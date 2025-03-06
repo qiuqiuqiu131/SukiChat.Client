@@ -49,11 +49,17 @@ internal class ChatMessageHandler : MessageHandlerBase
         await chatPackService.OperateChatMessage(chatMessage.UserFromId, chatData.ChatId, chatData.ChatMessages);
 
         var friendChat = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
-        if (friendChat != null)
+        if (friendChat != null && friendChat.ChatMessages.Count != 0)
         {
             var last = friendChat.ChatMessages.Last();
             if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
                 chatData.ShowTime = true;
+            friendChat.ChatMessages.Add(chatData);
+            friendChat.UnReadMessageCount++;
+        }
+        else if (friendChat != null)
+        {
+            chatData.ShowTime = true;
             friendChat.ChatMessages.Add(chatData);
             friendChat.UnReadMessageCount++;
         }

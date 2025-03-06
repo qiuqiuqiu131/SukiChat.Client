@@ -6,11 +6,12 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.SeperateGroupsView;
 using ChatClient.Tool.Data;
 
-namespace ChatClient.Avalonia.Controls.SeperateGroupsView;
+namespace ChatClient.Avalonia.Controls.MultiSeparateGroupView;
 
-public class SeparateGroupsView : UserControl
+public class MultiSeparateGroupView : UserControl
 {
     public static readonly StyledProperty<AvaloniaList<GroupFriendDto>> GroupFriendsProperty =
         AvaloniaProperty.Register<SeparateGroupsView, AvaloniaList<GroupFriendDto>>(nameof(GroupFriends));
@@ -78,8 +79,10 @@ public class SeparateGroupsView : UserControl
         if (!Inited) return;
         foreach (var control in _itemCollection)
         {
-            if (control is GroupList.GroupList groupList)
+            if (control is MultiGroupList.MultiGroupList groupList)
+            {
                 groupList.SelectionChanged -= OnSelectionChanged;
+            }
         }
     }
 
@@ -89,10 +92,10 @@ public class SeparateGroupsView : UserControl
         if (!Inited) return;
         foreach (var groupFriend in groupFriends)
         {
-            var contorl = (GroupList.GroupList)_dataTemplate.Build(groupFriend)!;
-            contorl.DataContext = groupFriend;
-            contorl.SelectionChanged += OnSelectionChanged;
-            _itemCollection.Add(contorl);
+            var control = (MultiGroupList.MultiGroupList)_dataTemplate.Build(groupFriend)!;
+            control.DataContext = groupFriend;
+            control.SelectionChanged += OnSelectionChanged;
+            _itemCollection.Add(control);
         }
     }
 
@@ -110,10 +113,10 @@ public class SeparateGroupsView : UserControl
                         // 类型检查
                         if (newItem is GroupFriendDto groupFriend)
                         {
-                            var contorl = (GroupList.GroupList)_dataTemplate.Build(groupFriend)!;
-                            contorl.DataContext = groupFriend;
-                            contorl.SelectionChanged += OnSelectionChanged;
-                            _itemCollection.Add(contorl);
+                            var control = (MultiGroupList.MultiGroupList)_dataTemplate.Build(groupFriend)!;
+                            control.DataContext = groupFriend;
+                            control.SelectionChanged += OnSelectionChanged;
+                            _itemCollection.Add(control);
                         }
                     }
                 }
@@ -126,7 +129,7 @@ public class SeparateGroupsView : UserControl
                     {
                         if (oldItem is GroupFriendDto groupFriend)
                         {
-                            var control = (GroupList.GroupList)_itemCollection.FirstOrDefault(d =>
+                            var control = (MultiGroupList.MultiGroupList)_itemCollection.FirstOrDefault(d =>
                                 d is GroupList.GroupList control && control.DataContext == groupFriend)!;
                             control.SelectionChanged -= OnSelectionChanged;
                             _itemCollection.Remove(control);
@@ -140,16 +143,9 @@ public class SeparateGroupsView : UserControl
     // 当权重
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs args)
     {
-        if (sender is GroupList.GroupList groupList)
+        if (sender is MultiGroupList.MultiGroupList groupList)
         {
-            foreach (var items in _itemCollection)
-            {
-                if (items is GroupList.GroupList groupItem)
-                {
-                    if (groupList == groupItem) continue;
-                    groupItem.SelectedItem = null;
-                }
-            }
+            SelectionChangedCommand.Execute(args);
         }
     }
 }

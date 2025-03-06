@@ -73,25 +73,34 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () => { user.UserDetail = await _userDtoManager.GetUserDto(userId); }),
             Task.Run(async () =>
             {
-                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var friendPackService = scope.Resolve<IFriendPackService>();
+                    user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
+                }
             }),
             Task.Run(async () =>
             {
-                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                var friends = await friendPackService.GetFriendRelationDtos(userId);
-                user.GroupFriends = new(friends
-                    .GroupBy(d => d.Grouping)
-                    .Select(d => new GroupFriendDto
-                    {
-                        Friends = new AvaloniaList<FriendRelationDto>(d),
-                        GroupName = d.Key
-                    }));
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var friendPackService = scope.Resolve<IFriendPackService>();
+                    var friends = await friendPackService.GetFriendRelationDtos(userId);
+                    user.GroupFriends = new(friends
+                        .GroupBy(d => d.Grouping)
+                        .Select(d => new GroupFriendDto
+                        {
+                            Friends = new AvaloniaList<FriendRelationDto>(d),
+                            GroupName = d.Key
+                        }));
+                }
             }),
             Task.Run(async () =>
             {
-                var chatPackService = _scopedProvider.Resolve<IChatPackService>();
-                user.FriendChatDtos = await chatPackService.GetFriendChatDtos(userId);
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var chatPackService = scope.Resolve<IChatPackService>();
+                    user.FriendChatDtos = await chatPackService.GetFriendChatDtos(userId);
+                }
             })
         ];
         await Task.WhenAll(tasks);

@@ -53,6 +53,14 @@ public class LargeFileUploadClient : IFileClient
 
         _fileName = fileName;
 
+        // 初始化本地文件读取
+        buffer = new byte[CHUNK_SIZE];
+        _packIndex = 0;
+        _totelCount = (int)Math.Ceiling((double)fileInfo.Length / CHUNK_SIZE);
+
+        // 等待服务器响应
+        taskCompletionSourceOfFileResponse = new TaskCompletionSource<FileResponse>();
+
         // 发送文件头信息
         // 对方接受到头文件后会返回一个FilePackResponse，即可开始发送文件内容了
         FileHeader fileHeader = new FileHeader
@@ -61,21 +69,12 @@ public class LargeFileUploadClient : IFileClient
             FileName = fileName,
             Type = Path.GetExtension(fileName),
             TotleSize = (int)fileInfo.Length,
-            TotleCount = (int)Math.Ceiling((double)fileInfo.Length / CHUNK_SIZE),
+            TotleCount = _totelCount,
             Time = DateTime.Now.ToString("yyyyMMddHHmmss")
         };
         await channel.WriteAndFlushProtobufAsync(fileHeader);
 
-        // 初始化本地文件读取
-        buffer = new byte[CHUNK_SIZE];
-        _packIndex = 0;
-        _totelCount = fileHeader.TotleCount;
-
-
-        // 等待服务器响应
-        taskCompletionSourceOfFileResponse = new TaskCompletionSource<FileResponse>();
         await taskCompletionSourceOfFileResponse.Task;
-        taskCompletionSourceOfFileResponse = null;
     }
 
     /// <summary>

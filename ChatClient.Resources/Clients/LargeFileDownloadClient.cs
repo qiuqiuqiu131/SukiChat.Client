@@ -38,11 +38,12 @@ public class LargeFileDownloadClient : IFileClient
         // 添加channel管道的handler
         channel.Pipeline.AddLast(new LargeFileDownloadServerHandler(this));
 
+        // 等待文件接受完毕或者出错
+        taskCompletionSourceOfFileUnit = new TaskCompletionSource<bool>();
+
         // 写入文件请求
         await channel.WriteAndFlushProtobufAsync(message);
 
-        // 等待文件接受完毕或者出错
-        taskCompletionSourceOfFileUnit = new TaskCompletionSource<bool>();
         await taskCompletionSourceOfFileUnit.Task;
 
         // 结束文件下载进度

@@ -57,12 +57,12 @@ public class RegularFileDownloadClient : IFileClient
         // 添加channel管道的handler
         channel.Pipeline.AddLast(new RegularFileDownloadServerHandler(this));
 
-        // 写入文件请求
-        await channel.WriteAndFlushProtobufAsync(message);
-
         // 等待文件接受完毕或者出错
         taskCompletionSourceOfFileUnit = new TaskCompletionSource<FileUnit>();
         Task wait = Task.Delay(TimeSpan.FromSeconds(100));
+
+        // 写入文件请求
+        await channel.WriteAndFlushProtobufAsync(message);
 
         // 等待其中一个线程执行完成
         var firstTask = await Task.WhenAny(wait, taskCompletionSourceOfFileUnit.Task);

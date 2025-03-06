@@ -37,7 +37,7 @@
                                       ContentTemplate="{TemplateBinding ContentTemplate}">
                         <ContentPresenter.Transitions>
                             <Transitions>
-                                <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="SineEaseInOut" />
+                                <BrushTransition Property="BorderBrush" Duration="0:0:0.20" Easing="SineEaseInOut" />
                                 <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
                                                         Easing="SineEaseInOut" />
                             </Transitions>
@@ -51,6 +51,7 @@
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
             <Style Selector="^ /template/ Border">
                 <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">

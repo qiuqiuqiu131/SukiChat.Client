@@ -43,7 +43,7 @@ public class ProtoFileIOHelper : IFileIOHelper
             if (completedTask == timeoutTask)
             {
                 _resourcesClientPool.ReturnClient(client);
-                throw new TimeoutException("获取文件请求超时（10秒）");
+                throw new TimeoutException($"获取文件请求超时（10秒）{client._fileStream}");
             }
 
             var result = uploadTask.Result;

@@ -10,6 +10,8 @@ public interface IGroupService
     Task<(bool, string)> CreateGroup(string userId, string groupName);
     Task<bool> JoinGroupRequest(string userId, string groupId);
     Task<bool> JoinGroupResponse(string userId, int requestId, bool accept);
+    Task<GroupMessage> GetGroupMessage(string userId, string groupId);
+    Task<GroupMembersMessage> GetGroupMemberMessage(string userId, string groupId);
 }
 
 public class GroupService : BaseService, IGroupService
@@ -172,5 +174,27 @@ public class GroupService : BaseService, IGroupService
         }
 
         return false;
+    }
+
+    public Task<GroupMessage> GetGroupMessage(string userId, string groupId)
+    {
+        var groupMessageRequest = new GroupMessageRequest
+        {
+            GroupId = groupId,
+            UserId = userId
+        };
+
+        return _messageHelper.SendMessageWithResponse<GroupMessage>(groupMessageRequest)!;
+    }
+
+    public Task<GroupMembersMessage> GetGroupMemberMessage(string userId, string groupId)
+    {
+        var groupMemberRequest = new GroupMembersRequest
+        {
+            GroupId = groupId,
+            UserId = userId
+        };
+
+        return _messageHelper.SendMessageWithResponse<GroupMembersMessage>(groupMemberRequest)!;
     }
 }

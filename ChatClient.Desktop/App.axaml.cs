@@ -12,6 +12,7 @@ using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.Login;
+using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
@@ -76,6 +77,10 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
         containerRegistry.RegisterForNavigation<FriendDetailView, FriendDetailViewModel>();
 
+        // 注册DialogView
+        containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
+        containerRegistry.RegisterDialog<CreateGroupView, CreateGroupViewModel>();
+
         var views = ConfigureViews(containerRegistry);
         DataTemplates.Add(new ViewLocator(views));
     }
@@ -117,8 +122,7 @@ public class App : PrismApplication
             .AddView<UserOptionView, UserOptionsViewModel>(services)
             .AddView<ChatView, ChatViewModel>(services)
             .AddView<ContactsView, ContactsViewModel>(services)
-            .AddView<ThemeView, ThemeViewModel>(services)
-            .AddView<CreateGroupView, CreateGroupViewModel>(services);
+            .AddView<ThemeView, ThemeViewModel>(services);
     }
 
     public override void OnFrameworkInitializationCompleted()

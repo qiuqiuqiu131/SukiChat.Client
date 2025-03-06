@@ -113,7 +113,7 @@
         <!-- 好友列表 -->
         <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                       Grid.Row="1"
-                      VerticalScrollBarVisibility="Disabled">
+                      VerticalScrollBarVisibility="Hidden">
             <ItemsControl x:Name="Items"
                           suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>

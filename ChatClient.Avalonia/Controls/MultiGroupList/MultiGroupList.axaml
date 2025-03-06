@@ -1,0 +1,55 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupList">
+    <Style Selector="multiGroupList|MultiGroupList">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Expander FontSize="13.5"
+                          Theme="{StaticResource ChatExpander}"
+                          FontWeight="SemiBold">
+                    <Expander.Header>
+                        <TextBlock FontSize="13.5" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                    </Expander.Header>
+                    <ListBox Name="PART_ListBox"
+                             SelectionMode="Multiple,Toggle"
+                             ItemsSource="{Binding $parent[multiGroupList:MultiGroupList].GroupContents}"
+                             Classes="Void MultiSelect">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="42">
+                                    <Grid Margin="6,5" ColumnDefinitions="36,*">
+                                        <Grid Width="36" Height="36">
+                                            <Panel Width="38" Height="38">
+                                                <Panel.Clip>
+                                                    <EllipseGeometry
+                                                        Center="18,18"
+                                                        RadiusX="18"
+                                                        RadiusY="18" />
+                                                </Panel.Clip>
+                                                <Image
+                                                    Width="36"
+                                                    Height="36"
+                                                    Source="{Binding  UserDto.HeadImage}" />
+                                            </Panel>
+                                        </Grid>
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="15,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13.5"
+                                                   FontWeight="DemiBold"
+                                                   Text="{Binding  UserDto.Name}" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

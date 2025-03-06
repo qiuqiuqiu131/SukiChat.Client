@@ -26,4 +26,6 @@ public class GroupRelation
     public bool CantDisturb { get; set; } = false;
 
     public bool IsTop { get; set; } = false;
+
+    public int HeadIndex { get; set; }
 }

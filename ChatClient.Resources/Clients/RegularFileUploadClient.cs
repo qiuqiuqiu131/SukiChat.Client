@@ -16,7 +16,7 @@ public class RegularFileUploadClient : IFileClient
 
     private string? _fileName;
 
-    private MemoryStream? _fileStream;
+    public MemoryStream? _fileStream;
 
     // 文件操作
     const int CHUNK_SIZE = 60000; // 64KB per chunk
@@ -46,9 +46,16 @@ public class RegularFileUploadClient : IFileClient
         _fileProcessDto = fileProcessDto;
 
         // 生成Stream流
-        _fileStream = new MemoryStream(file, writable: false);
+        _fileStream = new MemoryStream(file);
 
         _fileName = fileName;
+
+        // 初始化文件资源读取
+        buffer = new byte[CHUNK_SIZE];
+        _packIndex = 0;
+        _totelCount = (int)Math.Ceiling((double)file.Length / CHUNK_SIZE);
+
+        taskCompletionSourceOfFileResponse = new TaskCompletionSource<FileResponse>();
 
         // 发送文件头信息
         // 对方接受到头文件后会返回一个FilePackResponse，即可开始发送文件内容了
@@ -58,28 +65,26 @@ public class RegularFileUploadClient : IFileClient
             FileName = fileName,
             Type = Path.GetExtension(fileName),
             TotleSize = file.Length,
-            TotleCount = (int)Math.Ceiling((double)file.Length / CHUNK_SIZE),
+            TotleCount = _totelCount,
             Time = DateTime.Now.ToString("yyyyMMddHHmmss")
         };
         await channel.WriteAndFlushProtobufAsync(fileHeader);
 
-        // 初始化文件资源读取
-        buffer = new byte[CHUNK_SIZE];
-        _packIndex = 0;
-        _totelCount = fileHeader.TotleCount;
-
-        taskCompletionSourceOfFileResponse = new TaskCompletionSource<FileResponse>();
-        var result = await taskCompletionSourceOfFileResponse.Task;
-        taskCompletionSourceOfFileResponse = null;
-        return result;
+        await taskCompletionSourceOfFileResponse.Task;
+        return taskCompletionSourceOfFileResponse.Task.Result;
     }
 
+    /// <summary>
+    /// 对方接收到文件包后回复
+    /// </summary>
+    /// <param name="response"></param>
     public async void OnFilePackResponseReceived(FilePackResponse response)
     {
         if (!response.FileName.Equals(_fileName!) || !response.Success ||
             response.PackIndex != _packIndex)
         {
             OnFileUploadFinished(new FileResponse { Success = false });
+            Console.WriteLine("服务器文件接受失败");
             return;
         }
 
@@ -121,6 +126,7 @@ public class RegularFileUploadClient : IFileClient
 
     public void OnFileUploadFinished(FileResponse response)
     {
+        // Console.WriteLine($"FileUploadFinish:{response.Success},{response.FileName}");
         if (!response.FileName.Equals(_fileName) || taskCompletionSourceOfFileResponse == null) return;
         taskCompletionSourceOfFileResponse.SetResult(response);
 

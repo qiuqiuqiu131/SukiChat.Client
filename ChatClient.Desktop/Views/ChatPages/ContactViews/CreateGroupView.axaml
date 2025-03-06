@@ -3,11 +3,72 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="600" Height="450"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:desktop="clr-namespace:ChatClient.Desktop"
+             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Width="550" Height="480"
              x:DataType="vm:CreateGroupViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.CreateGroupView">
     <Grid ColumnDefinitions="*,*">
+        <Grid Grid.Column="0" RowDefinitions="50,*">
+            <suki:GlassCard Padding="8"
+                            Margin="0"
+                            Grid.Row="0"
+                            CornerRadius="0">
+                <suki:GlassCard
+                    CornerRadius="8"
+                    IsInteractive="True"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Stretch"
+                    Height="30"
+                    Margin="0"
+                    Padding="8,3"
+                    Classes="Search"
+                    IsAnimated="False">
+                    <suki:GlassCard.Transitions>
+                        <Transitions>
+                            <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
+                            <DoubleTransition Property="Width" Duration="0.35" />
+                        </Transitions>
+                    </suki:GlassCard.Transitions>
+                    <DockPanel LastChildFill="True">
+                        <PathIcon
+                            Width="12"
+                            Height="12"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Data="{x:Static suki:Icons.Search}"
+                            DockPanel.Dock="Left"
+                            Foreground="{DynamicResource SukiLowText}" />
+                        <TextBox
+                            Padding="-3,3,0,0"
+                            Margin="0"
+                            suki:TextBoxExtensions.AddDeleteButton="True"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Classes="NoShadow"
+                            LetterSpacing="0.5"
+                            Text="{Binding SearchText}"
+                            Watermark="Search" />
+                    </DockPanel>
+                </suki:GlassCard>
+            </suki:GlassCard>
+            <suki:GlassCard Padding="8" Margin="0" CornerRadius="0" Grid.Row="1">
+                <DockPanel LastChildFill="True">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                        <multiSeparateGroupView:MultiSeparateGroupView
+                            Margin="5"
+                            x:Name="MultiSeparateGroupView"
+                            SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                            GroupFriends="{Binding GroupFriends}" />
+                    </ScrollViewer>
+                </DockPanel>
+            </suki:GlassCard>
+        </Grid>
         <Grid Grid.Column="1">
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom"
@@ -17,7 +78,52 @@
                     <Button Content="确定" Command="{Binding OKCommand}" />
                     <Button Content="取消" Command="{Binding CancleCommand}" />
                 </StackPanel>
-                <Grid />
+                <Grid RowDefinitions="30,*">
+                    <Grid Grid.Row="0">
+                        <DockPanel LastChildFill="True" Margin="10">
+                            <TextBlock DockPanel.Dock="Right" FontSize="11"
+                                       IsVisible="{Binding SelectedFriends.Count}"
+                                       Opacity="0.75"
+                                       Text="{Binding SelectedFriends.Count,StringFormat=已选择 {0} 个好友}" />
+                            <TextBlock FontSize="13.5" Text="创建群聊" />
+                        </DockPanel>
+                    </Grid>
+                    <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="44">
+                                    <Grid Margin="13,7" ColumnDefinitions="36,*">
+                                        <Grid Width="36" Height="36">
+                                            <Panel Width="36" Height="36">
+                                                <Panel.Clip>
+                                                    <EllipseGeometry
+                                                        Center="18,18"
+                                                        RadiusX="18"
+                                                        RadiusY="18" />
+                                                </Panel.Clip>
+                                                <Image
+                                                    Width="36"
+                                                    Height="36"
+                                                    Source="{Binding  UserDto.HeadImage}" />
+                                            </Panel>
+                                        </Grid>
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="17,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13.5"
+                                                   FontWeight="DemiBold"
+                                                   Text="{Binding  UserDto.Name}" />
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
             </DockPanel>
         </Grid>
     </Grid>
