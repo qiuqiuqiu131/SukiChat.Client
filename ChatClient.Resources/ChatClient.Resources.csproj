@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>ChatClient.ResourcesClient</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+        <ProjectReference Include="..\ChatServer.Common\ChatServer.Common.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="DotNetty.Handlers" Version="0.7.6"/>
+    </ItemGroup>
+
+</Project>

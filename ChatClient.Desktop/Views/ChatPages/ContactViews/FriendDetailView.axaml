@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             x:DataType="vm:FriendDetailViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Desktop.Views.ContactDetailView.FriendDetailView">
+    <UserControl.Styles>
+        <Style Selector="Image.AppIcon">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0.1" />
+                </Transitions>
+            </Setter>
+            <Style Selector="^:pointerover">
+                <Setter Property="Opacity" Value="0.7" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <StackPanel Orientation="Vertical">
+        <Panel
+                Width="130"
+                Height="130"
+                Margin="15">
+                <Panel Width="120" Height="120">
+                    <Panel.Clip>
+                        <EllipseGeometry
+                            Center="60,60"
+                            RadiusX="60"
+                            RadiusY="60" />
+                    </Panel.Clip>
+                    <Image
+                        Name="Head"
+                        Width="118"
+                        Height="118"
+                        Margin="0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Classes="AppIcon"
+                        PointerPressed="Head_OnPointerPressed"
+                        Source="{Binding Friend.UserDto.HeadImage}" />
+                </Panel>
+                <Border
+                    Width="120"
+                    Height="120"
+                    Padding="0"
+                    BoxShadow="{DynamicResource SukiLowShadow}"
+                    BorderBrush="{DynamicResource SukiLowText}"
+                    BorderThickness="1.2"
+                    CornerRadius="60" />
+            </Panel>
+        <TextBlock Text="{Binding Friend.Id}"/>
+        <TextBlock Text="{Binding Friend.UserDto.Name}"/>
+        <TextBlock Text="{Binding Friend.GroupTime}"/>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,77 @@
+<UserControl
+    x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.FriendRequestView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:FriendRequestViewModel"
+    mc:Ignorable="d">
+    <Grid>
+        <ScrollViewer
+            HorizontalScrollBarVisibility="Disabled"
+            IsVisible="{Binding !IsRequestEmpty}"
+            VerticalScrollBarVisibility="Visible">
+            <ItemsControl ItemsSource="{Binding FriendReceivedDtos}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="0" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <suki:GlassCard
+                            Height="50"
+                            Padding="0"
+                            CornerRadius="5">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="PointerPressed">
+                                    <InvokeCommandAction Command="{Binding ((vm:FriendRequestViewModel)DataContext).ResponseFriendRequestCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" CommandParameter="{Binding}" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                            <StackPanel Margin="10" Orientation="Horizontal">
+                                <Panel Width="40" Height="40">
+                                    <Panel.Clip>
+                                        <EllipseGeometry
+                                            Center="20,20"
+                                            RadiusX="20"
+                                            RadiusY="20" />
+                                    </Panel.Clip>
+                                    <Image
+                                        Width="40"
+                                        Height="40"
+                                        Source="{Binding UserDto.HeadImage}" />
+                                </Panel>
+                                <Grid Margin="10,0" RowDefinitions="*,*">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Classes="h3"
+                                        FontSize="13"
+                                        FontWeight="Bold"
+                                        Foreground="{DynamicResource SukiText}"
+                                        Text="{Binding UserDto.Name}" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Margin="5"
+                                        HorizontalAlignment="Right"
+                                        FontSize="10"
+                                        Foreground="{DynamicResource SukiText}"
+                                        Text="{Binding ReceiveTime}" />
+                                </Grid>
+                            </StackPanel>
+                        </suki:GlassCard>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <TextBlock
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="17"
+            IsVisible="{Binding IsRequestEmpty}"
+            Text="没有待处理的好友请求" />
+    </Grid>
+</UserControl>

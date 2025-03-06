@@ -1,0 +1,103 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+    <Design.PreviewWith>
+        <TextBox Text="TextBox" Classes="Trans" Watermark="输入内容" />
+    </Design.PreviewWith>
+
+    <Style Selector="TextBox">
+        <Setter Property="LetterSpacing" Value="1.5" />
+    </Style>
+
+    <Style Selector="TextBlock, TextBox, Button, RadioButton, DropDownButton">
+        <Setter Property="TextBlock.FontFamily" Value="宋体,Simsun,微软雅黑,Microsoft YaHei,苹方-简,宋体-简" />
+    </Style>
+
+    <Style Selector="TextBox.Trans">
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiControlBorderBrush}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
+        <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
+        <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
+        <Setter Property="Padding" Value="6,8,5,6" />
+        <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+
+        <Setter Property="Template">
+            <ControlTemplate>
+
+                <Border Background="#00000000">
+                    <Border.Resources>
+                        <suki:StringToDoubleConverter x:Key="StringToDoubleC" />
+                    </Border.Resources>
+                    <Panel>
+                        <Border Name="borderbottom"
+                                Margin="1,-1,1,-1"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}"
+                                ClipToBounds="True"
+                                CornerRadius="1">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                                </Transitions>
+                            </Border.Transitions>
+
+
+                            <DataValidationErrors>
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <Panel>
+                                        <TextBlock Margin="3,1,3,0"
+                                                   FontSize="14"
+                                                   Foreground="{DynamicResource SukiLowText}"
+                                                   Text="{TemplateBinding suki:TextBoxExtensions.Prefix}" />
+                                    </Panel>
+                                    <TextPresenter Grid.Column="1" Name="PART_TextPresenter"
+                                                   Margin="0,0,0,0"
+                                                   CaretBrush="{DynamicResource SukiLowText}"
+                                                   CaretIndex="{TemplateBinding CaretIndex}"
+                                                   PasswordChar="{TemplateBinding PasswordChar}"
+                                                   RevealPassword="{TemplateBinding RevealPassword}"
+                                                   SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                   SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                   SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                                   SelectionStart="{TemplateBinding SelectionStart}"
+                                                   Text="{TemplateBinding Text,
+                                                                                      Mode=TwoWay}"
+                                                   TextAlignment="{TemplateBinding TextAlignment}"
+                                                   TextBlock.FontSize="{TemplateBinding FontSize}"
+                                                   TextBlock.Foreground="{TemplateBinding Foreground}"
+                                                   TextWrapping="{TemplateBinding TextWrapping}"
+                                                   VerticalAlignment="Top" />
+                                </Grid>
+                            </DataValidationErrors>
+                        </Border>
+                    </Panel>
+                </Border>
+
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="TextBox.Trans:pointerover /template/ Border#borderbottom">
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
+    </Style>
+
+    <Style Selector="TextBox.Trans:pointerover">
+        <Setter Property="Cursor" Value="IBeam"></Setter>
+    </Style>
+
+    <Style Selector="TextBox.Trans:focus /template/ Border#borderbottom">
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
+
+    </Style>
+    <Style Selector="TextBox.Trans /template/ DockPanel">
+        <Setter Property="Cursor" Value="IBeam" />
+    </Style>
+    <Style Selector="TextBox.Trans:disabled">
+        <Setter Property="Foreground" Value="{DynamicResource SukiDisabledText}" />
+    </Style>
+</Styles>

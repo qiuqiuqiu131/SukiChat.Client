@@ -1,0 +1,29 @@
+<suki:SukiWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:prism="http://prismlibrary.com/"
+                 xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+                 mc:Ignorable="d"
+                 Width="400" Height="300"
+                 prism:ViewModelLocator.AutoWireViewModel="True"
+                 x:DataType="vm:AddNewFriendViewModel"
+                 x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.AddNewFriendView"
+                 CanMaximize="False"
+                 ShowBottomBorder="False"
+                 ShowTitlebarBackground="False"
+                 TitleFontSize="13"
+                 WindowStartupLocation="CenterScreen"
+                 Icon="/Assets/ChartDonutVariant.ico"
+                 BackgroundAnimationEnabled="{Binding  CurrentThemeStyle.AnimationsEnabled}"
+                 BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
+                 BackgroundTransitionsEnabled="{Binding CurrentThemeStyle.TransitionsEnabled}"
+                 Title="查找用户">
+    <StackPanel Orientation="Vertical"
+                Grid.Column="2">
+        <TextBox Text="{Binding Id}" Watermark="好友Id" />
+        <TextBox Text="{Binding Group}" Watermark="分组" />
+        <Button Content="发送" Command="{Binding SendFriendRequestCommand}" />
+    </StackPanel>
+</suki:SukiWindow>

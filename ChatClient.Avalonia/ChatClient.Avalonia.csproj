@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.7"/>
+        <PackageReference Include="Material.Icons.Avalonia" Version="2.1.11"/>
+        <PackageReference Include="PInvoke.Kernel32" Version="0.7.124"/>
+        <PackageReference Include="PInvoke.User32" Version="0.7.124"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="SukiUI">
+            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\SukiUI.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>

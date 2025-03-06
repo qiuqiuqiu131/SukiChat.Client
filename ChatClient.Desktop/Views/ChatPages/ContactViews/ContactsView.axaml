@@ -1,0 +1,118 @@
+<UserControl
+    x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.ContactsView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:content="https://github.com/kikipoulet/SukiUI"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:regions="http://prismlibrary.com/"
+    xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
+    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+    xmlns:uiEntity="clr-namespace:ChatClient.Desktop.UIEntity;assembly=ChatClient.Tool"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList;assembly=ChatClient.Avalonia"
+    xmlns:seperateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView;assembly=ChatClient.Avalonia"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:ContactsViewModel"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                MinWidth="200" MaxWidth="350" Width="240" />
+            <ColumnDefinition Width="1.2" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- 左侧面板 -->
+        <Grid Grid.Column="0" RowDefinitions="70,*">
+            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0" Opacity="0.8" Grid.Row="0" Grid.RowSpan="2" />
+            <!-- 顶部 -->
+            <suki:GlassCard Padding="8"
+                            Grid.Row="0"
+                            CornerRadius="2"
+                            Height="70"
+                            Margin="0,0,0,0"
+                            BorderThickness="0,0,0,1.5">
+                <DockPanel LastChildFill="True">
+                    <Button Classes="Add"
+                            Name="PART_AddButton"
+                            CornerRadius="8"
+                            Padding="0"
+                            Margin="10,3,0,1"
+                            VerticalAlignment="Bottom"
+                            BorderThickness="0"
+                            DockPanel.Dock="Right"
+                            Click="PART_AddButton_OnClick"
+                            Height="29"
+                            Width="29"
+                            Background="{DynamicResource SukiGlassCardBackground}">
+                        <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
+                    </Button>
+                    <Popup Name="PART_AddPop" Placement="BottomEdgeAlignedLeft"
+                           HorizontalOffset="15"
+                           IsLightDismissEnabled="True"
+                           PlacementTarget="PART_AddButton">
+                        <Border Background="{DynamicResource SukiCardBackground}">
+                            <StackPanel Orientation="Vertical">
+                                <Button Content="创建群聊" />
+                                <Button Content="添加好友/群聊" />
+                            </StackPanel>
+                        </Border>
+                    </Popup>
+                    <suki:GlassCard
+                        CornerRadius="8"
+                        IsInteractive="True"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Stretch"
+                        Height="30"
+                        Margin="0"
+                        Padding="8,3"
+                        Classes="Search"
+                        IsAnimated="False">
+                        <suki:GlassCard.Transitions>
+                            <Transitions>
+                                <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
+                                <DoubleTransition Property="Width" Duration="0.35" />
+                            </Transitions>
+                        </suki:GlassCard.Transitions>
+                        <DockPanel LastChildFill="True">
+                            <PathIcon
+                                Width="12"
+                                Height="12"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Data="{x:Static content:Icons.Search}"
+                                DockPanel.Dock="Left"
+                                Foreground="{DynamicResource SukiLowText}" />
+                            <TextBox
+                                Padding="-3,3,0,0"
+                                Margin="0"
+                                content:TextBoxExtensions.AddDeleteButton="True"
+                                BorderThickness="0"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Classes="NoShadow"
+                                LetterSpacing="0.5"
+                                Text="{Binding SearchText}"
+                                Watermark="Search" />
+                        </DockPanel>
+                    </suki:GlassCard>
+                </DockPanel>
+            </suki:GlassCard>
+
+            <!-- 好友列表 -->
+            <StackPanel Grid.Row="1" x:Name="LeftPanel" Orientation="Vertical">
+                <Button Classes="Void" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
+                <seperateGroupsView:SeparateGroupsView GroupFriends="{Binding GroupFriends}"
+                                                       SelectionChangedCommand="{Binding SelectedFriendChangedCommand}" />
+            </StackPanel>
+        </Grid>
+
+        <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
+
+        <suki:GlassCard Grid.Column="2" CornerRadius="0">
+            <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ContactsRegion}" />
+        </suki:GlassCard>
+    </Grid>
+</UserControl>

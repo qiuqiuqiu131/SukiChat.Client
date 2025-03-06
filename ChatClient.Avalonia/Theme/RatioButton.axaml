@@ -1,0 +1,72 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="RadioButton.Chat">
+        <Setter Property="Background" Value="{DynamicResource SukiGlassCardBackground}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1.5" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Duration="0:0:0.2" Property="BorderBrush" />
+            </Transitions>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Border Background="{TemplateBinding Background}" Opacity="0.2"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="Background" Duration="0:0:0.25" Easing="SineEaseInOut" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="SineEaseInOut" />
+                                <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
+                                                        Easing="SineEaseInOut" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Margin="0,0,0,0"
+                                      CornerRadius="0"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      Background="Transparent"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      Height="{TemplateBinding Height}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}">
+                        <ContentPresenter.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="SineEaseInOut" />
+                                <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
+                                                        Easing="SineEaseInOut" />
+                            </Transitions>
+                        </ContentPresenter.Transitions>
+                    </ContentPresenter>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="CornerRadius" Value="5" />
+            </Style>
+        </Style>
+        <Style Selector="^:checked">
+            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
+                <Setter Property="CornerRadius" Value="13" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="CornerRadius" Value="13" />
+            </Style>
+        </Style>
+    </Style>
+</Styles>

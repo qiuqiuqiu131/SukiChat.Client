@@ -1,0 +1,221 @@
+<UserControl
+    x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatLeftPanelView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+    xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
+    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    d:DesignHeight="650"
+    d:DesignWidth="300"
+    x:DataType="vm:ChatLeftPanelViewModel"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
+        <converter:DateTimeConverter x:Key="DateTimeConverter" />
+    </UserControl.Resources>
+    <chatViews:ChatLeftPanelView.ItemsSource>
+        <Binding Path="ChatViewModel.Friends" />
+    </chatViews:ChatLeftPanelView.ItemsSource>
+    <Grid Margin="0" RowDefinitions="70,*">
+        <suki:GlassCard Padding="0" Margin="0" CornerRadius="0" Opacity="0.8" Grid.Row="0" Grid.RowSpan="2" />
+        <!-- 顶部 -->
+        <suki:GlassCard Padding="8"
+                        Grid.Row="0"
+                        CornerRadius="2"
+                        Height="70"
+                        Margin="0,0,0,0"
+                        BorderThickness="0,0,0,1.5">
+            <DockPanel LastChildFill="True">
+                <Button Classes="Add"
+                        Name="PART_AddButton"
+                        CornerRadius="8"
+                        Padding="0"
+                        Margin="10,3,0,1"
+                        VerticalAlignment="Bottom"
+                        BorderThickness="0"
+                        DockPanel.Dock="Right"
+                        Click="PART_AddButton_OnClick"
+                        Height="29"
+                        Width="29"
+                        Background="{DynamicResource SukiGlassCardBackground}">
+                    <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
+                </Button>
+                <Popup Name="PART_AddPop" Placement="BottomEdgeAlignedLeft"
+                       HorizontalOffset="15"
+                       IsLightDismissEnabled="True"
+                       PlacementTarget="PART_AddButton">
+                    <Border Background="{DynamicResource SukiCardBackground}">
+                        <StackPanel Orientation="Vertical">
+                            <Button Content="创建群聊" Command="{Binding CreateGroupCommand}">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction TargetObject="PART_AddPop" PropertyName="IsOpen"
+                                                              Value="false" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                            </Button>
+                            <Button Content="添加好友/群聊" Command="{Binding AddNewFriendCommand}">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction TargetObject="PART_AddPop" PropertyName="IsOpen"
+                                                              Value="false" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </Popup>
+                <suki:GlassCard
+                    CornerRadius="8"
+                    IsInteractive="True"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Stretch"
+                    Height="30"
+                    Margin="0"
+                    Padding="8,3"
+                    Classes="Search"
+                    IsAnimated="False">
+                    <suki:GlassCard.Transitions>
+                        <Transitions>
+                            <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
+                            <DoubleTransition Property="Width" Duration="0.35" />
+                        </Transitions>
+                    </suki:GlassCard.Transitions>
+                    <DockPanel LastChildFill="True">
+                        <PathIcon
+                            Width="12"
+                            Height="12"
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            Data="{x:Static suki:Icons.Search}"
+                            DockPanel.Dock="Left"
+                            Foreground="{DynamicResource SukiLowText}" />
+                        <TextBox
+                            Padding="-3,3,0,0"
+                            Margin="0"
+                            suki:TextBoxExtensions.AddDeleteButton="True"
+                            BorderThickness="0"
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Classes="NoShadow"
+                            LetterSpacing="0.5"
+                            Text="{Binding SearchText}"
+                            Watermark="Search" />
+                    </DockPanel>
+                </suki:GlassCard>
+            </DockPanel>
+        </suki:GlassCard>
+        <!-- 好友列表 -->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      Grid.Row="1"
+                      VerticalScrollBarVisibility="Disabled">
+            <ItemsControl x:Name="Items"
+                          suki:ItemsControlExtensions.AnimatedScroll="True">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="-1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Styles>
+                    <Style Selector="RadioButton.Content">
+                        <Style Selector="^ Grid#Root_Grid">
+                            <Setter Property="Margin" Value="6,5,6,5" />
+                            <Setter Property="Transitions">
+                                <Transitions>
+                                    <ThicknessTransition Property="Margin" Duration="0:0:0.25"
+                                                         Easing="SineEaseInOut" />
+                                </Transitions>
+                            </Setter>
+                        </Style>
+                    </Style>
+
+                    <Style Selector="RadioButton.Content:checked">
+                        <Style Selector="^ Grid#Root_Grid">
+                            <Setter Property="Margin" Value="17,5,17,5" />
+                        </Style>
+                    </Style>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="data:FriendChatDto">
+                        <RadioButton GroupName="Friends"
+                                     Margin="0"
+                                     Height="58"
+                                     Classes="Chat Content"
+                                     CornerRadius="0"
+                                     Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
+                                     CommandParameter="{Binding }">
+                            <Grid Name="Root_Grid" ColumnDefinitions="42,*">
+                                <!-- 头像 -->
+                                <Panel Width="42" Height="42">
+                                    <Panel.Clip>
+                                        <EllipseGeometry
+                                            Center="21,21"
+                                            RadiusX="21"
+                                            RadiusY="21" />
+                                    </Panel.Clip>
+                                    <Image
+                                        Width="42"
+                                        Height="42"
+                                        Source="{Binding  FriendRelatoinDto.UserDto.HeadImage}" />
+                                </Panel>
+                                <!-- 简略信息 -->
+                                <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
+                                    <TextBlock
+                                        Name="Name_Text"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Opacity="0.9"
+                                        FontWeight="DemiBold"
+                                        Foreground="{DynamicResource SukiText}"
+                                        Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
+                                    <TextBlock HorizontalAlignment="Right"
+                                               Name="Time_Text"
+                                               VerticalAlignment="Top"
+                                               Foreground="{DynamicResource SukiText}"
+                                               Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
+                                               Margin="0,5"
+                                               LetterSpacing="0.5"
+                                               FontSize="11.5" />
+                                    <TextBlock Grid.Row="1"
+                                               Name="Chat_Mess_Txt"
+                                               VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Margin="0,0,20,0"
+                                               LetterSpacing="0.5"
+                                               TextTrimming="CharacterEllipsis"
+                                               Foreground="{DynamicResource SukiText}"
+                                               Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
+                                    <Border Grid.Row="1"
+                                            Height="16"
+                                            CornerRadius="8"
+                                            Background="Red"
+                                            Padding="5,0"
+                                            HorizontalAlignment="Right"
+                                            IsVisible="{Binding UnReadMessageCount}">
+                                        <Interaction.Behaviors>
+                                            <DataTriggerBehavior
+                                                Binding="{Binding FriendRelatoinDto.UserDto.CantDisturb}" Value="True">
+                                                <ChangePropertyAction PropertyName="Background" Value="Gray" />
+                                            </DataTriggerBehavior>
+                                        </Interaction.Behaviors>
+                                        <TextBlock FontSize="11"
+                                                   Margin="0,0,0,1"
+                                                   HorizontalAlignment="Center"
+                                                   Foreground="White"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </RadioButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,26 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView"
+        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
+        xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool">
+    <Style Selector="separateGroupsView|SeparateGroupsView">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ItemsControl Name="FriendList" Classes="Void">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="data:GroupFriendDto">
+                            <groupList:GroupList GroupContents="{Binding Friends}"
+                                                 Header="{Binding GroupName}"
+                                                 SelectionChangedCommand="{Binding $parent[separateGroupsView:SeparateGroupsView].SelectionChangedCommand}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

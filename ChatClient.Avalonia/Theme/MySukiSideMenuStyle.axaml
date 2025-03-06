@@ -1,0 +1,280 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+                    xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
+                    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <ControlTheme x:Key="SukiSideMenuStyle" TargetType="suki:SukiSideMenu">
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <SplitView DisplayMode="CompactInline"
+                           IsPaneOpen="{TemplateBinding IsMenuExpanded}"
+                           CompactPaneLength="60"
+                           OpenPaneLength="{TemplateBinding OpenPaneLength}">
+                    <SplitView.Pane>
+                        <Border Margin="0">
+                            <Grid Background="Transparent">
+                                <Grid.Styles>
+                                    <Style Selector="suki|GlassCard">
+                                        <!-- in case someone use sukisidemenu without sukiwindow -->
+                                        <Setter Property="CornerRadius" Value="0"></Setter>
+                                    </Style>
+                                </Grid.Styles>
+                                <suki:GlassCard Name="Glass"
+                                                BorderThickness="0,0,1,0"
+                                                CornerRadius="0"
+                                                IsAnimated="False" />
+                                <DockPanel>
+                                    <Button Name="PART_SidebarToggleButton"
+                                            Margin="7,18,7,7"
+                                            HorizontalAlignment="{TemplateBinding TogglePaneButtonPosition}"
+                                            VerticalAlignment="Top"
+                                            Classes="Basic"
+                                            Cursor="Hand"
+                                            DockPanel.Dock="Top"
+                                            IsVisible="{TemplateBinding IsMenuExpanded}">
+                                        <Panel>
+                                            <PathIcon Name="PART_ExpandIcon"
+                                                      Classes="Flippable"
+                                                      Width="12"
+                                                      Height="12"
+                                                      Data="{x:Static suki:Icons.ChevronLeft}"
+                                                      Foreground="{DynamicResource SukiText}">
+                                                <PathIcon.Transitions>
+                                                    <Transitions>
+                                                        <TransformOperationsTransition Property="RenderTransform"
+                                                            Duration="{StaticResource MediumAnimationDuration}" />
+                                                    </Transitions>
+                                                </PathIcon.Transitions>
+                                            </PathIcon>
+                                        </Panel>
+                                    </Button>
+                                    <Border Background="Transparent"
+                                            DockPanel.Dock="Top"
+                                            Cursor="Hand"
+                                            Padding="0"
+                                            IsVisible="{Binding !$parent[suki:SukiSideMenu].IsMenuExpanded}"
+                                            Margin="0,20">
+                                        <Interaction.Behaviors>
+                                            <EventTriggerBehavior EventName="PointerPressed">
+                                                <ChangePropertyAction
+                                                    TargetObject="{Binding $parent[suki:SukiSideMenu]}"
+                                                    PropertyName="IsToggleButtonVisible"
+                                                    Value="True" />
+                                                <CallMethodAction
+                                                    TargetObject="{Binding $parent[suki:SukiSideMenu]}"
+                                                    MethodName="MenuExpandedClicked" />
+                                            </EventTriggerBehavior>
+                                        </Interaction.Behaviors>
+                                        <avalonia:MaterialIcon
+                                            Width="35"
+                                            Height="35"
+                                            VerticalAlignment="Center"
+                                            Foreground="{DynamicResource SukiPrimaryColor}"
+                                            Kind="ChartDonutVariant">
+                                            <avalonia:MaterialIcon.Transitions>
+                                                <Transitions>
+                                                    <BrushTransition Property="Foreground"
+                                                                     Duration="{DynamicResource ShortAnimationDuration}" />
+                                                </Transitions>
+                                            </avalonia:MaterialIcon.Transitions>
+                                        </avalonia:MaterialIcon>
+                                    </Border>
+                                    <Grid MinHeight="{TemplateBinding HeaderMinHeight}"
+                                          DockPanel.Dock="Top"
+                                          IsVisible="{TemplateBinding IsMenuExpanded}">
+                                        <ContentPresenter Content="{TemplateBinding HeaderContent}" />
+                                    </Grid>
+                                    <ContentControl Margin="0,0,0,12"
+                                                    Content="{TemplateBinding FooterContent}"
+                                                    DockPanel.Dock="Bottom"
+                                                    IsVisible="{TemplateBinding IsMenuExpanded}" />
+                                    <Grid Name="PART_Spacer"
+                                          Height="15"
+                                          DockPanel.Dock="Top" />
+                                    <DockPanel>
+                                        <StackPanel IsVisible="{TemplateBinding IsSearchEnabled}" DockPanel.Dock="Top">
+                                            <StackPanel.Styles>
+                                                <Style
+                                                    Selector="suki|GlassCard.Search:pointerover, suki|GlassCard.Search:focus-within">
+                                                    <Setter Property="Width" Value="190"></Setter>
+                                                    <Setter Property="CornerRadius" Value="12" />
+                                                </Style>
+                                            </StackPanel.Styles>
+                                            <suki:GlassCard IsVisible="{TemplateBinding IsMenuExpanded}"
+                                                            Classes="Search" HorizontalAlignment="Right"
+                                                            IsAnimated="False" Width="42" Margin="15,10,15,15"
+                                                            CornerRadius="22" Height="42">
+                                                <suki:GlassCard.Transitions>
+                                                    <Transitions>
+                                                        <CornerRadiusTransition Property="CornerRadius"
+                                                            Duration="0:0:0.35">
+                                                        </CornerRadiusTransition>
+                                                        <DoubleTransition Property="Width" Duration="0:0:0.35"></DoubleTransition>
+                                                    </Transitions>
+                                                </suki:GlassCard.Transitions>
+                                                <DockPanel Margin="-3,-1,0,0">
+                                                    <PathIcon Width="13" DockPanel.Dock="Left"
+                                                              VerticalAlignment="Center"
+                                                              Foreground="{DynamicResource SukiLowText}"
+                                                              Height="13"
+                                                              Data="{x:Static suki:Icons.Search}" />
+                                                    <TextBox suki:TextBoxExtensions.AddDeleteButton="True"
+                                                             Classes="NoShadow"
+                                                             Text="{TemplateBinding SearchText, Mode=TwoWay}"
+                                                             BorderThickness="0" Watermark="Search" />
+                                                </DockPanel>
+                                            </suki:GlassCard>
+
+                                            <!--  <Border Height="1" Margin="20,0,20,15" Background="{DynamicResource SukiBorderBrush}"/> -->
+                                        </StackPanel>
+                                        <ContentControl DockPanel.Dock="Bottom"
+                                                        IsVisible="{Binding !$parent[suki:SukiSideMenu].IsMenuExpanded}"
+                                                        Content="{TemplateBinding LeftBottomContent}"
+                                                        Name="PART_LeftBottomContent" />
+                                        <ScrollViewer Name="PART_ScrollViewer"
+                                                      AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                                      Background="{TemplateBinding Background}"
+                                                      BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}"
+                                                      Classes="Stack"
+                                                      HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                                      HorizontalSnapPointsType="{TemplateBinding (ScrollViewer.HorizontalSnapPointsType)}"
+                                                      IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                                      VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+                                                      VerticalSnapPointsType="{TemplateBinding (ScrollViewer.VerticalSnapPointsType)}">
+                                            <StackPanel suki:StackPanelExtensions.AnimatedScroll="True">
+                                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                                Margin="{TemplateBinding Padding}"
+                                                                suki:ItemsPresenterExtensions.AnimatedScroll="True"
+                                                                ItemsPanel="{TemplateBinding ItemsPanel}" />
+                                            </StackPanel>
+                                        </ScrollViewer>
+                                    </DockPanel>
+                                </DockPanel>
+                            </Grid>
+                        </Border>
+                    </SplitView.Pane>
+                    <Border Name="ContentBorder"
+                            Margin="0,0"
+                            Background="{DynamicResource SukiBackground}"
+                            BorderBrush="{DynamicResource SukiBorderBrush}"
+                            BorderThickness="0,0,0,0">
+                        <Grid>
+                            <suki:SukiTransitioningContentControl Name="PART_TransitioningContentControl" />
+                            <Border VerticalAlignment="Top"
+                                    Background="Transparent"
+                                    HorizontalAlignment="Stretch">
+                                <Interaction.Behaviors>
+                                    <behaviors:WindowDragBehavior />
+                                </Interaction.Behaviors>
+                                <DockPanel LastChildFill="False">
+                                    <StackPanel VerticalAlignment="Center"
+                                                DockPanel.Dock="Right"
+                                                Margin="5,0"
+                                                Orientation="Horizontal"
+                                                Spacing="4">
+                                        <StackPanel.Styles>
+                                            <Style Selector="PathIcon">
+                                                <Setter Property="Height" Value="8" />
+                                                <Setter Property="Width" Value="8" />
+                                            </Style>
+                                        </StackPanel.Styles>
+                                        <Button Name="PART_MinimizeButton"
+                                                VerticalContentAlignment="Bottom"
+                                                Classes="Basic Rounded WindowControlsButton">
+                                            <Interaction.Behaviors>
+                                                <EventTriggerBehavior EventName="Click">
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                                        PropertyName="WindowState"
+                                                        Value="{x:Static WindowState.Minimized}" />
+                                                </EventTriggerBehavior>
+                                            </Interaction.Behaviors>
+                                            <PathIcon Margin="0,0,0,6"
+                                                      VerticalAlignment="Bottom"
+                                                      Data="{x:Static suki:Icons.WindowMinimize}" />
+                                        </Button>
+                                        <Button Name="PART_MaximizeButton"
+                                                Classes="Basic Rounded WindowControlsButton">
+                                            <Interaction.Behaviors>
+                                                <EventTriggerBehavior EventName="Click">
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                                        PropertyName="WindowState"
+                                                        Value="{x:Static WindowState.Maximized}" />
+                                                    <ChangePropertyAction TargetObject="{Binding PART_MaximizeButton}"
+                                                                          PropertyName="IsVisible"
+                                                                          Value="False" />
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding ElementName=PART_NormalButton}"
+                                                        PropertyName="IsVisible"
+                                                        Value="True" />
+                                                </EventTriggerBehavior>
+                                            </Interaction.Behaviors>
+                                            <PathIcon x:Name="MaximizeIcon"
+                                                      Data="{x:Static suki:Icons.WindowMaximize}" />
+                                        </Button>
+                                        <Button Name="PART_NormalButton"
+                                                IsVisible="False"
+                                                Classes="Basic Rounded WindowControlsButton">
+                                            <Interaction.Behaviors>
+                                                <EventTriggerBehavior EventName="Click">
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                                        PropertyName="WindowState"
+                                                        Value="{x:Static WindowState.Normal}" />
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding ElementName=PART_NormalButton}"
+                                                        PropertyName="IsVisible"
+                                                        Value="False" />
+                                                    <ChangePropertyAction
+                                                        TargetObject="{Binding ElementName=PART_MaximizeButton}"
+                                                        PropertyName="IsVisible"
+                                                        Value="True" />
+                                                </EventTriggerBehavior>
+                                            </Interaction.Behaviors>
+                                            <PathIcon x:Name="NormalIcon"
+                                                      Data="{x:Static suki:Icons.WindowRestore}" />
+                                        </Button>
+                                        <Button Name="PART_CloseButton"
+                                                Classes="Basic Rounded WindowControlsButton Close">
+                                            <Interaction.Behaviors>
+                                                <EventTriggerBehavior EventName="Click">
+                                                    <CallMethodAction TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                                                      MethodName="Close" />
+                                                </EventTriggerBehavior>
+                                            </Interaction.Behaviors>
+                                            <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                                        </Button>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </SplitView>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^[IsToggleButtonVisible=False]">
+            <Style Selector="^[IsMenuExpanded=False]">
+                <Style Selector="^ /template/ Button#PART_SidebarToggleButton">
+                    <Setter Property="Opacity" Value="0" />
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </Style>
+            <Style Selector="^[IsMenuExpanded=True]">
+                <Style Selector="^ /template/ Button#PART_SidebarToggleButton">
+                    <Setter Property="Opacity" Value="0" />
+                    <Setter Property="IsHitTestVisible" Value="False" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="^[IsMenuExpanded=False]">
+            <Style Selector="^ /template/ PathIcon#PART_ExpandIcon">
+                <Setter Property="RenderTransform" Value="rotate(-180deg)" />
+            </Style>
+            <Style Selector="^ /template/ Grid#PART_Spacer">
+                <Setter Property="Height" Value="0" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>

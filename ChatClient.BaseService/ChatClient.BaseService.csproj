@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj"/>
+        <ProjectReference Include="..\ChatClient.DataBase\ChatClient.DataBase.csproj"/>
+        <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="SukiUI">
+            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\SukiUI.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Drawing.Common" Version="9.0.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Factory\"/>
+    </ItemGroup>
+
+</Project>

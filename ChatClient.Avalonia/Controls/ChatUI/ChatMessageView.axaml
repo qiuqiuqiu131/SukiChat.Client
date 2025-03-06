@@ -1,0 +1,202 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
+             xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.ChatUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Avalonia.Controls.ChatUI.ChatMessageView">
+    <UserControl.Styles>
+        <Style Selector="chatUi|ChatMessageView">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <Grid.DataTemplates>
+                            <DataTemplate DataType="data:TextMessDto">
+                                <SelectableTextBlock Text="{Binding Text}"
+                                                     FontSize="14"
+                                                     HorizontalAlignment="Center"
+                                                     Margin="3,0,2,2"
+                                                     Padding="2"
+                                                     MaxWidth="350"
+                                                     TextWrapping="Wrap" LetterSpacing="0.5" />
+                            </DataTemplate>
+                            <DataTemplate DataType="data:ImageMessDto">
+                                <Grid Classes="Icon">
+                                    <Grid.Styles>
+                                        <Style Selector="Grid.Icon:pointerover Border#Icon">
+                                            <Setter Property="Opacity" Value="0.45" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <Border ClipToBounds="True" CornerRadius="6">
+                                        <Image Name="ImageSource"
+                                               ToolTip.ShowDelay="500"
+                                               Source="{Binding ImageSource}">
+                                            <ToolTip.Tip>
+                                                <TextBlock FontSize="12"
+                                                           Text="双击查看图片" />
+                                            </ToolTip.Tip>
+                                            <Interaction.Behaviors>
+                                                <behaviors:ImageSizeAdjustBehavior />
+                                                <behaviors:ImageShowBehavior />
+                                            </Interaction.Behaviors>
+                                        </Image>
+                                    </Border>
+                                    <Border Name="Icon"
+                                            HorizontalAlignment="Right"
+                                            Background="#00000000"
+                                            VerticalAlignment="Bottom"
+                                            Opacity="0"
+                                            Padding="3"
+                                            Classes="Icon"
+                                            Margin="7">
+                                        <Border.Transitions>
+                                            <Transitions>
+                                                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+                                            </Transitions>
+                                        </Border.Transitions>
+                                        <Interaction.Behaviors>
+                                            <behaviors:ImageShowByClickBehavior
+                                                TargetImage="{Binding ElementName=ImageSource}" />
+                                        </Interaction.Behaviors>
+                                        <Border.Styles>
+                                            <Style Selector="Border.Icon:pointerover">
+                                                <Setter Property="Opacity" Value="0.7" />
+                                                <Setter Property="Cursor" Value="Hand" />
+                                            </Style>
+                                        </Border.Styles>
+                                        <avalonia:MaterialIcon Width="20"
+                                                               Foreground="White"
+                                                               Height="20"
+                                                               Kind="ImageSearch" />
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </Grid.DataTemplates>
+                        <Border IsVisible="{TemplateBinding IsLeft}"
+                                Padding="0"
+                                HorizontalAlignment="Left">
+                            <Border.DataTemplates>
+                                <DataTemplate DataType="data:FileMessDto">
+                                    <Border Margin="5,5,5,0" Padding="0" Background="Transparent">
+                                        <DockPanel LastChildFill="True">
+                                            <ProgressBar Width="100"
+                                                         Margin="0,-5,0,0"
+                                                         DockPanel.Dock="Bottom"
+                                                         IsVisible="{Binding FileProcessDto,Converter={converter:CheckIsNullConverter}}"
+                                                         Maximum="1"
+                                                         Value="{Binding FileProcessDto.Progress}" />
+                                            <Grid ColumnDefinitions="160,45" Margin="0,0,0,5">
+                                                <StackPanel Orientation="Vertical"
+                                                            HorizontalAlignment="Stretch"
+                                                            Margin="10,0">
+                                                    <TextBlock
+                                                        Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
+                                                        FontSize="13"
+                                                        HorizontalAlignment="Left"
+                                                        TextWrapping="NoWrap"
+                                                        TextTrimming="CharacterEllipsis" />
+                                                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                                                        <Grid DockPanel.Dock="Right">
+                                                            <Grid.Styles>
+                                                                <Style Selector="Button.Basic">
+                                                                    <Setter Property="Margin" Value="0" />
+                                                                    <Setter Property="Padding" Value="0" />
+                                                                </Style>
+                                                            </Grid.Styles>
+                                                            <Button Classes="Basic" IsVisible="{Binding !IsDownload}"
+                                                                    Cursor="Hand"
+                                                                    Command="{Binding $parent[chatUi:ChatUI].FileMessageClickCommand}"
+                                                                    CommandParameter="{Binding}">
+                                                                <TextBlock Text="下载" FontSize="12" />
+                                                            </Button>
+                                                            <Button Classes="Basic"
+                                                                    Cursor="Hand"
+                                                                    IsVisible="{Binding IsDownload}">
+                                                                <Interaction.Behaviors>
+                                                                    <behaviors:OpenFileInExplorerBehavior
+                                                                        FilePath="{Binding TargetFilePath}" />
+                                                                </Interaction.Behaviors>
+                                                                <TextBlock Text="打开" FontSize="12" />
+                                                            </Button>
+                                                        </Grid>
+                                                        <TextBlock
+                                                            Opacity="0.8"
+                                                            HorizontalAlignment="Left"
+                                                            Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
+                                                            FontSize="12"
+                                                            TextWrapping="NoWrap" />
+                                                    </DockPanel>
+                                                </StackPanel>
+                                                <avalonia:MaterialIcon
+                                                    Grid.Column="1"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Right"
+                                                    Foreground="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
+                                                    Height="45" Width="45"
+                                                    Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
+                                            </Grid>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </Border.DataTemplates>
+                            <ContentControl
+                                HorizontalAlignment="Left"
+                                Content="{TemplateBinding Message}" />
+                        </Border>
+                        <Border IsVisible="{Binding !$parent[chatUi:ChatMessageView].IsLeft}"
+                                Padding="0"
+                                HorizontalAlignment="Right">
+                            <Border.DataTemplates>
+                                <DataTemplate DataType="data:FileMessDto">
+                                    <Border Margin="5,5,5,0" Padding="0" Background="Transparent">
+                                        <DockPanel LastChildFill="True">
+                                            <ProgressBar Width="100" DockPanel.Dock="Bottom"
+                                                         Margin="0,-5,0,0"
+                                                         Maximum="1"
+                                                         IsVisible="{Binding FileProcessDto,Converter={converter:CheckIsNullConverter}}"
+                                                         Value="{Binding FileProcessDto.Progress}" />
+                                            <Grid ColumnDefinitions="45,160" Margin="0,0,0,5">
+                                                <avalonia:MaterialIcon
+                                                    Width="45" Height="45"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
+                                                    HorizontalAlignment="Left"
+                                                    Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
+                                                <StackPanel Grid.Column="1" Orientation="Vertical"
+                                                            HorizontalAlignment="Stretch"
+                                                            Margin="10,0">
+                                                    <TextBlock
+                                                        Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
+                                                        FontSize="13"
+                                                        HorizontalAlignment="Left"
+                                                        TextWrapping="NoWrap"
+                                                        TextTrimming="CharacterEllipsis" />
+                                                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="True">
+                                                        <TextBlock
+                                                            Opacity="0.8"
+                                                            HorizontalAlignment="Left"
+                                                            Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
+                                                            FontSize="12"
+                                                            TextWrapping="NoWrap" />
+                                                    </DockPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </Border.DataTemplates>
+                            <ContentControl
+                                HorizontalAlignment="Right"
+                                Content="{TemplateBinding Message}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

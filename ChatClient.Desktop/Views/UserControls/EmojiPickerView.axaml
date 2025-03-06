@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Desktop.Views.UserControls.EmojiPickerView">
+    <Panel>
+        <Border CornerRadius="8"
+                Opacity="0.95"
+                BorderThickness="1"
+                Margin="10"
+                BorderBrush="{DynamicResource SukiBorderBrush}"
+                Background="{DynamicResource SukiCardBackground}" />
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" Margin="10"
+                      VerticalScrollBarVisibility="Auto"
+                      MaxWidth="300">
+            <ItemsControl Name="EmojiList">
+                <ItemsControl.Styles>
+                    <Style Selector="Button.Emoji:pointerover">
+                        <Setter Property="RenderTransform">
+                            <Setter.Value>
+                                <ScaleTransform ScaleX="1.1" ScaleY="1.1" />
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Classes="Basic Emoji"
+                                CommandParameter="{Binding}"
+                                Padding="3"
+                                Margin="2"
+                                Click="SelectEmoji"
+                                FontSize="30">
+                            <TextBlock Text="{Binding}" />
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Panel>
+</UserControl>

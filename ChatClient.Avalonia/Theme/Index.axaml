@@ -1,0 +1,23 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StyleInclude Source="RatioButton.axaml" />
+    <StyleInclude Source="Text.axaml" />
+    <StyleInclude Source="ListBox.axaml" />
+    <StyleInclude Source="ListBoxItem.axaml" />
+    <StyleInclude Source="ToggleButton.axaml" />
+    <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="../Controls/OverlaySplitView/OverlaySplitView.axaml" />
+    <StyleInclude Source="../Controls/GroupList/GroupList.axaml" />
+    <StyleInclude Source="../Controls/SeparateGroupsView/SeparateGroupsView.axaml" />
+
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Expander.axaml" />
+                <ResourceInclude Source="MySukiWindowStyle.axaml" />
+                <ResourceInclude Source="ToolTip.axaml" />
+                <ResourceInclude Source="MySukiSideMenuStyle.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+</Styles>

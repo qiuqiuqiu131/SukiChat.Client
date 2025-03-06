@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:view="clr-namespace:ChatClient.Desktop.Views"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ChatClient.Desktop.Views.ScreenshotWindow"
+        WindowState="FullScreen"
+        SystemDecorations="None"
+        Title="ScreenshotWindow">
+    <Window.Styles>
+        <Style Selector="Button.ToolbarButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="Margin" Value="4,0" />
+            <Setter Property="Padding" Value="4" />
+        </Style>
+    </Window.Styles>
+
+    <!-- 主画布，用于显示选择框 -->
+    <Canvas x:Name="MainCanvas"
+            Background="Transparent">
+        <Border CornerRadius="4"
+                x:Name="Toolbar"
+                Background="#cccccc"
+                Opacity="0"
+                Padding="8,4">
+            <StackPanel Orientation="Horizontal">
+                <Button Classes="ToolbarButton"
+                        Cursor="Hand"
+                        Click="OnSaveAs">
+                    <ToolTip.Tip>
+                        <TextBlock Text="另存为" FontSize="13" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="ContentSave"
+                                           Width="20"
+                                           Height="20"
+                                           Foreground="Black" />
+                </Button>
+
+                <Button Classes="ToolbarButton"
+                        Cursor="Hand"
+                        Click="OnCancel">
+                    <ToolTip.Tip>
+                        <TextBlock Text="取消" FontSize="13" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="Close"
+                                           Width="20"
+                                           Height="20"
+                                           Foreground="Black" />
+                </Button>
+
+                <Button Classes="ToolbarButton"
+                        Cursor="Hand"
+                        Click="OnConfirm">
+                    <ToolTip.Tip>
+                        <TextBlock Text="确定" FontSize="13" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="Check"
+                                           Width="20"
+                                           Height="20"
+                                           Foreground="Black" />
+                </Button>
+            </StackPanel>
+        </Border>
+    </Canvas>
+</Window>

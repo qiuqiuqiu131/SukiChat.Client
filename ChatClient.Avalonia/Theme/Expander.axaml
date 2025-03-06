@@ -1,0 +1,118 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:content="https://github.com/kikipoulet/SukiUI">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="ChatExpander" TargetType="Expander">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="Expander">
+                <Border Name="PART_RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <Border Name="PART_InnerBorder" CornerRadius="{TemplateBinding CornerRadius}">
+                        <StackPanel Orientation="Vertical">
+                            <LayoutTransformControl Name="PART_ToggleTransform">
+                                <ToggleButton Name="PART_ToggleButton"
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Center"
+                                              HorizontalContentAlignment="Stretch"
+                                              Background="{DynamicResource SukiGlassCardBackground}"
+                                              BorderBrush="{DynamicResource SukiPrimaryColor7}"
+                                              Padding="0,7"
+                                              CornerRadius="0"
+                                              Classes="Chat"
+                                              IsChecked="{TemplateBinding IsExpanded,Mode=TwoWay}">
+                                    <Grid ColumnDefinitions="Auto,Auto,*">
+                                        <PathIcon Name="PART_Icon"
+                                                  Classes="Flippable"
+                                                  Width="12"
+                                                  Height="12"
+                                                  Opacity="0.8"
+                                                  Margin="10,0"
+                                                  Data="{x:Static content:Icons.ChevronLeft}"
+                                                  Foreground="{DynamicResource SukiText}">
+                                            <PathIcon.Transitions>
+                                                <Transitions>
+                                                    <TransformOperationsTransition Property="RenderTransform"
+                                                        Duration="{StaticResource MediumAnimationDuration}" />
+                                                </Transitions>
+                                            </PathIcon.Transitions>
+                                        </PathIcon>
+                                        <ContentPresenter Grid.Column="1"
+                                                          HorizontalAlignment="Left"
+                                                          VerticalAlignment="Center"
+                                                          Opacity="0.9"
+                                                          Content="{TemplateBinding Header}"
+                                                          FontWeight="{DynamicResource DefaultDemiBold}" />
+                                    </Grid>
+                                </ToggleButton>
+                            </LayoutTransformControl>
+                            <content:ContentExpandControl Name="PART_ContentExpand"
+                                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                          Content="{TemplateBinding Content}"
+                                                          ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </StackPanel>
+                    </Border>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:not(.no-transitions) /template/ content|ContentExpandControl#PART_ContentExpand">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Easing="CubicEaseInOut"
+                                      Property="Multiplier"
+                                      Duration="0.3" />
+                    <DoubleTransition Easing="CubicEaseInOut"
+                                      Property="Opacity"
+                                      Duration="0.3" />
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="^ /template/ Border#PART_InnerBorder">
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+
+        <Style Selector="^ /template/ LayoutTransformControl#PART_ToggleTransform">
+            <Setter Property="ClipToBounds" Value="False" />
+        </Style>
+
+        <Style Selector="^ /template/ content|ContentExpandControl#PART_ContentExpand">
+            <Setter Property="Multiplier" Value="0" />
+            <Setter Property="Opacity" Value="0.4"></Setter>
+        </Style>
+
+        <Style Selector="^:expanded /template/ content|ContentExpandControl#PART_ContentExpand">
+            <Setter Property="Multiplier" Value="1" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+
+        <Style Selector="^:down">
+            <Style Selector="^ /template/ content|ContentExpandControl#PART_ContentExpand">
+                <Setter Property="Orientation" Value="Vertical" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Margin" Value="0,0,0,0" />
+            </Style>
+
+            <Style Selector="^ /template/ LayoutTransformControl#PART_ToggleTransform">
+                <Setter Property="VerticalAlignment" Value="Top" />
+            </Style>
+        </Style>
+
+        <Style Selector="^ /template/ PathIcon#PART_Icon">
+            <Setter Property="RenderTransform" Value="rotate(-180deg)" />
+        </Style>
+
+        <Style Selector="^:expanded /template/ PathIcon#PART_Icon">
+            <Setter Property="RenderTransform" Value="rotate(-90deg)" />
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>
