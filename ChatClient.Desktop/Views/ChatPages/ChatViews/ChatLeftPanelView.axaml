@@ -49,23 +49,69 @@
                        HorizontalOffset="15"
                        IsLightDismissEnabled="True"
                        PlacementTarget="PART_AddButton">
-                    <Border Background="{DynamicResource SukiCardBackground}">
+                    <Border Background="{DynamicResource SukiCardBackground}" CornerRadius="5">
                         <StackPanel Orientation="Vertical">
-                            <Button Content="创建群聊" Command="{Binding CreateGroupCommand}">
+                            <StackPanel.Styles>
+                                <Style Selector="Button.Shake:pointerover avalonia|MaterialIcon">
+                                    <Style.Animations>
+                                        <Animation Easing="CubicEaseInOut"
+                                                   Duration="0:0:0.2"
+                                                   IterationCount="2"
+                                                   FillMode="Forward">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                                                <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </StackPanel.Styles>
+                            <Button Classes="Void Shake" HorizontalAlignment="Left" Margin="3,3,3,0" Padding="5,5"
+                                    Command="{Binding CreateGroupCommand}">
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="Click">
                                         <ChangePropertyAction TargetObject="PART_AddPop" PropertyName="IsOpen"
                                                               Value="false" />
                                     </EventTriggerBehavior>
                                 </Interaction.Behaviors>
+                                <Grid ColumnDefinitions="20,auto">
+                                    <avalonia:MaterialIcon RenderTransformOrigin="0.5,0.5"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           Kind="CommentPlusOutline"
+                                                           Width="17" Height="17" />
+                                    <TextBlock Grid.Column="1" Text="创建群聊" FontWeight="DemiBold"
+                                               VerticalAlignment="Center" FontSize="13"
+                                               Margin="10,0,0,1.5" />
+                                </Grid>
                             </Button>
-                            <Button Content="添加好友/群聊" Command="{Binding AddNewFriendCommand}">
+                            <Button Classes="Void Shake" HorizontalAlignment="Left" Margin="3,0,3,3"
+                                    Padding="5,5"
+                                    Command="{Binding AddNewFriendCommand}">
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="Click">
                                         <ChangePropertyAction TargetObject="PART_AddPop" PropertyName="IsOpen"
                                                               Value="false" />
                                     </EventTriggerBehavior>
                                 </Interaction.Behaviors>
+                                <Grid ColumnDefinitions="20,auto">
+                                    <avalonia:MaterialIcon RenderTransformOrigin="0.5,0.5"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           Kind="AccountPlusOutline"
+                                                           Width="17" Height="17" />
+                                    <TextBlock Grid.Column="1" Text="加好友/群" FontWeight="DemiBold"
+                                               VerticalAlignment="Center" FontSize="13"
+                                               Margin="10,0,0,1.5" />
+                                </Grid>
                             </Button>
                         </StackPanel>
                     </Border>

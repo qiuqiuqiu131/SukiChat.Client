@@ -41,32 +41,34 @@ namespace ChatServer.Common.Protobuf {
             "c2VGcm9tQ2xpZW50UmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0",
             "U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSJTChhGcmll",
             "bmRSZXNwb25zZUZyb21TZXJ2ZXISEQoJcmVxdWVzdElkGAEgASgFEg4KBmFj",
-            "Y2VwdBgCIAEoCBIUCgxyZXNwb25zZVRpbWUYAyABKAkiSQoQTmV3RnJpZW5k",
-            "TWVzc2FnZRIQCghmcmluZWRJZBgBIAEoCRINCgVncm91cBgCIAEoCRIUCgxy",
-            "ZWxhdGlvblRpbWUYAyABKAkiSQoSQ3JlYXRlR3JvdXBSZXF1ZXN0Eg4KBnVz",
-            "ZXJJZBgBIAEoCRIRCglncm91cE5hbWUYAiABKAkSEAoIZnJpZW5kSWQYAyAD",
-            "KAkicgoTQ3JlYXRlR3JvdXBSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIq",
-            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEg8K",
-            "B2dyb3VwSWQYAiABKAkSDAoEdGltZRgDIAEoCSJrChBQdWxsR3JvdXBNZXNz",
-            "YWdlEg8KB2dyb3VwSWQYASABKAkSEgoKdXNlcklkRnJvbRgCIAEoCRIUCgx1",
-            "c2VySWRUYXJnZXQYAyABKAkSDgoGc3RhdHVzGAQgASgFEgwKBHRpbWUYBSAB",
-            "KAkiPQoaSm9pbkdyb3VwUmVxdWVzdEZyb21DbGllbnQSDgoGdXNlcklkGAEg",
-            "ASgJEg8KB2dyb3VwSWQYAiABKAkilAEKIkpvaW5Hcm91cFJlcXVlc3RSZXNw",
-            "b25zZUZyb21TZXJ2ZXISPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVy",
-            "LkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIPCgdncm91cElkGAIg",
-            "ASgJEhEKCXJlcXVlc3RJZBgDIAEoBRIMCgR0aW1lGAQgASgJIl4KGkpvaW5H",
-            "cm91cFJlcXVlc3RGcm9tU2VydmVyEhEKCXJlcXVlc3RJZBgBIAEoBRIOCgZ1",
-            "c2VySWQYAiABKAkSDwoHZ3JvdXBJZBgDIAEoCRIMCgR0aW1lGAQgASgJIlAK",
-            "G0pvaW5Hcm91cFJlc3BvbnNlRnJvbUNsaWVudBIRCglyZXF1ZXN0SWQYASAB",
-            "KAUSDgoGdXNlcklkGAIgASgJEg4KBmFjY2VwdBgDIAEoCCKkAQojSm9pbkdy",
-            "b3VwUmVzcG9uc2VSZXNwb25zZUZyb21TZXJ2ZXISPAoIcmVzcG9uc2UYASAB",
-            "KAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25z",
-            "ZRIRCglyZXF1ZXN0SWQYAiABKAUSDgoGdXNlcklkGAMgASgJEgwKBHRpbWUY",
-            "BCABKAkSDgoGYWNjZXB0GAUgASgIIngKG0pvaW5Hcm91cFJlc3BvbnNlRnJv",
-            "bVNlcnZlchIRCglyZXF1ZXN0SWQYASABKAUSEgoKdXNlcklkRnJvbRgCIAEo",
-            "CRIUCgx1c2VySWRUYXJnZXQYAyABKAkSDgoGYWNjZXB0GAQgASgIEgwKBHRp",
-            "bWUYBSABKAkiNAoUTmV3TWVtYmVySm9pbk1lc3NhZ2USDgoGdXNlcklkGAEg",
-            "ASgJEgwKBHRpbWUYAiABKAliBnByb3RvMw=="));
+            "Y2VwdBgCIAEoCBIUCgxyZXNwb25zZVRpbWUYAyABKAkikAEKEE5ld0ZyaWVu",
+            "ZE1lc3NhZ2USDgoGdXNlcklkGAEgASgJEhAKCGZyaW5lZElkGAIgASgJEhAK",
+            "CGdyb3VwaW5nGAMgASgJEhQKDHJlbGF0aW9uVGltZRgEIAEoCRIOCgZyZW1h",
+            "cmsYBSABKAkSEwoLY2FudERpc3R1cmIYBiABKAgSDQoFaXNUb3AYByABKAgi",
+            "NgoSQ3JlYXRlR3JvdXBSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmll",
+            "bmRJZBgDIAMoCSKFAQoTQ3JlYXRlR3JvdXBSZXNwb25zZRI8CghyZXNwb25z",
+            "ZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJl",
+            "c3BvbnNlEg8KB2dyb3VwSWQYAiABKAkSDAoEdGltZRgDIAEoCRIRCglncm91",
+            "cE5hbWUYBCABKAkifQoQUHVsbEdyb3VwTWVzc2FnZRIPCgdncm91cElkGAEg",
+            "ASgJEhIKCnVzZXJJZEZyb20YAiABKAkSFAoMdXNlcklkVGFyZ2V0GAMgASgJ",
+            "Eg4KBnN0YXR1cxgEIAEoBRIQCghncm91cGluZxgFIAEoCRIMCgR0aW1lGAYg",
+            "ASgJIj0KGkpvaW5Hcm91cFJlcXVlc3RGcm9tQ2xpZW50Eg4KBnVzZXJJZBgB",
+            "IAEoCRIPCgdncm91cElkGAIgASgJIpQBCiJKb2luR3JvdXBSZXF1ZXN0UmVz",
+            "cG9uc2VGcm9tU2VydmVyEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZl",
+            "ci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgC",
+            "IAEoCRIRCglyZXF1ZXN0SWQYAyABKAUSDAoEdGltZRgEIAEoCSJeChpKb2lu",
+            "R3JvdXBSZXF1ZXN0RnJvbVNlcnZlchIRCglyZXF1ZXN0SWQYASABKAUSDgoG",
+            "dXNlcklkGAIgASgJEg8KB2dyb3VwSWQYAyABKAkSDAoEdGltZRgEIAEoCSJQ",
+            "ChtKb2luR3JvdXBSZXNwb25zZUZyb21DbGllbnQSEQoJcmVxdWVzdElkGAEg",
+            "ASgFEg4KBnVzZXJJZBgCIAEoCRIOCgZhY2NlcHQYAyABKAgipAEKI0pvaW5H",
+            "cm91cFJlc3BvbnNlUmVzcG9uc2VGcm9tU2VydmVyEjwKCHJlc3BvbnNlGAEg",
+            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
+            "c2USEQoJcmVxdWVzdElkGAIgASgFEg4KBnVzZXJJZBgDIAEoCRIMCgR0aW1l",
+            "GAQgASgJEg4KBmFjY2VwdBgFIAEoCCJ4ChtKb2luR3JvdXBSZXNwb25zZUZy",
+            "b21TZXJ2ZXISEQoJcmVxdWVzdElkGAEgASgFEhIKCnVzZXJJZEZyb20YAiAB",
+            "KAkSFAoMdXNlcklkVGFyZ2V0GAMgASgJEg4KBmFjY2VwdBgEIAEoCBIMCgR0",
+            "aW1lGAUgASgJIjQKFE5ld01lbWJlckpvaW5NZXNzYWdlEg4KBnVzZXJJZBgB",
+            "IAEoCRIMCgR0aW1lGAIgASgJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -76,10 +78,10 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromClient), global::ChatServer.Common.Protobuf.FriendResponseFromClient.Parser, new[]{ "RequestId", "Accept", "Group", "ResponseTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromClientResponse), global::ChatServer.Common.Protobuf.FriendResponseFromClientResponse.Parser, new[]{ "Response" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromServer), global::ChatServer.Common.Protobuf.FriendResponseFromServer.Parser, new[]{ "RequestId", "Accept", "ResponseTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.NewFriendMessage), global::ChatServer.Common.Protobuf.NewFriendMessage.Parser, new[]{ "FrinedId", "Group", "RelationTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CreateGroupRequest), global::ChatServer.Common.Protobuf.CreateGroupRequest.Parser, new[]{ "UserId", "GroupName", "FriendId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CreateGroupResponse), global::ChatServer.Common.Protobuf.CreateGroupResponse.Parser, new[]{ "Response", "GroupId", "Time" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.PullGroupMessage), global::ChatServer.Common.Protobuf.PullGroupMessage.Parser, new[]{ "GroupId", "UserIdFrom", "UserIdTarget", "Status", "Time" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.NewFriendMessage), global::ChatServer.Common.Protobuf.NewFriendMessage.Parser, new[]{ "UserId", "FrinedId", "Grouping", "RelationTime", "Remark", "CantDisturb", "IsTop" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CreateGroupRequest), global::ChatServer.Common.Protobuf.CreateGroupRequest.Parser, new[]{ "UserId", "FriendId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CreateGroupResponse), global::ChatServer.Common.Protobuf.CreateGroupResponse.Parser, new[]{ "Response", "GroupId", "Time", "GroupName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.PullGroupMessage), global::ChatServer.Common.Protobuf.PullGroupMessage.Parser, new[]{ "GroupId", "UserIdFrom", "UserIdTarget", "Status", "Grouping", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.JoinGroupRequestFromClient), global::ChatServer.Common.Protobuf.JoinGroupRequestFromClient.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.JoinGroupRequestResponseFromServer), global::ChatServer.Common.Protobuf.JoinGroupRequestResponseFromServer.Parser, new[]{ "Response", "GroupId", "RequestId", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.JoinGroupRequestFromServer), global::ChatServer.Common.Protobuf.JoinGroupRequestFromServer.Parser, new[]{ "RequestId", "UserId", "GroupId", "Time" }, null, null, null, null),
@@ -1320,9 +1322,13 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public NewFriendMessage(NewFriendMessage other) : this() {
+      userId_ = other.userId_;
       frinedId_ = other.frinedId_;
-      group_ = other.group_;
+      grouping_ = other.grouping_;
       relationTime_ = other.relationTime_;
+      remark_ = other.remark_;
+      cantDisturb_ = other.cantDisturb_;
+      isTop_ = other.isTop_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1331,8 +1337,19 @@ namespace ChatServer.Common.Protobuf {
       return new NewFriendMessage(this);
     }
 
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "frinedId" field.</summary>
-    public const int FrinedIdFieldNumber = 1;
+    public const int FrinedIdFieldNumber = 2;
     private string frinedId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string FrinedId {
@@ -1342,25 +1359,58 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
-    /// <summary>Field number for the "group" field.</summary>
-    public const int GroupFieldNumber = 2;
-    private string group_ = "";
+    /// <summary>Field number for the "grouping" field.</summary>
+    public const int GroupingFieldNumber = 3;
+    private string grouping_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string Group {
-      get { return group_; }
+    public string Grouping {
+      get { return grouping_; }
       set {
-        group_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+        grouping_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
     /// <summary>Field number for the "relationTime" field.</summary>
-    public const int RelationTimeFieldNumber = 3;
+    public const int RelationTimeFieldNumber = 4;
     private string relationTime_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string RelationTime {
       get { return relationTime_; }
       set {
         relationTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "remark" field.</summary>
+    public const int RemarkFieldNumber = 5;
+    private string remark_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Remark {
+      get { return remark_; }
+      set {
+        remark_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "cantDisturb" field.</summary>
+    public const int CantDisturbFieldNumber = 6;
+    private bool cantDisturb_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool CantDisturb {
+      get { return cantDisturb_; }
+      set {
+        cantDisturb_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isTop" field.</summary>
+    public const int IsTopFieldNumber = 7;
+    private bool isTop_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsTop {
+      get { return isTop_; }
+      set {
+        isTop_ = value;
       }
     }
 
@@ -1377,18 +1427,26 @@ namespace ChatServer.Common.Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (UserId != other.UserId) return false;
       if (FrinedId != other.FrinedId) return false;
-      if (Group != other.Group) return false;
+      if (Grouping != other.Grouping) return false;
       if (RelationTime != other.RelationTime) return false;
+      if (Remark != other.Remark) return false;
+      if (CantDisturb != other.CantDisturb) return false;
+      if (IsTop != other.IsTop) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (FrinedId.Length != 0) hash ^= FrinedId.GetHashCode();
-      if (Group.Length != 0) hash ^= Group.GetHashCode();
+      if (Grouping.Length != 0) hash ^= Grouping.GetHashCode();
       if (RelationTime.Length != 0) hash ^= RelationTime.GetHashCode();
+      if (Remark.Length != 0) hash ^= Remark.GetHashCode();
+      if (CantDisturb != false) hash ^= CantDisturb.GetHashCode();
+      if (IsTop != false) hash ^= IsTop.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1402,17 +1460,33 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (FrinedId.Length != 0) {
+      if (UserId.Length != 0) {
         output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (FrinedId.Length != 0) {
+        output.WriteRawTag(18);
         output.WriteString(FrinedId);
       }
-      if (Group.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Group);
+      if (Grouping.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Grouping);
       }
       if (RelationTime.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(34);
         output.WriteString(RelationTime);
+      }
+      if (Remark.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Remark);
+      }
+      if (CantDisturb != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(CantDisturb);
+      }
+      if (IsTop != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsTop);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1422,14 +1496,26 @@ namespace ChatServer.Common.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
       if (FrinedId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(FrinedId);
       }
-      if (Group.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Group);
+      if (Grouping.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Grouping);
       }
       if (RelationTime.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RelationTime);
+      }
+      if (Remark.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Remark);
+      }
+      if (CantDisturb != false) {
+        size += 1 + 1;
+      }
+      if (IsTop != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1442,14 +1528,26 @@ namespace ChatServer.Common.Protobuf {
       if (other == null) {
         return;
       }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
       if (other.FrinedId.Length != 0) {
         FrinedId = other.FrinedId;
       }
-      if (other.Group.Length != 0) {
-        Group = other.Group;
+      if (other.Grouping.Length != 0) {
+        Grouping = other.Grouping;
       }
       if (other.RelationTime.Length != 0) {
         RelationTime = other.RelationTime;
+      }
+      if (other.Remark.Length != 0) {
+        Remark = other.Remark;
+      }
+      if (other.CantDisturb != false) {
+        CantDisturb = other.CantDisturb;
+      }
+      if (other.IsTop != false) {
+        IsTop = other.IsTop;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1463,15 +1561,31 @@ namespace ChatServer.Common.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            FrinedId = input.ReadString();
+            UserId = input.ReadString();
             break;
           }
           case 18: {
-            Group = input.ReadString();
+            FrinedId = input.ReadString();
             break;
           }
           case 26: {
+            Grouping = input.ReadString();
+            break;
+          }
+          case 34: {
             RelationTime = input.ReadString();
+            break;
+          }
+          case 42: {
+            Remark = input.ReadString();
+            break;
+          }
+          case 48: {
+            CantDisturb = input.ReadBool();
+            break;
+          }
+          case 56: {
+            IsTop = input.ReadBool();
             break;
           }
         }
@@ -1510,7 +1624,6 @@ namespace ChatServer.Common.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public CreateGroupRequest(CreateGroupRequest other) : this() {
       userId_ = other.userId_;
-      groupName_ = other.groupName_;
       friendId_ = other.friendId_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1528,17 +1641,6 @@ namespace ChatServer.Common.Protobuf {
       get { return userId_; }
       set {
         userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "groupName" field.</summary>
-    public const int GroupNameFieldNumber = 2;
-    private string groupName_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string GroupName {
-      get { return groupName_; }
-      set {
-        groupName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -1566,7 +1668,6 @@ namespace ChatServer.Common.Protobuf {
         return true;
       }
       if (UserId != other.UserId) return false;
-      if (GroupName != other.GroupName) return false;
       if(!friendId_.Equals(other.friendId_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1575,7 +1676,6 @@ namespace ChatServer.Common.Protobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
-      if (GroupName.Length != 0) hash ^= GroupName.GetHashCode();
       hash ^= friendId_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1594,10 +1694,6 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
-      if (GroupName.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(GroupName);
-      }
       friendId_.WriteTo(output, _repeated_friendId_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1609,9 +1705,6 @@ namespace ChatServer.Common.Protobuf {
       int size = 0;
       if (UserId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
-      }
-      if (GroupName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupName);
       }
       size += friendId_.CalculateSize(_repeated_friendId_codec);
       if (_unknownFields != null) {
@@ -1628,9 +1721,6 @@ namespace ChatServer.Common.Protobuf {
       if (other.UserId.Length != 0) {
         UserId = other.UserId;
       }
-      if (other.GroupName.Length != 0) {
-        GroupName = other.GroupName;
-      }
       friendId_.Add(other.friendId_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1645,10 +1735,6 @@ namespace ChatServer.Common.Protobuf {
             break;
           case 10: {
             UserId = input.ReadString();
-            break;
-          }
-          case 18: {
-            GroupName = input.ReadString();
             break;
           }
           case 26: {
@@ -1692,6 +1778,7 @@ namespace ChatServer.Common.Protobuf {
       response_ = other.response_ != null ? other.response_.Clone() : null;
       groupId_ = other.groupId_;
       time_ = other.time_;
+      groupName_ = other.groupName_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1733,6 +1820,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "groupName" field.</summary>
+    public const int GroupNameFieldNumber = 4;
+    private string groupName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupName {
+      get { return groupName_; }
+      set {
+        groupName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as CreateGroupResponse);
@@ -1749,6 +1847,7 @@ namespace ChatServer.Common.Protobuf {
       if (!object.Equals(Response, other.Response)) return false;
       if (GroupId != other.GroupId) return false;
       if (Time != other.Time) return false;
+      if (GroupName != other.GroupName) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1758,6 +1857,7 @@ namespace ChatServer.Common.Protobuf {
       if (response_ != null) hash ^= Response.GetHashCode();
       if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
       if (Time.Length != 0) hash ^= Time.GetHashCode();
+      if (GroupName.Length != 0) hash ^= GroupName.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1783,6 +1883,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(26);
         output.WriteString(Time);
       }
+      if (GroupName.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(GroupName);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1799,6 +1903,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (Time.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Time);
+      }
+      if (GroupName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupName);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1822,6 +1929,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.Time.Length != 0) {
         Time = other.Time;
+      }
+      if (other.GroupName.Length != 0) {
+        GroupName = other.GroupName;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1847,6 +1957,10 @@ namespace ChatServer.Common.Protobuf {
           }
           case 26: {
             Time = input.ReadString();
+            break;
+          }
+          case 34: {
+            GroupName = input.ReadString();
             break;
           }
         }
@@ -1887,6 +2001,7 @@ namespace ChatServer.Common.Protobuf {
       userIdFrom_ = other.userIdFrom_;
       userIdTarget_ = other.userIdTarget_;
       status_ = other.status_;
+      grouping_ = other.grouping_;
       time_ = other.time_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1940,8 +2055,19 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "grouping" field.</summary>
+    public const int GroupingFieldNumber = 5;
+    private string grouping_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Grouping {
+      get { return grouping_; }
+      set {
+        grouping_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "time" field.</summary>
-    public const int TimeFieldNumber = 5;
+    public const int TimeFieldNumber = 6;
     private string time_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Time {
@@ -1968,6 +2094,7 @@ namespace ChatServer.Common.Protobuf {
       if (UserIdFrom != other.UserIdFrom) return false;
       if (UserIdTarget != other.UserIdTarget) return false;
       if (Status != other.Status) return false;
+      if (Grouping != other.Grouping) return false;
       if (Time != other.Time) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1979,6 +2106,7 @@ namespace ChatServer.Common.Protobuf {
       if (UserIdFrom.Length != 0) hash ^= UserIdFrom.GetHashCode();
       if (UserIdTarget.Length != 0) hash ^= UserIdTarget.GetHashCode();
       if (Status != 0) hash ^= Status.GetHashCode();
+      if (Grouping.Length != 0) hash ^= Grouping.GetHashCode();
       if (Time.Length != 0) hash ^= Time.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2009,8 +2137,12 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(32);
         output.WriteInt32(Status);
       }
-      if (Time.Length != 0) {
+      if (Grouping.Length != 0) {
         output.WriteRawTag(42);
+        output.WriteString(Grouping);
+      }
+      if (Time.Length != 0) {
+        output.WriteRawTag(50);
         output.WriteString(Time);
       }
       if (_unknownFields != null) {
@@ -2032,6 +2164,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (Status != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Status);
+      }
+      if (Grouping.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Grouping);
       }
       if (Time.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Time);
@@ -2058,6 +2193,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.Status != 0) {
         Status = other.Status;
+      }
+      if (other.Grouping.Length != 0) {
+        Grouping = other.Grouping;
       }
       if (other.Time.Length != 0) {
         Time = other.Time;
@@ -2090,6 +2228,10 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 42: {
+            Grouping = input.ReadString();
+            break;
+          }
+          case 50: {
             Time = input.ReadString();
             break;
           }

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.ManagerInterface;
@@ -16,6 +17,7 @@ public interface IUserManager
     public AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
     public AvaloniaList<GroupFriendDto>? GroupFriends { get; }
     public AvaloniaList<FriendChatDto>? FriendChats { get; }
+    public AvaloniaList<GroupChatDto>? GroupChatDtos { get; }
 
     // 用户登录请求
     public Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
@@ -30,4 +32,5 @@ public interface IUserManager
     public Task SaveUser();
 
     public Task<FriendRelationDto> NewFriendRecieve(string friendId);
+    public Task<GroupDto> NewGroupReceive(string groupId);
 }

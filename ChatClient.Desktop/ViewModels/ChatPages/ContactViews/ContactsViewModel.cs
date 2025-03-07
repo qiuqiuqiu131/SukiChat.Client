@@ -9,6 +9,7 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -29,19 +30,23 @@ public class ContactsViewModel : ChatPageBase
 
     public DelegateCommand<FriendRelationDto?> SelectedFriendChangedCommand { get; set; }
     public DelegateCommand ToFriendRequestViewCommand { get; init; }
-    public DelegateCommand NewFriendViewCommand { get; }
+    public DelegateCommand CreateGroupCommand { get; init; }
+    public DelegateCommand AddNewFriendCommand { get; init; }
 
     private readonly IContainerProvider _containerProvider;
+    private readonly IDialogService _dialogService;
 
     public ContactsViewModel(IContainerProvider containerProvider,
         IUserManager userManager)
         : base("通讯录", MaterialIconKind.ContactPhone, 1)
     {
         _containerProvider = containerProvider;
+        _dialogService = containerProvider.Resolve<IDialogService>();
 
         ToFriendRequestViewCommand = new DelegateCommand(ToFriendRequestView);
         SelectedFriendChangedCommand = new DelegateCommand<FriendRelationDto?>(SelectedFriendChanged);
-        NewFriendViewCommand = new DelegateCommand(NewFriendView);
+        CreateGroupCommand = new DelegateCommand(CreateGroup);
+        AddNewFriendCommand = new DelegateCommand(AddNewFriend);
 
         GroupFriends = userManager.GroupFriends!;
     }
@@ -51,10 +56,15 @@ public class ContactsViewModel : ChatPageBase
         ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendRequestView));
     }
 
-    private void NewFriendView()
+    private void AddNewFriend()
     {
         var view = _containerProvider.Resolve<AddNewFriendView>();
         view.Show();
+    }
+
+    private async void CreateGroup()
+    {
+        _dialogService.ShowDialog(nameof(CreateGroupView));
     }
 
     private void SelectedFriendChanged(FriendRelationDto? friend)

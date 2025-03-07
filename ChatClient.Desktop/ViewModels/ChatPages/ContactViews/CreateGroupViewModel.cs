@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Ioc;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
@@ -13,6 +16,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 public class CreateGroupViewModel : BindableBase, IDialogAware
 {
     private readonly IUserManager _userManager;
+    private readonly IContainerProvider _containerProvider;
 
     private string? _searchText;
 
@@ -31,29 +35,44 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
     public DelegateCommand CancleCommand { get; set; }
     public DelegateCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
 
-    public CreateGroupViewModel(IUserManager userManager)
+    public CreateGroupViewModel(IUserManager userManager, IContainerProvider containerProvider)
     {
         _userManager = userManager;
+        _containerProvider = containerProvider;
 
-        GroupFriends = userManager.GroupFriends!;
-
-        OKCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.OK));
+        OKCommand = new DelegateCommand(CreateGroup, CanCreateGroup);
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
         SelectionChangedCommand = new DelegateCommand<SelectionChangedEventArgs>(SelectionChanged);
+
+        GroupFriends = userManager.GroupFriends!;
+        GroupFriends.CollectionChanged += (sender, args) => OKCommand.RaiseCanExecuteChanged();
+    }
+
+    private bool CanCreateGroup() => GroupFriends.Count != 0;
+
+    /// <summary>
+    /// 创建群聊
+    /// </summary>
+    private async void CreateGroup()
+    {
+        List<string> friendIds = SelectedFriends.Select(d => d.Id).ToList();
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        var result = await groupService.CreateGroup(_userManager.User!.Id, friendIds);
     }
 
     private void SelectionChanged(SelectionChangedEventArgs args)
     {
         if (args.AddedItems != null && args.AddedItems.Count != 0)
         {
-            SelectedFriends.AddRange(args.AddedItems.Cast<FriendRelationDto>());
+            SelectedFriends.AddRange(args.AddedItems.Cast<Control>().Select(d => d.DataContext)
+                .Cast<FriendRelationDto>());
         }
 
         if (args.RemovedItems != null && args.RemovedItems.Count != 0)
         {
             foreach (var item in args.RemovedItems)
             {
-                var friend = item as FriendRelationDto;
+                var friend = ((Control)item).DataContext as FriendRelationDto;
                 SelectedFriends.Remove(friend!);
             }
         }

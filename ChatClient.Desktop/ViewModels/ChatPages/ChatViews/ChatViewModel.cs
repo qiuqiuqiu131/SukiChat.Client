@@ -97,9 +97,9 @@ public class ChatViewModel : ChatPageBase
             friendChatDto.HasMoreMessage = false;
         else if (friendChatDto.ChatMessages.Count == 1)
         {
-            var chatPackService = _containerProvider.Resolve<IChatPackService>();
+            var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
             var chatDatas =
-                await chatPackService.GetChatDataAsync(User?.Id, friendChatDto.UserId,
+                await chatPackService.GetFriendChatDataAsync(User?.Id, friendChatDto.UserId,
                     friendChatDto.ChatMessages[0].ChatId,
                     15);
 
@@ -138,9 +138,9 @@ public class ChatViewModel : ChatPageBase
 
         var chatMessages = SelectedFriend.ChatMessages;
 
-        var chatPackService = _containerProvider.Resolve<IChatPackService>();
+        var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
         var chatDatas =
-            await chatPackService.GetChatDataAsync(User?.Id, SelectedFriend.UserId,
+            await chatPackService.GetFriendChatDataAsync(User?.Id, SelectedFriend.UserId,
                 SelectedFriend.ChatMessages[0].ChatId,
                 15);
 

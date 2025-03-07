@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
+using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;
 
@@ -13,6 +14,8 @@ public interface IFriendPackService
 {
     Task<AvaloniaList<FriendReceiveDto>> GetFriendReceiveDtos(string userId);
     Task<AvaloniaList<FriendRelationDto>> GetFriendRelationDtos(string userId);
+    public Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
+    Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages);
 }
 
 public class FriendPackService : BaseService, IFriendPackService
@@ -76,5 +79,58 @@ public class FriendPackService : BaseService, IFriendPackService
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 客户端接收到NewFriendMessage消息后，由FriendService处理此消息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public async Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message)
+    {
+        if (!userId.Equals(message.UserId)) return false;
+        FriendRelation friendRelation = _mapper.Map<FriendRelation>(message);
+        try
+        {
+            var friendRepository = _unitOfWork.GetRepository<FriendRelation>();
+            var relation = await friendRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.User1Id.Equals(friendRelation.User1Id) && d.User2Id.Equals(friendRelation.User2Id));
+            if (relation != null)
+                friendRelation.Id = relation.Id;
+            friendRepository.Update(friendRelation);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 批量处理NewFriendMessage消息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public async Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages)
+    {
+        var friendRepository = _unitOfWork.GetRepository<FriendRelation>();
+        foreach (var message in messages)
+        {
+            if (!message.UserId.Equals(userId)) continue;
+
+            var friendRelation = _mapper.Map<FriendRelation>(message);
+            var relation = await friendRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.User1Id.Equals(friendRelation.User1Id) && d.User2Id.Equals(friendRelation.User2Id));
+            if (relation != null)
+                friendRelation.Id = relation.Id;
+            friendRepository.Update(friendRelation);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return true;
     }
 }

@@ -14,7 +14,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Background="{TemplateBinding Background}" Opacity="0.2"
+                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
@@ -82,7 +82,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Name="Back" Background="{TemplateBinding Background}" Opacity="0.2"
+                    <Border Name="Back" Background="{TemplateBinding Background}" Opacity="0.3"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>

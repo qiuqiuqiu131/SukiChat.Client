@@ -95,6 +95,7 @@ public class MultiSeparateGroupView : UserControl
             var control = (MultiGroupList.MultiGroupList)_dataTemplate.Build(groupFriend)!;
             control.DataContext = groupFriend;
             control.SelectionChanged += OnSelectionChanged;
+            groupFriend.DeSelectItemEvent += friend => control.DeSelectItems(friend);
             _itemCollection.Add(control);
         }
     }
@@ -116,6 +117,7 @@ public class MultiSeparateGroupView : UserControl
                             var control = (MultiGroupList.MultiGroupList)_dataTemplate.Build(groupFriend)!;
                             control.DataContext = groupFriend;
                             control.SelectionChanged += OnSelectionChanged;
+                            groupFriend.DeSelectItemEvent += friend => control.DeSelectItems(friend);
                             _itemCollection.Add(control);
                         }
                     }

@@ -95,7 +95,7 @@ internal class FriendMessageHandler : MessageHandlerBase
     /// <param name="newFriendMessage"></param>
     private async Task OnNewFriendMessage(IScopedProvider scope, NewFriendMessage newFriendMessage)
     {
-        var friendService = scope.Resolve<IFriendService>();
+        var friendService = scope.Resolve<IFriendPackService>();
         var result = await friendService.NewFriendMessageOperate(_userManager.User.Id, newFriendMessage);
         if (result)
         {

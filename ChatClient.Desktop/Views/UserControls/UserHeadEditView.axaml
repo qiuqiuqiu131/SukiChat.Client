@@ -25,6 +25,8 @@
     ShowBottomBorder="False"
     ShowTitlebarBackground="False"
     TitleFontSize="12.5"
+    IsTitleBarVisible="False"
+    TitleBarAnimationEnabled="False"
     TitleFontWeight="DemiBold"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -138,20 +140,20 @@
             </Setter>
         </ControlTheme>
     </Window.Resources>
-    <suki:SukiWindow.LogoContent>
-        <avalonia:MaterialIcon
-            Width="20"
-            Height="20"
-            VerticalAlignment="Center"
-            Foreground="{DynamicResource SukiPrimaryColor}"
-            Kind="ChartDonutVariant">
-            <avalonia:MaterialIcon.Transitions>
-                <Transitions>
-                    <BrushTransition Property="Foreground" Duration="{DynamicResource ShortAnimationDuration}" />
-                </Transitions>
-            </avalonia:MaterialIcon.Transitions>
-        </avalonia:MaterialIcon>
-    </suki:SukiWindow.LogoContent>
+    <!-- <suki:SukiWindow.LogoContent> -->
+    <!--     <avalonia:MaterialIcon -->
+    <!--         Width="20" -->
+    <!--         Height="20" -->
+    <!--         VerticalAlignment="Center" -->
+    <!--         Foreground="{DynamicResource SukiPrimaryColor}" -->
+    <!--         Kind="ChartDonutVariant"> -->
+    <!--         <avalonia:MaterialIcon.Transitions> -->
+    <!--             <Transitions> -->
+    <!--                 <BrushTransition Property="Foreground" Duration="{DynamicResource ShortAnimationDuration}" /> -->
+    <!--             </Transitions> -->
+    <!--         </avalonia:MaterialIcon.Transitions> -->
+    <!--     </avalonia:MaterialIcon> -->
+    <!-- </suki:SukiWindow.LogoContent> -->
     <suki:SukiWindow.Hosts>
         <suki:SukiDialogHost Manager="{Binding DialogManager}" />
     </suki:SukiWindow.Hosts>
@@ -165,88 +167,88 @@
                     Padding="20"
                     ClipToBounds="True"
                     CornerRadius="10">
-                    <suki:GroupBox Header=" 头像编辑" 
+                    <suki:GroupBox Header=" 头像编辑"
                                    Foreground="{DynamicResource SukiText}"
-                                   FontSize="17" 
+                                   FontSize="17"
                                    FontWeight="Bold">
                         <StackPanel Orientation="Vertical" Spacing="15">
-                        <Canvas
-                            Width="300"
-                            Height="300"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                            <Canvas.ClipToBounds>True</Canvas.ClipToBounds>
-                            <Image
-                                x:Name="HeadImage"
-                                MinWidth="300"
-                                MinHeight="300"
-                                Margin="0"
+                            <Canvas
+                                Width="300"
+                                Height="300"
                                 HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                PointerMoved="HeadImage_OnPointerMoved"
-                                PointerPressed="HeadImage_OnPointerPressed"
-                                PointerReleased="HeadImage_OnPointerReleased"
-                                Stretch="Uniform" />
-                            <Path
-                                Fill="#222"
-                                Opacity="0.5"
-                                Stroke="{DynamicResource SukiLowText}"
-                                StrokeThickness="1">
-                                <Path.Data>
-                                    <CombinedGeometry GeometryCombineMode="Exclude">
-                                        <CombinedGeometry.Geometry1>
-                                            <RectangleGeometry Rect="0,0,300,300" />
-                                        </CombinedGeometry.Geometry1>
-                                        <CombinedGeometry.Geometry2>
-                                            <EllipseGeometry
-                                                Center="150,150"
-                                                RadiusX="150"
-                                                RadiusY="150" />
-                                        </CombinedGeometry.Geometry2>
-                                    </CombinedGeometry>
-                                </Path.Data>
-                            </Path>
-                        </Canvas>
-                        <Grid ColumnDefinitions="30,*,30">
-                            <Grid.Styles>
-                                <Style Selector="Button:pointerover">
-                                    <Setter Property="Cursor" Value="Hand" />
-                                </Style>
-                            </Grid.Styles>
-                            <Button
-                                x:Name="SubButton"
-                                Grid.Column="0"
-                                Padding="3"
-                                FontWeight="Bold"
-                                FontSize="15" 
-                                Classes="Basic">
-                                <avalonia:MaterialIcon
-                                    Width="20"
-                                    Height="20"
-                                    Foreground="{DynamicResource SukiPrimaryColor75}"
-                                    Kind="MinusCircleOutline" />
-                            </Button>
-                            <Slider
-                                x:Name="ScaleSlider"
-                                Grid.Column="1"
-                                Maximum="1"
-                                Minimum="0"
-                                ValueChanged="RangeBase_OnValueChanged" />
-                            <Button
-                                x:Name="AddButton"
-                                Grid.Column="2"
-                                Padding="3"
-                                FontSize="15" 
-                                FontWeight="Bold"
-                                Classes="Basic">
-                                <avalonia:MaterialIcon
-                                    Width="20"
-                                    Height="20"
-                                    Foreground="{DynamicResource SukiPrimaryColor75}"
-                                    Kind="PlusCircleOutline" />
-                            </Button>
-                        </Grid>
-                    </StackPanel>
+                                VerticalAlignment="Center">
+                                <Canvas.ClipToBounds>True</Canvas.ClipToBounds>
+                                <Image
+                                    x:Name="HeadImage"
+                                    MinWidth="300"
+                                    MinHeight="300"
+                                    Margin="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    PointerMoved="HeadImage_OnPointerMoved"
+                                    PointerPressed="HeadImage_OnPointerPressed"
+                                    PointerReleased="HeadImage_OnPointerReleased"
+                                    Stretch="Uniform" />
+                                <Path
+                                    Fill="#222"
+                                    Opacity="0.5"
+                                    Stroke="{DynamicResource SukiLowText}"
+                                    StrokeThickness="1">
+                                    <Path.Data>
+                                        <CombinedGeometry GeometryCombineMode="Exclude">
+                                            <CombinedGeometry.Geometry1>
+                                                <RectangleGeometry Rect="0,0,300,300" />
+                                            </CombinedGeometry.Geometry1>
+                                            <CombinedGeometry.Geometry2>
+                                                <EllipseGeometry
+                                                    Center="150,150"
+                                                    RadiusX="150"
+                                                    RadiusY="150" />
+                                            </CombinedGeometry.Geometry2>
+                                        </CombinedGeometry>
+                                    </Path.Data>
+                                </Path>
+                            </Canvas>
+                            <Grid ColumnDefinitions="30,*,30">
+                                <Grid.Styles>
+                                    <Style Selector="Button:pointerover">
+                                        <Setter Property="Cursor" Value="Hand" />
+                                    </Style>
+                                </Grid.Styles>
+                                <Button
+                                    x:Name="SubButton"
+                                    Grid.Column="0"
+                                    Padding="3"
+                                    FontWeight="Bold"
+                                    FontSize="15"
+                                    Classes="Basic">
+                                    <avalonia:MaterialIcon
+                                        Width="20"
+                                        Height="20"
+                                        Foreground="{DynamicResource SukiPrimaryColor75}"
+                                        Kind="MinusCircleOutline" />
+                                </Button>
+                                <Slider
+                                    x:Name="ScaleSlider"
+                                    Grid.Column="1"
+                                    Maximum="1"
+                                    Minimum="0"
+                                    ValueChanged="RangeBase_OnValueChanged" />
+                                <Button
+                                    x:Name="AddButton"
+                                    Grid.Column="2"
+                                    Padding="3"
+                                    FontSize="15"
+                                    FontWeight="Bold"
+                                    Classes="Basic">
+                                    <avalonia:MaterialIcon
+                                        Width="20"
+                                        Height="20"
+                                        Foreground="{DynamicResource SukiPrimaryColor75}"
+                                        Kind="PlusCircleOutline" />
+                                </Button>
+                            </Grid>
+                        </StackPanel>
                     </suki:GroupBox>
                 </suki:GlassCard>
                 <Grid>
@@ -283,31 +285,31 @@
                             Classes="Void"
                             SelectedItem="{Binding SelectedItem}"
                             ItemsSource="{Binding HeadList}">
-                                <Interaction.Behaviors>
-                                    <EventTriggerBehavior EventName="SelectionChanged">
-                                        <InvokeCommandAction Command="{Binding SelectedHeadChangedCommand}"/>
-                                    </EventTriggerBehavior>
-                                </Interaction.Behaviors>
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="SelectionChanged">
+                                    <InvokeCommandAction Command="{Binding SelectedHeadChangedCommand}" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
                             <ListBox.Styles>
                                 <Style Selector="ListBox.Void ListBoxItem suki|GlassCard">
                                     <Setter Property="Transitions">
                                         <Transitions>
-                                            <ThicknessTransition Property="BorderThickness" Duration="0.2"/>
-                                            <BrushTransition Property="BorderBrush" Duration="0.2"/>
-                                            <BrushTransition Property="Background" Duration="0.2"/>
+                                            <ThicknessTransition Property="BorderThickness" Duration="0.2" />
+                                            <BrushTransition Property="BorderBrush" Duration="0.2" />
+                                            <BrushTransition Property="Background" Duration="0.2" />
                                         </Transitions>
                                     </Setter>
-                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}"/>
-                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
+                                    <Setter Property="BorderThickness" Value="1" />
                                 </Style>
                                 <Style Selector="ListBox.Void ListBoxItem:pointerover suki|GlassCard">
-                                    <Setter Property="BorderThickness" Value="3"/>
+                                    <Setter Property="BorderThickness" Value="3" />
                                     <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}"></Setter>
                                 </Style>
                                 <Style Selector="ListBox.Void ListBoxItem:selected suki|GlassCard">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}"/>
-                                    <Setter Property="BorderThickness" Value="3"/>
-                                    <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}"/>
+                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
+                                    <Setter Property="BorderThickness" Value="3" />
+                                    <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
                                 </Style>
                             </ListBox.Styles>
                             <ListBox.ItemsPanel>
@@ -321,7 +323,7 @@
                                         <suki:GlassCard helpers:AnimationExtensions.FadeIn="500"
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
-                                                        CornerRadius="5" 
+                                                        CornerRadius="5"
                                                         Padding="8">
                                             <Image
                                                 Width="60"

@@ -41,4 +41,20 @@
         <Setter Property="Opacity" Value="0.5" />
     </Style>
 
+    <Style Selector="Button.Void">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ContentPresenter Name="PART_ContentPresenter"
+                                  Margin="0,0,0,0"
+                                  CornerRadius="0"
+                                  Padding="{TemplateBinding Padding}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  Background="Transparent"
+                                  Content="{TemplateBinding Content}"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}">
+                </ContentPresenter>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
 </Styles>

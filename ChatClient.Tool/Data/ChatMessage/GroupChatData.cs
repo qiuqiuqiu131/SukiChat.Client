@@ -1,8 +1,9 @@
-using System.Collections.ObjectModel;
+using ChatClient.Tool.Data.Group;
+using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data;
 
-public class ChatData : BindableBase
+public class GroupChatData : BindableBase
 {
     // 是否显示时间条
     private bool _showTime = false;
@@ -53,14 +54,14 @@ public class ChatData : BindableBase
         set => SetProperty(ref _isError, value);
     }
 
-    private bool _isReaded;
+    // 消息发送者
+    private GroupMemberDto? owner;
 
-    public bool IsReaded
+    public GroupMemberDto? Owner
     {
-        get => _isReaded;
-        set => SetProperty(ref _isReaded, value);
+        get => owner;
+        set => SetProperty(ref owner, value);
     }
-
 
     private List<ChatMessageDto> _chatMessages = new();
 

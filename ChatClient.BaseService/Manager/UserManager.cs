@@ -5,6 +5,7 @@ using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
@@ -25,6 +26,7 @@ internal class UserManager : IUserManager
     public AvaloniaList<FriendReceiveDto>? FriendReceives => UserData?.FriendReceives;
     public AvaloniaList<GroupFriendDto>? GroupFriends => UserData?.GroupFriends;
     public AvaloniaList<FriendChatDto>? FriendChats => UserData?.FriendChatDtos;
+    public AvaloniaList<GroupChatDto>? GroupChatDtos => UserData?.GroupChatDtos;
 
     #endregion
 
@@ -146,6 +148,18 @@ internal class UserManager : IUserManager
             });
         }
 
+        return dto;
+    }
+
+    /// <summary>
+    /// 接收到新的群组消息
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <returns></returns>
+    public async Task<GroupDto> NewGroupReceive(string groupId)
+    {
+        var dto = await _userDtoManager.GetGroupDto(User.Id, groupId);
+        // TODO: 更新UI
         return dto;
     }
 

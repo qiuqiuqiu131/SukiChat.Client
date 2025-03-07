@@ -17,8 +17,9 @@ public interface IChatService
     Task<(bool, string)> SendGroupChatMessage(string userId, string groupId, List<ChatMessageDto> messages);
     Task<byte[]?> GetChatImage(string userId, string fileName);
     Task<byte[]?> GetCompressedChatImage(string userId, string fileName);
-    Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage);
-    Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages);
+
+    Task OperateChatMessage(string userFromId, int chatId, List<ChatMessageDto> chatMessages);
+
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
     Task UpdateFileMess(FileMessDto messages);
     Task ReadAllChatMessage(string userId, string targetId);
@@ -29,13 +30,18 @@ internal class ChatService : BaseService, IChatService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IMessageHelper _messageHelper;
+    private readonly IFileOperateHelper _fileOperateHelper;
 
-    public ChatService(IContainerProvider containerProvider, IMapper mapper, IMessageHelper messageHelper) : base(
+    public ChatService(IContainerProvider containerProvider,
+        IMapper mapper,
+        IMessageHelper messageHelper,
+        IFileOperateHelper fileOperateHelper) : base(
         containerProvider)
     {
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
         _mapper = mapper;
         _messageHelper = messageHelper;
+        _fileOperateHelper = fileOperateHelper;
     }
 
     #region SendMessage
@@ -238,58 +244,6 @@ internal class ChatService : BaseService, IChatService
         return (false, "Failed to upload image");
     }
 
-    #region ChatMessageOperate
-
-    /// <summary>
-    /// 处理好友消息
-    /// </summary>
-    /// <param name="chatMessage"></param>
-    /// <returns></returns>
-    public async Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage)
-    {
-        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
-        var result =
-            await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
-        if (result != null)
-        {
-            chatPrivate.IsReaded = result.IsReaded;
-            chatPrivate.Id = result.Id;
-        }
-
-        chatPrivateRepository.Update(chatPrivate);
-        await _unitOfWork.SaveChangesAsync();
-        return true;
-    }
-
-    /// <summary>
-    /// 批量处理好友请求
-    /// </summary>
-    /// <param name="chatMessages"></param>
-    /// <returns></returns>
-    public async Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages)
-    {
-        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        foreach (var chatMessage in chatMessages)
-        {
-            var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
-            var result =
-                await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
-            if (result != null)
-            {
-                chatPrivate.IsReaded = result.IsReaded;
-                chatPrivate.Id = result.Id;
-            }
-
-            chatPrivateRepository.Update(chatPrivate);
-        }
-
-        await _unitOfWork.SaveChangesAsync();
-        return true;
-    }
-
-    #endregion
-
     /// <summary>
     /// 用于更新文件下载状态,数据库中更改
     /// </summary>
@@ -340,5 +294,57 @@ internal class ChatService : BaseService, IChatService
             message.IsReaded = true;
         await _unitOfWork.SaveChangesAsync();
         unReadMessages.Clear();
+    }
+
+    /// <summary>
+    /// 将ChatMessages中的资源注入
+    /// </summary>
+    /// <param name="userFromId"></param>
+    /// <param name="chatMessages"></param>
+    public async Task OperateChatMessage(string userFromId,
+        int chatId,
+        List<ChatMessageDto> chatMessages)
+    {
+        foreach (var chatMessage in chatMessages)
+        {
+            if (chatMessage.Type == ChatMessage.ContentOneofCase.ImageMess)
+            {
+                var messContent = (ImageMessDto)chatMessage.Content;
+                string filename = messContent.FilePath;
+                var content = await _fileOperateHelper.GetFileForUser(
+                    Path.Combine(userFromId, "ChatFile"), filename);
+                if (content != null)
+                {
+                    using (MemoryStream stream = new MemoryStream(content))
+                        messContent.ImageSource = new Bitmap(stream);
+                }
+                else
+                {
+                    //TODO:图片失效处理
+                }
+            }
+            else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)
+            {
+                var messContent = (FileMessDto)chatMessage.Content;
+                messContent.ChatId = chatId;
+                if (string.IsNullOrWhiteSpace(messContent.TargetFilePath)) return;
+                FileInfo fileInfo = new FileInfo(messContent.TargetFilePath);
+                if (fileInfo.Exists && fileInfo.Length == messContent.FileSize)
+                    messContent.IsDownload = true;
+                else
+                {
+                    if (fileInfo.Exists)
+                    {
+                        FileProcessDto fileProcessDto = new FileProcessDto
+                        {
+                            FileName = messContent.FileName,
+                            CurrentSize = fileInfo.Length,
+                            MaxSize = messContent.FileSize
+                        };
+                        messContent.FileProcessDto = fileProcessDto;
+                    }
+                }
+            }
+        }
     }
 }

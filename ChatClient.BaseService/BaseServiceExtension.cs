@@ -49,8 +49,10 @@ public static class BaseServiceExtension
             .Register<IGroupService, GroupService>();
 
         // 注册PackService
-        containerRegistry.Register<IChatPackService, ChatPackService>()
-            .Register<IFriendPackService, FriendPackService>();
+        containerRegistry.Register<IFriendChatPackService, FriendChatPackService>()
+            .Register<IFriendPackService, FriendPackService>()
+            .Register<IGroupPackService, GroupPackService>()
+            .Register<IGroupChatPackService, GroupChatPackService>();
 
         // 注册MessageHandler
         containerRegistry.Register<IMessageHandler, FriendMessageHandler>()

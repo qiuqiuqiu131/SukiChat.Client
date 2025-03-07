@@ -26,34 +26,36 @@ namespace ChatServer.Common.Protobuf {
           string.Concat(
             "ChxQcm90by9DaGF0VXNlclByb3RvY29sLnByb3RvEhpDaGF0U2VydmVyLkNv",
             "bW1vbi5Qcm90b2J1ZhogUHJvdG8vQ2hhdFJlbGF0aW9uUHJvdG9jb2wucHJv",
-            "dG8aI1Byb3RvL0NoYXRDb21tdW5pY2F0ZVByb3RvY29sLnByb3RvIhwKDkdl",
-            "dFVzZXJSZXF1ZXN0EgoKAmlkGAEgASgJIrwBCgtVc2VyTWVzc2FnZRIKCgJp",
-            "ZBgBIAEoCRIMCgRuYW1lGAIgASgJEg4KBmlzTWFsZRgDIAEoCBINCgViaXJ0",
-            "aBgEIAEoCRIQCghwYXNzd29yZBgFIAEoCRIUCgxpbnRyb2R1Y3Rpb24YBiAB",
-            "KAkSEQoJaGVhZEluZGV4GAcgASgNEhEKCWhlYWRDb3VudBgIIAEoDRIUCgxy",
-            "ZWdpc3RlclRpbWUYCSABKAkSEAoIaXNPbmxpbmUYCiABKAgiRwoOVXBkYXRl",
-            "VXNlckRhdGESNQoEdXNlchgBIAEoCzInLkNoYXRTZXJ2ZXIuQ29tbW9uLlBy",
-            "b3RvYnVmLlVzZXJNZXNzYWdlIiEKE0dldFVzZXJTYWZ0eVJlcXVlc3QSCgoC",
-            "aWQYASABKAkiKQoFU2FmdHkSEAoIcXVlc3Rpb24YASABKAkSDgoGYW5zd2Vy",
-            "GAIgASgJIk0KDFNhZnR5TWVzc2FnZRIKCgJpZBgBIAEoCRIxCgZzYWZ0eXMY",
-            "AiADKAsyIS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5TYWZ0eSJLCg9V",
-            "cGRhdGVVc2VyU2FmdHkSOAoGc2FmdHlzGAEgASgLMiguQ2hhdFNlcnZlci5D",
-            "b21tb24uUHJvdG9idWYuU2FmdHlNZXNzYWdlIjsKFU91dGxpbmVNZXNzYWdl",
-            "UmVxdWVzdBIKCgJpZBgBIAEoCRIWCg5sYXN0TG9nb3V0VGltZRgCIAEoCSKv",
-            "AQoURnJpZW5kUmVxdWVzdE1lc3NhZ2USEQoJcmVxdWVzdElkGAEgASgFEhIK",
-            "CnVzZXJGcm9tSWQYAiABKAkSFAoMdXNlclRhcmdldElkGAMgASgJEg0KBWdy",
-            "b3VwGAQgASgJEhMKC3JlcXVlc3RUaW1lGAUgASgJEhAKCGlzQWNjZXB0GAYg",
-            "ASgIEhAKCElzU29sdmVkGAcgASgIEhIKCnNvbHZlZFRpbWUYCCABKAkitgIK",
-            "Fk91dGxpbmVNZXNzYWdlUmVzcG9uc2USCgoCaWQYASABKAkSSAoOZnJpZW5k",
-            "UmVxdWVzdHMYAiADKAsyMC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5G",
-            "cmllbmRSZXF1ZXN0TWVzc2FnZRJACgpuZXdGcmllbmRzGAMgAygLMiwuQ2hh",
-            "dFNlcnZlci5Db21tb24uUHJvdG9idWYuTmV3RnJpZW5kTWVzc2FnZRJCCgtm",
-            "cmllbmRDaGF0cxgEIAMoCzItLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
-            "LkZyaWVuZENoYXRNZXNzYWdlEkAKCmdyb3VwQ2hhdHMYBSADKAsyLC5DaGF0",
-            "U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Hcm91cENoYXRNZXNzYWdlYgZwcm90",
-            "bzM="));
+            "dG8aI1Byb3RvL0NoYXRDb21tdW5pY2F0ZVByb3RvY29sLnByb3RvGh1Qcm90",
+            "by9DaGF0R3JvdXBQcm90b2NvbC5wcm90byIcCg5HZXRVc2VyUmVxdWVzdBIK",
+            "CgJpZBgBIAEoCSK8AQoLVXNlck1lc3NhZ2USCgoCaWQYASABKAkSDAoEbmFt",
+            "ZRgCIAEoCRIOCgZpc01hbGUYAyABKAgSDQoFYmlydGgYBCABKAkSEAoIcGFz",
+            "c3dvcmQYBSABKAkSFAoMaW50cm9kdWN0aW9uGAYgASgJEhEKCWhlYWRJbmRl",
+            "eBgHIAEoDRIRCgloZWFkQ291bnQYCCABKA0SFAoMcmVnaXN0ZXJUaW1lGAkg",
+            "ASgJEhAKCGlzT25saW5lGAogASgIIkcKDlVwZGF0ZVVzZXJEYXRhEjUKBHVz",
+            "ZXIYASABKAsyJy5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Vc2VyTWVz",
+            "c2FnZSIhChNHZXRVc2VyU2FmdHlSZXF1ZXN0EgoKAmlkGAEgASgJIikKBVNh",
+            "ZnR5EhAKCHF1ZXN0aW9uGAEgASgJEg4KBmFuc3dlchgCIAEoCSJNCgxTYWZ0",
+            "eU1lc3NhZ2USCgoCaWQYASABKAkSMQoGc2FmdHlzGAIgAygLMiEuQ2hhdFNl",
+            "cnZlci5Db21tb24uUHJvdG9idWYuU2FmdHkiSwoPVXBkYXRlVXNlclNhZnR5",
+            "EjgKBnNhZnR5cxgBIAEoCzIoLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
+            "LlNhZnR5TWVzc2FnZSI7ChVPdXRsaW5lTWVzc2FnZVJlcXVlc3QSCgoCaWQY",
+            "ASABKAkSFgoObGFzdExvZ291dFRpbWUYAiABKAkirwEKFEZyaWVuZFJlcXVl",
+            "c3RNZXNzYWdlEhEKCXJlcXVlc3RJZBgBIAEoBRISCgp1c2VyRnJvbUlkGAIg",
+            "ASgJEhQKDHVzZXJUYXJnZXRJZBgDIAEoCRINCgVncm91cBgEIAEoCRITCgty",
+            "ZXF1ZXN0VGltZRgFIAEoCRIQCghpc0FjY2VwdBgGIAEoCBIQCghJc1NvbHZl",
+            "ZBgHIAEoCBISCgpzb2x2ZWRUaW1lGAggASgJIvoCChZPdXRsaW5lTWVzc2Fn",
+            "ZVJlc3BvbnNlEgoKAmlkGAEgASgJEkgKDmZyaWVuZFJlcXVlc3RzGAIgAygL",
+            "MjAuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuRnJpZW5kUmVxdWVzdE1l",
+            "c3NhZ2USQAoKbmV3RnJpZW5kcxgDIAMoCzIsLkNoYXRTZXJ2ZXIuQ29tbW9u",
+            "LlByb3RvYnVmLk5ld0ZyaWVuZE1lc3NhZ2USQgoLZnJpZW5kQ2hhdHMYBCAD",
+            "KAsyLS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GcmllbmRDaGF0TWVz",
+            "c2FnZRJCCgtlbnRlckdyb3VwcxgFIAMoCzItLkNoYXRTZXJ2ZXIuQ29tbW9u",
+            "LlByb3RvYnVmLkVudGVyR3JvdXBNZXNzYWdlEkAKCmdyb3VwQ2hhdHMYBiAD",
+            "KAsyLC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Hcm91cENoYXRNZXNz",
+            "YWdlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatRelationProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor, },
+          new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatRelationProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GetUserRequest), global::ChatServer.Common.Protobuf.GetUserRequest.Parser, new[]{ "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UserMessage), global::ChatServer.Common.Protobuf.UserMessage.Parser, new[]{ "Id", "Name", "IsMale", "Birth", "Password", "Introduction", "HeadIndex", "HeadCount", "RegisterTime", "IsOnline" }, null, null, null, null),
@@ -64,7 +66,7 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateUserSafty), global::ChatServer.Common.Protobuf.UpdateUserSafty.Parser, new[]{ "Saftys" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageRequest), global::ChatServer.Common.Protobuf.OutlineMessageRequest.Parser, new[]{ "Id", "LastLogoutTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendRequestMessage), global::ChatServer.Common.Protobuf.FriendRequestMessage.Parser, new[]{ "RequestId", "UserFromId", "UserTargetId", "Group", "RequestTime", "IsAccept", "IsSolved", "SolvedTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageResponse), global::ChatServer.Common.Protobuf.OutlineMessageResponse.Parser, new[]{ "Id", "FriendRequests", "NewFriends", "FriendChats", "GroupChats" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageResponse), global::ChatServer.Common.Protobuf.OutlineMessageResponse.Parser, new[]{ "Id", "FriendRequests", "NewFriends", "FriendChats", "EnterGroups", "GroupChats" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1821,6 +1823,7 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_ = other.friendRequests_.Clone();
       newFriends_ = other.newFriends_.Clone();
       friendChats_ = other.friendChats_.Clone();
+      enterGroups_ = other.enterGroups_.Clone();
       groupChats_ = other.groupChats_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -1871,10 +1874,20 @@ namespace ChatServer.Common.Protobuf {
       get { return friendChats_; }
     }
 
+    /// <summary>Field number for the "enterGroups" field.</summary>
+    public const int EnterGroupsFieldNumber = 5;
+    private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.EnterGroupMessage> _repeated_enterGroups_codec
+        = pb::FieldCodec.ForMessage(42, global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser);
+    private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage> enterGroups_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage> EnterGroups {
+      get { return enterGroups_; }
+    }
+
     /// <summary>Field number for the "groupChats" field.</summary>
-    public const int GroupChatsFieldNumber = 5;
+    public const int GroupChatsFieldNumber = 6;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.GroupChatMessage> _repeated_groupChats_codec
-        = pb::FieldCodec.ForMessage(42, global::ChatServer.Common.Protobuf.GroupChatMessage.Parser);
+        = pb::FieldCodec.ForMessage(50, global::ChatServer.Common.Protobuf.GroupChatMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage> groupChats_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage> GroupChats {
@@ -1898,6 +1911,7 @@ namespace ChatServer.Common.Protobuf {
       if(!friendRequests_.Equals(other.friendRequests_)) return false;
       if(!newFriends_.Equals(other.newFriends_)) return false;
       if(!friendChats_.Equals(other.friendChats_)) return false;
+      if(!enterGroups_.Equals(other.enterGroups_)) return false;
       if(!groupChats_.Equals(other.groupChats_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1909,6 +1923,7 @@ namespace ChatServer.Common.Protobuf {
       hash ^= friendRequests_.GetHashCode();
       hash ^= newFriends_.GetHashCode();
       hash ^= friendChats_.GetHashCode();
+      hash ^= enterGroups_.GetHashCode();
       hash ^= groupChats_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1930,6 +1945,7 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_.WriteTo(output, _repeated_friendRequests_codec);
       newFriends_.WriteTo(output, _repeated_newFriends_codec);
       friendChats_.WriteTo(output, _repeated_friendChats_codec);
+      enterGroups_.WriteTo(output, _repeated_enterGroups_codec);
       groupChats_.WriteTo(output, _repeated_groupChats_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1945,6 +1961,7 @@ namespace ChatServer.Common.Protobuf {
       size += friendRequests_.CalculateSize(_repeated_friendRequests_codec);
       size += newFriends_.CalculateSize(_repeated_newFriends_codec);
       size += friendChats_.CalculateSize(_repeated_friendChats_codec);
+      size += enterGroups_.CalculateSize(_repeated_enterGroups_codec);
       size += groupChats_.CalculateSize(_repeated_groupChats_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1963,6 +1980,7 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_.Add(other.friendRequests_);
       newFriends_.Add(other.newFriends_);
       friendChats_.Add(other.friendChats_);
+      enterGroups_.Add(other.enterGroups_);
       groupChats_.Add(other.groupChats_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1992,6 +2010,10 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 42: {
+            enterGroups_.AddEntriesFrom(input, _repeated_enterGroups_codec);
+            break;
+          }
+          case 50: {
             groupChats_.AddEntriesFrom(input, _repeated_groupChats_codec);
             break;
           }

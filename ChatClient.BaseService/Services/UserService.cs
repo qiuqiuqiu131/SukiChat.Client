@@ -14,6 +14,8 @@ public interface IUserService
 {
     public Task<Bitmap> GetHeadImage(UserDto User);
 
+    public Task<Bitmap> GetHeadImage(string userId, int headIndex);
+
     public Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User);
 
     public Task<UserDto?> GetUserDto(string id);
@@ -54,6 +56,34 @@ internal class UserService : BaseService, IUserService
         // 获取头像
         byte[]? file =
             await _fileOperateHelper.GetFileForUser(Path.Combine(User.Id, "HeadImage"), $"head_{User.HeadIndex}.png");
+        //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
+        if (file != null)
+        {
+            Bitmap bitmap;
+            using var stream = new MemoryStream(file);
+            // 从流加载Bitmap
+            bitmap = new Bitmap(stream);
+
+            return bitmap;
+        }
+        else
+        {
+            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            return bitmap;
+        }
+    }
+
+    public async Task<Bitmap> GetHeadImage(string userId, int headIndex)
+    {
+        if (headIndex == -1)
+        {
+            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            return bitmap;
+        }
+
+        // 获取头像
+        byte[]? file =
+            await _fileOperateHelper.GetFileForUser(Path.Combine(userId, "HeadImage"), $"head_{headIndex}.png");
         //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
         if (file != null)
         {

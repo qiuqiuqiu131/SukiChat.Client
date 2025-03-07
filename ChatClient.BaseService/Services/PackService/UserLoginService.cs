@@ -6,7 +6,6 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatServer.Common.Protobuf;
-using DryIoc.ImTools;
 
 namespace ChatClient.BaseService.Services.PackService;
 
@@ -98,8 +97,16 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 using (var scope = _scopedProvider.CreateScope())
                 {
-                    var chatPackService = scope.Resolve<IChatPackService>();
-                    user.FriendChatDtos = await chatPackService.GetFriendChatDtos(userId);
+                    var friendChatPackService = scope.Resolve<IFriendChatPackService>();
+                    user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
+                }
+            }),
+            Task.Run(async () =>
+            {
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var groupChatPackService = scope.Resolve<IGroupChatPackService>();
+                    user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
                 }
             })
         ];
@@ -138,7 +145,9 @@ internal class UserLoginService : BaseService, IUserLoginService
         [
             OperateFriendRequestMesssages(userId, outlineDto.FriendRequestMessages),
             OperateNewFriendMessages(userId, outlineDto.NewFriendMessages),
-            OperateFriendChatMessages(userId, outlineDto.FriendChatMessages)
+            OperateFriendChatMessages(userId, outlineDto.FriendChatMessages),
+            OperateEnterGroupMessages(userId, outlineDto.EnterGroupMessages),
+            OperateGroupChatMessages(userId, outlineDto.GroupChatMessages)
         ];
         await Task.WhenAll(tasks);
     }
@@ -209,8 +218,9 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="newFriendMessages"></param>
     private async Task OperateNewFriendMessages(string userId, List<NewFriendMessage> newFriendMessages)
     {
-        var friendService = _scopedProvider.Resolve<IFriendService>();
-        await friendService.NewFriendMessagesOperate(userId, newFriendMessages);
+        using var scope = _scopedProvider.CreateScope();
+        var friendPackService = scope.Resolve<IFriendPackService>();
+        await friendPackService.NewFriendMessagesOperate(userId, newFriendMessages);
     }
 
 
@@ -221,8 +231,33 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendChatMessages"></param>
     private async Task OperateFriendChatMessages(string userId, List<FriendChatMessage> friendChatMessages)
     {
-        var chatService = _scopedProvider.Resolve<IChatService>();
-        await chatService.FriendChatMessagesOperate(friendChatMessages);
+        using var scope = _scopedProvider.CreateScope();
+        var friendChatService = scope.Resolve<IFriendChatPackService>();
+        await friendChatService.FriendChatMessagesOperate(friendChatMessages);
+    }
+
+    /// <summary>
+    /// 处理进群消息，离线时用户可能进入了群聊
+    /// </summary>
+    /// <param name="useId"></param>
+    /// <param name="enterGroupMessages"></param>
+    private async Task OperateEnterGroupMessages(string useId, List<EnterGroupMessage> enterGroupMessages)
+    {
+        using var scope = _scopedProvider.CreateScope();
+        var groupPackService = scope.Resolve<IGroupPackService>();
+        await groupPackService.EnterGroupMessagesOperate(useId, enterGroupMessages);
+    }
+
+    /// <summary>
+    /// 处理群聊消息，离线时用户可能在群聊中发送了消息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupChatMessages"></param>
+    private async Task OperateGroupChatMessages(string userId, List<GroupChatMessage> groupChatMessages)
+    {
+        using var scope = _scopedProvider.CreateScope();
+        var groupChatService = scope.Resolve<IGroupChatPackService>();
+        await groupChatService.GroupChatMessagesOperate(groupChatMessages);
     }
 
     #endregion

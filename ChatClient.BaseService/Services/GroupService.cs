@@ -1,28 +1,72 @@
+using AutoMapper;
 using ChatClient.BaseService.Helper;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
+using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
 public interface IGroupService
 {
-    Task<(bool, string)> CreateGroup(string userId, string groupName);
+    Task<GroupDto?> GetGroupDto(string userId, string groupId);
+    Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+    Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> JoinGroupRequest(string userId, string groupId);
     Task<bool> JoinGroupResponse(string userId, int requestId, bool accept);
-    Task<GroupMessage> GetGroupMessage(string userId, string groupId);
-    Task<GroupMembersMessage> GetGroupMemberMessage(string userId, string groupId);
 }
 
 public class GroupService : BaseService, IGroupService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
     private readonly IMessageHelper _messageHelper;
 
-    public GroupService(IContainerProvider containerProvider) : base(containerProvider)
+    public GroupService(IContainerProvider containerProvider,
+        IMapper mapper) : base(containerProvider)
     {
+        _mapper = mapper;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
         _messageHelper = _scopedProvider.Resolve<IMessageHelper>();
+    }
+
+    public async Task<GroupDto?> GetGroupDto(string userId, string groupId)
+    {
+        var groupRequest = new GroupMessageRequest { GroupId = groupId, UserId = userId };
+        var groupMessage = await _messageHelper.SendMessageWithResponse<GroupMessage>(groupRequest);
+        if (groupMessage == null) return null;
+
+        var groupDto = _mapper.Map<GroupDto>(groupMessage);
+
+        var group = _mapper.Map<Group>(groupDto);
+        var groupRepository = _unitOfWork.GetRepository<Group>();
+        groupRepository.Update(group);
+        await _unitOfWork.SaveChangesAsync();
+
+        return groupDto;
+    }
+
+    public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
+    {
+        var groupMemberRequest = new GroupMemberRequest { GroupId = groupId, MemberId = memberId };
+        var groupMemberMessage = await _messageHelper.SendMessageWithResponse<GroupMemberMessage>(groupMemberRequest)!;
+        if (groupMemberMessage == null) return null;
+
+        var groupMemberDto = _mapper.Map<GroupMemberDto>(groupMemberMessage);
+        var userService = _scopedProvider.Resolve<IUserService>();
+        groupMemberDto.HeadImage = await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
+
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        var groupRelation = _mapper.Map<GroupRelation>(groupMemberDto);
+        var entity = await groupRelationRepository.GetFirstOrDefaultAsync(
+            predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
+        if (entity != null)
+            groupRelation.Id = entity.Id;
+        groupRelationRepository.Update(groupRelation);
+        await _unitOfWork.SaveChangesAsync();
+
+        return groupMemberDto;
     }
 
     /// <summary>
@@ -31,12 +75,12 @@ public class GroupService : BaseService, IGroupService
     /// <param name="userId"></param>
     /// <param name="groupName"></param>
     /// <returns>bool:是否正确处理请求,string:正确返回组群ID，错误返回报错信息</returns>
-    public async Task<(bool, string)> CreateGroup(string userId, string groupName)
+    public async Task<(bool, string)> CreateGroup(string userId, List<string> members)
     {
         var createGroupRequest = new CreateGroupRequest
         {
             UserId = userId,
-            GroupName = groupName
+            FriendId = { members }
         };
 
         // 发送建群请求
@@ -49,18 +93,26 @@ public class GroupService : BaseService, IGroupService
             try
             {
                 var groupRepository = _unitOfWork.GetRepository<Group>();
-                groupRepository.Update(new Group
+                await groupRepository.InsertAsync(new Group
                 {
                     Id = response.GroupId,
-                    CreateTime = time
+                    Name = response.GroupName,
+                    CreateTime = time,
+                    HeadPath = "-1"
                 });
+                await _unitOfWork.SaveChangesAsync();
+
                 var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
-                groupRelationRepository.Update(new GroupRelation
+                var userService = _scopedProvider.Resolve<IUserService>();
+                var user = await userService.GetUserDto(userId);
+                await groupRelationRepository.InsertAsync(new GroupRelation
                 {
                     GroupId = response.GroupId,
                     UserId = userId,
                     Status = 0,
-                    JoinTime = time
+                    Grouping = "默认分组",
+                    JoinTime = time,
+                    HeadIndex = user.HeadIndex
                 });
                 await _unitOfWork.SaveChangesAsync();
             }
@@ -174,27 +226,5 @@ public class GroupService : BaseService, IGroupService
         }
 
         return false;
-    }
-
-    public Task<GroupMessage> GetGroupMessage(string userId, string groupId)
-    {
-        var groupMessageRequest = new GroupMessageRequest
-        {
-            GroupId = groupId,
-            UserId = userId
-        };
-
-        return _messageHelper.SendMessageWithResponse<GroupMessage>(groupMessageRequest)!;
-    }
-
-    public Task<GroupMembersMessage> GetGroupMemberMessage(string userId, string groupId)
-    {
-        var groupMemberRequest = new GroupMembersRequest
-        {
-            GroupId = groupId,
-            UserId = userId
-        };
-
-        return _messageHelper.SendMessageWithResponse<GroupMembersMessage>(groupMemberRequest)!;
     }
 }

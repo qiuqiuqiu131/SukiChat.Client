@@ -1,6 +1,7 @@
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
 using System.Collections.Concurrent;
+using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.BaseService.Manager;
 
@@ -8,6 +9,8 @@ public interface IUserDtoManager
 {
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
+    Task<GroupDto?> GetGroupDto(string userId, string groupId);
+    Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
     void Clear();
 }
 
@@ -16,10 +19,14 @@ public class UserDtoManager : IUserDtoManager
     // 使用 ConcurrentDictionary 存储用户数据，确保线程安全
     private readonly ConcurrentDictionary<string, UserDto> _userDtos = new();
     private readonly ConcurrentDictionary<string, FriendRelationDto> _friendRelationDtos = new();
+    private readonly ConcurrentDictionary<string, GroupDto> _groupDtos = new();
+    private readonly ConcurrentDictionary<string, GroupMemberDto> _groupMemberDtos = new();
 
     private readonly IContainerProvider _containerProvider;
     private readonly SemaphoreSlim _semaphore_1 = new(1, 1);
     private readonly SemaphoreSlim _semaphore_2 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore_3 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore_4 = new(1, 1);
 
     public UserDtoManager(IContainerProvider containerProvider)
     {
@@ -100,6 +107,77 @@ public class UserDtoManager : IUserDtoManager
         finally
         {
             _semaphore_2.Release();
+        }
+    }
+
+    /// <summary>
+    /// 获取GroupDto
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupId"></param>
+    /// <returns></returns>
+    public async Task<GroupDto?> GetGroupDto(string userId, string groupId)
+    {
+        if (_groupDtos.TryGetValue(groupId, out var cachedGroup))
+            return cachedGroup;
+        try
+        {
+            // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
+            await _semaphore_3.WaitAsync();
+
+            // 双重检查，防止在等待信号量时其他线程已经添加了数据
+            if (_groupDtos.TryGetValue(groupId, out cachedGroup))
+            {
+                return cachedGroup;
+            }
+
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            var group = await groupService.GetGroupDto(userId, groupId);
+
+            // 如果获取到用户信息，添加到缓存中
+            if (group != null)
+            {
+                _groupDtos.TryAdd(groupId, group);
+            }
+
+            return group;
+        }
+        finally
+        {
+            _semaphore_3.Release();
+        }
+    }
+
+    public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
+    {
+        string key = groupId + memberId;
+        if (_groupMemberDtos.TryGetValue(key, out var cachedGroupMember))
+            return cachedGroupMember;
+        try
+        {
+            // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
+            await _semaphore_4.WaitAsync();
+
+            // 双重检查，防止在等待信号量时其他线程已经添加了数据
+            if (_groupMemberDtos.TryGetValue(groupId, out cachedGroupMember))
+            {
+                return cachedGroupMember;
+            }
+
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
+
+            // 如果获取到用户信息，添加到缓存中
+            if (groupMember != null)
+            {
+                _groupMemberDtos.TryAdd(key, groupMember);
+            }
+
+            return groupMember;
+        }
+        finally
+        {
+            _semaphore_4.Release();
         }
     }
 

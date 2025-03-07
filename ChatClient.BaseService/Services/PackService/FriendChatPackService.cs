@@ -1,38 +1,39 @@
-using System.Collections;
-using System.Collections.ObjectModel;
 using AutoMapper;
 using Avalonia.Collections;
-using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Data.File;
 using ChatServer.Common.Protobuf;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
-public interface IChatPackService
+public interface IFriendChatPackService
 {
-    Task<FriendChatDto> GetFriendChatDto(string userId, string targetId);
     Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId);
-    Task<List<ChatData>> GetChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
-    Task OperateChatMessage(string userFromId, int chatId, List<ChatMessageDto> chatMessages);
+    Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
     Task<int> GetUnReadChatMessageCount(string userId, string targetId);
+
+    Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage);
+    Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages);
 }
 
-public class ChatPackService : BaseService, IChatPackService
+public class FriendChatPackService : BaseService, IFriendChatPackService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserDtoManager _userDtoManager;
+    private readonly IMapper _mapper;
     private readonly IFileOperateHelper _fileOperateHelper;
 
-    public ChatPackService(IContainerProvider containerProvider,
+    public FriendChatPackService(IContainerProvider containerProvider,
         IUserDtoManager userDtoManager,
+        IMapper mapper,
         IFileOperateHelper fileOperateHelper) : base(containerProvider)
     {
         _userDtoManager = userDtoManager;
+        _mapper = mapper;
         _fileOperateHelper = fileOperateHelper;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
@@ -43,7 +44,7 @@ public class ChatPackService : BaseService, IChatPackService
     /// <param name="userId"></param>
     /// <param name="targetId"></param>
     /// <returns></returns>
-    public async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
+    private async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
     {
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
         var friendChat = await friendChatRepository.GetFirstOrDefaultAsync(
@@ -61,11 +62,11 @@ public class ChatPackService : BaseService, IChatPackService
             return friendChatDto;
 
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
+        IChatService chatService = _scopedProvider.Resolve<IChatService>();
         // 生成ChatData（单条聊天消息，数组，包含文字图片等）
         var chatData = mapper.Map<ChatData>(friendChat);
         chatData.IsUser = friendChat.UserFromId.Equals(userId);
-        chatData.IsWriting = false;
-        await OperateChatMessage(friendChat.UserFromId, chatData.ChatId, chatData.ChatMessages);
+        await chatService.OperateChatMessage(friendChat.UserFromId, chatData.ChatId, chatData.ChatMessages);
 
         friendChatDto.ChatMessages.Add(chatData);
         return friendChatDto;
@@ -86,16 +87,12 @@ public class ChatPackService : BaseService, IChatPackService
 
         // 获取好友的聊天记录
         foreach (var friendId in friendIds)
-        {
-            var chatPackService = _scopedProvider.Resolve<IChatPackService>();
-            result.Add(await chatPackService.GetFriendChatDto(userId, friendId));
-        }
+            result.Add(await GetFriendChatDto(userId, friendId));
 
         var ordered = result.OrderByDescending(d => d.LastChatMessages?.Time).ToList();
 
         result.Clear();
-        foreach (var chatDto in ordered)
-            result.Add(chatDto);
+        result.AddRange(ordered);
 
         return result;
     }
@@ -108,85 +105,33 @@ public class ChatPackService : BaseService, IChatPackService
     /// <param name="chatId"></param>
     /// <param name="nextCount"></param>
     /// <returns></returns>
-    public async Task<List<ChatData>> GetChatDataAsync(string? userId, string targetId, int chatId,
+    public async Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId,
         int nextCount)
     {
         if (userId == null) return new List<ChatData>();
 
         // 从数据库中获取聊天记录
-        var task = new Task<IEnumerable<ChatPrivate>>(() =>
-        {
-            var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
-            var friendChat = friendChatRepository.GetAll(predicate: d =>
+        var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        var friendChat = await friendChatRepository.GetAll(
+                predicate: d =>
                     ((d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
                      (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) && d.ChatId < chatId,
-                orderBy: o => o.OrderByDescending(d => d.ChatId)).Take(nextCount).ToList();
-
-            return friendChat;
-        });
-        task.Start();
-        await task;
+                orderBy: o => o.OrderByDescending(d => d.ChatId))
+            .Take(nextCount).ToListAsync();
 
         // 将ChatPrivate转换为ChatData
-        var friendChat = task.Result;
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
+        IChatService chatService = _scopedProvider.Resolve<IChatService>();
         var chatDatas = new List<ChatData>();
         foreach (var chatPrivate in friendChat)
         {
             var data = mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
-            data.IsWriting = false;
-            await OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages);
+            await chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages);
             chatDatas.Add(data);
         }
 
         return chatDatas;
-    }
-
-    /// <summary>
-    /// 将ChatMessages中的资源注入
-    /// </summary>
-    /// <param name="userFromId"></param>
-    /// <param name="chatMessages"></param>
-    public async Task OperateChatMessage(string userFromId,
-        int chatId,
-        List<ChatMessageDto> chatMessages)
-    {
-        foreach (var chatMessage in chatMessages)
-        {
-            if (chatMessage.Type == ChatMessage.ContentOneofCase.ImageMess)
-            {
-                var messContent = (ImageMessDto)chatMessage.Content;
-                string filename = messContent.FilePath;
-                var content = await _fileOperateHelper.GetFileForUser(
-                    Path.Combine(userFromId, "ChatFile"), filename);
-                //TODO: 图片失效处理
-                using (MemoryStream stream = new MemoryStream(content))
-                    messContent.ImageSource = new Bitmap(stream);
-            }
-            else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)
-            {
-                var messContent = (FileMessDto)chatMessage.Content;
-                messContent.ChatId = chatId;
-                if (string.IsNullOrWhiteSpace(messContent.TargetFilePath)) return;
-                FileInfo fileInfo = new FileInfo(messContent.TargetFilePath);
-                if (fileInfo.Exists && fileInfo.Length == messContent.FileSize)
-                    messContent.IsDownload = true;
-                else
-                {
-                    if (fileInfo.Exists)
-                    {
-                        FileProcessDto fileProcessDto = new FileProcessDto
-                        {
-                            FileName = messContent.FileName,
-                            CurrentSize = fileInfo.Length,
-                            MaxSize = messContent.FileSize
-                        };
-                        messContent.FileProcessDto = fileProcessDto;
-                    }
-                }
-            }
-        }
     }
 
     /// <summary>
@@ -201,5 +146,53 @@ public class ChatPackService : BaseService, IChatPackService
         var repository = _unitOfWork.GetRepository<ChatPrivate>();
         return repository.CountAsync(d =>
             d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId) && !d.IsReaded);
+    }
+
+    /// <summary>
+    /// 处理好友消息
+    /// </summary>
+    /// <param name="chatMessage"></param>
+    /// <returns></returns>
+    public async Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage)
+    {
+        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
+        var result =
+            await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
+        if (result != null)
+        {
+            chatPrivate.IsReaded = result.IsReaded;
+            chatPrivate.Id = result.Id;
+        }
+
+        chatPrivateRepository.Update(chatPrivate);
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    /// <summary>
+    /// 批量处理好友请求
+    /// </summary>
+    /// <param name="chatMessages"></param>
+    /// <returns></returns>
+    public async Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages)
+    {
+        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        foreach (var chatMessage in chatMessages)
+        {
+            var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
+            var result =
+                await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
+            if (result != null)
+            {
+                chatPrivate.IsReaded = result.IsReaded;
+                chatPrivate.Id = result.Id;
+            }
+
+            chatPrivateRepository.Update(chatPrivate);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return true;
     }
 }

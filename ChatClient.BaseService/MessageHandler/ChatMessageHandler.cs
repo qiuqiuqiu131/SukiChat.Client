@@ -34,9 +34,11 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     private async Task OnFriendChatMessage(IScopedProvider scopedprovider, FriendChatMessage chatMessage)
     {
-        var chatService = scopedprovider.Resolve<IChatService>();
-        await chatService.FriendChatMessageOperate(chatMessage);
+        // 将消息存入数据库
+        var friendChatPackService = scopedprovider.Resolve<IFriendChatPackService>();
+        await friendChatPackService.FriendChatMessageOperate(chatMessage);
 
+        // 生成消息Dto
         var chatData = new ChatData
         {
             ChatId = chatMessage.Id,
@@ -45,9 +47,11 @@ internal class ChatMessageHandler : MessageHandlerBase
             IsUser = false,
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(chatMessage.Messages)
         };
-        var chatPackService = scopedprovider.Resolve<IChatPackService>();
-        await chatPackService.OperateChatMessage(chatMessage.UserFromId, chatData.ChatId, chatData.ChatMessages);
+        // 注入消息资源
+        var chatService = scopedprovider.Resolve<IChatService>();
+        await chatService.OperateChatMessage(chatMessage.UserFromId, chatData.ChatId, chatData.ChatMessages);
 
+        // 更新消息Dto
         var friendChat = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
         if (friendChat != null && friendChat.ChatMessages.Count != 0)
         {

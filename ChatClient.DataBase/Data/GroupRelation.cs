@@ -27,5 +27,5 @@ public class GroupRelation
 
     public bool IsTop { get; set; } = false;
 
-    public int HeadIndex { get; set; }
+    public int HeadIndex { get; set; } = -1;
 }

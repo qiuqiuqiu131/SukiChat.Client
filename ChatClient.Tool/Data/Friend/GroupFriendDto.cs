@@ -19,4 +19,9 @@ public class GroupFriendDto : BindableBase
         get => _groupName;
         set => SetProperty(ref _groupName, value);
     }
+
+    public event Action<FriendRelationDto> DeSelectItemEvent;
+
+    public void DeSelectItem(FriendRelationDto friend) =>
+        DeSelectItemEvent?.Invoke(friend);
 }

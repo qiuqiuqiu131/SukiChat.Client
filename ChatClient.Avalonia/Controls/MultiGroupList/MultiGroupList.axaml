@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupList">
+        xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupList"
+        xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool">
     <Style Selector="multiGroupList|MultiGroupList">
         <Setter Property="Template">
             <ControlTemplate>
@@ -12,7 +13,6 @@
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
                              SelectionMode="Multiple,Toggle"
-                             ItemsSource="{Binding $parent[multiGroupList:MultiGroupList].GroupContents}"
                              Classes="Void MultiSelect">
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -20,7 +20,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="data:FriendRelationDto">
                                 <Grid Height="42">
                                     <Grid Margin="6,5" ColumnDefinitions="36,*">
                                         <Grid Width="36" Height="36">
@@ -42,6 +42,7 @@
                                                    VerticalAlignment="Center"
                                                    FontSize="13.5"
                                                    FontWeight="DemiBold"
+                                                   Foreground="{DynamicResource SukiText}"
                                                    Text="{Binding  UserDto.Name}" />
                                     </Grid>
                                 </Grid>

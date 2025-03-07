@@ -1,4 +1,5 @@
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Events;
@@ -28,43 +29,11 @@ internal class GroupMessageHandler : MessageHandlerBase
     {
         if (!pullGroupMessage.UserIdTarget.Equals(_userManager.User?.Id)) return;
 
-        var unitOfWork = scopedProvider.Resolve<IUnitOfWork>();
+        // 处理拉入消息
+        var groupService = scopedProvider.Resolve<IGroupPackService>();
+        await groupService.OperatePullGroupMessage(_userManager.User.Id, pullGroupMessage);
 
-        // 获取group并保存到本地数据库
-        var groupService = scopedProvider.Resolve<GroupService>();
-        var groupMessage = await groupService.GetGroupMessage(_userManager.User.Id!, pullGroupMessage.GroupId);
-
-        Group group = new Group
-        {
-            CreateTime = DateTime.Parse(groupMessage.CreateTime),
-            Description = groupMessage.Description,
-            Id = groupMessage.GroupId,
-            Name = groupMessage.Name,
-            HeadPath = groupMessage.HeadPath
-        };
-        var groupRepository = unitOfWork.GetRepository<Group>();
-        groupRepository.Update(group);
-        await unitOfWork.SaveChangesAsync();
-
-        // 添加群组关系到数据库
-        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
-        var groupMemberMessage =
-            await groupService.GetGroupMemberMessage(_userManager.User.Id!, pullGroupMessage.GroupId);
-        foreach (var member in groupMemberMessage.Members)
-        {
-            groupRelationRepository.Update(new GroupRelation
-            {
-                GroupId = pullGroupMessage.GroupId,
-                UserId = member.UserId,
-                NickName = member.Nickname,
-                Status = member.Status,
-                JoinTime = DateTime.Parse(member.JoinTime),
-                HeadIndex = member.HeadIndex
-            });
-        }
-
-        await unitOfWork.SaveChangesAsync();
-
-        // TODO: 更新UI
+        // UserManager更新Dto
+        var groupDto = await _userManager.NewGroupReceive(pullGroupMessage.GroupId);
     }
 }
