@@ -1,0 +1,151 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:groupChatUi="clr-namespace:ChatClient.Avalonia.Controls.GroupChatUI;assembly=ChatClient.Avalonia"
+             xmlns:chatViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
+             xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
+             xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:chatViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
+    <Grid RowDefinitions="70,*">
+        <!-- 顶部栏 -->
+        <suki:GlassCard Grid.Row="0"
+                        CornerRadius="0"
+                        Padding="0"
+                        Margin="0"
+                        BorderThickness="0,0,0,1.5"
+                        BorderBrush="{DynamicResource SukiBorderBrush}">
+            <DockPanel Margin="0" LastChildFill="True">
+                <StackPanel Margin="0,0,10,5"
+                            VerticalAlignment="Bottom"
+                            Orientation="Horizontal"
+                            DockPanel.Dock="Right">
+                    <StackPanel.Styles>
+                        <Style Selector="Button.Basic">
+                            <Setter Property="Padding" Value="5" />
+                            <Style Selector="^ avalonia|MaterialIcon">
+                                <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+                            </Style>
+                            <Style Selector="^:pointerover">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Style Selector="^ avalonia|MaterialIcon">
+                                    <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+                                </Style>
+                            </Style>
+                            <Style Selector="^:pressed /template/ Border">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Style Selector="^ avalonia|MaterialIcon">
+                                    <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+                                </Style>
+                            </Style>
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button Classes="Basic" Click="ShowRightView">
+                        <avalonia:MaterialIcon Kind="DotsHorizontal" Width="23" Height="23" />
+                    </Button>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="13,5,0,0"
+                            Orientation="Horizontal">
+                    <TextBlock Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"
+                               LetterSpacing="1"
+                               FontSize="16.5"
+                               Foreground="{DynamicResource SukiText}"
+                               FontWeight="DemiBold" />
+                </StackPanel>
+            </DockPanel>
+        </suki:GlassCard>
+        <overlaySplitView:OverlaySplitView Grid.Row="1"
+                                           Name="OverlaySplitView"
+                                           IsPaneOpen="False">
+            <!-- 侧边栏 -->
+            <overlaySplitView:OverlaySplitView.PaneContent>
+                <Border CornerRadius="5" Opacity="0.95"
+                        Background="{DynamicResource SukiCardBackground}">
+                    <TextBlock Text="侧边栏" FontSize="25" />
+                </Border>
+            </overlaySplitView:OverlaySplitView.PaneContent>
+
+            <!-- 主体 -->
+            <Grid ColumnDefinitions="*,1.5,auto">
+                <!-- 聊天部分 -->
+                <Grid RowDefinitions="*,40">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="1.2" />
+                            <RowDefinition MinHeight="150" MaxHeight="350" Height="200" />
+                        </Grid.RowDefinitions>
+
+                        <!-- 聊天内容 -->
+                        <groupChatUi:GroupChatUI Name="ChatUI"
+                                                 Margin="0"
+                                                 HeadClickCommand="{Binding HeadClickCommand}"
+                                                 Messages="{Binding SelectedGroup.ChatMessages}"
+                                                 FileMessageClickCommand="{Binding FileMessageClickCommand}"
+                                                 SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
+                                                 SearchMoreCommand="{Binding SearchMoreCommand}"
+                                                 UserImageSource="{Binding User.HeadImage}" />
+
+                        <GridSplitter Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+
+                        <!-- 输入框 -->
+                        <Grid Grid.Row="2">
+                            <Border BorderThickness="0"
+                                    Opacity="{DynamicResource GlassOpacity}"
+                                    Background="{DynamicResource SukiGlassCardBackground}" />
+                            <chatViews1:ChatInputPanelView
+                                DataContext="{Binding ChatInputPanelViewModel }" />
+                        </Grid>
+                    </Grid>
+
+                    <!-- 底部按钮 -->
+                    <Grid Grid.Row="1" Margin="0,0,0,0">
+                        <Border BorderThickness="0"
+                                Opacity="{DynamicResource GlassOpacity}"
+                                Background="{DynamicResource SukiGlassCardBackground}" />
+                        <Button
+                            Content="发送"
+                            Classes="Flat"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Padding="20,6,20,6"
+                            Margin="10,0,10,5"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Command="{Binding ChatInputPanelViewModel.SendMessageCommand}" />
+                    </Grid>
+                </Grid>
+
+                <Border Background="{DynamicResource SukiBorderBrush}" />
+
+                <!-- 右侧群聊信息 -->
+                <Grid Column="2" Width="150">
+                    <ItemsControl ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="40,*">
+                                    <circleImage:CircleImage Image="{Binding HeadImage}" Size="34" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Grid>
+        </overlaySplitView:OverlaySplitView>
+    </Grid>
+</UserControl>

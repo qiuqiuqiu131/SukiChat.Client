@@ -10,15 +10,4 @@ public partial class ChatView : UserControl
     {
         InitializeComponent();
     }
-
-    protected override void OnPointerPressed(PointerPressedEventArgs e)
-    {
-        base.OnPointerPressed(e);
-        OverlaySplitView.IsPaneOpen = false;
-    }
-
-    private void ShowRightView(object? sender, RoutedEventArgs e)
-    {
-        OverlaySplitView.IsPaneOpen = !OverlaySplitView.IsPaneOpen;
-    }
 }

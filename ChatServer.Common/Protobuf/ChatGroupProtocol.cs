@@ -36,16 +36,18 @@ namespace ChatServer.Common.Protobuf {
             "ZXJzTWVzc2FnZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29t",
             "bW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEg8KB2dyb3VwSWQYAiABKAkS",
             "PwoHbWVtYmVycxgDIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
-            "Lkdyb3VwTWVtYmVyTWVzc2FnZSJHChJHcm91cE1lbWJlclJlcXVlc3QSDgoG",
-            "dXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkSEAoIbWVtYmVySWQYAyAB",
-            "KAkikwEKEkdyb3VwTWVtYmVyTWVzc2FnZRIOCgZ1c2VySWQYASABKAkSDwoH",
-            "Z3JvdXBJZBgCIAEoCRIQCghqb2luVGltZRgDIAEoCRIVCg1sYXN0U3BlYWtU",
-            "aW1lGAQgASgJEg4KBnN0YXR1cxgFIAEoBRIQCghuaWNrbmFtZRgGIAEoCRIR",
-            "CgloZWFkSW5kZXgYByABKAUirgEKEUVudGVyR3JvdXBNZXNzYWdlEg8KB2dy",
-            "b3VwSWQYASABKAkSDgoGdXNlcklkGAIgASgJEg4KBnN0YXR1cxgDIAEoCRIQ",
-            "Cghncm91cGluZxgEIAEoCRIQCghqb2luVGltZRgFIAEoCRIQCghOaWNrTmFt",
-            "ZRgGIAEoCRIOCgZSZW1hcmsYByABKAkSEwoLY2FudERpc3R1cmIYCCABKAgS",
-            "DQoFaXNUb3AYCSABKAhiBnByb3RvMw=="));
+            "Lkdyb3VwTWVtYmVyTWVzc2FnZSI3ChJHcm91cE1lbWJlclJlcXVlc3QSDwoH",
+            "Z3JvdXBJZBgBIAEoCRIQCghtZW1iZXJJZBgCIAEoCSKTAQoSR3JvdXBNZW1i",
+            "ZXJNZXNzYWdlEg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJEhAK",
+            "CGpvaW5UaW1lGAMgASgJEhUKDWxhc3RTcGVha1RpbWUYBCABKAkSDgoGc3Rh",
+            "dHVzGAUgASgFEhAKCG5pY2tuYW1lGAYgASgJEhEKCWhlYWRJbmRleBgHIAEo",
+            "BSI4ChVHcm91cE1lbWJlcklkc1JlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8K",
+            "B2dyb3VwSWQYAiABKAkiNAoOR3JvdXBNZW1iZXJJZHMSDwoHZ3JvdXBJZBgB",
+            "IAEoCRIRCgltZW1iZXJJZHMYAiADKAkirgEKEUVudGVyR3JvdXBNZXNzYWdl",
+            "Eg8KB2dyb3VwSWQYASABKAkSDgoGdXNlcklkGAIgASgJEg4KBnN0YXR1cxgD",
+            "IAEoCRIQCghncm91cGluZxgEIAEoCRIQCghqb2luVGltZRgFIAEoCRIQCghO",
+            "aWNrTmFtZRgGIAEoCRIOCgZSZW1hcmsYByABKAkSEwoLY2FudERpc3R1cmIY",
+            "CCABKAgSDQoFaXNUb3AYCSABKAhiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -53,8 +55,10 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessage), global::ChatServer.Common.Protobuf.GroupMessage.Parser, new[]{ "Response", "GroupId", "Name", "Description", "HeadPath", "CreateTime", "MemberCount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersRequest), global::ChatServer.Common.Protobuf.GroupMembersRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersMessage), global::ChatServer.Common.Protobuf.GroupMembersMessage.Parser, new[]{ "Response", "GroupId", "Members" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberRequest), global::ChatServer.Common.Protobuf.GroupMemberRequest.Parser, new[]{ "UserId", "GroupId", "MemberId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberRequest), global::ChatServer.Common.Protobuf.GroupMemberRequest.Parser, new[]{ "GroupId", "MemberId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberMessage), global::ChatServer.Common.Protobuf.GroupMemberMessage.Parser, new[]{ "UserId", "GroupId", "JoinTime", "LastSpeakTime", "Status", "Nickname", "HeadIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIdsRequest), global::ChatServer.Common.Protobuf.GroupMemberIdsRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIds), global::ChatServer.Common.Protobuf.GroupMemberIds.Parser, new[]{ "GroupId", "MemberIds" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.EnterGroupMessage), global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser, new[]{ "GroupId", "UserId", "Status", "Grouping", "JoinTime", "NickName", "Remark", "CantDisturb", "IsTop" }, null, null, null, null)
           }));
     }
@@ -887,7 +891,6 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GroupMemberRequest(GroupMemberRequest other) : this() {
-      userId_ = other.userId_;
       groupId_ = other.groupId_;
       memberId_ = other.memberId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -898,19 +901,8 @@ namespace ChatServer.Common.Protobuf {
       return new GroupMemberRequest(this);
     }
 
-    /// <summary>Field number for the "userId" field.</summary>
-    public const int UserIdFieldNumber = 1;
-    private string userId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string UserId {
-      get { return userId_; }
-      set {
-        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
     /// <summary>Field number for the "groupId" field.</summary>
-    public const int GroupIdFieldNumber = 2;
+    public const int GroupIdFieldNumber = 1;
     private string groupId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string GroupId {
@@ -921,7 +913,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "memberId" field.</summary>
-    public const int MemberIdFieldNumber = 3;
+    public const int MemberIdFieldNumber = 2;
     private string memberId_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string MemberId {
@@ -944,7 +936,6 @@ namespace ChatServer.Common.Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (UserId != other.UserId) return false;
       if (GroupId != other.GroupId) return false;
       if (MemberId != other.MemberId) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -953,7 +944,6 @@ namespace ChatServer.Common.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
       if (MemberId.Length != 0) hash ^= MemberId.GetHashCode();
       if (_unknownFields != null) {
@@ -969,16 +959,12 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (UserId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(UserId);
-      }
       if (GroupId.Length != 0) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(10);
         output.WriteString(GroupId);
       }
       if (MemberId.Length != 0) {
-        output.WriteRawTag(26);
+        output.WriteRawTag(18);
         output.WriteString(MemberId);
       }
       if (_unknownFields != null) {
@@ -989,9 +975,6 @@ namespace ChatServer.Common.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (UserId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
-      }
       if (GroupId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
       }
@@ -1008,9 +991,6 @@ namespace ChatServer.Common.Protobuf {
     public void MergeFrom(GroupMemberRequest other) {
       if (other == null) {
         return;
-      }
-      if (other.UserId.Length != 0) {
-        UserId = other.UserId;
       }
       if (other.GroupId.Length != 0) {
         GroupId = other.GroupId;
@@ -1030,14 +1010,10 @@ namespace ChatServer.Common.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            UserId = input.ReadString();
-            break;
-          }
-          case 18: {
             GroupId = input.ReadString();
             break;
           }
-          case 26: {
+          case 18: {
             MemberId = input.ReadString();
             break;
           }
@@ -1344,6 +1320,312 @@ namespace ChatServer.Common.Protobuf {
 
   }
 
+  public sealed partial class GroupMemberIdsRequest : pb::IMessage<GroupMemberIdsRequest> {
+    private static readonly pb::MessageParser<GroupMemberIdsRequest> _parser = new pb::MessageParser<GroupMemberIdsRequest>(() => new GroupMemberIdsRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GroupMemberIdsRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[6]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIdsRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIdsRequest(GroupMemberIdsRequest other) : this() {
+      userId_ = other.userId_;
+      groupId_ = other.groupId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIdsRequest Clone() {
+      return new GroupMemberIdsRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 2;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GroupMemberIdsRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GroupMemberIdsRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (GroupId != other.GroupId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(GroupId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GroupMemberIdsRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            GroupId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class GroupMemberIds : pb::IMessage<GroupMemberIds> {
+    private static readonly pb::MessageParser<GroupMemberIds> _parser = new pb::MessageParser<GroupMemberIds>(() => new GroupMemberIds());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GroupMemberIds> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIds() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIds(GroupMemberIds other) : this() {
+      groupId_ = other.groupId_;
+      memberIds_ = other.memberIds_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GroupMemberIds Clone() {
+      return new GroupMemberIds(this);
+    }
+
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 1;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "memberIds" field.</summary>
+    public const int MemberIdsFieldNumber = 2;
+    private static readonly pb::FieldCodec<string> _repeated_memberIds_codec
+        = pb::FieldCodec.ForString(18);
+    private readonly pbc::RepeatedField<string> memberIds_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<string> MemberIds {
+      get { return memberIds_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GroupMemberIds);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GroupMemberIds other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (GroupId != other.GroupId) return false;
+      if(!memberIds_.Equals(other.memberIds_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
+      hash ^= memberIds_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(GroupId);
+      }
+      memberIds_.WriteTo(output, _repeated_memberIds_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
+      }
+      size += memberIds_.CalculateSize(_repeated_memberIds_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GroupMemberIds other) {
+      if (other == null) {
+        return;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
+      }
+      memberIds_.Add(other.memberIds_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            GroupId = input.ReadString();
+            break;
+          }
+          case 18: {
+            memberIds_.AddEntriesFrom(input, _repeated_memberIds_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   public sealed partial class EnterGroupMessage : pb::IMessage<EnterGroupMessage> {
     private static readonly pb::MessageParser<EnterGroupMessage> _parser = new pb::MessageParser<EnterGroupMessage>(() => new EnterGroupMessage());
     private pb::UnknownFieldSet _unknownFields;
@@ -1352,7 +1634,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[6]; }
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[8]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

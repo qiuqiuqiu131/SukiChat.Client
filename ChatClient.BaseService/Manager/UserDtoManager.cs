@@ -10,7 +10,7 @@ public interface IUserDtoManager
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
-    Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+    Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     void Clear();
 }
 
@@ -20,7 +20,7 @@ public class UserDtoManager : IUserDtoManager
     private readonly ConcurrentDictionary<string, UserDto> _userDtos = new();
     private readonly ConcurrentDictionary<string, FriendRelationDto> _friendRelationDtos = new();
     private readonly ConcurrentDictionary<string, GroupDto> _groupDtos = new();
-    private readonly ConcurrentDictionary<string, GroupMemberDto> _groupMemberDtos = new();
+    private readonly ConcurrentDictionary<string, GroupRelationDto> _groupRelationDtos = new();
 
     private readonly IContainerProvider _containerProvider;
     private readonly SemaphoreSlim _semaphore_1 = new(1, 1);
@@ -133,12 +133,21 @@ public class UserDtoManager : IUserDtoManager
 
             var groupService = _containerProvider.Resolve<IGroupService>();
             var group = await groupService.GetGroupDto(userId, groupId);
+            if (group == null) return null;
+            var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
+            if (memberIds != null)
+            {
+                foreach (var memberId in memberIds)
+                {
+                    // 注入群组成员信息
+                    var memberDto = await groupService.GetGroupMemberDto(groupId, memberId);
+                    if (memberDto != null)
+                        group.GroupMembers.Add(memberDto);
+                }
+            }
 
             // 如果获取到用户信息，添加到缓存中
-            if (group != null)
-            {
-                _groupDtos.TryAdd(groupId, group);
-            }
+            _groupDtos.TryAdd(groupId, group);
 
             return group;
         }
@@ -148,32 +157,32 @@ public class UserDtoManager : IUserDtoManager
         }
     }
 
-    public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
+    public async Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId)
     {
-        string key = groupId + memberId;
-        if (_groupMemberDtos.TryGetValue(key, out var cachedGroupMember))
-            return cachedGroupMember;
+        if (_groupRelationDtos.TryGetValue(groupId, out var cachedGroupRelation))
+            return cachedGroupRelation;
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
             await _semaphore_4.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
-            if (_groupMemberDtos.TryGetValue(groupId, out cachedGroupMember))
+            if (_groupRelationDtos.TryGetValue(groupId, out cachedGroupRelation))
             {
-                return cachedGroupMember;
+                return cachedGroupRelation;
             }
 
             var groupService = _containerProvider.Resolve<IGroupService>();
-            var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
+            var groupRelation = await groupService.GetGroupRelationDto(userId, groupId);
 
             // 如果获取到用户信息，添加到缓存中
-            if (groupMember != null)
+            if (groupRelation != null)
             {
-                _groupMemberDtos.TryAdd(key, groupMember);
+                groupRelation.GroupDto = await GetGroupDto(userId, groupId);
+                _groupRelationDtos.TryAdd(groupId, groupRelation);
             }
 
-            return groupMember;
+            return groupRelation;
         }
         finally
         {

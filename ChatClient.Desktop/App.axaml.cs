@@ -10,16 +10,19 @@ using ChatClient.DataBase;
 using ChatClient.Desktop.UIEntity;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
+using ChatClient.Tool.UIEntity;
 using Microsoft.Extensions.Configuration;
 using Prism.DryIoc;
 using Prism.Ioc;
@@ -76,6 +79,9 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
         containerRegistry.RegisterForNavigation<FriendDetailView, FriendDetailViewModel>();
+        containerRegistry.RegisterForNavigation<ChatEmptyView>();
+        containerRegistry.RegisterForNavigation<ChatFriendPanelView, ChatFriendPanelViewModel>();
+        containerRegistry.RegisterForNavigation<ChatGroupPanelView, ChatGroupPanelViewModel>();
 
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
@@ -97,6 +103,9 @@ public class App : PrismApplication
     {
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
         regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, typeof(LoginView));
+        regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
+        regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatFriendPanelView));
+        regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatGroupPanelView));
 
         // ProtoFileIOHelper helper = Container.Resolve<ProtoFileIOHelper>();
         // byte[] bytes;

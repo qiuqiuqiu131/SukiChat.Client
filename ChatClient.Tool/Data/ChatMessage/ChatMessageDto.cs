@@ -16,11 +16,17 @@ public class TextMessDto
     public string Text { get; set; }
 }
 
-public class ImageMessDto
+public class ImageMessDto : BindableBase
 {
     public string? FilePath { get; set; }
     public long FileSize { get; set; }
-    public Bitmap ImageSource { get; set; }
+    private Bitmap imageSource;
+
+    public Bitmap ImageSource
+    {
+        get => imageSource;
+        set => SetProperty(ref imageSource, value);
+    }
 }
 
 public class FileMessDto : BindableBase

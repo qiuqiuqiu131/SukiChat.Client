@@ -24,13 +24,16 @@ internal class DataToDtoProfile : Profile
 
         CreateMap<GroupDto, Group>().ReverseMap();
 
-        CreateMap<GroupMemberDto, GroupRelation>().ReverseMap();
+        CreateMap<GroupMemberDto, GroupMember>().ReverseMap();
 
         CreateMap<FriendReceived, FriendReceiveDto>().ReverseMap();
         CreateMap<FriendRequest, FriendRequestDto>().ReverseMap();
 
         CreateMap<FriendRelation, FriendRelationDto>()
             .ForMember(fr => fr.Id, opt => opt.MapFrom(frd => frd.User2Id));
+
+        CreateMap<GroupRelation, GroupRelationDto>()
+            .ForMember(gr => gr.Id, opt => opt.MapFrom(grd => grd.GroupId));
 
         // User login state, get outline message and operate friend request
         CreateMap<FriendRequestMessage, FriendRequest>()

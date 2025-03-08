@@ -52,11 +52,11 @@ public class GroupMemberDto : BindableBase
 
     private int headIndex;
 
-    public Bitmap HeadImage
+    public Bitmap? HeadImage
     {
         get => headImage;
         set => SetProperty(ref headImage, value);
     }
 
-    private Bitmap headImage;
+    private Bitmap? headImage;
 }

@@ -6,12 +6,12 @@ public class GroupChatDto : BindableBase
 {
     public string? GroupId { get; set; }
 
-    private GroupDto? _groupDto;
+    private GroupRelationDto? _groupRelationDto;
 
-    public GroupDto? GroupDto
+    public GroupRelationDto? GroupRelationDto
     {
-        get => _groupDto;
-        set => SetProperty(ref _groupDto, value);
+        get => _groupRelationDto;
+        set => SetProperty(ref _groupRelationDto, value);
     }
 
     // 是否存在更多历史聊天记录

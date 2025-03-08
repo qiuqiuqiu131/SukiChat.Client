@@ -7,6 +7,7 @@ using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.UIEntity;
 using Material.Icons;
 using Prism.Commands;
 using Prism.Dialogs;

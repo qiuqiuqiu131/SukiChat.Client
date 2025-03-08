@@ -9,7 +9,6 @@ namespace ChatClient.BaseService.Services.PackService;
 
 public interface IGroupPackService
 {
-    Task<List<string>> GetGroupIds(string userId);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
 }
@@ -27,13 +26,6 @@ public class GroupPackService : BaseService, IGroupPackService
         _mapper = mapper;
         _userManager = userManager;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
-    }
-
-    public Task<List<string>> GetGroupIds(string userId)
-    {
-        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
-        return groupRelationRepository.GetAll(predicate: d => d.UserId.Equals(userId))
-            .Select(d => d.GroupId).ToListAsync();
     }
 
     public Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message)

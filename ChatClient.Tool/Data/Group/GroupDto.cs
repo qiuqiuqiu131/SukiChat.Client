@@ -1,4 +1,5 @@
 using System.Drawing;
+using Avalonia.Collections;
 
 namespace ChatClient.Tool.Data.Group;
 
@@ -35,6 +36,14 @@ public class GroupDto : BindableBase
     }
 
     private DateTime createTime;
+
+    public AvaloniaList<GroupMemberDto> GroupMembers
+    {
+        get => groupMembers;
+        set => SetProperty(ref groupMembers, value);
+    }
+
+    private AvaloniaList<GroupMemberDto> groupMembers = new();
 
     public string HeadPath
     {

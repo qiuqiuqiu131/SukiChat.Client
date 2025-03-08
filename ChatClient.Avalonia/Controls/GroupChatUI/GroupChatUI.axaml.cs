@@ -1,7 +1,5 @@
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Animation;
@@ -13,17 +11,16 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.ChatUI;
 using ChatClient.Tool.Data;
-using SukiUI.Theme;
 
-namespace ChatClient.Avalonia.Controls.ChatUI;
+namespace ChatClient.Avalonia.Controls.GroupChatUI;
 
-public partial class ChatUI : UserControl
+public partial class GroupChatUI : UserControl
 {
-    public ChatUI()
+    public GroupChatUI()
     {
         InitializeComponent();
     }
@@ -99,7 +96,7 @@ public partial class ChatUI : UserControl
     #region Messages
 
     public static readonly StyledProperty<AvaloniaList<ChatData>> MessagesProperty =
-        AvaloniaProperty.Register<ChatUI, AvaloniaList<ChatData>>(nameof(Messages),
+        AvaloniaProperty.Register<GroupChatUI, AvaloniaList<ChatData>>(nameof(Messages),
             defaultValue: new AvaloniaList<ChatData>());
 
     public AvaloniaList<ChatData> Messages
@@ -110,10 +107,10 @@ public partial class ChatUI : UserControl
 
     #endregion
 
-    #region HeadClickCommand
+    #region HeadClickCommnad
 
     public static readonly StyledProperty<ICommand> HeadClickCommandProperty =
-        AvaloniaProperty.Register<ChatUI, ICommand>(nameof(HeadClickCommand));
+        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(HeadClickCommand));
 
     public ICommand HeadClickCommand
     {
@@ -126,7 +123,7 @@ public partial class ChatUI : UserControl
     #region SearchMoreCommand
 
     public static readonly StyledProperty<ICommand> SearchMoreCommandProperty =
-        AvaloniaProperty.Register<ChatUI, ICommand>(nameof(SearchMoreCommand));
+        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(SearchMoreCommand));
 
     public ICommand SearchMoreCommand
     {
@@ -139,7 +136,7 @@ public partial class ChatUI : UserControl
     #region SearchMoreVisible
 
     public static readonly StyledProperty<bool> SearchMoreVisibleProperty =
-        AvaloniaProperty.Register<ChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
+        AvaloniaProperty.Register<GroupChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
 
     public bool SearchMoreVisible
     {
@@ -152,7 +149,7 @@ public partial class ChatUI : UserControl
     #region UserImage
 
     public static readonly StyledProperty<IImage?> UserImageSourceProperty =
-        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(UserImageSource));
+        AvaloniaProperty.Register<GroupChatUI, IImage?>(nameof(UserImageSource));
 
     public IImage? UserImageSource
     {
@@ -162,23 +159,10 @@ public partial class ChatUI : UserControl
 
     #endregion
 
-    #region FriendImage
-
-    public static readonly StyledProperty<IImage?> FriendImageSourceProperty =
-        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(FriendImageSource));
-
-    public IImage? FriendImageSource
-    {
-        get => GetValue(FriendImageSourceProperty);
-        set => SetValue(FriendImageSourceProperty, value);
-    }
-
-    #endregion
-
     #region UnReadMessage
 
     public static readonly StyledProperty<bool> HaveUnReadMessageProperty =
-        AvaloniaProperty.Register<ChatUI, bool>(nameof(HaveUnReadMessage));
+        AvaloniaProperty.Register<GroupChatUI, bool>(nameof(HaveUnReadMessage));
 
     public bool HaveUnReadMessage
     {
@@ -187,7 +171,7 @@ public partial class ChatUI : UserControl
     }
 
     public static readonly StyledProperty<int> UnReadMessageCountProperty =
-        AvaloniaProperty.Register<ChatUI, int>(nameof(UnReadMessageCount));
+        AvaloniaProperty.Register<GroupChatUI, int>(nameof(UnReadMessageCount));
 
     public int UnReadMessageCount
     {

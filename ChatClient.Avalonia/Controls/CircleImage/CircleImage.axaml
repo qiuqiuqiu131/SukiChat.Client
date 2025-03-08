@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Avalonia.Controls.CircleImage.CircleImage">
+    <UserControl.Resources>
+        <circleImage:HalfValueConverter x:Key="HalfValueConverter" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="circleImage|CircleImage">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel Width="{Binding $parent[circleImage:CircleImage].Size}"
+                           Height="{Binding $parent[circleImage:CircleImage].Size}">
+                        <Panel.Clip>
+                            <EllipseGeometry
+                                Center="{Binding $parent[circleImage:CircleImage].Size,Converter={circleImage:HalfPointConverter}}"
+                                RadiusX="{Binding $parent[circleImage:CircleImage].Size,Converter={StaticResource HalfValueConverter}}"
+                                RadiusY="{Binding $parent[circleImage:CircleImage].Size,Converter={StaticResource HalfValueConverter}}" />
+                        </Panel.Clip>
+                        <Image
+                            Width="{Binding $parent[circleImage:CircleImage].Size}"
+                            Height="{Binding $parent[circleImage:CircleImage].Size}"
+                            Source="{Binding  $parent[circleImage:CircleImage].Image}" />
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

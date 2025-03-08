@@ -8,8 +8,6 @@ public class UserData
 {
     public UserDto UserDetail { get; set; }
 
-    public List<UserDto> Friends { get; set; } = new();
-
     public AvaloniaList<FriendReceiveDto> FriendReceives { get; set; }
 
     public AvaloniaList<GroupFriendDto> GroupFriends { get; set; }

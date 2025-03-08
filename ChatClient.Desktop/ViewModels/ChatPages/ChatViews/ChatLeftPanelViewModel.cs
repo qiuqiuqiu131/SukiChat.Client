@@ -3,6 +3,7 @@ using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
@@ -30,6 +31,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
     public DelegateCommand CreateGroupCommand { get; init; }
     public DelegateCommand AddNewFriendCommand { get; init; }
     public DelegateCommand<FriendChatDto> FriendSelectionChangedCommand { get; init; }
+    public DelegateCommand<GroupChatDto> GroupSelectionChangedCommand { get; init; }
 
     public ChatLeftPanelViewModel(ChatViewModel chatViewModel, IContainerProvider containerProvider)
     {
@@ -40,6 +42,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
         ChatViewModel = chatViewModel;
 
         FriendSelectionChangedCommand = new DelegateCommand<FriendChatDto>(ChatViewModel.FriendSelectionChanged);
+        GroupSelectionChangedCommand = new DelegateCommand<GroupChatDto>(ChatViewModel.GroupSelectionChanged);
         CreateGroupCommand = new DelegateCommand(CreateGroup);
         AddNewFriendCommand = new DelegateCommand(AddNewFriend);
     }

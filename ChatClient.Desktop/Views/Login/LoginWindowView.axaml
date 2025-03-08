@@ -11,6 +11,7 @@
     xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
     xmlns:vm="using:ChatClient.Desktop.ViewModels.Login"
     xmlns:uiEntity="clr-namespace:ChatClient.Desktop.UIEntity;assembly=ChatClient.Tool"
+    xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     Title="Suki Chat"
     Width="320"
     Height="430"
@@ -149,5 +150,5 @@
                 Kind="WifiStrengthAlertOutline" />
         </Panel>
     </suki:SukiWindow.RightWindowTitleBarControls>
-    <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.LoginRegion}" />
+    <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}" />
 </suki:SukiWindow>

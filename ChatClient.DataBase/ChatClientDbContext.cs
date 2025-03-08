@@ -17,6 +17,7 @@ public class ChatClientDbContext : DbContext
     public DbSet<GroupRequest> GroupRequest { get; set; }
     public DbSet<GroupRelation> GroupRelation { get; set; }
     public DbSet<ChatGroup> ChatGroup { get; set; }
+    public DbSet<GroupMember> GroupMember { get; set; }
 
     private string _databasePath;
 

@@ -21,7 +21,8 @@
                             BoxShadow="0 0 10 0 #40000000"
                             HorizontalAlignment="Right">
                         <Border.RenderTransform>
-                            <TranslateTransform X="{TemplateBinding PaneWidth}" />
+                            <TranslateTransform
+                                X="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Border.RenderTransform>
                         <ContentPresenter Content="{TemplateBinding PaneContent}" />
                     </Border>
@@ -33,10 +34,6 @@
     <Style Selector="controls|OverlaySplitView[IsPaneOpen=true] /template/ Border#PaneContainer">
         <Style.Animations>
             <Animation Duration="0:0:0.3" FillMode="Forward" Easing="QuadraticEaseInOut">
-                <KeyFrame Cue="0%">
-                    <Setter Property="TranslateTransform.X"
-                            Value="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
-                </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="TranslateTransform.X" Value="0" />
                 </KeyFrame>
@@ -47,9 +44,6 @@
     <Style Selector="controls|OverlaySplitView[IsPaneOpen=false] /template/ Border#PaneContainer">
         <Style.Animations>
             <Animation Duration="0:0:0.3" FillMode="Forward" Easing="QuadraticEaseInOut">
-                <KeyFrame Cue="0%">
-                    <Setter Property="TranslateTransform.X" Value="0" />
-                </KeyFrame>
                 <KeyFrame Cue="100%">
                     <Setter Property="TranslateTransform.X"
                             Value="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />

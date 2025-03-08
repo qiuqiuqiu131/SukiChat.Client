@@ -20,11 +20,8 @@ using Prism.Ioc;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
-public class ChatRightBottomPanelViewModel : ViewModelBase
+public class ChatInputPanelViewModel : ViewModelBase
 {
-    private readonly IContainerProvider _containerProvider;
-    public ChatViewModel ChatViewModel { get; init; }
-
     private AvaloniaList<object>? _inputMessages;
 
     public AvaloniaList<object>? InputMessages
@@ -38,26 +35,28 @@ public class ChatRightBottomPanelViewModel : ViewModelBase
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
 
-    public ChatRightBottomPanelViewModel(ChatViewModel chatViewModel, IContainerProvider containerProvider)
+    private readonly Action<ChatMessage.ContentOneofCase, object> sendChatMessage;
+    private readonly Action<IEnumerable<object>> sendChatMessages;
+
+    public ChatInputPanelViewModel(
+        Action<ChatMessage.ContentOneofCase, object> SendChatMessage,
+        Action<IEnumerable<object>> SendChatMessages)
     {
-        _containerProvider = containerProvider;
-        ChatViewModel = chatViewModel;
+        sendChatMessages = SendChatMessages;
+        sendChatMessage = SendChatMessage;
 
         SendMessageCommand = new DelegateCommand(SendMessages, CanSendMessages);
         SelectFileAndSendCommand = new DelegateCommand(SelectFileAndSend);
         ScreenShotCommand = new DelegateCommand(ScreenShot);
         ClearInputMessages = new DelegateCommand(ClearInput);
+    }
 
-        ChatViewModel.OnFriendSelectionChanged += () =>
-        {
-            if (InputMessages != null)
-                InputMessages.CollectionChanged -= NotifyInputMessagesChanged;
-
-            InputMessages = chatViewModel.SelectedFriend?.InputMessages ?? null;
-
-            if (InputMessages != null)
-                InputMessages.CollectionChanged += NotifyInputMessagesChanged;
-        };
+    public void UpdateChatMessages(AvaloniaList<object> chatList)
+    {
+        if (InputMessages != null)
+            InputMessages.CollectionChanged -= NotifyInputMessagesChanged;
+        InputMessages = chatList;
+        InputMessages.CollectionChanged += NotifyInputMessagesChanged;
     }
 
     private void ClearInput()
@@ -121,7 +120,7 @@ public class ChatRightBottomPanelViewModel : ViewModelBase
                 ImageSource = bitmap
             };
 
-            await ChatViewModel.SendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
+            sendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
         }
 
         // 选择文件并发送
@@ -139,7 +138,7 @@ public class ChatRightBottomPanelViewModel : ViewModelBase
                     MaxSize = fileInfo.Length
                 }
             };
-            await ChatViewModel.SendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
+            sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
         }
 
         // 获取文件地址
@@ -173,7 +172,7 @@ public class ChatRightBottomPanelViewModel : ViewModelBase
         List<object> messages = InputMessages.Select(d => d).ToList();
         InputMessages.RemoveRange(0, InputMessages.Count);
 
-        await ChatViewModel.SendChatMessages(messages);
+        sendChatMessages.Invoke(messages);
     }
 
     #endregion

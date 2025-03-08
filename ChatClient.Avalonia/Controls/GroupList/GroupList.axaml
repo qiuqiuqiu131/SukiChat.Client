@@ -1,14 +1,15 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList">
+        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
+        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage">
     <Style Selector="groupList|GroupList">
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander FontSize="13.5"
+                <Expander FontSize="14"
                           Theme="{StaticResource ChatExpander}"
                           FontWeight="SemiBold">
                     <Expander.Header>
-                        <TextBlock FontSize="13.5" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
                              SelectedItem="{Binding $parent[groupList:GroupList].SelectedItem}"
@@ -30,18 +31,8 @@
                                 <Grid Height="46">
                                     <Grid Margin="6,6" ColumnDefinitions="42,*">
                                         <Grid Width="42" Height="42">
-                                            <Panel Width="42" Height="42">
-                                                <Panel.Clip>
-                                                    <EllipseGeometry
-                                                        Center="21,21"
-                                                        RadiusX="21"
-                                                        RadiusY="21" />
-                                                </Panel.Clip>
-                                                <Image
-                                                    Width="42"
-                                                    Height="42"
-                                                    Source="{Binding  UserDto.HeadImage}" />
-                                            </Panel>
+                                            <circleImage:CircleImage Size="42"
+                                                                     Image="{Binding UserDto.HeadImage}" />
                                             <Ellipse IsVisible="{Binding UserDto.IsOnline}"
                                                      Fill="LimeGreen"
                                                      Width="9"
@@ -61,7 +52,7 @@
                                             <TextBlock
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Center"
-                                                FontSize="13.5"
+                                                FontSize="14"
                                                 Opacity="0.9"
                                                 FontWeight="DemiBold"
                                                 Foreground="{DynamicResource SukiText}"

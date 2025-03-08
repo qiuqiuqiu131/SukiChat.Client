@@ -127,7 +127,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         {
             var data = mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
-            await chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages);
+            _ = chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages);
             chatDatas.Add(data);
         }
 

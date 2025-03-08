@@ -1,19 +1,16 @@
-<UserControl
-    x:Class="ChatClient.Avalonia.Controls.ChatUI.ChatUI"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:chatUI="clr-namespace:ChatClient.Avalonia.Controls.ChatUI"
-    xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
-    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    mc:Ignorable="d">
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:chatUI="clr-namespace:ChatClient.Avalonia.Controls.GroupChatUI"
+             xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.ChatUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Avalonia.Controls.GroupChatUI.GroupChatUI">
     <UserControl.Resources>
         <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
     </UserControl.Resources>
@@ -41,7 +38,7 @@
                 </Animation>
             </Style.Animations>
         </Style>
-        <Style Selector="chatUI|ChatUI">
+        <Style Selector="chatUI|GroupChatUI">
             <Setter Property="Template">
                 <ControlTemplate>
                     <Grid>
@@ -62,7 +59,7 @@
                                               Margin="0,0,-15,0"
                                               Padding="0,0,0,5">
                                     <ItemsControl.DataTemplates>
-                                        <DataTemplate DataType="data:ChatData">
+                                        <DataTemplate DataType="data:GroupChatData">
                                             <Grid>
                                                 <Grid.Styles>
                                                     <Style Selector="TextBlock.FadeIn">
@@ -124,13 +121,13 @@
                                                                 DockPanel.Dock="Left"
                                                                 VerticalAlignment="Top"
                                                                 Margin="20,0,12,0"
-                                                                Image="{Binding $parent[chatUI:ChatUI].FriendImageSource}"
+                                                                Image="{Binding Owner.HeadImage}"
                                                                 Size="35">
                                                                 <Interaction.Behaviors>
                                                                     <EventTriggerBehavior
                                                                         EventName="PointerPressed">
                                                                         <InvokeCommandAction
-                                                                            Command="{Binding $parent[chatUI:ChatUI].HeadClickCommnad}"
+                                                                            Command="{Binding $parent[chatUI:GroupChatUI].HeadClickCommand}"
                                                                             CommandParameter="{Binding}" />
                                                                     </EventTriggerBehavior>
                                                                 </Interaction.Behaviors>
@@ -161,7 +158,7 @@
                                                                         </ItemsControl.ItemsPanel>
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <chatUI:ChatMessageView IsLeft="True"
+                                                                                <chatUi:ChatMessageView IsLeft="True"
                                                                                     HorizontalAlignment="Left"
                                                                                     Message="{Binding Content}" />
                                                                             </DataTemplate>
@@ -182,13 +179,13 @@
                                                                 Margin="12,0,20,0"
                                                                 VerticalAlignment="Top"
                                                                 DockPanel.Dock="Right"
-                                                                Image="{Binding $parent[chatUI:ChatUI].UserImageSource}"
+                                                                Image="{Binding $parent[chatUI:GroupChatUI].UserImageSource}"
                                                                 Size="35">
                                                                 <Interaction.Behaviors>
                                                                     <EventTriggerBehavior
                                                                         EventName="PointerPressed">
                                                                         <InvokeCommandAction
-                                                                            Command="{Binding $parent[chatUI:ChatUI].HeadClickCommnad}"
+                                                                            Command="{Binding $parent[chatUI:GroupChatUI].HeadClickCommnad}"
                                                                             CommandParameter="{Binding}" />
                                                                     </EventTriggerBehavior>
                                                                 </Interaction.Behaviors>
@@ -233,7 +230,7 @@
                                                                         </ItemsControl.ItemsPanel>
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <chatUI:ChatMessageView IsLeft="False"
+                                                                                <chatUi:ChatMessageView IsLeft="False"
                                                                                     HorizontalAlignment="Right"
                                                                                     Message="{Binding Content}" />
                                                                             </DataTemplate>
@@ -265,7 +262,7 @@
                                             CornerRadius="7">
                                 <TextBlock
                                     FontSize="13"
-                                    Text="{Binding $parent[chatUI:ChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}">
+                                    Text="{Binding $parent[chatUI:GroupChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}">
                                 </TextBlock>
                             </suki:GlassCard>
                         </Button>

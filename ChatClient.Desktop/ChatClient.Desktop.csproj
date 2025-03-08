@@ -9,98 +9,102 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Folder Include="Models\" />
-        <AvaloniaResource Include="Assets\**" />
+        <Folder Include="Models\"/>
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Remove="Assets\DefaultHead.ico" />
+        <AvaloniaResource Remove="Assets\DefaultHead.ico"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Assets\DefaultHead.ico" />
+        <None Remove="Assets\DefaultHead.ico"/>
     </ItemGroup>
 
     <ItemGroup>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
-        <PackageReference Include="Dock.Avalonia" Version="11.2.0" />
-        <PackageReference Include="Dock.Model.Avalonia" Version="11.2.0" />
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+        <PackageReference Include="Dock.Avalonia" Version="11.2.0"/>
+        <PackageReference Include="Dock.Model.Avalonia" Version="11.2.0"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj" />
+        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Views\Login\LoginView.axaml.cs">
-        <DependentUpon>LoginView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\Login\RegisterWindowView.axaml.cs">
-        <DependentUpon>RegisterView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\UserControls\UserHeadEditView.axaml.cs">
-        <DependentUpon>UserHeadEditView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ChatPages\ChatViews\ChatLeftPanelView.axaml.cs">
-        <DependentUpon>ChatLeftPanelView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ChatPages\ChatViews\ChatView.axaml.cs">
-        <DependentUpon>ChatView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ChatPages\ContactViews\ContactsView.axaml.cs">
-        <DependentUpon>ContactsView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ChatPages\ContactViews\AddNewFriendView.axaml.cs">
-        <DependentUpon>AddNewFriendView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
-      <Compile Update="Views\ChatPages\ContactViews\FriendDetailView.axaml.cs">
-        <DependentUpon>FriendDetailView.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
+        <Compile Update="Views\Login\LoginView.axaml.cs">
+            <DependentUpon>LoginView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Login\RegisterWindowView.axaml.cs">
+            <DependentUpon>RegisterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\UserControls\UserHeadEditView.axaml.cs">
+            <DependentUpon>UserHeadEditView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ChatViews\ChatLeftPanelView.axaml.cs">
+            <DependentUpon>ChatLeftPanelView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ChatViews\ChatView.axaml.cs">
+            <DependentUpon>ChatView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\ContactsView.axaml.cs">
+            <DependentUpon>ContactsView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\AddNewFriendView.axaml.cs">
+            <DependentUpon>AddNewFriendView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\FriendDetailView.axaml.cs">
+            <DependentUpon>FriendDetailView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ChatViews\ChatRightCenterPanel\ChatFriendPanelView.axaml.cs">
+            <DependentUpon>ChatRightTopPanelView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml" />
-      <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml" />
-      <UpToDateCheckInput Remove="Styles\TextStyles.axaml" />
-      <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml" />
+        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\TextStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Assets\DefaultHead.ico">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+        <Content Include="Assets\DefaultHead.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="SukiUI">
-        <HintPath>bin\Debug\net8.0\SukiUI.dll</HintPath>
-      </Reference>
-      <Reference Include="SukiUI.Dock">
-        <HintPath>bin\Debug\net8.0\SukiUI.Dock.dll</HintPath>
-      </Reference>
+        <Reference Include="SukiUI">
+            <HintPath>bin\Debug\net8.0\SukiUI.dll</HintPath>
+        </Reference>
+        <Reference Include="SukiUI.Dock">
+            <HintPath>bin\Debug\net8.0\SukiUI.Dock.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Update="Assets\ChartDonutVariant.ico">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </AvaloniaResource>
+        <AvaloniaResource Update="Assets\ChartDonutVariant.ico">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </AvaloniaResource>
     </ItemGroup>
 </Project>

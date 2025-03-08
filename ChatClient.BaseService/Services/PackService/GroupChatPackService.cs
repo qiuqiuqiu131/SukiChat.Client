@@ -48,14 +48,15 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         var groupChatDto = new GroupChatDto();
         groupChatDto.GroupId = groupId;
-        groupChatDto.GroupDto = await _userDtoManager.GetGroupDto(userId, groupId);
+        groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
 
         if (groupChat == null)
             return groupChatDto;
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
+        IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatData = mapper.Map<GroupChatData>(groupChat);
         groupChatData.IsUser = groupChat.UserFromId.Equals(userId);
-        groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+        groupChatData.Owner = await groupService.GetGroupMemberDto(groupId, groupChat.UserFromId);
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
@@ -70,8 +71,8 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         var result = new AvaloniaList<GroupChatDto>();
 
         // 获取所有好友的Id
-        var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
-        var groupIds = await groupPackService.GetGroupIds(userId);
+        var groupService = _scopedProvider.Resolve<IGroupService>();
+        var groupIds = await groupService.GetGroupIds(userId);
 
         // 获取好友的聊天记录
         foreach (var friendId in groupIds)
@@ -100,12 +101,13 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         // 将ChatGroup转换为GroupChatData
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
         IChatService chatService = _scopedProvider.Resolve<IChatService>();
+        IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatDatas = new List<GroupChatData>();
         foreach (var groupChat in groupChats)
         {
             var data = mapper.Map<GroupChatData>(groupChat);
             data.IsUser = groupChat.UserFromId.Equals(userId);
-            data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+            data.Owner = await groupService.GetGroupMemberDto(groupId, groupChat.UserFromId);
             await chatService.OperateChatMessage(groupChat.UserFromId, data.ChatId, data.ChatMessages);
             groupChatDatas.Add(data);
         }

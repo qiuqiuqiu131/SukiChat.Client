@@ -10,8 +10,8 @@
              xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="vm:ChatRightBottomPanelViewModel"
-             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightBottomPanelView">
+             x:DataType="vm:ChatInputPanelViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatInputPanelView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="x:String">
             <TextBox
@@ -39,9 +39,9 @@
             </Image>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <chatViews:ChatRightBottomPanelView.InputMessages>
+    <chatViews:ChatInputPanelView.InputMessages>
         <Binding Path="InputMessages" Mode="TwoWay" />
-    </chatViews:ChatRightBottomPanelView.InputMessages>
+    </chatViews:ChatInputPanelView.InputMessages>
     <Grid RowDefinitions="35,*">
         <Grid.Styles>
             <Style Selector="Button.Basic">

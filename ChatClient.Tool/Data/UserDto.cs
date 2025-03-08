@@ -97,14 +97,6 @@ namespace ChatClient.Tool.Data
             }
         }
 
-        private bool _cantDisturb;
-
-        public bool CantDisturb
-        {
-            get => _cantDisturb;
-            set => SetProperty(ref _cantDisturb, value);
-        }
-
         public event Action OnUserOnlineChanged;
     }
 }

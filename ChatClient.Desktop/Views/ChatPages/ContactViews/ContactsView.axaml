@@ -12,6 +12,7 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList;assembly=ChatClient.Avalonia"
     xmlns:seperateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView;assembly=ChatClient.Avalonia"
+    xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
@@ -163,7 +164,8 @@
 
             <!-- 好友列表 -->
             <StackPanel Grid.Row="1" x:Name="LeftPanel" Orientation="Vertical">
-                <Button Classes="Void" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
+                <Button Classes="Void" Margin="0,5" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
+                <Button Classes="Void" Margin="0,5" Content="群聊消息" Command="{Binding ToFriendRequestViewCommand}" />
                 <seperateGroupsView:SeparateGroupsView GroupFriends="{Binding GroupFriends}"
                                                        SelectionChangedCommand="{Binding SelectedFriendChangedCommand}" />
             </StackPanel>
@@ -172,7 +174,7 @@
         <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
         <suki:GlassCard Grid.Column="2" CornerRadius="0">
-            <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ContactsRegion}" />
+            <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.ContactsRegion}" />
         </suki:GlassCard>
     </Grid>
 </UserControl>

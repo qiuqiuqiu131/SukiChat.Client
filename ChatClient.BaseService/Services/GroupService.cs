@@ -4,14 +4,18 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
+using DryIoc.ImTools;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
 public interface IGroupService
 {
+    Task<List<string>> GetGroupIds(string userId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
+    Task<List<string>?> GetGroupMemberIds(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+    Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> JoinGroupRequest(string userId, string groupId);
     Task<bool> JoinGroupResponse(string userId, int requestId, bool accept);
@@ -31,6 +35,13 @@ public class GroupService : BaseService, IGroupService
         _messageHelper = _scopedProvider.Resolve<IMessageHelper>();
     }
 
+    public Task<List<string>> GetGroupIds(string userId)
+    {
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        return groupRelationRepository.GetAll(predicate: d => d.UserId.Equals(userId))
+            .Select(d => d.GroupId).ToListAsync();
+    }
+
     public async Task<GroupDto?> GetGroupDto(string userId, string groupId)
     {
         var groupRequest = new GroupMessageRequest { GroupId = groupId, UserId = userId };
@@ -41,10 +52,20 @@ public class GroupService : BaseService, IGroupService
 
         var group = _mapper.Map<Group>(groupDto);
         var groupRepository = _unitOfWork.GetRepository<Group>();
-        groupRepository.Update(group);
+        if (await groupRepository.ExistsAsync(d => d.Id.Equals(group.Id)))
+            groupRepository.Update(group);
+        else
+            await groupRepository.InsertAsync(group);
         await _unitOfWork.SaveChangesAsync();
 
         return groupDto;
+    }
+
+    public async Task<List<string>?> GetGroupMemberIds(string userId, string groupId)
+    {
+        var memberIdsRequest = new GroupMemberIdsRequest { GroupId = groupId, UserId = userId };
+        var memberIds = await _messageHelper.SendMessageWithResponse<GroupMemberIds>(memberIdsRequest);
+        return memberIds?.MemberIds.ToList();
     }
 
     public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
@@ -55,18 +76,38 @@ public class GroupService : BaseService, IGroupService
 
         var groupMemberDto = _mapper.Map<GroupMemberDto>(groupMemberMessage);
         var userService = _scopedProvider.Resolve<IUserService>();
-        groupMemberDto.HeadImage = await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
+        _ = Task.Run(async () =>
+        {
+            groupMemberDto.HeadImage =
+                await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
+        });
 
-        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
-        var groupRelation = _mapper.Map<GroupRelation>(groupMemberDto);
-        var entity = await groupRelationRepository.GetFirstOrDefaultAsync(
+        var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
+        var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
+        var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
             predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
         if (entity != null)
-            groupRelation.Id = entity.Id;
-        groupRelationRepository.Update(groupRelation);
+            groupMember.Id = entity.Id;
+        groupMemberRepository.Update(groupMember);
         await _unitOfWork.SaveChangesAsync();
 
         return groupMemberDto;
+    }
+
+    /// <summary>
+    /// 从数据库中获取User和Group的Relation
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupId"></param>
+    /// <returns></returns>
+    public async Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId)
+    {
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        var groupRelation = await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(groupId) && d.UserId.Equals(userId));
+        if (groupRelation == null) return null;
+        var dto = _mapper.Map<GroupRelationDto>(groupRelation);
+        return dto;
     }
 
     /// <summary>
@@ -103,16 +144,13 @@ public class GroupService : BaseService, IGroupService
                 await _unitOfWork.SaveChangesAsync();
 
                 var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
-                var userService = _scopedProvider.Resolve<IUserService>();
-                var user = await userService.GetUserDto(userId);
                 await groupRelationRepository.InsertAsync(new GroupRelation
                 {
                     GroupId = response.GroupId,
                     UserId = userId,
                     Status = 0,
                     Grouping = "默认分组",
-                    JoinTime = time,
-                    HeadIndex = user.HeadIndex
+                    JoinTime = time
                 });
                 await _unitOfWork.SaveChangesAsync();
             }

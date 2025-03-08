@@ -15,10 +15,10 @@ using ChatClient.Desktop.Views.UserControls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
-public partial class ChatRightBottomPanelView : UserControl
+public partial class ChatInputPanelView : UserControl
 {
     public static readonly StyledProperty<AvaloniaList<object>> InputMessagesProperty
-        = AvaloniaProperty.Register<ChatRightBottomPanelView, AvaloniaList<object>>(nameof(InputMessages));
+        = AvaloniaProperty.Register<ChatInputPanelView, AvaloniaList<object>>(nameof(InputMessages));
 
     public AvaloniaList<object> InputMessages
     {
@@ -28,7 +28,7 @@ public partial class ChatRightBottomPanelView : UserControl
 
     private ItemCollection _itemCollection;
 
-    public ChatRightBottomPanelView()
+    public ChatInputPanelView()
     {
         InitializeComponent();
         _itemCollection = InputItems.Items;
