@@ -2,14 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:groupChatUi="clr-namespace:ChatClient.Avalonia.Controls.GroupChatUI;assembly=ChatClient.Avalonia"
-             xmlns:chatViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
              xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
              xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:chatViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:groupChatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
@@ -87,14 +86,14 @@
                         </Grid.RowDefinitions>
 
                         <!-- 聊天内容 -->
-                        <groupChatUi:GroupChatUI Name="ChatUI"
-                                                 Margin="0"
-                                                 HeadClickCommand="{Binding HeadClickCommand}"
-                                                 Messages="{Binding SelectedGroup.ChatMessages}"
-                                                 FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                                 SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
-                                                 SearchMoreCommand="{Binding SearchMoreCommand}"
-                                                 UserImageSource="{Binding User.HeadImage}" />
+                        <groupChatUi1:GroupChatUI Name="ChatUI"
+                                                  Margin="0"
+                                                  HeadClickCommand="{Binding HeadClickCommand}"
+                                                  Messages="{Binding SelectedGroup.ChatMessages}"
+                                                  FileMessageClickCommand="{Binding FileMessageClickCommand}"
+                                                  SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
+                                                  SearchMoreCommand="{Binding SearchMoreCommand}"
+                                                  UserImageSource="{Binding User.HeadImage}" />
 
                         <GridSplitter Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 
@@ -126,7 +125,7 @@
                     </Grid>
                 </Grid>
 
-                <Border Background="{DynamicResource SukiBorderBrush}" />
+                <Border Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
                 <!-- 右侧群聊信息 -->
                 <Grid Column="2" Width="150">

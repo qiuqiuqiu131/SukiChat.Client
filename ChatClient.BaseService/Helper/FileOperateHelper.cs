@@ -3,12 +3,6 @@ using ChatClient.Tool.ManagerInterface;
 
 namespace ChatClient.BaseService.Helper;
 
-public interface IFileOperateHelper
-{
-    Task<byte[]?> GetFileForUser(string path, string fileName);
-    Task<bool> UploadFileForUser(string path, string fileName, byte[] bytes);
-}
-
 /// <summary>
 /// 用于文件的处理，通过本地保存和Web请求，获取和保存文件内容
 /// </summary>
@@ -29,14 +23,21 @@ internal class FileOperateHelper : IFileOperateHelper
     /// <param name="path"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public async Task<byte[]?> GetFileForUser(string path, string fileName)
+    public async Task<byte[]?> GetFile(string Id, string path, string fileName, FileTarget fileTarget)
     {
-        var fileInfo = _appDataManager.GetFileInfo(Path.Combine(path, fileName));
+        var basePath = fileTarget switch
+        {
+            FileTarget.Group => "Groups",
+            FileTarget.User => "Users"
+        };
+        var actualPath = Path.Combine(basePath, Id, path);
+
+        var fileInfo = _appDataManager.GetFileInfo(Path.Combine(actualPath, fileName));
         if (fileInfo.Exists)
             return await System.IO.File.ReadAllBytesAsync(fileInfo.FullName);
         else
         {
-            byte[]? file = await _fileIOHelper.GetFileAsync(Path.Combine("Users", path), fileName);
+            byte[]? file = await _fileIOHelper.GetFileAsync(actualPath, fileName);
             if (file != null)
             {
                 if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
@@ -60,15 +61,23 @@ internal class FileOperateHelper : IFileOperateHelper
     /// <param name="fileName"></param>
     /// <param name="bytes"></param>
     /// <returns></returns>
-    public async Task<bool> UploadFileForUser(string path, string fileName, byte[] bytes)
+    public async Task<bool> UploadFile(string Id, string path, string fileName, byte[] bytes,
+        FileTarget fileTarget)
     {
-        var result = await _fileIOHelper.UploadFileAsync(Path.Combine("Users", path), fileName, bytes);
+        var basePath = fileTarget switch
+        {
+            FileTarget.Group => "Groups",
+            FileTarget.User => "Users"
+        };
+
+        var actualPath = Path.Combine(basePath, Id, path);
+        var result = await _fileIOHelper.UploadFileAsync(actualPath, fileName, bytes);
 
         // 如果上传失败，返回false
         if (!result) return false;
 
         // 上传成功，保存到本地 
-        var fileInfo = _appDataManager.GetFileInfo(Path.Combine(path, fileName));
+        var fileInfo = _appDataManager.GetFileInfo(Path.Combine(actualPath, fileName));
         if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
             Directory.CreateDirectory(fileInfo.DirectoryName!);
         await System.IO.File.WriteAllBytesAsync(fileInfo.FullName, bytes);

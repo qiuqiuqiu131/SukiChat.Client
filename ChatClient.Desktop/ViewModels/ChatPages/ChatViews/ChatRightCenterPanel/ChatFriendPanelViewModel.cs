@@ -77,7 +77,7 @@ public class ChatFriendPanelViewModel : ViewModelBase
         var chatDatas =
             await chatPackService.GetFriendChatDataAsync(_userManager.User?.Id, SelectedFriend.UserId,
                 SelectedFriend.ChatMessages[0].ChatId,
-                15);
+                10);
 
         foreach (var chatData in chatDatas)
         {
@@ -91,7 +91,7 @@ public class ChatFriendPanelViewModel : ViewModelBase
             chatMessages[0].ShowTime = true;
 
         // 如果加载的消息不足15条，则说明没有更多消息了
-        if (chatDatas.Count() != 15)
+        if (chatDatas.Count() != 10)
             SelectedFriend.HasMoreMessage = false;
     }
 

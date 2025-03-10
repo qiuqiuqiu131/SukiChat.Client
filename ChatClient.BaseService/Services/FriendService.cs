@@ -12,7 +12,7 @@ public interface IFriendService
     public Task<(bool, string)> AddFriend(string userId, string targetId, string group);
     public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "");
     public Task<List<string>> GetFriendIds(string userId);
-    public Task<FriendRelationDto> GetFriendRelationDto(string userId, string friendId);
+    public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
 }
 
 internal class FriendService : BaseService, IFriendService
@@ -33,7 +33,8 @@ internal class FriendService : BaseService, IFriendService
     /// <summary>
     /// 发送好友请求
     /// </summary>
-    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <param name="targetId"></param>
     /// <param name="group"></param>
     /// <returns></returns>
     public async Task<(bool, string)> AddFriend(string userId, string targetId, string group)
@@ -119,7 +120,7 @@ internal class FriendService : BaseService, IFriendService
         return friendRelations.Select(d => d.User2Id).ToList();
     }
 
-    public async Task<FriendRelationDto> GetFriendRelationDto(string userId, string friendId)
+    public async Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId)
     {
         var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
         var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>

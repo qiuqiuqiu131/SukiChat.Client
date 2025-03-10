@@ -58,6 +58,8 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
         List<string> friendIds = SelectedFriends.Select(d => d.Id).ToList();
         var groupService = _containerProvider.Resolve<IGroupService>();
         var result = await groupService.CreateGroup(_userManager.User!.Id, friendIds);
+        if (result.Item1)
+            _userManager.NewGroupReceive(result.Item2);
     }
 
     private void SelectionChanged(SelectionChangedEventArgs args)

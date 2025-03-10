@@ -19,7 +19,7 @@ public class ChatClientDbContext : DbContext
     public DbSet<ChatGroup> ChatGroup { get; set; }
     public DbSet<GroupMember> GroupMember { get; set; }
 
-    private string _databasePath;
+    private readonly string _databasePath;
 
     public ChatClientDbContext(IAppDataManager appDataManager) : base()
     {

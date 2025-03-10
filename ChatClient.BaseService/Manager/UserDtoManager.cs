@@ -11,6 +11,7 @@ public interface IUserDtoManager
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
+    Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
     void Clear();
 }
 
@@ -21,12 +22,14 @@ public class UserDtoManager : IUserDtoManager
     private readonly ConcurrentDictionary<string, FriendRelationDto> _friendRelationDtos = new();
     private readonly ConcurrentDictionary<string, GroupDto> _groupDtos = new();
     private readonly ConcurrentDictionary<string, GroupRelationDto> _groupRelationDtos = new();
+    private readonly ConcurrentDictionary<string, GroupMemberDto> _groupMemberDtos = new();
 
     private readonly IContainerProvider _containerProvider;
     private readonly SemaphoreSlim _semaphore_1 = new(1, 1);
     private readonly SemaphoreSlim _semaphore_2 = new(1, 1);
     private readonly SemaphoreSlim _semaphore_3 = new(1, 1);
     private readonly SemaphoreSlim _semaphore_4 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore_5 = new(1, 1);
 
     public UserDtoManager(IContainerProvider containerProvider)
     {
@@ -140,7 +143,7 @@ public class UserDtoManager : IUserDtoManager
                 foreach (var memberId in memberIds)
                 {
                     // 注入群组成员信息
-                    var memberDto = await groupService.GetGroupMemberDto(groupId, memberId);
+                    var memberDto = await GetGroupMemberDto(groupId, memberId);
                     if (memberDto != null)
                         group.GroupMembers.Add(memberDto);
                 }
@@ -187,6 +190,39 @@ public class UserDtoManager : IUserDtoManager
         finally
         {
             _semaphore_4.Release();
+        }
+    }
+
+    public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
+    {
+        var key = groupId + memberId;
+        if (_groupMemberDtos.TryGetValue(key, out var cachedGroupMember))
+            return cachedGroupMember;
+        try
+        {
+            // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
+            await _semaphore_5.WaitAsync();
+
+            // 双重检查，防止在等待信号量时其他线程已经添加了数据
+            if (_groupMemberDtos.TryGetValue(key, out cachedGroupMember))
+            {
+                return cachedGroupMember;
+            }
+
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
+
+            // 如果获取到用户信息，添加到缓存中
+            if (groupMember != null)
+            {
+                _groupMemberDtos.TryAdd(key, groupMember);
+            }
+
+            return groupMember;
+        }
+        finally
+        {
+            _semaphore_5.Release();
         }
     }
 

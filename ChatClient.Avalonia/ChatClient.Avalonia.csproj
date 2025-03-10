@@ -24,4 +24,26 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="Controls\Chat\"/>
+        <Folder Include="Controls\FreindGroup\"/>
+        <Folder Include="Controls\MultiFriendGroup\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatMessageView.axaml"/>
+        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatUI.axaml"/>
+        <AdditionalFiles Include="Controls\Chat\GroupChatUI\GroupChatUI.axaml"/>
+        <AdditionalFiles Include="Controls\FreindGroup\GroupList\GroupList.axaml"/>
+        <AdditionalFiles Include="Controls\FreindGroup\SeparateGroupsView\SeparateGroupsView.axaml"/>
+        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiGroupList\MultiGroupList.axaml"/>
+        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiSeparateGroupView\MultiSeparateGroupView.axaml"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <UpToDateCheckInput Remove="Controls\SeparateGroupsView\SeparateGroupsView.axaml"/>
+        <UpToDateCheckInput Remove="Controls\MultiSeparateGroupView\MultiSeparateGroupView.axaml"/>
+        <UpToDateCheckInput Remove="Controls\GroupChatUI\GroupChatUI.axaml"/>
+    </ItemGroup>
+
 </Project>

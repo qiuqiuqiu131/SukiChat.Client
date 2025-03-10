@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;

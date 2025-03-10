@@ -5,6 +5,7 @@ using ChatClient.BaseService.Helper;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -55,7 +56,7 @@ internal class UserService : BaseService, IUserService
 
         // 获取头像
         byte[]? file =
-            await _fileOperateHelper.GetFileForUser(Path.Combine(User.Id, "HeadImage"), $"head_{User.HeadIndex}.png");
+            await _fileOperateHelper.GetFile(User.Id, "HeadImage", $"head_{User.HeadIndex}.png", FileTarget.User);
         //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
         if (file != null)
         {
@@ -83,7 +84,7 @@ internal class UserService : BaseService, IUserService
 
         // 获取头像
         byte[]? file =
-            await _fileOperateHelper.GetFileForUser(Path.Combine(userId, "HeadImage"), $"head_{headIndex}.png");
+            await _fileOperateHelper.GetFile(userId, "HeadImage", $"head_{headIndex}.png", FileTarget.User);
         //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
         if (file != null)
         {
@@ -111,7 +112,7 @@ internal class UserService : BaseService, IUserService
         Dictionary<int, Bitmap> bitmaps = new();
         foreach (var i in Enumerable.Range(0, User.HeadCount))
         {
-            byte[]? file = await _fileOperateHelper.GetFileForUser(Path.Combine(User.Id, "HeadImage"), $"head_{i}.png");
+            byte[]? file = await _fileOperateHelper.GetFile(User.Id, "HeadImage", $"head_{i}.png", FileTarget.User);
             if (file == null) continue;
             Bitmap bitmap;
             using (var stream = new MemoryStream(file))

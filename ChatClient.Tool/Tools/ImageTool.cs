@@ -84,6 +84,21 @@ public static class ImageTool
         };
         process.Start();
     }
+
+    public static Bitmap GetLowResolutionBitmap(this Bitmap bitmap, double scale)
+    {
+        int targetWidth = (int)(bitmap.PixelSize.Width * scale);
+        int targetHeight = (int)(bitmap.PixelSize.Height * scale);
+
+        var renderTarget = new RenderTargetBitmap(new PixelSize(targetWidth, targetHeight), new Vector(96, 96));
+        using (var ctx = renderTarget.CreateDrawingContext(true))
+        {
+            ctx.DrawImage(bitmap, new Rect(0, 0, bitmap.PixelSize.Width, bitmap.PixelSize.Height),
+                new Rect(0, 0, targetWidth, targetHeight));
+        }
+
+        return renderTarget;
+    }
 }
 
 public class ImageResize

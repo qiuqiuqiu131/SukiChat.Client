@@ -5,6 +5,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services.PackService;
@@ -99,6 +100,21 @@ internal class UserLoginService : BaseService, IUserLoginService
                 {
                     var friendChatPackService = scope.Resolve<IFriendChatPackService>();
                     user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
+                }
+            }),
+            Task.Run(async () =>
+            {
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var groupPackService = scope.Resolve<IGroupPackService>();
+                    var groups = await groupPackService.GetGroupRelationDtos(userId);
+                    user.GroupGroupDtos = new(groups
+                        .GroupBy(d => d.Grouping)
+                        .Select(d => new GroupGroupDto()
+                        {
+                            Groups = new AvaloniaList<GroupRelationDto>(d),
+                            GroupName = d.Key
+                        }));
                 }
             }),
             Task.Run(async () =>

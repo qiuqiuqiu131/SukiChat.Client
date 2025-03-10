@@ -17,7 +17,8 @@ public interface IUserManager
     public AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
     public AvaloniaList<GroupFriendDto>? GroupFriends { get; }
     public AvaloniaList<FriendChatDto>? FriendChats { get; }
-    public AvaloniaList<GroupChatDto>? GroupChatDtos { get; }
+    public AvaloniaList<GroupChatDto>? GroupChats { get; }
+    public AvaloniaList<GroupGroupDto>? GroupGroups { get; }
 
     // 用户登录请求
     public Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
@@ -31,6 +32,6 @@ public interface IUserManager
     // 保存用户信息
     public Task SaveUser();
 
-    public Task<FriendRelationDto> NewFriendRecieve(string friendId);
-    public Task<GroupDto> NewGroupReceive(string groupId);
+    public Task<FriendRelationDto?> NewFriendReceive(string friendId);
+    public Task<GroupRelationDto?> NewGroupReceive(string groupId);
 }

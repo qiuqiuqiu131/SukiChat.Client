@@ -1,7 +1,8 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
-        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage">
+        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
+        xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool">
     <Style Selector="groupList|GroupList">
         <Setter Property="Template">
             <ControlTemplate>
@@ -12,13 +13,12 @@
                         <TextBlock FontSize="14" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
-                             SelectedItem="{Binding $parent[groupList:GroupList].SelectedItem}"
-                             ItemsSource="{Binding $parent[groupList:GroupList].GroupContents}"
+                             SelectedItem="{Binding $parent[groupList:GroupList].SelectedItem,Mode=TwoWay}"
                              Classes="Void Chat">
                         <Interaction.Behaviors>
                             <EventTriggerBehavior EventName="SelectionChanged">
                                 <InvokeCommandAction Command="{TemplateBinding SelectionChangedCommand}"
-                                                     CommandParameter="{Binding $parent[ListBox].SelectedItem}" />
+                                                     CommandParameter="{Binding $parent[ListBox].SelectedItem.DataContext}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>
                         <ListBox.ItemsPanel>
@@ -27,7 +27,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate DataType="data:FriendRelationDto">
                                 <Grid Height="46">
                                     <Grid Margin="6,6" ColumnDefinitions="42,*">
                                         <Grid Width="42" Height="42">

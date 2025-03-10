@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Tool.Common;
@@ -190,13 +191,16 @@ public class ChatGroupPanelViewModel : ViewModelBase
         bool showTime = SelectedGroup.ChatMessages.Count == 0 ||
                         DateTime.Now - SelectedGroup.ChatMessages.Last().Time > TimeSpan.FromMinutes(5);
 
+        var userDtoManager = _containerProvider.Resolve<IUserDtoManager>();
+
         var chatData = new GroupChatData
         {
             ShowTime = showTime,
             IsUser = true,
             IsWriting = true,
             Time = DateTime.Now,
-            ChatMessages = chatMessageDtos
+            ChatMessages = chatMessageDtos,
+            Owner = await userDtoManager.GetGroupMemberDto(selectedGroup.GroupId, _userManager.User!.Id)
         };
 
         SelectedGroup.ChatMessages.Add(chatData);

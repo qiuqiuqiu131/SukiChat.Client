@@ -6,6 +6,7 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
@@ -15,10 +16,7 @@ public interface IChatService
 {
     Task<(bool, string)> SendChatMessage(string userId, string targetId, List<ChatMessageDto> messages);
     Task<(bool, string)> SendGroupChatMessage(string userId, string groupId, List<ChatMessageDto> messages);
-    Task<byte[]?> GetChatImage(string userId, string fileName);
-    Task<byte[]?> GetCompressedChatImage(string userId, string fileName);
-
-    Task OperateChatMessage(string userFromId, int chatId, List<ChatMessageDto> chatMessages);
+    Task OperateChatMessage(string id, int chatId, List<ChatMessageDto> chatMessages, FileTarget fileTarget);
 
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
     Task UpdateFileMess(FileMessDto messages);
@@ -63,7 +61,7 @@ internal class ChatService : BaseService, IChatService
             if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.ImageMess)
             {
                 var (state, message) = await UploadChatImage(userId, ((ImageMessDto)mess.Content).ImageSource,
-                    ((ImageMessDto)mess.Content).FilePath);
+                    FileTarget.User, ((ImageMessDto)mess.Content).FilePath);
 
                 if (!state) return (false, message);
                 chatMessage.ImageMess.FilePath = message;
@@ -71,7 +69,7 @@ internal class ChatService : BaseService, IChatService
             else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
             {
                 var fileMess = (FileMessDto)mess.Content;
-                var (state, message) = await UploadChatFile(userId, chatMessage.FileMess.FileName,
+                var (state, message) = await UploadChatFile(userId, chatMessage.FileMess.FileName, FileTarget.User,
                     fileMess.FileProcessDto);
 
                 // 上传完成，取消下载状态
@@ -121,30 +119,59 @@ internal class ChatService : BaseService, IChatService
     /// <returns></returns>
     public async Task<(bool, string)> SendGroupChatMessage(string userId, string groupId, List<ChatMessageDto> messages)
     {
-        var groupChatMessages = _mapper.Map<List<ChatMessage>>(messages);
-        foreach (var chatMessage in groupChatMessages)
+        var chatMessages = new List<ChatMessage>();
+        foreach (var mess in messages)
         {
+            var chatMessage = _mapper.Map<ChatMessage>(mess);
             // 如果是图片消息，上传图片,ChatMessage.Content为图片路径
             if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.ImageMess)
             {
-                var (state, message) = await UploadChatFile(userId, chatMessage.ImageMess.FilePath);
+                var (state, message) = await UploadChatImage(groupId, ((ImageMessDto)mess.Content).ImageSource,
+                    FileTarget.Group, ((ImageMessDto)mess.Content).FilePath);
 
                 if (!state) return (false, message);
                 chatMessage.ImageMess.FilePath = message;
             }
+            else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
+            {
+                var fileMess = (FileMessDto)mess.Content;
+                var (state, message) = await UploadChatFile(groupId, chatMessage.FileMess.FileName, FileTarget.Group,
+                    fileMess.FileProcessDto);
+
+                // 上传完成，取消下载状态
+                fileMess.FileProcessDto = null;
+
+                if (!state) return (false, message);
+                chatMessage.FileMess.FileName = message;
+            }
+
+            chatMessages.Add(chatMessage);
         }
 
         var groupChatMessage = new GroupChatMessage
         {
             UserFromId = userId,
-            GroupId = groupId
+            GroupId = groupId,
         };
-        groupChatMessage.Messages.AddRange(groupChatMessages);
+        groupChatMessage.Messages.AddRange(chatMessages);
 
         var response = await _messageHelper.SendMessageWithResponse<GroupChatMessageResponse>(groupChatMessage);
-        if (response is { Response: { State: true } })
-            return (true, "Group message sent successfully");
-        return (false, response?.Response?.Message ?? "Failed to send group message");
+        //-- 判断: 是否发送成功 --//
+        if (!(response is { Response: { State: true } }))
+            return (false, response?.Response?.Message ?? "Failed to send message");
+
+        //-- 操作: 将消息存入数据库 --//
+        groupChatMessage.Id = response.Id;
+        groupChatMessage.Time = response.Time;
+        var chatGroup = _mapper.Map<ChatGroup>(groupChatMessage);
+        var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
+        var result = await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(response.Id));
+        if (result != null)
+            chatGroup.Id = result.Id;
+        chatGroupRepository.Update(chatGroup);
+        await _unitOfWork.SaveChangesAsync();
+
+        return (true, "Message sent successfully");
     }
 
     /// <summary>
@@ -168,52 +195,25 @@ internal class ChatService : BaseService, IChatService
 
     #endregion
 
-    #region Image
-
-    /// <summary>
-    /// 获取聊天图片，此操作在用户打开详细图片前调用
-    /// </summary>
-    /// <param name="userId">ChatMessage的来源客户的Id</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns></returns>
-    public async Task<byte[]?> GetChatImage(string userId, string fileName)
-    {
-        var _fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
-        var path = Path.Combine(userId, "ChatFile");
-        return await _fileOperateHelper.GetFileForUser(path, fileName);
-    }
-
-    /// <summary>
-    /// 获取压缩后的聊天图片，在聊天界面显示
-    /// </summary>
-    /// <param name="userId">ChatMessage的来源客户的Id</param>
-    /// <param name="fileName">文件名</param>
-    /// <returns></returns>
-    public async Task<byte[]?> GetCompressedChatImage(string userId, string fileName)
-    {
-        var _fileIOHelper = _scopedProvider.Resolve<IFileIOHelper>();
-        var path = Path.Combine("Users", userId, "ChatFile");
-        return await _fileIOHelper.GetFileAsync(path, fileName);
-    }
-
-    #endregion
+    #region OperateFriendResources
 
     /// <summary>
     /// 上传聊天图片，不会直接调用，而是在发送消息时调用
     /// 如果上传成功，返回true和文件名，否则返回false和错误信息
     /// </summary>
-    /// <param name="userId"></param>
+    /// <param name="Id"></param>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    private async Task<(bool, string)> UploadChatImage(string userId, Bitmap bitmap, string? filename = null)
+    private async Task<(bool, string)> UploadChatImage(string Id, Bitmap bitmap, FileTarget fileTarget,
+        string? filename = null)
     {
         var _fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
 
-        var path = Path.Combine(userId, "ChatFile");
-
         var fileName =
             $"{DateTime.Now:yyyyMMddHHmmss}_{(string.IsNullOrWhiteSpace(filename) ? "图片" : Path.GetFileName(filename))}.png";
-        var result = await _fileOperateHelper.UploadFileForUser(path, fileName, bitmap.BitmapToByteArray());
+        var result =
+            await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, bitmap.BitmapToByteArray(),
+                fileTarget);
 
         if (result)
             return (true, fileName);
@@ -227,14 +227,19 @@ internal class ChatService : BaseService, IChatService
     /// <param name="userId"></param>
     /// <param name="filePath"></param>
     /// <returns></returns>
-    private async Task<(bool, string)> UploadChatFile(string userId, string filePath,
+    private async Task<(bool, string)> UploadChatFile(string Id, string filePath, FileTarget fileTarget,
         FileProcessDto? fileProcessDto = null)
     {
         if (!System.IO.File.Exists(filePath)) return (false, "File not found");
 
         var _fileIOHelper = _scopedProvider.Resolve<IFileIOHelper>();
 
-        var path = Path.Combine("Users", userId, "ChatFile");
+        var basePath = fileTarget switch
+        {
+            FileTarget.Group => "Groups",
+            FileTarget.User => "Users",
+        };
+        var path = Path.Combine(basePath, Id, "ChatFile");
 
         var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(filePath)}";
         var result = await _fileIOHelper.UploadLargeFileAsync(path, fileName, filePath, fileProcessDto);
@@ -243,6 +248,8 @@ internal class ChatService : BaseService, IChatService
             return (true, fileName);
         return (false, "Failed to upload image");
     }
+
+    #endregion
 
     /// <summary>
     /// 用于更新文件下载状态,数据库中更改
@@ -301,9 +308,9 @@ internal class ChatService : BaseService, IChatService
     /// </summary>
     /// <param name="userFromId"></param>
     /// <param name="chatMessages"></param>
-    public async Task OperateChatMessage(string userFromId,
+    public async Task OperateChatMessage(string id,
         int chatId,
-        List<ChatMessageDto> chatMessages)
+        List<ChatMessageDto> chatMessages, FileTarget fileTarget)
     {
         foreach (var chatMessage in chatMessages)
         {
@@ -311,8 +318,8 @@ internal class ChatService : BaseService, IChatService
             {
                 var messContent = (ImageMessDto)chatMessage.Content;
                 string filename = messContent.FilePath;
-                var content = await _fileOperateHelper.GetFileForUser(
-                    Path.Combine(userFromId, "ChatFile"), filename);
+                var content = await _fileOperateHelper.GetFile(
+                    id, "ChatFile", filename, fileTarget);
                 if (content != null)
                 {
                     using (MemoryStream stream = new MemoryStream(content))

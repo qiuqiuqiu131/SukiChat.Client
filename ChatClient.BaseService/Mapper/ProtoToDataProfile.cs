@@ -54,5 +54,13 @@ public class ProtoToDataProfile : Profile
                 opt => opt.MapFrom(egm => string.IsNullOrEmpty(egm.NickName) ? null : egm.NickName));
 
         #endregion
+
+        #region PullGroupMessage + GroupRelation
+
+        CreateMap<PullGroupMessage, GroupRelation>()
+            .ForMember(gr => gr.JoinTime, opt => opt.MapFrom(pgm => DateTime.Parse(pgm.Time)))
+            .ForMember(gr => gr.UserId, opt => opt.MapFrom(pgm => pgm.UserIdTarget));
+
+        #endregion
     }
 }

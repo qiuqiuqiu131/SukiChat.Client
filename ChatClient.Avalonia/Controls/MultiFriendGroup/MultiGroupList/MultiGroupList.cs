@@ -1,3 +1,4 @@
+using System.Collections.Specialized;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
@@ -69,6 +70,8 @@ public class MultiGroupList : UserControl
             if (change.OldValue != null)
             {
                 _itemCollection.Clear();
+                if (change.OldValue is AvaloniaList<FriendRelationDto> oldValue)
+                    oldValue.CollectionChanged -= NewValueOnCollectionChanged;
             }
 
             if (change.NewValue != null)
@@ -76,6 +79,48 @@ public class MultiGroupList : UserControl
                 if (change.NewValue is AvaloniaList<FriendRelationDto> newValue)
                 {
                     InitItems(newValue);
+                    newValue.CollectionChanged += NewValueOnCollectionChanged;
+                }
+            }
+        }
+    }
+
+    private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            if (e.NewItems != null && e.NewItems.Count > 0)
+            {
+                foreach (FriendRelationDto newItem in e.NewItems)
+                {
+                    var listItem = new ListBoxItem();
+                    var control = _dataTemplate.Build(newItem);
+                    listItem.Content = control;
+                    listItem.DataContext = newItem;
+
+                    // 按名字大小插入新项
+                    var index = _itemCollection.Cast<ListBoxItem>()
+                        .Select((item, idx) => new { item, idx })
+                        .FirstOrDefault(x => string.Compare(((FriendRelationDto)x.item.DataContext).UserDto.Name,
+                            newItem.UserDto.Name, StringComparison.Ordinal) > 0)?.idx ?? _itemCollection.Count;
+
+                    _itemCollection.Insert(index, listItem);
+                }
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            if (e.OldItems != null && e.OldItems.Count > 0)
+            {
+                foreach (FriendRelationDto oldItem in e.OldItems)
+                {
+                    var listItem = _itemCollection.Cast<ListBoxItem>()
+                        .FirstOrDefault(item => item.DataContext == oldItem);
+
+                    if (listItem != null)
+                    {
+                        _itemCollection.Remove(listItem);
+                    }
                 }
             }
         }

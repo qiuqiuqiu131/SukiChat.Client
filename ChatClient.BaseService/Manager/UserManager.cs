@@ -1,11 +1,11 @@
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
-using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
@@ -26,7 +26,8 @@ internal class UserManager : IUserManager
     public AvaloniaList<FriendReceiveDto>? FriendReceives => UserData?.FriendReceives;
     public AvaloniaList<GroupFriendDto>? GroupFriends => UserData?.GroupFriends;
     public AvaloniaList<FriendChatDto>? FriendChats => UserData?.FriendChatDtos;
-    public AvaloniaList<GroupChatDto>? GroupChatDtos => UserData?.GroupChatDtos;
+    public AvaloniaList<GroupChatDto>? GroupChats => UserData?.GroupChatDtos;
+    public AvaloniaList<GroupGroupDto>? GroupGroups => UserData?.GroupGroupDtos;
 
     #endregion
 
@@ -97,10 +98,9 @@ internal class UserManager : IUserManager
     {
         if (bitmap == null || User == null) return false;
 
-        var path = Path.Combine(User.Id, "HeadImage");
         var fileName = $"head_{User.HeadIndex}.png";
         byte[] bytes = bitmap.BitmapToByteArray();
-        var result = await _fileOperateHelper.UploadFileForUser(path, fileName, bytes);
+        var result = await _fileOperateHelper.UploadFile(User.Id, "HeadImage", fileName, bytes, FileTarget.User);
         if (!result) return false;
 
         User.HeadCount++;
@@ -126,21 +126,29 @@ internal class UserManager : IUserManager
     /// <param name="friendId"></param>
     /// <param name="dto"></param>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<FriendRelationDto?> NewFriendRecieve(string friendId)
+    public async Task<FriendRelationDto?> NewFriendReceive(string friendId)
     {
+        if (User == null) return null;
+
         var dto = await _userDtoManager.GetFriendRelationDto(User.Id, friendId);
         if (dto != null)
         {
-            var groupFriend = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
+            var groupFriend = GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
             if (groupFriend != null)
                 groupFriend.Friends.Add(dto);
             else
-                GroupFriends.Add(new GroupFriendDto
+            {
+                if (GroupFriends == null)
+                    UserData!.GroupFriends = new AvaloniaList<GroupFriendDto>();
+                GroupFriends!.Add(new GroupFriendDto
                 {
                     GroupName = dto.Grouping,
-                    Friends = new AvaloniaList<FriendRelationDto> { dto }
+                    Friends = [dto]
                 });
+            }
 
+            if (FriendChats == null)
+                UserData!.FriendChatDtos = new AvaloniaList<FriendChatDto>();
             FriendChats!.Add(new FriendChatDto
             {
                 FriendRelatoinDto = dto,
@@ -156,10 +164,36 @@ internal class UserManager : IUserManager
     /// </summary>
     /// <param name="groupId"></param>
     /// <returns></returns>
-    public async Task<GroupDto> NewGroupReceive(string groupId)
+    public async Task<GroupRelationDto?> NewGroupReceive(string groupId)
     {
-        var dto = await _userDtoManager.GetGroupDto(User.Id, groupId);
-        // TODO: 更新UI
+        if (User == null) return null;
+
+        var dto = await _userDtoManager.GetGroupRelationDto(User!.Id, groupId);
+        if (dto != null)
+        {
+            var groupGroup = GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
+            if (groupGroup != null)
+                groupGroup.Groups.Add(dto);
+            else
+            {
+                if (GroupGroups == null)
+                    UserData!.GroupGroupDtos = new AvaloniaList<GroupGroupDto>();
+                GroupGroups!.Add(new GroupGroupDto
+                {
+                    GroupName = dto.Grouping,
+                    Groups = [dto]
+                });
+            }
+
+            if (GroupChats == null)
+                UserData!.GroupChatDtos = new AvaloniaList<GroupChatDto>();
+            GroupChats!.Add(new GroupChatDto
+            {
+                GroupRelationDto = dto,
+                GroupId = groupId,
+            });
+        }
+
         return dto;
     }
 

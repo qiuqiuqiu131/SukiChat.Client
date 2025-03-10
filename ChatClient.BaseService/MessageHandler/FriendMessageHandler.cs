@@ -99,7 +99,7 @@ internal class FriendMessageHandler : MessageHandlerBase
         var result = await friendService.NewFriendMessageOperate(_userManager.User.Id, newFriendMessage);
         if (result)
         {
-            var dto = await _userManager.NewFriendRecieve(newFriendMessage.FrinedId);
+            var dto = await _userManager.NewFriendReceive(newFriendMessage.FrinedId);
 
             Dispatcher.UIThread.Invoke(() =>
             {

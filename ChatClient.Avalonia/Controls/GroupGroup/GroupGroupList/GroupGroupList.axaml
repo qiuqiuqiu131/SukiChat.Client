@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupGroupList"
+        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
+        xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool">
+    <Style Selector="groupList|GroupGroupList">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Expander FontSize="14"
+                          Theme="{StaticResource ChatExpander}"
+                          FontWeight="SemiBold">
+                    <Expander.Header>
+                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                    </Expander.Header>
+                    <ListBox Name="PART_ListBox"
+                             SelectedItem="{Binding $parent[groupList:GroupGroupList].SelectedItem,Mode=TwoWay}"
+                             Classes="Void Chat">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="SelectionChanged">
+                                <InvokeCommandAction Command="{TemplateBinding SelectionChangedCommand}"
+                                                     CommandParameter="{Binding $parent[ListBox].SelectedItem.DataContext}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" Spacing="-1" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="group:GroupRelationDto">
+                                <Grid Height="46">
+                                    <Grid Margin="6,6" ColumnDefinitions="42,*">
+                                        <circleImage:CircleImage Size="42"
+                                                                 Image="{Binding GroupDto.HeadImage}" />
+                                        <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
+                                            <TextBlock
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Opacity="0.9"
+                                                FontWeight="DemiBold"
+                                                Foreground="{DynamicResource SukiText}"
+                                                Text="{Binding  GroupDto.Name}" />
+                                            <TextBlock Grid.Row="1"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="12"
+                                                       Opacity="0.8"
+                                                       Margin="0,0,15,0"
+                                                       LetterSpacing="0.5"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Foreground="{DynamicResource SukiText}"
+                                                       Text="{Binding GroupDto.Description}" />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Expander>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

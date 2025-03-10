@@ -49,6 +49,7 @@ public partial class ChatLeftPanelView : UserControl
         base.OnLoaded(e);
         if (isLoaded) return;
         FriendItemsSource.CollectionChanged += ItemsSourceOnCollectionChanged;
+        GroupItemsSource.CollectionChanged += ItemsSourceOnCollectionChanged;
         InitItemsControl();
         isLoaded = true;
     }
@@ -90,8 +91,22 @@ public partial class ChatLeftPanelView : UserControl
             {
                 if (e.NewItems != null)
                 {
-                    for (int i = e.NewItems.Count - 1; i >= 0; i--)
-                        _itemCollection.Insert(0, e.NewItems[i]);
+                    foreach (var newItem in e.NewItems)
+                    {
+                        var control = newItem switch
+                        {
+                            FriendChatDto friendChat => DataTemplates[0]?.Build(friendChat),
+                            GroupChatDto groupChat => DataTemplates[1]?.Build(groupChat),
+                            _ => null
+                        };
+
+                        if (control != null)
+                        {
+                            control.DataContext = newItem;
+                            int index = FindInsertIndex(newItem);
+                            _itemCollection.Insert(index, control);
+                        }
+                    }
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -100,8 +115,12 @@ public partial class ChatLeftPanelView : UserControl
                 {
                     foreach (var item in e.OldItems)
                     {
-                        _itemCollection.Remove(item);
-                        ((Control)item).DataContext = null;
+                        var control = _itemCollection.FirstOrDefault(d => ((Control)d).DataContext == item);
+                        if (control != null)
+                        {
+                            _itemCollection.Remove(control);
+                            ((Control)control).DataContext = null;
+                        }
                     }
                 }
             }
@@ -111,11 +130,14 @@ public partial class ChatLeftPanelView : UserControl
     // 排序
     private void SortItemControl(object friend)
     {
-        // 找到对应的控件
-        var control = _itemCollection.FirstOrDefault(d => ((Control)d).DataContext == friend);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            // 找到对应的控件
+            var control = _itemCollection.FirstOrDefault(d => ((Control)d).DataContext == friend);
 
-        _itemCollection.Remove(control);
-        _itemCollection.Insert(0, control);
+            _itemCollection.Remove(control);
+            _itemCollection.Insert(0, control);
+        });
     }
 
     private void PART_AddButton_OnClick(object? sender, RoutedEventArgs e)
@@ -123,12 +145,17 @@ public partial class ChatLeftPanelView : UserControl
         PART_AddPop.IsOpen = !PART_AddPop.IsOpen;
     }
 
-    private int FindInsertIndex(GroupChatDto newItem)
+    private int FindInsertIndex(object newItem)
     {
         int left = 0;
         int right = _itemCollection.Count;
 
-        var time = newItem.LastChatMessages?.Time ?? DateTime.MinValue;
+        DateTime time = newItem switch
+        {
+            FriendChatDto friendChat => friendChat.LastChatMessages?.Time ?? DateTime.MinValue,
+            GroupChatDto groupChat => groupChat.LastChatMessages?.Time ?? DateTime.MinValue,
+            _ => DateTime.MinValue
+        };
 
         while (left < right)
         {
@@ -138,22 +165,17 @@ public partial class ChatLeftPanelView : UserControl
             if (midItem is Control control)
             {
                 var midDataContext = control.DataContext;
-                if (midDataContext is GroupChatDto groupChatDto)
+                DateTime itemTime = midDataContext switch
                 {
-                    var itemTime = groupChatDto.LastChatMessages?.Time ?? DateTime.MinValue;
-                    if (itemTime > time)
-                        left = mid + 1;
-                    else
-                        right = mid;
-                }
-                else if (midDataContext is FriendChatDto friendChatDto)
-                {
-                    var itemTime = friendChatDto.LastChatMessages?.Time ?? DateTime.MinValue;
-                    if (itemTime > time)
-                        left = mid + 1;
-                    else
-                        right = mid;
-                }
+                    FriendChatDto friendChat => friendChat.LastChatMessages?.Time ?? DateTime.MinValue,
+                    GroupChatDto groupChat => groupChat.LastChatMessages?.Time ?? DateTime.MinValue,
+                    _ => DateTime.MinValue
+                };
+
+                if (itemTime > time)
+                    left = mid + 1;
+                else
+                    right = mid;
             }
         }
 

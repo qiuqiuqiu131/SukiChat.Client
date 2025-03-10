@@ -18,6 +18,7 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
+        <converter:GroupChatMessageToStringConverter x:Key="GroupChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
     </UserControl.Resources>
     <UserControl.DataTemplates>
@@ -34,51 +35,58 @@
                     <circleImage:CircleImage Image="{Binding FriendRelatoinDto.UserDto.HeadImage}" Size="42" />
                     <!-- 简略信息 -->
                     <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
-                        <TextBlock
-                            Name="Name_Text"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Opacity="0.9"
-                            FontWeight="DemiBold"
-                            Foreground="{DynamicResource SukiText}"
-                            Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
-                        <TextBlock HorizontalAlignment="Right"
-                                   Name="Time_Text"
-                                   VerticalAlignment="Top"
-                                   Foreground="{DynamicResource SukiText}"
-                                   Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
-                                   Margin="0,5"
-                                   LetterSpacing="0.5"
-                                   FontSize="11.5" />
-                        <TextBlock Grid.Row="1"
-                                   Name="Chat_Mess_Txt"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   Margin="0,0,20,0"
-                                   LetterSpacing="0.5"
-                                   TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource SukiText}"
-                                   Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
-                        <Border Grid.Row="1"
-                                Height="16"
-                                CornerRadius="8"
-                                Background="Red"
-                                Padding="5,0"
-                                HorizontalAlignment="Right"
-                                IsVisible="{Binding UnReadMessageCount}">
-                            <Interaction.Behaviors>
-                                <DataTriggerBehavior
-                                    Binding="{Binding FriendRelatoinDto.CantDisturb}" Value="True">
-                                    <ChangePropertyAction PropertyName="Background" Value="Gray" />
-                                </DataTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <TextBlock FontSize="11"
-                                       Margin="0,0,0,1"
-                                       HorizontalAlignment="Center"
-                                       Foreground="White"
+                        <Grid Grid.Row="0" ColumnDefinitions="*,auto">
+                            <TextBlock
+                                Grid.Column="0"
+                                Name="Name_Text"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                TextTrimming="CharacterEllipsis"
+                                Opacity="0.9"
+                                FontWeight="DemiBold"
+                                Foreground="{DynamicResource SukiText}"
+                                Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
+                            <TextBlock Grid.Column="1" HorizontalAlignment="Right"
+                                       Name="Time_Text"
+                                       VerticalAlignment="Top"
+                                       Foreground="{DynamicResource SukiText}"
+                                       Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
+                                       Margin="0,5"
+                                       LetterSpacing="0.5"
+                                       FontSize="11.5" />
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,auto">
+                            <TextBlock Grid.Column="0"
+                                       Name="Chat_Mess_Txt"
                                        VerticalAlignment="Center"
-                                       Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
-                        </Border>
+                                       FontSize="12"
+                                       Margin="0,0,20,0"
+                                       LetterSpacing="0.5"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource SukiText}"
+                                       Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
+                            <Border Grid.Column="1"
+                                    Height="16"
+                                    CornerRadius="8"
+                                    Background="Red"
+                                    Padding="5,0"
+                                    Margin="0,5"
+                                    HorizontalAlignment="Right"
+                                    IsVisible="{Binding UnReadMessageCount}">
+                                <Interaction.Behaviors>
+                                    <DataTriggerBehavior
+                                        Binding="{Binding FriendRelatoinDto.CantDisturb}" Value="True">
+                                        <ChangePropertyAction PropertyName="Background" Value="Gray" />
+                                    </DataTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <TextBlock FontSize="11"
+                                           Margin="0,0,0,1"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </Grid>
             </RadioButton>
@@ -93,65 +101,62 @@
                          CommandParameter="{Binding }">
                 <Grid Name="Root_Grid" ColumnDefinitions="42,*">
                     <!-- 头像 -->
-                    <Panel Width="42" Height="42">
-                        <Panel.Clip>
-                            <EllipseGeometry
-                                Center="21,21"
-                                RadiusX="21"
-                                RadiusY="21" />
-                        </Panel.Clip>
-                        <Image
-                            Width="42"
-                            Height="42"
-                            Source="{Binding  GroupRelationDto.GroupDto.HeadImage}" />
-                    </Panel>
+                    <circleImage:CircleImage Image="{Binding GroupRelationDto.GroupDto.HeadImage}" Size="42" />
                     <!-- 简略信息 -->
                     <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
-                        <TextBlock
-                            Name="Name_Text"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Opacity="0.9"
-                            FontWeight="DemiBold"
-                            Foreground="{DynamicResource SukiText}"
-                            Text="{Binding  GroupRelationDto.GroupDto.Name}" />
-                        <TextBlock HorizontalAlignment="Right"
-                                   Name="Time_Text"
-                                   VerticalAlignment="Top"
-                                   Foreground="{DynamicResource SukiText}"
-                                   Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
-                                   Margin="0,5"
-                                   LetterSpacing="0.5"
-                                   FontSize="11.5" />
-                        <TextBlock Grid.Row="1"
-                                   Name="Chat_Mess_Txt"
-                                   VerticalAlignment="Center"
-                                   FontSize="12"
-                                   Margin="0,0,20,0"
-                                   LetterSpacing="0.5"
-                                   TextTrimming="CharacterEllipsis"
-                                   Foreground="{DynamicResource SukiText}"
-                                   Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
-                        <Border Grid.Row="1"
-                                Height="16"
-                                CornerRadius="8"
-                                Background="Red"
-                                Padding="5,0"
-                                HorizontalAlignment="Right"
-                                IsVisible="{Binding UnReadMessageCount}">
-                            <Interaction.Behaviors>
-                                <DataTriggerBehavior
-                                    Binding="{Binding GroupRelationDto.CantDisturb}" Value="True">
-                                    <ChangePropertyAction PropertyName="Background" Value="Gray" />
-                                </DataTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <TextBlock FontSize="11"
-                                       Margin="0,0,0,1"
-                                       HorizontalAlignment="Center"
-                                       Foreground="White"
+                        <Grid Grid.Row="0" ColumnDefinitions="*,auto">
+                            <TextBlock
+                                Grid.Column="0"
+                                Name="Name_Text"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Opacity="0.9"
+                                TextTrimming="CharacterEllipsis"
+                                FontWeight="DemiBold"
+                                Foreground="{DynamicResource SukiText}"
+                                Text="{Binding  GroupRelationDto.GroupDto.Name}" />
+                            <TextBlock Grid.Column="1"
+                                       HorizontalAlignment="Right"
+                                       Name="Time_Text"
+                                       VerticalAlignment="Top"
+                                       Foreground="{DynamicResource SukiText}"
+                                       Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
+                                       Margin="0,5"
+                                       LetterSpacing="0.5"
+                                       FontSize="11.5" />
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,auto">
+                            <TextBlock Grid.Column="0"
+                                       Name="Chat_Mess_Txt"
                                        VerticalAlignment="Center"
-                                       Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
-                        </Border>
+                                       FontSize="12"
+                                       Margin="0,0,20,0"
+                                       LetterSpacing="0.5"
+                                       TextTrimming="CharacterEllipsis"
+                                       Foreground="{DynamicResource SukiText}"
+                                       Text="{Binding LastChatMessages,Converter={StaticResource GroupChatMessageToStringConverter}}" />
+                            <Border Grid.Column="1"
+                                    Height="16"
+                                    CornerRadius="8"
+                                    Background="Red"
+                                    Margin="0,5"
+                                    Padding="5,0"
+                                    HorizontalAlignment="Right"
+                                    IsVisible="{Binding UnReadMessageCount}">
+                                <Interaction.Behaviors>
+                                    <DataTriggerBehavior
+                                        Binding="{Binding GroupRelationDto.CantDisturb}" Value="True">
+                                        <ChangePropertyAction PropertyName="Background" Value="Gray" />
+                                    </DataTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <TextBlock FontSize="11"
+                                           Margin="0,0,0,1"
+                                           HorizontalAlignment="Center"
+                                           Foreground="White"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                            </Border>
+                        </Grid>
                     </Grid>
                 </Grid>
             </RadioButton>

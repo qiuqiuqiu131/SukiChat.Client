@@ -16,12 +16,15 @@ public class UserData
 
     public AvaloniaList<GroupChatDto> GroupChatDtos { get; set; }
 
+    public AvaloniaList<GroupGroupDto> GroupGroupDtos { get; set; }
+
     public void Clear()
     {
         FriendReceives.Clear();
         GroupFriends.Clear();
         FriendChatDtos.Clear();
         GroupChatDtos.Clear();
+        GroupGroupDtos.Clear();
 
         FriendReceives = null;
         GroupFriends = null;

@@ -13,6 +13,7 @@
     xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList;assembly=ChatClient.Avalonia"
     xmlns:seperateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+    xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
@@ -163,12 +164,28 @@
             </suki:GlassCard>
 
             <!-- 好友列表 -->
-            <StackPanel Grid.Row="1" x:Name="LeftPanel" Orientation="Vertical">
-                <Button Classes="Void" Margin="0,5" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
-                <Button Classes="Void" Margin="0,5" Content="群聊消息" Command="{Binding ToFriendRequestViewCommand}" />
-                <seperateGroupsView:SeparateGroupsView GroupFriends="{Binding GroupFriends}"
-                                                       SelectionChangedCommand="{Binding SelectedFriendChangedCommand}" />
-            </StackPanel>
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel x:Name="LeftPanel" Orientation="Vertical"
+                            content:StackPanelExtensions.AnimatedScroll="True">
+                    <Button Classes="Void" Margin="0,5" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
+                    <Button Classes="Void" Margin="0,5" Content="群聊消息" Command="{Binding ToFriendRequestViewCommand}" />
+                    <TabControl TabIndex="0">
+                        <TabControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" />
+                            </ItemsPanelTemplate>
+                        </TabControl.ItemsPanel>
+                        <TabItem Header="好友">
+                            <seperateGroupsView:SeparateGroupsView GroupFriends="{Binding GroupFriends}"
+                                                                   SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                        </TabItem>
+                        <TabItem Header="群聊">
+                            <groupSepatateGroupsView:GroupSeparateGroupsView GroupFriends="{Binding GroupGroups}"
+                                                                             SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                        </TabItem>
+                    </TabControl>
+                </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />

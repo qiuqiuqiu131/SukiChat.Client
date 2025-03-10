@@ -79,6 +79,7 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
         containerRegistry.RegisterForNavigation<FriendDetailView, FriendDetailViewModel>();
+        containerRegistry.RegisterForNavigation<GroupDetailView, GroupDetailViewModel>();
         containerRegistry.RegisterForNavigation<ChatEmptyView>();
         containerRegistry.RegisterForNavigation<ChatFriendPanelView, ChatFriendPanelViewModel>();
         containerRegistry.RegisterForNavigation<ChatGroupPanelView, ChatGroupPanelViewModel>();

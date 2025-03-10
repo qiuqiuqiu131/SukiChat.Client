@@ -1,5 +1,6 @@
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data;
@@ -20,9 +21,9 @@ public class ImageMessDto : BindableBase
 {
     public string? FilePath { get; set; }
     public long FileSize { get; set; }
-    private Bitmap imageSource;
+    private Bitmap? imageSource;
 
-    public Bitmap ImageSource
+    public Bitmap? ImageSource
     {
         get => imageSource;
         set => SetProperty(ref imageSource, value);

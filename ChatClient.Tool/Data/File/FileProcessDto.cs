@@ -42,8 +42,8 @@ public class FileProcessDto : BindableBase
             if (SetProperty(ref currentSize, value))
             {
                 RaisePropertyChanged(nameof(Progress));
-                Console.WriteLine(
-                    $"FileName:{FileName} Received New Pack, CurrentSize:{CurrentSize}, MaxSize:{MaxSize}, Progress:{Progress}");
+                // Console.WriteLine(
+                //$"FileName:{FileName} Received New Pack, CurrentSize:{CurrentSize}, MaxSize:{MaxSize}, Progress:{Progress}");
             }
         }
     }

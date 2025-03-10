@@ -5,6 +5,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -66,7 +67,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         // 生成ChatData（单条聊天消息，数组，包含文字图片等）
         var chatData = mapper.Map<ChatData>(friendChat);
         chatData.IsUser = friendChat.UserFromId.Equals(userId);
-        await chatService.OperateChatMessage(friendChat.UserFromId, chatData.ChatId, chatData.ChatMessages);
+        _ = chatService.OperateChatMessage(friendChat.UserFromId, chatData.ChatId, chatData.ChatMessages,
+            FileTarget.User);
 
         friendChatDto.ChatMessages.Add(chatData);
         return friendChatDto;
@@ -127,7 +129,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         {
             var data = mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
-            _ = chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages);
+            _ = chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages,
+                FileTarget.User);
             chatDatas.Add(data);
         }
 

@@ -6,6 +6,7 @@ using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
 using Material.Icons;
@@ -28,8 +29,9 @@ public class ContactsViewModel : ChatPageBase
     }
 
     public AvaloniaList<GroupFriendDto> GroupFriends { get; init; }
+    public AvaloniaList<GroupGroupDto> GroupGroups { get; set; }
 
-    public DelegateCommand<FriendRelationDto?> SelectedFriendChangedCommand { get; set; }
+    public DelegateCommand<object?> SelectedChangedCommand { get; set; }
     public DelegateCommand ToFriendRequestViewCommand { get; init; }
     public DelegateCommand CreateGroupCommand { get; init; }
     public DelegateCommand AddNewFriendCommand { get; init; }
@@ -45,11 +47,12 @@ public class ContactsViewModel : ChatPageBase
         _dialogService = containerProvider.Resolve<IDialogService>();
 
         ToFriendRequestViewCommand = new DelegateCommand(ToFriendRequestView);
-        SelectedFriendChangedCommand = new DelegateCommand<FriendRelationDto?>(SelectedFriendChanged);
+        SelectedChangedCommand = new DelegateCommand<object?>(SelectedChanged);
         CreateGroupCommand = new DelegateCommand(CreateGroup);
         AddNewFriendCommand = new DelegateCommand(AddNewFriend);
 
         GroupFriends = userManager.GroupFriends!;
+        GroupGroups = userManager.GroupGroups!;
     }
 
     private void ToFriendRequestView()
@@ -63,17 +66,26 @@ public class ContactsViewModel : ChatPageBase
         view.Show();
     }
 
-    private async void CreateGroup()
+    private void CreateGroup()
     {
         _dialogService.ShowDialog(nameof(CreateGroupView));
     }
 
-    private void SelectedFriendChanged(FriendRelationDto? friend)
+    private void SelectedChanged(object? obj)
     {
-        if (friend == null) return;
+        if (obj == null) return;
 
-        INavigationParameters parameters = new NavigationParameters();
-        parameters.Add("dto", friend);
-        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
+        if (obj is FriendRelationDto friendRelationDto)
+        {
+            INavigationParameters parameters = new NavigationParameters();
+            parameters.Add("dto", obj);
+            ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
+        }
+        else if (obj is GroupRelationDto groupRelationDto)
+        {
+            INavigationParameters parameters = new NavigationParameters();
+            parameters.Add("dto", obj);
+            ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
+        }
     }
 }

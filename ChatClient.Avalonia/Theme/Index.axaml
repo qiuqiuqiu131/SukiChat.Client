@@ -7,10 +7,12 @@
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="../Controls/OverlaySplitView/OverlaySplitView.axaml" />
-    <StyleInclude Source="../Controls/GroupList/GroupList.axaml" />
-    <StyleInclude Source="../Controls/SeparateGroupsView/SeparateGroupsView.axaml" />
-    <StyleInclude Source="../Controls/MultiGroupList/MultiGroupList.axaml" />
-    <StyleInclude Source="../Controls/MultiSeparateGroupView/MultiSeparateGroupView.axaml" />
+    <StyleInclude Source="../Controls/FreindGroup/GroupList/GroupList.axaml" />
+    <StyleInclude Source="../Controls/FreindGroup/SeparateGroupsView/SeparateGroupsView.axaml" />
+    <StyleInclude Source="../Controls/MultiFriendGroup/MultiGroupList/MultiGroupList.axaml" />
+    <StyleInclude Source="../Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" />
+    <StyleInclude Source="../Controls/GroupGroup/GroupGroupList/GroupGroupList.axaml" />
+    <StyleInclude Source="../Controls/GroupGroup/GroupSepatateGroupsView/GroupSeparateGroupsView.axaml" />
 
     <Styles.Resources>
         <ResourceDictionary>

@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
@@ -135,9 +136,12 @@ public class LoginViewModel : ViewModelBase
     {
         IsBusy = true;
 
-        CommonResponse? result;
-        var _userManager = _containerProvider.Resolve<IUserManager>();
-        result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
+        CommonResponse? result = null;
+        await Task.Run(async () =>
+        {
+            var _userManager = _containerProvider.Resolve<IUserManager>();
+            result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
+        });
 
         // 登录成功
         if (result is { State: true })

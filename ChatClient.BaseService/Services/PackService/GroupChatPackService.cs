@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,11 +57,12 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatData = mapper.Map<GroupChatData>(groupChat);
         groupChatData.IsUser = groupChat.UserFromId.Equals(userId);
-        groupChatData.Owner = await groupService.GetGroupMemberDto(groupId, groupChat.UserFromId);
+        groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
-        await chatService.OperateChatMessage(groupChat.UserFromId, groupChatData.ChatId, groupChatData.ChatMessages);
+        await chatService.OperateChatMessage(groupChat.GroupId, groupChatData.ChatId, groupChatData.ChatMessages,
+            FileTarget.Group);
 
         groupChatDto.ChatMessages.Add(groupChatData);
         return groupChatDto;
@@ -101,14 +103,14 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         // 将ChatGroup转换为GroupChatData
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
         IChatService chatService = _scopedProvider.Resolve<IChatService>();
-        IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatDatas = new List<GroupChatData>();
         foreach (var groupChat in groupChats)
         {
             var data = mapper.Map<GroupChatData>(groupChat);
             data.IsUser = groupChat.UserFromId.Equals(userId);
-            data.Owner = await groupService.GetGroupMemberDto(groupId, groupChat.UserFromId);
-            await chatService.OperateChatMessage(groupChat.UserFromId, data.ChatId, data.ChatMessages);
+            data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+            await chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
+                FileTarget.Group);
             groupChatDatas.Add(data);
         }
 

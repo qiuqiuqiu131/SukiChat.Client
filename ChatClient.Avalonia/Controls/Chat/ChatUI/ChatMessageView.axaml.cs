@@ -1,9 +1,7 @@
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace ChatClient.Avalonia.Controls.ChatUI;
+namespace ChatClient.Avalonia.Controls.Chat.ChatUI;
 
 public partial class ChatMessageView : UserControl
 {

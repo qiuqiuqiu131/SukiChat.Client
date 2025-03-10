@@ -9,18 +9,16 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using ChatClient.Avalonia.Controls.ChatUI;
 using ChatClient.Tool.Data;
 
-namespace ChatClient.Avalonia.Controls.GroupChatUI;
+namespace ChatClient.Avalonia.Controls.Chat.ChatUI;
 
-public partial class GroupChatUI : UserControl
+public partial class ChatUI : UserControl
 {
-    public GroupChatUI()
+    public ChatUI()
     {
         InitializeComponent();
     }
@@ -96,7 +94,7 @@ public partial class GroupChatUI : UserControl
     #region Messages
 
     public static readonly StyledProperty<AvaloniaList<ChatData>> MessagesProperty =
-        AvaloniaProperty.Register<GroupChatUI, AvaloniaList<ChatData>>(nameof(Messages),
+        AvaloniaProperty.Register<ChatUI, AvaloniaList<ChatData>>(nameof(Messages),
             defaultValue: new AvaloniaList<ChatData>());
 
     public AvaloniaList<ChatData> Messages
@@ -107,10 +105,10 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
-    #region HeadClickCommnad
+    #region HeadClickCommand
 
     public static readonly StyledProperty<ICommand> HeadClickCommandProperty =
-        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(HeadClickCommand));
+        AvaloniaProperty.Register<ChatUI, ICommand>(nameof(HeadClickCommand));
 
     public ICommand HeadClickCommand
     {
@@ -123,7 +121,7 @@ public partial class GroupChatUI : UserControl
     #region SearchMoreCommand
 
     public static readonly StyledProperty<ICommand> SearchMoreCommandProperty =
-        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(SearchMoreCommand));
+        AvaloniaProperty.Register<ChatUI, ICommand>(nameof(SearchMoreCommand));
 
     public ICommand SearchMoreCommand
     {
@@ -136,7 +134,7 @@ public partial class GroupChatUI : UserControl
     #region SearchMoreVisible
 
     public static readonly StyledProperty<bool> SearchMoreVisibleProperty =
-        AvaloniaProperty.Register<GroupChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
+        AvaloniaProperty.Register<ChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
 
     public bool SearchMoreVisible
     {
@@ -149,7 +147,7 @@ public partial class GroupChatUI : UserControl
     #region UserImage
 
     public static readonly StyledProperty<IImage?> UserImageSourceProperty =
-        AvaloniaProperty.Register<GroupChatUI, IImage?>(nameof(UserImageSource));
+        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(UserImageSource));
 
     public IImage? UserImageSource
     {
@@ -159,10 +157,23 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
+    #region FriendImage
+
+    public static readonly StyledProperty<IImage?> FriendImageSourceProperty =
+        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(FriendImageSource));
+
+    public IImage? FriendImageSource
+    {
+        get => GetValue(FriendImageSourceProperty);
+        set => SetValue(FriendImageSourceProperty, value);
+    }
+
+    #endregion
+
     #region UnReadMessage
 
     public static readonly StyledProperty<bool> HaveUnReadMessageProperty =
-        AvaloniaProperty.Register<GroupChatUI, bool>(nameof(HaveUnReadMessage));
+        AvaloniaProperty.Register<ChatUI, bool>(nameof(HaveUnReadMessage));
 
     public bool HaveUnReadMessage
     {
@@ -171,7 +182,7 @@ public partial class GroupChatUI : UserControl
     }
 
     public static readonly StyledProperty<int> UnReadMessageCountProperty =
-        AvaloniaProperty.Register<GroupChatUI, int>(nameof(UnReadMessageCount));
+        AvaloniaProperty.Register<ChatUI, int>(nameof(UnReadMessageCount));
 
     public int UnReadMessageCount
     {
@@ -364,7 +375,7 @@ public partial class GroupChatUI : UserControl
                         {
                             new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
                         },
-                        KeyTime = TimeSpan.FromSeconds(0)
+                        Cue = new Cue(0)
                     },
                     new KeyFrame()
                     {
@@ -376,7 +387,7 @@ public partial class GroupChatUI : UserControl
                                 Value = new Vector(ChatScroll.Offset.X, target)
                             }
                         },
-                        KeyTime = TimeSpan.FromMilliseconds(time)
+                        Cue = new Cue(1)
                     }
                 }
             };
@@ -423,7 +434,7 @@ public partial class GroupChatUI : UserControl
                     {
                         new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
                     },
-                    KeyTime = TimeSpan.FromSeconds(0)
+                    Cue = new Cue(0)
                 },
                 new KeyFrame()
                 {
@@ -435,7 +446,7 @@ public partial class GroupChatUI : UserControl
                             Value = new Vector(ChatScroll.Offset.X, targetOffsetY)
                         }
                     },
-                    KeyTime = TimeSpan.FromMilliseconds(duration)
+                    Cue = new Cue(1)
                 }
             }
         };
