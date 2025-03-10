@@ -107,7 +107,7 @@ internal class ChatService : BaseService, IChatService
         chatPrivateRepository.Update(chatPrivate);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, "Message sent successfully");
+        return (true, response.Id.ToString());
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ internal class ChatService : BaseService, IChatService
         chatGroupRepository.Update(chatGroup);
         await _unitOfWork.SaveChangesAsync();
 
-        return (true, "Message sent successfully");
+        return (true, response.Id.ToString());
     }
 
     /// <summary>

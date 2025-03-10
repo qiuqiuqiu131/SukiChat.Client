@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock;assembly=ChatClient.Avalonia"
              x:DataType="vm:FriendDetailViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Desktop.Views.ContactDetailView.FriendDetailView">
@@ -18,22 +20,23 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <StackPanel Orientation="Vertical">
-        <Panel
-                Width="130"
-                Height="130"
-                Margin="15">
-                <Panel Width="120" Height="120">
+    <StackPanel Orientation="Vertical" Margin="50">
+        <StackPanel Orientation="Horizontal" Spacing="15">
+            <Panel
+                Width="90"
+                Height="90"
+                Margin="0">
+                <Panel Width="90" Height="90">
                     <Panel.Clip>
                         <EllipseGeometry
-                            Center="60,60"
-                            RadiusX="60"
-                            RadiusY="60" />
+                            Center="45,45"
+                            RadiusX="45"
+                            RadiusY="45" />
                     </Panel.Clip>
                     <Image
                         Name="Head"
-                        Width="118"
-                        Height="118"
+                        Width="88"
+                        Height="88"
                         Margin="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -42,16 +45,84 @@
                         Source="{Binding Friend.UserDto.HeadImage}" />
                 </Panel>
                 <Border
-                    Width="120"
-                    Height="120"
+                    Width="90"
+                    Height="90"
                     Padding="0"
                     BoxShadow="{DynamicResource SukiLowShadow}"
                     BorderBrush="{DynamicResource SukiLowText}"
                     BorderThickness="1.2"
-                    CornerRadius="60" />
+                    CornerRadius="45" />
             </Panel>
-        <TextBlock Text="{Binding Friend.Id}"/>
-        <TextBlock Text="{Binding Friend.UserDto.Name}"/>
-        <TextBlock Text="{Binding Friend.GroupTime}"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
+                <SelectableTextBlock Text="{Binding Friend.UserDto.Name}"
+                                     FontWeight="DemiBold"
+                                     FontSize="16.5" />
+                <SelectableTextBlock Text="{Binding Friend.UserDto.Id,StringFormat=ID: {0}}"
+                                     FontSize="12.5"
+                                     Opacity="0.7" />
+                <Grid>
+                    <StackPanel Orientation="Horizontal" Spacing="7"
+                                IsVisible="{Binding Friend.UserDto.IsOnline}">
+                        <Ellipse Fill="LimeGreen" Width="13" Height="13" />
+                        <TextBlock Text="在线" FontSize="13" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="7"
+                                IsVisible="{Binding !Friend.UserDto.IsOnline}">
+                        <Ellipse Fill="Red" Width="13" Height="13" />
+                        <TextBlock Text="离线" FontSize="13" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+        <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20" />
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Spacing="15" Margin="5">
+                <StackPanel.Styles>
+                    <Style Selector="TextBlock">
+                        <Setter Property="FontSize" Value="12" />
+                    </Style>
+                </StackPanel.Styles>
+                <StackPanel Orientation="Horizontal" Spacing="3">
+                    <ContentControl Content="{Binding Friend.UserDto.Sex,Converter={converter:SexIconKindConverter}}" />
+                    <TextBlock Text="{Binding Friend.UserDto.Sex,Converter={converter:SexConverter}}" />
+                </StackPanel>
+                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"
+                           Text="{Binding Friend.UserDto.Birth,Converter={converter:AgeConverter}}" />
+                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"
+                           Text="{Binding Friend.UserDto.Birth,Converter={converter:DateOfMDConverter}}" />
+            </StackPanel>
+            <DockPanel Margin="5">
+                <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <editableTextBlock:EditableTextBlock
+                    Text="{Binding Friend.Remark}"
+                    FontSize="13.5"
+                    DockPanel.Dock="Right"
+                    HorizontalContentAlignment="Right"
+                    VerticalAlignment="Center" />
+            </DockPanel>
+            <DockPanel Margin="5">
+                <TextBlock Text="好友分组" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBox DockPanel.Dock="Right"
+                         Text="{Binding Friend.Grouping}"
+                         IsReadOnly="True"
+                         Padding="10,3"
+                         MinHeight="0"
+                         HorizontalAlignment="Right"
+                         Margin="0"
+                         Classes="Editable" />
+            </DockPanel>
+            <DockPanel Margin="5" IsVisible="{Binding Friend.UserDto.Introduction}">
+                <TextBlock Text="个性签名" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBox DockPanel.Dock="Right"
+                         Text="{Binding Friend.UserDto.Introduction}"
+                         IsReadOnly="True"
+                         Padding="10,3"
+                         MinHeight="0"
+                         MaxWidth="250"
+                         HorizontalAlignment="Right"
+                         Margin="0"
+                         Classes="Editable" />
+            </DockPanel>
+        </StackPanel>
     </StackPanel>
 </UserControl>

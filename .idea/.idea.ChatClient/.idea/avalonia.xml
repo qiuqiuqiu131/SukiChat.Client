@@ -9,6 +9,8 @@
         <entry key="ChatClient.Avalonia/Controls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/CircleImage/CircleImage.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/EdictableTextBlock/EditableTextBlock.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/EditableTextBlock/EditableTextBlock.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/FreindGroup/GroupList/GroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/FreindGroup/SeparateGroupsView/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/GroupChatUI/GroupChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

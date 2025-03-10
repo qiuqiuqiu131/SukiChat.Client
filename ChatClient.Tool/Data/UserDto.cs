@@ -30,13 +30,13 @@ namespace ChatClient.Tool.Data
 
         private Sex sex;
 
-        public DateOnly Birth
+        public DateOnly? Birth
         {
             get => birth;
             set => SetProperty(ref birth, value);
         }
 
-        private DateOnly birth;
+        private DateOnly? birth;
 
         public string? Password
         {
@@ -46,13 +46,13 @@ namespace ChatClient.Tool.Data
 
         private string? password;
 
-        public string Introduction
+        public string? Introduction
         {
             get => introduction;
             set => SetProperty(ref introduction, value);
         }
 
-        private string introduction;
+        private string? introduction;
 
         public int HeadIndex
         {

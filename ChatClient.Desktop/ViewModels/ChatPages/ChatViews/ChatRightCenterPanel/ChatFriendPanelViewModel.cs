@@ -201,12 +201,14 @@ public class ChatFriendPanelViewModel : ViewModelBase
         SelectedFriend.ChatMessages.Add(chatData);
 
         var chatService = _containerProvider.Resolve<IChatService>();
-        var (state, _) = await chatService.SendChatMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id,
+        var (state, chatId) = await chatService.SendChatMessage(_userManager.User!.Id,
+            SelectedFriend.FriendRelatoinDto!.Id,
             chatMessageDtos);
 
         chatData.IsWriting = false;
         chatData.IsError = !state;
         chatData.Time = DateTime.Now;
+        chatData.ChatId = int.TryParse(chatId, out int id) ? id : 0;
 
         SelectedFriend.UpdateChatMessages();
     }
@@ -217,5 +219,10 @@ public class ChatFriendPanelViewModel : ViewModelBase
     {
         SelectedFriend = navigationContext.Parameters.GetValue<FriendChatDto>("SelectedFriend");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedFriend.InputMessages);
+    }
+
+    public override void OnNavigatedFrom(NavigationContext navigationContext)
+    {
+        SelectedFriend = null;
     }
 }

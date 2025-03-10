@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock"
+        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
+    <Style Selector="editableTextBlock|EditableTextBlock">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <TextBlock Name="PART_TextBlock"
+                               Background="Transparent"
+                               Padding="50,0,0,0"
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                               FontSize="{TemplateBinding FontSize}"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding !$parent[editableTextBlock:EditableTextBlock].IsEditing}"
+                               Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Converter={converter:DefaultTextConverter DefaultText=无}}" />
+                    <TextBox Name="PART_TextBox"
+                             Padding="10,3"
+                             Width="200"
+                             MinHeight="0"
+                             Classes="Editable"
+                             Margin="0"
+                             FontSize="{TemplateBinding FontSize}"
+                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                             VerticalAlignment="Center"
+                             IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].IsEditing}"
+                             Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text}" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

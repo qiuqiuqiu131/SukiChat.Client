@@ -1,5 +1,6 @@
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;

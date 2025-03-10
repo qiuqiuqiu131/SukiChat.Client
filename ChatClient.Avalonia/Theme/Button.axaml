@@ -57,4 +57,90 @@
         </Setter>
     </Style>
 
+    <Style Selector="Button.Chat">
+        <Setter Property="Background" Value="{DynamicResource SukiGlassCardBackground}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="1.5" />
+        <Setter Property="CornerRadius" Value="0" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Duration="0:0:0.2" Property="BorderBrush" />
+            </Transitions>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Margin="0,0,0,0"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      Background="Transparent"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      Height="{TemplateBinding Height}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="^ PathIcon">
+            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+        </Style>
+
+        <Style Selector="^:pressed">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform ScaleX="1" ScaleY="1" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="RenderTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <!-- <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" /> -->
+            </Style>
+            <Style Selector="^ PathIcon">
+                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+            </Style>
+        </Style>
+
+        <Style Selector="^:pointerover">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="Opacity" Value="0.5" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+                <!-- <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" /> -->
+            </Style>
+            <Style Selector="^ PathIcon">
+                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+            </Style>
+        </Style>
+    </Style>
 </Styles>

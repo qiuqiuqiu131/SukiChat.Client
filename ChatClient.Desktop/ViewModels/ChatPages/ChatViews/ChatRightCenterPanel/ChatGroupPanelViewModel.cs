@@ -206,12 +206,13 @@ public class ChatGroupPanelViewModel : ViewModelBase
         SelectedGroup.ChatMessages.Add(chatData);
 
         var chatService = _containerProvider.Resolve<IChatService>();
-        var (state, _) =
+        var (state, chatId) =
             await chatService.SendGroupChatMessage(_userManager.User!.Id, SelectedGroup.GroupId, chatMessageDtos);
 
         chatData.IsWriting = false;
         chatData.IsError = !state;
         chatData.Time = DateTime.Now;
+        chatData.ChatId = int.TryParse(chatId, out int id) ? id : 0;
 
         SelectedGroup.UpdateChatMessages();
     }
@@ -222,5 +223,10 @@ public class ChatGroupPanelViewModel : ViewModelBase
     {
         SelectedGroup = navigationContext.Parameters.GetValue<GroupChatDto>("SelectedGroup");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedGroup.InputMessages);
+    }
+
+    public override void OnNavigatedFrom(NavigationContext navigationContext)
+    {
+        SelectedGroup = null;
     }
 }

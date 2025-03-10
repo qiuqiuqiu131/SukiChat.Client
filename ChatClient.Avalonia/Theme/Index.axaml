@@ -13,6 +13,7 @@
     <StyleInclude Source="../Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" />
     <StyleInclude Source="../Controls/GroupGroup/GroupGroupList/GroupGroupList.axaml" />
     <StyleInclude Source="../Controls/GroupGroup/GroupSepatateGroupsView/GroupSeparateGroupsView.axaml" />
+    <StyleInclude Source="../Controls/EditableTextBlock/EditableTextBlock.axaml" />
 
     <Styles.Resources>
         <ResourceDictionary>

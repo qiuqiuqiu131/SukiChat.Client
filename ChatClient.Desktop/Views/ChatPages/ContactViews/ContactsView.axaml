@@ -167,8 +167,44 @@
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
                 <StackPanel x:Name="LeftPanel" Orientation="Vertical"
                             content:StackPanelExtensions.AnimatedScroll="True">
-                    <Button Classes="Void" Margin="0,5" Content="好友请求" Command="{Binding ToFriendRequestViewCommand}" />
-                    <Button Classes="Void" Margin="0,5" Content="群聊消息" Command="{Binding ToFriendRequestViewCommand}" />
+                    <Button Classes="Chat"
+                            Margin="0"
+                            HorizontalContentAlignment="Stretch"
+                            Padding="25,7"
+                            Command="{Binding ToFriendRequestViewCommand}">
+                        <Grid>
+                            <PathIcon HorizontalAlignment="Right"
+                                      Width="12"
+                                      Height="12"
+                                      Opacity="0.8"
+                                      VerticalAlignment="Center"
+                                      Data="{x:Static content:Icons.ChevronLeft}">
+                                <PathIcon.RenderTransform>
+                                    <RotateTransform Angle="180" />
+                                </PathIcon.RenderTransform>
+                            </PathIcon>
+                            <TextBlock Text="好友请求" FontWeight="DemiBold" HorizontalAlignment="Left" />
+                        </Grid>
+                    </Button>
+                    <Button Classes="Chat"
+                            Margin="0"
+                            Padding="25,7"
+                            HorizontalContentAlignment="Stretch"
+                            Command="{Binding ToFriendRequestViewCommand}">
+                        <Grid>
+                            <PathIcon HorizontalAlignment="Right"
+                                      Width="12"
+                                      Height="12"
+                                      Opacity="0.8"
+                                      VerticalAlignment="Center"
+                                      Data="{x:Static content:Icons.ChevronLeft}">
+                                <PathIcon.RenderTransform>
+                                    <RotateTransform Angle="180" />
+                                </PathIcon.RenderTransform>
+                            </PathIcon>
+                            <TextBlock Text="群聊消息" FontWeight="DemiBold" HorizontalAlignment="Left" />
+                        </Grid>
+                    </Button>
                     <TabControl TabIndex="0">
                         <TabControl.ItemsPanel>
                             <ItemsPanelTemplate>

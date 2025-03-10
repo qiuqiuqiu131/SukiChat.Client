@@ -16,12 +16,16 @@ internal class ProtoToDtoProfile : Profile
 
         CreateMap<UserDto, UserMessage>()
             .ForMember(um => um.RegisterTime, opt => opt.MapFrom(u => u.RegisteTime.ToString()))
-            .ForMember(um => um.Birth, opt => opt.MapFrom(u => u.Birth.ToString()))
+            .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.Introduction ?? string.Empty))
+            .ForMember(um => um.Birth, opt => opt.MapFrom(u => u.Birth == null ? string.Empty : u.Birth.ToString()))
             .ForMember(um => um.IsMale, opt => opt.MapFrom(u => u.Sex == Sex.Male));
 
         CreateMap<UserMessage, UserDto>()
             .ForMember(u => u.RegisteTime, opt => opt.MapFrom(um => DateTime.Parse(um.RegisterTime)))
-            .ForMember(u => u.Birth, opt => opt.MapFrom(um => DateOnly.Parse(um.Birth)))
+            .ForMember(u => u.Introduction,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Introduction) ? null : um.Introduction))
+            .ForMember(u => u.Birth,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateOnly?)null : DateOnly.Parse(um.Birth)))
             .ForMember(u => u.Sex, opt => opt.MapFrom(um => um.IsMale ? Sex.Male : Sex.Female));
 
         #endregion

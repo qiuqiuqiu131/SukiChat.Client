@@ -8,7 +8,7 @@ public class GroupDetailViewModel : ViewModelBase
 {
     private GroupRelationDto? _group;
 
-    public GroupRelationDto? Friend
+    public GroupRelationDto? Group
     {
         get => _group;
         set => SetProperty(ref _group, value);
@@ -17,6 +17,6 @@ public class GroupDetailViewModel : ViewModelBase
     public override void OnNavigatedTo(NavigationContext navigationContext)
     {
         var parameters = navigationContext.Parameters;
-        Friend = parameters.GetValue<GroupRelationDto>("dto");
+        Group = parameters.GetValue<GroupRelationDto>("dto");
     }
 }
