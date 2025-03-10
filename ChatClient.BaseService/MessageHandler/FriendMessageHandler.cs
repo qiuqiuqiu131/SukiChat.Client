@@ -1,5 +1,6 @@
 using AutoMapper;
 using Avalonia.Threading;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
@@ -35,8 +36,11 @@ internal class FriendMessageHandler : MessageHandlerBase
         var token3 = eventAggregator.GetEvent<ResponseEvent<NewFriendMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnNewFriendMessage));
         _subscriptionTokens.Add(token3);
-    }
 
+        var token4 = eventAggregator.GetEvent<ResponseEvent<UpdateUserData>>()
+            .Subscribe(d => ExecuteInScope(d, OnUpdateUserData));
+        _subscriptionTokens.Add(token4);
+    }
 
     /// <summary>
     /// 接受来自服务器的好友请求
@@ -109,5 +113,24 @@ internal class FriendMessageHandler : MessageHandlerBase
                     .Queue();
             });
         }
+    }
+
+
+    /// <summary>
+    /// 好友信息发生更新
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnUpdateUserData(IScopedProvider scopedprovider, UpdateUserData message)
+    {
+        var userService = scopedprovider.Resolve<IUserService>();
+        var dto = await userService.GetUserDto(message.UserId);
+
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var userDto = await userDtoManager.GetUserDto(message.UserId);
+
+        userDto?.CopyFrom(dto!);
     }
 }

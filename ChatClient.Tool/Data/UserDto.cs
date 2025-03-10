@@ -1,5 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
 using ChatClient.Desktop.UIEntity;
+using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Tool.Data
 {
@@ -98,5 +99,16 @@ namespace ChatClient.Tool.Data
         }
 
         public event Action OnUserOnlineChanged;
+
+        public void CopyFrom(UserDto dto)
+        {
+            Name = dto.Name;
+            Introduction = dto.Name;
+            HeadIndex = dto.HeadIndex;
+            HeadCount = dto.HeadCount;
+            HeadImage = dto.HeadImage;
+            Birth = dto.birth;
+            Sex = dto.Sex;
+        }
     }
 }

@@ -60,4 +60,13 @@ public class GroupDto : BindableBase
     }
 
     private Bitmap headImage;
+
+    public void CopyFrom(GroupDto dto)
+    {
+        Name = dto.Name;
+        Description = dto.Description;
+        CreateTime = dto.CreateTime;
+        HeadPath = dto.HeadPath;
+        HeadImage = dto.HeadImage;
+    }
 }

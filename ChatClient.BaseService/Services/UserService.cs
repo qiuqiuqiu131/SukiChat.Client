@@ -21,7 +21,7 @@ public interface IUserService
 
     public Task<UserDto?> GetUserDto(string id);
 
-    public Task SaveUser(UserDto User);
+    public Task<bool> SaveUser(UserDto User);
 }
 
 internal class UserService : BaseService, IUserService
@@ -161,27 +161,28 @@ internal class UserService : BaseService, IUserService
     /// 保存用户信息
     /// </summary>
     /// <param name="User"></param>
-    public async Task SaveUser(UserDto User)
+    public async Task<bool> SaveUser(UserDto User)
     {
         // 服务器保存
         UserMessage message = _mapper.Map<UserMessage>(User);
-        if (message == null) return;
+        if (message == null) return false;
 
-        UpdateUserData updateUserData = new UpdateUserData { User = message };
-        await _messageHelper.SendMessage(updateUserData);
+        UpdateUserDataRequest updateUserData = new UpdateUserDataRequest { User = message, UserId = User.Id };
+        var result = await _messageHelper.SendMessageWithResponse<UpdateUserData>(updateUserData);
 
-        // 本地数据库保存
-        User user = _mapper.Map<User>(User);
-        if (user == null) return;
+        if (result is { Response: { State: true } })
+        {
+            // 本地数据库保存
+            User user = _mapper.Map<User>(User);
+            if (user == null) return false;
 
-        var _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
-
-        var userRepository = _unitOfWork.GetRepository<User>();
-        var currentUser = await userRepository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id));
-        if (currentUser != null)
-            currentUser.Copy(user);
-        else
+            var _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
+            var userRepository = _unitOfWork.GetRepository<User>();
             userRepository.Update(user);
-        await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
     }
 }

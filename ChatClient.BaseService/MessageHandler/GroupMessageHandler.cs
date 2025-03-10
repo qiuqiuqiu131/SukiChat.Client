@@ -1,4 +1,6 @@
 using Avalonia.Threading;
+using ChatClient.BaseService.Manager;
+using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Tool.Events;
 using ChatServer.Common.Protobuf;
@@ -21,6 +23,10 @@ internal class GroupMessageHandler : MessageHandlerBase
         var token1 = eventAggregator.GetEvent<ResponseEvent<PullGroupMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnPullGroupMessage));
         _subscriptionTokens.Add(token1);
+
+        var token2 = eventAggregator.GetEvent<ResponseEvent<UpdateGroupMessage>>()
+            .Subscribe(d => ExecuteInScope(d, OnUpdateGroupMessage));
+        _subscriptionTokens.Add(token2);
     }
 
     /// <summary>
@@ -52,5 +58,23 @@ internal class GroupMessageHandler : MessageHandlerBase
                 });
             }
         }
+    }
+
+    /// <summary>
+    /// 群聊信息发生更新
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnUpdateGroupMessage(IScopedProvider scopedprovider, UpdateGroupMessage message)
+    {
+        var groupService = scopedprovider.Resolve<IGroupService>();
+        var dto = await groupService.GetGroupDto(_userManager.User!.Id, message.GroupId);
+
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+
+        groupDto?.CopyFrom(dto!);
     }
 }
