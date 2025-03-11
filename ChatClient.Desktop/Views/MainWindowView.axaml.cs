@@ -104,4 +104,12 @@ public partial class MainWindowView : SukiWindow
         WindowState = WindowState.Minimized;
         Hide();
     }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+
+        if (e.Handled) return;
+        FocusManager?.ClearFocus();
+    }
 }

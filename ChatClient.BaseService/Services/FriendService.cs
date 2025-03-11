@@ -13,6 +13,7 @@ public interface IFriendService
     public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "");
     public Task<List<string>> GetFriendIds(string userId);
     public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
+    public Task<bool> UpdateFriendRelation(string userId, FriendRelationDto friendRelationDto);
 }
 
 internal class FriendService : BaseService, IFriendService
@@ -127,5 +128,48 @@ internal class FriendService : BaseService, IFriendService
             (d.User1Id.Equals(userId) && d.User2Id.Equals(friendId)));
         var friendRelationDto = _mapper.Map<FriendRelationDto>(friendRelation);
         return friendRelationDto;
+    }
+
+    public async Task<bool> UpdateFriendRelation(string userId, FriendRelationDto friendRelationDto)
+    {
+        UpdateFriendRelationRequest request = new UpdateFriendRelationRequest
+        {
+            UserId = userId,
+            FriendId = friendRelationDto.Id,
+            Remark = friendRelationDto.Remark ?? string.Empty,
+            CantDisturb = friendRelationDto.CantDisturb,
+            IsTop = friendRelationDto.IsTop
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<UpdateFriendRelation>(request);
+
+        if (response is { Response: { State: true } })
+        {
+            var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+            var entity = await friendRelationRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.User1Id.Equals(userId) && d.User2Id.Equals(friendRelationDto.Id),
+                disableTracking: false
+            );
+
+            if (entity != null)
+            {
+                entity.CantDisturb = friendRelationDto.CantDisturb;
+                entity.IsTop = friendRelationDto.IsTop;
+                entity.Remark = friendRelationDto.Remark;
+            }
+
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+                // ignored
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

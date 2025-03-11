@@ -9,6 +9,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:groupChatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
@@ -129,20 +130,32 @@
 
                 <!-- 右侧群聊信息 -->
                 <Grid Column="2" Width="150">
-                    <ItemsControl ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ColumnDefinitions="40,*">
-                                    <circleImage:CircleImage Image="{Binding HeadImage}" Size="34" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="成员列表" FontWeight="DemiBold" FontSize="13.5" Margin="5"
+                                   HorizontalAlignment="Center" />
+                        <ItemsControl ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="40,*" Height="40">
+                                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="32" />
+                                        <Grid Grid.Column="1" VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Margin="5">
+                                                <TextBlock Text="{Binding NickName}" FontSize="12" />
+                                                <TextBlock
+                                                    Text="{Binding Status,Converter={converter:GroupIdentityConverter}}"
+                                                    FontSize="12" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </overlaySplitView:OverlaySplitView>

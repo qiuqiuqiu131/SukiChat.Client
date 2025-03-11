@@ -152,7 +152,7 @@ internal class UserService : BaseService, IUserService
         await _unitOfWork.SaveChangesAsync();
 
         // 头像获取
-        user.HeadImage = await GetHeadImage(user);
+        _ = Task.Run(async () => { user.HeadImage = await GetHeadImage(user); });
 
         return user;
     }

@@ -12,5 +12,5 @@ public class Group
 
     public DateTime CreateTime { get; set; }
 
-    public string? HeadPath { get; set; }
+    public int HeadIndex { get; set; } = 1;
 }

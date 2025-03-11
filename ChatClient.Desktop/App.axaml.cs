@@ -78,6 +78,7 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
+        containerRegistry.RegisterForNavigation<GroupRequestView, GroupRequestViewModel>();
         containerRegistry.RegisterForNavigation<FriendDetailView, FriendDetailViewModel>();
         containerRegistry.RegisterForNavigation<GroupDetailView, GroupDetailViewModel>();
         containerRegistry.RegisterForNavigation<ChatEmptyView>();
@@ -104,9 +105,12 @@ public class App : PrismApplication
     {
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
         regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, typeof(LoginView));
+
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatFriendPanelView));
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatGroupPanelView));
+
+        regionManager.RegisterViewWithRegion(RegionNames.ContactsRegion, typeof(ChatEmptyView));
 
         // ProtoFileIOHelper helper = Container.Resolve<ProtoFileIOHelper>();
         // byte[] bytes;

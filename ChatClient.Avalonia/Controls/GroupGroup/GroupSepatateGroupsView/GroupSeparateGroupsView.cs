@@ -5,6 +5,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.SeperateGroupsView;
 using ChatClient.Tool.Data;
@@ -53,6 +54,14 @@ public class GroupSeparateGroupsView : UserControl
             RemoveAllControl();
             InitGroupFriendControl(GroupFriends);
         }
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        foreach (var items in _itemCollection)
+            if (items is GroupGroupList.GroupGroupList groupItem)
+                groupItem.SelectedItem = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)

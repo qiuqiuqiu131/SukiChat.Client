@@ -18,7 +18,6 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
-        <converter:GroupChatMessageToStringConverter x:Key="GroupChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
     </UserControl.Resources>
     <UserControl.DataTemplates>
@@ -36,16 +35,26 @@
                     <!-- 简略信息 -->
                     <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Name="Name_Text"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                TextTrimming="CharacterEllipsis"
-                                Opacity="0.9"
-                                FontWeight="DemiBold"
-                                Foreground="{DynamicResource SukiText}"
-                                Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
+                            <Grid Grid.Column="0">
+                                <TextBlock
+                                    IsVisible="{Binding FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"
+                                    Opacity="0.9"
+                                    FontWeight="DemiBold"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Text="{Binding  FriendRelatoinDto.Remark}" />
+                                <TextBlock
+                                    IsVisible="{Binding FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    TextTrimming="CharacterEllipsis"
+                                    Opacity="0.9"
+                                    FontWeight="DemiBold"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
+                            </Grid>
                             <TextBlock Grid.Column="1" HorizontalAlignment="Right"
                                        Name="Time_Text"
                                        VerticalAlignment="Top"
@@ -105,16 +114,26 @@
                     <!-- 简略信息 -->
                     <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Name="Name_Text"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Opacity="0.9"
-                                TextTrimming="CharacterEllipsis"
-                                FontWeight="DemiBold"
-                                Foreground="{DynamicResource SukiText}"
-                                Text="{Binding  GroupRelationDto.GroupDto.Name}" />
+                            <Grid Grid.Column="0">
+                                <TextBlock
+                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Opacity="0.9"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontWeight="DemiBold"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Text="{Binding  GroupRelationDto.Remark}" />
+                                <TextBlock
+                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Opacity="0.9"
+                                    TextTrimming="CharacterEllipsis"
+                                    FontWeight="DemiBold"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Text="{Binding  GroupRelationDto.GroupDto.Name}" />
+                            </Grid>
                             <TextBlock Grid.Column="1"
                                        HorizontalAlignment="Right"
                                        Name="Time_Text"
@@ -133,8 +152,12 @@
                                        Margin="0,0,20,0"
                                        LetterSpacing="0.5"
                                        TextTrimming="CharacterEllipsis"
-                                       Foreground="{DynamicResource SukiText}"
-                                       Text="{Binding LastChatMessages,Converter={StaticResource GroupChatMessageToStringConverter}}" />
+                                       Foreground="{DynamicResource SukiText}">
+                                <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                <Run Text=": " />
+                                <Run
+                                    Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
+                            </TextBlock>
                             <Border Grid.Column="1"
                                     Height="16"
                                     CornerRadius="8"

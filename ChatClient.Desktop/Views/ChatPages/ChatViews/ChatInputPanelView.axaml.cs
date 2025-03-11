@@ -183,6 +183,8 @@ public partial class ChatInputPanelView : UserControl
         var textBox = (TextBox)_itemCollection.Last()!;
         textBox.Focus();
         ScrollViewer.ScrollToEnd();
+
+        e.Handled = true;
     }
 
     private void SelectEmojis(object? sender, RoutedEventArgs e)

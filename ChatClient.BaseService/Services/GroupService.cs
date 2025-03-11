@@ -1,8 +1,10 @@
 using AutoMapper;
+using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 using DryIoc.ImTools;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +19,11 @@ public interface IGroupService
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
+    Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto);
     Task<bool> JoinGroupRequest(string userId, string groupId);
     Task<bool> JoinGroupResponse(string userId, int requestId, bool accept);
+    Task<Bitmap> GetHeadImage(int headIndex);
+    Task<Dictionary<int, Bitmap>> GetHeadImages();
 }
 
 public class GroupService : BaseService, IGroupService
@@ -57,6 +62,8 @@ public class GroupService : BaseService, IGroupService
         else
             await groupRepository.InsertAsync(group);
         await _unitOfWork.SaveChangesAsync();
+
+        groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex);
 
         return groupDto;
     }
@@ -139,7 +146,7 @@ public class GroupService : BaseService, IGroupService
                     Id = response.GroupId,
                     Name = response.GroupName,
                     CreateTime = time,
-                    HeadPath = "-1"
+                    HeadIndex = 1
                 });
                 await _unitOfWork.SaveChangesAsync();
 
@@ -167,6 +174,50 @@ public class GroupService : BaseService, IGroupService
         }
     }
 
+    public async Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto)
+    {
+        var request = new UpdateGroupRelationRequest
+        {
+            UserId = userId,
+            GroupId = groupRelationDto.Id,
+            Grouping = groupRelationDto.Grouping,
+            Remark = groupRelationDto.Remark ?? string.Empty,
+            CantDisturb = groupRelationDto.CantDisturb,
+            IsTop = groupRelationDto.IsTop,
+            NickName = groupRelationDto.NickName ?? string.Empty
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<UpdateGroupRelation>(request);
+        if (response is { Response: { State: true } })
+        {
+            var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+            var entity = await groupRelationRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.UserId.Equals(userId) && d.GroupId.Equals(groupRelationDto.Id),
+                disableTracking: false
+            );
+
+            if (entity != null)
+            {
+                entity.Remark = groupRelationDto.Remark;
+                entity.Grouping = groupRelationDto.Grouping;
+                entity.CantDisturb = groupRelationDto.CantDisturb;
+                entity.IsTop = groupRelationDto.IsTop;
+                entity.NickName = groupRelationDto.NickName;
+            }
+
+            try
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                // ignored
+            }
+        }
+
+        return false;
+    }
 
     /// <summary>
     /// 发送加入群聊请求
@@ -264,5 +315,27 @@ public class GroupService : BaseService, IGroupService
         }
 
         return false;
+    }
+
+    public async Task<Bitmap> GetHeadImage(int headIndex)
+    {
+        var fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
+        var bytes = await fileOperateHelper.GetGroupFile("HeadImage", $"{headIndex}.png");
+        if (bytes != null)
+        {
+            Bitmap bitmap;
+            using var stream = new MemoryStream(bytes);
+            // 从流加载Bitmap
+            bitmap = new Bitmap(stream);
+
+            return bitmap;
+        }
+
+        return null;
+    }
+
+    public Task<Dictionary<int, Bitmap>> GetHeadImages()
+    {
+        throw new NotImplementedException();
     }
 }

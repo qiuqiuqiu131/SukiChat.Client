@@ -17,7 +17,7 @@ public partial class GroupDetailView : UserControl
 
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        Bitmap bitmap = ((FriendDetailViewModel)DataContext!).Friend.UserDto.HeadImage;
+        Bitmap bitmap = ((GroupDetailViewModel)DataContext!).Group.GroupDto.HeadImage;
         ImageTool.OpenImageInSystemViewer(bitmap);
     }
 }

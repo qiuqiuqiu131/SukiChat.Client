@@ -28,9 +28,9 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="data:FriendRelationDto">
-                                <Grid Height="46">
-                                    <Grid Margin="6,6" ColumnDefinitions="42,*">
-                                        <Grid Width="42" Height="42">
+                                <Grid Height="46" ClipToBounds="False">
+                                    <Grid ColumnDefinitions="42,*" Margin="6">
+                                        <Panel Width="42" Height="42" ClipToBounds="False">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding UserDto.HeadImage}" />
                                             <Ellipse IsVisible="{Binding UserDto.IsOnline}"
@@ -47,16 +47,34 @@
                                                      HorizontalAlignment="Right"
                                                      VerticalAlignment="Bottom"
                                                      Margin="1" />
-                                        </Grid>
+                                        </Panel>
                                         <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
-                                            <TextBlock
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                FontSize="14"
-                                                Opacity="0.9"
-                                                FontWeight="DemiBold"
-                                                Foreground="{DynamicResource SukiText}"
-                                                Text="{Binding  UserDto.Name}" />
+                                            <Grid>
+                                                <TextBlock
+                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Opacity="0.9"
+                                                    FontWeight="DemiBold"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource SukiText}">
+                                                    <Run Text="{Binding Remark}" />
+                                                    <Run Text=" (" />
+                                                    <Run Text="{Binding UserDto.Name}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock
+                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Opacity="0.9"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    FontWeight="DemiBold"
+                                                    Text="{Binding UserDto.Name}"
+                                                    Foreground="{DynamicResource SukiText}" />
+                                            </Grid>
                                             <TextBlock Grid.Row="1"
                                                        VerticalAlignment="Center"
                                                        FontSize="12"

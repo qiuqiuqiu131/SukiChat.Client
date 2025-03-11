@@ -30,17 +30,37 @@
                             <DataTemplate DataType="group:GroupRelationDto">
                                 <Grid Height="46">
                                     <Grid Margin="6,6" ColumnDefinitions="42,*">
-                                        <circleImage:CircleImage Size="42"
-                                                                 Image="{Binding GroupDto.HeadImage}" />
+                                        <Grid Width="42" Height="42">
+                                            <circleImage:CircleImage Size="42"
+                                                                     Image="{Binding GroupDto.HeadImage}" />
+                                        </Grid>
                                         <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
-                                            <TextBlock
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                FontSize="14"
-                                                Opacity="0.9"
-                                                FontWeight="DemiBold"
-                                                Foreground="{DynamicResource SukiText}"
-                                                Text="{Binding  GroupDto.Name}" />
+                                            <Grid>
+                                                <TextBlock
+                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Opacity="0.9"
+                                                    FontWeight="DemiBold"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource SukiText}">
+                                                    <Run Text="{Binding Remark}" />
+                                                    <Run Text=" (" />
+                                                    <Run Text="{Binding GroupDto.Name}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock
+                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Opacity="0.9"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    FontWeight="DemiBold"
+                                                    Text="{Binding GroupDto.Name}"
+                                                    Foreground="{DynamicResource SukiText}" />
+                                            </Grid>
                                             <TextBlock Grid.Row="1"
                                                        VerticalAlignment="Center"
                                                        FontSize="12"

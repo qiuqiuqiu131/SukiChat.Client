@@ -17,6 +17,29 @@ internal class FileOperateHelper : IFileOperateHelper
         _appDataManager = appDataManager;
     }
 
+    public async Task<byte[]?> GetGroupFile(string path, string fileName)
+    {
+        var fileInfo = _appDataManager.GetFileInfo(Path.Combine("Groups", path, fileName));
+        if (fileInfo.Exists)
+            return await System.IO.File.ReadAllBytesAsync(fileInfo.FullName);
+        else
+        {
+            byte[]? file = await _fileIOHelper.GetFileAsync(Path.Combine("Groups", path), fileName);
+            if (file != null)
+            {
+                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
+                    Directory.CreateDirectory(fileInfo.DirectoryName!);
+                await System.IO.File.WriteAllBytesAsync(fileInfo.FullName, file);
+                return file;
+            }
+            else
+            {
+                // TODO : 未找到该文件
+                return null;
+            }
+        }
+    }
+
     /// <summary>
     /// 用于用户信息的文件获取
     /// </summary>

@@ -59,4 +59,12 @@ public class GroupMemberDto : BindableBase
     }
 
     private Bitmap? headImage;
+
+    public void CopyFrom(GroupMemberDto groupMemberDto)
+    {
+        HeadIndex = groupMemberDto.headIndex;
+        HeadImage = groupMemberDto.headImage;
+        NickName = groupMemberDto.nickName;
+        Status = groupMemberDto.status;
+    }
 }

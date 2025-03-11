@@ -19,9 +19,19 @@ public class EditableTextBlock : UserControl
         set => SetValue(TextProperty, value);
     }
 
+    public static readonly StyledProperty<string?> ActualTextProperty =
+        AvaloniaProperty.Register<EditableTextBlock, string?>(
+            nameof(ActualText));
+
+    public string? ActualText
+    {
+        get => GetValue(ActualTextProperty);
+        set => SetValue(ActualTextProperty, value);
+    }
+
     public static readonly StyledProperty<string> DefaultTextProperty =
         AvaloniaProperty.Register<EditableTextBlock, string>(
-            "DefaultText");
+            nameof(DefaultText));
 
     public string DefaultText
     {
@@ -49,17 +59,28 @@ public class EditableTextBlock : UserControl
     }
 
     private TextBlock _textBlock;
+    private TextBlock _defaultTextBox;
     private TextBox _textBox;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+
+        ActualText = Text;
+
         _textBlock = e.NameScope.Get<TextBlock>("PART_TextBlock");
+        _defaultTextBox = e.NameScope.Get<TextBlock>("PART_DefaultTextBlock");
         _textBox = e.NameScope.Get<TextBox>("PART_TextBox");
 
         _textBlock.PointerPressed += TextBlockOnPointerPressed;
+        _defaultTextBox.PointerPressed += TextBlockOnPointerPressed;
         _textBox.LostFocus += TextBoxOnLostFocus;
         _textBox.KeyDown += TextBoxOnKeyDown;
+        _textBox.GotFocus += TextBoxOnGotFocus;
+    }
+
+    private void TextBoxOnGotFocus(object? sender, GotFocusEventArgs e)
+    {
     }
 
     private void TextBoxOnKeyDown(object? sender, KeyEventArgs e)
@@ -71,11 +92,17 @@ public class EditableTextBlock : UserControl
     private void TextBoxOnLostFocus(object? sender, RoutedEventArgs e)
     {
         IsEditing = false;
+        Text = ActualText;
     }
 
-    private void TextBlockOnPointerPressed(object? sender, PointerPressedEventArgs e)
+    private async void TextBlockOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        if (IsEditing) return;
+
         IsEditing = true;
-        _textBlock.Focus();
+        _textBox.Focus();
+        _textBox.SelectAll();
+
+        e.Handled = true;
     }
 }

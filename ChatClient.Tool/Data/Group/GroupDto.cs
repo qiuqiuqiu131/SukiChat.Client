@@ -1,5 +1,5 @@
-using System.Drawing;
 using Avalonia.Collections;
+using Avalonia.Media.Imaging;
 
 namespace ChatClient.Tool.Data.Group;
 
@@ -45,13 +45,13 @@ public class GroupDto : BindableBase
 
     private AvaloniaList<GroupMemberDto> groupMembers = new();
 
-    public string HeadPath
+    public int HeadIndex
     {
-        get => headPath;
-        set => SetProperty(ref headPath, value);
+        get => headIndex;
+        set => SetProperty(ref headIndex, value);
     }
 
-    private string headPath;
+    private int headIndex;
 
     public Bitmap HeadImage
     {
@@ -66,7 +66,7 @@ public class GroupDto : BindableBase
         Name = dto.Name;
         Description = dto.Description;
         CreateTime = dto.CreateTime;
-        HeadPath = dto.HeadPath;
+        headIndex = dto.headIndex;
         HeadImage = dto.HeadImage;
     }
 }

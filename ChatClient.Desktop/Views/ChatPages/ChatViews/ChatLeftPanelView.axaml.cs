@@ -10,6 +10,9 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
+using Prism.Events;
+using Prism.Ioc;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
@@ -42,6 +45,35 @@ public partial class ChatLeftPanelView : UserControl
         InitializeComponent();
 
         _itemCollection = Items.Items;
+
+        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+        eventAggregator.GetEvent<SendMessageToViewEvent>().Subscribe(SendMessageToView);
+    }
+
+    private void SendMessageToView(object obj)
+    {
+        foreach (var item in _itemCollection)
+        {
+            var dataContext = ((Control)item).DataContext;
+            if (dataContext is FriendChatDto friendChat && friendChat.FriendRelatoinDto == obj)
+            {
+                _itemCollection.Remove(item);
+                _itemCollection.Insert(0, item);
+                var radioButton = item as RadioButton;
+                radioButton.IsChecked = true;
+                radioButton.Command.Execute(dataContext);
+                return;
+            }
+            else if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
+            {
+                _itemCollection.Remove(item);
+                _itemCollection.Insert(0, item);
+                var radioButton = item as RadioButton;
+                radioButton.IsChecked = true;
+                radioButton.Command.Execute(dataContext);
+                return;
+            }
+        }
     }
 
     protected override void OnLoaded(RoutedEventArgs e)

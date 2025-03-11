@@ -65,6 +65,7 @@
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/FriendDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/FriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/GroupDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/GroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ThemeView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

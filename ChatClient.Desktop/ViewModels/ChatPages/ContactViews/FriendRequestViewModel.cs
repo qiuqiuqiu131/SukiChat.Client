@@ -48,7 +48,7 @@ public class FriendRequestViewModel : ViewModelBase
             .WithActionButton("Yes", async d =>
             {
                 var _friendService = _containerProvider.Resolve<IFriendService>();
-                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "hahaha");
+                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "默认分组");
                 if (state)
                     FriendReceivedDtos.Remove(obj);
                 else
@@ -61,7 +61,7 @@ public class FriendRequestViewModel : ViewModelBase
             .WithActionButton("No", async d =>
             {
                 var _friendService = _containerProvider.Resolve<IFriendService>();
-                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false, "hahaha");
+                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false, "默认分组");
                 if (state)
                     FriendReceivedDtos.Remove(obj);
                 else

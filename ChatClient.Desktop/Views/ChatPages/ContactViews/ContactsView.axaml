@@ -190,7 +190,7 @@
                             Margin="0"
                             Padding="25,7"
                             HorizontalContentAlignment="Stretch"
-                            Command="{Binding ToFriendRequestViewCommand}">
+                            Command="{Binding ToGroupRequestViewCommand}">
                         <Grid>
                             <PathIcon HorizontalAlignment="Right"
                                       Width="12"

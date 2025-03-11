@@ -4,8 +4,6 @@ public class FriendRelationDto : BindableBase
 {
     public string Id { get; set; }
 
-    public string Grouping { get; set; }
-
     public DateTime GroupTime { get; set; }
 
     private UserDto? _userDto;
@@ -16,12 +14,32 @@ public class FriendRelationDto : BindableBase
         set => SetProperty(ref _userDto, value);
     }
 
+    private string grouping;
+
+    public string Grouping
+    {
+        get => grouping;
+        set
+        {
+            if (SetProperty(ref grouping, value))
+            {
+                OnFriendRelationChanged?.Invoke();
+            }
+        }
+    }
+
     private string? _remark;
 
     public string? Remark
     {
         get => _remark;
-        set => SetProperty(ref _remark, value);
+        set
+        {
+            if (SetProperty(ref _remark, value))
+            {
+                OnFriendRelationChanged?.Invoke();
+            }
+        }
     }
 
     private bool _cantDisturb;
@@ -29,7 +47,13 @@ public class FriendRelationDto : BindableBase
     public bool CantDisturb
     {
         get => _cantDisturb;
-        set => SetProperty(ref _cantDisturb, value);
+        set
+        {
+            if (SetProperty(ref _cantDisturb, value))
+            {
+                OnFriendRelationChanged?.Invoke();
+            }
+        }
     }
 
     private bool _isTop;
@@ -37,6 +61,14 @@ public class FriendRelationDto : BindableBase
     public bool IsTop
     {
         get => _isTop;
-        set => SetProperty(ref _isTop, value);
+        set
+        {
+            if (SetProperty(ref _isTop, value))
+            {
+                OnFriendRelationChanged?.Invoke();
+            }
+        }
     }
+
+    public event Action OnFriendRelationChanged;
 }

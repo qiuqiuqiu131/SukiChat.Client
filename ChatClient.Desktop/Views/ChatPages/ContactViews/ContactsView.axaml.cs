@@ -1,6 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ChatClient.Avalonia.Controls.GroupList;
+using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Tool.UIEntity;
+using Prism.Ioc;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
 

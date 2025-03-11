@@ -2,6 +2,7 @@ using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.DataBase.Data;
 using ChatClient.Tool.Events;
 using ChatServer.Common.Protobuf;
 using SukiUI.Toasts;
@@ -27,6 +28,9 @@ internal class GroupMessageHandler : MessageHandlerBase
         var token2 = eventAggregator.GetEvent<ResponseEvent<UpdateGroupMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnUpdateGroupMessage));
         _subscriptionTokens.Add(token2);
+
+        var token3 = eventAggregator.GetEvent<ResponseEvent<UpdateGroupRelation>>()
+            .Subscribe(d => ExecuteInScope(d, OnUpdateGroupRelation));
     }
 
     /// <summary>
@@ -74,6 +78,24 @@ internal class GroupMessageHandler : MessageHandlerBase
 
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+
+        groupDto?.CopyFrom(dto!);
+    }
+
+    /// <summary>
+    /// 当全成员的群聊关系发生变化时调用
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnUpdateGroupRelation(IScopedProvider scopedprovider, UpdateGroupRelation message)
+    {
+        var groupService = scopedprovider.Resolve<IGroupService>();
+        var dto = await groupService.GetGroupMemberDto(message.GroupId, message.UserId);
+
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var groupDto = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserId);
 
         groupDto?.CopyFrom(dto!);
     }

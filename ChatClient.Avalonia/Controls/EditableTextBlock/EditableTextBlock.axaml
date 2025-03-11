@@ -6,25 +6,37 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <TextBlock Name="PART_TextBlock"
-                               Background="Transparent"
-                               Padding="50,0,0,0"
-                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                               FontSize="{TemplateBinding FontSize}"
-                               VerticalAlignment="Center"
-                               IsVisible="{Binding !$parent[editableTextBlock:EditableTextBlock].IsEditing}"
-                               Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Converter={converter:DefaultTextConverter DefaultText=无}}" />
+                    <Grid IsVisible="{Binding !$parent[editableTextBlock:EditableTextBlock].IsEditing}">
+                        <TextBlock Name="PART_DefaultTextBlock"
+                                   IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                   Background="Transparent"
+                                   Opacity="0.5"
+                                   Padding="50,0,0,0"
+                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding $parent[editableTextBlock:EditableTextBlock].DefaultText}" />
+                        <TextBlock Name="PART_TextBlock"
+                                   IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Background="Transparent"
+                                   Padding="50,0,0,0"
+                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding $parent[editableTextBlock:EditableTextBlock].ActualText}" />
+                    </Grid>
                     <TextBox Name="PART_TextBox"
-                             Padding="10,3"
-                             Width="200"
+                             Padding="5,3"
+                             Width="150"
                              MinHeight="0"
                              Classes="Editable"
+                             Watermark="{Binding $parent[editableTextBlock:EditableTextBlock].DefaultText}"
                              Margin="0"
                              FontSize="{TemplateBinding FontSize}"
                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                              VerticalAlignment="Center"
                              IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].IsEditing}"
-                             Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text}" />
+                             Text="{Binding $parent[editableTextBlock:EditableTextBlock].ActualText}" />
                 </Grid>
             </ControlTemplate>
         </Setter>

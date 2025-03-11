@@ -33,6 +33,7 @@ public class ContactsViewModel : ChatPageBase
 
     public DelegateCommand<object?> SelectedChangedCommand { get; set; }
     public DelegateCommand ToFriendRequestViewCommand { get; init; }
+    public DelegateCommand ToGroupRequestViewCommand { get; init; }
     public DelegateCommand CreateGroupCommand { get; init; }
     public DelegateCommand AddNewFriendCommand { get; init; }
 
@@ -47,12 +48,18 @@ public class ContactsViewModel : ChatPageBase
         _dialogService = containerProvider.Resolve<IDialogService>();
 
         ToFriendRequestViewCommand = new DelegateCommand(ToFriendRequestView);
+        ToGroupRequestViewCommand = new DelegateCommand(ToGroupRequestView);
         SelectedChangedCommand = new DelegateCommand<object?>(SelectedChanged);
         CreateGroupCommand = new DelegateCommand(CreateGroup);
         AddNewFriendCommand = new DelegateCommand(AddNewFriend);
 
         GroupFriends = userManager.GroupFriends!;
         GroupGroups = userManager.GroupGroups!;
+    }
+
+    private void ToGroupRequestView()
+    {
+        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupRequestView));
     }
 
     private void ToFriendRequestView()

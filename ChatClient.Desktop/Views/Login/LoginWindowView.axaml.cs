@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -43,5 +44,12 @@ public partial class LoginWindowView : SukiWindow
             Hosts.Remove(_dialogHost);
 
         _dialogHost.Manager = null;
+    }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+        if(e.Handled) return;
+        FocusManager?.ClearFocus();
     }
 }
