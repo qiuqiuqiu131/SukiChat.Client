@@ -49,21 +49,16 @@ internal class FriendMessageHandler : MessageHandlerBase
     /// <param name="friendRequestFromServer"></param>
     private async Task OnFriendRequestFromServer(IScopedProvider scope, FriendRequestFromServer friendRequestFromServer)
     {
-        var _userService = scope.Resolve<IUserService>();
-        FriendReceiveDto friendReceived = new()
-        {
-            RequestId = friendRequestFromServer.RequestId,
-            UserFromId = friendRequestFromServer.UserFromId,
-            UserTargetId = friendRequestFromServer.UserTargetId,
-            ReceiveTime = DateTime.Now,
-            UserDto = await _userService.GetUserDto(friendRequestFromServer.UserFromId)
-        };
+        var _userDtoManager = scope.Resolve<IUserDtoManager>();
+        FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
+        friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
         _userManager.FriendReceives?.Add(friendReceived);
 
         var _unitOfWork = scope.Resolve<IUnitOfWork>();
         var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
         await receivedRepository.InsertAsync(_mapper.Map<FriendReceived>(friendReceived));
         await _unitOfWork.SaveChangesAsync();
+
         Dispatcher.UIThread.Invoke(() =>
         {
             _toastManager.CreateSimpleInfoToast()
@@ -84,12 +79,21 @@ internal class FriendMessageHandler : MessageHandlerBase
         var _unitOfWork = scope.Resolve<IUnitOfWork>();
         var requestRepository = _unitOfWork.GetRepository<FriendRequest>();
         var result = await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.RequestId.Equals(friendResponseFromServer.RequestId));
+            d.RequestId.Equals(friendResponseFromServer.RequestId), disableTracking: false);
+        if (result == null) return;
         result.IsSolved = true;
         result.IsAccept = friendResponseFromServer.Accept;
-        result.RequestTime = DateTime.Now;
-        requestRepository.ChangeEntityState(result, EntityState.Modified);
+        result.SolveTime = DateTime.Parse(friendResponseFromServer.ResponseTime);
         await _unitOfWork.SaveChangesAsync();
+
+        // 更新UI
+        var dto = _userManager.FriendRequests?.FirstOrDefault(d => d.RequestId == friendResponseFromServer.RequestId);
+        if (dto != null)
+        {
+            dto.IsSolved = true;
+            dto.IsAccept = friendResponseFromServer.Accept;
+            dto.SolveTime = DateTime.Parse(friendResponseFromServer.ResponseTime);
+        }
     }
 
     /// <summary>

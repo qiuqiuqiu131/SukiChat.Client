@@ -12,7 +12,8 @@ namespace ChatClient.BaseService.Services;
 
 public interface IFriendPackService
 {
-    Task<AvaloniaList<FriendReceiveDto>> GetFriendReceiveDtos(string userId);
+    Task<AvaloniaList<FriendReceiveDto>?> GetFriendReceiveDtos(string userId);
+    Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId);
     Task<AvaloniaList<FriendRelationDto>> GetFriendRelationDtos(string userId);
     public Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
     Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages);
@@ -41,22 +42,36 @@ public class FriendPackService : BaseService, IFriendPackService
     /// <returns></returns>
     public async Task<AvaloniaList<FriendReceiveDto>> GetFriendReceiveDtos(string userId)
     {
-        var result = new AvaloniaList<FriendReceiveDto>();
-
         var friendReceiveRepository = _unitOfWork.GetRepository<FriendReceived>();
         var friendReceive = await friendReceiveRepository.GetAllAsync(
-            predicate: d => d.UserTargetId.Equals(userId) && !d.IsSolved,
+            predicate: d => d.UserTargetId.Equals(userId),
             orderBy: order => order.OrderByDescending(d => d.ReceiveTime));
 
-        if (friendReceive == null) return result;
+        if (friendReceive == null) return null;
 
         var friendReceiveDtos = _mapper.Map<List<FriendReceiveDto>>(friendReceive);
         List<Task> tasks = new();
         foreach (var dto in friendReceiveDtos)
             tasks.Add(Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserFromId); }));
-        await Task.WhenAll(tasks);
 
         return new AvaloniaList<FriendReceiveDto>(friendReceiveDtos);
+    }
+
+    public async Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId)
+    {
+        var friendRequestRepository = _unitOfWork.GetRepository<FriendRequest>();
+        var friendRequests = await friendRequestRepository.GetAllAsync(
+            predicate: d => d.UserFromId.Equals(userId),
+            orderBy: order => order.OrderByDescending(d => d.RequestTime));
+
+        if (friendRequests == null) return null;
+
+        var friendRequestDtos = _mapper.Map<List<FriendRequestDto>>(friendRequests);
+        List<Task> tasks = new();
+        foreach (var dto in friendRequestDtos)
+            tasks.Add(Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserTargetId); }));
+
+        return new AvaloniaList<FriendRequestDto>(friendRequestDtos);
     }
 
     /// <summary>

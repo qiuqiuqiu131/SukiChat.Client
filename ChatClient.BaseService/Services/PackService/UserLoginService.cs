@@ -84,6 +84,14 @@ internal class UserLoginService : BaseService, IUserLoginService
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var friendPackService = scope.Resolve<IFriendPackService>();
+                    user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
+                }
+            }),
+            Task.Run(async () =>
+            {
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var friendPackService = scope.Resolve<IFriendPackService>();
                     var friends = await friendPackService.GetFriendRelationDtos(userId);
                     user.GroupFriends = new(friends
                         .GroupBy(d => d.Grouping)
@@ -124,7 +132,23 @@ internal class UserLoginService : BaseService, IUserLoginService
                     var groupChatPackService = scope.Resolve<IGroupChatPackService>();
                     user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
                 }
-            })
+            }),
+            Task.Run(async () =>
+            {
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var groupPackService = scope.Resolve<IGroupPackService>();
+                    user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
+                }
+            }),
+            Task.Run(async () =>
+            {
+                using (var scope = _scopedProvider.CreateScope())
+                {
+                    var groupPackService = scope.Resolve<IGroupPackService>();
+                    user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
+                }
+            }),
         ];
         await Task.WhenAll(tasks);
         return user;
@@ -163,7 +187,8 @@ internal class UserLoginService : BaseService, IUserLoginService
             OperateNewFriendMessages(userId, outlineDto.NewFriendMessages),
             OperateFriendChatMessages(userId, outlineDto.FriendChatMessages),
             OperateEnterGroupMessages(userId, outlineDto.EnterGroupMessages),
-            OperateGroupChatMessages(userId, outlineDto.GroupChatMessages)
+            OperateGroupChatMessages(userId, outlineDto.GroupChatMessages),
+            OperateGroupRequestMessage(userId, outlineDto.GroupRequestMessages)
         ];
         await Task.WhenAll(tasks);
     }
@@ -178,6 +203,10 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendRequestMessages"></param>
     private async Task OperateFriendRequestMesssages(string userId, List<FriendRequestMessage> friendRequestMessages)
     {
+        List<FriendRequestMessage> requests =
+            friendRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
+        List<FriendRequestMessage> receives =
+            friendRequestMessages.Where(d => d.UserTargetId.Equals(userId)).ToList();
         List<Task> tasks =
         [
             Task.Run(async () =>
@@ -186,9 +215,6 @@ internal class UserLoginService : BaseService, IUserLoginService
                 using var scope = _scopedProvider.CreateScope();
                 var _unitOfWork = scope.Resolve<IUnitOfWork>();
 
-                // Request 发送者
-                List<FriendRequestMessage> requests =
-                    friendRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
                 var requestRespository = _unitOfWork.GetRepository<FriendRequest>();
                 foreach (var request in requests)
                 {
@@ -208,9 +234,6 @@ internal class UserLoginService : BaseService, IUserLoginService
                 using var scope = _scopedProvider.CreateScope();
                 var _unitOfWork = scope.Resolve<IUnitOfWork>();
 
-                // Receive 接收者
-                List<FriendRequestMessage> receives =
-                    friendRequestMessages.Where(d => d.UserTargetId.Equals(userId)).ToList();
                 var receiveRespository = _unitOfWork.GetRepository<FriendReceived>();
                 foreach (var receive in receives)
                 {
@@ -274,6 +297,61 @@ internal class UserLoginService : BaseService, IUserLoginService
         using var scope = _scopedProvider.CreateScope();
         var groupChatService = scope.Resolve<IGroupChatPackService>();
         await groupChatService.GroupChatMessagesOperate(groupChatMessages);
+    }
+
+    /// <summary>
+    /// 处理入群请求消息，离线时用户可能有入群请求，或者处理了用户的入群请求
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupRequestMessages"></param>
+    private async Task OperateGroupRequestMessage(string userId, List<GroupRequestMessage> groupRequestMessages)
+    {
+        List<GroupRequestMessage> requests =
+            groupRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
+        List<GroupRequestMessage> receives =
+            groupRequestMessages.Where(d => !d.UserFromId.Equals(userId)).ToList();
+        List<Task> tasks =
+        [
+            Task.Run(async () =>
+            {
+                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
+                using var scope = _scopedProvider.CreateScope();
+                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+
+                var requestRespository = _unitOfWork.GetRepository<GroupRequest>();
+                foreach (var request in requests)
+                {
+                    var groupRequest = _mapper.Map<GroupRequest>(request);
+                    var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                        d.RequestId.Equals(groupRequest.RequestId));
+                    if (req != null)
+                        groupRequest.Id = req.Id;
+                    requestRespository.Update(groupRequest);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            }),
+            Task.Run(async () =>
+            {
+                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
+                using var scope = _scopedProvider.CreateScope();
+                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+
+                var friendRespository = _unitOfWork.GetRepository<GroupReceived>();
+                foreach (var receive in receives)
+                {
+                    var groupRequest = _mapper.Map<GroupReceived>(receive);
+                    var req = await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
+                        d.RequestId.Equals(groupRequest.RequestId));
+                    if (req != null)
+                        groupRequest.Id = req.Id;
+                    friendRespository.Update(groupRequest);
+                }
+
+                await _unitOfWork.SaveChangesAsync();
+            })
+        ];
+        await Task.WhenAll(tasks);
     }
 
     #endregion

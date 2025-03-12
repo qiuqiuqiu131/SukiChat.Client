@@ -15,10 +15,13 @@ public interface IUserManager
     // 登录用户信息
     public UserDto? User { get; }
     public AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
+    public AvaloniaList<FriendRequestDto>? FriendRequests { get; }
     public AvaloniaList<GroupFriendDto>? GroupFriends { get; }
     public AvaloniaList<FriendChatDto>? FriendChats { get; }
     public AvaloniaList<GroupChatDto>? GroupChats { get; }
     public AvaloniaList<GroupGroupDto>? GroupGroups { get; }
+    public AvaloniaList<GroupReceivedDto>? GroupReceiveds { get; }
+    public AvaloniaList<GroupRequestDto>? GroupRequests { get; }
 
     // 用户登录请求
     public Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
@@ -34,4 +37,5 @@ public interface IUserManager
 
     public Task<FriendRelationDto?> NewFriendReceive(string friendId);
     public Task<GroupRelationDto?> NewGroupReceive(string groupId);
+    public Task<GroupMemberDto?> NewGroupMember(string groupId, string userId);
 }

@@ -28,6 +28,7 @@ public class AddNewFriendViewModel : ViewModelBase
     }
 
     public DelegateCommand SendFriendRequestCommand { get; }
+    public DelegateCommand SendGroupRequestCommand { get; }
 
     public ThemeStyle CurrentThemeStyle { get; }
 
@@ -47,6 +48,7 @@ public class AddNewFriendViewModel : ViewModelBase
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
 
         SendFriendRequestCommand = new DelegateCommand(SendFriendRequest);
+        SendGroupRequestCommand = new DelegateCommand(SendGroupRequest);
     }
 
     private async void SendFriendRequest()
@@ -56,6 +58,27 @@ public class AddNewFriendViewModel : ViewModelBase
 
         var _friendService = _containerProvider.Resolve<IFriendService>();
         var (state, message) = await _friendService.AddFriend(_userManager.User!.Id, Id, Group);
+        if (state)
+            _toastManager.CreateSimpleInfoToast()
+                .OfType(NotificationType.Success)
+                .WithTitle("好友请求成功")
+                .WithContent("耐心等待对方同意")
+                .Queue();
+        else
+            _toastManager.CreateSimpleInfoToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("好友请求失败")
+                .WithContent(message)
+                .Queue();
+    }
+
+    private async void SendGroupRequest()
+    {
+        if (string.IsNullOrEmpty(Id) || string.IsNullOrEmpty(Group))
+            return;
+
+        var _groupService = _containerProvider.Resolve<IGroupService>();
+        var (state, message) = await _groupService.JoinGroupRequest(_userManager.User!.Id, Id);
         if (state)
             _toastManager.CreateSimpleInfoToast()
                 .OfType(NotificationType.Success)

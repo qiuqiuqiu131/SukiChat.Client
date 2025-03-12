@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<linker>
+	<assembly fullname="Avalonia.Controls" preserve="All" />
+	<assembly fullname="SukiUI" preserve="All" />
+	<assembly fullname="Prism" preserve="All" />
+	<assembly fullname="Prism.Avalonia" preserve="All" />
+	<assembly fullname="Prism.DryIoc.Avalonia" preserve="All" />
+	<assembly fullname="Prism.Container.DryIoc" preserve="All" />
+	<assembly fullname="Prism.Container.Abstractions" preserve="All" />
+	<assembly fullname="AutoMapper" preserve="All" />
+	<assembly fullname="DryIoc" preserve="All"/>
+	<assembly fullname="ChatClient.DataBase" preserve="All"/>
+	<assembly fullname="ChatClient.BaseService" preserve="All"/>
+	<assembly fullname="ChatClient.Client" preserve="All"/>
+</linker>

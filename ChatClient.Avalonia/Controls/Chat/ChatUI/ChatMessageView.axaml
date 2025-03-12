@@ -19,7 +19,7 @@
                         <Grid.DataTemplates>
                             <DataTemplate DataType="data:TextMessDto">
                                 <SelectableTextBlock Text="{Binding Text}"
-                                                     FontSize="14"
+                                                     FontSize="13"
                                                      HorizontalAlignment="Center"
                                                      Margin="3,0,2,2"
                                                      Padding="2"

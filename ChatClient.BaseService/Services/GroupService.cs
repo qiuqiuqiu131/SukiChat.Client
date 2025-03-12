@@ -1,10 +1,12 @@
 using AutoMapper;
 using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
+using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using DryIoc.ImTools;
 using Microsoft.EntityFrameworkCore;
@@ -17,11 +19,12 @@ public interface IGroupService
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
     Task<List<string>?> GetGroupMemberIds(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+    Task<List<string>> GetGroupsOfUserManager(string userId);
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto);
-    Task<bool> JoinGroupRequest(string userId, string groupId);
-    Task<bool> JoinGroupResponse(string userId, int requestId, bool accept);
+    Task<(bool, string)> JoinGroupRequest(string userId, string groupId);
+    Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept);
     Task<Bitmap> GetHeadImage(int headIndex);
     Task<Dictionary<int, Bitmap>> GetHeadImages();
 }
@@ -99,6 +102,14 @@ public class GroupService : BaseService, IGroupService
         await _unitOfWork.SaveChangesAsync();
 
         return groupMemberDto;
+    }
+
+    public Task<List<string>> GetGroupsOfUserManager(string userId)
+    {
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        return groupRelationRepository
+            .GetAll(predicate: d => d.UserId.Equals(userId) && (d.Status == 0 || d.Status == 1))
+            .Select(d => d.GroupId).ToListAsync();
     }
 
     /// <summary>
@@ -226,12 +237,13 @@ public class GroupService : BaseService, IGroupService
     /// <param name="groupId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<bool> JoinGroupRequest(string userId, string groupId)
+    public async Task<(bool, string)> JoinGroupRequest(string userId, string groupId)
     {
         var joinGroupRequest = new JoinGroupRequestFromClient
         {
             UserId = userId,
             GroupId = groupId,
+            Message = ""
         };
 
         var response =
@@ -241,18 +253,27 @@ public class GroupService : BaseService, IGroupService
         {
             // 如果请求成功,数据库中保存此请求信息
             var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
-            groupRequestRepository.Update(new GroupRequest
+            var groupRequest = new GroupRequest
             {
                 UserFromId = userId,
                 GroupId = groupId,
                 RequestId = response.RequestId,
                 RequestTime = DateTime.Parse(response.Time),
+                Message = "",
                 IsSolved = false
-            });
+            };
+            groupRequestRepository.Update(groupRequest);
             await _unitOfWork.SaveChangesAsync();
+
+            // UI更新
+            var userManager = _scopedProvider.Resolve<IUserManager>();
+            var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+            var groupRequestDto = _mapper.Map<GroupRequestDto>(groupRequest);
+            groupRequestDto.GroupDto = await userDtoManager.GetGroupDto(userId, groupId);
+            userManager.GroupRequests?.Add(groupRequestDto);
         }
 
-        return response?.Response.State ?? false;
+        return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");
     }
 
     /// <summary>
@@ -262,7 +283,7 @@ public class GroupService : BaseService, IGroupService
     /// <param name="requestId"></param>
     /// <param name="accept"></param>
     /// <returns></returns>
-    public async Task<bool> JoinGroupResponse(string userId, int requestId, bool accept)
+    public async Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept)
     {
         var joinGroupResponse = new JoinGroupResponseFromClient
         {
@@ -274,47 +295,7 @@ public class GroupService : BaseService, IGroupService
         var response =
             await _messageHelper.SendMessageWithResponse<JoinGroupResponseResponseFromServer>(joinGroupResponse);
 
-        if (response is { Response: { State: true } })
-        {
-            // 如果请求成功,数据库中更改此请求信息
-            var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
-            var groupRequest =
-                await groupRequestRepository.GetFirstOrDefaultAsync(predicate: x => x.RequestId == requestId,
-                    disableTracking: false);
-            if (groupRequest != null)
-            {
-                groupRequest.IsAccept = response.Accept;
-                groupRequest.IsSolved = true;
-                groupRequest.SolveTime = DateTime.Parse(response.Time);
-                groupRequest.AcceptByUserId = response.UserId;
-            }
-            else
-            {
-                var gresponse = new GroupRequest
-                {
-                    RequestId = response.RequestId,
-                    RequestTime = DateTime.Now,
-                    SolveTime = DateTime.Parse(response.Time),
-                    IsAccept = response.Accept,
-                    IsSolved = true,
-                    AcceptByUserId = response.UserId
-                };
-                groupRequestRepository.Update(gresponse);
-            }
-
-            try
-            {
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        return false;
+        return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");
     }
 
     public async Task<Bitmap> GetHeadImage(int headIndex)

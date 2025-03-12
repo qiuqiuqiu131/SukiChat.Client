@@ -25,5 +25,11 @@
         <TextBox Text="{Binding Id}" Watermark="好友Id" />
         <TextBox Text="{Binding Group}" Watermark="分组" />
         <Button Content="发送" Command="{Binding SendFriendRequestCommand}" />
+
+        <Border Margin="20" />
+
+        <TextBox Text="{Binding Id}" Watermark="群聊Id" />
+        <TextBox Text="{Binding Group}" Watermark="分组" />
+        <Button Content="发送" Command="{Binding SendGroupRequestCommand}" />
     </StackPanel>
 </suki:SukiWindow>

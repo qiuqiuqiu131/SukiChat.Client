@@ -164,13 +164,14 @@
             </suki:GlassCard>
 
             <!-- 好友列表 -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                          Margin="0,10,0,0">
                 <StackPanel x:Name="LeftPanel" Orientation="Vertical"
                             content:StackPanelExtensions.AnimatedScroll="True">
                     <Button Classes="Chat"
                             Margin="0"
                             HorizontalContentAlignment="Stretch"
-                            Padding="25,7"
+                            Padding="20,7"
                             Command="{Binding ToFriendRequestViewCommand}">
                         <Grid>
                             <PathIcon HorizontalAlignment="Right"
@@ -183,12 +184,12 @@
                                     <RotateTransform Angle="180" />
                                 </PathIcon.RenderTransform>
                             </PathIcon>
-                            <TextBlock Text="好友请求" FontWeight="DemiBold" HorizontalAlignment="Left" />
+                            <TextBlock Text="好友通知" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Left" />
                         </Grid>
                     </Button>
                     <Button Classes="Chat"
                             Margin="0"
-                            Padding="25,7"
+                            Padding="20,7"
                             HorizontalContentAlignment="Stretch"
                             Command="{Binding ToGroupRequestViewCommand}">
                         <Grid>
@@ -202,7 +203,7 @@
                                     <RotateTransform Angle="180" />
                                 </PathIcon.RenderTransform>
                             </PathIcon>
-                            <TextBlock Text="群聊消息" FontWeight="DemiBold" HorizontalAlignment="Left" />
+                            <TextBlock Text="群聊通知" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Left" />
                         </Grid>
                     </Button>
                     <TabControl TabIndex="0">
@@ -226,8 +227,7 @@
 
         <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
-        <suki:GlassCard Grid.Column="2" CornerRadius="0">
-            <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.ContactsRegion}" />
-        </suki:GlassCard>
+        <ContentControl Grid.Column="2"
+                        regions:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.ContactsRegion}" />
     </Grid>
 </UserControl>

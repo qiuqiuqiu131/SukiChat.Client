@@ -12,6 +12,8 @@ namespace ChatClient.BaseService.Services.PackService;
 public interface IGroupPackService
 {
     Task<AvaloniaList<GroupRelationDto>> GetGroupRelationDtos(string userId);
+    Task<AvaloniaList<GroupRequestDto>> GetGroupRequestDtos(string userId);
+    Task<AvaloniaList<GroupReceivedDto>> GetGroupReceivedDtos(string userId);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
 }
@@ -46,6 +48,45 @@ public class GroupPackService : BaseService, IGroupPackService
         }
 
         return result;
+    }
+
+    public async Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId)
+    {
+        var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
+        var groupRequests = await groupRequestRepository.GetAllAsync(
+            predicate: d => d.UserFromId.Equals(userId),
+            orderBy: order => order.OrderByDescending(d => d.RequestTime));
+
+        if (groupRequests == null) return null;
+
+        var friendRequestDtos = _mapper.Map<List<GroupRequestDto>>(groupRequests);
+        List<Task> tasks = new();
+        foreach (var dto in friendRequestDtos)
+            tasks.Add(Task.Run(async () => { dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId); }));
+
+        return new AvaloniaList<GroupRequestDto>(friendRequestDtos);
+    }
+
+    public async Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId)
+    {
+        var groupIds = await _scopedProvider.Resolve<IGroupService>().GetGroupsOfUserManager(userId);
+        var groupRequestRepository = _unitOfWork.GetRepository<GroupReceived>();
+        var groupRequests = await groupRequestRepository.GetAllAsync(
+            predicate: d => groupIds.Contains(d.GroupId),
+            orderBy: d => d.OrderByDescending(g => g.ReceiveTime));
+
+        if (groupRequests == null) return null;
+
+        var groupRequestDtos = _mapper.Map<List<GroupReceivedDto>>(groupRequests);
+        List<Task> tasks = new();
+        foreach (var dto in groupRequestDtos)
+            tasks.Add(Task.Run(async () =>
+            {
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                dto.UserDto = await _userManager.GetUserDto(dto.UserFromId);
+            }));
+
+        return new AvaloniaList<GroupReceivedDto>(groupRequestDtos);
     }
 
     public async Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message)

@@ -55,7 +55,7 @@
                             Margin="13,5,0,0"
                             Orientation="Horizontal">
                     <TextBlock Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
-                               Margin="10,0,0,0"
+                               Margin="10,0,0,10"
                                VerticalAlignment="Center"
                                LetterSpacing="1"
                                FontSize="16.5"

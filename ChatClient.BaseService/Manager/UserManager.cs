@@ -24,10 +24,13 @@ internal class UserManager : IUserManager
     // 信息属性
     public UserDto? User => UserData?.UserDetail;
     public AvaloniaList<FriendReceiveDto>? FriendReceives => UserData?.FriendReceives;
+    public AvaloniaList<FriendRequestDto>? FriendRequests => UserData?.FriendRequests;
     public AvaloniaList<GroupFriendDto>? GroupFriends => UserData?.GroupFriends;
     public AvaloniaList<FriendChatDto>? FriendChats => UserData?.FriendChatDtos;
     public AvaloniaList<GroupChatDto>? GroupChats => UserData?.GroupChatDtos;
     public AvaloniaList<GroupGroupDto>? GroupGroups => UserData?.GroupGroupDtos;
+    public AvaloniaList<GroupReceivedDto>? GroupReceiveds => UserData?.GroupReceiveds;
+    public AvaloniaList<GroupRequestDto>? GroupRequests => UserData?.GroupRequests;
 
     #endregion
 
@@ -192,6 +195,28 @@ internal class UserManager : IUserManager
                 GroupRelationDto = dto,
                 GroupId = groupId,
             });
+        }
+
+        return dto;
+    }
+
+    /// <summary>
+    /// 接收到新的群组成员
+    /// </summary>
+    /// <param name="groupId"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public async Task<GroupMemberDto?> NewGroupMember(string groupId, string userId)
+    {
+        if (User == null) return null;
+        var dto = await _userDtoManager.GetGroupMemberDto(groupId, userId);
+        if (dto != null)
+        {
+            var group = await _userDtoManager.GetGroupDto(User.Id, groupId);
+            if (group != null)
+            {
+                group.GroupMembers.Add(dto);
+            }
         }
 
         return dto;

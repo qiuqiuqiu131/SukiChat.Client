@@ -1,26 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Drawing.Imaging;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Layout;
-using Avalonia.Markup.Xaml;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Tools;
-using DryIoc;
-using Prism.Commands;
 using Prism.Ioc;
-using SukiUI;
-using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views;
 
@@ -130,7 +121,7 @@ public partial class ScreenshotWindow : Window
         // 将 System.Drawing.Image 转换为字节数组
         using (var ms = new MemoryStream())
         {
-            screenImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            screenImage.Save(ms, ImageFormat.Png);
             byte[] imageBytes = ms.ToArray();
 
             // 将字节数组转换为 Avalonia Bitmap

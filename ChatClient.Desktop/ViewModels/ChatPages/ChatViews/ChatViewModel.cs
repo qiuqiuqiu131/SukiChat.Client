@@ -86,15 +86,15 @@ public class ChatViewModel : ChatPageBase
         }
 
         // 处理上一个选中的好友
-        if (SelectedGroup != null && SelectedGroup.ChatMessages.Count > 15)
+        if (SelectedGroup != null && SelectedGroup.ChatMessages.Count > 1)
         {
             // 移除错误消息
             var errorMessage = SelectedGroup.ChatMessages.Where(d => d.IsError);
             SelectedGroup.ChatMessages.RemoveAll(errorMessage);
 
             SelectedGroup.HasMoreMessage = true;
-            // 将PreviousSelectedFriend的聊天记录裁剪到只剩15条
-            SelectedGroup.ChatMessages.RemoveRange(0, SelectedGroup.ChatMessages.Count - 15);
+            // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
+            SelectedGroup.ChatMessages.RemoveRange(0, SelectedGroup.ChatMessages.Count - 1);
         }
     }
 
@@ -116,11 +116,11 @@ public class ChatViewModel : ChatPageBase
             // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
             if (friendChatDto.ChatMessages.Count == 0)
                 friendChatDto.HasMoreMessage = false;
-            else if (friendChatDto.ChatMessages.Count < 10)
+            else if (friendChatDto.ChatMessages.Count < 15)
             {
                 var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
 
-                int nextCount = 10 - friendChatDto.ChatMessages.Count;
+                int nextCount = 15 - friendChatDto.ChatMessages.Count;
                 var chatDatas =
                     await chatPackService.GetFriendChatDataAsync(User?.Id, friendChatDto.UserId,
                         friendChatDto.ChatMessages[0].ChatId,
@@ -128,6 +128,8 @@ public class ChatViewModel : ChatPageBase
 
                 if (chatDatas.Count != nextCount)
                     friendChatDto.HasMoreMessage = false;
+                else
+                    friendChatDto.HasMoreMessage = true;
 
                 float value = nextCount;
                 foreach (var chatData in chatDatas)
@@ -184,11 +186,11 @@ public class ChatViewModel : ChatPageBase
             // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
             if (groupChatDto.ChatMessages.Count == 0)
                 groupChatDto.HasMoreMessage = false;
-            else if (groupChatDto.ChatMessages.Count == 1)
+            else if (groupChatDto.ChatMessages.Count < 15)
             {
                 var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
 
-                int nextCount = 10 - groupChatDto.ChatMessages.Count;
+                int nextCount = 15 - groupChatDto.ChatMessages.Count;
                 var chatDatas =
                     await groupPackService.GetGroupChatDataAsync(User?.Id, groupChatDto.GroupId,
                         groupChatDto.ChatMessages[0].ChatId,
@@ -196,6 +198,8 @@ public class ChatViewModel : ChatPageBase
 
                 if (chatDatas.Count != nextCount)
                     groupChatDto.HasMoreMessage = false;
+                else 
+                    groupChatDto.HasMoreMessage = true;
 
                 float value = nextCount;
                 foreach (var chatData in chatDatas)

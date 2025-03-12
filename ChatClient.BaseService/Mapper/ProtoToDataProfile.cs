@@ -62,5 +62,28 @@ public class ProtoToDataProfile : Profile
             .ForMember(gr => gr.UserId, opt => opt.MapFrom(pgm => pgm.UserIdTarget));
 
         #endregion
+
+        // User login state, get outline message and operate friend request
+        CreateMap<FriendRequestMessage, FriendRequest>()
+            .ForMember(fr => fr.RequestTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
+            .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
+        CreateMap<FriendRequestMessage, FriendReceived>()
+            .ForMember(fr => fr.ReceiveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
+            .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
+
+        CreateMap<GroupRequestMessage, GroupRequest>()
+            .ForMember(gr => gr.AcceptByUserId,
+                opt => opt.MapFrom(fm => string.IsNullOrEmpty(fm.AcceptByUserId) ? null : fm.AcceptByUserId))
+            .ForMember(gr => gr.RequestTime, opt => opt.MapFrom(gm => DateTime.Parse(gm.RequestTime)))
+            .ForMember(gr => gr.SolveTime, opt =>
+                opt.MapFrom(gm =>
+                    string.IsNullOrEmpty(gm.SolvedTime) ? (DateTime?)null : DateTime.Parse(gm.SolvedTime)));
+        CreateMap<GroupRequestMessage, GroupReceived>()
+            .ForMember(gr => gr.AcceptByUserId,
+                opt => opt.MapFrom(fm => string.IsNullOrEmpty(fm.AcceptByUserId) ? null : fm.AcceptByUserId))
+            .ForMember(gr => gr.ReceiveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
+            .ForMember(gr => gr.SolveTime,
+                opt => opt.MapFrom(fm =>
+                    string.IsNullOrEmpty(fm.SolvedTime) ? (DateTime?)null : DateTime.Parse(fm.SolvedTime)));
     }
 }

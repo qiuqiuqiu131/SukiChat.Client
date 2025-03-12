@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChatClient.DataBase.Data;
 
-public class GroupRequest
+public class GroupReceived
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,7 +15,7 @@ public class GroupRequest
 
     [StringLength(10)] public string GroupId { get; set; }
 
-    public DateTime RequestTime { get; set; }
+    public DateTime ReceiveTime { get; set; }
 
     public string Message { get; set; }
 

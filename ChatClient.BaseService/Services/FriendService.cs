@@ -1,8 +1,10 @@
 using AutoMapper;
 using ChatClient.BaseService.Helper;
+using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;
@@ -64,11 +66,19 @@ internal class FriendService : BaseService, IFriendService
             RequestId = result.RequestId,
             UserFromId = result.Request.UserFromId,
             UserTargetId = result.Request.UserTargetId,
+            Message = "",
             RequestTime = DateTime.Parse(result.RequestTime),
             Group = group
         };
         await _unitOfWork.GetRepository<FriendRequest>().InsertAsync(friendRequest);
         await _unitOfWork.SaveChangesAsync();
+
+        var userManager = _scopedProvider.Resolve<IUserManager>();
+        var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+        var dto = _mapper.Map<FriendRequestDto>(friendRequest);
+        dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
+        userManager.FriendRequests.Add(dto);
+
         return (true, result.Response.Message);
     }
 
@@ -95,16 +105,23 @@ internal class FriendService : BaseService, IFriendService
         var friendReceived =
             await respository.GetFirstOrDefaultAsync(predicate: x => x.RequestId.Equals(requestId),
                 disableTracking: false);
-        if (friendReceived == null)
+        if (friendReceived != null)
         {
-            //TODO:数据不存在
-            return (false, "数据不存在");
+            friendReceived.IsAccept = state;
+            friendReceived.IsSolved = true;
+            friendReceived.SolveTime = time;
         }
 
-        friendReceived.IsAccept = state;
-        friendReceived.IsSolved = true;
-        friendReceived.SolveTime = time;
         await _unitOfWork.SaveChangesAsync();
+
+        var userManager = _scopedProvider.Resolve<IUserManager>();
+        var dto = userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId.Equals(friendReceived.RequestId));
+        if (dto != null)
+        {
+            dto.IsAccept = state;
+            dto.SolveTime = time;
+            dto.IsSolved = true;
+        }
 
         return (true, result.Response.Message);
     }

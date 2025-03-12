@@ -52,12 +52,20 @@ internal class ProtoToDtoProfile : Profile
 
         #endregion
 
+        CreateMap<FriendRequestFromServer, FriendReceiveDto>()
+            .ForMember(frd => frd.ReceiveTime, opt => opt.MapFrom(fr => DateTime.Parse(fr.RequestTime)));
+
+        CreateMap<JoinGroupRequestFromServer, GroupReceivedDto>()
+            .ForMember(jrf => jrf.UserFromId, opt => opt.MapFrom(jr => jr.UserId))
+            .ForMember(jrf => jrf.ReceiveTime, opt => opt.MapFrom(jr => DateTime.Parse(jr.Time)));
+
         CreateMap<OutlineMessageResponse, OutlineMessageDto>()
             .ForMember(s => s.FriendRequestMessages, opt => opt.MapFrom(o => o.FriendRequests.ToList()))
             .ForMember(s => s.NewFriendMessages, opt => opt.MapFrom(o => o.NewFriends.ToList()))
             .ForMember(s => s.FriendChatMessages, opt => opt.MapFrom(o => o.FriendChats.ToList()))
             .ForMember(s => s.GroupChatMessages, opt => opt.MapFrom(o => o.GroupChats.ToList()))
-            .ForMember(s => s.EnterGroupMessages, opt => opt.MapFrom(o => o.EnterGroups.ToList()));
+            .ForMember(s => s.EnterGroupMessages, opt => opt.MapFrom(o => o.EnterGroups.ToList()))
+            .ForMember(s => s.GroupRequestMessages, opt => opt.MapFrom(o => o.GroupRequests.ToList()));
 
         CreateMap<ChatMessage, ChatMessageDto>()
             .ForMember(s => s.Type, opt => opt.MapFrom(c => c.ContentCase))

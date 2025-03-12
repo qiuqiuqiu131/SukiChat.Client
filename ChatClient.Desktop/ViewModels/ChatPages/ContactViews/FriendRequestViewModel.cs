@@ -1,3 +1,4 @@
+using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Manager;
@@ -15,10 +16,14 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 public class FriendRequestViewModel : ViewModelBase
 {
     public AvaloniaList<FriendReceiveDto> FriendReceivedDtos { get; init; }
+    public AvaloniaList<FriendRequestDto> FriendRequestDtos { get; init; }
 
-    public bool IsRequestEmpty => FriendReceivedDtos.Count == 0;
+    public bool IsRequestEmpty => FriendReceivedDtos.Count == 0 && FriendRequestDtos.Count == 0;
 
-    public DelegateCommand<FriendReceiveDto> ResponseFriendRequestCommand { get; init; }
+    public DelegateCommand<FriendReceiveDto> AcceptCommand { get; init; }
+    public DelegateCommand<FriendReceiveDto> RejectCommand { get; init; }
+
+    private bool isOperate = false;
 
     private readonly IContainerProvider _containerProvider;
     private readonly ISukiDialogManager _dialogManager;
@@ -34,44 +39,57 @@ public class FriendRequestViewModel : ViewModelBase
         _toastManager = toastManager;
 
         FriendReceivedDtos = _userManager.FriendReceives!;
+        FriendRequestDtos = _userManager.FriendRequests!;
         FriendReceivedDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
+        FriendRequestDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
 
-        ResponseFriendRequestCommand = new DelegateCommand<FriendReceiveDto>(ResponseFriendRequest);
+        AcceptCommand = new DelegateCommand<FriendReceiveDto>(AcceptRequest);
+        RejectCommand = new DelegateCommand<FriendReceiveDto>(RejectRequest);
     }
 
-    // 响应好友请求
-    private void ResponseFriendRequest(FriendReceiveDto obj)
+    private async void RejectRequest(FriendReceiveDto obj)
     {
-        _dialogManager.CreateDialog()
-            .WithTitle("好友请求")
-            .WithContent($"是否同意{obj.UserFromId}的好友请求")
-            .WithActionButton("Yes", async d =>
-            {
-                var _friendService = _containerProvider.Resolve<IFriendService>();
-                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "默认分组");
-                if (state)
-                    FriendReceivedDtos.Remove(obj);
-                else
-                    _toastManager.CreateToast()
-                        .OfType(NotificationType.Error)
-                        .WithTitle("操作失败")
-                        .WithContent(message)
-                        .Queue();
-            }, true)
-            .WithActionButton("No", async d =>
-            {
-                var _friendService = _containerProvider.Resolve<IFriendService>();
-                var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false, "默认分组");
-                if (state)
-                    FriendReceivedDtos.Remove(obj);
-                else
-                    _toastManager.CreateToast()
-                        .OfType(NotificationType.Error)
-                        .WithTitle("操作失败")
-                        .WithContent(message)
-                        .Queue();
-            }, true)
-            .Dismiss().ByClickingBackground()
-            .TryShow();
+        if (isOperate) return;
+
+        isOperate = true;
+        var _friendService = _containerProvider.Resolve<IFriendService>();
+        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false, "默认分组");
+        if (state)
+        {
+            obj.IsAccept = true;
+            obj.IsSolved = true;
+            obj.SolveTime = DateTime.Now;
+        }
+        else
+            _toastManager.CreateToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("操作失败")
+                .WithContent(message)
+                .Queue();
+
+        isOperate = false;
+    }
+
+    private async void AcceptRequest(FriendReceiveDto obj)
+    {
+        if (isOperate) return;
+
+        isOperate = true;
+        var _friendService = _containerProvider.Resolve<IFriendService>();
+        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "默认分组");
+        if (state)
+        {
+            obj.IsAccept = true;
+            obj.IsSolved = true;
+            obj.SolveTime = DateTime.Now;
+        }
+        else
+            _toastManager.CreateToast()
+                .OfType(NotificationType.Error)
+                .WithTitle("操作失败")
+                .WithContent(message)
+                .Queue();
+
+        isOperate = false;
     }
 }
