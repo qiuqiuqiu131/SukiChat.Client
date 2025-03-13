@@ -22,10 +22,11 @@
     <UserControl.DataTemplates>
         <DataTemplate DataType="group:GroupRequestDto">
             <suki:GlassCard
+                IsAnimated="True"
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
-                Margin="25,0,10,0"
+                Margin="25,10,10,10"
                 Padding="25,0"
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
@@ -66,10 +67,11 @@
         </DataTemplate>
         <DataTemplate DataType="group:GroupReceivedDto">
             <suki:GlassCard
+                IsAnimated="True"
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
-                Margin="25,0,10,0"
+                Margin="25,10,10,10"
                 Padding="25,0"
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
@@ -135,8 +137,8 @@
         <Binding Path="GroupReceivedDtos" />
     </contactViews1:GroupRequestView.GroupReceivedDtos>
     <Grid>
-        <Grid RowDefinitions="85,*" IsVisible="{Binding !IsRequestEmpty}">
-            <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10,0">
+        <Grid RowDefinitions="65,*" IsVisible="{Binding !IsRequestEmpty}">
+            <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0">
                 <TextBlock Text="群聊通知" FontSize="16.5" VerticalAlignment="Bottom"
                            FontWeight="SemiBold"
                            DockPanel.Dock="Left"
@@ -176,10 +178,11 @@
                           Margin="10,0"
                           IsVisible="{Binding !IsRequestEmpty}"
                           VerticalScrollBarVisibility="Visible">
-                <ItemsControl Name="RequestItemsControl" extenstions:ItemsControlExtensions.AnimatedScroll="True">
+                <ItemsControl Name="RequestItemsControl" extenstions:ItemsControlExtensions.AnimatedScroll="False">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="20" />
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                            <!-- <StackPanel Orientation="Vertical" Spacing="20" /> -->
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>

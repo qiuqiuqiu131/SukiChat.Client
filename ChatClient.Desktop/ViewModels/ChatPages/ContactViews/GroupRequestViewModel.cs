@@ -43,7 +43,7 @@ public class GroupRequestViewModel : ViewModelBase
         GroupReceivedDtos = _userManager.GroupReceiveds!;
         GroupRequestDtos = _userManager.GroupRequests!;
         GroupReceivedDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
-        GroupReceivedDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
+        GroupRequestDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
 
         AcceptCommand = new DelegateCommand<GroupReceivedDto>(AcceptRequest);
         RejectCommand = new DelegateCommand<GroupReceivedDto>(RejectRequest);

@@ -21,7 +21,7 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <DockPanel LastChildFill="True" Margin="70,70,70,0">
+    <DockPanel LastChildFill="True" Margin="85,85,85,15">
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Spacing="15">
                 <Panel
@@ -138,12 +138,12 @@
                 <ItemsControl ItemsSource="{Binding Group.GroupDto.GroupMembers}" Margin="0,8">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" Spacing="5" />
+                            <VirtualizingStackPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <circleImage:CircleImage Size="35" Image="{Binding HeadImage}" />
+                            <circleImage:CircleImage Size="35" Margin="2.5" Image="{Binding HeadImage}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

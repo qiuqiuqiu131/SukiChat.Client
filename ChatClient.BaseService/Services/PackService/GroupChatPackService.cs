@@ -56,8 +56,12 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
         IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatData = mapper.Map<GroupChatData>(groupChat);
-        groupChatData.IsUser = groupChat.UserFromId.Equals(userId);
-        groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+        groupChatData.IsSystem = groupChat.UserFromId.Equals("System");
+        if (!groupChatData.IsSystem)
+        {
+            groupChatData.IsUser = groupChat.UserFromId.Equals(userId);
+            groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+        }
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
@@ -107,8 +111,13 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         foreach (var groupChat in groupChats)
         {
             var data = mapper.Map<GroupChatData>(groupChat);
-            data.IsUser = groupChat.UserFromId.Equals(userId);
-            data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+            data.IsSystem = groupChat.UserFromId.Equals("System");
+            if (!data.IsSystem)
+            {
+                data.IsUser = groupChat.UserFromId.Equals(userId);
+                data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+            }
+
             await chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
                 FileTarget.Group);
             groupChatDatas.Add(data);

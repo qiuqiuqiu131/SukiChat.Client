@@ -107,163 +107,212 @@
                                                         Margin="5"
                                                         Opacity="0.8"
                                                         IsVisible="{Binding ShowTime}"
-                                                        FontSize="12"
+                                                        FontSize="11.5"
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
-                                                    <!-- Left -->
-                                                    <Grid Margin="0,7"
-                                                          RenderTransformOrigin="0%,100%"
-                                                          Classes="FadeIn"
-                                                          IsVisible="{Binding !IsUser}">
-                                                        <DockPanel Margin="0,0,50,0">
-                                                            <!-- Head -->
-                                                            <circleImage:CircleImage
-                                                                DockPanel.Dock="Left"
-                                                                VerticalAlignment="Top"
-                                                                Margin="16,0,8,0"
-                                                                Image="{Binding Owner.HeadImage}"
-                                                                Size="35">
-                                                                <Interaction.Behaviors>
-                                                                    <EventTriggerBehavior
-                                                                        EventName="PointerPressed">
-                                                                        <InvokeCommandAction
-                                                                            Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommand}"
-                                                                            CommandParameter="{Binding}" />
-                                                                    </EventTriggerBehavior>
-                                                                </Interaction.Behaviors>
-                                                            </circleImage:CircleImage>
-                                                            <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                <TextBlock DockPanel.Dock="Top"
-                                                                           HorizontalAlignment="Left"
-                                                                           Text="{Binding Owner.NickName}"
-                                                                           FontSize="11.5"
-                                                                           Padding="0"
-                                                                           Margin="0,0,0,3"
-                                                                           Opacity="0.7" />
-                                                                <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Left">
-                                                                    <suki:GlassCard Classes="Friend"
-                                                                        CornerRadius="6"
-                                                                        MaxWidth="360"
-                                                                        Padding="5">
-                                                                        <suki:GlassCard.Styles>
-                                                                            <Style
-                                                                                Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
-                                                                                <Setter Property="Opacity" Value="0.7" />
-                                                                                <Setter Property="Background"
-                                                                                    Value="{DynamicResource SukiGlassCardBackground}" />
-                                                                            </Style>
-                                                                        </suki:GlassCard.Styles>
-                                                                        <ItemsControl
-                                                                            ItemsSource="{Binding ChatMessages}"
-                                                                            Padding="0"
-                                                                            HorizontalAlignment="Center"
-                                                                            Margin="0">
-                                                                            <ItemsControl.ItemsPanel>
-                                                                                <ItemsPanelTemplate>
-                                                                                    <StackPanel Orientation="Vertical"
-                                                                                        Spacing="5" />
-                                                                                </ItemsPanelTemplate>
-                                                                            </ItemsControl.ItemsPanel>
-                                                                            <ItemsControl.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <chatUi1:ChatMessageView
-                                                                                        IsLeft="True"
-                                                                                        HorizontalAlignment="Left"
-                                                                                        Message="{Binding Content}" />
-                                                                                </DataTemplate>
-                                                                            </ItemsControl.ItemTemplate>
-                                                                        </ItemsControl>
-                                                                    </suki:GlassCard>
-                                                                </StackPanel>
-                                                            </DockPanel>
-                                                        </DockPanel>
+                                                    <Grid IsVisible="{Binding IsSystem}">
+                                                        <ItemsControl
+                                                            Margin="0,5"
+                                                            ItemsSource="{Binding ChatMessages}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                        HorizontalAlignment="Center" />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <ItemsControl
+                                                                        ItemsSource="{Binding ((data:SystemMessDto)Content).Blocks}">
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <StackPanel Orientation="Horizontal"
+                                                                                    HorizontalAlignment="Center" />
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <TextBlock Text="{Binding Text}"
+                                                                                    Opacity="0.7"
+                                                                                    FontSize="12"
+                                                                                    Foreground="{DynamicResource SukiText}">
+                                                                                    <Interaction.Behaviors>
+                                                                                        <DataTriggerBehavior
+                                                                                            Binding="{Binding Bold}"
+                                                                                            Value="True">
+                                                                                            <ChangePropertyAction
+                                                                                                PropertyName="Foreground"
+                                                                                                Value="{DynamicResource SukiPrimaryColor}" />
+                                                                                        </DataTriggerBehavior>
+                                                                                    </Interaction.Behaviors>
+                                                                                </TextBlock>
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
                                                     </Grid>
-                                                    <!-- Right -->
-                                                    <Grid Margin="0,7"
-                                                          RenderTransformOrigin="100%,100%"
-                                                          IsVisible="{Binding IsUser}"
-                                                          Classes="FadeIn">
-                                                        <DockPanel Margin="50,0,0,0">
-                                                            <!-- Head -->
-                                                            <circleImage:CircleImage
-                                                                Margin="8,0,16,0"
-                                                                VerticalAlignment="Top"
-                                                                DockPanel.Dock="Right"
-                                                                Image="{Binding $parent[groupChatUi:GroupChatUI].UserImageSource}"
-                                                                Size="35">
-                                                                <Interaction.Behaviors>
-                                                                    <EventTriggerBehavior
-                                                                        EventName="PointerPressed">
-                                                                        <InvokeCommandAction
-                                                                            Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommnad}"
-                                                                            CommandParameter="{Binding}" />
-                                                                    </EventTriggerBehavior>
-                                                                </Interaction.Behaviors>
-                                                            </circleImage:CircleImage>
-                                                            <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                <TextBlock DockPanel.Dock="Top"
-                                                                           HorizontalAlignment="Right"
-                                                                           Text="{Binding Owner.NickName}"
-                                                                           FontSize="11.5"
-                                                                           Padding="0"
-                                                                           Margin="0,0,0,3"
-                                                                           Opacity="0.7" />
-                                                                <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Right">
-                                                                    <Grid VerticalAlignment="Bottom" Width="20"
-                                                                          Height="20"
-                                                                          Margin="5">
-                                                                        <suki:Loading LoadingStyle="Simple"
-                                                                            IsVisible="{Binding IsWriting}">
-                                                                            <suki:Loading.RenderTransform>
-                                                                                <ScaleTransform ScaleX="0.55"
-                                                                                    ScaleY="0.55" />
-                                                                            </suki:Loading.RenderTransform>
-                                                                        </suki:Loading>
-                                                                        <avalonia:MaterialIcon Kind="AlertCircle"
-                                                                            IsVisible="{Binding IsError}"
-                                                                            Width="20"
-                                                                            Height="20"
-                                                                            Foreground="Red" />
-                                                                    </Grid>
-                                                                    <suki:GlassCard Classes="Owner"
-                                                                        CornerRadius="6"
-                                                                        MaxWidth="350"
-                                                                        Padding="5">
-                                                                        <suki:GlassCard.Styles>
-                                                                            <Style
-                                                                                Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
-                                                                                <Setter Property="Opacity" Value="1" />
-                                                                                <Setter Property="Background"
-                                                                                    Value="{DynamicResource SukiPrimaryColor25}" />
-                                                                            </Style>
-                                                                        </suki:GlassCard.Styles>
-                                                                        <ItemsControl
-                                                                            ItemsSource="{Binding ChatMessages}"
-                                                                            HorizontalAlignment="Center"
-                                                                            Padding="0"
-                                                                            Margin="0">
-                                                                            <ItemsControl.ItemsPanel>
-                                                                                <ItemsPanelTemplate>
-                                                                                    <StackPanel Orientation="Vertical"
-                                                                                        Spacing="5" />
-                                                                                </ItemsPanelTemplate>
-                                                                            </ItemsControl.ItemsPanel>
-                                                                            <ItemsControl.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <chatUi1:ChatMessageView
-                                                                                        IsLeft="False"
-                                                                                        HorizontalAlignment="Right"
-                                                                                        Message="{Binding Content}" />
-                                                                                </DataTemplate>
-                                                                            </ItemsControl.ItemTemplate>
-                                                                        </ItemsControl>
-                                                                    </suki:GlassCard>
-                                                                </StackPanel>
+                                                    <Grid IsVisible="{Binding !IsSystem}">
+                                                        <!-- Left -->
+                                                        <Grid Margin="0,7"
+                                                              RenderTransformOrigin="0%,100%"
+                                                              Classes="FadeIn"
+                                                              IsVisible="{Binding !IsUser}">
+                                                            <DockPanel Margin="0,0,50,0">
+                                                                <!-- Head -->
+                                                                <circleImage:CircleImage
+                                                                    DockPanel.Dock="Left"
+                                                                    VerticalAlignment="Top"
+                                                                    Margin="16,0,8,0"
+                                                                    Image="{Binding Owner.HeadImage}"
+                                                                    Size="35">
+                                                                    <Interaction.Behaviors>
+                                                                        <EventTriggerBehavior
+                                                                            EventName="PointerPressed">
+                                                                            <InvokeCommandAction
+                                                                                Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommand}"
+                                                                                CommandParameter="{Binding}" />
+                                                                        </EventTriggerBehavior>
+                                                                    </Interaction.Behaviors>
+                                                                </circleImage:CircleImage>
+                                                                <DockPanel LastChildFill="True" Margin="0,-5,0,0">
+                                                                    <TextBlock DockPanel.Dock="Top"
+                                                                               HorizontalAlignment="Left"
+                                                                               Text="{Binding Owner.NickName}"
+                                                                               FontSize="11.5"
+                                                                               Padding="0"
+                                                                               Margin="0,0,0,3"
+                                                                               Opacity="0.7" />
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                        HorizontalAlignment="Left">
+                                                                        <suki:GlassCard Classes="Friend"
+                                                                            CornerRadius="6"
+                                                                            MaxWidth="360"
+                                                                            Padding="5">
+                                                                            <suki:GlassCard.Styles>
+                                                                                <Style
+                                                                                    Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
+                                                                                    <Setter Property="Opacity"
+                                                                                        Value="0.7" />
+                                                                                    <Setter Property="Background"
+                                                                                        Value="{DynamicResource SukiGlassCardBackground}" />
+                                                                                </Style>
+                                                                            </suki:GlassCard.Styles>
+                                                                            <ItemsControl
+                                                                                ItemsSource="{Binding ChatMessages}"
+                                                                                Padding="0"
+                                                                                HorizontalAlignment="Center"
+                                                                                Margin="0">
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Vertical"
+                                                                                            Spacing="5" />
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+                                                                                <ItemsControl.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <chatUi1:ChatMessageView
+                                                                                            IsLeft="True"
+                                                                                            HorizontalAlignment="Left"
+                                                                                            Message="{Binding Content}" />
+                                                                                    </DataTemplate>
+                                                                                </ItemsControl.ItemTemplate>
+                                                                            </ItemsControl>
+                                                                        </suki:GlassCard>
+                                                                    </StackPanel>
+                                                                </DockPanel>
                                                             </DockPanel>
-                                                        </DockPanel>
+                                                        </Grid>
+                                                        <!-- Right -->
+                                                        <Grid Margin="0,7"
+                                                              RenderTransformOrigin="100%,100%"
+                                                              IsVisible="{Binding IsUser}"
+                                                              Classes="FadeIn">
+                                                            <DockPanel Margin="50,0,0,0">
+                                                                <!-- Head -->
+                                                                <circleImage:CircleImage
+                                                                    Margin="8,0,16,0"
+                                                                    VerticalAlignment="Top"
+                                                                    DockPanel.Dock="Right"
+                                                                    Image="{Binding $parent[groupChatUi:GroupChatUI].UserImageSource}"
+                                                                    Size="35">
+                                                                    <Interaction.Behaviors>
+                                                                        <EventTriggerBehavior
+                                                                            EventName="PointerPressed">
+                                                                            <InvokeCommandAction
+                                                                                Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommnad}"
+                                                                                CommandParameter="{Binding}" />
+                                                                        </EventTriggerBehavior>
+                                                                    </Interaction.Behaviors>
+                                                                </circleImage:CircleImage>
+                                                                <DockPanel LastChildFill="True" Margin="0,-5,0,0">
+                                                                    <TextBlock DockPanel.Dock="Top"
+                                                                               HorizontalAlignment="Right"
+                                                                               Text="{Binding Owner.NickName}"
+                                                                               FontSize="11.5"
+                                                                               Padding="0"
+                                                                               Margin="0,0,0,3"
+                                                                               Opacity="0.7" />
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                        HorizontalAlignment="Right">
+                                                                        <Grid VerticalAlignment="Bottom" Width="20"
+                                                                              Height="20"
+                                                                              Margin="5">
+                                                                            <suki:Loading LoadingStyle="Simple"
+                                                                                IsVisible="{Binding IsWriting}">
+                                                                                <suki:Loading.RenderTransform>
+                                                                                    <ScaleTransform ScaleX="0.55"
+                                                                                        ScaleY="0.55" />
+                                                                                </suki:Loading.RenderTransform>
+                                                                            </suki:Loading>
+                                                                            <avalonia:MaterialIcon Kind="AlertCircle"
+                                                                                IsVisible="{Binding IsError}"
+                                                                                Width="20"
+                                                                                Height="20"
+                                                                                Foreground="Red" />
+                                                                        </Grid>
+                                                                        <suki:GlassCard Classes="Owner"
+                                                                            CornerRadius="6"
+                                                                            MaxWidth="350"
+                                                                            Padding="5">
+                                                                            <suki:GlassCard.Styles>
+                                                                                <Style
+                                                                                    Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
+                                                                                    <Setter Property="Opacity"
+                                                                                        Value="1" />
+                                                                                    <Setter Property="Background"
+                                                                                        Value="{DynamicResource SukiPrimaryColor25}" />
+                                                                                </Style>
+                                                                            </suki:GlassCard.Styles>
+                                                                            <ItemsControl
+                                                                                ItemsSource="{Binding ChatMessages}"
+                                                                                HorizontalAlignment="Center"
+                                                                                Padding="0"
+                                                                                Margin="0">
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Vertical"
+                                                                                            Spacing="5" />
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+                                                                                <ItemsControl.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <chatUi1:ChatMessageView
+                                                                                            IsLeft="False"
+                                                                                            HorizontalAlignment="Right"
+                                                                                            Message="{Binding Content}" />
+                                                                                    </DataTemplate>
+                                                                                </ItemsControl.ItemTemplate>
+                                                                            </ItemsControl>
+                                                                        </suki:GlassCard>
+                                                                    </StackPanel>
+                                                                </DockPanel>
+                                                            </DockPanel>
+                                                        </Grid>
                                                     </Grid>
                                                 </StackPanel>
                                             </Grid>

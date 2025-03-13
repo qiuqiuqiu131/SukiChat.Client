@@ -52,7 +52,7 @@ internal class FriendMessageHandler : MessageHandlerBase
         var _userDtoManager = scope.Resolve<IUserDtoManager>();
         FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
         friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
-        _userManager.FriendReceives?.Add(friendReceived);
+        _userManager.FriendReceives?.Insert(0,friendReceived);
 
         var _unitOfWork = scope.Resolve<IUnitOfWork>();
         var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();

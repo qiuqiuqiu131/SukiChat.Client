@@ -23,6 +23,7 @@
     CanMaximize="False"
     CanMinimize="False"
     CanMove="True"
+    TitleBarAnimationEnabled="False"
     CanResize="False"
     WindowStartupLocation="CenterOwner"
     Icon="/Assets/ChartDonutVariant.ico"

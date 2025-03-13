@@ -12,4 +12,6 @@
 	<assembly fullname="ChatClient.DataBase" preserve="All"/>
 	<assembly fullname="ChatClient.BaseService" preserve="All"/>
 	<assembly fullname="ChatClient.Client" preserve="All"/>
+	<assembly fullname="ChatClient.Resources" preserve="All"/>
+	<assembly fullname="ChatClient.Desktop" preserve="All"/>
 </linker>

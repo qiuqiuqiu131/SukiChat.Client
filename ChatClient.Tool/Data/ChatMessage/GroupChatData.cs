@@ -14,6 +14,14 @@ public class GroupChatData : BindableBase
         set => SetProperty(ref _showTime, value);
     }
 
+    private bool isSystem;
+
+    public bool IsSystem
+    {
+        get => isSystem;
+        set => SetProperty(ref isSystem, value);
+    }
+
     private int _chatId;
 
     public int ChatId

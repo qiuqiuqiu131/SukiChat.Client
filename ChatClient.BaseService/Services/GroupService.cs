@@ -270,7 +270,7 @@ public class GroupService : BaseService, IGroupService
             var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
             var groupRequestDto = _mapper.Map<GroupRequestDto>(groupRequest);
             groupRequestDto.GroupDto = await userDtoManager.GetGroupDto(userId, groupId);
-            userManager.GroupRequests?.Add(groupRequestDto);
+            userManager.GroupRequests?.Insert(0,groupRequestDto);
         }
 
         return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<TrimMode>copyused</TrimMode>
-		<PublishAot>false</PublishAot>	
+		<PublishAot>false</PublishAot>
 		<InvariantGlobalization>true</InvariantGlobalization>
 		<StripSymbols>true</StripSymbols>
     </PropertyGroup>

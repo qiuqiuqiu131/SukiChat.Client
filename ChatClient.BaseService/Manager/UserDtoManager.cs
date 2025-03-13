@@ -195,6 +195,8 @@ public class UserDtoManager : IUserDtoManager
 
     public async Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId)
     {
+        if (memberId.Equals("System")) return null;
+
         var key = groupId + memberId;
         if (_groupMemberDtos.TryGetValue(key, out var cachedGroupMember))
             return cachedGroupMember;

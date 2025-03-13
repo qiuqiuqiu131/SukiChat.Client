@@ -77,7 +77,7 @@ internal class FriendService : BaseService, IFriendService
         var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
         var dto = _mapper.Map<FriendRequestDto>(friendRequest);
         dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
-        userManager.FriendRequests.Add(dto);
+        userManager.FriendRequests.Insert(0,dto);
 
         return (true, result.Response.Message);
     }

@@ -39,15 +39,19 @@ namespace ChatServer.Common.Protobuf {
             "b25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1v",
             "blJlc3BvbnNlEgoKAmlkGAIgASgFEgwKBHRpbWUYAyABKAkiUwoURnJpZW5k",
             "V3JpdGluZ01lc3NhZ2USEgoKdXNlckZyb21JZBgBIAEoCRIUCgx1c2VyVGFy",
-            "Z2V0SWQYAiABKAkSEQoJaXNXcml0aW5nGAMgASgIIsgBCgtDaGF0TWVzc2Fn",
+            "Z2V0SWQYAiABKAkSEQoJaXNXcml0aW5nGAMgASgIIowCCgtDaGF0TWVzc2Fn",
             "ZRI4Cgh0ZXh0TWVzcxgBIAEoCzIkLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
             "YnVmLlRleHRNZXNzSAASOgoJaW1hZ2VNZXNzGAIgASgLMiUuQ2hhdFNlcnZl",
             "ci5Db21tb24uUHJvdG9idWYuSW1hZ2VNZXNzSAASOAoIZmlsZU1lc3MYAyAB",
-            "KAsyJC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GaWxlTWVzc0gAQgkK",
-            "B2NvbnRlbnQiGAoIVGV4dE1lc3MSDAoEdGV4dBgBIAEoCSIvCglJbWFnZU1l",
-            "c3MSEAoIZmlsZVBhdGgYASABKAkSEAoIZmlsZVNpemUYAiABKAUiQAoIRmls",
-            "ZU1lc3MSEAoIZmlsZU5hbWUYASABKAkSEAoIZmlsZVNpemUYAiABKAUSEAoI",
-            "ZmlsZVR5cGUYAyABKAliBnByb3RvMw=="));
+            "KAsyJC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GaWxlTWVzc0gAEkIK",
+            "DXN5c3RlbU1lc3NhZ2UYBCABKAsyKS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90",
+            "b2J1Zi5TeXN0ZW1NZXNzYWdlSABCCQoHY29udGVudCIYCghUZXh0TWVzcxIM",
+            "CgR0ZXh0GAEgASgJIi8KCUltYWdlTWVzcxIQCghmaWxlUGF0aBgBIAEoCRIQ",
+            "CghmaWxlU2l6ZRgCIAEoBSJACghGaWxlTWVzcxIQCghmaWxlTmFtZRgBIAEo",
+            "CRIQCghmaWxlU2l6ZRgCIAEoBRIQCghmaWxlVHlwZRgDIAEoCSJPCg1TeXN0",
+            "ZW1NZXNzYWdlEj4KBmJsb2NrcxgBIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9u",
+            "LlByb3RvYnVmLlN5c3RlbU1lc3NhZ2VCbG9jayIwChJTeXN0ZW1NZXNzYWdl",
+            "QmxvY2sSDAoEdGV4dBgBIAEoCRIMCgRib2xkGAIgASgIYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -56,10 +60,12 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessage), global::ChatServer.Common.Protobuf.GroupChatMessage.Parser, new[]{ "UserFromId", "GroupId", "Time", "Messages", "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessageResponse), global::ChatServer.Common.Protobuf.GroupChatMessageResponse.Parser, new[]{ "Response", "Id", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendWritingMessage), global::ChatServer.Common.Protobuf.FriendWritingMessage.Parser, new[]{ "UserFromId", "UserTargetId", "IsWriting" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatMessage), global::ChatServer.Common.Protobuf.ChatMessage.Parser, new[]{ "TextMess", "ImageMess", "FileMess" }, new[]{ "Content" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatMessage), global::ChatServer.Common.Protobuf.ChatMessage.Parser, new[]{ "TextMess", "ImageMess", "FileMess", "SystemMessage" }, new[]{ "Content" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.TextMess), global::ChatServer.Common.Protobuf.TextMess.Parser, new[]{ "Text" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ImageMess), global::ChatServer.Common.Protobuf.ImageMess.Parser, new[]{ "FilePath", "FileSize" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FileMess), global::ChatServer.Common.Protobuf.FileMess.Parser, new[]{ "FileName", "FileSize", "FileType" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FileMess), global::ChatServer.Common.Protobuf.FileMess.Parser, new[]{ "FileName", "FileSize", "FileType" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessage), global::ChatServer.Common.Protobuf.SystemMessage.Parser, new[]{ "Blocks" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessageBlock), global::ChatServer.Common.Protobuf.SystemMessageBlock.Parser, new[]{ "Text", "Bold" }, null, null, null, null)
           }));
     }
     #endregion
@@ -1152,6 +1158,9 @@ namespace ChatServer.Common.Protobuf {
         case ContentOneofCase.FileMess:
           FileMess = other.FileMess.Clone();
           break;
+        case ContentOneofCase.SystemMessage:
+          SystemMessage = other.SystemMessage.Clone();
+          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1195,6 +1204,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "systemMessage" field.</summary>
+    public const int SystemMessageFieldNumber = 4;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.SystemMessage SystemMessage {
+      get { return contentCase_ == ContentOneofCase.SystemMessage ? (global::ChatServer.Common.Protobuf.SystemMessage) content_ : null; }
+      set {
+        content_ = value;
+        contentCase_ = value == null ? ContentOneofCase.None : ContentOneofCase.SystemMessage;
+      }
+    }
+
     private object content_;
     /// <summary>Enum of possible cases for the "content" oneof.</summary>
     public enum ContentOneofCase {
@@ -1202,6 +1222,7 @@ namespace ChatServer.Common.Protobuf {
       TextMess = 1,
       ImageMess = 2,
       FileMess = 3,
+      SystemMessage = 4,
     }
     private ContentOneofCase contentCase_ = ContentOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1231,6 +1252,7 @@ namespace ChatServer.Common.Protobuf {
       if (!object.Equals(TextMess, other.TextMess)) return false;
       if (!object.Equals(ImageMess, other.ImageMess)) return false;
       if (!object.Equals(FileMess, other.FileMess)) return false;
+      if (!object.Equals(SystemMessage, other.SystemMessage)) return false;
       if (ContentCase != other.ContentCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1241,6 +1263,7 @@ namespace ChatServer.Common.Protobuf {
       if (contentCase_ == ContentOneofCase.TextMess) hash ^= TextMess.GetHashCode();
       if (contentCase_ == ContentOneofCase.ImageMess) hash ^= ImageMess.GetHashCode();
       if (contentCase_ == ContentOneofCase.FileMess) hash ^= FileMess.GetHashCode();
+      if (contentCase_ == ContentOneofCase.SystemMessage) hash ^= SystemMessage.GetHashCode();
       hash ^= (int) contentCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1267,6 +1290,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(26);
         output.WriteMessage(FileMess);
       }
+      if (contentCase_ == ContentOneofCase.SystemMessage) {
+        output.WriteRawTag(34);
+        output.WriteMessage(SystemMessage);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1283,6 +1310,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (contentCase_ == ContentOneofCase.FileMess) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(FileMess);
+      }
+      if (contentCase_ == ContentOneofCase.SystemMessage) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(SystemMessage);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1313,6 +1343,12 @@ namespace ChatServer.Common.Protobuf {
             FileMess = new global::ChatServer.Common.Protobuf.FileMess();
           }
           FileMess.MergeFrom(other.FileMess);
+          break;
+        case ContentOneofCase.SystemMessage:
+          if (SystemMessage == null) {
+            SystemMessage = new global::ChatServer.Common.Protobuf.SystemMessage();
+          }
+          SystemMessage.MergeFrom(other.SystemMessage);
           break;
       }
 
@@ -1352,6 +1388,15 @@ namespace ChatServer.Common.Protobuf {
             }
             input.ReadMessage(subBuilder);
             FileMess = subBuilder;
+            break;
+          }
+          case 34: {
+            global::ChatServer.Common.Protobuf.SystemMessage subBuilder = new global::ChatServer.Common.Protobuf.SystemMessage();
+            if (contentCase_ == ContentOneofCase.SystemMessage) {
+              subBuilder.MergeFrom(SystemMessage);
+            }
+            input.ReadMessage(subBuilder);
+            SystemMessage = subBuilder;
             break;
           }
         }
@@ -1832,6 +1877,287 @@ namespace ChatServer.Common.Protobuf {
           }
           case 26: {
             FileType = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 系统消息
+  /// </summary>
+  public sealed partial class SystemMessage : pb::IMessage<SystemMessage> {
+    private static readonly pb::MessageParser<SystemMessage> _parser = new pb::MessageParser<SystemMessage>(() => new SystemMessage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<SystemMessage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessage(SystemMessage other) : this() {
+      blocks_ = other.blocks_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessage Clone() {
+      return new SystemMessage(this);
+    }
+
+    /// <summary>Field number for the "blocks" field.</summary>
+    public const int BlocksFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.SystemMessageBlock> _repeated_blocks_codec
+        = pb::FieldCodec.ForMessage(10, global::ChatServer.Common.Protobuf.SystemMessageBlock.Parser);
+    private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.SystemMessageBlock> blocks_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.SystemMessageBlock>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::ChatServer.Common.Protobuf.SystemMessageBlock> Blocks {
+      get { return blocks_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as SystemMessage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(SystemMessage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if(!blocks_.Equals(other.blocks_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      hash ^= blocks_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      blocks_.WriteTo(output, _repeated_blocks_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      size += blocks_.CalculateSize(_repeated_blocks_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(SystemMessage other) {
+      if (other == null) {
+        return;
+      }
+      blocks_.Add(other.blocks_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            blocks_.AddEntriesFrom(input, _repeated_blocks_codec);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class SystemMessageBlock : pb::IMessage<SystemMessageBlock> {
+    private static readonly pb::MessageParser<SystemMessageBlock> _parser = new pb::MessageParser<SystemMessageBlock>(() => new SystemMessageBlock());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<SystemMessageBlock> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[10]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessageBlock() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessageBlock(SystemMessageBlock other) : this() {
+      text_ = other.text_;
+      bold_ = other.bold_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public SystemMessageBlock Clone() {
+      return new SystemMessageBlock(this);
+    }
+
+    /// <summary>Field number for the "text" field.</summary>
+    public const int TextFieldNumber = 1;
+    private string text_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string Text {
+      get { return text_; }
+      set {
+        text_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "bold" field.</summary>
+    public const int BoldFieldNumber = 2;
+    private bool bold_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Bold {
+      get { return bold_; }
+      set {
+        bold_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as SystemMessageBlock);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(SystemMessageBlock other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Text != other.Text) return false;
+      if (Bold != other.Bold) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Text.Length != 0) hash ^= Text.GetHashCode();
+      if (Bold != false) hash ^= Bold.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Text.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Text);
+      }
+      if (Bold != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(Bold);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Text.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Text);
+      }
+      if (Bold != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(SystemMessageBlock other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Text.Length != 0) {
+        Text = other.Text;
+      }
+      if (other.Bold != false) {
+        Bold = other.Bold;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Text = input.ReadString();
+            break;
+          }
+          case 16: {
+            Bold = input.ReadBool();
             break;
           }
         }

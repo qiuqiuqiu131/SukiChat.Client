@@ -24,6 +24,7 @@
     CanMinimize="False"
     CanMove="True"
     CanResize="False"
+    TitleBarAnimationEnabled="False"
     Icon="/Assets/ChartDonutVariant.ico"
     ShowBottomBorder="False"
     ShowTitlebarBackground="False"

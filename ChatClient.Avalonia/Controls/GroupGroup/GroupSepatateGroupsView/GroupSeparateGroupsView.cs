@@ -16,7 +16,7 @@ namespace ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;
 public class GroupSeparateGroupsView : UserControl
 {
     public static readonly StyledProperty<AvaloniaList<GroupGroupDto>> GroupFriendsProperty =
-        AvaloniaProperty.Register<SeparateGroupsView, AvaloniaList<GroupGroupDto>>(nameof(GroupFriends));
+        AvaloniaProperty.Register<GroupSeparateGroupsView, AvaloniaList<GroupGroupDto>>(nameof(GroupFriends));
 
     public AvaloniaList<GroupGroupDto> GroupFriends
     {
@@ -24,8 +24,19 @@ public class GroupSeparateGroupsView : UserControl
         set => SetValue(GroupFriendsProperty, value);
     }
 
+    public static readonly RoutedEvent<SelectionChangedEventArgs> SelectionChangedEvent =
+        RoutedEvent.Register<GroupSeparateGroupsView, SelectionChangedEventArgs>(
+            nameof(SelectionChanged),
+            RoutingStrategies.Bubble);
+
+    public event EventHandler<SelectionChangedEventArgs> SelectionChanged
+    {
+        add => AddHandler(SelectionChangedEvent, value);
+        remove => RemoveHandler(SelectionChangedEvent, value);
+    }
+
     public static readonly StyledProperty<ICommand> SelectionChangedCommandProperty =
-        AvaloniaProperty.Register<SeparateGroupsView, ICommand>(
+        AvaloniaProperty.Register<GroupSeparateGroupsView, ICommand>(
             nameof(SelectionChangedCommand));
 
     public ICommand SelectionChangedCommand
@@ -54,14 +65,6 @@ public class GroupSeparateGroupsView : UserControl
             RemoveAllControl();
             InitGroupFriendControl(GroupFriends);
         }
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        foreach (var items in _itemCollection)
-            if (items is GroupGroupList.GroupGroupList groupItem)
-                groupItem.SelectedItem = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -110,6 +113,7 @@ public class GroupSeparateGroupsView : UserControl
     // GroupFriend 内容发生改变后调用，用于实时更新_itemCollection的控件
     private void OnGroupFriendsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
+        if (!Inited) return;
         Dispatcher.UIThread.Invoke(() =>
         {
             if (args.Action == NotifyCollectionChangedAction.Add)
@@ -151,16 +155,26 @@ public class GroupSeparateGroupsView : UserControl
     // 当权重
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs args)
     {
-        if (sender is GroupList.GroupList groupList)
+        if (sender is GroupGroupList.GroupGroupList groupList)
         {
             foreach (var items in _itemCollection)
             {
-                if (items is GroupList.GroupList groupItem)
+                if (items is GroupGroupList.GroupGroupList groupItem)
                 {
                     if (groupList == groupItem) continue;
                     groupItem.SelectedItem = null;
                 }
             }
         }
+
+        RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, args.RemovedItems, args.AddedItems));
+    }
+
+    public void ClearAllSelected()
+    {
+        if (!Inited) return;
+        foreach (var items in _itemCollection)
+            if (items is GroupGroupList.GroupGroupList groupItem)
+                groupItem.SelectedItem = null;
     }
 }

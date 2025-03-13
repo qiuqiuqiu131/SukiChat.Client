@@ -136,7 +136,7 @@ internal class GroupMessageHandler : MessageHandlerBase
         GroupReceivedDto groupReceivedDto = _mapper.Map<GroupReceivedDto>(message);
         groupReceivedDto.UserDto = await _userDtoManager.GetUserDto(message.UserId);
         groupReceivedDto.GroupDto = await _userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
-        _userManager.GroupReceiveds?.Add(groupReceivedDto);
+        _userManager.GroupReceiveds?.Insert(0, groupReceivedDto);
 
         var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
         var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
@@ -164,6 +164,7 @@ internal class GroupMessageHandler : MessageHandlerBase
         JoinGroupResponseFromServer message)
     {
         var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        // 更新groupRequest表
         var requestRepository = _unitOfWork.GetRepository<GroupRequest>();
         var result = await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
             d.RequestId.Equals(message.RequestId), disableTracking: false);
@@ -174,6 +175,23 @@ internal class GroupMessageHandler : MessageHandlerBase
         result.SolveTime = DateTime.Parse(message.Time);
         await _unitOfWork.SaveChangesAsync();
 
+        // 更新groupRelation表
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        if (message.Accept)
+        {
+            var groupRelation = new GroupRelation
+            {
+                GroupId = result.GroupId,
+                UserId = result.UserFromId,
+                Status = 2,
+                JoinTime = DateTime.Now,
+                Grouping = "默认分组"
+            };
+            await groupRelationRepository.InsertAsync(groupRelation);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        // 更新UI
         var dto = _userManager.GroupRequests.FirstOrDefault(d => d.RequestId == message.RequestId);
         if (dto != null)
         {
@@ -182,6 +200,10 @@ internal class GroupMessageHandler : MessageHandlerBase
             dto.SolveTime = DateTime.Parse(message.Time);
             dto.AcceptByUserId = message.UserIdFrom;
         }
+
+        // 加入群聊
+        if (dto?.IsAccept ?? false)
+            await _userManager.NewGroupReceive(dto.GroupId);
     }
 
     /// <summary>

@@ -29,6 +29,15 @@ public class ChatMessageToStringConverter : IValueConverter
                     case ChatMessage.ContentOneofCase.FileMess:
                         sb.Append("[文件]");
                         break;
+                    case ChatMessage.ContentOneofCase.SystemMessage:
+                        SystemMessDto systemMessDto = (SystemMessDto)chatMessage.Content;
+                        foreach (var block in systemMessDto.Blocks)
+                        {
+                            sb.Append(block.Text);
+                            sb.Append(" ");
+                        }
+
+                        break;
                 }
             }
 

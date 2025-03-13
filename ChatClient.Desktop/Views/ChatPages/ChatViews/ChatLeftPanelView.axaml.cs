@@ -125,18 +125,27 @@ public partial class ChatLeftPanelView : UserControl
                 {
                     foreach (var newItem in e.NewItems)
                     {
-                        var control = newItem switch
+                        if (newItem is FriendChatDto friendChat)
                         {
-                            FriendChatDto friendChat => DataTemplates[0]?.Build(friendChat),
-                            GroupChatDto groupChat => DataTemplates[1]?.Build(groupChat),
-                            _ => null
-                        };
-
-                        if (control != null)
+                            friendChat.OnLastChatMessagesChanged += SortItemControl;
+                            var control = DataTemplates[0]?.Build(friendChat);
+                            if (control != null)
+                            {
+                                control.DataContext = newItem;
+                                int index = FindInsertIndex(newItem);
+                                _itemCollection.Insert(index, control);
+                            }
+                        }
+                        else if (newItem is GroupChatDto groupChat)
                         {
-                            control.DataContext = newItem;
-                            int index = FindInsertIndex(newItem);
-                            _itemCollection.Insert(index, control);
+                            groupChat.OnLastChatMessagesChanged += SortItemControl;
+                            var control = DataTemplates[1]?.Build(groupChat);
+                            if (control != null)
+                            {
+                                control.DataContext = newItem;
+                                int index = FindInsertIndex(newItem);
+                                _itemCollection.Insert(index, control);
+                            }
                         }
                     }
                 }
@@ -151,6 +160,16 @@ public partial class ChatLeftPanelView : UserControl
                         if (control != null)
                         {
                             _itemCollection.Remove(control);
+                            var dt = ((Control)control).DataContext;
+                            if (dt is FriendChatDto friendChat)
+                            {
+                                friendChat.OnLastChatMessagesChanged -= SortItemControl;
+                            }
+                            else if (dt is GroupChatDto groupChat)
+                            {
+                                groupChat.OnLastChatMessagesChanged -= SortItemControl;
+                            }
+
                             ((Control)control).DataContext = null;
                         }
                     }

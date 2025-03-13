@@ -113,9 +113,13 @@ internal class ChatMessageHandler : MessageHandlerBase
             Time = DateTime.Parse(message.Time),
             IsWriting = false,
             IsUser = false,
-            Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId),
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(message.Messages)
         };
+        if (message.UserFromId.Equals("System"))
+            chatData.IsSystem = true;
+        else
+            chatData.Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
+
         // 注入消息资源
         var chatService = scopedprovider.Resolve<IChatService>();
         _ = chatService.OperateChatMessage(message.GroupId, chatData.ChatId, chatData.ChatMessages,

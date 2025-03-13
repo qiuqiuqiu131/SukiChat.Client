@@ -20,4 +20,20 @@ public partial class ContactsView : UserControl
     {
         PART_AddPop.IsOpen = !PART_AddPop.IsOpen;
     }
+
+    private void FriendSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        GroupView.ClearAllSelected();
+    }
+
+    private void GroupSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        FriendView.ClearAllSelected();
+    }
+
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
+    {
+        GroupView.ClearAllSelected();
+        FriendView.ClearAllSelected();
+    }
 }

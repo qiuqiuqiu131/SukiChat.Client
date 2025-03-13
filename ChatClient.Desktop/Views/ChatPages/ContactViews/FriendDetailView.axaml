@@ -21,7 +21,7 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <DockPanel LastChildFill="True" Margin="70,70,70,0">
+    <DockPanel LastChildFill="True" Margin="85,85,85,15">
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Spacing="15">
                 <Panel

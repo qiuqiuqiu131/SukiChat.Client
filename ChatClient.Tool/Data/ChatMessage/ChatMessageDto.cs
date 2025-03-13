@@ -66,3 +66,14 @@ public class FileMessDto : BindableBase
 
     #endregion
 }
+
+public class SystemMessDto : BindableBase
+{
+    public List<SystemMessBlockDto> Blocks { get; set; } = new();
+}
+
+public class SystemMessBlockDto
+{
+    public string Text { get; set; }
+    public bool Bold { get; set; }
+}

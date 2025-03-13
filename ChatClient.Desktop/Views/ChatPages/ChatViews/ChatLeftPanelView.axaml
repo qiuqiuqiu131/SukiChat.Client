@@ -145,19 +145,31 @@
                                        FontSize="11.5" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
-                            <TextBlock Grid.Column="0"
-                                       Name="Chat_Mess_Txt"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Margin="0,0,20,0"
-                                       LetterSpacing="0.5"
-                                       TextTrimming="CharacterEllipsis"
-                                       Foreground="{DynamicResource SukiText}">
-                                <Run Text="{Binding LastChatMessages.Owner.NickName}" />
-                                <Run Text=": " />
-                                <Run
-                                    Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
-                            </TextBlock>
+                            <Grid Grid.Column="0"
+                                  IsVisible="{Binding LastChatMessages,Converter={converter:NullValueConverter}}">
+                                <TextBlock IsVisible="{Binding !LastChatMessages.IsSystem}"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Margin="0,0,20,0"
+                                           LetterSpacing="0.5"
+                                           TextTrimming="CharacterEllipsis"
+                                           Foreground="{DynamicResource SukiText}">
+                                    <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                    <Run Text=": " />
+                                    <Run
+                                        Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
+                                </TextBlock>
+                                <TextBlock IsVisible="{Binding LastChatMessages.IsSystem}"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Margin="0,0,20,0"
+                                           LetterSpacing="0.5"
+                                           TextTrimming="CharacterEllipsis"
+                                           Foreground="{DynamicResource SukiText}">
+                                    <Run
+                                        Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
+                                </TextBlock>
+                            </Grid>
                             <Border Grid.Column="1"
                                     Height="16"
                                     CornerRadius="8"

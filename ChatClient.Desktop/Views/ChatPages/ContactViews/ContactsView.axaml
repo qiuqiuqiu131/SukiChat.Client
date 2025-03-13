@@ -171,6 +171,7 @@
                     <Button Classes="Chat"
                             Margin="0"
                             HorizontalContentAlignment="Stretch"
+                            Click="Button_OnClick"
                             Padding="20,7"
                             Command="{Binding ToFriendRequestViewCommand}">
                         <Grid>
@@ -191,6 +192,7 @@
                             Margin="0"
                             Padding="20,7"
                             HorizontalContentAlignment="Stretch"
+                            Click="Button_OnClick"
                             Command="{Binding ToGroupRequestViewCommand}">
                         <Grid>
                             <PathIcon HorizontalAlignment="Right"
@@ -213,11 +215,15 @@
                             </ItemsPanelTemplate>
                         </TabControl.ItemsPanel>
                         <TabItem Header="好友">
-                            <seperateGroupsView:SeparateGroupsView GroupFriends="{Binding GroupFriends}"
+                            <seperateGroupsView:SeparateGroupsView x:Name="FriendView"
+                                                                   GroupFriends="{Binding GroupFriends}"
+                                                                   SelectionChanged="FriendSelectionChanged"
                                                                    SelectionChangedCommand="{Binding SelectedChangedCommand}" />
                         </TabItem>
                         <TabItem Header="群聊">
-                            <groupSepatateGroupsView:GroupSeparateGroupsView GroupFriends="{Binding GroupGroups}"
+                            <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
+                                                                             GroupFriends="{Binding GroupGroups}"
+                                                                             SelectionChanged="GroupSelectionChanged"
                                                                              SelectionChangedCommand="{Binding SelectedChangedCommand}" />
                         </TabItem>
                     </TabControl>

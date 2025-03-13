@@ -5,6 +5,7 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
 using DryIoc.ImTools;
+using Google.Protobuf.Collections;
 
 namespace ChatClient.BaseService.Mapper;
 
@@ -87,11 +88,16 @@ internal class ProtoToDtoProfile : Profile
                     case ChatMessage.ContentOneofCase.ImageMess:
                         dest.ImageMess = context.Mapper.Map<ImageMess>((ImageMessDto)src.Content);
                         break;
+                    case ChatMessage.ContentOneofCase.SystemMessage:
+                        dest.SystemMessage = context.Mapper.Map<SystemMessage>((SystemMessDto)src.Content);
+                        break;
                 }
             });
 
         CreateMap<TextMess, TextMessDto>().ReverseMap();
         CreateMap<ImageMess, ImageMessDto>().ReverseMap();
         CreateMap<FileMess, FileMessDto>().ReverseMap();
+        CreateMap<SystemMessage, SystemMessDto>().ReverseMap();
+        CreateMap<SystemMessBlockDto, SystemMessageBlock>().ReverseMap();
     }
 }

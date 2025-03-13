@@ -22,6 +22,17 @@ public class SeparateGroupsView : UserControl
         set => SetValue(GroupFriendsProperty, value);
     }
 
+    public static readonly RoutedEvent<SelectionChangedEventArgs> SelectionChangedEvent =
+        RoutedEvent.Register<SeparateGroupsView, SelectionChangedEventArgs>(
+            nameof(SelectionChanged),
+            RoutingStrategies.Bubble);
+
+    public event EventHandler<SelectionChangedEventArgs> SelectionChanged
+    {
+        add => AddHandler(SelectionChangedEvent, value);
+        remove => RemoveHandler(SelectionChangedEvent, value);
+    }
+
     public static readonly StyledProperty<ICommand> SelectionChangedCommandProperty =
         AvaloniaProperty.Register<SeparateGroupsView, ICommand>(
             nameof(SelectionChangedCommand));
@@ -52,14 +63,6 @@ public class SeparateGroupsView : UserControl
             RemoveAllControl();
             InitGroupFriendControl(GroupFriends);
         }
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-        foreach (var items in _itemCollection)
-            if (items is GroupList.GroupList groupItem)
-                groupItem.SelectedItem = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -108,6 +111,7 @@ public class SeparateGroupsView : UserControl
     // GroupFriend 内容发生改变后调用，用于实时更新_itemCollection的控件
     private void OnGroupFriendsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
+        if (!Inited) return;
         Dispatcher.UIThread.Invoke(() =>
         {
             if (args.Action == NotifyCollectionChangedAction.Add)
@@ -160,5 +164,15 @@ public class SeparateGroupsView : UserControl
                 }
             }
         }
+
+        RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, args.RemovedItems, args.AddedItems));
+    }
+
+    public void ClearAllSelected()
+    {
+        if (!Inited) return;
+        foreach (var items in _itemCollection)
+            if (items is GroupList.GroupList groupItem)
+                groupItem.SelectedItem = null;
     }
 }
