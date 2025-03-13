@@ -26,16 +26,13 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     private readonly IUserDtoManager _userDtoManager;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IFileOperateHelper _fileOperateHelper;
 
     public GroupChatPackService(IContainerProvider containerProvider,
         IUserDtoManager userDtoManager,
-        IMapper mapper,
-        IFileOperateHelper fileOperateHelper) : base(containerProvider)
+        IMapper mapper) : base(containerProvider)
     {
         _userDtoManager = userDtoManager;
         _mapper = mapper;
-        _fileOperateHelper = fileOperateHelper;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
@@ -49,23 +46,24 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         var groupChatDto = new GroupChatDto();
         groupChatDto.GroupId = groupId;
-        groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
+        _ = Task.Run(async () =>
+            groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId));
 
         if (groupChat == null)
             return groupChatDto;
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
-        IGroupService groupService = _scopedProvider.Resolve<IGroupService>();
         var groupChatData = mapper.Map<GroupChatData>(groupChat);
         groupChatData.IsSystem = groupChat.UserFromId.Equals("System");
         if (!groupChatData.IsSystem)
         {
             groupChatData.IsUser = groupChat.UserFromId.Equals(userId);
-            groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+            _ = Task.Run(async () =>
+                groupChatData.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId));
         }
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
-        await chatService.OperateChatMessage(groupChat.GroupId, groupChatData.ChatId, groupChatData.ChatMessages,
+        _ = chatService.OperateChatMessage(groupChat.GroupId, groupChatData.ChatId, groupChatData.ChatMessages,
             FileTarget.Group);
 
         groupChatDto.ChatMessages.Add(groupChatData);
@@ -80,9 +78,11 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         var groupService = _scopedProvider.Resolve<IGroupService>();
         var groupIds = await groupService.GetGroupIds(userId);
 
-        // 获取好友的聊天记录
-        foreach (var friendId in groupIds)
-            result.Add(await GetGroupChatDto(userId, friendId));
+        foreach (var groupId in groupIds)
+        {
+            var groupChatDto = await GetGroupChatDto(userId, groupId);
+            result.Add(groupChatDto);
+        }
 
         var ordered = result.OrderByDescending(d => d.LastChatMessages?.Time).ToList();
 

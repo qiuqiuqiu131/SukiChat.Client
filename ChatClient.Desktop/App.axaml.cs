@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -41,6 +42,9 @@ public class App : PrismApplication
     {
         AvaloniaXamlLoader.Load(this);
         base.Initialize();
+
+        // CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("zh-CN");
+        // CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("zh-CN");
     }
 
     /// <summary>

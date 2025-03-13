@@ -14,6 +14,7 @@
     <StyleInclude Source="../Controls/GroupGroup/GroupGroupList/GroupGroupList.axaml" />
     <StyleInclude Source="../Controls/GroupGroup/GroupSepatateGroupsView/GroupSeparateGroupsView.axaml" />
     <StyleInclude Source="../Controls/EditableTextBlock/EditableTextBlock.axaml" />
+    <StyleInclude Source="../Controls/SearchBox/SearchBox.axaml" />
 
     <Styles.Resources>
         <ResourceDictionary>

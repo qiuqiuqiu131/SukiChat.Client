@@ -60,7 +60,8 @@ public class UserDtoManager : IUserDtoManager
                 return cachedUser;
             }
 
-            var userService = _containerProvider.Resolve<IUserService>();
+            using var scope = _containerProvider.CreateScope();
+            var userService = scope.Resolve<IUserService>();
             var user = await userService.GetUserDto(id);
 
             // 如果获取到用户信息，添加到缓存中
@@ -95,13 +96,14 @@ public class UserDtoManager : IUserDtoManager
                 return cachedFriend;
             }
 
-            var friendService = _containerProvider.Resolve<IFriendService>();
+            using var scope = _containerProvider.CreateScope();
+            var friendService = scope.Resolve<IFriendService>();
             var friend = await friendService.GetFriendRelationDto(userId, friendId);
 
             // 如果获取到用户信息，添加到缓存中
             if (friend != null)
             {
-                friend.UserDto = await GetUserDto(friendId);
+                _ = Task.Run(async () => friend.UserDto = await GetUserDto(friendId));
                 _friendRelationDtos.TryAdd(friendId, friend);
             }
 
@@ -134,19 +136,23 @@ public class UserDtoManager : IUserDtoManager
                 return cachedGroup;
             }
 
-            var groupService = _containerProvider.Resolve<IGroupService>();
+            using var scope = _containerProvider.CreateScope();
+            var groupService = scope.Resolve<IGroupService>();
             var group = await groupService.GetGroupDto(userId, groupId);
             if (group == null) return null;
             var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
             if (memberIds != null)
             {
-                foreach (var memberId in memberIds)
+                _ = Task.Run(async () =>
                 {
-                    // 注入群组成员信息
-                    var memberDto = await GetGroupMemberDto(groupId, memberId);
-                    if (memberDto != null)
-                        group.GroupMembers.Add(memberDto);
-                }
+                    foreach (var memberId in memberIds)
+                    {
+                        // 注入群组成员信息
+                        var memberDto = await GetGroupMemberDto(groupId, memberId);
+                        if (memberDto != null)
+                            group.GroupMembers.Add(memberDto);
+                    }
+                });
             }
 
             // 如果获取到用户信息，添加到缓存中
@@ -175,13 +181,14 @@ public class UserDtoManager : IUserDtoManager
                 return cachedGroupRelation;
             }
 
-            var groupService = _containerProvider.Resolve<IGroupService>();
+            using var scope = _containerProvider.CreateScope();
+            var groupService = scope.Resolve<IGroupService>();
             var groupRelation = await groupService.GetGroupRelationDto(userId, groupId);
 
             // 如果获取到用户信息，添加到缓存中
             if (groupRelation != null)
             {
-                groupRelation.GroupDto = await GetGroupDto(userId, groupId);
+                _ = Task.Run(async () => groupRelation.GroupDto = await GetGroupDto(userId, groupId));
                 _groupRelationDtos.TryAdd(groupId, groupRelation);
             }
 
@@ -211,7 +218,8 @@ public class UserDtoManager : IUserDtoManager
                 return cachedGroupMember;
             }
 
-            var groupService = _containerProvider.Resolve<IGroupService>();
+            using var scope = _containerProvider.CreateScope();
+            var groupService = scope.Resolve<IGroupService>();
             var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
 
             // 如果获取到用户信息，添加到缓存中

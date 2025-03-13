@@ -34,10 +34,10 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.65" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.65" IsVisible="{Binding !IsAccept}" />
+                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
+                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
                         </Grid>
-                        <TextBlock Text="等待验证" FontSize="12" Opacity="0.65"
+                        <TextBlock Text="等待验证" FontSize="12" Opacity="0.6"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding !IsSolved}" />
                     </Grid>
@@ -54,12 +54,12 @@
                                            FontSize="13" />
                                 <TextBlock Text="{Binding RequestTime,Converter={converter:DateOfYMDConverter}}"
                                            FontSize="13"
-                                           Opacity="0.65" />
+                                           Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock Text="留言：" FontSize="12" Opacity="0.65" />
+                                <TextBlock Text="留言：" FontSize="12" Opacity="0.6" />
                                 <TextBlock
-                                    FontSize="12" Opacity="0.65"
+                                    FontSize="12" Opacity="0.6"
                                     Text="{Binding Message,Converter={converter:DefaultTextConverter DefaultText=已发送验证消息}}" />
                             </StackPanel>
                         </Grid>
@@ -78,8 +78,8 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.65" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.65" IsVisible="{Binding !IsAccept}" />
+                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
+                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
                         </Grid>
                         <StackPanel IsVisible="{Binding !IsSolved}"
                                     Margin="0,0,-10,0"
@@ -97,7 +97,7 @@
                                     CommandParameter="{Binding}"
                                     Command="{Binding ((vm:FriendRequestViewModel)DataContext).AcceptCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="拒绝" FontSize="13" />
+                                <TextBlock Text="拒绝" FontSize="12" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -114,12 +114,12 @@
                                            FontSize="13" />
                                 <TextBlock Text="{Binding ReceiveTime,Converter={converter:DateOfYMDConverter}}"
                                            FontSize="13"
-                                           Opacity="0.65" />
+                                           Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock Text="留言：" FontSize="12" Opacity="0.65" Margin="0" />
+                                <TextBlock Text="留言：" FontSize="12" Opacity="0.6" Margin="0" />
                                 <TextBlock
-                                    FontSize="12" Opacity="0.65"
+                                    FontSize="12" Opacity="0.6"
                                     Text="{Binding Message,Converter={converter:DefaultTextConverter DefaultText=已发送验证消息}}" />
                             </StackPanel>
                         </Grid>

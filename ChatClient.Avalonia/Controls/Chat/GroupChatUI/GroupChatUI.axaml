@@ -105,13 +105,13 @@
                                                     <TextBlock
                                                         Classes="FadeIn"
                                                         Margin="5"
-                                                        Opacity="0.8"
+                                                        Opacity="0.6"
                                                         IsVisible="{Binding ShowTime}"
                                                         FontSize="11.5"
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
-                                                    <Grid IsVisible="{Binding IsSystem}">
+                                                    <Grid IsVisible="{Binding IsSystem}" Classes="FadeIn">
                                                         <ItemsControl
                                                             Margin="0,5"
                                                             ItemsSource="{Binding ChatMessages}">
@@ -134,8 +134,8 @@
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <TextBlock Text="{Binding Text}"
-                                                                                    Opacity="0.7"
-                                                                                    FontSize="12"
+                                                                                    Opacity="0.6"
+                                                                                    FontSize="11.5"
                                                                                     Foreground="{DynamicResource SukiText}">
                                                                                     <Interaction.Behaviors>
                                                                                         <DataTriggerBehavior
@@ -144,6 +144,9 @@
                                                                                             <ChangePropertyAction
                                                                                                 PropertyName="Foreground"
                                                                                                 Value="{DynamicResource SukiPrimaryColor}" />
+                                                                                            <ChangePropertyAction
+                                                                                                PropertyName="Opacity"
+                                                                                                Value="1" />
                                                                                         </DataTriggerBehavior>
                                                                                     </Interaction.Behaviors>
                                                                                 </TextBlock>

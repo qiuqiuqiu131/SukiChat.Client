@@ -67,34 +67,34 @@ public class ChatViewModel : ChatPageBase
         ChatLeftPanelViewModel = new ChatLeftPanelViewModel(this, containerProvider);
     }
 
-    private void ClearSelected()
+    private void ClearSelected(FriendChatDto? friendChatDto, GroupChatDto? groupChatDto)
     {
         var chatService = _containerProvider.Resolve<IChatService>();
         // 处理上一个选中的好友
-        if (SelectedFriend != null && SelectedFriend.ChatMessages.Count > 1)
+        if (friendChatDto != null && friendChatDto.ChatMessages.Count > 1)
         {
             // 移除错误消息
-            var errorMessage = SelectedFriend.ChatMessages.Where(d => d.IsError);
-            SelectedFriend.ChatMessages.RemoveAll(errorMessage);
+            var errorMessage = friendChatDto.ChatMessages.Where(d => d.IsError);
+            friendChatDto.ChatMessages.RemoveAll(errorMessage);
 
-            SelectedFriend.HasMoreMessage = true;
+            friendChatDto.HasMoreMessage = true;
             // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
-            SelectedFriend.ChatMessages.RemoveRange(0, SelectedFriend.ChatMessages.Count - 1);
+            friendChatDto.ChatMessages.RemoveRange(0, friendChatDto.ChatMessages.Count - 1);
 
             // 发送好友停止输入消息
-            _ = chatService.SendFriendWritingMessage(User?.Id, SelectedFriend.UserId, false);
+            _ = chatService.SendFriendWritingMessage(User?.Id, friendChatDto.UserId, false);
         }
 
         // 处理上一个选中的好友
-        if (SelectedGroup != null && SelectedGroup.ChatMessages.Count > 1)
+        if (groupChatDto != null && groupChatDto.ChatMessages.Count > 1)
         {
             // 移除错误消息
-            var errorMessage = SelectedGroup.ChatMessages.Where(d => d.IsError);
-            SelectedGroup.ChatMessages.RemoveAll(errorMessage);
+            var errorMessage = groupChatDto.ChatMessages.Where(d => d.IsError);
+            groupChatDto.ChatMessages.RemoveAll(errorMessage);
 
-            SelectedGroup.HasMoreMessage = true;
+            groupChatDto.HasMoreMessage = true;
             // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
-            SelectedGroup.ChatMessages.RemoveRange(0, SelectedGroup.ChatMessages.Count - 1);
+            groupChatDto.ChatMessages.RemoveRange(0, groupChatDto.ChatMessages.Count - 1);
         }
     }
 
@@ -110,8 +110,6 @@ public class ChatViewModel : ChatPageBase
 
         await Task.Run(async () =>
         {
-            ClearSelected();
-
             var chatService = _containerProvider.Resolve<IChatService>();
             // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
             if (friendChatDto.ChatMessages.Count == 0)
@@ -160,11 +158,16 @@ public class ChatViewModel : ChatPageBase
             _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId);
         });
 
+        var previousSelectedFriend = SelectedFriend;
+        var previousSelectedGroup = SelectedGroup;
+
         SelectedGroup = null;
         SelectedFriend = friendChatDto;
         var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
         ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
             param);
+
+        await Task.Run(() => { ClearSelected(previousSelectedFriend, previousSelectedGroup); });
     }
 
     #endregion
@@ -181,8 +184,6 @@ public class ChatViewModel : ChatPageBase
 
         await Task.Run(async () =>
         {
-            ClearSelected();
-
             // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
             if (groupChatDto.ChatMessages.Count == 0)
                 groupChatDto.HasMoreMessage = false;
@@ -198,7 +199,7 @@ public class ChatViewModel : ChatPageBase
 
                 if (chatDatas.Count != nextCount)
                     groupChatDto.HasMoreMessage = false;
-                else 
+                else
                     groupChatDto.HasMoreMessage = true;
 
                 float value = nextCount;
@@ -229,11 +230,16 @@ public class ChatViewModel : ChatPageBase
             groupChatDto.UnReadMessageCount = 0;
         });
 
+        var previousSelectedFriend = SelectedFriend;
+        var previousSelectedGroup = SelectedGroup;
+
         SelectedFriend = null;
         SelectedGroup = groupChatDto;
         var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
         ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
             param);
+
+        await Task.Run(() => { ClearSelected(previousSelectedFriend, previousSelectedGroup); });
     }
 
     #endregion

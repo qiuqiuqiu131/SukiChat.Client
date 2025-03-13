@@ -64,7 +64,7 @@ internal class UserManager : IUserManager
         UserData = await _userService.GetUserFullData(id);
 
         // 登录成功
-        await loginService.LoginSuccess(UserData.UserDetail);
+        _ = loginService.LoginSuccess(UserData.UserDetail);
 
         IsLogin = true;
         // 登录成功后，程序启用全双工通信，开始监听消息。接收到消息后，由eventaggregator发布消息。 

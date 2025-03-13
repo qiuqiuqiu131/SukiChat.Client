@@ -109,9 +109,9 @@
                                                     <TextBlock
                                                         Classes="FadeIn"
                                                         Margin="5"
-                                                        Opacity="0.8"
+                                                        Opacity="0.6"
                                                         IsVisible="{Binding ShowTime}"
-                                                        FontSize="12"
+                                                        FontSize="11.5"
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />

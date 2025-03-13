@@ -12,6 +12,7 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+    xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     d:DesignHeight="650"
     d:DesignWidth="300"
     x:DataType="vm:ChatLeftPanelViewModel"
@@ -217,7 +218,7 @@
                         Name="PART_AddButton"
                         CornerRadius="8"
                         Padding="0"
-                        Margin="10,3,0,1"
+                        Margin="7,3,0,1"
                         VerticalAlignment="Bottom"
                         BorderThickness="0"
                         DockPanel.Dock="Right"
@@ -298,44 +299,7 @@
                         </StackPanel>
                     </Border>
                 </Popup>
-                <suki:GlassCard
-                    CornerRadius="8"
-                    IsInteractive="True"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Stretch"
-                    Height="30"
-                    Margin="0"
-                    Padding="8,3"
-                    Classes="Search"
-                    IsAnimated="False">
-                    <suki:GlassCard.Transitions>
-                        <Transitions>
-                            <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
-                            <DoubleTransition Property="Width" Duration="0.35" />
-                        </Transitions>
-                    </suki:GlassCard.Transitions>
-                    <DockPanel LastChildFill="True">
-                        <PathIcon
-                            Width="12"
-                            Height="12"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Data="{x:Static suki:Icons.Search}"
-                            DockPanel.Dock="Left"
-                            Foreground="{DynamicResource SukiLowText}" />
-                        <TextBox
-                            Padding="-3,3,0,0"
-                            Margin="0"
-                            suki:TextBoxExtensions.AddDeleteButton="True"
-                            BorderThickness="0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Classes="NoShadow"
-                            LetterSpacing="0.5"
-                            Text="{Binding SearchText}"
-                            Watermark="Search" />
-                    </DockPanel>
-                </suki:GlassCard>
+                <searchBox:SearchBox SearchText="{Binding SearchText}" />
             </DockPanel>
         </suki:GlassCard>
         <!-- 好友列表 -->

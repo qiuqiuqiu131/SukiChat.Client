@@ -73,22 +73,31 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () => { user.UserDetail = await _userDtoManager.GetUserDto(userId); }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var friendPackService = scope.Resolve<IFriendPackService>();
                     user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Friend Receives Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var friendPackService = scope.Resolve<IFriendPackService>();
                     user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Friend Requests Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var friendPackService = scope.Resolve<IFriendPackService>();
@@ -101,17 +110,25 @@ internal class UserLoginService : BaseService, IUserLoginService
                             GroupName = d.Key
                         }));
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Friend Relations Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var friendChatPackService = scope.Resolve<IFriendChatPackService>();
                     user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Friend Chats Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var groupPackService = scope.Resolve<IGroupPackService>();
@@ -124,30 +141,45 @@ internal class UserLoginService : BaseService, IUserLoginService
                             GroupName = d.Key
                         }));
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Group Relations Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var groupChatPackService = scope.Resolve<IGroupChatPackService>();
                     user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Group Chats Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var groupPackService = scope.Resolve<IGroupPackService>();
                     user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Group Receives Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
+                DateTime startTime = DateTime.Now;
                 using (var scope = _scopedProvider.CreateScope())
                 {
                     var groupPackService = scope.Resolve<IGroupPackService>();
                     user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
                 }
+
+                DateTime endTime = DateTime.Now;
+                Console.WriteLine("Get Group Requests Cost Time:" + (endTime - startTime));
             }),
         ];
         await Task.WhenAll(tasks);
@@ -207,15 +239,15 @@ internal class UserLoginService : BaseService, IUserLoginService
             friendRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
         List<FriendRequestMessage> receives =
             friendRequestMessages.Where(d => d.UserTargetId.Equals(userId)).ToList();
-        List<Task> tasks =
-        [
+        List<Task> tasks = new List<Task>
+        {
             Task.Run(async () =>
             {
                 //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
                 using var scope = _scopedProvider.CreateScope();
-                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+                var unitOfWork = scope.Resolve<IUnitOfWork>();
 
-                var requestRespository = _unitOfWork.GetRepository<FriendRequest>();
+                var requestRespository = unitOfWork.GetRepository<FriendRequest>();
                 foreach (var request in requests)
                 {
                     var friendRequest = _mapper.Map<FriendRequest>(request);
@@ -232,9 +264,9 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
                 using var scope = _scopedProvider.CreateScope();
-                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+                var unitOfWork = scope.Resolve<IUnitOfWork>();
 
-                var receiveRespository = _unitOfWork.GetRepository<FriendReceived>();
+                var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
                 foreach (var receive in receives)
                 {
                     var friendRequest = _mapper.Map<FriendReceived>(receive);
@@ -247,7 +279,7 @@ internal class UserLoginService : BaseService, IUserLoginService
 
                 await _unitOfWork.SaveChangesAsync();
             })
-        ];
+        };
         await Task.WhenAll(tasks);
     }
 
@@ -310,8 +342,8 @@ internal class UserLoginService : BaseService, IUserLoginService
             groupRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
         List<GroupRequestMessage> receives =
             groupRequestMessages.Where(d => !d.UserFromId.Equals(userId)).ToList();
-        List<Task> tasks =
-        [
+        List<Task> tasks = new List<Task>
+        {
             Task.Run(async () =>
             {
                 //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
@@ -350,7 +382,7 @@ internal class UserLoginService : BaseService, IUserLoginService
 
                 await _unitOfWork.SaveChangesAsync();
             })
-        ];
+        };
         await Task.WhenAll(tasks);
     }
 

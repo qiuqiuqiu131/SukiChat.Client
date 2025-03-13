@@ -40,11 +40,20 @@ public class GroupPackService : BaseService, IGroupPackService
         var groupService = _scopedProvider.Resolve<IGroupService>();
         var groupIds = await groupService.GetGroupIds(userId);
 
-        foreach (var groupId in groupIds)
+        var tasks = groupIds.Select(async groupId =>
         {
             var groupRelationDto = await _userManager.GetGroupRelationDto(userId, groupId);
-            if (groupRelationDto == null) continue;
-            result.Add(groupRelationDto);
+            return groupRelationDto;
+        }).ToList();
+
+        var groupRelationDtos = await Task.WhenAll(tasks);
+
+        foreach (var groupRelationDto in groupRelationDtos)
+        {
+            if (groupRelationDto != null)
+            {
+                result.Add(groupRelationDto);
+            }
         }
 
         return result;
@@ -60,9 +69,8 @@ public class GroupPackService : BaseService, IGroupPackService
         if (groupRequests == null) return null;
 
         var friendRequestDtos = _mapper.Map<List<GroupRequestDto>>(groupRequests);
-        List<Task> tasks = new();
         foreach (var dto in friendRequestDtos)
-            tasks.Add(Task.Run(async () => { dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId); }));
+            _ = Task.Run(async () => { dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId); });
 
         return new AvaloniaList<GroupRequestDto>(friendRequestDtos);
     }
@@ -78,13 +86,12 @@ public class GroupPackService : BaseService, IGroupPackService
         if (groupRequests == null) return null;
 
         var groupRequestDtos = _mapper.Map<List<GroupReceivedDto>>(groupRequests);
-        List<Task> tasks = new();
         foreach (var dto in groupRequestDtos)
-            tasks.Add(Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
                 dto.UserDto = await _userManager.GetUserDto(dto.UserFromId);
-            }));
+            });
 
         return new AvaloniaList<GroupReceivedDto>(groupRequestDtos);
     }
