@@ -215,7 +215,7 @@ public partial class GroupChatUI : UserControl
             double OffsetYOrigion = ChatScroll.Offset.Y;
             if (isMovingToBottom // 正在移动到底部
                 || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
+                || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
             {
                 // 等待渲染完成
                 await Task.Delay(50);
@@ -225,7 +225,7 @@ public partial class GroupChatUI : UserControl
             {
                 lockScroll = true;
                 lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
-                await Task.Delay(150);
+                await Task.Delay(200);
                 lockScroll = false;
                 lockBottomDistance = 0;
             }
@@ -251,10 +251,10 @@ public partial class GroupChatUI : UserControl
     {
         if (change.Property == MessagesProperty)
         {
-            if (change.OldValue is AvaloniaList<ChatData> oldMessages)
+            if (change.OldValue is AvaloniaList<GroupChatData> oldMessages)
                 oldMessages.CollectionChanged -= ValueOnCollectionChanged;
 
-            if (change.NewValue is AvaloniaList<ChatData> newMessages)
+            if (change.NewValue is AvaloniaList<GroupChatData> newMessages)
                 newMessages.CollectionChanged += ValueOnCollectionChanged;
 
             OnItemsSourceChanged();

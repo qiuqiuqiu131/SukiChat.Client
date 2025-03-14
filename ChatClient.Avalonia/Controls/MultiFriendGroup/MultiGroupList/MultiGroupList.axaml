@@ -23,16 +23,25 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="data:FriendRelationDto">
                                 <Grid Height="42">
-                                    <Grid Margin="6,5" ColumnDefinitions="36,*">
+                                    <Grid Margin="3,3" ColumnDefinitions="36,*">
                                         <circleImage:CircleImage Size="36"
                                                                  Image="{Binding UserDto.HeadImage}" />
                                         <TextBlock Grid.Column="1"
-                                                   Margin="15,0"
+                                                   Margin="10,0"
                                                    VerticalAlignment="Center"
                                                    FontSize="13.5"
+                                                   IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                    FontWeight="DemiBold"
                                                    Foreground="{DynamicResource SukiText}"
                                                    Text="{Binding  UserDto.Name}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="10,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="13.5"
+                                                   IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                   FontWeight="DemiBold"
+                                                   Foreground="{DynamicResource SukiText}"
+                                                   Text="{Binding  Remark}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>

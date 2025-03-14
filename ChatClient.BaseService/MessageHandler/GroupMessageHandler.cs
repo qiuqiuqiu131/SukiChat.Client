@@ -96,13 +96,16 @@ internal class GroupMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnUpdateGroupMessage(IScopedProvider scopedprovider, UpdateGroupMessage message)
     {
+        // 重新向服务器请求GroupDto，并更新数据库
         var groupService = scopedprovider.Resolve<IGroupService>();
         var dto = await groupService.GetGroupDto(_userManager.User!.Id, message.GroupId);
+        if (dto == null) return;
 
+        // 更新userDtoManager中保存的GroupDto
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
 
-        groupDto?.CopyFrom(dto!);
+        groupDto?.CopyFrom(dto);
     }
 
     /// <summary>

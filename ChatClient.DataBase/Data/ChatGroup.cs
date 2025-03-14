@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChatClient.DataBase.Data;
 
+[Microsoft.EntityFrameworkCore.Index(nameof(ChatId), IsUnique = true)]
 public class ChatGroup
 {
     [Key]

@@ -15,7 +15,6 @@ public interface IFriendChatPackService
 {
     Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId);
     Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
-    Task<int> GetUnReadChatMessageCount(string userId, string targetId);
 
     Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage);
     Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages);
@@ -26,7 +25,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserDtoManager _userDtoManager;
     private readonly IMapper _mapper;
-    private readonly IFileOperateHelper _fileOperateHelper;
 
     public FriendChatPackService(IContainerProvider containerProvider,
         IUserDtoManager userDtoManager,
@@ -35,7 +33,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     {
         _userDtoManager = userDtoManager;
         _mapper = mapper;
-        _fileOperateHelper = fileOperateHelper;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
@@ -57,7 +54,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         FriendChatDto friendChatDto = new FriendChatDto();
         friendChatDto.UserId = targetId;
         friendChatDto.FriendRelatoinDto = await _userDtoManager.GetFriendRelationDto(userId, targetId);
-        friendChatDto.UnReadMessageCount = await GetUnReadChatMessageCount(userId, targetId);
+        friendChatDto.UnReadMessageCount =
+            await GetUnReadChatMessageCount(userId, targetId, friendChatDto.FriendRelatoinDto!.LastChatId);
 
         if (friendChat == null)
             return friendChatDto;
@@ -138,20 +136,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     }
 
     /// <summary>
-    /// 获取未读消息数量
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<int> GetUnReadChatMessageCount(string userId, string targetId)
-    {
-        var repository = _unitOfWork.GetRepository<ChatPrivate>();
-        return repository.CountAsync(d =>
-            d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId) && !d.IsReaded);
-    }
-
-    /// <summary>
     /// 处理好友消息
     /// </summary>
     /// <param name="chatMessage"></param>
@@ -160,16 +144,24 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     {
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
         var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
-        var result =
-            await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
-        if (result != null)
+
+        try
         {
-            chatPrivate.IsReaded = result.IsReaded;
-            chatPrivate.Id = result.Id;
+            var result =
+                await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
+            if (result != null)
+                chatPrivate.Id = result.Id;
+
+            chatPrivateRepository.Update(chatPrivate);
+            await _unitOfWork.SaveChangesAsync();
+            if (result != null)
+                chatPrivateRepository.ChangeEntityState(result, EntityState.Detached);
+        }
+        catch (Exception e)
+        {
+            // ignored
         }
 
-        chatPrivateRepository.Update(chatPrivate);
-        await _unitOfWork.SaveChangesAsync();
         return true;
     }
 
@@ -187,15 +179,29 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
             var result =
                 await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
             if (result != null)
-            {
-                chatPrivate.IsReaded = result.IsReaded;
                 chatPrivate.Id = result.Id;
-            }
 
             chatPrivateRepository.Update(chatPrivate);
         }
 
         await _unitOfWork.SaveChangesAsync();
         return true;
+    }
+
+    /// <summary>
+    /// 获取未读消息数量
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="targetId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<int> GetUnReadChatMessageCount(string userId, string targetId, int lastChatId)
+    {
+        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        var result = await chatPrivateRepository.GetAll(
+                predicate: d =>
+                    d.UserTargetId.Equals(userId) && d.UserFromId.Equals(targetId) && d.ChatId > lastChatId)
+            .CountAsync();
+        return result;
     }
 }

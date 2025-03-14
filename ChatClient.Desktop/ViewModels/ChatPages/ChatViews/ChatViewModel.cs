@@ -9,6 +9,7 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
@@ -80,9 +81,6 @@ public class ChatViewModel : ChatPageBase
             friendChatDto.HasMoreMessage = true;
             // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
             friendChatDto.ChatMessages.RemoveRange(0, friendChatDto.ChatMessages.Count - 1);
-
-            // 发送好友停止输入消息
-            _ = chatService.SendFriendWritingMessage(User?.Id, friendChatDto.UserId, false);
         }
 
         // 处理上一个选中的好友
@@ -110,7 +108,6 @@ public class ChatViewModel : ChatPageBase
 
         await Task.Run(async () =>
         {
-            var chatService = _containerProvider.Resolve<IChatService>();
             // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
             if (friendChatDto.ChatMessages.Count == 0)
                 friendChatDto.HasMoreMessage = false;
@@ -155,14 +152,22 @@ public class ChatViewModel : ChatPageBase
                 friendChatDto.ChatMessages[0].ShowTime = true;
 
             friendChatDto.UnReadMessageCount = 0;
-            _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId);
+
+            var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
+
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId, maxChatId, FileTarget.User);
         });
 
         var previousSelectedFriend = SelectedFriend;
         var previousSelectedGroup = SelectedGroup;
+        if (previousSelectedFriend != null) previousSelectedFriend.IsSelected = false;
+        if (previousSelectedGroup != null) previousSelectedGroup.IsSelected = false;
 
         SelectedGroup = null;
         SelectedFriend = friendChatDto;
+        SelectedFriend.IsSelected = true;
+
         var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
         ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
             param);
@@ -228,13 +233,23 @@ public class ChatViewModel : ChatPageBase
                 groupChatDto.ChatMessages[0].ShowTime = true;
 
             groupChatDto.UnReadMessageCount = 0;
+
+            var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
+
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, groupChatDto.GroupRelationDto!.Id, maxChatId,
+                FileTarget.Group);
         });
 
         var previousSelectedFriend = SelectedFriend;
         var previousSelectedGroup = SelectedGroup;
+        if (previousSelectedFriend != null) previousSelectedFriend.IsSelected = false;
+        if (previousSelectedGroup != null) previousSelectedGroup.IsSelected = false;
 
         SelectedFriend = null;
         SelectedGroup = groupChatDto;
+        SelectedGroup.IsSelected = true;
+
         var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
         ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
             param);

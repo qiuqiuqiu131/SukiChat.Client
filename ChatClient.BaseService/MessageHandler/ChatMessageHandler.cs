@@ -67,13 +67,17 @@ internal class ChatMessageHandler : MessageHandlerBase
             if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
                 chatData.ShowTime = true;
             friendChat.ChatMessages.Add(chatData);
-            friendChat.UnReadMessageCount++;
         }
         else if (friendChat != null)
         {
             chatData.ShowTime = true;
             friendChat.ChatMessages.Add(chatData);
-            friendChat.UnReadMessageCount++;
+        }
+
+        if (friendChat != null && friendChat.IsSelected)
+        {
+            await chatService.ReadAllChatMessage(_userManager.User!.Id, chatMessage.UserTargetId, chatMessage.Id,
+                FileTarget.User);
         }
     }
 
@@ -129,17 +133,30 @@ internal class ChatMessageHandler : MessageHandlerBase
         var groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
         if (groupChat != null && groupChat.ChatMessages.Count != 0)
         {
-            var last = groupChat.ChatMessages.Last();
-            if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
+            var item = groupChat.ChatMessages.FirstOrDefault(d => d.ChatId > chatData.ChatId);
+            var index = item != null ? groupChat.ChatMessages.IndexOf(item) : groupChat.ChatMessages.Count;
+
+            if (index > 0)
+            {
+                var previous = groupChat.ChatMessages[index - 1];
+                if (chatData.Time - previous.Time > TimeSpan.FromMinutes(5))
+                    chatData.ShowTime = true;
+            }
+            else
                 chatData.ShowTime = true;
-            groupChat.ChatMessages.Add(chatData);
-            groupChat.UnReadMessageCount++;
+
+            groupChat.ChatMessages.Insert(index, chatData);
         }
         else if (groupChat != null)
         {
             chatData.ShowTime = true;
             groupChat.ChatMessages.Add(chatData);
-            groupChat.UnReadMessageCount++;
+        }
+
+        if (groupChat != null && groupChat.IsSelected)
+        {
+            await chatService.ReadAllChatMessage(_userManager.User!.Id, message.GroupId, message.Id,
+                FileTarget.Group);
         }
     }
 }

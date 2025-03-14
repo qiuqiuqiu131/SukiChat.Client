@@ -52,27 +52,27 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <ScrollViewer Margin="20" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+    <ScrollViewer Margin="50" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
         <StackPanel Orientation="Vertical">
             <Panel
-                Width="130"
-                Height="130"
+                Width="110"
+                Height="110"
                 Margin="15">
-                <Panel Width="120" Height="120" ToolTip.ShowDelay="500">
+                <Panel Width="100" Height="100" ToolTip.ShowDelay="500">
                     <ToolTip.Tip>
                         <TextBlock FontSize="12"
                                    Text="点击查看头像" />
                     </ToolTip.Tip>
                     <Panel.Clip>
                         <EllipseGeometry
-                            Center="60,60"
-                            RadiusX="60"
-                            RadiusY="60" />
+                            Center="50,50"
+                            RadiusX="50"
+                            RadiusY="50" />
                     </Panel.Clip>
                     <Image
                         Name="Head"
-                        Width="118"
-                        Height="118"
+                        Width="98"
+                        Height="98"
                         Margin="0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
@@ -81,16 +81,16 @@
                         Source="{Binding User.HeadImage}" />
                 </Panel>
                 <Border
-                    Width="120"
-                    Height="120"
+                    Width="100"
+                    Height="100"
                     Padding="0"
                     BoxShadow="{DynamicResource SukiLowShadow}"
                     BorderBrush="{DynamicResource SukiLowText}"
                     BorderThickness="1.2"
-                    CornerRadius="60" />
+                    CornerRadius="50" />
                 <Button
-                    Width="30"
-                    Height="30"
+                    Width="20"
+                    Height="20"
                     Margin="5"
                     Padding="0"
                     HorizontalAlignment="Right"
@@ -110,70 +110,23 @@
                                        Text="编辑头像" />
                         </ToolTip.Tip>
                         <Ellipse
-                            Width="28"
-                            Height="28"
+                            Width="18"
+                            Height="18"
                             Fill="White" />
                         <Ellipse
-                            Width="28"
-                            Height="28"
+                            Width="18"
+                            Height="18"
                             Fill="{DynamicResource SukiPrimaryColor50}"
                             Stroke="{DynamicResource SukiLowText}"
                             StrokeThickness="1.5" />
                         <avalonia:MaterialIcon
-                            Width="18"
-                            Height="18"
+                            Width="13"
+                            Height="13"
                             Foreground="{DynamicResource SukiLowText}"
                             Kind="CircleEditOutline" />
                     </Panel>
                 </Button>
             </Panel>
-            <suki:GlassCard Width="500">
-                <StackPanel Orientation="Vertical" Spacing="25">
-                    <suki:GlassCard>
-                        <Expander ExpandDirection="Down" Header="基本信息">
-                            <StackPanel Orientation="Vertical" Spacing="10">
-                                <Panel>
-                                    <TextBlock Text="ID" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Id}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <TextBlock Text="昵称" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Name}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <TextBlock Text="性别" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Sex}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <TextBlock Text="简介" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Introduction}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <TextBlock Text="注册时间" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.RegisterDate}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <TextBlock Text="生日" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Birthday}" HorizontalAlignment="Right" />
-                                </Panel>
-                                <Panel>
-                                    <Button Content="编辑" />
-                                </Panel>
-                            </StackPanel>
-                        </Expander>
-                    </suki:GlassCard>
-                    <suki:GlassCard>
-                        <Expander ExpandDirection="Down" Header="账号安全">
-                            <StackPanel Orientation="Vertical" Spacing="10">
-                                <Panel>
-                                    <TextBlock Text="密码" HorizontalAlignment="Left" />
-                                    <TextBlock Text="{Binding BasicDetail.Birthday}" HorizontalAlignment="Right" />
-                                </Panel>
-                            </StackPanel>
-                        </Expander>
-                    </suki:GlassCard>
-                </StackPanel>
-            </suki:GlassCard>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

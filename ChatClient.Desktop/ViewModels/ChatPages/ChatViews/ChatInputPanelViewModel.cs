@@ -17,6 +17,7 @@ using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Ioc;
+using Action = Avalonia.Xaml.Interactivity.Action;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
@@ -37,13 +38,18 @@ public class ChatInputPanelViewModel : ViewModelBase
 
     private readonly Action<ChatMessage.ContentOneofCase, object> sendChatMessage;
     private readonly Action<IEnumerable<object>> sendChatMessages;
+    private readonly Action<bool>? inputMessageChanged;
+
+    private bool isWriting;
 
     public ChatInputPanelViewModel(
         Action<ChatMessage.ContentOneofCase, object> SendChatMessage,
-        Action<IEnumerable<object>> SendChatMessages)
+        Action<IEnumerable<object>> SendChatMessages,
+        Action<bool>? InputMessageChanged = null)
     {
         sendChatMessages = SendChatMessages;
         sendChatMessage = SendChatMessage;
+        inputMessageChanged = InputMessageChanged;
 
         SendMessageCommand = new DelegateCommand(SendMessages, CanSendMessages);
         SelectFileAndSendCommand = new DelegateCommand(SelectFileAndSend);
@@ -57,6 +63,11 @@ public class ChatInputPanelViewModel : ViewModelBase
             InputMessages.CollectionChanged -= NotifyInputMessagesChanged;
         InputMessages = chatList;
         InputMessages.CollectionChanged += NotifyInputMessagesChanged;
+
+        if (InputMessages.Count == 1 && InputMessages[0] is string str && string.IsNullOrEmpty(str))
+            isWriting = false;
+        else
+            isWriting = true;
     }
 
     private void ClearInput()
@@ -87,8 +98,23 @@ public class ChatInputPanelViewModel : ViewModelBase
         }
     }
 
-    private void NotifyInputMessagesChanged(object? sender, NotifyCollectionChangedEventArgs? e) =>
+    private void NotifyInputMessagesChanged(object? sender, NotifyCollectionChangedEventArgs? e)
+    {
         SendMessageCommand.RaiseCanExecuteChanged();
+
+        if (isWriting && InputMessages.Count == 1 && InputMessages[0] is string str1 && string.IsNullOrEmpty(str1))
+        {
+            isWriting = false;
+            inputMessageChanged?.Invoke(false);
+        }
+        else if (!isWriting && (InputMessages.Count > 1 || InputMessages.Count == 1 &&
+                     (InputMessages[0] is not string str2 ||
+                      !string.IsNullOrEmpty(str2))))
+        {
+            isWriting = true;
+            inputMessageChanged?.Invoke(true);
+        }
+    }
 
     private bool CanSendMessages()
     {

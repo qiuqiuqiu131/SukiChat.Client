@@ -38,7 +38,7 @@
     </Style>
 
     <Style Selector="Button.Add:pointerover /template/ Border#PART_Border">
-        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="Opacity" Value="0." />
     </Style>
 
     <Style Selector="Button.Void">
@@ -70,11 +70,11 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
+                    <Border Background="{TemplateBinding Background}" Opacity="0.15"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
                             </Transitions>
                         </Border.Transitions>
                     </Border>
@@ -100,6 +100,23 @@
             <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         </Style>
 
+        <Style Selector="^:pointerover">
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="Opacity" Value="0.15" />
+            </Style>
+            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush"
+                        Value="Transparent" />
+                <!-- <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" /> -->
+            </Style>
+            <Style Selector="^ PathIcon">
+                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+            </Style>
+        </Style>
+
         <Style Selector="^:pressed">
             <Setter Property="RenderTransform">
                 <Setter.Value>
@@ -109,7 +126,7 @@
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="RenderTransform">
                     <Setter.Value>
                         <ScaleTransform ScaleX="1" ScaleY="1" />
@@ -119,23 +136,6 @@
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
                 <Setter Property="BorderBrush" Value="Transparent" />
-                <!-- <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" /> -->
-            </Style>
-            <Style Selector="^ PathIcon">
-                <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
-            </Style>
-        </Style>
-
-        <Style Selector="^:pointerover">
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
-            <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.5" />
-            </Style>
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush"
-                        Value="Transparent" />
                 <!-- <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" /> -->
             </Style>
             <Style Selector="^ PathIcon">

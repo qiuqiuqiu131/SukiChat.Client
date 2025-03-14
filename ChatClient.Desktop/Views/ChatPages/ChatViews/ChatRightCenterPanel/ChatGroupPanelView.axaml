@@ -9,10 +9,16 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:groupChatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI;assembly=ChatClient.Avalonia"
-             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="5"></Setter>
+        </Style>
+    </UserControl.Styles>
     <Grid RowDefinitions="70,*">
         <!-- 顶部栏 -->
         <suki:GlassCard Grid.Row="0"
@@ -54,13 +60,32 @@
                             HorizontalAlignment="Left"
                             Margin="13,5,0,0"
                             Orientation="Horizontal">
-                    <TextBlock Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
-                               Margin="10,0,0,10"
-                               VerticalAlignment="Center"
-                               LetterSpacing="1"
-                               FontSize="16.5"
-                               Foreground="{DynamicResource SukiText}"
-                               FontWeight="DemiBold" />
+                    <Grid Margin="10,0,0,10">
+                        <TextBlock
+                            IsVisible="{Binding SelectedGroup.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Text="{Binding SelectedGroup.GroupRelationDto.Remark}"
+                            VerticalAlignment="Center"
+                            LetterSpacing="1"
+                            FontSize="16.5"
+                            Foreground="{DynamicResource SukiText}"
+                            FontWeight="DemiBold" />
+                        <TextBlock
+                            IsVisible="{Binding SelectedGroup.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                            Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
+                            VerticalAlignment="Center"
+                            LetterSpacing="1"
+                            FontSize="16.5"
+                            Foreground="{DynamicResource SukiText}"
+                            FontWeight="DemiBold" />
+                    </Grid>
+                    <TextBlock
+                        Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers.Count,StringFormat=({0})}"
+                        Margin="0,0,0,10"
+                        VerticalAlignment="Center"
+                        LetterSpacing="1"
+                        FontSize="16.5"
+                        Foreground="{DynamicResource SukiText}"
+                        FontWeight="DemiBold" />
                 </StackPanel>
             </DockPanel>
         </suki:GlassCard>
@@ -69,93 +94,231 @@
                                            IsPaneOpen="False">
             <!-- 侧边栏 -->
             <overlaySplitView:OverlaySplitView.PaneContent>
-                <Border CornerRadius="5" Opacity="0.95"
-                        Background="{DynamicResource SukiCardBackground}">
-                    <TextBlock Text="侧边栏" FontSize="25" />
-                </Border>
+                <Panel ClipToBounds="True">
+                    <suki:SukiBackground Name="PART_Background"
+                                         Margin="-150"
+                                         AnimationEnabled="{Binding ThemeStyle.AnimationsEnabled}"
+                                         Style="{Binding ThemeStyle.BackgroundStyle}"
+                                         TransitionTime="1"
+                                         TransitionsEnabled="{Binding ThemeStyle.TransitionsEnabled}"
+                                         ForceSoftwareRendering="True" />
+                    <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Orientation="Vertical"
+                                    Spacing="20"
+                                    suki:StackPanelExtensions.AnimatedScroll="True"
+                                    Margin="16,20,0,20">
+                            <suki:GlassCard CornerRadius="6" Padding="10" Margin="0">
+                                <DockPanel LastChildFill="True">
+                                    <StackPanel Orientation="Horizontal" Margin="5,0" Spacing="10">
+                                        <circleImage:CircleImage Size="40"
+                                                                 Image="{Binding SelectedGroup.GroupRelationDto.GroupDto.HeadImage}" />
+                                        <Grid RowDefinitions="1.1*,*">
+                                            <TextBlock TextTrimming="CharacterEllipsis"
+                                                       Grid.Row="0"
+                                                       FontWeight="SemiBold"
+                                                       FontSize="13.5"
+                                                       Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}" />
+                                            <Border Grid.Row="1"
+                                                    Margin="0,2"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="3"
+                                                    Background="{DynamicResource SukiPrimaryColor10}"
+                                                    Padding="6,0">
+                                                <SelectableTextBlock
+                                                    FontSize="11"
+                                                    Opacity="0.6"
+                                                    Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Id}" />
+                                            </Border>
+                                        </Grid>
+                                    </StackPanel>
+                                </DockPanel>
+                            </suki:GlassCard>
+
+                            <suki:GlassCard CornerRadius="6" Padding="10" Margin="0">
+                                <DockPanel LastChildFill="True">
+                                    <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+                                        <TextBlock Margin="5" Text="群聊成员" FontWeight="SemiBold" FontSize="13"
+                                                   DockPanel.Dock="Left" />
+                                        <TextBlock
+                                            Margin="5"
+                                            Opacity="0.6"
+                                            FontSize="12"
+                                            HorizontalAlignment="Right"
+                                            DockPanel.Dock="Right"
+                                            Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers.Count,StringFormat=查看{0}名群聊成员>}">
+                                        </TextBlock>
+                                    </DockPanel>
+                                    <ItemsControl
+                                        Margin="5"
+                                        ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupClipMembers}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical" Spacing="3" Width="46" Margin="0,10">
+                                                    <circleImage:CircleImage Size="32" Image="{Binding HeadImage}" />
+                                                    <TextBlock Text="{Binding NickName}"
+                                                               FontSize="12"
+                                                               HorizontalAlignment="Center"
+                                                               MaxWidth="35"
+                                                               Opacity="0.6"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DockPanel>
+                            </suki:GlassCard>
+
+                            <StackPanel Orientation="Vertical" Margin="0,-3"
+                                        IsVisible="{Binding SelectedGroup.GroupRelationDto.IsOwner}">
+                                <TextBlock Text="群名" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                           HorizontalAlignment="Left" />
+                                <TextBox CornerRadius="6"
+                                         Padding="8,4"
+                                         Watermark="设置群名"
+                                         suki:TextBoxExtensions.AddDeleteButton="True"
+                                         FontSize="13.5"
+                                         LetterSpacing="0.5"
+                                         Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                                    <Interaction.Behaviors>
+                                        <behaviors:TextBoxLostFocusBehavior />
+                                    </Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,-3">
+                                <TextBlock Text="我的本群昵称" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                           HorizontalAlignment="Left" />
+                                <TextBox CornerRadius="6"
+                                         Padding="8,4"
+                                         Watermark="设置本群昵称"
+                                         suki:TextBoxExtensions.AddDeleteButton="True"
+                                         LetterSpacing="0.5"
+                                         FontSize="13.5"
+                                         Text="{Binding SelectedGroup.GroupRelationDto.NickName,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                                    <Interaction.Behaviors>
+                                        <behaviors:TextBoxLostFocusBehavior />
+                                    </Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,-3"
+                                        IsVisible="{Binding !SelectedGroup.GroupRelationDto.IsOwner}">
+                                <TextBlock Text="群聊备注" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                           HorizontalAlignment="Left" />
+                                <TextBox CornerRadius="6"
+                                         Padding="8,4"
+                                         Watermark="设置群聊备注"
+                                         suki:TextBoxExtensions.AddDeleteButton="True"
+                                         FontSize="13.5"
+                                         LetterSpacing="0.5"
+                                         Text="{Binding SelectedGroup.GroupRelationDto.Remark,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                                    <Interaction.Behaviors>
+                                        <behaviors:TextBoxLostFocusBehavior />
+                                    </Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <suki:GlassCard Padding="15,5,10,5" Margin="0" CornerRadius="6">
+                                <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Stretch">
+                                    <DockPanel HorizontalAlignment="Stretch">
+                                        <TextBlock Text="设为置顶" FontSize="13.5" DockPanel.Dock="Left"
+                                                   VerticalAlignment="Center" />
+                                        <ToggleButton Classes="Switch"
+                                                      VerticalAlignment="Center"
+                                                      Margin="0"
+                                                      HorizontalAlignment="Right"
+                                                      RenderTransformOrigin="0.5,0.5"
+                                                      IsChecked="{Binding SelectedGroup.GroupRelationDto.IsTop}"
+                                                      DockPanel.Dock="Right">
+                                            <ToggleButton.RenderTransform>
+                                                <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                            </ToggleButton.RenderTransform>
+                                        </ToggleButton>
+                                    </DockPanel>
+                                    <DockPanel HorizontalAlignment="Stretch">
+                                        <TextBlock Text="消息免打扰" FontSize="13.5" DockPanel.Dock="Left"
+                                                   VerticalAlignment="Center" />
+                                        <ToggleButton Classes="Switch"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Right"
+                                                      Margin="0"
+                                                      RenderTransformOrigin="0.5,0.5"
+                                                      IsChecked="{Binding SelectedGroup.GroupRelationDto.CantDisturb}"
+                                                      DockPanel.Dock="Right">
+                                            <ToggleButton.RenderTransform>
+                                                <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                                            </ToggleButton.RenderTransform>
+                                        </ToggleButton>
+                                    </DockPanel>
+                                </StackPanel>
+                            </suki:GlassCard>
+
+                            <Button Classes="Outlined Accent"
+                                    IsVisible="{Binding SelectedGroup.GroupRelationDto.IsOwner}"
+                                    CornerRadius="6" Command="{Binding DeleteGroupCommand}"
+                                    Margin="5,15,5,40"
+                                    Content="解散群聊" />
+
+                            <Button Classes="Outlined Accent"
+                                    IsVisible="{Binding !SelectedGroup.GroupRelationDto.IsOwner}"
+                                    CornerRadius="6" Command="{Binding QuitGroupCommand}"
+                                    Content="退出群聊" Margin="5,15,5,40" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Panel>
             </overlaySplitView:OverlaySplitView.PaneContent>
 
-            <!-- 主体 -->
-            <Grid ColumnDefinitions="*,1.5,auto">
-                <!-- 聊天部分 -->
-                <Grid RowDefinitions="*,40">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="1.2" />
-                            <RowDefinition MinHeight="150" MaxHeight="350" Height="200" />
-                        </Grid.RowDefinitions>
+            <!-- 聊天部分 -->
+            <Grid RowDefinitions="*,40">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="1.2" />
+                        <RowDefinition MinHeight="150" MaxHeight="350" Height="200" />
+                    </Grid.RowDefinitions>
 
-                        <!-- 聊天内容 -->
-                        <groupChatUi1:GroupChatUI Name="ChatUI"
-                                                  Margin="0"
-                                                  HeadClickCommand="{Binding HeadClickCommand}"
-                                                  Messages="{Binding SelectedGroup.ChatMessages}"
-                                                  FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                                  SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
-                                                  SearchMoreCommand="{Binding SearchMoreCommand}"
-                                                  UserImageSource="{Binding User.HeadImage}" />
+                    <!-- 聊天内容 -->
+                    <groupChatUi1:GroupChatUI Name="ChatUI"
+                                              Margin="0"
+                                              HeadClickCommand="{Binding HeadClickCommand}"
+                                              Messages="{Binding SelectedGroup.ChatMessages}"
+                                              FileMessageClickCommand="{Binding FileMessageClickCommand}"
+                                              SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
+                                              SearchMoreCommand="{Binding SearchMoreCommand}"
+                                              UserImageSource="{Binding User.HeadImage}" />
 
-                        <GridSplitter Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+                    <GridSplitter Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 
-                        <!-- 输入框 -->
-                        <Grid Grid.Row="2">
-                            <Border BorderThickness="0"
-                                    Opacity="{DynamicResource GlassOpacity}"
-                                    Background="{DynamicResource SukiGlassCardBackground}" />
-                            <chatViews1:ChatInputPanelView
-                                DataContext="{Binding ChatInputPanelViewModel }" />
-                        </Grid>
-                    </Grid>
-
-                    <!-- 底部按钮 -->
-                    <Grid Grid.Row="1" Margin="0,0,0,0">
+                    <!-- 输入框 -->
+                    <Grid Grid.Row="2">
                         <Border BorderThickness="0"
                                 Opacity="{DynamicResource GlassOpacity}"
                                 Background="{DynamicResource SukiGlassCardBackground}" />
-                        <Button
-                            Content="发送"
-                            Classes="Flat"
-                            FontSize="13"
-                            FontWeight="SemiBold"
-                            Padding="20,6,20,6"
-                            Margin="10,0,10,5"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Command="{Binding ChatInputPanelViewModel.SendMessageCommand}" />
+                        <chatViews1:ChatInputPanelView
+                            DataContext="{Binding ChatInputPanelViewModel }" />
                     </Grid>
                 </Grid>
 
-                <Border Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
-
-                <!-- 右侧群聊信息 -->
-                <Grid Column="2" Width="150">
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock Text="成员列表" FontWeight="DemiBold" FontSize="13.5" Margin="5"
-                                   HorizontalAlignment="Center" />
-                        <ItemsControl ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid ColumnDefinitions="40,*" Height="40">
-                                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="32" />
-                                        <Grid Grid.Column="1" VerticalAlignment="Center">
-                                            <StackPanel Orientation="Horizontal" Margin="5">
-                                                <TextBlock Text="{Binding NickName}" FontSize="12" />
-                                                <TextBlock
-                                                    Text="{Binding Status,Converter={converter:GroupIdentityConverter}}"
-                                                    FontSize="12" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Grid>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                <!-- 底部按钮 -->
+                <Grid Grid.Row="1" Margin="0,0,0,0">
+                    <Border BorderThickness="0"
+                            Opacity="{DynamicResource GlassOpacity}"
+                            Background="{DynamicResource SukiGlassCardBackground}" />
+                    <Button
+                        Content="发送"
+                        Classes="Flat"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Padding="20,6,20,6"
+                        Margin="10,0,10,5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Command="{Binding ChatInputPanelViewModel.SendMessageCommand}" />
                 </Grid>
             </Grid>
         </overlaySplitView:OverlaySplitView>

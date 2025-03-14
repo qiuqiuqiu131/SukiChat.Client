@@ -140,20 +140,6 @@
             </Setter>
         </ControlTheme>
     </Window.Resources>
-    <!-- <suki:SukiWindow.LogoContent> -->
-    <!--     <avalonia:MaterialIcon -->
-    <!--         Width="20" -->
-    <!--         Height="20" -->
-    <!--         VerticalAlignment="Center" -->
-    <!--         Foreground="{DynamicResource SukiPrimaryColor}" -->
-    <!--         Kind="ChartDonutVariant"> -->
-    <!--         <avalonia:MaterialIcon.Transitions> -->
-    <!--             <Transitions> -->
-    <!--                 <BrushTransition Property="Foreground" Duration="{DynamicResource ShortAnimationDuration}" /> -->
-    <!--             </Transitions> -->
-    <!--         </avalonia:MaterialIcon.Transitions> -->
-    <!--     </avalonia:MaterialIcon> -->
-    <!-- </suki:SukiWindow.LogoContent> -->
     <suki:SukiWindow.Hosts>
         <suki:SukiDialogHost Manager="{Binding DialogManager}" />
     </suki:SukiWindow.Hosts>
@@ -251,32 +237,6 @@
                         </StackPanel>
                     </suki:GroupBox>
                 </suki:GlassCard>
-                <Grid>
-                    <Button
-                        Height="35"
-                        Classes="Accent"
-                        HorizontalAlignment="Left"
-                        Command="{Binding AddHeadCommnad}"
-                        Content="添加本地图片"
-                        FontWeight="DemiBold"
-                        FontSize="14" />
-                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
-                        <Button
-                            Height="35"
-                            HorizontalAlignment="Right"
-                            Command="{Binding SaveHeadCommand}"
-                            Content="确认"
-                            FontWeight="DemiBold"
-                            FontSize="14" />
-                        <Button
-                            Height="35"
-                            HorizontalAlignment="Right"
-                            Command="{Binding CancleCommand}"
-                            Content="取消"
-                            FontWeight="DemiBold"
-                            FontSize="14" />
-                    </StackPanel>
-                </Grid>
                 <suki:GlassCard>
                     <Expander ExpandDirection="Down" Header="历史头像" FontWeight="DemiBold" CornerRadius="10">
                         <ListBox
@@ -339,6 +299,29 @@
                         </ListBox>
                     </Expander>
                 </suki:GlassCard>
+                <Grid>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Command="{Binding AddHeadCommnad}"
+                        Content="添加本地图片"
+                        FontWeight="DemiBold"
+                        FontSize="13" />
+                    <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
+                        <Button
+                            HorizontalAlignment="Right"
+                            Command="{Binding SaveHeadCommand}"
+                            Content="确认"
+                            FontWeight="DemiBold"
+                            FontSize="13" />
+                        <Button
+                            Classes="Accent"
+                            HorizontalAlignment="Right"
+                            Command="{Binding CancleCommand}"
+                            Content="取消"
+                            FontWeight="DemiBold"
+                            FontSize="13" />
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </ScrollViewer>
     </suki:BusyArea>

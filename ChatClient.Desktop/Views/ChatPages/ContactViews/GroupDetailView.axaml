@@ -6,6 +6,7 @@
              xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="contactViews:GroupDetailViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.GroupDetailView">
@@ -75,18 +76,32 @@
                     Command="{Binding SendMessageCommand}" />
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="3">
-            <DockPanel Margin="5">
-                <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
-                                       Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
-                <editableTextBlock:EditableTextBlock
-                    DefaultText="设置群聊备注"
-                    Text="{Binding Group.Remark,Mode=TwoWay}"
-                    FontSize="13.5"
-                    DockPanel.Dock="Right"
-                    HorizontalContentAlignment="Right"
-                    VerticalAlignment="Center" />
-            </DockPanel>
+            <Grid>
+                <DockPanel Margin="5" IsVisible="{Binding !Group.IsOwner}">
+                    <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SukiText}" />
+                    <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                    <editableTextBlock:EditableTextBlock
+                        DefaultText="设置群聊备注"
+                        Text="{Binding Group.Remark,Mode=TwoWay}"
+                        FontSize="13.5"
+                        DockPanel.Dock="Right"
+                        HorizontalContentAlignment="Right"
+                        VerticalAlignment="Center" />
+                </DockPanel>
+                <DockPanel Margin="5" IsVisible="{Binding Group.IsOwner}">
+                    <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
+                                           Foreground="{DynamicResource SukiText}" />
+                    <TextBlock Text="群名" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                    <editableTextBlock:EditableTextBlock
+                        DefaultText="更改群名"
+                        Text="{Binding Group.GroupDto.Name,Mode=TwoWay}"
+                        FontSize="13.5"
+                        DockPanel.Dock="Right"
+                        HorizontalContentAlignment="Right"
+                        VerticalAlignment="Center" />
+                </DockPanel>
+            </Grid>
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="AccountOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
@@ -116,8 +131,17 @@
                 <avalonia:MaterialIcon Kind="NoteTextOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
                 <TextBlock Text="群介绍" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <editableTextBlock:EditableTextBlock
+                    IsVisible="{Binding Group.IsOwner}"
+                    Text="{Binding Group.GroupDto.Description,Mode=TwoWay}"
+                    DefaultText="设置群介绍"
+                    FontSize="14"
+                    DockPanel.Dock="Right"
+                    HorizontalContentAlignment="Right"
+                    VerticalAlignment="Center" />
                 <TextBlock DockPanel.Dock="Right"
-                           Text="{Binding Group.GroupDto.Description}"
+                           IsVisible="{Binding !Group.IsOwner}"
+                           Text="{Binding Group.GroupDto.Description,Converter={converter:DefaultTextConverter DefaultText=暂无介绍}}"
                            Padding="10,3"
                            MinHeight="0"
                            TextTrimming="CharacterEllipsis"
@@ -125,7 +149,7 @@
                            HorizontalAlignment="Right"
                            Margin="0" />
             </DockPanel>
-            <StackPanel Orientation="Vertical" Margin="8">
+            <StackPanel Orientation="Vertical" Margin="8" ClipToBounds="True">
                 <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
@@ -135,7 +159,7 @@
                         <Run Text=")" />
                     </TextBlock>
                 </StackPanel>
-                <ItemsControl ItemsSource="{Binding Group.GroupDto.GroupMembers}" Margin="0,8">
+                <ItemsControl ItemsSource="{Binding Group.GroupDto.GroupClipMembers}" Margin="0,8">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal" />

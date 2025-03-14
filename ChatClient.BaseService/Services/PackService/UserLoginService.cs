@@ -239,48 +239,42 @@ internal class UserLoginService : BaseService, IUserLoginService
             friendRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
         List<FriendRequestMessage> receives =
             friendRequestMessages.Where(d => d.UserTargetId.Equals(userId)).ToList();
-        List<Task> tasks = new List<Task>
+
+        using (var scope = _scopedProvider.CreateScope())
         {
-            Task.Run(async () =>
+            var unitOfWork = scope.Resolve<IUnitOfWork>();
+
+            var requestRespository = unitOfWork.GetRepository<FriendRequest>();
+            foreach (var request in requests)
             {
-                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
-                using var scope = _scopedProvider.CreateScope();
-                var unitOfWork = scope.Resolve<IUnitOfWork>();
+                var friendRequest = _mapper.Map<FriendRequest>(request);
+                var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(friendRequest.RequestId));
+                if (req != null)
+                    friendRequest.Id = req.Id;
+                requestRespository.Update(friendRequest);
+            }
 
-                var requestRespository = unitOfWork.GetRepository<FriendRequest>();
-                foreach (var request in requests)
-                {
-                    var friendRequest = _mapper.Map<FriendRequest>(request);
-                    var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
-                        d.RequestId.Equals(friendRequest.RequestId));
-                    if (req != null)
-                        friendRequest.Id = req.Id;
-                    requestRespository.Update(friendRequest);
-                }
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-                await _unitOfWork.SaveChangesAsync();
-            }),
-            Task.Run(async () =>
+        using (var scope = _scopedProvider.CreateScope())
+        {
+            var unitOfWork = scope.Resolve<IUnitOfWork>();
+
+            var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
+            foreach (var receive in receives)
             {
-                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
-                using var scope = _scopedProvider.CreateScope();
-                var unitOfWork = scope.Resolve<IUnitOfWork>();
+                var friendRequest = _mapper.Map<FriendReceived>(receive);
+                var req = await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(friendRequest.RequestId));
+                if (req != null)
+                    friendRequest.Id = req.Id;
+                receiveRespository.Update(friendRequest);
+            }
 
-                var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
-                foreach (var receive in receives)
-                {
-                    var friendRequest = _mapper.Map<FriendReceived>(receive);
-                    var req = await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
-                        d.RequestId.Equals(friendRequest.RequestId));
-                    if (req != null)
-                        friendRequest.Id = req.Id;
-                    receiveRespository.Update(friendRequest);
-                }
-
-                await _unitOfWork.SaveChangesAsync();
-            })
-        };
-        await Task.WhenAll(tasks);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 
     /// <summary>
@@ -342,48 +336,42 @@ internal class UserLoginService : BaseService, IUserLoginService
             groupRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
         List<GroupRequestMessage> receives =
             groupRequestMessages.Where(d => !d.UserFromId.Equals(userId)).ToList();
-        List<Task> tasks = new List<Task>
+
+        using (var scope = _scopedProvider.CreateScope())
         {
-            Task.Run(async () =>
+            var _unitOfWork = scope.Resolve<IUnitOfWork>();
+
+            var requestRespository = _unitOfWork.GetRepository<GroupRequest>();
+            foreach (var request in requests)
             {
-                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
-                using var scope = _scopedProvider.CreateScope();
-                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+                var groupRequest = _mapper.Map<GroupRequest>(request);
+                var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(groupRequest.RequestId));
+                if (req != null)
+                    groupRequest.Id = req.Id;
+                requestRespository.Update(groupRequest);
+            }
 
-                var requestRespository = _unitOfWork.GetRepository<GroupRequest>();
-                foreach (var request in requests)
-                {
-                    var groupRequest = _mapper.Map<GroupRequest>(request);
-                    var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
-                        d.RequestId.Equals(groupRequest.RequestId));
-                    if (req != null)
-                        groupRequest.Id = req.Id;
-                    requestRespository.Update(groupRequest);
-                }
+            await _unitOfWork.SaveChangesAsync();
+        }
 
-                await _unitOfWork.SaveChangesAsync();
-            }),
-            Task.Run(async () =>
+        using (var scope = _scopedProvider.CreateScope())
+        {
+            var _unitOfWork = scope.Resolve<IUnitOfWork>();
+
+            var friendRespository = _unitOfWork.GetRepository<GroupReceived>();
+            foreach (var receive in receives)
             {
-                //因为需要多线程并行处理，所以需要创建新的Scope，保证每个线程都有自己的UnitOfWork
-                using var scope = _scopedProvider.CreateScope();
-                var _unitOfWork = scope.Resolve<IUnitOfWork>();
+                var groupRequest = _mapper.Map<GroupReceived>(receive);
+                var req = await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(groupRequest.RequestId));
+                if (req != null)
+                    groupRequest.Id = req.Id;
+                friendRespository.Update(groupRequest);
+            }
 
-                var friendRespository = _unitOfWork.GetRepository<GroupReceived>();
-                foreach (var receive in receives)
-                {
-                    var groupRequest = _mapper.Map<GroupReceived>(receive);
-                    var req = await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
-                        d.RequestId.Equals(groupRequest.RequestId));
-                    if (req != null)
-                        groupRequest.Id = req.Id;
-                    friendRespository.Update(groupRequest);
-                }
-
-                await _unitOfWork.SaveChangesAsync();
-            })
-        };
-        await Task.WhenAll(tasks);
+            await _unitOfWork.SaveChangesAsync();
+        }
     }
 
     #endregion

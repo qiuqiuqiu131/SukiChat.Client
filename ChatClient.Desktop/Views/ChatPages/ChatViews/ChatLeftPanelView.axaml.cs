@@ -37,6 +37,7 @@ public partial class ChatLeftPanelView : UserControl
     }
 
     private ItemCollection _itemCollection;
+    private IEventAggregator eventAggregator;
 
     private bool isLoaded = false;
 
@@ -46,7 +47,7 @@ public partial class ChatLeftPanelView : UserControl
 
         _itemCollection = Items.Items;
 
-        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+        eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
         eventAggregator.GetEvent<SendMessageToViewEvent>().Subscribe(SendMessageToView);
     }
 
@@ -231,5 +232,10 @@ public partial class ChatLeftPanelView : UserControl
         }
 
         return left;
+    }
+
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
+    {
+        eventAggregator.GetEvent<SelectChatDtoChanged>().Publish();
     }
 }

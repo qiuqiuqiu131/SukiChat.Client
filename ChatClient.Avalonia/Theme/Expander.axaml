@@ -26,8 +26,18 @@
                                               BorderBrush="{DynamicResource SukiPrimaryColor7}"
                                               Padding="0,7"
                                               CornerRadius="0"
-                                              Classes="Chat"
+                                              Classes="Chat Expand"
                                               IsChecked="{TemplateBinding IsExpanded,Mode=TwoWay}">
+                                    <ToggleButton.Styles>
+                                        <Style Selector="ToggleButton.Expand:pointerover">
+                                            <Style Selector="^ PathIcon">
+                                                <Setter Property="Foreground"
+                                                        Value="{DynamicResource SukiPrimaryColor}" />
+                                            </Style>
+                                            <Setter Property="TextBlock.Foreground"
+                                                    Value="{DynamicResource SukiPrimaryColor}" />
+                                        </Style>
+                                    </ToggleButton.Styles>
                                     <Grid ColumnDefinitions="Auto,Auto,*">
                                         <PathIcon Name="PART_Icon"
                                                   Classes="Flippable"

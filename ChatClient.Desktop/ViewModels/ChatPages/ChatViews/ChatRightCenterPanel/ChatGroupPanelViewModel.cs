@@ -28,6 +28,8 @@ public class ChatGroupPanelViewModel : ViewModelBase
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
+    public ThemeStyle ThemeStyle { get; set; }
+
     public ChatInputPanelViewModel ChatInputPanelViewModel { get; init; }
 
     private GroupChatDto? selectedGroup;
@@ -45,19 +47,36 @@ public class ChatGroupPanelViewModel : ViewModelBase
     public DelegateCommand SearchMoreCommand { get; private set; }
     public DelegateCommand<GroupChatData> HeadClickCommand { get; private set; }
     public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public DelegateCommand QuitGroupCommand { get; private set; }
+    public DelegateCommand DeleteGroupCommand { get; private set; }
 
     #endregion
 
-    public ChatGroupPanelViewModel(IContainerProvider containerProvider, IUserManager userManager)
+    public ChatGroupPanelViewModel(IContainerProvider containerProvider,
+        IUserManager userManager,
+        IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
+        ThemeStyle = themeStyle.CurrentThemeStyle;
 
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
 
         HeadClickCommand = new DelegateCommand<GroupChatData>(HeadClick);
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
         FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
+        QuitGroupCommand = new DelegateCommand(QuitGroup);
+        DeleteGroupCommand = new DelegateCommand(DeleteGroup);
+    }
+
+    private void DeleteGroup()
+    {
+        // TODO:解散群聊
+    }
+
+    private void QuitGroup()
+    {
+        // TODO:退出群组
     }
 
     private void HeadClick(GroupChatData obj)
@@ -223,10 +242,39 @@ public class ChatGroupPanelViewModel : ViewModelBase
     {
         SelectedGroup = navigationContext.Parameters.GetValue<GroupChatDto>("SelectedGroup");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedGroup.InputMessages);
+
+        SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+        SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        SelectedGroup = null;
+        if (SelectedGroup != null)
+        {
+            SelectedGroup.GroupRelationDto!.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
+            SelectedGroup = null;
+        }
+    }
+
+    private async void GroupRelationDtoOnOnGroupRelationChanged()
+    {
+        if (SelectedGroup?.GroupRelationDto == null) return;
+
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        await groupService.UpdateGroupRelation(_userManager.User!.Id, SelectedGroup.GroupRelationDto);
+
+        IUserDtoManager userDtoManager = _containerProvider.Resolve<IUserDtoManager>();
+        var memberDto =
+            await userDtoManager.GetGroupMemberDto(SelectedGroup.GroupRelationDto.GroupDto!.Id, _userManager.User.Id);
+        if (memberDto != null)
+            memberDto.NickName = SelectedGroup.GroupRelationDto.NickName!;
+    }
+
+    private async void GroupDtoOnOnGroupChanged()
+    {
+        if (SelectedGroup?.GroupRelationDto?.GroupDto == null) return;
+
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        await groupService.UpdateGroup(_userManager.User!.Id, SelectedGroup.GroupRelationDto.GroupDto);
     }
 }

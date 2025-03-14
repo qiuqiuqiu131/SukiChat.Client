@@ -51,7 +51,15 @@ namespace ChatServer.Common.Protobuf {
             "CRIQCghmaWxlU2l6ZRgCIAEoBRIQCghmaWxlVHlwZRgDIAEoCSJPCg1TeXN0",
             "ZW1NZXNzYWdlEj4KBmJsb2NrcxgBIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9u",
             "LlByb3RvYnVmLlN5c3RlbU1lc3NhZ2VCbG9jayIwChJTeXN0ZW1NZXNzYWdl",
-            "QmxvY2sSDAoEdGV4dBgBIAEoCRIMCgRib2xkGAIgASgIYgZwcm90bzM="));
+            "QmxvY2sSDAoEdGV4dBgBIAEoCRIMCgRib2xkGAIgASgIIlUKHVVwZGF0ZUZy",
+            "aWVuZExhc3RDaGF0SWRSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmll",
+            "bmRJZBgCIAEoCRISCgpsYXN0Q2hhdElkGAMgASgFIlMKHFVwZGF0ZUdyb3Vw",
+            "TGFzdENoYXRJZFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQY",
+            "AiABKAkSEgoKbGFzdENoYXRJZBgDIAEoBSJeCh5VcGRhdGVGcmllbmRMYXN0",
+            "Q2hhdElkUmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVy",
+            "LkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSJdCh1VcGRhdGVHcm91",
+            "cExhc3RDaGF0SWRSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRT",
+            "ZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -65,7 +73,11 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ImageMess), global::ChatServer.Common.Protobuf.ImageMess.Parser, new[]{ "FilePath", "FileSize" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FileMess), global::ChatServer.Common.Protobuf.FileMess.Parser, new[]{ "FileName", "FileSize", "FileType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessage), global::ChatServer.Common.Protobuf.SystemMessage.Parser, new[]{ "Blocks" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessageBlock), global::ChatServer.Common.Protobuf.SystemMessageBlock.Parser, new[]{ "Text", "Bold" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessageBlock), global::ChatServer.Common.Protobuf.SystemMessageBlock.Parser, new[]{ "Text", "Bold" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdRequest), global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdRequest.Parser, new[]{ "UserId", "FriendId", "LastChatId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdRequest), global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdRequest.Parser, new[]{ "UserId", "GroupId", "LastChatId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdResponse), global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdResponse.Parser, new[]{ "Response" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse), global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse.Parser, new[]{ "Response" }, null, null, null, null)
           }));
     }
     #endregion
@@ -2158,6 +2170,646 @@ namespace ChatServer.Common.Protobuf {
           }
           case 16: {
             Bold = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdateFriendLastChatIdRequest : pb::IMessage<UpdateFriendLastChatIdRequest> {
+    private static readonly pb::MessageParser<UpdateFriendLastChatIdRequest> _parser = new pb::MessageParser<UpdateFriendLastChatIdRequest>(() => new UpdateFriendLastChatIdRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdateFriendLastChatIdRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdRequest(UpdateFriendLastChatIdRequest other) : this() {
+      userId_ = other.userId_;
+      friendId_ = other.friendId_;
+      lastChatId_ = other.lastChatId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdRequest Clone() {
+      return new UpdateFriendLastChatIdRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "friendId" field.</summary>
+    public const int FriendIdFieldNumber = 2;
+    private string friendId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string FriendId {
+      get { return friendId_; }
+      set {
+        friendId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastChatId" field.</summary>
+    public const int LastChatIdFieldNumber = 3;
+    private int lastChatId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int LastChatId {
+      get { return lastChatId_; }
+      set {
+        lastChatId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateFriendLastChatIdRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdateFriendLastChatIdRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (FriendId != other.FriendId) return false;
+      if (LastChatId != other.LastChatId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (FriendId.Length != 0) hash ^= FriendId.GetHashCode();
+      if (LastChatId != 0) hash ^= LastChatId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (FriendId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(FriendId);
+      }
+      if (LastChatId != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(LastChatId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (FriendId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(FriendId);
+      }
+      if (LastChatId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastChatId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdateFriendLastChatIdRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.FriendId.Length != 0) {
+        FriendId = other.FriendId;
+      }
+      if (other.LastChatId != 0) {
+        LastChatId = other.LastChatId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            FriendId = input.ReadString();
+            break;
+          }
+          case 24: {
+            LastChatId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdateGroupLastChatIdRequest : pb::IMessage<UpdateGroupLastChatIdRequest> {
+    private static readonly pb::MessageParser<UpdateGroupLastChatIdRequest> _parser = new pb::MessageParser<UpdateGroupLastChatIdRequest>(() => new UpdateGroupLastChatIdRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdateGroupLastChatIdRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[12]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdRequest(UpdateGroupLastChatIdRequest other) : this() {
+      userId_ = other.userId_;
+      groupId_ = other.groupId_;
+      lastChatId_ = other.lastChatId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdRequest Clone() {
+      return new UpdateGroupLastChatIdRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 2;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastChatId" field.</summary>
+    public const int LastChatIdFieldNumber = 3;
+    private int lastChatId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int LastChatId {
+      get { return lastChatId_; }
+      set {
+        lastChatId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateGroupLastChatIdRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdateGroupLastChatIdRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (GroupId != other.GroupId) return false;
+      if (LastChatId != other.LastChatId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
+      if (LastChatId != 0) hash ^= LastChatId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(GroupId);
+      }
+      if (LastChatId != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(LastChatId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
+      }
+      if (LastChatId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastChatId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdateGroupLastChatIdRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
+      }
+      if (other.LastChatId != 0) {
+        LastChatId = other.LastChatId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            GroupId = input.ReadString();
+            break;
+          }
+          case 24: {
+            LastChatId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdateFriendLastChatIdResponse : pb::IMessage<UpdateFriendLastChatIdResponse> {
+    private static readonly pb::MessageParser<UpdateFriendLastChatIdResponse> _parser = new pb::MessageParser<UpdateFriendLastChatIdResponse>(() => new UpdateFriendLastChatIdResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdateFriendLastChatIdResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[13]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdResponse(UpdateFriendLastChatIdResponse other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateFriendLastChatIdResponse Clone() {
+      return new UpdateFriendLastChatIdResponse(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateFriendLastChatIdResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdateFriendLastChatIdResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdateFriendLastChatIdResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class UpdateGroupLastChatIdResponse : pb::IMessage<UpdateGroupLastChatIdResponse> {
+    private static readonly pb::MessageParser<UpdateGroupLastChatIdResponse> _parser = new pb::MessageParser<UpdateGroupLastChatIdResponse>(() => new UpdateGroupLastChatIdResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<UpdateGroupLastChatIdResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[14]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdResponse(UpdateGroupLastChatIdResponse other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public UpdateGroupLastChatIdResponse Clone() {
+      return new UpdateGroupLastChatIdResponse(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as UpdateGroupLastChatIdResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(UpdateGroupLastChatIdResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(UpdateGroupLastChatIdResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
             break;
           }
         }

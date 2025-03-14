@@ -23,6 +23,7 @@ public interface IGroupService
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto);
+    Task<bool> UpdateGroup(string userId, GroupDto groupDto);
     Task<(bool, string)> JoinGroupRequest(string userId, string groupId);
     Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept);
     Task<Bitmap> GetHeadImage(int headIndex);
@@ -231,6 +232,28 @@ public class GroupService : BaseService, IGroupService
     }
 
     /// <summary>
+    /// 更新群聊信息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupDto"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<bool> UpdateGroup(string userId, GroupDto groupDto)
+    {
+        var request = new UpdateGroupMessageRequest
+        {
+            UserId = userId,
+            GroupId = groupDto.Id,
+            Name = groupDto.Name,
+            Description = groupDto.Description ?? string.Empty,
+            HeadIndex = groupDto.HeadIndex
+        };
+
+        await _messageHelper.SendMessage(request);
+        return true;
+    }
+
+    /// <summary>
     /// 发送加入群聊请求
     /// </summary>
     /// <param name="userId"></param>
@@ -270,7 +293,7 @@ public class GroupService : BaseService, IGroupService
             var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
             var groupRequestDto = _mapper.Map<GroupRequestDto>(groupRequest);
             groupRequestDto.GroupDto = await userDtoManager.GetGroupDto(userId, groupId);
-            userManager.GroupRequests?.Insert(0,groupRequestDto);
+            userManager.GroupRequests?.Insert(0, groupRequestDto);
         }
 
         return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");

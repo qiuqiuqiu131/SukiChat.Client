@@ -23,4 +23,6 @@ public class FriendRelation
     public bool CantDisturb { get; set; } = false;
 
     public bool IsTop { get; set; } = false;
+
+    public int LastChatId { get; set; }
 }

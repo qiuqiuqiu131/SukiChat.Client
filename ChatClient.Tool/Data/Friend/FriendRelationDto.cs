@@ -70,5 +70,13 @@ public class FriendRelationDto : BindableBase
         }
     }
 
+    private int _lastChatId;
+
+    public int LastChatId
+    {
+        get => _lastChatId;
+        set => SetProperty(ref _lastChatId, value);
+    }
+
     public event Action OnFriendRelationChanged;
 }

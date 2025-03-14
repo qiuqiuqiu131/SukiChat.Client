@@ -15,7 +15,6 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 public class ChatLeftPanelViewModel : ViewModelBase
 {
     private readonly IContainerProvider _containerProvider;
-    private readonly ISukiDialogManager _dialogManager;
     private readonly IDialogService _dialogService;
 
     public ChatViewModel ChatViewModel { get; init; }
@@ -37,7 +36,6 @@ public class ChatLeftPanelViewModel : ViewModelBase
     public ChatLeftPanelViewModel(ChatViewModel chatViewModel, IContainerProvider containerProvider)
     {
         _containerProvider = containerProvider;
-        _dialogManager = containerProvider.Resolve<ISukiDialogManager>();
         _dialogService = containerProvider.Resolve<IDialogService>();
 
         ChatViewModel = chatViewModel;

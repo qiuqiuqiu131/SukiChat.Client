@@ -14,7 +14,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
+                    <Border Background="{TemplateBinding Background}" Opacity="0.15"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
@@ -50,7 +50,7 @@
         <Style Selector="^:pointerover">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
@@ -61,7 +61,7 @@
         <Style Selector="^:selected">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
                 <Setter Property="CornerRadius" Value="13" />
             </Style>
@@ -82,7 +82,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Name="Back" Background="{TemplateBinding Background}" Opacity="0.3"
+                    <Border Name="Back" Background="{TemplateBinding Background}" Opacity="0.15"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
@@ -132,7 +132,7 @@
 
         <Style Selector="^:pointerover">
             <Style Selector="^ /template/ Border#Back">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
@@ -142,7 +142,7 @@
         </Style>
         <Style Selector="^:selected">
             <Style Selector="^ /template/ Border#Back">
-                <Setter Property="Opacity" Value="0.5" />
+                <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
                 <Setter Property="CornerRadius" Value="13" />
             </Style>

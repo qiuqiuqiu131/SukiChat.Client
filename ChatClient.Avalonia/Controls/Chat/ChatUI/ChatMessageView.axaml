@@ -19,7 +19,7 @@
                         <Grid.DataTemplates>
                             <DataTemplate DataType="data:TextMessDto">
                                 <SelectableTextBlock Text="{Binding Text}"
-                                                     FontSize="13"
+                                                     FontSize="13.5"
                                                      HorizontalAlignment="Center"
                                                      Margin="3,0,2,2"
                                                      Padding="2"
@@ -97,7 +97,7 @@
                                                             Margin="10,0">
                                                     <TextBlock
                                                         Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
-                                                        FontSize="13"
+                                                        FontSize="13.5"
                                                         HorizontalAlignment="Left"
                                                         TextWrapping="NoWrap"
                                                         TextTrimming="CharacterEllipsis" />
@@ -173,7 +173,7 @@
                                                             Margin="10,0">
                                                     <TextBlock
                                                         Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
-                                                        FontSize="13"
+                                                        FontSize="13.5"
                                                         HorizontalAlignment="Left"
                                                         TextWrapping="NoWrap"
                                                         TextTrimming="CharacterEllipsis" />

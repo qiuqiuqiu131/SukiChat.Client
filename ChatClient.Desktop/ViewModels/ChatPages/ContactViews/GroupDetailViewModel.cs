@@ -49,7 +49,10 @@ public class GroupDetailViewModel : ViewModelBase
         var parameters = navigationContext.Parameters;
         Group = parameters.GetValue<GroupRelationDto>("dto");
         if (Group != null)
+        {
             Group.OnGroupRelationChanged += Group_OnGroupRelationChanged;
+            Group.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
+        }
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
@@ -57,6 +60,7 @@ public class GroupDetailViewModel : ViewModelBase
         if (Group != null)
         {
             Group.OnGroupRelationChanged -= Group_OnGroupRelationChanged;
+            Group.GroupDto.OnGroupChanged -= GroupDtoOnOnGroupChanged;
             Group = null;
         }
     }
@@ -67,6 +71,17 @@ public class GroupDetailViewModel : ViewModelBase
     private async void Group_OnGroupRelationChanged()
     {
         var groupService = _containerProvider.Resolve<IGroupService>();
-        var result = await groupService.UpdateGroupRelation(_userManager.User.Id, Group);
+        await groupService.UpdateGroupRelation(_userManager.User.Id, Group);
+
+        IUserDtoManager userDtoManager = _containerProvider.Resolve<IUserDtoManager>();
+        var memberDto = await userDtoManager.GetGroupMemberDto(Group.GroupDto.Id, _userManager.User.Id);
+        if (memberDto != null)
+            memberDto.NickName = Group.NickName;
+    }
+
+    private async void GroupDtoOnOnGroupChanged()
+    {
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        await groupService.UpdateGroup(_userManager.User.Id, Group.GroupDto);
     }
 }

@@ -16,7 +16,8 @@ namespace ChatClient.DataBase.UnitOfWork
     /// Represents the default implementation of the <see cref="IUnitOfWork"/> and <see cref="IUnitOfWork{TContext}"/> interface.
     /// </summary>
     /// <typeparam name="TContext">The type of the db context.</typeparam>
-    public class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TContext>, IUnitOfWork where TContext : DbContext
+    public class UnitOfWork<TContext> : IRepositoryFactory, IUnitOfWork<TContext>, IUnitOfWork
+        where TContext : DbContext
     {
         private readonly TContext _context;
         private bool disposed = false;
@@ -53,7 +54,8 @@ namespace ChatClient.DataBase.UnitOfWork
             }
             else
             {
-                var connectionString = Regex.Replace(connection.ConnectionString.Replace(" ", ""), @"(?<=[Dd]atabase=)\w+(?=;)", database, RegexOptions.Singleline);
+                var connectionString = Regex.Replace(connection.ConnectionString.Replace(" ", ""),
+                    @"(?<=[Dd]atabase=)\w+(?=;)", database, RegexOptions.Singleline);
                 connection.ConnectionString = connectionString;
             }
 
@@ -76,6 +78,8 @@ namespace ChatClient.DataBase.UnitOfWork
         /// <returns>An instance of type inherited from <see cref="IRepository{TEntity}"/> interface.</returns>
         public IRepository<TEntity> GetRepository<TEntity>(bool hasCustomRepository = false) where TEntity : class
         {
+            //Console.WriteLine($"-------------{typeof(TEntity).Name} Created -------------");
+
             if (repositories == null)
             {
                 repositories = new Dictionary<Type, object>();
@@ -106,7 +110,8 @@ namespace ChatClient.DataBase.UnitOfWork
         /// <param name="sql">The raw SQL.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>The number of state entities written to database.</returns>
-        public int ExecuteSqlCommand(string sql, params object[] parameters) => _context.Database.ExecuteSqlRaw(sql, parameters);
+        public int ExecuteSqlCommand(string sql, params object[] parameters) =>
+            _context.Database.ExecuteSqlRaw(sql, parameters);
 
         /// <summary>
         /// Uses raw SQL queries to fetch the specified <typeparamref name="TEntity" /> data.
@@ -115,7 +120,8 @@ namespace ChatClient.DataBase.UnitOfWork
         /// <param name="sql">The raw SQL.</param>
         /// <param name="parameters">The parameters.</param>
         /// <returns>An <see cref="IQueryable{T}" /> that contains elements that satisfy the condition specified by raw SQL.</returns>
-        public IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class => _context.Set<TEntity>().FromSqlRaw(sql, parameters);
+        public IQueryable<TEntity> FromSql<TEntity>(string sql, params object[] parameters) where TEntity : class =>
+            _context.Set<TEntity>().FromSqlRaw(sql, parameters);
 
         /// <summary>
         /// Saves all changes made in this context to the database.

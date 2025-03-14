@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView">
+        xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView"
+        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
@@ -18,7 +19,10 @@
                     <!-- 侧边栏 -->
                     <Border Name="PaneContainer"
                             Width="{TemplateBinding PaneWidth}"
-                            BoxShadow="0 0 10 0 #40000000"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource SukiBorderBrush}"
+                            BoxShadow="-5 0 10 0 #10000000"
                             HorizontalAlignment="Right">
                         <Border.RenderTransform>
                             <TranslateTransform
@@ -33,7 +37,7 @@
 
     <Style Selector="controls|OverlaySplitView[IsPaneOpen=true] /template/ Border#PaneContainer">
         <Style.Animations>
-            <Animation Duration="0:0:0.3" FillMode="Forward" Easing="QuadraticEaseInOut">
+            <Animation Duration="0:0:0.2" FillMode="Forward" Easing="QuadraticEaseInOut">
                 <KeyFrame Cue="100%">
                     <Setter Property="TranslateTransform.X" Value="0" />
                 </KeyFrame>
@@ -43,10 +47,10 @@
 
     <Style Selector="controls|OverlaySplitView[IsPaneOpen=false] /template/ Border#PaneContainer">
         <Style.Animations>
-            <Animation Duration="0:0:0.3" FillMode="Forward" Easing="QuadraticEaseInOut">
+            <Animation Duration="0:0:0.2" FillMode="Forward" Easing="QuadraticEaseInOut">
                 <KeyFrame Cue="100%">
                     <Setter Property="TranslateTransform.X"
-                            Value="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                            Value="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent},Converter={converter:DoubleAddConverter AddValue=5}}" />
                 </KeyFrame>
             </Animation>
         </Style.Animations>

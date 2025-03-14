@@ -1,4 +1,6 @@
+using System.Collections.Specialized;
 using Avalonia.Collections;
+using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data.Group;
 
@@ -54,6 +56,8 @@ public class GroupChatDto : BindableBase
         set => SetProperty(ref unReadMessageCount, value);
     }
 
+    public bool IsSelected { get; set; }
+
     // 用户输入的消息
     public AvaloniaList<object> InputMessages { get; set; } = new();
 
@@ -61,7 +65,25 @@ public class GroupChatDto : BindableBase
 
     public GroupChatDto()
     {
-        ChatMessages.CollectionChanged += delegate { UpdateChatMessages(); };
+        ChatMessages.CollectionChanged += ChatMessagesOnCollectionChanged;
+    }
+
+    private void ChatMessagesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        UpdateChatMessages();
+
+        if (IsSelected) return;
+
+        // 新添加的消息
+        if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex != 0)
+        {
+            foreach (var newItem in e.NewItems)
+            {
+                var chatData = (GroupChatData)newItem;
+                if (!chatData.IsUser)
+                    UnReadMessageCount++;
+            }
+        }
     }
 
     public void UpdateChatMessages()

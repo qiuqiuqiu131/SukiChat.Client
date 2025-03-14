@@ -1,12 +1,13 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
-using ChatClient.Desktop.UIEntity;
 
 namespace ChatClient.Avalonia.Converter;
 
-public class SexConverter : MarkupExtension, IValueConverter
+public class DoubleAddConverter : MarkupExtension, IValueConverter
 {
+    public double AddValue { get; set; }
+
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
         return this;
@@ -14,13 +15,9 @@ public class SexConverter : MarkupExtension, IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is Sex sex)
+        if (value is double d)
         {
-            return sex switch
-            {
-                Sex.Female => "女",
-                Sex.Male => "男",
-            };
+            return d + AddValue;
         }
 
         return null;
@@ -28,15 +25,6 @@ public class SexConverter : MarkupExtension, IValueConverter
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string str)
-        {
-            return str switch
-            {
-                "女" => Sex.Female,
-                "男" => Sex.Male,
-            };
-        }
-
         return null;
     }
 }

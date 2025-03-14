@@ -25,6 +25,8 @@ public class ChatFriendPanelViewModel : ViewModelBase
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
+    public ThemeStyle ThemeStyle { get; set; }
+
     public ChatInputPanelViewModel ChatInputPanelViewModel { get; init; }
 
     private FriendChatDto? selectedFriend;
@@ -43,19 +45,41 @@ public class ChatFriendPanelViewModel : ViewModelBase
     public DelegateCommand SearchMoreCommand { get; private set; }
     public DelegateCommand<ChatData> HeadClickCommand { get; private set; }
     public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public DelegateCommand DeleteFriendCommand { get; private set; }
 
     #endregion
 
-    public ChatFriendPanelViewModel(IContainerProvider containerProvider, IUserManager userManager)
+    public ChatFriendPanelViewModel(IContainerProvider containerProvider,
+        IThemeStyle themeStyle,
+        IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
 
-        ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
+        ThemeStyle = themeStyle.CurrentThemeStyle;
+
+        ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, InputMessageChanged);
 
         HeadClickCommand = new DelegateCommand<ChatData>(HeadClick);
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
+        DeleteFriendCommand = new DelegateCommand(DeleteFriend);
+    }
+
+    /// <summary>
+    ///  处理输入事件
+    /// </summary>
+    /// <param name="obj"></param>
+    private void InputMessageChanged(bool isInputing)
+    {
+        if (SelectedFriend == null) return;
+        var chatService = _containerProvider.Resolve<IChatService>();
+        chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id, isInputing);
+    }
+
+    private void DeleteFriend()
+    {
+        // TODO:删除好友
     }
 
     private void HeadClick(ChatData obj)
@@ -219,10 +243,25 @@ public class ChatFriendPanelViewModel : ViewModelBase
     {
         SelectedFriend = navigationContext.Parameters.GetValue<FriendChatDto>("SelectedFriend");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedFriend.InputMessages);
+        if (SelectedFriend is { FriendRelatoinDto: not null })
+            SelectedFriend.FriendRelatoinDto.OnFriendRelationChanged += Friend_OnFriendRelationChanged;
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        SelectedFriend = null;
+        if (SelectedFriend != null)
+        {
+            var chatService = _containerProvider.Resolve<IChatService>();
+            chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id, false);
+
+            SelectedFriend.FriendRelatoinDto!.OnFriendRelationChanged -= Friend_OnFriendRelationChanged;
+            SelectedFriend = null;
+        }
+    }
+
+    private void Friend_OnFriendRelationChanged()
+    {
+        var friendService = _containerProvider.Resolve<IFriendService>();
+        friendService.UpdateFriendRelation(_userManager.User!.Id, SelectedFriend!.FriendRelatoinDto!);
     }
 }

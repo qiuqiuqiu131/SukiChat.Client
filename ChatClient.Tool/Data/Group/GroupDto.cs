@@ -16,7 +16,13 @@ public class GroupDto : BindableBase
     public string Name
     {
         get => name;
-        set => SetProperty(ref name, value);
+        set
+        {
+            if (SetProperty(ref name, value))
+            {
+                OnGroupChanged?.Invoke();
+            }
+        }
     }
 
     private string name;
@@ -24,7 +30,13 @@ public class GroupDto : BindableBase
     public string? Description
     {
         get => description;
-        set => SetProperty(ref description, value);
+        set
+        {
+            if (SetProperty(ref description, value))
+            {
+                OnGroupChanged?.Invoke();
+            }
+        }
     }
 
     private string? description;
@@ -40,15 +52,27 @@ public class GroupDto : BindableBase
     public AvaloniaList<GroupMemberDto> GroupMembers
     {
         get => groupMembers;
-        set => SetProperty(ref groupMembers, value);
+        set
+        {
+            if (SetProperty(ref groupMembers, value))
+                RaisePropertyChanged(nameof(GroupClipMembers));
+        }
     }
+
+    public List<GroupMemberDto> GroupClipMembers => [..GroupMembers.Take(16)];
 
     private AvaloniaList<GroupMemberDto> groupMembers = new();
 
     public int HeadIndex
     {
         get => headIndex;
-        set => SetProperty(ref headIndex, value);
+        set
+        {
+            if (SetProperty(ref headIndex, value))
+            {
+                OnGroupChanged?.Invoke();
+            }
+        }
     }
 
     private int headIndex;
@@ -60,6 +84,13 @@ public class GroupDto : BindableBase
     }
 
     private Bitmap headImage;
+
+    public event Action OnGroupChanged;
+
+    public GroupDto()
+    {
+        GroupMembers.CollectionChanged += (_, _) => { RaisePropertyChanged(nameof(GroupClipMembers)); };
+    }
 
     public void CopyFrom(GroupDto dto)
     {

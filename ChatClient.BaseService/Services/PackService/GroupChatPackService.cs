@@ -42,12 +42,16 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
         var groupChat = await chatGroupRepository.GetFirstOrDefaultAsync(
             predicate: d => d.GroupId.Equals(groupId),
-            orderBy: o => o.OrderByDescending(d => d.Time));
+            orderBy: o => o.OrderByDescending(d => d.ChatId));
 
-        var groupChatDto = new GroupChatDto();
+        GroupChatDto groupChatDto = new GroupChatDto();
         groupChatDto.GroupId = groupId;
         _ = Task.Run(async () =>
-            groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId));
+        {
+            groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
+            groupChatDto.UnReadMessageCount =
+                await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId);
+        });
 
         if (groupChat == null)
             return groupChatDto;
@@ -115,10 +119,11 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
             if (!data.IsSystem)
             {
                 data.IsUser = groupChat.UserFromId.Equals(userId);
-                data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId);
+                Task.Run(
+                    async () => data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId));
             }
 
-            await chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
+            chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
                 FileTarget.Group);
             groupChatDatas.Add(data);
         }
@@ -135,15 +140,23 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     {
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
         var chatGroup = _mapper.Map<ChatGroup>(groupChatMessage);
-        var result =
-            await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatGroup.ChatId));
-        if (result != null)
+        try
         {
-            chatGroup.Id = result.Id;
+            var result =
+                await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatGroup.ChatId));
+            if (result != null)
+                chatGroup.Id = result.Id;
+
+            chatGroupRepository.Update(chatGroup);
+            await _unitOfWork.SaveChangesAsync();
+            if (result != null)
+                chatGroupRepository.ChangeEntityState(result, EntityState.Detached);
+        }
+        catch (Exception e)
+        {
+            // ignored
         }
 
-        chatGroupRepository.Update(chatGroup);
-        await _unitOfWork.SaveChangesAsync();
         return true;
     }
 
@@ -170,5 +183,22 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         await _unitOfWork.SaveChangesAsync();
         return true;
+    }
+
+    /// <summary>
+    /// 获取未读消息数量
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="targetId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<int> GetUnReadChatMessageCount(string userId, string groupId, int lastChatId)
+    {
+        var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
+        var result = await chatGroupRepository.GetAll(
+                predicate: d =>
+                    d.UserFromId.Equals(userId) && d.UserFromId.Equals(groupId) && d.ChatId > lastChatId)
+            .CountAsync();
+        return result;
     }
 }

@@ -4,9 +4,11 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
@@ -59,7 +61,16 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
         var groupService = _containerProvider.Resolve<IGroupService>();
         var result = await groupService.CreateGroup(_userManager.User!.Id, friendIds);
         if (result.Item1)
-            _userManager.NewGroupReceive(result.Item2);
+        {
+            var dto = await _userManager.NewGroupReceive(result.Item2);
+            RequestClose.Invoke(ButtonResult.OK);
+
+            if (dto != null)
+            {
+                IEventAggregator eventAggregator = _containerProvider.Resolve<IEventAggregator>();
+                eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(dto);
+            }
+        }
     }
 
     private void SelectionChanged(SelectionChangedEventArgs args)

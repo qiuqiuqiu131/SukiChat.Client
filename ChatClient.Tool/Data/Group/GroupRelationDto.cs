@@ -86,5 +86,31 @@ public class GroupRelationDto : BindableBase
         }
     }
 
+    private int _lastChatId;
+
+    public int LastChatId
+    {
+        get => _lastChatId;
+        set => SetProperty(ref _lastChatId, value);
+    }
+
+    private int status;
+
+    public int Status
+    {
+        get => status;
+        set
+        {
+            if (SetProperty(ref status, value))
+            {
+                RaisePropertyChanged(nameof(IsManager));
+                RaisePropertyChanged(nameof(IsOwner));
+            }
+        }
+    }
+
+    public bool IsManager => status is 0 or 1;
+    public bool IsOwner => status == 0;
+
     public event Action OnGroupRelationChanged;
 }

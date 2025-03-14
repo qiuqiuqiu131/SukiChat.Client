@@ -52,7 +52,7 @@
                                 <Button IsVisible="{TemplateBinding SearchMoreVisible}"
                                         Classes="Basic"
                                         Command="{TemplateBinding SearchMoreCommand}">
-                                    <TextBlock Text="查看更多历史记录" FontSize="11.5" LetterSpacing="1"
+                                    <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
                                                Foreground="{DynamicResource SukiPrimaryColor75}" />
                                 </Button>
                                 <ItemsControl Name="IC"
@@ -107,14 +107,15 @@
                                                         Margin="5"
                                                         Opacity="0.6"
                                                         IsVisible="{Binding ShowTime}"
-                                                        FontSize="11.5"
+                                                        FontSize="12"
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
                                                     <Grid IsVisible="{Binding IsSystem}" Classes="FadeIn">
                                                         <ItemsControl
-                                                            Margin="0,5"
-                                                            ItemsSource="{Binding ChatMessages}">
+                                                            Margin="0,0,0,5"
+                                                            DataContext="{Binding ChatMessages[0]}"
+                                                            ItemsSource="{Binding ((data:SystemMessDto)Content).Blocks}">
                                                             <ItemsControl.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal"
@@ -123,36 +124,25 @@
                                                             </ItemsControl.ItemsPanel>
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <ItemsControl
-                                                                        ItemsSource="{Binding ((data:SystemMessDto)Content).Blocks}">
-                                                                        <ItemsControl.ItemsPanel>
-                                                                            <ItemsPanelTemplate>
-                                                                                <StackPanel Orientation="Horizontal"
-                                                                                    HorizontalAlignment="Center" />
-                                                                            </ItemsPanelTemplate>
-                                                                        </ItemsControl.ItemsPanel>
-                                                                        <ItemsControl.ItemTemplate>
-                                                                            <DataTemplate>
-                                                                                <TextBlock Text="{Binding Text}"
-                                                                                    Opacity="0.6"
-                                                                                    FontSize="11.5"
-                                                                                    Foreground="{DynamicResource SukiText}">
-                                                                                    <Interaction.Behaviors>
-                                                                                        <DataTriggerBehavior
-                                                                                            Binding="{Binding Bold}"
-                                                                                            Value="True">
-                                                                                            <ChangePropertyAction
-                                                                                                PropertyName="Foreground"
-                                                                                                Value="{DynamicResource SukiPrimaryColor}" />
-                                                                                            <ChangePropertyAction
-                                                                                                PropertyName="Opacity"
-                                                                                                Value="1" />
-                                                                                        </DataTriggerBehavior>
-                                                                                    </Interaction.Behaviors>
-                                                                                </TextBlock>
-                                                                            </DataTemplate>
-                                                                        </ItemsControl.ItemTemplate>
-                                                                    </ItemsControl>
+                                                                    <TextBlock Text="{Binding Text}"
+                                                                               Opacity="0.6"
+                                                                               Margin="0"
+                                                                               Padding="0"
+                                                                               FontSize="12"
+                                                                               Foreground="{DynamicResource SukiText}">
+                                                                        <Interaction.Behaviors>
+                                                                            <DataTriggerBehavior
+                                                                                Binding="{Binding Bold}"
+                                                                                Value="True">
+                                                                                <ChangePropertyAction
+                                                                                    PropertyName="Foreground"
+                                                                                    Value="{DynamicResource SukiPrimaryColor}" />
+                                                                                <ChangePropertyAction
+                                                                                    PropertyName="Opacity"
+                                                                                    Value="1" />
+                                                                            </DataTriggerBehavior>
+                                                                        </Interaction.Behaviors>
+                                                                    </TextBlock>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>

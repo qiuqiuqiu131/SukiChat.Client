@@ -19,16 +19,6 @@ public class EditableTextBlock : UserControl
         set => SetValue(TextProperty, value);
     }
 
-    public static readonly StyledProperty<string?> ActualTextProperty =
-        AvaloniaProperty.Register<EditableTextBlock, string?>(
-            nameof(ActualText));
-
-    public string? ActualText
-    {
-        get => GetValue(ActualTextProperty);
-        set => SetValue(ActualTextProperty, value);
-    }
-
     public static readonly StyledProperty<string> DefaultTextProperty =
         AvaloniaProperty.Register<EditableTextBlock, string>(
             nameof(DefaultText));
@@ -66,8 +56,6 @@ public class EditableTextBlock : UserControl
     {
         base.OnApplyTemplate(e);
 
-        ActualText = Text;
-
         _textBlock = e.NameScope.Get<TextBlock>("PART_TextBlock");
         _defaultTextBox = e.NameScope.Get<TextBlock>("PART_DefaultTextBlock");
         _textBox = e.NameScope.Get<TextBox>("PART_TextBox");
@@ -76,11 +64,6 @@ public class EditableTextBlock : UserControl
         _defaultTextBox.PointerPressed += TextBlockOnPointerPressed;
         _textBox.LostFocus += TextBoxOnLostFocus;
         _textBox.KeyDown += TextBoxOnKeyDown;
-        _textBox.GotFocus += TextBoxOnGotFocus;
-    }
-
-    private void TextBoxOnGotFocus(object? sender, GotFocusEventArgs e)
-    {
     }
 
     private void TextBoxOnKeyDown(object? sender, KeyEventArgs e)
@@ -92,7 +75,6 @@ public class EditableTextBlock : UserControl
     private void TextBoxOnLostFocus(object? sender, RoutedEventArgs e)
     {
         IsEditing = false;
-        Text = ActualText;
     }
 
     private async void TextBlockOnPointerPressed(object? sender, PointerPressedEventArgs e)

@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 
@@ -46,5 +47,9 @@ public class OverlaySplitView : ContentControl
     private void PaneContainerOnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         e.Handled = true;
+        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow.FocusManager.ClearFocus();
+        }
     }
 }

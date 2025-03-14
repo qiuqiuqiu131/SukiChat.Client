@@ -23,7 +23,7 @@
                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                    FontSize="{TemplateBinding FontSize}"
                                    VerticalAlignment="Center"
-                                   Text="{Binding $parent[editableTextBlock:EditableTextBlock].ActualText}" />
+                                   Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text}" />
                     </Grid>
                     <TextBox Name="PART_TextBox"
                              Padding="5,3"
@@ -36,7 +36,7 @@
                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                              VerticalAlignment="Center"
                              IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].IsEditing}"
-                             Text="{Binding $parent[editableTextBlock:EditableTextBlock].ActualText}" />
+                             Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Mode=TwoWay,UpdateSourceTrigger=LostFocus}" />
                 </Grid>
             </ControlTemplate>
         </Setter>

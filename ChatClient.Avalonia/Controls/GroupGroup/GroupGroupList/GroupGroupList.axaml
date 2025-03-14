@@ -29,7 +29,7 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="group:GroupRelationDto">
                                 <Grid Height="46">
-                                    <Grid Margin="6,6" ColumnDefinitions="42,*">
+                                    <Grid Margin="6,3" ColumnDefinitions="42,*">
                                         <Grid Width="42" Height="42">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding GroupDto.HeadImage}" />
@@ -63,13 +63,16 @@
                                             </Grid>
                                             <TextBlock Grid.Row="1"
                                                        VerticalAlignment="Center"
-                                                       FontSize="12"
-                                                       Opacity="0.8"
-                                                       Margin="0,0,15,0"
+                                                       FontSize="11.5"
+                                                       IsVisible="{Binding GroupDto.Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                       Opacity="0.6"
+                                                       Margin="0,3,15,0"
                                                        LetterSpacing="0.5"
                                                        TextTrimming="CharacterEllipsis"
-                                                       Foreground="{DynamicResource SukiText}"
-                                                       Text="{Binding GroupDto.Description}" />
+                                                       Foreground="{DynamicResource SukiText}">
+                                                <Run Text="[简介]:" FontWeight="Normal" />
+                                                <Run Text="{Binding GroupDto.Description}" FontWeight="Normal" />
+                                            </TextBlock>
                                         </Grid>
                                     </Grid>
                                 </Grid>

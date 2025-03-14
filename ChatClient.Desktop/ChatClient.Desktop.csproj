@@ -8,8 +8,6 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<TrimMode>copyused</TrimMode>
 		<PublishAot>false</PublishAot>
-		<InvariantGlobalization>false</InvariantGlobalization>
-		<StripSymbols>true</StripSymbols>
     </PropertyGroup>
 
 	<ItemGroup>

@@ -6,9 +6,9 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.HelperInterface;
-using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
@@ -20,7 +20,7 @@ public interface IChatService
 
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
     Task UpdateFileMess(FileMessDto messages);
-    Task ReadAllChatMessage(string userId, string targetId);
+    Task<bool> ReadAllChatMessage(string userId, string targetId, int chatId, FileTarget fileTarget);
 }
 
 internal class ChatService : BaseService, IChatService
@@ -101,11 +101,21 @@ internal class ChatService : BaseService, IChatService
         friendMessage.Time = response.Time;
         var chatPrivate = _mapper.Map<ChatPrivate>(friendMessage);
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        var result = await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(response.Id));
-        if (result != null)
-            chatPrivate.Id = result.Id;
-        chatPrivateRepository.Update(chatPrivate);
-        await _unitOfWork.SaveChangesAsync();
+        try
+        {
+            var result =
+                await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(response.Id));
+            if (result != null)
+                chatPrivate.Id = result.Id;
+            chatPrivateRepository.Update(chatPrivate);
+            await _unitOfWork.SaveChangesAsync();
+            if (result != null)
+                chatPrivateRepository.ChangeEntityState(result, EntityState.Detached);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
 
         return (true, response.Id.ToString());
     }
@@ -165,11 +175,20 @@ internal class ChatService : BaseService, IChatService
         groupChatMessage.Time = response.Time;
         var chatGroup = _mapper.Map<ChatGroup>(groupChatMessage);
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
-        var result = await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(response.Id));
-        if (result != null)
-            chatGroup.Id = result.Id;
-        chatGroupRepository.Update(chatGroup);
-        await _unitOfWork.SaveChangesAsync();
+        try
+        {
+            var result = await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(response.Id));
+            if (result != null)
+                chatGroup.Id = result.Id;
+            chatGroupRepository.Update(chatGroup);
+            await _unitOfWork.SaveChangesAsync();
+            if (result != null)
+                chatGroupRepository.ChangeEntityState(result, EntityState.Detached);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
 
         return (true, response.Id.ToString());
     }
@@ -202,7 +221,9 @@ internal class ChatService : BaseService, IChatService
     /// 如果上传成功，返回true和文件名，否则返回false和错误信息
     /// </summary>
     /// <param name="Id"></param>
-    /// <param name="filePath"></param>
+    /// <param name="bitmap"></param>
+    /// <param name="fileTarget"></param>
+    /// <param name="filename"></param>
     /// <returns></returns>
     private async Task<(bool, string)> UploadChatImage(string Id, Bitmap bitmap, FileTarget fileTarget,
         string? filename = null)
@@ -224,8 +245,10 @@ internal class ChatService : BaseService, IChatService
     /// 上传聊天文件，不会直接调用，而是在发送消息时调用
     /// 如果上传成功，返回true和文件名，否则返回false和错误信息
     /// </summary>
-    /// <param name="userId"></param>
+    /// <param name="Id"></param>
     /// <param name="filePath"></param>
+    /// <param name="fileTarget"></param>
+    /// <param name="fileProcessDto"></param>
     /// <returns></returns>
     private async Task<(bool, string)> UploadChatFile(string Id, string filePath, FileTarget fileTarget,
         FileProcessDto? fileProcessDto = null)
@@ -254,11 +277,7 @@ internal class ChatService : BaseService, IChatService
     /// <summary>
     /// 用于更新文件下载状态,数据库中更改
     /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <param name="messages"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="fileMess"></param>
     public async Task UpdateFileMess(FileMessDto fileMess)
     {
         int chatId = fileMess.ChatId;
@@ -292,22 +311,42 @@ internal class ChatService : BaseService, IChatService
     /// <param name="targetId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task ReadAllChatMessage(string userId, string targetId)
+    public async Task<bool> ReadAllChatMessage(string userId, string targetId, int lastChatId, FileTarget fileTarget)
     {
-        var respository = _unitOfWork.GetRepository<ChatPrivate>();
-        var unReadMessages = await respository.GetAllAsync(predicate: d =>
-            d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId) && !d.IsReaded, disableTracking: false);
-        foreach (var message in unReadMessages)
-            message.IsReaded = true;
-        await _unitOfWork.SaveChangesAsync();
-        unReadMessages.Clear();
+        // TODO: 已读所有消息
+        if (fileTarget == FileTarget.User)
+        {
+            var request = new UpdateFriendLastChatIdRequest
+            {
+                UserId = userId,
+                FriendId = targetId,
+                LastChatId = lastChatId
+            };
+            var response = await _messageHelper.SendMessageWithResponse<UpdateFriendLastChatIdResponse>(request);
+            return response is { Response: { State: true } };
+        }
+        else if (fileTarget == FileTarget.Group)
+        {
+            var request = new UpdateGroupLastChatIdRequest
+            {
+                UserId = userId,
+                GroupId = targetId,
+                LastChatId = lastChatId
+            };
+            var response = await _messageHelper.SendMessageWithResponse<UpdateGroupLastChatIdResponse>(request);
+            return response is { Response: { State: true } };
+        }
+
+        return false;
     }
 
     /// <summary>
     /// 将ChatMessages中的资源注入
     /// </summary>
-    /// <param name="userFromId"></param>
+    /// <param name="id"></param>
+    /// <param name="chatId"></param>
     /// <param name="chatMessages"></param>
+    /// <param name="fileTarget"></param>
     public async Task OperateChatMessage(string id,
         int chatId,
         List<ChatMessageDto> chatMessages, FileTarget fileTarget)

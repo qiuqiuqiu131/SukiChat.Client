@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ChatClient.DataBase.Data;
 
+[Microsoft.EntityFrameworkCore.Index(nameof(ChatId), IsUnique = true)]
 public class ChatPrivate
 {
     [Key]
@@ -18,6 +19,4 @@ public class ChatPrivate
     [Required] public string Message { get; set; }
 
     [Required] public DateTime Time { get; set; }
-
-    [Required] public bool IsReaded { get; set; } = false;
 }
