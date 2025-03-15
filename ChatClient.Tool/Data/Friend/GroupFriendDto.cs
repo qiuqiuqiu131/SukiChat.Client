@@ -2,7 +2,7 @@ using Avalonia.Collections;
 
 namespace ChatClient.Tool.Data;
 
-public class GroupFriendDto : BindableBase
+public class GroupFriendDto : BindableBase, IDisposable
 {
     private AvaloniaList<FriendRelationDto> _friends;
 
@@ -24,4 +24,11 @@ public class GroupFriendDto : BindableBase
 
     public void DeSelectItem(FriendRelationDto friend) =>
         DeSelectItemEvent?.Invoke(friend);
+
+    public void Dispose()
+    {
+        DeSelectItemEvent = null;
+        Friends.Clear();
+        Friends = null;
+    }
 }

@@ -1,6 +1,6 @@
 namespace ChatClient.Tool.Data.Group;
 
-public class GroupRelationDto : BindableBase
+public class GroupRelationDto : BindableBase, IDisposable
 {
     public string Id { get; set; }
 
@@ -113,4 +113,10 @@ public class GroupRelationDto : BindableBase
     public bool IsOwner => status == 0;
 
     public event Action OnGroupRelationChanged;
+
+    public void Dispose()
+    {
+        _groupDto = null;
+        OnGroupRelationChanged = null;
+    }
 }

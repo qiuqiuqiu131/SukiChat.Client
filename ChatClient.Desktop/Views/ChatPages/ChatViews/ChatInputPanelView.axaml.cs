@@ -12,6 +12,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.UserControls;
+using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 

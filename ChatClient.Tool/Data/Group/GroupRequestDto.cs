@@ -1,6 +1,6 @@
 namespace ChatClient.Tool.Data.Group;
 
-public class GroupRequestDto : BindableBase
+public class GroupRequestDto : BindableBase, IDisposable
 {
     public int RequestId { get; set; }
 
@@ -58,5 +58,11 @@ public class GroupRequestDto : BindableBase
     {
         get => acceptByGroupMemberDto;
         set => SetProperty(ref acceptByGroupMemberDto, value);
+    }
+
+    public void Dispose()
+    {
+        _groupDto = null;
+        acceptByGroupMemberDto = null;
     }
 }

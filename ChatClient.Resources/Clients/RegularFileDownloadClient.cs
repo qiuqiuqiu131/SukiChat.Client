@@ -47,38 +47,56 @@ public class RegularFileDownloadClient : IFileClient
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
 
-        // 存储文件下载进度
-        _fileProcessDto = fileProcessDto;
-
-        // 创建文件处理器
-        _regularFileOperator = new RegularFileOperator(message.FileName);
-        _regularFileOperator.OnFileDownloadFinished += OnFileDownloadFinished;
-
-        // 添加channel管道的handler
-        channel.Pipeline.AddLast(new RegularFileDownloadServerHandler(this));
-
-        // 等待文件接受完毕或者出错
-        taskCompletionSourceOfFileUnit = new TaskCompletionSource<FileUnit>();
-        Task wait = Task.Delay(TimeSpan.FromSeconds(100));
-
-        // 写入文件请求
-        await channel.WriteAndFlushProtobufAsync(message);
-
-        // 等待其中一个线程执行完成
-        var firstTask = await Task.WhenAny(wait, taskCompletionSourceOfFileUnit.Task);
-
-        if (firstTask == wait)
+        try
         {
-            taskCompletionSourceOfFileUnit.SetCanceled();
-            _fileProcessDto = null;
-            throw new TimeoutException("获取文件请求超时（10秒）");
+            // 存储文件下载进度
+            _fileProcessDto = fileProcessDto;
+
+            // 创建文件处理器
+            _regularFileOperator = new RegularFileOperator(message.FileName);
+            _regularFileOperator.OnFileDownloadFinished += OnFileDownloadFinished;
+
+            // 添加channel管道的handler
+            channel.Pipeline.AddLast(new RegularFileDownloadServerHandler(this));
+
+            // 等待文件接受完毕或者出错
+            taskCompletionSourceOfFileUnit = new TaskCompletionSource<FileUnit>();
+
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(100)))
+            {
+                // 注册取消回调
+                cts.Token.Register(() =>
+                {
+                    taskCompletionSourceOfFileUnit?.TrySetCanceled();
+                    Clear();
+                });
+
+                // 写入文件请求
+                await channel.WriteAndFlushProtobufAsync(message);
+
+                // 等待完成或取消
+                var result = await taskCompletionSourceOfFileUnit.Task;
+
+                // 更新进度
+                if (_fileProcessDto != null)
+                    _fileProcessDto.CurrentSize = _fileProcessDto.MaxSize;
+
+                return result;
+            }
         }
-        else
+        catch (TimeoutException)
         {
-            if (_fileProcessDto != null)
-                _fileProcessDto.CurrentSize = _fileProcessDto.MaxSize;
+            Clear();
+            throw new TimeoutException("获取文件请求超时（100秒）");
+        }
+        catch (Exception ex)
+        {
+            Clear();
+            throw;
+        }
+        finally
+        {
             _fileProcessDto = null;
-            return taskCompletionSourceOfFileUnit.Task.Result;
         }
     }
 
@@ -159,6 +177,22 @@ public class RegularFileDownloadClient : IFileClient
 
     public void Clear()
     {
-        _regularFileOperator.Clear();
+        // 取消订阅事件
+        if (_regularFileOperator != null)
+        {
+            _regularFileOperator.OnFileDownloadFinished -= OnFileDownloadFinished;
+            _regularFileOperator.Clear();
+            _regularFileOperator.Dispose();
+            _regularFileOperator = null;
+        }
+
+        _fileProcessDto = null;
+
+        // 清理未完成的任务
+        if (taskCompletionSourceOfFileUnit != null && !taskCompletionSourceOfFileUnit.Task.IsCompleted)
+        {
+            taskCompletionSourceOfFileUnit.TrySetCanceled();
+        }
+        taskCompletionSourceOfFileUnit = null;
     }
 }

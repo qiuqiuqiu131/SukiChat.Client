@@ -19,18 +19,19 @@ using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Ioc;
+using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatGroupPanelViewModel : ViewModelBase
+public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
 
-    public ChatInputPanelViewModel ChatInputPanelViewModel { get; init; }
+    public ChatInputPanelViewModel ChatInputPanelViewModel { get; private set; }
 
     private GroupChatDto? selectedGroup;
 
@@ -276,5 +277,11 @@ public class ChatGroupPanelViewModel : ViewModelBase
 
         var groupService = _containerProvider.Resolve<IGroupService>();
         await groupService.UpdateGroup(_userManager.User!.Id, SelectedGroup.GroupRelationDto.GroupDto);
+    }
+
+    public void Destroy()
+    {
+        SelectedGroup = null;
+        ChatInputPanelViewModel?.Dispose();
     }
 }

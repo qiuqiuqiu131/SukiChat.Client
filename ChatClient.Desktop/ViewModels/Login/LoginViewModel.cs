@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -17,7 +19,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
-public class LoginViewModel : ViewModelBase
+public class LoginViewModel : ViewModelBase, IDisposable
 {
     #region IsConnected
 
@@ -123,9 +125,14 @@ public class LoginViewModel : ViewModelBase
         ToRegisterViewCommand = new DelegateCommand(ToRegisterView);
         ToForgetViewCommand = new DelegateCommand(ToForgetView);
 
-        IsConnected.PropertyChanged += delegate { LoginCommand.RaiseCanExecuteChanged(); };
+        IsConnected.PropertyChanged += IsConnectedOnPropertyChanged;
 
         Id = LoginData.Id;
+    }
+
+    private void IsConnectedOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        LoginCommand.RaiseCanExecuteChanged();
     }
 
 
@@ -165,7 +172,24 @@ public class LoginViewModel : ViewModelBase
 
                 window.Show();
                 foreach (var w in windows)
+                {
+                    var oldRegion = RegionManager.GetRegionManager(w);
+                    if (oldRegion != null)
+                        foreach (var region in oldRegion.Regions)
+                        {
+                            foreach (var view in region.Views)
+                            {
+                                if (view is IDisposable v)
+                                    v.Dispose();
+                            }
+
+                            region.RemoveAll();
+                        }
+
                     w.Close();
+                    if (w is IDisposable disposable)
+                        disposable.Dispose();
+                }
             }
         }
         else
@@ -224,4 +248,41 @@ public class LoginViewModel : ViewModelBase
             .Dismiss().ByClickingBackground()
             .TryShow();
     }
+
+    #region Dispose
+
+    private bool _isDisposed = false;
+
+    /// <summary>
+    /// 释放资源
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                // 释放托管资源
+                IsConnected.PropertyChanged -= IsConnectedOnPropertyChanged;
+            }
+
+            _isDisposed = true;
+        }
+    }
+
+    /// <summary>
+    /// 析构函数，作为安全网
+    /// </summary>
+    ~LoginViewModel()
+    {
+        Dispose(false);
+    }
+
+    #endregion
 }

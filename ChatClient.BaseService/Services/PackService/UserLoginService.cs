@@ -56,6 +56,8 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("Load Date From Db Cost Time:" + (end - get_start));
         Console.WriteLine("User Init Cost Time:" + (end - start));
 
+        GC.Collect();
+
         return user;
     }
 
@@ -74,11 +76,8 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var friendPackService = scope.Resolve<IFriendPackService>();
-                    user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
-                }
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+                user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
 
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Receives Cost Time:" + (endTime - startTime));
@@ -86,102 +85,76 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var friendPackService = scope.Resolve<IFriendPackService>();
-                    user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
-                }
-
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+                user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Requests Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var friendPackService = scope.Resolve<IFriendPackService>();
-                    var friends = await friendPackService.GetFriendRelationDtos(userId);
-                    user.GroupFriends = new(friends
-                        .GroupBy(d => d.Grouping)
-                        .Select(d => new GroupFriendDto
-                        {
-                            Friends = new AvaloniaList<FriendRelationDto>(d),
-                            GroupName = d.Key
-                        }));
-                }
-
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+                var friends = await friendPackService.GetFriendRelationDtos(userId);
+                user.GroupFriends = new(friends
+                    .GroupBy(d => d.Grouping)
+                    .Select(d => new GroupFriendDto
+                    {
+                        Friends = new AvaloniaList<FriendRelationDto>(d),
+                        GroupName = d.Key
+                    }));
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Relations Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var friendChatPackService = scope.Resolve<IFriendChatPackService>();
-                    user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
-                }
-
+                var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
+                user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Chats Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var groupPackService = scope.Resolve<IGroupPackService>();
-                    var groups = await groupPackService.GetGroupRelationDtos(userId);
-                    user.GroupGroupDtos = new(groups
-                        .GroupBy(d => d.Grouping)
-                        .Select(d => new GroupGroupDto()
-                        {
-                            Groups = new AvaloniaList<GroupRelationDto>(d),
-                            GroupName = d.Key
-                        }));
-                }
-
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                var groups = await groupPackService.GetGroupRelationDtos(userId);
+                user.GroupGroupDtos = new(groups
+                    .GroupBy(d => d.Grouping)
+                    .Select(d => new GroupGroupDto()
+                    {
+                        Groups = new AvaloniaList<GroupRelationDto>(d),
+                        GroupName = d.Key
+                    }));
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Group Relations Cost Time:" + (endTime - startTime));
             }),
+
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var groupChatPackService = scope.Resolve<IGroupChatPackService>();
-                    user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
-                }
-
+                var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
+                user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Group Chats Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var groupPackService = scope.Resolve<IGroupPackService>();
-                    user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
-                }
-
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Group Receives Cost Time:" + (endTime - startTime));
             }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
-                using (var scope = _scopedProvider.CreateScope())
-                {
-                    var groupPackService = scope.Resolve<IGroupPackService>();
-                    user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
-                }
-
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Group Requests Cost Time:" + (endTime - startTime));
             }),
         ];
+
         await Task.WhenAll(tasks);
         return user;
     }
@@ -213,16 +186,21 @@ internal class UserLoginService : BaseService, IUserLoginService
         var outlineDto = _mapper.Map<OutlineMessageDto>(outlineResponse);
 
         // 处理离线消息
-        List<Task> tasks =
-        [
-            OperateFriendRequestMesssages(userId, outlineDto.FriendRequestMessages),
-            OperateNewFriendMessages(userId, outlineDto.NewFriendMessages),
-            OperateFriendChatMessages(userId, outlineDto.FriendChatMessages),
-            OperateEnterGroupMessages(userId, outlineDto.EnterGroupMessages),
-            OperateGroupChatMessages(userId, outlineDto.GroupChatMessages),
-            OperateGroupRequestMessage(userId, outlineDto.GroupRequestMessages)
-        ];
-        await Task.WhenAll(tasks);
+        var friendTaskGroup = Task.Run(async () =>
+        {
+            await OperateFriendRequestMesssages(userId, outlineDto.FriendRequestMessages);
+            await OperateNewFriendMessages(userId, outlineDto.NewFriendMessages);
+            await OperateFriendChatMessages(userId, outlineDto.FriendChatMessages);
+        });
+
+        var groupTaskGroup = Task.Run(async () =>
+        {
+            await OperateEnterGroupMessages(userId, outlineDto.EnterGroupMessages);
+            await OperateGroupChatMessages(userId, outlineDto.GroupChatMessages);
+            await OperateGroupRequestMessage(userId, outlineDto.GroupRequestMessages);
+        });
+
+        await Task.WhenAll(friendTaskGroup, groupTaskGroup);
     }
 
     #region OperateOutLineData(处理离线未处理的消息,直接对本地数据库进行操作)
@@ -283,8 +261,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="newFriendMessages"></param>
     private async Task OperateNewFriendMessages(string userId, List<NewFriendMessage> newFriendMessages)
     {
-        using var scope = _scopedProvider.CreateScope();
-        var friendPackService = scope.Resolve<IFriendPackService>();
+        var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.NewFriendMessagesOperate(userId, newFriendMessages);
     }
 
@@ -296,8 +273,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendChatMessages"></param>
     private async Task OperateFriendChatMessages(string userId, List<FriendChatMessage> friendChatMessages)
     {
-        using var scope = _scopedProvider.CreateScope();
-        var friendChatService = scope.Resolve<IFriendChatPackService>();
+        var friendChatService = _scopedProvider.Resolve<IFriendChatPackService>();
         await friendChatService.FriendChatMessagesOperate(friendChatMessages);
     }
 
@@ -308,8 +284,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="enterGroupMessages"></param>
     private async Task OperateEnterGroupMessages(string useId, List<EnterGroupMessage> enterGroupMessages)
     {
-        using var scope = _scopedProvider.CreateScope();
-        var groupPackService = scope.Resolve<IGroupPackService>();
+        var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.EnterGroupMessagesOperate(useId, enterGroupMessages);
     }
 
@@ -320,8 +295,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="groupChatMessages"></param>
     private async Task OperateGroupChatMessages(string userId, List<GroupChatMessage> groupChatMessages)
     {
-        using var scope = _scopedProvider.CreateScope();
-        var groupChatService = scope.Resolve<IGroupChatPackService>();
+        var groupChatService = _scopedProvider.Resolve<IGroupChatPackService>();
         await groupChatService.GroupChatMessagesOperate(groupChatMessages);
     }
 

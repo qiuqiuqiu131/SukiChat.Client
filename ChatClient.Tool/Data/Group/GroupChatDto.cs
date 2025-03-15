@@ -4,7 +4,7 @@ using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data.Group;
 
-public class GroupChatDto : BindableBase
+public class GroupChatDto : BindableBase, IDisposable
 {
     public string? GroupId { get; set; }
 
@@ -76,5 +76,19 @@ public class GroupChatDto : BindableBase
     public void UpdateChatMessages()
     {
         LastChatMessages = ChatMessages?.LastOrDefault(predicate: d => !d.IsWriting);
+    }
+
+    public void Dispose()
+    {
+        OnLastChatMessagesChanged = null;
+
+        InputMessages.Clear();
+        InputMessages = null;
+
+        ChatMessages.Clear();
+        ChatMessages = null;
+
+        _groupRelationDto = null;
+        _lastChatMessages = null;
     }
 }

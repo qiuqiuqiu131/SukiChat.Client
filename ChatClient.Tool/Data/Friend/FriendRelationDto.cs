@@ -1,6 +1,6 @@
 namespace ChatClient.Tool.Data;
 
-public class FriendRelationDto : BindableBase
+public class FriendRelationDto : BindableBase, IDisposable
 {
     public string Id { get; set; }
 
@@ -79,4 +79,9 @@ public class FriendRelationDto : BindableBase
     }
 
     public event Action OnFriendRelationChanged;
+
+    public void Dispose()
+    {
+        _userDto = null;
+    }
 }

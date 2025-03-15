@@ -61,9 +61,13 @@ internal class UserService : BaseService, IUserService
         if (file != null)
         {
             Bitmap bitmap;
-            using var stream = new MemoryStream(file);
-            // 从流加载Bitmap
-            bitmap = new Bitmap(stream);
+            using (var stream = new MemoryStream(file))
+            {
+                // 从流加载Bitmap
+                bitmap = new Bitmap(stream);
+            }
+
+            Array.Clear(file);
 
             return bitmap;
         }
@@ -89,9 +93,13 @@ internal class UserService : BaseService, IUserService
         if (file != null)
         {
             Bitmap bitmap;
-            using var stream = new MemoryStream(file);
-            // 从流加载Bitmap
-            bitmap = new Bitmap(stream);
+            using (var stream = new MemoryStream(file))
+            {
+                // 从流加载Bitmap
+                bitmap = new Bitmap(stream);
+            }
+
+            Array.Clear(file);
 
             return bitmap;
         }
@@ -119,6 +127,8 @@ internal class UserService : BaseService, IUserService
             {
                 bitmap = new Bitmap(stream);
             }
+
+            Array.Clear(file);
 
             bitmaps.Add(i, bitmap);
         }

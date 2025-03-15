@@ -7,15 +7,19 @@ using ChatClient.Avalonia.Controls.OverlaySplitView;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using Prism.Events;
+using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public partial class ChatGroupPanelView : UserControl
+public partial class ChatGroupPanelView : UserControl, IDestructible
 {
+    private SubscriptionToken? token;
+
     public ChatGroupPanelView(IEventAggregator eventAggregator)
     {
         InitializeComponent();
-        eventAggregator.GetEvent<SelectChatDtoChanged>().Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
+        token = eventAggregator.GetEvent<SelectChatDtoChanged>()
+            .Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -27,5 +31,10 @@ public partial class ChatGroupPanelView : UserControl
     private void ShowRightView(object? sender, RoutedEventArgs e)
     {
         OverlaySplitView.IsPaneOpen = !OverlaySplitView.IsPaneOpen;
+    }
+
+    public void Destroy()
+    {
+        token?.Dispose();
     }
 }

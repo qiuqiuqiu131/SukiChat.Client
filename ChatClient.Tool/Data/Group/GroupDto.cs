@@ -3,7 +3,7 @@ using Avalonia.Media.Imaging;
 
 namespace ChatClient.Tool.Data.Group;
 
-public class GroupDto : BindableBase
+public class GroupDto : BindableBase, IDisposable
 {
     public string Id
     {
@@ -99,5 +99,15 @@ public class GroupDto : BindableBase
         CreateTime = dto.CreateTime;
         headIndex = dto.headIndex;
         HeadImage = dto.HeadImage;
+    }
+
+    public void Dispose()
+    {
+        headImage.Dispose();
+
+        OnGroupChanged = null;
+
+        groupMembers.Clear();
+        groupMembers = null;
     }
 }

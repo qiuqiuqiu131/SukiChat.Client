@@ -94,6 +94,8 @@ public class ChatViewModel : ChatPageBase
             // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
             groupChatDto.ChatMessages.RemoveRange(0, groupChatDto.ChatMessages.Count - 1);
         }
+
+        GC.Collect();
     }
 
     #region FriendChat

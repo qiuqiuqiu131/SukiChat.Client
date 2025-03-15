@@ -397,6 +397,7 @@ internal class ChatService : BaseService, IChatService
                 {
                     using (MemoryStream stream = new MemoryStream(content))
                         messContent.ImageSource = new Bitmap(stream);
+                    Array.Clear(content);
                 }
                 else
                 {

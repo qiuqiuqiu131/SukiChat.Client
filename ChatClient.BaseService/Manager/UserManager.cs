@@ -85,8 +85,9 @@ internal class UserManager : IUserManager
         UnRegisterEvent(_eventAggregator);
 
         // 清空用户数据
-        UserData?.Clear();
+        UserData?.Dispose();
         UserData = null;
+
         _userDtoManager.Clear();
 
         return response;
@@ -122,6 +123,8 @@ internal class UserManager : IUserManager
         var userService = _containerProvider.Resolve<IUserService>();
         await userService.SaveUser(User);
     }
+
+    #region NewDto
 
     /// <summary>
     /// 当添加了新朋友时，更新朋友列表
@@ -221,6 +224,8 @@ internal class UserManager : IUserManager
 
         return dto;
     }
+
+    #endregion
 
     #region EventRegister
 

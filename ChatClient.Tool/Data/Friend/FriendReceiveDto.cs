@@ -1,6 +1,6 @@
 namespace ChatClient.Tool.Data;
 
-public class FriendReceiveDto : BindableBase
+public class FriendReceiveDto : BindableBase, IDisposable
 {
     public int RequestId { get; set; }
 
@@ -41,5 +41,10 @@ public class FriendReceiveDto : BindableBase
     {
         get => _userDto;
         set => SetProperty(ref _userDto, value);
+    }
+
+    public void Dispose()
+    {
+        _userDto = null;
     }
 }

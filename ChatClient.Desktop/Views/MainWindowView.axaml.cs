@@ -14,7 +14,7 @@ using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views;
 
-public partial class MainWindowView : SukiWindow
+public partial class MainWindowView : SukiWindow, IDisposable
 {
     private readonly IEventAggregator _eventAggregator;
 
@@ -112,4 +112,43 @@ public partial class MainWindowView : SukiWindow
         if (e.Handled) return;
         FocusManager?.ClearFocus();
     }
+
+    #region Dispose
+
+    private bool _isDisposed = false;
+
+    /// <summary>
+    /// 释放资源
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                if (DataContext is IDisposable disposable)
+                    disposable.Dispose();
+            }
+
+            // 释放非托管资源（如果有的话）
+
+            _isDisposed = true;
+        }
+    }
+
+    /// <summary>
+    /// 析构函数，作为安全网
+    /// </summary>
+    ~MainWindowView()
+    {
+        Dispose(false);
+    }
+
+    #endregion
 }

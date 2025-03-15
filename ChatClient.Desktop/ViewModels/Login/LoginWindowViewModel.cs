@@ -1,3 +1,4 @@
+using System;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -8,7 +9,7 @@ using SukiUI.Enums;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
-public class LoginWindowViewModel : ViewModelBase
+public class LoginWindowViewModel : ViewModelBase, IDisposable
 {
     public ISukiDialogManager DialogManager { get; init; }
 
@@ -35,4 +36,40 @@ public class LoginWindowViewModel : ViewModelBase
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
     }
+
+    #region Dispose
+
+    private bool _isDisposed = false;
+
+    /// <summary>
+    /// 释放资源
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                // 释放托管资源
+            }
+
+            _isDisposed = true;
+        }
+    }
+
+    /// <summary>
+    /// 析构函数，作为安全网
+    /// </summary>
+    ~LoginWindowViewModel()
+    {
+        Dispose(false);
+    }
+
+    #endregion
 }

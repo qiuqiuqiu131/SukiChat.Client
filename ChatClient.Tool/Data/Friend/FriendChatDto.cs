@@ -4,7 +4,7 @@ using Avalonia.Collections;
 
 namespace ChatClient.Tool.Data;
 
-public class FriendChatDto : BindableBase
+public class FriendChatDto : BindableBase, IDisposable
 {
     public string UserId { get; set; }
 
@@ -111,5 +111,20 @@ public class FriendChatDto : BindableBase
     public void UpdateChatMessages()
     {
         LastChatMessages = ChatMessages?.LastOrDefault(predicate: d => !d.IsWriting);
+    }
+
+    public void Dispose()
+    {
+        OnLastChatMessagesChanged = null;
+
+        _friendRelationDto = null;
+
+        InputMessages.Clear();
+        InputMessages = null;
+
+        ChatMessages.Clear();
+        ChatMessages = null;
+
+        LastChatMessages = null;
     }
 }

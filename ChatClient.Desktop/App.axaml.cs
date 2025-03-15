@@ -9,6 +9,7 @@ using ChatClient.BaseService.Helper;
 using ChatClient.Client;
 using ChatClient.DataBase;
 using ChatClient.Desktop.UIEntity;
+using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
@@ -42,9 +43,6 @@ public class App : PrismApplication
     {
         AvaloniaXamlLoader.Load(this);
         base.Initialize();
-
-        // CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("zh-CN");
-        // CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("zh-CN");
     }
 
     /// <summary>
@@ -77,6 +75,9 @@ public class App : PrismApplication
         // 注册SukiManager
         containerRegistry.RegisterSingleton<ISukiToastManager, SukiToastManager>();
         containerRegistry.RegisterSingleton<ISukiDialogManager, SukiDialogManager>();
+
+        containerRegistry.Register<MainWindowView>().Register<MainWindowViewModel>();
+        containerRegistry.Register<LoginWindowView>().Register<LoginWindowViewModel>();
 
         // 注册导航View
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();

@@ -1,3 +1,4 @@
+using System.Buffers;
 using ChatClient.ResourcesClient.ServerHandlers;
 using ChatClient.Tool.Data.File;
 using ChatServer.Common;
@@ -97,32 +98,36 @@ public class LargeFileUploadClient : IFileClient
 
         if (_fileStream == null) return;
 
-        // 读取文件流
-        int bytesRead = await _fileStream.ReadAsync(buffer!, 0, CHUNK_SIZE);
-
-        // 拷贝读取的字节流
-        byte[] chunk = new byte[bytesRead];
-        Array.Copy(buffer!, chunk, bytesRead);
-
-        // 发送文件分片
-        if (_channel.TryGetTarget(out var channel))
+        // 使用内存池获取缓冲区
+        byte[] sharedBuffer = ArrayPool<byte>.Shared.Rent(CHUNK_SIZE);
+        try
         {
-            FilePack filePack = new FilePack
+            // 读取文件流
+            int bytesRead = await _fileStream.ReadAsync(sharedBuffer, 0, CHUNK_SIZE);
+
+            // 发送文件分片
+            if (_channel.TryGetTarget(out var channel))
             {
-                PackIndex = ++_packIndex,
-                FileName = response.FileName,
-                PackSize = bytesRead,
-                Data = ByteString.CopyFrom(chunk),
-                Time = response.Time
-            };
-            await channel.WriteAndFlushProtobufAsync(filePack);
+                FilePack filePack = new FilePack
+                {
+                    PackIndex = ++_packIndex,
+                    FileName = response.FileName,
+                    PackSize = bytesRead,
+                    Data = ByteString.CopyFrom(sharedBuffer, 0, bytesRead),
+                    Time = response.Time
+                };
+                await channel.WriteAndFlushProtobufAsync(filePack);
+            }
+            else
+            {
+                OnFileUploadFinished(new FileResponse { Success = false });
+            }
         }
-        else
+        finally
         {
-            OnFileUploadFinished(new FileResponse { Success = false });
+            // 归还缓冲区到池
+            ArrayPool<byte>.Shared.Return(sharedBuffer);
         }
-
-        Array.Clear(chunk);
     }
 
     /// <summary>
@@ -150,15 +155,20 @@ public class LargeFileUploadClient : IFileClient
         return null;
     }
 
+    // 修改Clear方法
     public void Clear()
     {
         if (_fileStream != null)
+        {
             _fileStream.Dispose();
-        _fileStream = null;
+            _fileStream = null;
+        }
 
         _fileProcessDto = null;
+        _fileName = null;
+        buffer = null;
 
-        if (buffer != null)
-            Array.Clear(buffer);
+        // 确保任务完成源设置为null
+        taskCompletionSourceOfFileResponse = null;
     }
 }

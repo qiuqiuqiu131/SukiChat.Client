@@ -9,7 +9,7 @@
 		
 		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
 		<TrimMode>copyused</TrimMode>
-		<PublishAot>true</PublishAot>
+		<PublishTrimmed>true</PublishTrimmed>
 		<IsAotCompatible>true</IsAotCompatible>
 		<StripSymbols>false</StripSymbols>
     </PropertyGroup>

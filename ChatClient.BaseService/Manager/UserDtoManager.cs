@@ -238,8 +238,25 @@ public class UserDtoManager : IUserDtoManager
 
     public void Clear()
     {
+        foreach (var friendRelationDto in _friendRelationDtos.Values)
+            friendRelationDto.Dispose();
         _friendRelationDtos.Clear();
+
+        foreach (var userDto in _userDtos.Values)
+            userDto.Dispose();
         _userDtos.Clear();
+
+        foreach (var groupDto in _groupDtos.Values)
+            groupDto.Dispose();
+        _groupDtos.Clear();
+
+        foreach (var groupRelationDto in _groupRelationDtos.Values)
+            groupRelationDto.Dispose();
+        _groupRelationDtos.Clear();
+
+        foreach (var groupMemberDto in _groupMemberDtos.Values)
+            groupMemberDto.Dispose();
+        _groupMemberDtos.Clear();
     }
 
     // 析构函数中释放信号量
@@ -247,5 +264,9 @@ public class UserDtoManager : IUserDtoManager
     {
         _semaphore_1.Dispose();
         _semaphore_2.Dispose();
+        _semaphore_3.Dispose();
+        _semaphore_4.Dispose();
+        _semaphore_5.Dispose();
+        Clear();
     }
 }

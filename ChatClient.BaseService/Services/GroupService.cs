@@ -328,10 +328,13 @@ public class GroupService : BaseService, IGroupService
         if (bytes != null)
         {
             Bitmap bitmap;
-            using var stream = new MemoryStream(bytes);
-            // 从流加载Bitmap
-            bitmap = new Bitmap(stream);
+            using (var stream = new MemoryStream(bytes))
+            {
+                // 从流加载Bitmap
+                bitmap = new Bitmap(stream);
+            }
 
+            Array.Clear(bytes);
             return bitmap;
         }
 

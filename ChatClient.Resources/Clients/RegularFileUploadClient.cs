@@ -1,3 +1,4 @@
+using System.Buffers;
 using ChatClient.Resources.ServerHandlers;
 using ChatClient.Tool.Data.File;
 using ChatServer.Common;
@@ -20,7 +21,6 @@ public class RegularFileUploadClient : IFileClient
 
     // 文件操作
     const int CHUNK_SIZE = 60000; // 64KB per chunk
-    byte[]? buffer;
     int _packIndex = 0;
     int _totelCount = 0;
 
@@ -51,7 +51,6 @@ public class RegularFileUploadClient : IFileClient
         _fileName = fileName;
 
         // 初始化文件资源读取
-        buffer = new byte[CHUNK_SIZE];
         _packIndex = 0;
         _totelCount = (int)Math.Ceiling((double)file.Length / CHUNK_SIZE);
 
@@ -96,32 +95,36 @@ public class RegularFileUploadClient : IFileClient
 
         if (_fileStream == null) return;
 
-        // 读取文件流
-        int bytesRead = await _fileStream.ReadAsync(buffer!, 0, CHUNK_SIZE);
-
-        // 拷贝读取的字节流
-        byte[] chunk = new byte[bytesRead];
-        Array.Copy(buffer!, chunk, bytesRead);
-
-        // 发送文件分片
-        if (_channel.TryGetTarget(out var channel))
+        // 使用共享对象池获取缓冲区
+        byte[] sharedBuffer = ArrayPool<byte>.Shared.Rent(CHUNK_SIZE);
+        try
         {
-            FilePack filePack = new FilePack
+            // 读取文件流
+            int bytesRead = await _fileStream.ReadAsync(sharedBuffer, 0, CHUNK_SIZE);
+
+            // 发送文件分片
+            if (_channel.TryGetTarget(out var channel))
             {
-                PackIndex = ++_packIndex,
-                FileName = response.FileName,
-                PackSize = bytesRead,
-                Data = ByteString.CopyFrom(chunk),
-                Time = response.Time
-            };
-            await channel.WriteAndFlushProtobufAsync(filePack);
+                FilePack filePack = new FilePack
+                {
+                    PackIndex = ++_packIndex,
+                    FileName = response.FileName,
+                    PackSize = bytesRead,
+                    Data = ByteString.CopyFrom(sharedBuffer, 0, bytesRead),
+                    Time = response.Time
+                };
+                await channel.WriteAndFlushProtobufAsync(filePack);
+            }
+            else
+            {
+                OnFileUploadFinished(new FileResponse { Success = false });
+            }
         }
-        else
+        finally
         {
-            OnFileUploadFinished(new FileResponse { Success = false });
+            // 归还缓冲区
+            ArrayPool<byte>.Shared.Return(sharedBuffer);
         }
-
-        Array.Clear(chunk);
     }
 
     public void OnFileUploadFinished(FileResponse response)
@@ -131,8 +134,6 @@ public class RegularFileUploadClient : IFileClient
         taskCompletionSourceOfFileResponse.SetResult(response);
 
         // 清理资源
-        if (buffer != null)
-            Array.Clear(buffer);
         _fileStream?.Dispose();
         _fileStream = null;
     }
@@ -151,11 +152,12 @@ public class RegularFileUploadClient : IFileClient
     public void Clear()
     {
         if (_fileStream != null)
+        {
             _fileStream.Dispose();
+            _fileStream = null;
+        }
 
         _fileProcessDto = null;
-
-        if (buffer != null)
-            Array.Clear(buffer);
+        _fileName = null;
     }
 }

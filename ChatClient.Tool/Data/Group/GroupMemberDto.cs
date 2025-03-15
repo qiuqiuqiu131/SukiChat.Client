@@ -2,7 +2,7 @@ using Avalonia.Media.Imaging;
 
 namespace ChatClient.Tool.Data.Group;
 
-public class GroupMemberDto : BindableBase
+public class GroupMemberDto : BindableBase, IDisposable
 {
     public string UserId
     {
@@ -66,5 +66,10 @@ public class GroupMemberDto : BindableBase
         HeadImage = groupMemberDto.headImage;
         NickName = groupMemberDto.nickName;
         Status = groupMemberDto.status;
+    }
+
+    public void Dispose()
+    {
+        headImage?.Dispose();
     }
 }

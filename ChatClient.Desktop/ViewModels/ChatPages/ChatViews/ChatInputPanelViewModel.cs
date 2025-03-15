@@ -21,7 +21,7 @@ using Action = Avalonia.Xaml.Interactivity.Action;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
-public class ChatInputPanelViewModel : ViewModelBase
+public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 {
     private AvaloniaList<object>? _inputMessages;
 
@@ -36,9 +36,9 @@ public class ChatInputPanelViewModel : ViewModelBase
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
 
-    private readonly Action<ChatMessage.ContentOneofCase, object> sendChatMessage;
-    private readonly Action<IEnumerable<object>> sendChatMessages;
-    private readonly Action<bool>? inputMessageChanged;
+    private Action<ChatMessage.ContentOneofCase, object> sendChatMessage;
+    private Action<IEnumerable<object>> sendChatMessages;
+    private Action<bool>? inputMessageChanged;
 
     private bool isWriting;
 
@@ -72,7 +72,7 @@ public class ChatInputPanelViewModel : ViewModelBase
 
     private void ClearInput()
     {
-        InputMessages?.RemoveRange(0, InputMessages.Count);
+        InputMessages?.Clear();
     }
 
     /// <summary>
@@ -202,4 +202,13 @@ public class ChatInputPanelViewModel : ViewModelBase
     }
 
     #endregion
+
+    public void Dispose()
+    {
+        sendChatMessages = null;
+        sendChatMessage = null;
+        inputMessageChanged = null;
+
+        InputMessages = null;
+    }
 }

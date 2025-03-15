@@ -19,12 +19,14 @@ using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
+using Prism.Navigation;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel : ViewModelBase, IDisposable
 {
     private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
@@ -77,7 +79,7 @@ public class MainWindowViewModel : ViewModelBase
 
     #endregion
 
-    public IAvaloniaReadOnlyList<ChatPageBase> ChatPages { get; }
+    public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
 
     public ISukiToastManager ToastManager { get; init; }
     public ISukiDialogManager DialogManager { get; init; }
@@ -143,6 +145,7 @@ public class MainWindowViewModel : ViewModelBase
     {
         foreach (var token in tokens)
             token.Dispose();
+        tokens.Clear();
         IsConnected.ConnecttedChanged -= ConnectionChanged;
         CurrentThemeStyle.ThemeStyleChanged -= ThemeStyleChanged;
     }
@@ -193,7 +196,6 @@ public class MainWindowViewModel : ViewModelBase
     {
         // 退出登录
         _userManager.Logout();
-        UnRegisterEvent();
 
         if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
@@ -203,7 +205,62 @@ public class MainWindowViewModel : ViewModelBase
 
             window.Show();
             foreach (var wd in windows)
+            {
+                var oldRegion = RegionManager.GetRegionManager(wd);
+                if (oldRegion != null)
+                    foreach (var region in oldRegion.Regions)
+                        region.RemoveAll();
+
                 wd.Close();
+
+                if (wd is IDisposable disposable)
+                    disposable.Dispose();
+            }
         }
     }
+
+    #region Dispose
+
+    private bool _isDisposed = false;
+
+    /// <summary>
+    /// 释放资源
+    /// </summary>
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!_isDisposed)
+        {
+            if (disposing)
+            {
+                // 释放托管资源
+                UnRegisterEvent();
+                try
+                {
+                    ChatPages?.Clear();
+                    ChatPages = null;
+                }
+                catch (Exception e)
+                {
+                }
+            }
+
+            _isDisposed = true;
+        }
+    }
+
+    /// <summary>
+    /// 析构函数，作为安全网
+    /// </summary>
+    ~MainWindowViewModel()
+    {
+        Dispose(false);
+    }
+
+    #endregion
 }

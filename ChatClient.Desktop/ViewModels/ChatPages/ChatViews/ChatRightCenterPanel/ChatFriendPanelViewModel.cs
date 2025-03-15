@@ -16,18 +16,19 @@ using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Ioc;
+using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatFriendPanelViewModel : ViewModelBase
+public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
 
-    public ChatInputPanelViewModel ChatInputPanelViewModel { get; init; }
+    public ChatInputPanelViewModel ChatInputPanelViewModel { get; private set; }
 
     private FriendChatDto? selectedFriend;
 
@@ -263,5 +264,11 @@ public class ChatFriendPanelViewModel : ViewModelBase
     {
         var friendService = _containerProvider.Resolve<IFriendService>();
         friendService.UpdateFriendRelation(_userManager.User!.Id, SelectedFriend!.FriendRelatoinDto!);
+    }
+
+    public void Destroy()
+    {
+        ChatInputPanelViewModel?.Dispose();
+        SelectedFriend = null;
     }
 }

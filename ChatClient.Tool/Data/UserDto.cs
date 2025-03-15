@@ -4,7 +4,7 @@ using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Tool.Data
 {
-    public class UserDto : BindableBase
+    public class UserDto : BindableBase, IDisposable
     {
         public string Id
         {
@@ -109,6 +109,12 @@ namespace ChatClient.Tool.Data
             HeadImage = dto.HeadImage;
             Birth = dto.birth;
             Sex = dto.Sex;
+        }
+
+        public void Dispose()
+        {
+            HeadImage?.Dispose();
+            OnUserOnlineChanged = null;
         }
     }
 }
