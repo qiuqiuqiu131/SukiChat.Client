@@ -323,7 +323,24 @@ internal class ChatService : BaseService, IChatService
                 LastChatId = lastChatId
             };
             var response = await _messageHelper.SendMessageWithResponse<UpdateFriendLastChatIdResponse>(request);
-            return response is { Response: { State: true } };
+            if (response is { Response: { State: true } })
+            {
+                var repository = _unitOfWork.GetRepository<FriendRelation>();
+                var relation = await repository.GetFirstOrDefaultAsync(
+                    predicate: d => d.User1Id.Equals(userId) && d.User2Id.Equals(targetId), disableTracking: false);
+                if (relation != null)
+                {
+                    if (relation.LastChatId < lastChatId)
+                    {
+                        relation.LastChatId = lastChatId;
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
         }
         else if (fileTarget == FileTarget.Group)
         {
@@ -334,7 +351,24 @@ internal class ChatService : BaseService, IChatService
                 LastChatId = lastChatId
             };
             var response = await _messageHelper.SendMessageWithResponse<UpdateGroupLastChatIdResponse>(request);
-            return response is { Response: { State: true } };
+            if (response is { Response: { State: true } })
+            {
+                var repository = _unitOfWork.GetRepository<GroupRelation>();
+                var relation = await repository.GetFirstOrDefaultAsync(
+                    predicate: d => d.UserId.Equals(userId) && d.GroupId.Equals(targetId), disableTracking: false);
+                if (relation != null)
+                {
+                    if (relation.LastChatId < lastChatId)
+                    {
+                        relation.LastChatId = lastChatId;
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         return false;

@@ -74,7 +74,7 @@ internal class GroupMessageHandler : MessageHandlerBase
             // UserManager更新Dto
             var groupDto = await _userManager.NewGroupReceive(pullGroupMessage.GroupId);
 
-            if (groupDto != null)
+            /*if (groupDto != null)
             {
                 Dispatcher.UIThread.Invoke(() =>
                 {
@@ -83,7 +83,7 @@ internal class GroupMessageHandler : MessageHandlerBase
                         .WithContent($"你成为\"{groupDto.GroupDto!.Name}\"的成员")
                         .Queue();
                 });
-            }
+            }*/
         }
     }
 

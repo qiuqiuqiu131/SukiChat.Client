@@ -71,19 +71,6 @@ public class GroupChatDto : BindableBase
     private void ChatMessagesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UpdateChatMessages();
-
-        if (IsSelected) return;
-
-        // 新添加的消息
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex != 0)
-        {
-            foreach (var newItem in e.NewItems)
-            {
-                var chatData = (GroupChatData)newItem;
-                if (!chatData.IsUser)
-                    UnReadMessageCount++;
-            }
-        }
     }
 
     public void UpdateChatMessages()

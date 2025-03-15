@@ -149,14 +149,16 @@ public class ChatViewModel : ChatPageBase
 
             // 将最后一条消息的时间显示出来
             if (friendChatDto.ChatMessages.Count > 0)
+            {
                 friendChatDto.ChatMessages[0].ShowTime = true;
 
-            friendChatDto.UnReadMessageCount = 0;
+                friendChatDto.UnReadMessageCount = 0;
 
-            var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
+                var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
 
-            var chatService = _containerProvider.Resolve<IChatService>();
-            _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId, maxChatId, FileTarget.User);
+                var chatService = _containerProvider.Resolve<IChatService>();
+                _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId, maxChatId, FileTarget.User);
+            }
         });
 
         var previousSelectedFriend = SelectedFriend;
@@ -230,15 +232,17 @@ public class ChatViewModel : ChatPageBase
 
             // 将最后一条消息的时间显示出来
             if (groupChatDto.ChatMessages.Count > 0)
+            {
                 groupChatDto.ChatMessages[0].ShowTime = true;
 
-            groupChatDto.UnReadMessageCount = 0;
+                groupChatDto.UnReadMessageCount = 0;
 
-            var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
+                var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
 
-            var chatService = _containerProvider.Resolve<IChatService>();
-            _ = chatService.ReadAllChatMessage(User!.Id, groupChatDto.GroupRelationDto!.Id, maxChatId,
-                FileTarget.Group);
+                var chatService = _containerProvider.Resolve<IChatService>();
+                _ = chatService.ReadAllChatMessage(User!.Id, groupChatDto.GroupRelationDto!.Id, maxChatId,
+                    FileTarget.Group);
+            }
         });
 
         var previousSelectedFriend = SelectedFriend;

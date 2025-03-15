@@ -67,11 +67,15 @@ internal class ChatMessageHandler : MessageHandlerBase
             if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
                 chatData.ShowTime = true;
             friendChat.ChatMessages.Add(chatData);
+            if (!friendChat.IsSelected)
+                friendChat.UnReadMessageCount++;
         }
         else if (friendChat != null)
         {
             chatData.ShowTime = true;
             friendChat.ChatMessages.Add(chatData);
+            if (!friendChat.IsSelected)
+                friendChat.UnReadMessageCount++;
         }
 
         if (friendChat != null && friendChat.IsSelected)
@@ -146,11 +150,15 @@ internal class ChatMessageHandler : MessageHandlerBase
                 chatData.ShowTime = true;
 
             groupChat.ChatMessages.Insert(index, chatData);
+            if (!groupChat.IsSelected)
+                groupChat.UnReadMessageCount++;
         }
         else if (groupChat != null)
         {
             chatData.ShowTime = true;
             groupChat.ChatMessages.Add(chatData);
+            if (!groupChat.IsSelected)
+                groupChat.UnReadMessageCount++;
         }
 
         if (groupChat != null && groupChat.IsSelected)

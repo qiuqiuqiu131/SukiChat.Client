@@ -1,5 +1,6 @@
 using AutoMapper;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
@@ -46,12 +47,9 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         GroupChatDto groupChatDto = new GroupChatDto();
         groupChatDto.GroupId = groupId;
-        _ = Task.Run(async () =>
-        {
-            groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
-            groupChatDto.UnReadMessageCount =
-                await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId);
-        });
+        groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
+        groupChatDto.UnReadMessageCount =
+            await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId);
 
         if (groupChat == null)
             return groupChatDto;
@@ -197,7 +195,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
         var result = await chatGroupRepository.GetAll(
                 predicate: d =>
-                    d.UserFromId.Equals(userId) && d.UserFromId.Equals(groupId) && d.ChatId > lastChatId)
+                    !d.UserFromId.Equals(userId) && d.GroupId.Equals(groupId) && d.ChatId > lastChatId)
             .CountAsync();
         return result;
     }

@@ -47,7 +47,7 @@ namespace ChatServer.Common.Protobuf {
             "BnVzZXJJZBgCIAEoCRIOCgZzdGF0dXMYAyABKAkSEAoIZ3JvdXBpbmcYBCAB",
             "KAkSEAoIam9pblRpbWUYBSABKAkSEAoITmlja05hbWUYBiABKAkSDgoGUmVt",
             "YXJrGAcgASgJEhMKC2NhbnREaXN0dXJiGAggASgIEg0KBWlzVG9wGAkgASgI",
-            "EhIKCmxhc3RDaGF0SWQYCiABKAgicgoZVXBkYXRlR3JvdXBNZXNzYWdlUmVx",
+            "EhIKCmxhc3RDaGF0SWQYCiABKAUicgoZVXBkYXRlR3JvdXBNZXNzYWdlUmVx",
             "dWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1l",
             "GAMgASgJEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhEKCWhlYWRJbmRleBgFIAEo",
             "BSJjChJVcGRhdGVHcm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5D",
@@ -1776,9 +1776,9 @@ namespace ChatServer.Common.Protobuf {
 
     /// <summary>Field number for the "lastChatId" field.</summary>
     public const int LastChatIdFieldNumber = 10;
-    private bool lastChatId_;
+    private int lastChatId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool LastChatId {
+    public int LastChatId {
       get { return lastChatId_; }
       set {
         lastChatId_ = value;
@@ -1823,7 +1823,7 @@ namespace ChatServer.Common.Protobuf {
       if (Remark.Length != 0) hash ^= Remark.GetHashCode();
       if (CantDisturb != false) hash ^= CantDisturb.GetHashCode();
       if (IsTop != false) hash ^= IsTop.GetHashCode();
-      if (LastChatId != false) hash ^= LastChatId.GetHashCode();
+      if (LastChatId != 0) hash ^= LastChatId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1873,9 +1873,9 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(72);
         output.WriteBool(IsTop);
       }
-      if (LastChatId != false) {
+      if (LastChatId != 0) {
         output.WriteRawTag(80);
-        output.WriteBool(LastChatId);
+        output.WriteInt32(LastChatId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -1912,8 +1912,8 @@ namespace ChatServer.Common.Protobuf {
       if (IsTop != false) {
         size += 1 + 1;
       }
-      if (LastChatId != false) {
-        size += 1 + 1;
+      if (LastChatId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastChatId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1953,7 +1953,7 @@ namespace ChatServer.Common.Protobuf {
       if (other.IsTop != false) {
         IsTop = other.IsTop;
       }
-      if (other.LastChatId != false) {
+      if (other.LastChatId != 0) {
         LastChatId = other.LastChatId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
@@ -2004,7 +2004,7 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 80: {
-            LastChatId = input.ReadBool();
+            LastChatId = input.ReadInt32();
             break;
           }
         }
