@@ -70,7 +70,12 @@ public class GroupPackService : BaseService, IGroupPackService
 
         var friendRequestDtos = _mapper.Map<List<GroupRequestDto>>(groupRequests);
         foreach (var dto in friendRequestDtos)
-            _ = Task.Run(async () => { dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId); });
+            _ = Task.Run(async () =>
+            {
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                if (dto.IsSolved && dto.AcceptByUserId != null)
+                    dto.AcceptByGroupMemberDto = await _userManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
+            });
 
         return new AvaloniaList<GroupRequestDto>(friendRequestDtos);
     }
@@ -91,6 +96,8 @@ public class GroupPackService : BaseService, IGroupPackService
             {
                 dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
                 dto.UserDto = await _userManager.GetUserDto(dto.UserFromId);
+                if (dto.IsSolved && dto.AcceptByUserId != null)
+                    dto.AcceptByGroupMemberDto = await _userManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
             });
 
         return new AvaloniaList<GroupReceivedDto>(groupRequestDtos);

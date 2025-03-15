@@ -77,7 +77,7 @@ internal class FriendService : BaseService, IFriendService
         var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
         var dto = _mapper.Map<FriendRequestDto>(friendRequest);
         dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
-        userManager.FriendRequests.Insert(0,dto);
+        userManager.FriendRequests.Insert(0, dto);
 
         return (true, result.Response.Message);
     }
@@ -115,12 +115,15 @@ internal class FriendService : BaseService, IFriendService
         await _unitOfWork.SaveChangesAsync();
 
         var userManager = _scopedProvider.Resolve<IUserManager>();
+        var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
         var dto = userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId.Equals(friendReceived.RequestId));
         if (dto != null)
         {
             dto.IsAccept = state;
             dto.SolveTime = time;
             dto.IsSolved = true;
+            dto.AcceptByUserId = userManager.User.Id;
+            dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, userManager.User.Id);
         }
 
         return (true, result.Response.Message);

@@ -314,6 +314,7 @@
                       Grid.Row="1"
                       VerticalScrollBarVisibility="Hidden">
             <ItemsControl x:Name="Items"
+                          Margin="0,0,0,40"
                           suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

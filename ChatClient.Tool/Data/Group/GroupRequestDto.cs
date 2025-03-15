@@ -51,4 +51,12 @@ public class GroupRequestDto : BindableBase
         get => _groupDto;
         set => SetProperty(ref _groupDto, value);
     }
+
+    private GroupMemberDto? acceptByGroupMemberDto;
+
+    public GroupMemberDto? AcceptByGroupMemberDto
+    {
+        get => acceptByGroupMemberDto;
+        set => SetProperty(ref acceptByGroupMemberDto, value);
+    }
 }

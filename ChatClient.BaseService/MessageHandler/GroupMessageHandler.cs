@@ -1,4 +1,5 @@
 using AutoMapper;
+using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
@@ -196,12 +197,14 @@ internal class GroupMessageHandler : MessageHandlerBase
 
         // 更新UI
         var dto = _userManager.GroupRequests.FirstOrDefault(d => d.RequestId == message.RequestId);
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         if (dto != null)
         {
             dto.IsAccept = message.Accept;
             dto.IsSolved = true;
             dto.SolveTime = DateTime.Parse(message.Time);
             dto.AcceptByUserId = message.UserIdFrom;
+            dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, message.UserIdFrom);
         }
 
         // 加入群聊
@@ -265,6 +268,18 @@ internal class GroupMessageHandler : MessageHandlerBase
         catch
         {
             // ignored
+        }
+
+        // 更新UI
+        var dto = _userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId.Equals(message.RequestId));
+        if (dto != null)
+        {
+            dto.IsAccept = message.Accept;
+            dto.IsSolved = true;
+            dto.SolveTime = DateTime.Now;
+            dto.AcceptByUserId = message.UserId;
+            var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+            dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
         }
     }
 }

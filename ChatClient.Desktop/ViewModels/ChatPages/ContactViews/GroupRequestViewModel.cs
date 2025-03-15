@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
 using ChatClient.Tool.Common;
@@ -56,18 +57,14 @@ public class GroupRequestViewModel : ViewModelBase
         isOperate = true;
         var _groupService = _containerProvider.Resolve<IGroupService>();
         var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, false);
-        if (state)
+        if (!state)
         {
-            obj.IsAccept = true;
-            obj.IsSolved = true;
-            obj.SolveTime = DateTime.Now;
-        }
-        else
             _toastManager.CreateToast()
                 .OfType(NotificationType.Error)
                 .WithTitle("操作失败")
                 .WithContent(message)
                 .Queue();
+        }
 
         isOperate = false;
     }
@@ -79,14 +76,7 @@ public class GroupRequestViewModel : ViewModelBase
         isOperate = true;
         var _groupService = _containerProvider.Resolve<IGroupService>();
         var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
-        if (state)
-        {
-            obj.IsAccept = true;
-            obj.IsSolved = true;
-            obj.SolveTime = DateTime.Now;
-            obj.AcceptByUserId = _userManager.User.Id;
-        }
-        else
+        if (!state)
             _toastManager.CreateToast()
                 .OfType(NotificationType.Error)
                 .WithTitle("操作失败")
