@@ -4,7 +4,6 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Transactions;
 using ChatServer.DataBase.UnitOfWork;
-using EntityFrameworkCore.AutoHistory.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
@@ -130,11 +129,6 @@ namespace ChatClient.DataBase.UnitOfWork
         /// <returns>The number of state entries written to the database.</returns>
         public int SaveChanges(bool ensureAutoHistory = false)
         {
-            if (ensureAutoHistory)
-            {
-                _context.EnsureAutoHistory();
-            }
-
             return _context.SaveChanges();
         }
 
@@ -145,11 +139,6 @@ namespace ChatClient.DataBase.UnitOfWork
         /// <returns>A <see cref="Task{TResult}"/> that represents the asynchronous save operation. The task result contains the number of state entities written to database.</returns>
         public async Task<int> SaveChangesAsync(bool ensureAutoHistory = false)
         {
-            if (ensureAutoHistory)
-            {
-                _context.EnsureAutoHistory();
-            }
-
             return await _context.SaveChangesAsync();
         }
 

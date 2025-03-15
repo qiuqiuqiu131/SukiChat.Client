@@ -1,14 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+		
+		<JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
 		<TrimMode>copyused</TrimMode>
-		<PublishAot>false</PublishAot>
+		<PublishAot>true</PublishAot>
+		<IsAotCompatible>true</IsAotCompatible>
+		<StripSymbols>false</StripSymbols>
     </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugType>none</DebugType>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<TrimmerRootDescriptor Include="TrimmerRoots.xml" />
@@ -33,8 +41,6 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
-        <PackageReference Include="Dock.Avalonia" Version="11.2.0" />
-        <PackageReference Include="Dock.Model.Avalonia" Version="11.2.0" />
     </ItemGroup>
 
     <ItemGroup>
