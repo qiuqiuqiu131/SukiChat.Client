@@ -16,6 +16,7 @@ public interface IFriendService
     public Task<List<string>> GetFriendIds(string userId);
     public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     public Task<bool> UpdateFriendRelation(string userId, FriendRelationDto friendRelationDto);
+    public Task<bool> DeleteFriend(string userId, string friendId);
 }
 
 internal class FriendService : BaseService, IFriendService
@@ -191,5 +192,22 @@ internal class FriendService : BaseService, IFriendService
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// 删除好友
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="friendId"></param>
+    /// <returns></returns>
+    public async Task<bool> DeleteFriend(string userId, string friendId)
+    {
+        var friendDeleteRequest = new DeleteFriendRequest
+        {
+            UserId = userId, FriendId = friendId
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<DeleteFriendMessage>(friendDeleteRequest);
+        return response is { Response: { State: true } };
     }
 }

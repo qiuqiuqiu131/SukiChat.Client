@@ -18,6 +18,7 @@ public class UserData : IDisposable
     /// </summary>
     public AvaloniaList<FriendRequestDto> FriendRequests { get; set; }
 
+
     /// <summary>
     /// 好友列表
     /// </summary>

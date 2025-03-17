@@ -57,6 +57,7 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("User Init Cost Time:" + (end - start));
 
         GC.Collect();
+        GC.WaitForPendingFinalizers();
 
         return user;
     }
@@ -182,25 +183,21 @@ internal class UserLoginService : BaseService, IUserLoginService
         DateTime end = DateTime.Now;
         Console.WriteLine("Get Outline Message Cost Time:" + (end - start));
 
-        // 转成Dto
-        var outlineDto = _mapper.Map<OutlineMessageDto>(outlineResponse);
+        if (outlineResponse == null) return;
 
         // 处理离线消息
-        var friendTaskGroup = Task.Run(async () =>
-        {
-            await OperateFriendRequestMesssages(userId, outlineDto.FriendRequestMessages);
-            await OperateNewFriendMessages(userId, outlineDto.NewFriendMessages);
-            await OperateFriendChatMessages(userId, outlineDto.FriendChatMessages);
-        });
-
-        var groupTaskGroup = Task.Run(async () =>
-        {
-            await OperateEnterGroupMessages(userId, outlineDto.EnterGroupMessages);
-            await OperateGroupChatMessages(userId, outlineDto.GroupChatMessages);
-            await OperateGroupRequestMessage(userId, outlineDto.GroupRequestMessages);
-        });
-
-        await Task.WhenAll(friendTaskGroup, groupTaskGroup);
+        List<Task> tasks =
+        [
+            OperateFriendRequestMesssages(userId, outlineResponse.FriendRequests),
+            OperateNewFriendMessages(userId, outlineResponse.NewFriends),
+            OperateFriendChatMessages(userId, outlineResponse.FriendChats),
+            OperateFriendDeleteMessages(userId, outlineResponse.FriendDeletes),
+            OperateEnterGroupMessages(userId, outlineResponse.EnterGroups),
+            OperateGroupChatMessages(userId, outlineResponse.GroupChats),
+            OperateGroupRequestMessage(userId, outlineResponse.GroupRequests),
+            OperateGroupDeleteMessages(userId, outlineResponse.GroupDeletes)
+        ];
+        await Task.WhenAll(tasks);
     }
 
     #region OperateOutLineData(处理离线未处理的消息,直接对本地数据库进行操作)
@@ -211,12 +208,12 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 2.存在用户处理了自己的好友请求
     /// </summary>
     /// <param name="friendRequestMessages"></param>
-    private async Task OperateFriendRequestMesssages(string userId, List<FriendRequestMessage> friendRequestMessages)
+    private async Task OperateFriendRequestMesssages(string userId, IList<FriendRequestMessage> friendRequestMessages)
     {
-        List<FriendRequestMessage> requests =
-            friendRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
-        List<FriendRequestMessage> receives =
-            friendRequestMessages.Where(d => d.UserTargetId.Equals(userId)).ToList();
+        IEnumerable<FriendRequestMessage> requests =
+            friendRequestMessages.Where(d => d.UserFromId.Equals(userId));
+        IEnumerable<FriendRequestMessage> receives =
+            friendRequestMessages.Where(d => d.UserTargetId.Equals(userId));
 
         using (var scope = _scopedProvider.CreateScope())
         {
@@ -239,7 +236,6 @@ internal class UserLoginService : BaseService, IUserLoginService
         using (var scope = _scopedProvider.CreateScope())
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-
             var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
             foreach (var receive in receives)
             {
@@ -253,16 +249,31 @@ internal class UserLoginService : BaseService, IUserLoginService
 
             await _unitOfWork.SaveChangesAsync();
         }
+
+        friendRequestMessages.Clear();
     }
 
     /// <summary>
     /// 处理新朋友消息，离线时可能有用户统一了自己的好友请求，并成为了朋友
     /// </summary>
     /// <param name="newFriendMessages"></param>
-    private async Task OperateNewFriendMessages(string userId, List<NewFriendMessage> newFriendMessages)
+    private async Task OperateNewFriendMessages(string userId, IList<NewFriendMessage> newFriendMessages)
     {
         var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.NewFriendMessagesOperate(userId, newFriendMessages);
+        newFriendMessages.Clear();
+    }
+
+    /// <summary>
+    /// 处理好友删除消息，离线时可能有用户删除了自己的好友
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="friendDeleteMessages"></param>
+    private async Task OperateFriendDeleteMessages(string userId, IList<FriendDeleteMessage> friendDeleteMessages)
+    {
+        var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+        await friendPackService.FriendDeleteMessagesOperate(userId, friendDeleteMessages);
+        friendDeleteMessages.Clear();
     }
 
 
@@ -271,10 +282,11 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="friendChatMessages"></param>
-    private async Task OperateFriendChatMessages(string userId, List<FriendChatMessage> friendChatMessages)
+    private async Task OperateFriendChatMessages(string userId, IList<FriendChatMessage> friendChatMessages)
     {
         var friendChatService = _scopedProvider.Resolve<IFriendChatPackService>();
         await friendChatService.FriendChatMessagesOperate(friendChatMessages);
+        friendChatMessages.Clear();
     }
 
     /// <summary>
@@ -282,10 +294,11 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// </summary>
     /// <param name="useId"></param>
     /// <param name="enterGroupMessages"></param>
-    private async Task OperateEnterGroupMessages(string useId, List<EnterGroupMessage> enterGroupMessages)
+    private async Task OperateEnterGroupMessages(string useId, IList<EnterGroupMessage> enterGroupMessages)
     {
         var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.EnterGroupMessagesOperate(useId, enterGroupMessages);
+        enterGroupMessages.Clear();
     }
 
     /// <summary>
@@ -293,10 +306,23 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="groupChatMessages"></param>
-    private async Task OperateGroupChatMessages(string userId, List<GroupChatMessage> groupChatMessages)
+    private async Task OperateGroupChatMessages(string userId, IList<GroupChatMessage> groupChatMessages)
     {
         var groupChatService = _scopedProvider.Resolve<IGroupChatPackService>();
         await groupChatService.GroupChatMessagesOperate(groupChatMessages);
+        groupChatMessages.Clear();
+    }
+
+    /// <summary>
+    /// 处理群聊删除消息，离线时可能有群聊移除了成员
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="friendDeleteMessages"></param>
+    private async Task OperateGroupDeleteMessages(string userId, IList<GroupDeleteMessage> friendDeleteMessages)
+    {
+        var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+        await groupPackService.GroupDeleteMessagesOperate(userId, friendDeleteMessages);
+        friendDeleteMessages.Clear();
     }
 
     /// <summary>
@@ -304,12 +330,12 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="groupRequestMessages"></param>
-    private async Task OperateGroupRequestMessage(string userId, List<GroupRequestMessage> groupRequestMessages)
+    private async Task OperateGroupRequestMessage(string userId, IList<GroupRequestMessage> groupRequestMessages)
     {
-        List<GroupRequestMessage> requests =
-            groupRequestMessages.Where(d => d.UserFromId.Equals(userId)).ToList();
-        List<GroupRequestMessage> receives =
-            groupRequestMessages.Where(d => !d.UserFromId.Equals(userId)).ToList();
+        IEnumerable<GroupRequestMessage> requests =
+            groupRequestMessages.Where(d => d.UserFromId.Equals(userId));
+        IEnumerable<GroupRequestMessage> receives =
+            groupRequestMessages.Where(d => !d.UserFromId.Equals(userId));
 
         using (var scope = _scopedProvider.CreateScope())
         {
@@ -346,6 +372,8 @@ internal class UserLoginService : BaseService, IUserLoginService
 
             await _unitOfWork.SaveChangesAsync();
         }
+
+        groupRequestMessages.Clear();
     }
 
     #endregion

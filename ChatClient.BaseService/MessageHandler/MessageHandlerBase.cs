@@ -6,7 +6,7 @@ namespace ChatClient.BaseService.MessageHandler;
 
 public delegate Task MessageEvent<T>(IScopedProvider scopedProvider, T message);
 
-internal abstract class MessageHandlerBase : IMessageHandler
+public abstract class MessageHandlerBase : IMessageHandler
 {
     private readonly IContainerProvider _containerProvider;
     protected readonly IUserManager _userManager;

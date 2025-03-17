@@ -15,8 +15,10 @@ public interface IFriendPackService
     Task<AvaloniaList<FriendReceiveDto>?> GetFriendReceiveDtos(string userId);
     Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId);
     Task<AvaloniaList<FriendRelationDto>> GetFriendRelationDtos(string userId);
-    public Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
+    Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
     Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages);
+    Task<bool> FriendDeleteMessageOperate(string userId, DeleteFriendMessage message);
+    Task<bool> FriendDeleteMessagesOperate(string userId, IEnumerable<FriendDeleteMessage> messages);
 }
 
 public class FriendPackService : BaseService, IFriendPackService
@@ -143,6 +145,89 @@ public class FriendPackService : BaseService, IFriendPackService
             if (relation != null)
                 friendRelation.Id = relation.Id;
             friendRepository.Update(friendRelation);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> FriendDeleteMessageOperate(string userId, DeleteFriendMessage message)
+    {
+        if (!message.UserId.Equals(userId) && !message.FriendId.Equals(userId)) return false;
+        try
+        {
+            var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
+            var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+            var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
+
+            // 添加删除记录
+            var friendDelete = _mapper.Map<FriendDelete>(message);
+            var delete = await friendDeleteRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.DeleteId.Equals(friendDelete.DeleteId));
+            if (delete != null)
+                friendDelete.Id = delete.Id;
+            friendDeleteRepository.Update(friendDelete);
+
+            string friendId = message.UserId.Equals(userId) ? message.FriendId : message.UserId;
+            // 删除好友关系
+            var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.User1Id.Equals(userId) && d.User2Id.Equals(friendId));
+            if (friendRelation != null)
+                friendRelationRepository.Delete(friendRelation);
+
+            // 删除聊天记录
+            var friendChat = await friendChatRepository.GetAllAsync(predicate:
+                d => d.UserFromId.Equals(userId) && d.UserTargetId.Equals(friendId) ||
+                     d.UserTargetId.Equals(userId) && d.UserFromId.Equals(friendId));
+            if (friendChat != null)
+                friendChatRepository.Delete(friendChat);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 批量处理FriendDeleteMessage消息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    public async Task<bool> FriendDeleteMessagesOperate(string userId, IEnumerable<FriendDeleteMessage> messages)
+    {
+        var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
+        var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+        var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        foreach (var message in messages)
+        {
+            if (!message.UserId.Equals(userId) && !message.FriendId.Equals(userId)) continue;
+
+            // 添加删除记录
+            var friendDelete = _mapper.Map<FriendDelete>(message);
+            var delete = await friendDeleteRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.DeleteId.Equals(friendDelete.DeleteId));
+            if (delete != null)
+                friendDelete.Id = delete.Id;
+            friendDeleteRepository.Update(friendDelete);
+
+            string friendId = message.UserId.Equals(userId) ? message.FriendId : message.UserId;
+            // 删除好友关系
+            var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.User1Id.Equals(userId) && d.User2Id.Equals(friendId));
+            if (friendRelation != null)
+                friendRelationRepository.Delete(friendRelation);
+
+            // 删除聊天记录
+            var friendChat = await friendChatRepository.GetAllAsync(predicate:
+                d => d.UserFromId.Equals(userId) && d.UserTargetId.Equals(friendId) ||
+                     d.UserTargetId.Equals(userId) && d.UserFromId.Equals(friendId));
+            if (friendChat != null)
+                friendChatRepository.Delete(friendChat);
         }
 
         await _unitOfWork.SaveChangesAsync();

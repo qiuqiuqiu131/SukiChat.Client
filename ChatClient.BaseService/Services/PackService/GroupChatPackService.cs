@@ -77,7 +77,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         var result = new AvaloniaList<GroupChatDto>();
 
         // 获取所有好友的Id
-        var groupService = _scopedProvider.Resolve<IGroupService>();
+        var groupService = _scopedProvider.Resolve<IGroupGetService>();
         var groupIds = await groupService.GetGroupIds(userId);
 
         foreach (var groupId in groupIds)

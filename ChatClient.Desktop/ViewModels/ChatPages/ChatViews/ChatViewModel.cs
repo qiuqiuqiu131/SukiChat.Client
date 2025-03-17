@@ -72,7 +72,7 @@ public class ChatViewModel : ChatPageBase
     {
         var chatService = _containerProvider.Resolve<IChatService>();
         // 处理上一个选中的好友
-        if (friendChatDto != null && friendChatDto.ChatMessages.Count > 1)
+        if (friendChatDto is { ChatMessages.Count: > 1 })
         {
             // 移除错误消息
             var errorMessage = friendChatDto.ChatMessages.Where(d => d.IsError);
@@ -84,7 +84,7 @@ public class ChatViewModel : ChatPageBase
         }
 
         // 处理上一个选中的好友
-        if (groupChatDto != null && groupChatDto.ChatMessages.Count > 1)
+        if (groupChatDto is { ChatMessages.Count: > 1 })
         {
             // 移除错误消息
             var errorMessage = groupChatDto.ChatMessages.Where(d => d.IsError);

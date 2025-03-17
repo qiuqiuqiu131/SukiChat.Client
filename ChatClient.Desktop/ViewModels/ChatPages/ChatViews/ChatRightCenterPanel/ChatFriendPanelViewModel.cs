@@ -78,9 +78,14 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id, isInputing);
     }
 
+    /// <summary>
+    /// 删除好友
+    /// </summary>
     private void DeleteFriend()
     {
-        // TODO:删除好友
+        if (SelectedFriend == null) return;
+        var friendService = _containerProvider.Resolve<IFriendService>();
+        friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend!.UserId);
     }
 
     private void HeadClick(ChatData obj)

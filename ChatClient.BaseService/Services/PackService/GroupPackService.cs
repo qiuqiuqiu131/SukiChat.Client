@@ -16,6 +16,7 @@ public interface IGroupPackService
     Task<AvaloniaList<GroupReceivedDto>> GetGroupReceivedDtos(string userId);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
+    Task<bool> GroupDeleteMessagesOperate(string userId, IEnumerable<GroupDeleteMessage> groupDeleteMessages);
 }
 
 public class GroupPackService : BaseService, IGroupPackService
@@ -37,7 +38,7 @@ public class GroupPackService : BaseService, IGroupPackService
     {
         var result = new AvaloniaList<GroupRelationDto>();
 
-        var groupService = _scopedProvider.Resolve<IGroupService>();
+        var groupService = _scopedProvider.Resolve<IGroupGetService>();
         var groupIds = await groupService.GetGroupIds(userId);
 
         var tasks = groupIds.Select(async groupId =>
@@ -82,7 +83,7 @@ public class GroupPackService : BaseService, IGroupPackService
 
     public async Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId)
     {
-        var groupIds = await _scopedProvider.Resolve<IGroupService>().GetGroupsOfUserManager(userId);
+        var groupIds = await _scopedProvider.Resolve<IGroupGetService>().GetGroupsOfUserManager(userId);
         var groupRequestRepository = _unitOfWork.GetRepository<GroupReceived>();
         var groupRequests = await groupRequestRepository.GetAllAsync(
             predicate: d => groupIds.Contains(d.GroupId),
@@ -137,6 +138,34 @@ public class GroupPackService : BaseService, IGroupPackService
             if (entity != null)
                 groupRelation.Id = entity.Id;
             groupRelationRepository.Update(groupRelation);
+        }
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task<bool> GroupDeleteMessagesOperate(string userId,
+        IEnumerable<GroupDeleteMessage> groupDeleteMessages)
+    {
+        var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
+        foreach (var message in groupDeleteMessages)
+        {
+            if (!message.MemberId.Equals(userId)) continue;
+            var groupDelete = _mapper.Map<GroupDelete>(message);
+            var entity = await groupDeleteRepository.GetFirstOrDefaultAsync(
+                predicate: d =>
+                    d.DeleteId.Equals(message.DeleteId));
+            if (entity != null)
+                groupDelete.Id = entity.Id;
+            groupDeleteRepository.Update(groupDelete);
         }
 
         try

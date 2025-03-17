@@ -64,11 +64,12 @@ public class ProtoToDataProfile : Profile
         #endregion
 
         // User login state, get outline message and operate friend request
-        CreateMap<FriendRequestMessage, FriendRequest>()
-            .ForMember(fr => fr.RequestTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
-            .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
         CreateMap<FriendRequestMessage, FriendReceived>()
             .ForMember(fr => fr.ReceiveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
+            .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
+
+        CreateMap<FriendRequestMessage, FriendRequest>()
+            .ForMember(fr => fr.RequestTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
             .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
 
         CreateMap<GroupRequestMessage, GroupRequest>()
@@ -85,5 +86,20 @@ public class ProtoToDataProfile : Profile
             .ForMember(gr => gr.SolveTime,
                 opt => opt.MapFrom(fm =>
                     string.IsNullOrEmpty(fm.SolvedTime) ? (DateTime?)null : DateTime.Parse(fm.SolvedTime)));
+
+
+        CreateMap<FriendDeleteMessage, FriendDelete>()
+            .ForMember(fd => fd.DeleteTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.Time)))
+            .ForMember(fd => fd.UseId1, opt => opt.MapFrom(fm => fm.UserId))
+            .ForMember(fd => fd.UserId2, opt => opt.MapFrom(fm => fm.FriendId));
+
+        CreateMap<DeleteFriendMessage, FriendDelete>()
+            .ForMember(fd => fd.DeleteTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.Time)))
+            .ForMember(fd => fd.UseId1, opt => opt.MapFrom(fm => fm.UserId))
+            .ForMember(fd => fd.UserId2, opt => opt.MapFrom(fm => fm.FriendId));
+
+        CreateMap<GroupDeleteMessage, GroupDelete>()
+            .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(gdm => DateTime.Parse(gdm.Time)))
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(gdm => gdm.Method));
     }
 }

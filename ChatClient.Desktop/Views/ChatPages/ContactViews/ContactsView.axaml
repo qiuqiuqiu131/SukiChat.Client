@@ -15,6 +15,7 @@
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
@@ -179,16 +180,36 @@
                             </ItemsPanelTemplate>
                         </TabControl.ItemsPanel>
                         <TabItem Header="好友">
-                            <seperateGroupsView:SeparateGroupsView x:Name="FriendView"
-                                                                   GroupFriends="{Binding GroupFriends}"
-                                                                   SelectionChanged="FriendSelectionChanged"
-                                                                   SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                            <Panel>
+                                <TextBlock Text="还没有添加好友"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Opacity="0.6"
+                                           FontWeight="SemiBold"
+                                           IsVisible="{Binding GroupFriends,Converter={converter:ListEmptyConverter}}">
+                                </TextBlock>
+                                <seperateGroupsView:SeparateGroupsView
+                                    x:Name="FriendView"
+                                    IsVisible="{Binding !GroupFriends,Converter={converter:ListEmptyConverter}}"
+                                    GroupFriends="{Binding GroupFriends}"
+                                    SelectionChanged="FriendSelectionChanged"
+                                    SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                            </Panel>
                         </TabItem>
                         <TabItem Header="群聊">
-                            <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
-                                                                             GroupFriends="{Binding GroupGroups}"
-                                                                             SelectionChanged="GroupSelectionChanged"
-                                                                             SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                            <Panel>
+                                <TextBlock Text="还没有加入群聊"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center"
+                                           Opacity="0.6"
+                                           FontWeight="SemiBold"
+                                           IsVisible="{Binding GroupGroups,Converter={converter:ListEmptyConverter}}" />
+                                <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
+                                    IsVisible="{Binding !GroupGroups,Converter={converter:ListEmptyConverter}}"
+                                    GroupFriends="{Binding GroupGroups}"
+                                    SelectionChanged="GroupSelectionChanged"
+                                    SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                            </Panel>
                         </TabItem>
                     </TabControl>
                 </StackPanel>

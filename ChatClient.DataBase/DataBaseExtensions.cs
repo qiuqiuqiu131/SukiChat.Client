@@ -22,9 +22,12 @@ public static class DataBaseExtensions
         containerRegistry.AddCustomRepository<ChatPrivate, ChatPrivateRepository>();
         containerRegistry.AddCustomRepository<FriendRelation, FriendRelationRepository>();
         containerRegistry.AddCustomRepository<FriendRequest, FriendRequestRepository>();
+        containerRegistry.AddCustomRepository<FriendDelete, FriendDeleteRepository>();
+
         containerRegistry.AddCustomRepository<Group, GroupRepository>();
         containerRegistry.AddCustomRepository<GroupRequest, GroupRequestRepository>();
         containerRegistry.AddCustomRepository<GroupRelation, GroupRelationRepository>();
         containerRegistry.AddCustomRepository<ChatGroup, ChatGroupRepository>();
+        containerRegistry.AddCustomRepository<GroupDelete, GroupDeleteRepository>();
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
@@ -155,6 +156,7 @@ public partial class ChatLeftPanelView : UserControl
             {
                 if (e.OldItems != null)
                 {
+                    bool isSelected = false;
                     foreach (var item in e.OldItems)
                     {
                         var control = _itemCollection.FirstOrDefault(d => ((Control)d).DataContext == item);
@@ -164,14 +166,29 @@ public partial class ChatLeftPanelView : UserControl
                             var dt = ((Control)control).DataContext;
                             if (dt is FriendChatDto friendChat)
                             {
+                                if (friendChat.IsSelected) isSelected = true;
                                 friendChat.OnLastChatMessagesChanged -= SortItemControl;
                             }
                             else if (dt is GroupChatDto groupChat)
                             {
+                                if (groupChat.IsSelected) isSelected = true;
                                 groupChat.OnLastChatMessagesChanged -= SortItemControl;
                             }
 
                             ((Control)control).DataContext = null;
+                        }
+                    }
+
+                    if (isSelected)
+                    {
+                        int index = e.OldStartingIndex - 1;
+                        if (index < 0) index = 0;
+
+                        var control = _itemCollection.GetAt(index);
+                        if (control is RadioButton radioButton)
+                        {
+                            radioButton.IsChecked = true;
+                            radioButton.Command.Execute(radioButton.DataContext);
                         }
                     }
                 }

@@ -137,7 +137,7 @@ public class UserDtoManager : IUserDtoManager
             }
 
             using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupService>();
+            var groupService = scope.Resolve<IGroupGetService>();
             var group = await groupService.GetGroupDto(userId, groupId);
             if (group == null) return null;
             var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
@@ -182,7 +182,7 @@ public class UserDtoManager : IUserDtoManager
             }
 
             using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupService>();
+            var groupService = scope.Resolve<IGroupGetService>();
             var groupRelation = await groupService.GetGroupRelationDto(userId, groupId);
 
             // 如果获取到用户信息，添加到缓存中
@@ -219,7 +219,7 @@ public class UserDtoManager : IUserDtoManager
             }
 
             using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupService>();
+            var groupService = scope.Resolve<IGroupGetService>();
             var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
 
             // 如果获取到用户信息，添加到缓存中

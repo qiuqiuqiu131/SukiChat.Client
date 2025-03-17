@@ -28,8 +28,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
 
     public FriendChatPackService(IContainerProvider containerProvider,
         IUserDtoManager userDtoManager,
-        IMapper mapper,
-        IFileOperateHelper fileOperateHelper) : base(containerProvider)
+        IMapper mapper) : base(containerProvider)
     {
         _userDtoManager = userDtoManager;
         _mapper = mapper;
