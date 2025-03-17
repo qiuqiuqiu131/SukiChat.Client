@@ -1,12 +1,10 @@
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
-using ChatClient.Desktop.Views;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -101,7 +99,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private bool autoPassword = false;
 
-    public DelegateCommand LoginCommand { get; init; }
+    public AsyncDelegateCommand LoginCommand { get; init; }
     public DelegateCommand ToRegisterViewCommand { get; init; }
     public DelegateCommand ToForgetViewCommand { get; init; }
 
@@ -121,7 +119,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
         LoginData = loginData.LoginData;
         IsConnected = connection.IsConnected;
 
-        LoginCommand = new DelegateCommand(Login, CanLogin);
+        LoginCommand = new AsyncDelegateCommand(Login, CanLogin);
         ToRegisterViewCommand = new DelegateCommand(ToRegisterView);
         ToForgetViewCommand = new DelegateCommand(ToForgetView);
 
@@ -139,16 +137,13 @@ public class LoginViewModel : ViewModelBase, IDisposable
     private bool CanLogin() => IsConnected.IsConnected && !string.IsNullOrEmpty(Id) &&
                                !string.IsNullOrEmpty(Password) && !isBusy;
 
-    private async void Login()
+    private async Task Login()
     {
         IsBusy = true;
 
         CommonResponse? result = null;
-        await Task.Run(async () =>
-        {
-            var _userManager = _containerProvider.Resolve<IUserManager>();
-            result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
-        });
+        var _userManager = _containerProvider.Resolve<IUserManager>();
+        result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
 
         // 登录成功
         if (result is { State: true })
@@ -159,38 +154,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
             Id = null;
             Password = null;
 
-            // 跳转到主界面
-            if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-            {
-                var windows = desktopLifetime.Windows.ToList();
-                var window = App.Current.Container.Resolve<MainWindowView>();
-                desktopLifetime.MainWindow = window;
-
-                IRegionManager newRegionManager = _regionManager.CreateRegionManager();
-                RegionManager.SetRegionManager(window, newRegionManager);
-                RegionManager.UpdateRegions();
-
-                window.Show();
-                foreach (var w in windows)
-                {
-                    var oldRegion = RegionManager.GetRegionManager(w);
-                    if (oldRegion != null)
-                        foreach (var region in oldRegion.Regions)
-                        {
-                            foreach (var view in region.Views)
-                            {
-                                if (view is IDisposable v)
-                                    v.Dispose();
-                            }
-
-                            region.RemoveAll();
-                        }
-
-                    w.Close();
-                    if (w is IDisposable disposable)
-                        disposable.Dispose();
-                }
-            }
+            TranslateWindowHelper.TranslateToMainWindow(_regionManager);
         }
         else
         {

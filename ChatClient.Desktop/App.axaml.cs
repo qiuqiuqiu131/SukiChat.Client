@@ -112,8 +112,6 @@ public class App : PrismApplication
         regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, typeof(LoginView));
 
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
-        regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatFriendPanelView));
-        regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatGroupPanelView));
 
         regionManager.RegisterViewWithRegion(RegionNames.ContactsRegion, typeof(ChatEmptyView));
 

@@ -16,6 +16,13 @@ public partial class ContactsView : UserControl
         InitializeComponent();
     }
 
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        GroupView.ClearAllSelected();
+        FriendView.ClearAllSelected();
+    }
+
     private void PART_AddButton_OnClick(object? sender, RoutedEventArgs e)
     {
         PART_AddPop.IsOpen = !PART_AddPop.IsOpen;

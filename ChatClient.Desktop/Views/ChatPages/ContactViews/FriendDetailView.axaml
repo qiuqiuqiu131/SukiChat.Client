@@ -57,6 +57,7 @@
                 </Panel>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Name}"
+                                         Height="20"
                                          FontWeight="DemiBold"
                                          FontSize="16.5" />
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Id,StringFormat=ID: {0}}"
@@ -78,7 +79,7 @@
             </StackPanel>
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="15,15,15,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="15,15,15,5">
             <Button Content="发消息"
                     Classes="Flat"
                     Margin="0"

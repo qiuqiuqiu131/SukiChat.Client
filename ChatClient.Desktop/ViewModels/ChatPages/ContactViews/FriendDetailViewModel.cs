@@ -39,7 +39,7 @@ public class FriendDetailViewModel : ViewModelBase
 
     private async void SendMessage()
     {
-        _eventAggregator.GetEvent<ChangePageEvent>().Publish("聊天");
+        _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
         await Task.Delay(50);
         _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(Friend);
     }

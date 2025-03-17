@@ -104,7 +104,7 @@ public class ChatViewModel : ChatPageBase
     /// 左侧面板选中好友变化时调用
     /// </summary>
     /// <param name="friendChatDto">被选中的好友</param>
-    public async void FriendSelectionChanged(FriendChatDto? friendChatDto)
+    public async Task FriendSelectionChanged(FriendChatDto? friendChatDto)
     {
         if (friendChatDto == SelectedFriend) return;
 
@@ -116,60 +116,57 @@ public class ChatViewModel : ChatPageBase
             return;
         }
 
-        await Task.Run(async () =>
+        // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
+        if (friendChatDto.ChatMessages.Count == 0)
+            friendChatDto.HasMoreMessage = false;
+        else if (friendChatDto.ChatMessages.Count < 15)
         {
-            // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-            if (friendChatDto.ChatMessages.Count == 0)
+            var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
+
+            int nextCount = 15 - friendChatDto.ChatMessages.Count;
+            var chatDatas =
+                await chatPackService.GetFriendChatDataAsync(User?.Id, friendChatDto.UserId,
+                    friendChatDto.ChatMessages[0].ChatId,
+                    nextCount);
+
+            if (chatDatas.Count != nextCount)
                 friendChatDto.HasMoreMessage = false;
-            else if (friendChatDto.ChatMessages.Count < 15)
+            else
+                friendChatDto.HasMoreMessage = true;
+
+            float value = nextCount;
+            foreach (var chatData in chatDatas)
             {
-                var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
-
-                int nextCount = 15 - friendChatDto.ChatMessages.Count;
-                var chatDatas =
-                    await chatPackService.GetFriendChatDataAsync(User?.Id, friendChatDto.UserId,
-                        friendChatDto.ChatMessages[0].ChatId,
-                        nextCount);
-
-                if (chatDatas.Count != nextCount)
-                    friendChatDto.HasMoreMessage = false;
+                if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
+                    value -= 2.5f;
+                else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
+                    value -= 2f;
                 else
-                    friendChatDto.HasMoreMessage = true;
+                    value -= 1;
 
-                float value = nextCount;
-                foreach (var chatData in chatDatas)
-                {
-                    if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
-                        value -= 2.5f;
-                    else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
-                        value -= 2f;
-                    else
-                        value -= 1;
+                if (value <= 0) break;
 
-                    if (value <= 0) break;
-
-                    friendChatDto.ChatMessages.Insert(0, chatData);
-                    var duration = friendChatDto.ChatMessages[1].Time - chatData.Time;
-                    if (duration > TimeSpan.FromMinutes(5))
-                        friendChatDto.ChatMessages[1].ShowTime = true;
-                    else
-                        friendChatDto.ChatMessages[1].ShowTime = false;
-                }
+                friendChatDto.ChatMessages.Insert(0, chatData);
+                var duration = friendChatDto.ChatMessages[1].Time - chatData.Time;
+                if (duration > TimeSpan.FromMinutes(5))
+                    friendChatDto.ChatMessages[1].ShowTime = true;
+                else
+                    friendChatDto.ChatMessages[1].ShowTime = false;
             }
+        }
 
-            // 将最后一条消息的时间显示出来
-            if (friendChatDto.ChatMessages.Count > 0)
-            {
-                friendChatDto.ChatMessages[0].ShowTime = true;
+        // 将最后一条消息的时间显示出来
+        if (friendChatDto.ChatMessages.Count > 0)
+        {
+            friendChatDto.ChatMessages[0].ShowTime = true;
 
-                friendChatDto.UnReadMessageCount = 0;
+            friendChatDto.UnReadMessageCount = 0;
 
-                var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
+            var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
 
-                var chatService = _containerProvider.Resolve<IChatService>();
-                _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId, maxChatId, FileTarget.User);
-            }
-        });
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, friendChatDto.UserId, maxChatId, FileTarget.User);
+        }
 
         var previousSelectedFriend = SelectedFriend;
         var previousSelectedGroup = SelectedGroup;
@@ -195,7 +192,7 @@ public class ChatViewModel : ChatPageBase
     /// 左侧面板选中好友变化时调用
     /// </summary>
     /// <param name="friendChatDto">被选中的好友</param>
-    public async void GroupSelectionChanged(GroupChatDto? groupChatDto)
+    public async Task GroupSelectionChanged(GroupChatDto? groupChatDto)
     {
         if (groupChatDto == SelectedGroup) return;
 
@@ -207,61 +204,58 @@ public class ChatViewModel : ChatPageBase
             return;
         }
 
-        await Task.Run(async () =>
+        // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
+        if (groupChatDto.ChatMessages.Count == 0)
+            groupChatDto.HasMoreMessage = false;
+        else if (groupChatDto.ChatMessages.Count < 15)
         {
-            // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-            if (groupChatDto.ChatMessages.Count == 0)
+            var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
+
+            int nextCount = 15 - groupChatDto.ChatMessages.Count;
+            var chatDatas =
+                await groupPackService.GetGroupChatDataAsync(User?.Id, groupChatDto.GroupId,
+                    groupChatDto.ChatMessages[0].ChatId,
+                    nextCount);
+
+            if (chatDatas.Count != nextCount)
                 groupChatDto.HasMoreMessage = false;
-            else if (groupChatDto.ChatMessages.Count < 15)
+            else
+                groupChatDto.HasMoreMessage = true;
+
+            float value = nextCount;
+            foreach (var chatData in chatDatas)
             {
-                var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
-
-                int nextCount = 15 - groupChatDto.ChatMessages.Count;
-                var chatDatas =
-                    await groupPackService.GetGroupChatDataAsync(User?.Id, groupChatDto.GroupId,
-                        groupChatDto.ChatMessages[0].ChatId,
-                        nextCount);
-
-                if (chatDatas.Count != nextCount)
-                    groupChatDto.HasMoreMessage = false;
+                if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
+                    value -= 2.5f;
+                else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
+                    value -= 2f;
                 else
-                    groupChatDto.HasMoreMessage = true;
+                    value -= 1;
 
-                float value = nextCount;
-                foreach (var chatData in chatDatas)
-                {
-                    if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
-                        value -= 2.5f;
-                    else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
-                        value -= 2f;
-                    else
-                        value -= 1;
+                if (value <= 0) break;
 
-                    if (value <= 0) break;
-
-                    groupChatDto.ChatMessages.Insert(0, chatData);
-                    var duration = groupChatDto.ChatMessages[1].Time - chatData.Time;
-                    if (duration > TimeSpan.FromMinutes(5))
-                        groupChatDto.ChatMessages[1].ShowTime = true;
-                    else
-                        groupChatDto.ChatMessages[1].ShowTime = false;
-                }
+                groupChatDto.ChatMessages.Insert(0, chatData);
+                var duration = groupChatDto.ChatMessages[1].Time - chatData.Time;
+                if (duration > TimeSpan.FromMinutes(5))
+                    groupChatDto.ChatMessages[1].ShowTime = true;
+                else
+                    groupChatDto.ChatMessages[1].ShowTime = false;
             }
+        }
 
-            // 将最后一条消息的时间显示出来
-            if (groupChatDto.ChatMessages.Count > 0)
-            {
-                groupChatDto.ChatMessages[0].ShowTime = true;
+        // 将最后一条消息的时间显示出来
+        if (groupChatDto.ChatMessages.Count > 0)
+        {
+            groupChatDto.ChatMessages[0].ShowTime = true;
 
-                groupChatDto.UnReadMessageCount = 0;
+            groupChatDto.UnReadMessageCount = 0;
 
-                var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
+            var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
 
-                var chatService = _containerProvider.Resolve<IChatService>();
-                _ = chatService.ReadAllChatMessage(User!.Id, groupChatDto.GroupRelationDto!.Id, maxChatId,
-                    FileTarget.Group);
-            }
-        });
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, groupChatDto.GroupRelationDto!.Id, maxChatId,
+                FileTarget.Group);
+        }
 
         var previousSelectedFriend = SelectedFriend;
         var previousSelectedGroup = SelectedGroup;

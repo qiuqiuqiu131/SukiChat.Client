@@ -95,7 +95,7 @@
                             <Button Classes="Outlined Accent" Padding="8,4" Margin="0"
                                     Opacity="0.9"
                                     CommandParameter="{Binding}"
-                                    Command="{Binding ((vm:FriendRequestViewModel)DataContext).AcceptCommand,
+                                    Command="{Binding ((vm:FriendRequestViewModel)DataContext).RejectCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="拒绝" FontSize="12" />
                             </Button>

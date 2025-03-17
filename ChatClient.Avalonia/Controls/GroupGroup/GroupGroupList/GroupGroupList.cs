@@ -78,7 +78,10 @@ public class GroupGroupList : UserControl
         inited = true;
 
         if (GroupContents != null)
+        {
             InitItems(GroupContents);
+            GroupContents.CollectionChanged += NewValueOnCollectionChanged;
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -107,7 +110,7 @@ public class GroupGroupList : UserControl
 
     private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if(!inited) return;
+        if (!inited) return;
         Dispatcher.UIThread.Invoke(() =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add)

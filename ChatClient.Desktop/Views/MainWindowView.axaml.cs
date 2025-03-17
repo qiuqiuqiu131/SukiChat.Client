@@ -10,6 +10,7 @@ using ChatClient.Desktop.ViewModels;
 using ChatClient.Tool.Events;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Navigation.Regions;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views;
@@ -65,7 +66,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        _eventAggregator.GetEvent<ChangePageEvent>().Publish("用户");
+        _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "用户" });
     }
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)

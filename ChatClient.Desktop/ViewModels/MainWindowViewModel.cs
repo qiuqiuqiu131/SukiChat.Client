@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Avalonia.Collections;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
-using ChatClient.BaseService.Services;
-using ChatClient.Desktop.ViewModels.Login;
-using ChatClient.Desktop.Views;
-using ChatClient.Desktop.Views.Login;
+using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -18,9 +12,6 @@ using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Ioc;
-using Prism.Navigation;
-using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
@@ -62,7 +53,15 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
     public ChatPageBase? ActivePage
     {
         get => _activePage;
-        set => SetProperty(ref _activePage, value);
+        set
+        {
+            var previousPage = _activePage;
+            if (SetProperty(ref _activePage, value))
+            {
+                previousPage?.OnNavigatedFrom();
+                _activePage?.OnNavigatedTo();
+            }
+        }
     }
 
     #endregion
@@ -133,7 +132,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         var token3 = _eventAggregator.GetEvent<ChangePageEvent>().Subscribe(d =>
         {
-            ActivePage = ChatPages.FirstOrDefault(x => x.DisplayName.Equals(d));
+            ActivePage = ChatPages.FirstOrDefault(x => x.DisplayName.Equals(d.PageName));
         });
         tokens.Add(token3);
 
@@ -197,26 +196,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         // 退出登录
         _userManager.Logout();
 
-        if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-        {
-            var windows = desktopLifetime.Windows.ToList();
-            var window = App.Current.Container.Resolve<LoginWindowView>();
-            desktopLifetime.MainWindow = window;
-
-            window.Show();
-            foreach (var wd in windows)
-            {
-                var oldRegion = RegionManager.GetRegionManager(wd);
-                if (oldRegion != null)
-                    foreach (var region in oldRegion.Regions)
-                        region.RemoveAll();
-
-                wd.Close();
-
-                if (wd is IDisposable disposable)
-                    disposable.Dispose();
-            }
-        }
+        TranslateWindowHelper.TranslateToLoginWindow();
     }
 
     #region Dispose
@@ -243,7 +223,6 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 try
                 {
                     ChatPages?.Clear();
-                    ChatPages = null;
                 }
                 catch (Exception e)
                 {

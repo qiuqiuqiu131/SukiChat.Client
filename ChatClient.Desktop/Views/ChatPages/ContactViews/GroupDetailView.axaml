@@ -67,7 +67,7 @@
             </StackPanel>
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,10" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="15,15,15,0">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="15,15,15,5">
             <Button Margin="0"
                     Classes="Flat"
                     Padding="15,7"

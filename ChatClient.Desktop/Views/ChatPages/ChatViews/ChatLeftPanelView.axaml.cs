@@ -157,6 +157,8 @@ public partial class ChatLeftPanelView : UserControl
             {
                 if (e.OldItems != null)
                 {
+                    eventAggregator.GetEvent<SelectChatDtoChanged>().Publish();
+
                     bool isSelected = false;
                     foreach (var item in e.OldItems)
                     {

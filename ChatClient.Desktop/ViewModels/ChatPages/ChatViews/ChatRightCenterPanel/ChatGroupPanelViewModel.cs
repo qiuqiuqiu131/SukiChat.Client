@@ -47,7 +47,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
     public DelegateCommand SearchMoreCommand { get; private set; }
     public DelegateCommand<GroupChatData> HeadClickCommand { get; private set; }
-    public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public DelegateCommand QuitGroupCommand { get; private set; }
     public DelegateCommand DeleteGroupCommand { get; private set; }
 
@@ -65,19 +65,29 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
         HeadClickCommand = new DelegateCommand<GroupChatData>(HeadClick);
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
-        FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
+        FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         QuitGroupCommand = new DelegateCommand(QuitGroup);
         DeleteGroupCommand = new DelegateCommand(DeleteGroup);
     }
 
-    private void DeleteGroup()
+    /// <summary>
+    /// 请求解散群聊
+    /// </summary>
+    private async void DeleteGroup()
     {
-        // TODO:解散群聊
+        if (SelectedGroup == null) return;
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        var result = await groupService.DisbandGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
     }
 
-    private void QuitGroup()
+    /// <summary>
+    /// 请求退出群聊
+    /// </summary>
+    private async void QuitGroup()
     {
-        // TODO:退出群组
+        if (SelectedGroup == null) return;
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        var result = await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
     }
 
     private void HeadClick(GroupChatData obj)
@@ -121,7 +131,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// 下载文件
     /// </summary>
     /// <param name="fileMess"></param>
-    public async void FileDownload(FileMessDto fileMess)
+    public async Task FileDownload(FileMessDto fileMess)
     {
         // 获取文件地址
         string filePath = "";

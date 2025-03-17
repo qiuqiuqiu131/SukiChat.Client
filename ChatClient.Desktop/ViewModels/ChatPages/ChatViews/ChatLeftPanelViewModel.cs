@@ -30,8 +30,8 @@ public class ChatLeftPanelViewModel : ViewModelBase
 
     public DelegateCommand CreateGroupCommand { get; init; }
     public DelegateCommand AddNewFriendCommand { get; init; }
-    public DelegateCommand<FriendChatDto> FriendSelectionChangedCommand { get; init; }
-    public DelegateCommand<GroupChatDto> GroupSelectionChangedCommand { get; init; }
+    public AsyncDelegateCommand<FriendChatDto> FriendSelectionChangedCommand { get; init; }
+    public AsyncDelegateCommand<GroupChatDto> GroupSelectionChangedCommand { get; init; }
 
     public ChatLeftPanelViewModel(ChatViewModel chatViewModel, IContainerProvider containerProvider)
     {
@@ -40,8 +40,8 @@ public class ChatLeftPanelViewModel : ViewModelBase
 
         ChatViewModel = chatViewModel;
 
-        FriendSelectionChangedCommand = new DelegateCommand<FriendChatDto>(ChatViewModel.FriendSelectionChanged);
-        GroupSelectionChangedCommand = new DelegateCommand<GroupChatDto>(ChatViewModel.GroupSelectionChanged);
+        FriendSelectionChangedCommand = new AsyncDelegateCommand<FriendChatDto>(ChatViewModel.FriendSelectionChanged);
+        GroupSelectionChangedCommand = new AsyncDelegateCommand<GroupChatDto>(ChatViewModel.GroupSelectionChanged);
         CreateGroupCommand = new DelegateCommand(CreateGroup);
         AddNewFriendCommand = new DelegateCommand(AddNewFriend);
     }

@@ -17,7 +17,7 @@ public class TextMessDto
     public string Text { get; set; }
 }
 
-public class ImageMessDto : BindableBase
+public class ImageMessDto : BindableBase, IDisposable
 {
     public string? FilePath { get; set; }
     public long FileSize { get; set; }
@@ -27,6 +27,11 @@ public class ImageMessDto : BindableBase
     {
         get => imageSource;
         set => SetProperty(ref imageSource, value);
+    }
+
+    public void Dispose()
+    {
+        imageSource?.Dispose();
     }
 }
 

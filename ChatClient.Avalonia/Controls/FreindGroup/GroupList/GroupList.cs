@@ -6,6 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using ChatClient.Tool.Data;
 
 namespace ChatClient.Avalonia.Controls.GroupList;
@@ -76,7 +77,10 @@ public class GroupList : UserControl
         inited = true;
 
         if (GroupContents != null)
+        {
             InitItems(GroupContents);
+            GroupContents.CollectionChanged += NewValueOnCollectionChanged;
+        }
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -105,43 +109,47 @@ public class GroupList : UserControl
 
     private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        if (!inited) return;
+        Dispatcher.UIThread.Invoke(() =>
         {
-            if (e.NewItems != null && e.NewItems.Count > 0)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                foreach (FriendRelationDto newItem in e.NewItems)
+                if (e.NewItems != null && e.NewItems.Count > 0)
                 {
-                    var listItem = new ListBoxItem();
-                    var control = _dataTemplate.Build(newItem);
-                    listItem.Content = control;
-                    listItem.DataContext = newItem;
-
-                    // 按名字大小插入新项
-                    var index = _itemCollection.Cast<ListBoxItem>()
-                        .Select((item, idx) => new { item, idx })
-                        .FirstOrDefault(x => string.Compare(((FriendRelationDto)x.item.DataContext).UserDto.Name,
-                            newItem.UserDto.Name, StringComparison.Ordinal) > 0)?.idx ?? _itemCollection.Count;
-
-                    _itemCollection.Insert(index, listItem);
-                }
-            }
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null && e.OldItems.Count > 0)
-            {
-                foreach (FriendRelationDto oldItem in e.OldItems)
-                {
-                    var listItem = _itemCollection.Cast<ListBoxItem>()
-                        .FirstOrDefault(item => item.DataContext == oldItem);
-
-                    if (listItem != null)
+                    foreach (FriendRelationDto newItem in e.NewItems)
                     {
-                        _itemCollection.Remove(listItem);
+                        var listItem = new ListBoxItem();
+                        var control = _dataTemplate.Build(newItem);
+                        listItem.Content = control;
+                        listItem.DataContext = newItem;
+
+                        // 按名字大小插入新项
+                        var index = _itemCollection.Cast<ListBoxItem>()
+                            .Select((item, idx) => new { item, idx })
+                            .FirstOrDefault(x => string.Compare(((FriendRelationDto)x.item.DataContext).UserDto.Name,
+                                newItem.UserDto.Name, StringComparison.Ordinal) > 0)?.idx ?? _itemCollection.Count;
+
+                        _itemCollection.Insert(index, listItem);
                     }
                 }
             }
-        }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                if (e.OldItems != null && e.OldItems.Count > 0)
+                {
+                    foreach (FriendRelationDto oldItem in e.OldItems)
+                    {
+                        var listItem = _itemCollection.Cast<ListBoxItem>()
+                            .FirstOrDefault(item => item.DataContext == oldItem);
+
+                        if (listItem != null)
+                        {
+                            _itemCollection.Remove(listItem);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private void InitItems(AvaloniaList<FriendRelationDto> value)

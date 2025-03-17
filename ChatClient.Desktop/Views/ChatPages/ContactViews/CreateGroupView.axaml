@@ -7,6 +7,8 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Width="550" Height="480"
@@ -18,55 +20,30 @@
                             Margin="0"
                             Grid.Row="0"
                             CornerRadius="0">
-                <suki:GlassCard
-                    CornerRadius="8"
-                    IsInteractive="True"
-                    VerticalAlignment="Bottom"
-                    HorizontalAlignment="Stretch"
-                    Height="30"
-                    Margin="0"
-                    Padding="8,3"
-                    Classes="Search"
-                    IsAnimated="False">
-                    <suki:GlassCard.Transitions>
-                        <Transitions>
-                            <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
-                            <DoubleTransition Property="Width" Duration="0.35" />
-                        </Transitions>
-                    </suki:GlassCard.Transitions>
-                    <DockPanel LastChildFill="True">
-                        <PathIcon
-                            Width="12"
-                            Height="12"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Data="{x:Static suki:Icons.Search}"
-                            DockPanel.Dock="Left"
-                            Foreground="{DynamicResource SukiLowText}" />
-                        <TextBox
-                            Padding="-3,3,0,0"
-                            Margin="0"
-                            suki:TextBoxExtensions.AddDeleteButton="True"
-                            BorderThickness="0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Classes="NoShadow"
-                            LetterSpacing="0.5"
-                            Text="{Binding SearchText}"
-                            Watermark="Search" />
-                    </DockPanel>
-                </suki:GlassCard>
+                <searchBox:SearchBox HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Bottom" />
             </suki:GlassCard>
             <suki:GlassCard Padding="8" Margin="0" CornerRadius="0" Grid.Row="1">
-                <DockPanel LastChildFill="True">
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                        <multiSeparateGroupView:MultiSeparateGroupView
-                            Margin="5"
-                            x:Name="MultiSeparateGroupView"
-                            SelectionChangedCommand="{Binding SelectionChangedCommand}"
-                            GroupFriends="{Binding GroupFriends}" />
-                    </ScrollViewer>
-                </DockPanel>
+                <Grid>
+                    <TextBlock Text="还没有添加好友"
+                               Margin="0,50"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Opacity="0.6"
+                               FontWeight="SemiBold"
+                               IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
+                    </TextBlock>
+                    <DockPanel LastChildFill="True"
+                               IsVisible="{Binding !GroupFriends.Count,Converter={converter:ListEmptyConverter}}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                            <multiSeparateGroupView:MultiSeparateGroupView
+                                Margin="5"
+                                x:Name="MultiSeparateGroupView"
+                                SelectionChangedCommand="{Binding SelectionChangedCommand}"
+                                GroupFriends="{Binding GroupFriends}" />
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
             </suki:GlassCard>
         </Grid>
         <Grid Grid.Column="1">

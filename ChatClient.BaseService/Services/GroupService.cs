@@ -1,15 +1,11 @@
 using AutoMapper;
-using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
-using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
-using DryIoc.ImTools;
-using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
@@ -20,6 +16,9 @@ public interface IGroupService
     Task<bool> UpdateGroup(string userId, GroupDto groupDto);
     Task<(bool, string)> JoinGroupRequest(string userId, string groupId);
     Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept);
+    Task<(bool, string)> QuitGroupRequest(string userId, string groupId);
+    Task<(bool, string)> RemoveMemberRequest(string userId, string groupId, string memberId);
+    Task<(bool, string)> DisbandGroupRequest(string userId, string groupId);
 }
 
 public class GroupService : BaseService, IGroupService
@@ -226,5 +225,49 @@ public class GroupService : BaseService, IGroupService
             await _messageHelper.SendMessageWithResponse<JoinGroupResponseResponseFromServer>(joinGroupResponse);
 
         return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");
+    }
+
+    /// <summary>
+    /// 请求退出群聊
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="groupId"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<(bool, string)> QuitGroupRequest(string userId, string groupId)
+    {
+        var request = new QuitGroupRequest
+        {
+            UserId = userId,
+            GroupId = groupId
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<QuitGroupMessage>(request);
+        return (response is { Response: { State: true } }, response?.Response?.Message ?? string.Empty);
+    }
+
+    public async Task<(bool, string)> RemoveMemberRequest(string userId, string groupId, string memberId)
+    {
+        var request = new RemoveMemberRequest
+        {
+            UserId = userId,
+            GroupId = groupId,
+            MemberId = memberId
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<RemoveMemberMessage>(request);
+        return (response is { Response: { State: true } }, response?.Response?.Message ?? string.Empty);
+    }
+
+    public async Task<(bool, string)> DisbandGroupRequest(string userId, string groupId)
+    {
+        var request = new DisbandGroupRequest
+        {
+            UserId = userId,
+            GroupId = groupId
+        };
+
+        var response = await _messageHelper.SendMessageWithResponse<RemoveMemberMessage>(request);
+        return (response is { Response: { State: true } }, response?.Response?.Message ?? string.Empty);
     }
 }

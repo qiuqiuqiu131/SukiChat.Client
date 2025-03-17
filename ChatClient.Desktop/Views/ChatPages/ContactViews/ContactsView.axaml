@@ -8,9 +8,7 @@
     xmlns:regions="http://prismlibrary.com/"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
-    xmlns:uiEntity="clr-namespace:ChatClient.Desktop.UIEntity;assembly=ChatClient.Tool"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList;assembly=ChatClient.Avalonia"
     xmlns:seperateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
@@ -173,6 +171,7 @@
                             <TextBlock Text="群聊通知" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Left" />
                         </Grid>
                     </Button>
+                    <Border Background="{DynamicResource SukiPrimaryColor10}" Height="2" Margin="5" />
                     <TabControl TabIndex="0">
                         <TabControl.ItemsPanel>
                             <ItemsPanelTemplate>

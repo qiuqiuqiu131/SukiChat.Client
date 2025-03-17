@@ -260,9 +260,10 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         if (SelectedFriend != null)
         {
             var chatService = _containerProvider.Resolve<IChatService>();
-            chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id, false);
+            chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.UserId, false);
 
-            SelectedFriend.FriendRelatoinDto!.OnFriendRelationChanged -= Friend_OnFriendRelationChanged;
+            if (SelectedFriend.FriendRelatoinDto != null)
+                SelectedFriend.FriendRelatoinDto.OnFriendRelationChanged -= Friend_OnFriendRelationChanged;
             SelectedFriend = null;
         }
     }

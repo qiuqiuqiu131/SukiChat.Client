@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia.Collections;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.UIEntity;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Tool.Common;
@@ -94,5 +95,10 @@ public class ContactsViewModel : ChatPageBase
             parameters.Add("dto", obj);
             ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
         }
+    }
+
+    public override void OnNavigatedFrom()
+    {
+        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
     }
 }

@@ -22,6 +22,12 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
             .Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
     }
 
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        OverlaySplitView.IsPaneOpen = false;
+    }
+
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
