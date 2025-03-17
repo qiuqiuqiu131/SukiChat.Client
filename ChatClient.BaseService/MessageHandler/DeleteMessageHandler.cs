@@ -1,10 +1,8 @@
 using AutoMapper;
 using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
-using ChatClient.DataBase.Repository;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Events;
-using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.MessageHandler;
@@ -54,7 +52,7 @@ public class DeleteMessageHandler : MessageHandlerBase
         IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
         var friendRelationRepository = unitOfWork.GetRepository<FriendRelation>();
 
-        var friendId = message.UserId.Equals(_userManager.User.Id) ? message.FriendId : message.UserId;
+        var friendId = message.UserId.Equals(_userManager.User!.Id) ? message.FriendId : message.UserId;
         var groupName = (await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
             d.User1Id.Equals(_userManager.User.Id) && d.User2Id.Equals(friendId))).Grouping;
 
@@ -68,6 +66,10 @@ public class DeleteMessageHandler : MessageHandlerBase
             var friend = friendGroup.Friends.FirstOrDefault(d => d.Id.Equals(friendId));
             if (friend != null)
                 friendGroup.Friends.Remove(friend);
+            if (friendGroup.Friends.Count == 0)
+            {
+                _userManager.GroupFriends!.Remove(friendGroup);
+            }
         }
 
         // 删除聊天列表

@@ -69,7 +69,9 @@ public class ProtoToDataProfile : Profile
             .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
 
         CreateMap<FriendRequestMessage, FriendRequest>()
-            .ForMember(fr => fr.RequestTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
+            .ForMember(fr => fr.RequestTime, opt =>
+                opt.MapFrom(
+                    fm => DateTime.Parse(fm.RequestTime)))
             .ForMember(fr => fr.SolveTime, opt => opt.MapFrom(fm => DateTime.Parse(fm.SolvedTime)));
 
         CreateMap<GroupRequestMessage, GroupRequest>()

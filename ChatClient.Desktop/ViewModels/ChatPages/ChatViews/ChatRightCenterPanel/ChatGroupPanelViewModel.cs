@@ -24,7 +24,7 @@ using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
+public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
@@ -239,13 +239,15 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 
     #endregion
 
+    #region Region
+
     public override void OnNavigatedTo(NavigationContext navigationContext)
     {
         SelectedGroup = navigationContext.Parameters.GetValue<GroupChatDto>("SelectedGroup");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedGroup.InputMessages);
 
         SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
-        SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
+        SelectedGroup.GroupRelationDto!.GroupDto!.OnGroupChanged += GroupDtoOnOnGroupChanged;
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
@@ -253,6 +255,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         if (SelectedGroup != null)
         {
             SelectedGroup.GroupRelationDto!.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
+            SelectedGroup.GroupRelationDto!.GroupDto!.OnGroupChanged -= GroupDtoOnOnGroupChanged;
             SelectedGroup = null;
         }
     }
@@ -284,4 +287,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         SelectedGroup = null;
         ChatInputPanelViewModel?.Dispose();
     }
+
+    public bool KeepAlive => false;
+
+    #endregion
 }

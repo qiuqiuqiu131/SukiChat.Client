@@ -182,11 +182,12 @@
                         <TabItem Header="好友">
                             <Panel>
                                 <TextBlock Text="还没有添加好友"
+                                           Margin="0,50"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
                                            FontWeight="SemiBold"
-                                           IsVisible="{Binding GroupFriends,Converter={converter:ListEmptyConverter}}">
+                                           IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
                                 </TextBlock>
                                 <seperateGroupsView:SeparateGroupsView
                                     x:Name="FriendView"
@@ -199,13 +200,14 @@
                         <TabItem Header="群聊">
                             <Panel>
                                 <TextBlock Text="还没有加入群聊"
+                                           Margin="0,50"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
                                            FontWeight="SemiBold"
                                            IsVisible="{Binding GroupGroups,Converter={converter:ListEmptyConverter}}" />
                                 <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
-                                    IsVisible="{Binding !GroupGroups,Converter={converter:ListEmptyConverter}}"
+                                    IsVisible="{Binding !GroupGroups.Count,Converter={converter:ListEmptyConverter}}"
                                     GroupFriends="{Binding GroupGroups}"
                                     SelectionChanged="GroupSelectionChanged"
                                     SelectionChangedCommand="{Binding SelectedChangedCommand}" />

@@ -106,7 +106,15 @@ public class ChatViewModel : ChatPageBase
     /// <param name="friendChatDto">被选中的好友</param>
     public async void FriendSelectionChanged(FriendChatDto? friendChatDto)
     {
-        if (friendChatDto == null || friendChatDto == SelectedFriend) return;
+        if (friendChatDto == SelectedFriend) return;
+
+        if (friendChatDto == null)
+        {
+            SelectedGroup = null;
+            SelectedFriend = null;
+            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            return;
+        }
 
         await Task.Run(async () =>
         {
@@ -189,7 +197,15 @@ public class ChatViewModel : ChatPageBase
     /// <param name="friendChatDto">被选中的好友</param>
     public async void GroupSelectionChanged(GroupChatDto? groupChatDto)
     {
-        if (groupChatDto == null || groupChatDto == SelectedGroup) return;
+        if (groupChatDto == SelectedGroup) return;
+
+        if (groupChatDto == null)
+        {
+            SelectedGroup = null;
+            SelectedFriend = null;
+            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            return;
+        }
 
         await Task.Run(async () =>
         {

@@ -44,6 +44,9 @@ internal class UserLoginService : BaseService, IUserLoginService
     {
         DateTime start = DateTime.Now;
 
+        // 开启线程，用于提前加载用户和群聊Dto
+        await _userDtoManager.InitDtos(userId);
+
         DateTime operate_start = DateTime.Now;
         // 获取用户离线消息，处理消息后会更新数据库的
         await OperateOutlineMessage(userId);
@@ -73,12 +76,12 @@ internal class UserLoginService : BaseService, IUserLoginService
         //user.UserDetail = await _userDtoManager.GetUserDto(userId);
         List<Task> tasks =
         [
-            Task.Run(async () => { user.UserDetail = await _userDtoManager.GetUserDto(userId); }),
+            Task.Run(async () => { user.UserDetail = (await _userDtoManager.GetUserDto(userId))!; }),
             Task.Run(async () =>
             {
                 DateTime startTime = DateTime.Now;
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
+                user.FriendReceives = (await friendPackService.GetFriendReceiveDtos(userId) ?? []);
 
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Receives Cost Time:" + (endTime - startTime));
@@ -87,7 +90,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 DateTime startTime = DateTime.Now;
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
+                user.FriendRequests = (await friendPackService.GetFriendRequestDtos(userId) ?? []);
                 DateTime endTime = DateTime.Now;
                 Console.WriteLine("Get Friend Requests Cost Time:" + (endTime - startTime));
             }),
@@ -172,7 +175,7 @@ internal class UserLoginService : BaseService, IUserLoginService
         var loginRepository = _unitOfWork.GetRepository<LoginHistory>();
         var lastLogout = await loginRepository.GetFirstOrDefaultAsync(
             predicate: d => d.Id.Equals(userId),
-            orderBy: d => d.OrderByDescending(d => d.LastLoginTime));
+            orderBy: d => d.OrderByDescending(l => l.LastLoginTime));
         var lastTime = lastLogout?.LastLoginTime ?? DateTime.MinValue;
 
         // 获取离线消息
@@ -207,6 +210,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 1.存在用户给自己发送了好友请求
     /// 2.存在用户处理了自己的好友请求
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="friendRequestMessages"></param>
     private async Task OperateFriendRequestMesssages(string userId, IList<FriendRequestMessage> friendRequestMessages)
     {
@@ -223,39 +227,39 @@ internal class UserLoginService : BaseService, IUserLoginService
             foreach (var request in requests)
             {
                 var friendRequest = _mapper.Map<FriendRequest>(request);
-                var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (FriendRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId.Equals(friendRequest.RequestId));
                 if (req != null)
                     friendRequest.Id = req.Id;
                 requestRespository.Update(friendRequest);
             }
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         using (var scope = _scopedProvider.CreateScope())
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
+
             var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
             foreach (var receive in receives)
             {
-                var friendRequest = _mapper.Map<FriendReceived>(receive);
-                var req = await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(friendRequest.RequestId));
+                var friendReceived = _mapper.Map<FriendReceived>(receive);
+                var req = (FriendReceived?)await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(friendReceived.RequestId));
                 if (req != null)
-                    friendRequest.Id = req.Id;
-                receiveRespository.Update(friendRequest);
+                    friendReceived.Id = req.Id;
+                receiveRespository.Update(friendReceived);
             }
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
-
-        friendRequestMessages.Clear();
     }
 
     /// <summary>
     /// 处理新朋友消息，离线时可能有用户统一了自己的好友请求，并成为了朋友
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="newFriendMessages"></param>
     private async Task OperateNewFriendMessages(string userId, IList<NewFriendMessage> newFriendMessages)
     {
@@ -339,38 +343,33 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         using (var scope = _scopedProvider.CreateScope())
         {
-            var _unitOfWork = scope.Resolve<IUnitOfWork>();
+            var unitOfWork = scope.Resolve<IUnitOfWork>();
 
-            var requestRespository = _unitOfWork.GetRepository<GroupRequest>();
+            var requestRespository = unitOfWork.GetRepository<GroupRequest>();
             foreach (var request in requests)
             {
                 var groupRequest = _mapper.Map<GroupRequest>(request);
-                var req = await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (GroupRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId.Equals(groupRequest.RequestId));
                 if (req != null)
                     groupRequest.Id = req.Id;
                 requestRespository.Update(groupRequest);
             }
 
-            await _unitOfWork.SaveChangesAsync();
-        }
+            await unitOfWork.SaveChangesAsync();
 
-        using (var scope = _scopedProvider.CreateScope())
-        {
-            var _unitOfWork = scope.Resolve<IUnitOfWork>();
-
-            var friendRespository = _unitOfWork.GetRepository<GroupReceived>();
+            var friendRespository = unitOfWork.GetRepository<GroupReceived>();
             foreach (var receive in receives)
             {
-                var groupRequest = _mapper.Map<GroupReceived>(receive);
-                var req = await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(groupRequest.RequestId));
+                var groupReceived = _mapper.Map<GroupReceived>(receive);
+                var req = (GroupReceived?)await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
+                    d.RequestId.Equals(groupReceived.RequestId));
                 if (req != null)
-                    groupRequest.Id = req.Id;
-                friendRespository.Update(groupRequest);
+                    groupReceived.Id = req.Id;
+                friendRespository.Update(groupReceived);
             }
 
-            await _unitOfWork.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         groupRequestMessages.Clear();

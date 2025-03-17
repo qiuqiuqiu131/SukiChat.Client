@@ -102,6 +102,8 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     {
         SendMessageCommand.RaiseCanExecuteChanged();
 
+        if (InputMessages == null) return;
+
         if (isWriting && InputMessages.Count == 1 && InputMessages[0] is string str1 && string.IsNullOrEmpty(str1))
         {
             isWriting = false;

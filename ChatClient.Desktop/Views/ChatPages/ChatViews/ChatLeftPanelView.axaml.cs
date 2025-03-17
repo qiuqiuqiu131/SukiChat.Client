@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
@@ -184,11 +185,19 @@ public partial class ChatLeftPanelView : UserControl
                         int index = e.OldStartingIndex - 1;
                         if (index < 0) index = 0;
 
-                        var control = _itemCollection.GetAt(index);
-                        if (control is RadioButton radioButton)
+                        if (_itemCollection.Count != 0)
                         {
-                            radioButton.IsChecked = true;
-                            radioButton.Command.Execute(radioButton.DataContext);
+                            var control = _itemCollection.GetAt(index);
+                            if (control is RadioButton radioButton)
+                            {
+                                radioButton.IsChecked = true;
+                                radioButton.Command.Execute(radioButton.DataContext);
+                            }
+                        }
+                        else
+                        {
+                            var viewModel = (ChatLeftPanelViewModel)DataContext!;
+                            viewModel.FriendSelectionChangedCommand.Execute(null);
                         }
                     }
                 }

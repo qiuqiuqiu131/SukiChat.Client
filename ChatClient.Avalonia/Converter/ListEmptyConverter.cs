@@ -14,6 +14,11 @@ public class ListEmptyConverter : MarkupExtension, IValueConverter
             return list.Count == 0;
         }
 
+        if (value is int i)
+        {
+            return i == 0;
+        }
+
         return true;
     }
 

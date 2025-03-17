@@ -7,6 +7,7 @@ namespace ChatClient.BaseService.Manager;
 
 public interface IUserDtoManager
 {
+    Task InitDtos(string userId);
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
@@ -34,6 +35,27 @@ public class UserDtoManager : IUserDtoManager
     public UserDtoManager(IContainerProvider containerProvider)
     {
         _containerProvider = containerProvider;
+    }
+
+    public async Task InitDtos(string userId)
+    {
+        List<string> userIds = [userId];
+        List<string> groupIds;
+        using (var scope = _containerProvider.CreateScope())
+        {
+            var friendService = scope.Resolve<IFriendService>();
+            var ids = await friendService.GetFriendIds(userId);
+            userIds.AddRange(ids);
+
+            var groupService = scope.Resolve<IGroupGetService>();
+            groupIds = await groupService.GetGroupIds(userId);
+        }
+
+        foreach (var id in userIds)
+            _ = GetUserDto(id);
+
+        foreach (var id in groupIds)
+            _ = GetGroupDto(userId, id);
     }
 
     /// <summary>

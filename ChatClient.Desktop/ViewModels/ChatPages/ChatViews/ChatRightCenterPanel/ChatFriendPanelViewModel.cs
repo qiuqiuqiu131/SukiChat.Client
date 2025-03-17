@@ -21,7 +21,7 @@ using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
+public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
@@ -70,7 +70,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     /// <summary>
     ///  处理输入事件
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="isInputing"></param>
     private void InputMessageChanged(bool isInputing)
     {
         if (SelectedFriend == null) return;
@@ -245,6 +245,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
 
     #endregion
 
+    #region Region
+
     public override void OnNavigatedTo(NavigationContext navigationContext)
     {
         SelectedFriend = navigationContext.Parameters.GetValue<FriendChatDto>("SelectedFriend");
@@ -276,4 +278,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         ChatInputPanelViewModel?.Dispose();
         SelectedFriend = null;
     }
+
+    public bool KeepAlive => false;
+
+    #endregion
 }
