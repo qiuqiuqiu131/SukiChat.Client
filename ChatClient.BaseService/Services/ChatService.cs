@@ -6,6 +6,7 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
@@ -28,18 +29,18 @@ internal class ChatService : BaseService, IChatService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IMessageHelper _messageHelper;
-    private readonly IFileOperateHelper _fileOperateHelper;
+    private readonly IImageManager _imageManager;
 
     public ChatService(IContainerProvider containerProvider,
         IMapper mapper,
         IMessageHelper messageHelper,
-        IFileOperateHelper fileOperateHelper) : base(
+        IImageManager imageManager) : base(
         containerProvider)
     {
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
         _mapper = mapper;
         _messageHelper = messageHelper;
-        _fileOperateHelper = fileOperateHelper;
+        _imageManager = imageManager;
     }
 
     #region SendMessage
@@ -391,14 +392,10 @@ internal class ChatService : BaseService, IChatService
             {
                 var messContent = (ImageMessDto)chatMessage.Content;
                 string filename = messContent.FilePath;
-                var content = await _fileOperateHelper.GetFile(
+                var content = await _imageManager.GetFile(
                     id, "ChatFile", filename, fileTarget);
                 if (content != null)
-                {
-                    using (MemoryStream stream = new MemoryStream(content))
-                        messContent.ImageSource = new Bitmap(stream);
-                    Array.Clear(content);
-                }
+                    messContent.ImageSource = content;
                 else
                 {
                     //TODO:图片失效处理

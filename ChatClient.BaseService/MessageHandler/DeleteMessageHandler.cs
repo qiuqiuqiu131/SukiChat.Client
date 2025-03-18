@@ -35,6 +35,10 @@ public class DeleteMessageHandler : MessageHandlerBase
         var token4 = eventAggregator.GetEvent<ResponseEvent<DisbandGroupMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnDisbandGroupMessage));
         _subscriptionTokens.Add(token4);
+
+        var token5 = eventAggregator.GetEvent<ResponseEvent<GroupMemeberRemovedMessage>>()
+            .Subscribe(d => ExecuteInScope(d, OnGroupMemberRemovedMessage));
+        _subscriptionTokens.Add(token5);
     }
 
     /// <summary>
@@ -132,5 +136,17 @@ public class DeleteMessageHandler : MessageHandlerBase
 
         if (message.MemberId.Equals(_userManager.User.Id))
             await _userManager.DeleteGroup(message.GroupId, groupName);
+    }
+
+    /// <summary>
+    /// 处理群成员离开群聊的消息
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnGroupMemberRemovedMessage(IScopedProvider scopedprovider, GroupMemeberRemovedMessage message)
+    {
+        await _userManager.RemoveMember(message.GroupId, message.MemberId);
     }
 }

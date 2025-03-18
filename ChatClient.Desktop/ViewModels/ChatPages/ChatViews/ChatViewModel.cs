@@ -70,7 +70,6 @@ public class ChatViewModel : ChatPageBase
 
     private void ClearSelected(FriendChatDto? friendChatDto, GroupChatDto? groupChatDto)
     {
-        var chatService = _containerProvider.Resolve<IChatService>();
         // 处理上一个选中的好友
         if (friendChatDto is { ChatMessages.Count: > 1 })
         {

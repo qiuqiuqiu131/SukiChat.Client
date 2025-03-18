@@ -287,6 +287,17 @@ internal class UserManager : IUserManager
         // 添加群聊退出消息
     }
 
+    public async Task RemoveMember(string groupId, string memberId)
+    {
+        var groupDto = await _userDtoManager.GetGroupDto(User!.Id, groupId);
+        var memberDto = groupDto?.GroupMembers.FirstOrDefault(d => d.UserId.Equals(memberId));
+        if (memberDto != null && groupDto != null)
+        {
+            groupDto.GroupMembers.Remove(memberDto);
+            memberDto.Dispose();
+        }
+    }
+
     #endregion
 
     #region EventRegister

@@ -41,4 +41,5 @@ public interface IUserManager
 
     Task DeleteFriend(string friendId, string groupName);
     Task DeleteGroup(string groupId, string groupName);
+    Task RemoveMember(string groupId, string memberId);
 }

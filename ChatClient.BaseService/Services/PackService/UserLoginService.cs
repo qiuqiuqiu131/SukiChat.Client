@@ -97,8 +97,6 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
                 user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
-                if (friendChatPackService is IDisposable disposable)
-                    disposable.Dispose();
             }),
             Task.Run(async () =>
             {
@@ -121,8 +119,6 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
                 user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
-                if (groupChatPackService is IDisposable disposable)
-                    disposable.Dispose();
             })
         ];
 

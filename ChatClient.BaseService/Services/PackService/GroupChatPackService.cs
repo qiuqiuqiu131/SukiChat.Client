@@ -49,7 +49,8 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         groupChatDto.GroupId = groupId;
         groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
         groupChatDto.UnReadMessageCount =
-            await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId);
+            await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId,
+                groupChatDto.GroupRelationDto.GroupTime);
 
         if (groupChat == null)
             return groupChatDto;
@@ -97,12 +98,18 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     public async Task<List<GroupChatData>> GetGroupChatDataAsync(string? userId, string groupId, int chatId,
         int nextCount)
     {
-        if (userId == null) return new List<GroupChatData>();
+        if (userId == null) return [];
+
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        var relation = (GroupRelation?)await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(groupId) && d.UserId.Equals(userId));
+
+        if (relation == null) return [];
 
         // 从数据库中获取群聊消息
         var groupChatRepository = _unitOfWork.GetRepository<ChatGroup>();
         var groupChats = await groupChatRepository.GetAll(
-                predicate: d => d.GroupId.Equals(groupId) && d.ChatId < chatId,
+                predicate: d => d.GroupId.Equals(groupId) && d.ChatId < chatId && d.Time >= relation.JoinTime,
                 orderBy: o => o.OrderByDescending(d => d.ChatId))
             .Take(nextCount).ToListAsync();
 
@@ -190,12 +197,13 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     /// <param name="targetId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<int> GetUnReadChatMessageCount(string userId, string groupId, int lastChatId)
+    public async Task<int> GetUnReadChatMessageCount(string userId, string groupId, int lastChatId, DateTime joinTime)
     {
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
         var result = await chatGroupRepository.GetAll(
                 predicate: d =>
-                    !d.UserFromId.Equals(userId) && d.GroupId.Equals(groupId) && d.ChatId > lastChatId)
+                    !d.UserFromId.Equals(userId) && d.GroupId.Equals(groupId) && d.ChatId > lastChatId &&
+                    d.Time > joinTime)
             .CountAsync();
         return result;
     }
