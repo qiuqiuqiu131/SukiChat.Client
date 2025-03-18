@@ -113,7 +113,7 @@ namespace ChatClient.Tool.Data
 
         public void Dispose()
         {
-            HeadImage?.Dispose();
+            HeadImage = null;
             OnUserOnlineChanged = null;
         }
     }

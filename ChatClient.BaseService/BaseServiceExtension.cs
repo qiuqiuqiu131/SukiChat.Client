@@ -31,6 +31,7 @@ public static class BaseServiceExtension
 
         // 注册UserManager
         containerRegistry.RegisterSingleton<IUserManager, UserManager>()
+            .RegisterSingleton<IImageManager, ImageManager>()
             .RegisterSingleton<IUserDtoManager, UserDtoManager>();
 
         // 注册Helper

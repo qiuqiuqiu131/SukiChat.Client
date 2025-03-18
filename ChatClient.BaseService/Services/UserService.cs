@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +14,6 @@ namespace ChatClient.BaseService.Services;
 
 public interface IUserService
 {
-    public Task<Bitmap> GetHeadImage(UserDto User);
-
     public Task<Bitmap> GetHeadImage(string userId, int headIndex);
 
     public Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User);
@@ -46,7 +45,7 @@ internal class UserService : BaseService, IUserService
     /// 获取用户头像
     /// </summary>
     /// <returns></returns>
-    public async Task<Bitmap> GetHeadImage(UserDto User)
+    private async Task<Bitmap> GetHeadImage(UserDto User)
     {
         if (User.HeadCount == 0)
         {
@@ -54,23 +53,12 @@ internal class UserService : BaseService, IUserService
             return bitmap;
         }
 
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
         // 获取头像
-        byte[]? file =
-            await _fileOperateHelper.GetFile(User.Id, "HeadImage", $"head_{User.HeadIndex}.png", FileTarget.User);
-        //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
+        Bitmap? file =
+            await imageManager.GetFile(User.Id, "HeadImage", $"head_{User.HeadIndex}.png", FileTarget.User);
         if (file != null)
-        {
-            Bitmap bitmap;
-            using (var stream = new MemoryStream(file))
-            {
-                // 从流加载Bitmap
-                bitmap = new Bitmap(stream);
-            }
-
-            Array.Clear(file);
-
-            return bitmap;
-        }
+            return file;
         else
         {
             Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
@@ -86,23 +74,13 @@ internal class UserService : BaseService, IUserService
             return bitmap;
         }
 
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
+
         // 获取头像
-        byte[]? file =
-            await _fileOperateHelper.GetFile(userId, "HeadImage", $"head_{headIndex}.png", FileTarget.User);
-        //byte[]? file = await _webApiHelper.GetCompressedFileAsync(Path.Combine("Users", User.Id, "HeadImage"),$"head_{User.HeadIndex}.png");
+        var file =
+            await imageManager.GetFile(userId, "HeadImage", $"head_{headIndex}.png", FileTarget.User);
         if (file != null)
-        {
-            Bitmap bitmap;
-            using (var stream = new MemoryStream(file))
-            {
-                // 从流加载Bitmap
-                bitmap = new Bitmap(stream);
-            }
-
-            Array.Clear(file);
-
-            return bitmap;
-        }
+            return file;
         else
         {
             Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
@@ -161,8 +139,10 @@ internal class UserService : BaseService, IUserService
             await respository.InsertAsync(data_user);
         await _unitOfWork.SaveChangesAsync();
 
+        user.HeadImage = await GetHeadImage(user);
+
         // 头像获取
-        _ = Task.Run(async () => { user.HeadImage = await GetHeadImage(user); });
+        // _ = Task.Run(async () => { user.HeadImage = await GetHeadImage(user); });
 
         return user;
     }

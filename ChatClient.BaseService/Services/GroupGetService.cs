@@ -5,6 +5,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -118,24 +119,10 @@ public class GroupGetService : BaseService, IGroupGetService
         return dto;
     }
 
-    public async Task<Bitmap> GetHeadImage(int headIndex)
+    private Task<Bitmap> GetHeadImage(int headIndex)
     {
-        var fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
-        var bytes = await fileOperateHelper.GetGroupFile("HeadImage", $"{headIndex}.png");
-        if (bytes != null)
-        {
-            Bitmap bitmap;
-            using (var stream = new MemoryStream(bytes))
-            {
-                // 从流加载Bitmap
-                bitmap = new Bitmap(stream);
-            }
-
-            Array.Clear(bytes);
-            return bitmap;
-        }
-
-        return null;
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
+        return imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
     }
 
     public Task<Dictionary<int, Bitmap>> GetHeadImages()

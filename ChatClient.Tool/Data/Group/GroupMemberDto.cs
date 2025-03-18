@@ -70,6 +70,6 @@ public class GroupMemberDto : BindableBase, IDisposable
 
     public void Dispose()
     {
-        headImage?.Dispose();
+        headImage = null;
     }
 }

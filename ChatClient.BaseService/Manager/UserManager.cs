@@ -35,18 +35,15 @@ internal class UserManager : IUserManager
     #endregion
 
     private readonly IEventAggregator _eventAggregator;
-    private readonly IFileOperateHelper _fileOperateHelper;
     private readonly IUserDtoManager _userDtoManager;
     private readonly IContainerProvider _containerProvider;
 
     public UserManager(
         IEventAggregator eventAggregator,
-        IFileOperateHelper fileOperateHelper,
         IUserDtoManager userDtoManager,
         IContainerProvider containerProvider)
     {
         _eventAggregator = eventAggregator;
-        _fileOperateHelper = fileOperateHelper;
         _userDtoManager = userDtoManager;
         _containerProvider = containerProvider;
     }
@@ -62,6 +59,8 @@ internal class UserManager : IUserManager
         // 调用userService获取用户完整数据
         var _userService = _containerProvider.Resolve<IUserLoginService>();
         UserData = await _userService.GetUserFullData(id);
+        if (_userService is IDisposable disposable)
+            disposable.Dispose();
 
         // 登录成功
         _ = loginService.LoginSuccess(UserData.UserDetail);
@@ -90,6 +89,9 @@ internal class UserManager : IUserManager
 
         _userDtoManager.Clear();
 
+        var imageManager = _containerProvider.Resolve<ImageManager>();
+        imageManager.ClearCache();
+
         return response;
     }
 
@@ -104,6 +106,7 @@ internal class UserManager : IUserManager
 
         var fileName = $"head_{User.HeadIndex}.png";
         byte[] bytes = bitmap.BitmapToByteArray();
+        var _fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
         var result = await _fileOperateHelper.UploadFile(User.Id, "HeadImage", fileName, bytes, FileTarget.User);
         if (!result) return false;
 

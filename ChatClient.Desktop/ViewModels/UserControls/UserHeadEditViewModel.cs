@@ -163,6 +163,10 @@ public class UserHeadEditViewModel : BindableBase
             _userManager.SaveUser();
 
             ((UserHeadEditView)View).Close();
+
+            foreach (var value in _headImages.Values)
+                value.Dispose();
+            _headImages.Clear();
             return;
         }
 
@@ -178,6 +182,10 @@ public class UserHeadEditViewModel : BindableBase
             ImageChanged?.Invoke(bitmap);
 
             ((UserHeadEditView)View).Close();
+
+            foreach (var value in _headImages.Values)
+                value.Dispose();
+            _headImages.Clear();
         }
         else
             _dialogManager.CreateDialog()

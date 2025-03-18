@@ -73,31 +73,14 @@ internal class UserLoginService : BaseService, IUserLoginService
     private async Task<UserData> LoadUserDate(string userId)
     {
         var user = new UserData();
-        //user.UserDetail = await _userDtoManager.GetUserDto(userId);
         List<Task> tasks =
         [
             Task.Run(async () => { user.UserDetail = (await _userDtoManager.GetUserDto(userId))!; }),
             Task.Run(async () =>
             {
-                DateTime startTime = DateTime.Now;
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
                 user.FriendReceives = (await friendPackService.GetFriendReceiveDtos(userId) ?? []);
-
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Friend Receives Cost Time:" + (endTime - startTime));
-            }),
-            Task.Run(async () =>
-            {
-                DateTime startTime = DateTime.Now;
-                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
                 user.FriendRequests = (await friendPackService.GetFriendRequestDtos(userId) ?? []);
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Friend Requests Cost Time:" + (endTime - startTime));
-            }),
-            Task.Run(async () =>
-            {
-                DateTime startTime = DateTime.Now;
-                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
                 var friends = await friendPackService.GetFriendRelationDtos(userId);
                 user.GroupFriends = new(friends
                     .GroupBy(d => d.Grouping)
@@ -106,21 +89,22 @@ internal class UserLoginService : BaseService, IUserLoginService
                         Friends = new AvaloniaList<FriendRelationDto>(d),
                         GroupName = d.Key
                     }));
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Friend Relations Cost Time:" + (endTime - startTime));
+
+                if (friendPackService is IDisposable disposable)
+                    disposable.Dispose();
             }),
             Task.Run(async () =>
             {
-                DateTime startTime = DateTime.Now;
                 var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
                 user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Friend Chats Cost Time:" + (endTime - startTime));
+                if (friendChatPackService is IDisposable disposable)
+                    disposable.Dispose();
             }),
             Task.Run(async () =>
             {
-                DateTime startTime = DateTime.Now;
                 var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
+                user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
                 var groups = await groupPackService.GetGroupRelationDtos(userId);
                 user.GroupGroupDtos = new(groups
                     .GroupBy(d => d.Grouping)
@@ -129,34 +113,17 @@ internal class UserLoginService : BaseService, IUserLoginService
                         Groups = new AvaloniaList<GroupRelationDto>(d),
                         GroupName = d.Key
                     }));
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Group Relations Cost Time:" + (endTime - startTime));
-            }),
 
+                if (groupPackService is IDisposable disposable)
+                    disposable.Dispose();
+            }),
             Task.Run(async () =>
             {
-                DateTime startTime = DateTime.Now;
                 var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
                 user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Group Chats Cost Time:" + (endTime - startTime));
-            }),
-            Task.Run(async () =>
-            {
-                DateTime startTime = DateTime.Now;
-                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
-                user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Group Receives Cost Time:" + (endTime - startTime));
-            }),
-            Task.Run(async () =>
-            {
-                DateTime startTime = DateTime.Now;
-                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
-                user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
-                DateTime endTime = DateTime.Now;
-                Console.WriteLine("Get Group Requests Cost Time:" + (endTime - startTime));
-            }),
+                if (groupChatPackService is IDisposable disposable)
+                    disposable.Dispose();
+            })
         ];
 
         await Task.WhenAll(tasks);
@@ -219,6 +186,8 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendRequestMessages"></param>
     private async Task OperateFriendRequestMesssages(string userId, IList<FriendRequestMessage> friendRequestMessages)
     {
+        if (friendRequestMessages.Count == 0) return;
+
         IEnumerable<FriendRequestMessage> requests =
             friendRequestMessages.Where(d => d.UserFromId.Equals(userId));
         IEnumerable<FriendRequestMessage> receives =
@@ -268,8 +237,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="newFriendMessages"></param>
     private async Task OperateNewFriendMessages(string userId, IList<NewFriendMessage> newFriendMessages)
     {
+        if (newFriendMessages.Count == 0) return;
+
         var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.NewFriendMessagesOperate(userId, newFriendMessages);
+        if (friendPackService is IDisposable disposable)
+            disposable.Dispose();
+
         newFriendMessages.Clear();
     }
 
@@ -280,8 +254,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendDeleteMessages"></param>
     private async Task OperateFriendDeleteMessages(string userId, IList<FriendDeleteMessage> friendDeleteMessages)
     {
+        if (friendDeleteMessages.Count == 0) return;
+
         var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.FriendDeleteMessagesOperate(userId, friendDeleteMessages);
+        if (friendPackService is IDisposable disposable)
+            disposable.Dispose();
+
         friendDeleteMessages.Clear();
     }
 
@@ -293,8 +272,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendChatMessages"></param>
     private async Task OperateFriendChatMessages(string userId, IList<FriendChatMessage> friendChatMessages)
     {
+        if (friendChatMessages.Count == 0) return;
+
         var friendChatService = _scopedProvider.Resolve<IFriendChatPackService>();
         await friendChatService.FriendChatMessagesOperate(friendChatMessages);
+        if (friendChatService is IDisposable disposable)
+            disposable.Dispose();
+
         friendChatMessages.Clear();
     }
 
@@ -305,8 +289,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="enterGroupMessages"></param>
     private async Task OperateEnterGroupMessages(string useId, IList<EnterGroupMessage> enterGroupMessages)
     {
+        if (enterGroupMessages.Count == 0) return;
+
         var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.EnterGroupMessagesOperate(useId, enterGroupMessages);
+        if (groupPackService is IDisposable disposable)
+            disposable.Dispose();
+
         enterGroupMessages.Clear();
     }
 
@@ -317,8 +306,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="groupChatMessages"></param>
     private async Task OperateGroupChatMessages(string userId, IList<GroupChatMessage> groupChatMessages)
     {
+        if (groupChatMessages.Count == 0) return;
+
         var groupChatService = _scopedProvider.Resolve<IGroupChatPackService>();
         await groupChatService.GroupChatMessagesOperate(groupChatMessages);
+        if (groupChatService is IDisposable disposable)
+            disposable.Dispose();
+
         groupChatMessages.Clear();
     }
 
@@ -329,8 +323,13 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="friendDeleteMessages"></param>
     private async Task OperateGroupDeleteMessages(string userId, IList<GroupDeleteMessage> friendDeleteMessages)
     {
+        if (friendDeleteMessages.Count == 0) return;
+
         var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.GroupDeleteMessagesOperate(userId, friendDeleteMessages);
+        if (groupPackService is IDisposable disposable)
+            disposable.Dispose();
+
         friendDeleteMessages.Clear();
     }
 
@@ -341,6 +340,8 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// <param name="groupRequestMessages"></param>
     private async Task OperateGroupRequestMessage(string userId, IList<GroupRequestMessage> groupRequestMessages)
     {
+        if (groupRequestMessages.Count == 0) return;
+
         IEnumerable<GroupRequestMessage> requests =
             groupRequestMessages.Where(d => d.UserFromId.Equals(userId));
         IEnumerable<GroupRequestMessage> receives =

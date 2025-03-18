@@ -27,17 +27,10 @@ public class ChatClientDbContext : DbContext
     public ChatClientDbContext(IAppDataManager appDataManager) : base()
     {
         _databasePath = appDataManager.GetFileInfo("ChatClient.db").FullName;
-        Console.WriteLine("new DataContext");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite($"Data Source={_databasePath}");
-    }
-
-    public override void Dispose()
-    {
-        Console.WriteLine("dispose DataContext");
-        base.Dispose();
     }
 }

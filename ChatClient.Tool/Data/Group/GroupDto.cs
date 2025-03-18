@@ -111,8 +111,7 @@ public class GroupDto : BindableBase, IDisposable
 
     public void Dispose()
     {
-        headImage.Dispose();
-
+        headImage = null;
         OnGroupChanged = null;
 
         foreach (var groupMember in groupMembers)

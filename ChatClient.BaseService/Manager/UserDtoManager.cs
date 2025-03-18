@@ -67,9 +67,7 @@ public class UserDtoManager : IUserDtoManager
     {
         // 先尝试从缓存中获取
         if (_userDtos.TryGetValue(id, out var cachedUser))
-        {
             return cachedUser;
-        }
 
         try
         {
@@ -78,13 +76,14 @@ public class UserDtoManager : IUserDtoManager
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_userDtos.TryGetValue(id, out cachedUser))
-            {
                 return cachedUser;
-            }
 
-            using var scope = _containerProvider.CreateScope();
-            var userService = scope.Resolve<IUserService>();
+            var userService = _containerProvider.Resolve<IUserService>();
             var user = await userService.GetUserDto(id);
+
+            // 销毁服务
+            if (userService is IDisposable disposable)
+                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (user != null)
@@ -114,13 +113,14 @@ public class UserDtoManager : IUserDtoManager
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_friendRelationDtos.TryGetValue(friendId, out cachedFriend))
-            {
                 return cachedFriend;
-            }
 
-            using var scope = _containerProvider.CreateScope();
-            var friendService = scope.Resolve<IFriendService>();
+            var friendService = _containerProvider.Resolve<IFriendService>();
             var friend = await friendService.GetFriendRelationDto(userId, friendId);
+
+            // 销毁服务
+            if (friendService is IDisposable disposable)
+                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (friend != null)
@@ -154,33 +154,36 @@ public class UserDtoManager : IUserDtoManager
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupDtos.TryGetValue(groupId, out cachedGroup))
-            {
                 return cachedGroup;
-            }
 
-            using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupGetService>();
+            var groupService = _containerProvider.Resolve<IGroupGetService>();
             var group = await groupService.GetGroupDto(userId, groupId);
-            if (group == null) return null;
 
-            // 加载GroupMember
-            _ = Task.Run(async () =>
+            if (group != null)
             {
                 var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
-                if (memberIds != null)
+                // 加载GroupMember
+                _ = Task.Run(async () =>
                 {
-                    foreach (var memberId in memberIds)
+                    if (memberIds != null)
                     {
-                        // 注入群组成员信息
-                        var memberDto = await GetGroupMemberDto(groupId, memberId);
-                        if (memberDto != null)
-                            group.GroupMembers.Add(memberDto);
+                        foreach (var memberId in memberIds)
+                        {
+                            // 注入群组成员信息
+                            var memberDto = await GetGroupMemberDto(groupId, memberId);
+                            if (memberDto != null)
+                                group.GroupMembers.Add(memberDto);
+                        }
                     }
-                }
-            });
+                });
 
-            // 如果获取到用户信息，添加到缓存中
-            _groupDtos.TryAdd(groupId, group);
+                // 如果获取到用户信息，添加到缓存中
+                _groupDtos.TryAdd(groupId, group);
+            }
+
+            // 销毁服务
+            if (groupService is IDisposable disposable)
+                disposable.Dispose();
 
             return group;
         }
@@ -201,13 +204,14 @@ public class UserDtoManager : IUserDtoManager
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupRelationDtos.TryGetValue(groupId, out cachedGroupRelation))
-            {
                 return cachedGroupRelation;
-            }
 
-            using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupGetService>();
+            var groupService = _containerProvider.Resolve<IGroupGetService>();
             var groupRelation = await groupService.GetGroupRelationDto(userId, groupId);
+
+            // 销毁服务
+            if (groupService is IDisposable disposable)
+                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (groupRelation != null)
@@ -239,13 +243,14 @@ public class UserDtoManager : IUserDtoManager
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupMemberDtos.TryGetValue(key, out cachedGroupMember))
-            {
                 return cachedGroupMember;
-            }
 
-            using var scope = _containerProvider.CreateScope();
-            var groupService = scope.Resolve<IGroupGetService>();
+            var groupService = _containerProvider.Resolve<IGroupGetService>();
             var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
+
+            // 销毁服务
+            if (groupService is IDisposable disposable)
+                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (groupMember != null)

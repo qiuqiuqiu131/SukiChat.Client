@@ -183,6 +183,8 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
         var _loginService = _containerProvider.Resolve<ILoginService>();
         var result = await _loginService.GetPassword(id);
+        if (_loginService is IDisposable disposable)
+            disposable.Dispose();
 
         if (!string.IsNullOrEmpty(result))
         {
@@ -198,7 +200,6 @@ public class LoginViewModel : ViewModelBase, IDisposable
         if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
         {
             var window = App.Current.Container.Resolve<RegisterWindowView>();
-            //window.Show(desktopLifetime.MainWindow!);
             window.ShowDialog(desktopLifetime.MainWindow!);
         }
     }
