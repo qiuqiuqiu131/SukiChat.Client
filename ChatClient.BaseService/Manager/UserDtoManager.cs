@@ -162,10 +162,12 @@ public class UserDtoManager : IUserDtoManager
             var groupService = scope.Resolve<IGroupGetService>();
             var group = await groupService.GetGroupDto(userId, groupId);
             if (group == null) return null;
-            var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
-            if (memberIds != null)
+
+            // 加载GroupMember
+            _ = Task.Run(async () =>
             {
-                _ = Task.Run(async () =>
+                var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
+                if (memberIds != null)
                 {
                     foreach (var memberId in memberIds)
                     {
@@ -174,8 +176,8 @@ public class UserDtoManager : IUserDtoManager
                         if (memberDto != null)
                             group.GroupMembers.Add(memberDto);
                     }
-                });
-            }
+                }
+            });
 
             // 如果获取到用户信息，添加到缓存中
             _groupDtos.TryAdd(groupId, group);

@@ -75,11 +75,17 @@ public class DeleteMessageHandler : MessageHandlerBase
     {
         if (message is not { Response: { State: true } }) return;
 
+        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
+
+        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.UserId))).Grouping;
+
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
 
         if (message.UserId.Equals(_userManager.User.Id))
-            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
+            await _userManager.DeleteGroup(message.GroupId, groupName);
     }
 
     /// <summary>
@@ -92,12 +98,17 @@ public class DeleteMessageHandler : MessageHandlerBase
     private async Task OnRemoveMemberMessage(IScopedProvider scopedprovider, RemoveMemberMessage message)
     {
         if (message is not { Response: { State: true } }) return;
+        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
+
+        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId))).Grouping;
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
 
         if (message.MemberId.Equals(_userManager.User.Id))
-            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
+            await _userManager.DeleteGroup(message.GroupId, groupName);
     }
 
     /// <summary>
@@ -110,11 +121,16 @@ public class DeleteMessageHandler : MessageHandlerBase
     private async Task OnDisbandGroupMessage(IScopedProvider scopedprovider, DisbandGroupMessage message)
     {
         if (message is not { Response: { State: true } }) return;
+        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
+
+        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId))).Grouping;
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
 
         if (message.MemberId.Equals(_userManager.User.Id))
-            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
+            await _userManager.DeleteGroup(message.GroupId, groupName);
     }
 }

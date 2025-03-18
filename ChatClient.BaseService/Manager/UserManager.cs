@@ -238,11 +238,13 @@ internal class UserManager : IUserManager
         {
             var friend = friendGroup.Friends.FirstOrDefault(d => d.Id.Equals(friendId));
             if (friend != null)
-                friendGroup.Friends.Remove(friend);
-            if (friendGroup.Friends.Count == 0)
             {
-                GroupFriends!.Remove(friendGroup);
+                friendGroup.Friends.Remove(friend);
+                friend.Dispose();
             }
+
+            if (friendGroup.Friends.Count == 0)
+                GroupFriends!.Remove(friendGroup);
         }
 
         // 删除聊天列表
@@ -256,9 +258,30 @@ internal class UserManager : IUserManager
         // TODO:添加好友删除消息
     }
 
-    public async Task DeleteGroup(string userId, string friendId)
+    public async Task DeleteGroup(string groupId, string groupName)
     {
-        return;
+        var groupGroup = GroupGroups!.FirstOrDefault(d => d.GroupName.Equals(groupName));
+        if (groupGroup != null)
+        {
+            var group = groupGroup.Groups.FirstOrDefault(d => d.Id.Equals(groupId));
+            if (group != null)
+            {
+                groupGroup.Groups.Remove(group);
+                group.Dispose();
+            }
+
+            if (groupGroup.Groups.Count == 0)
+                GroupGroups!.Remove(groupGroup);
+        }
+
+        var groupChat = GroupChats!.FirstOrDefault(d => d.GroupId.Equals(groupId));
+        if (groupChat != null)
+        {
+            GroupChats!.Remove(groupChat);
+            groupChat.Dispose();
+        }
+
+        // 添加群聊退出消息
     }
 
     #endregion

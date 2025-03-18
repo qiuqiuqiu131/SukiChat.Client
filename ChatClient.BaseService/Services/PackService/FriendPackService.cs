@@ -215,17 +215,21 @@ public class FriendPackService : BaseService, IFriendPackService
                 friendDelete.Id = delete.Id;
             friendDeleteRepository.Update(friendDelete);
 
+
             string friendId = message.UserId.Equals(userId) ? message.FriendId : message.UserId;
-            // 删除好友关系
+            // 准备删除好友关系
             var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
                 d.User1Id.Equals(userId) && d.User2Id.Equals(friendId));
-            if (friendRelation != null)
+
+            // 如果删除操作是在组建好友关系前操作的，那么跳过删除操作
+            if (friendRelation != null && friendRelation.GroupTime < DateTime.Parse(message.Time))
                 friendRelationRepository.Delete(friendRelation);
 
             // 删除聊天记录
             var friendChat = await friendChatRepository.GetAllAsync(predicate:
-                d => d.UserFromId.Equals(userId) && d.UserTargetId.Equals(friendId) ||
-                     d.UserTargetId.Equals(userId) && d.UserFromId.Equals(friendId));
+                d => (d.UserFromId.Equals(userId) && d.UserTargetId.Equals(friendId) ||
+                      d.UserTargetId.Equals(userId) && d.UserFromId.Equals(friendId)) &&
+                     d.Time < DateTime.Parse(message.Time));
             if (friendChat != null)
                 friendChatRepository.Delete(friendChat);
         }

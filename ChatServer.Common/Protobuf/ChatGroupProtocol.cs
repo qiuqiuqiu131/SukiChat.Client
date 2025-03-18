@@ -27,37 +27,37 @@ namespace ChatServer.Common.Protobuf {
             "Ch1Qcm90by9DaGF0R3JvdXBQcm90b2NvbC5wcm90bxIaQ2hhdFNlcnZlci5D",
             "b21tb24uUHJvdG9idWYaHFByb3RvL0NoYXRCYXNlUHJvdG9jb2wucHJvdG8i",
             "NgoTR3JvdXBNZXNzYWdlUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3Jv",
-            "dXBJZBgCIAEoCSKnAQoMR3JvdXBNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgL",
+            "dXBJZBgCIAEoCSK6AQoMR3JvdXBNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgL",
             "MiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2US",
             "DwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1lGAMgASgJEhMKC2Rlc2NyaXB0aW9u",
             "GAQgASgJEhEKCWhlYWRJbmRleBgFIAEoBRISCgpjcmVhdGVUaW1lGAYgASgJ",
-            "IjYKE0dyb3VwTWVtYmVyc1JlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dy",
-            "b3VwSWQYAiABKAkipQEKE0dyb3VwTWVtYmVyc01lc3NhZ2USPAoIcmVzcG9u",
-            "c2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25S",
-            "ZXNwb25zZRIPCgdncm91cElkGAIgASgJEj8KB21lbWJlcnMYAyADKAsyLi5D",
-            "aGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Hcm91cE1lbWJlck1lc3NhZ2Ui",
-            "NwoSR3JvdXBNZW1iZXJSZXF1ZXN0Eg8KB2dyb3VwSWQYASABKAkSEAoIbWVt",
-            "YmVySWQYAiABKAkikwEKEkdyb3VwTWVtYmVyTWVzc2FnZRIOCgZ1c2VySWQY",
-            "ASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIQCghqb2luVGltZRgDIAEoCRIVCg1s",
-            "YXN0U3BlYWtUaW1lGAQgASgJEg4KBnN0YXR1cxgFIAEoBRIQCghuaWNrbmFt",
-            "ZRgGIAEoCRIRCgloZWFkSW5kZXgYByABKAUiOAoVR3JvdXBNZW1iZXJJZHNS",
-            "ZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJIjQKDkdy",
-            "b3VwTWVtYmVySWRzEg8KB2dyb3VwSWQYASABKAkSEQoJbWVtYmVySWRzGAIg",
-            "AygJIsIBChFFbnRlckdyb3VwTWVzc2FnZRIPCgdncm91cElkGAEgASgJEg4K",
-            "BnVzZXJJZBgCIAEoCRIOCgZzdGF0dXMYAyABKAkSEAoIZ3JvdXBpbmcYBCAB",
-            "KAkSEAoIam9pblRpbWUYBSABKAkSEAoITmlja05hbWUYBiABKAkSDgoGUmVt",
-            "YXJrGAcgASgJEhMKC2NhbnREaXN0dXJiGAggASgIEg0KBWlzVG9wGAkgASgI",
-            "EhIKCmxhc3RDaGF0SWQYCiABKAUicgoZVXBkYXRlR3JvdXBNZXNzYWdlUmVx",
-            "dWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1l",
-            "GAMgASgJEhMKC2Rlc2NyaXB0aW9uGAQgASgJEhEKCWhlYWRJbmRleBgFIAEo",
-            "BSJjChJVcGRhdGVHcm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5D",
-            "aGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIPCgdn",
-            "cm91cElkGAIgASgJYgZwcm90bzM="));
+            "EhEKCWlzRGlzYmFuZBgHIAEoCCI2ChNHcm91cE1lbWJlcnNSZXF1ZXN0Eg4K",
+            "BnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJIqUBChNHcm91cE1lbWJl",
+            "cnNNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21t",
+            "b24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCRI/",
+            "CgdtZW1iZXJzGAMgAygLMi4uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
+            "R3JvdXBNZW1iZXJNZXNzYWdlIjcKEkdyb3VwTWVtYmVyUmVxdWVzdBIPCgdn",
+            "cm91cElkGAEgASgJEhAKCG1lbWJlcklkGAIgASgJIpMBChJHcm91cE1lbWJl",
+            "ck1lc3NhZ2USDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkSEAoI",
+            "am9pblRpbWUYAyABKAkSFQoNbGFzdFNwZWFrVGltZRgEIAEoCRIOCgZzdGF0",
+            "dXMYBSABKAUSEAoIbmlja25hbWUYBiABKAkSEQoJaGVhZEluZGV4GAcgASgF",
+            "IjgKFUdyb3VwTWVtYmVySWRzUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoH",
+            "Z3JvdXBJZBgCIAEoCSI0Cg5Hcm91cE1lbWJlcklkcxIPCgdncm91cElkGAEg",
+            "ASgJEhEKCW1lbWJlcklkcxgCIAMoCSLCAQoRRW50ZXJHcm91cE1lc3NhZ2US",
+            "DwoHZ3JvdXBJZBgBIAEoCRIOCgZ1c2VySWQYAiABKAkSDgoGc3RhdHVzGAMg",
+            "ASgJEhAKCGdyb3VwaW5nGAQgASgJEhAKCGpvaW5UaW1lGAUgASgJEhAKCE5p",
+            "Y2tOYW1lGAYgASgJEg4KBlJlbWFyaxgHIAEoCRITCgtjYW50RGlzdHVyYhgI",
+            "IAEoCBINCgVpc1RvcBgJIAEoCBISCgpsYXN0Q2hhdElkGAogASgFInIKGVVw",
+            "ZGF0ZUdyb3VwTWVzc2FnZVJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dy",
+            "b3VwSWQYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEo",
+            "CRIRCgloZWFkSW5kZXgYBSABKAUiYwoSVXBkYXRlR3JvdXBNZXNzYWdlEjwK",
+            "CHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
+            "Q29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessageRequest), global::ChatServer.Common.Protobuf.GroupMessageRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessage), global::ChatServer.Common.Protobuf.GroupMessage.Parser, new[]{ "Response", "GroupId", "Name", "Description", "HeadIndex", "CreateTime" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessage), global::ChatServer.Common.Protobuf.GroupMessage.Parser, new[]{ "Response", "GroupId", "Name", "Description", "HeadIndex", "CreateTime", "IsDisband" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersRequest), global::ChatServer.Common.Protobuf.GroupMembersRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersMessage), global::ChatServer.Common.Protobuf.GroupMembersMessage.Parser, new[]{ "Response", "GroupId", "Members" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberRequest), global::ChatServer.Common.Protobuf.GroupMemberRequest.Parser, new[]{ "GroupId", "MemberId" }, null, null, null, null),
@@ -267,6 +267,7 @@ namespace ChatServer.Common.Protobuf {
       description_ = other.description_;
       headIndex_ = other.headIndex_;
       createTime_ = other.createTime_;
+      isDisband_ = other.isDisband_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -341,6 +342,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "isDisband" field.</summary>
+    public const int IsDisbandFieldNumber = 7;
+    private bool isDisband_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDisband {
+      get { return isDisband_; }
+      set {
+        isDisband_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GroupMessage);
@@ -360,6 +372,7 @@ namespace ChatServer.Common.Protobuf {
       if (Description != other.Description) return false;
       if (HeadIndex != other.HeadIndex) return false;
       if (CreateTime != other.CreateTime) return false;
+      if (IsDisband != other.IsDisband) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -372,6 +385,7 @@ namespace ChatServer.Common.Protobuf {
       if (Description.Length != 0) hash ^= Description.GetHashCode();
       if (HeadIndex != 0) hash ^= HeadIndex.GetHashCode();
       if (CreateTime.Length != 0) hash ^= CreateTime.GetHashCode();
+      if (IsDisband != false) hash ^= IsDisband.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -409,6 +423,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(50);
         output.WriteString(CreateTime);
       }
+      if (IsDisband != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsDisband);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -434,6 +452,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (CreateTime.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(CreateTime);
+      }
+      if (IsDisband != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -466,6 +487,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.CreateTime.Length != 0) {
         CreateTime = other.CreateTime;
+      }
+      if (other.IsDisband != false) {
+        IsDisband = other.IsDisband;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -503,6 +527,10 @@ namespace ChatServer.Common.Protobuf {
           }
           case 50: {
             CreateTime = input.ReadString();
+            break;
+          }
+          case 56: {
+            IsDisband = input.ReadBool();
             break;
           }
         }

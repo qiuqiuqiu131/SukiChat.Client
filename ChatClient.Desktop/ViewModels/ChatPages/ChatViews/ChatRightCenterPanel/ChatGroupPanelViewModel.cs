@@ -257,14 +257,17 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         SelectedGroup = navigationContext.Parameters.GetValue<GroupChatDto>("SelectedGroup");
         ChatInputPanelViewModel.UpdateChatMessages(SelectedGroup.InputMessages);
 
-        SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
-        if (SelectedGroup.GroupRelationDto.GroupDto != null)
-            SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
+        if (SelectedGroup.GroupRelationDto != null)
+        {
+            SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+            if (SelectedGroup.GroupRelationDto.GroupDto != null)
+                SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
+        }
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        if (SelectedGroup != null)
+        if (SelectedGroup is { GroupRelationDto: not null })
         {
             SelectedGroup.GroupRelationDto!.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
             if (SelectedGroup.GroupRelationDto.GroupDto != null)

@@ -77,6 +77,14 @@ public class GroupDto : BindableBase, IDisposable
 
     private int headIndex;
 
+    private bool isDisband;
+
+    public bool IsDisband
+    {
+        get => isDisband;
+        set => SetProperty(ref isDisband, value);
+    }
+
     public Bitmap HeadImage
     {
         get => headImage;
@@ -107,6 +115,8 @@ public class GroupDto : BindableBase, IDisposable
 
         OnGroupChanged = null;
 
+        foreach (var groupMember in groupMembers)
+            groupMember.Dispose();
         groupMembers.Clear();
         groupMembers = null;
     }

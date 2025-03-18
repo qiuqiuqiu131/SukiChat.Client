@@ -94,18 +94,18 @@ public class FriendChatDto : BindableBase, IDisposable
     {
         UpdateChatMessages();
 
-        if (IsSelected) return;
-
-        // 新添加的消息
-        if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex != 0)
-        {
-            foreach (var newItem in e.NewItems)
-            {
-                var chatData = (ChatData)newItem;
-                if (!chatData.IsUser)
-                    UnReadMessageCount++;
-            }
-        }
+        // if (IsSelected) return;
+        //
+        // // 新添加的消息
+        // if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex != 0)
+        // {
+        //     foreach (var newItem in e.NewItems)
+        //     {
+        //         var chatData = (ChatData)newItem;
+        //         if (!chatData.IsUser)
+        //             UnReadMessageCount++;
+        //     }
+        // }
     }
 
     public void UpdateChatMessages()

@@ -213,7 +213,8 @@ public class GroupPackService : BaseService, IGroupPackService
             // 移除GroupRelation
             var groupRelation = (GroupRelation?)await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
                 d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId));
-            if (groupRelation != null)
+
+            if (groupRelation != null && groupRelation.JoinTime < DateTime.Parse(message.Time))
                 groupRelationRepository.Delete(groupRelation);
 
             // ChatGroup不好删

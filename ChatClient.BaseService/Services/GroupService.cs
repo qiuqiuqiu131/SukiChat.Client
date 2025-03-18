@@ -81,7 +81,7 @@ public class GroupService : BaseService, IGroupService
             }
             catch (Exception e)
             {
-                return (false, "本地数据库更新失败");
+                // doNothing
             }
 
             return (true, response.GroupId);

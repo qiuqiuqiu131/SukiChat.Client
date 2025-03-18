@@ -21,12 +21,32 @@
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
     </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="RadioButton.Enter:visible">
+            <Style.Animations>
+                <Animation Duration="0:0:0.3"
+                           FillMode="Forward"
+                           IterationCount="1"
+                           Easing="CubicEaseInOut">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="ScaleTransform.ScaleX" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:FriendChatDto">
             <RadioButton GroupName="Friends"
                          Margin="0"
+                         RenderTransformOrigin="0.5,0.5"
                          Height="58"
-                         Classes="Chat Content"
+                         Classes="Chat Content Enter"
                          CornerRadius="0"
                          Click="Button_OnClick"
                          Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
@@ -108,7 +128,8 @@
             <RadioButton GroupName="Friends"
                          Margin="0"
                          Height="58"
-                         Classes="Chat Content"
+                         RenderTransformOrigin="0.5,0.5"
+                         Classes="Chat Content Enter"
                          Click="Button_OnClick"
                          CornerRadius="0"
                          Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).GroupSelectionChangedCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"

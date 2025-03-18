@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using AutoMapper;
+using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
@@ -63,22 +64,26 @@ internal class ChatMessageHandler : MessageHandlerBase
 
         // 更新消息Dto
         var friendChat = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
-        if (friendChat != null && friendChat.ChatMessages.Count != 0)
+
+        Dispatcher.UIThread.Invoke(() =>
         {
-            var last = friendChat.ChatMessages.Last();
-            if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
+            if (friendChat != null && friendChat.ChatMessages.Count != 0)
+            {
+                var last = friendChat.ChatMessages.Last();
+                if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
+                    chatData.ShowTime = true;
+                friendChat.ChatMessages.Add(chatData);
+                if (!friendChat.IsSelected)
+                    friendChat.UnReadMessageCount++;
+            }
+            else if (friendChat != null)
+            {
                 chatData.ShowTime = true;
-            friendChat.ChatMessages.Add(chatData);
-            if (!friendChat.IsSelected)
-                friendChat.UnReadMessageCount++;
-        }
-        else if (friendChat != null)
-        {
-            chatData.ShowTime = true;
-            friendChat.ChatMessages.Add(chatData);
-            if (!friendChat.IsSelected)
-                friendChat.UnReadMessageCount++;
-        }
+                friendChat.ChatMessages.Add(chatData);
+                if (!friendChat.IsSelected)
+                    friendChat.UnReadMessageCount++;
+            }
+        });
 
         if (friendChat != null && friendChat.IsSelected)
         {
@@ -127,6 +132,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             IsUser = false,
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(message.Messages)
         };
+
         if (message.UserFromId.Equals("System"))
             chatData.IsSystem = true;
         else
@@ -139,40 +145,59 @@ internal class ChatMessageHandler : MessageHandlerBase
 
         // 更新消息Dto
         var groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
-        if (groupChat != null && groupChat.ChatMessages.Count != 0)
-        {
-            var item = groupChat.ChatMessages.FirstOrDefault(d => d.ChatId > chatData.ChatId);
-            var index = item != null ? groupChat.ChatMessages.IndexOf(item) : groupChat.ChatMessages.Count;
+        if (groupChat == null) return; // 提前返回，避免后续重复判断
 
-            if (index > 0)
+        Dispatcher.UIThread.Invoke(async () =>
+        {
+            // 确定插入位置
+            if (groupChat.ChatMessages.Count > 0)
             {
-                var previous = groupChat.ChatMessages[index - 1];
-                if (chatData.Time - previous.Time > TimeSpan.FromMinutes(5))
-                    chatData.ShowTime = true;
+                // 查找第一个 ChatId 大于当前消息 ChatId 的消息位置
+                var nextMessage = groupChat.ChatMessages.FirstOrDefault(d => d.ChatId > chatData.ChatId);
+                var index = nextMessage != null
+                    ? groupChat.ChatMessages.IndexOf(nextMessage)
+                    : groupChat.ChatMessages.Count;
+
+                // 设置时间显示逻辑
+                chatData.ShowTime = index == 0 || ShouldShowTime(chatData.Time, groupChat.ChatMessages[index - 1].Time);
+
+                // 更新下一条消息的时间显示逻辑（如果存在）
+                if (index < groupChat.ChatMessages.Count)
+                {
+                    var nextMsg = groupChat.ChatMessages[index];
+                    nextMsg.ShowTime = ShouldShowTime(nextMsg.Time, chatData.Time);
+                }
+
+                groupChat.ChatMessages.Insert(index, chatData);
             }
             else
+            {
+                // 第一条消息总是显示时间
                 chatData.ShowTime = true;
+                groupChat.ChatMessages.Add(chatData);
+            }
 
-            groupChat.ChatMessages.Insert(index, chatData);
+            // 更新未读消息计数
             if (!groupChat.IsSelected)
+            {
                 groupChat.UnReadMessageCount++;
-        }
-        else if (groupChat != null)
-        {
-            chatData.ShowTime = true;
-            groupChat.ChatMessages.Add(chatData);
-            if (!groupChat.IsSelected)
-                groupChat.UnReadMessageCount++;
-        }
-
-        if (groupChat != null && groupChat.IsSelected)
-        {
-            await chatService.ReadAllChatMessage(_userManager.User!.Id, message.GroupId, message.Id,
-                FileTarget.Group);
-        }
+            }
+            else
+            {
+                // 群聊被选中时，标记消息为已读
+                await chatService.ReadAllChatMessage(_userManager.User!.Id, message.GroupId, message.Id,
+                    FileTarget.Group);
+            }
+        });
 
         await Task.Delay(50);
 
         _semaphoreSlim.Release();
+    }
+
+    // 辅助方法：判断是否应该显示时间（时间间隔超过5分钟）
+    bool ShouldShowTime(DateTime current, DateTime previous)
+    {
+        return current - previous > TimeSpan.FromMinutes(5);
     }
 }

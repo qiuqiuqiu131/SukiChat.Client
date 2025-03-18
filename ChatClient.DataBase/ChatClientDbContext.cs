@@ -1,7 +1,6 @@
 using ChatClient.DataBase.Data;
 using ChatClient.Tool.ManagerInterface;
 using Microsoft.EntityFrameworkCore;
-using DbContext = Microsoft.EntityFrameworkCore.DbContext;
 
 namespace ChatClient.DataBase;
 
@@ -14,7 +13,7 @@ public class ChatClientDbContext : DbContext
     public DbSet<FriendRequest> FriendRequest { get; set; }
     public DbSet<FriendReceived> FriendReceived { get; set; }
     public DbSet<FriendDelete> FriendDelete { get; set; }
-    
+
     public DbSet<Group> Group { get; set; }
     public DbSet<GroupRequest> GroupRequest { get; set; }
     public DbSet<GroupReceived> GroupReceiveds { get; set; }
@@ -28,11 +27,17 @@ public class ChatClientDbContext : DbContext
     public ChatClientDbContext(IAppDataManager appDataManager) : base()
     {
         _databasePath = appDataManager.GetFileInfo("ChatClient.db").FullName;
-        //Console.WriteLine("new DataContext");
+        Console.WriteLine("new DataContext");
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlite($"Data Source={_databasePath}");
+    }
+
+    public override void Dispose()
+    {
+        Console.WriteLine("dispose DataContext");
+        base.Dispose();
     }
 }
