@@ -5,6 +5,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
+using Google.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services.PackService;
@@ -16,6 +17,7 @@ public interface IGroupPackService
     Task<AvaloniaList<GroupReceivedDto>> GetGroupReceivedDtos(string userId);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
+    Task<bool> GroupDeleteMessageOperate(string userId, IMessage message);
     Task<bool> GroupDeleteMessagesOperate(string userId, IEnumerable<GroupDeleteMessage> groupDeleteMessages);
 }
 
@@ -152,13 +154,53 @@ public class GroupPackService : BaseService, IGroupPackService
         return true;
     }
 
+    public async Task<bool> GroupDeleteMessageOperate(string userId, IMessage message)
+    {
+        var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+
+        var groupDelete = _mapper.Map<GroupDelete>(message);
+
+        // 添加群成员删除消息
+        var entity = await groupDeleteRepository.GetFirstOrDefaultAsync(
+            predicate: d =>
+                d.DeleteId.Equals(groupDelete.DeleteId));
+        if (entity != null)
+            groupDelete.Id = entity.Id;
+        groupDeleteRepository.Update(groupDelete);
+
+        // 有可能是管理员发送，那么不删除GroupRelation
+        if (groupDelete.MemberId.Equals(userId))
+        {
+            // 移除GroupRelation
+            var groupRelation = (GroupRelation?)await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.GroupId.Equals(groupDelete.GroupId) && d.UserId.Equals(groupDelete.MemberId));
+            if (groupRelation != null)
+                groupRelationRepository.Delete(groupRelation);
+        }
+
+        // ChatGroup不好删
+
+        try
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<bool> GroupDeleteMessagesOperate(string userId,
         IEnumerable<GroupDeleteMessage> groupDeleteMessages)
     {
         var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
         foreach (var message in groupDeleteMessages)
         {
-            if (!message.MemberId.Equals(userId)) continue;
+            // 添加GroupDelete数据
             var groupDelete = _mapper.Map<GroupDelete>(message);
             var entity = await groupDeleteRepository.GetFirstOrDefaultAsync(
                 predicate: d =>
@@ -166,6 +208,15 @@ public class GroupPackService : BaseService, IGroupPackService
             if (entity != null)
                 groupDelete.Id = entity.Id;
             groupDeleteRepository.Update(groupDelete);
+
+            if (!message.MemberId.Equals(userId)) continue;
+            // 移除GroupRelation
+            var groupRelation = (GroupRelation?)await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+                d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId));
+            if (groupRelation != null)
+                groupRelationRepository.Delete(groupRelation);
+
+            // ChatGroup不好删
         }
 
         try

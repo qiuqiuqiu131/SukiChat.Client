@@ -100,8 +100,36 @@ public class ProtoToDataProfile : Profile
             .ForMember(fd => fd.UseId1, opt => opt.MapFrom(fm => fm.UserId))
             .ForMember(fd => fd.UserId2, opt => opt.MapFrom(fm => fm.FriendId));
 
+
         CreateMap<GroupDeleteMessage, GroupDelete>()
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(gdm => DateTime.Parse(gdm.Time)))
             .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(gdm => gdm.Method));
+
+        // 添加QuitGroupMessage到GroupDelete的映射
+        CreateMap<QuitGroupMessage, GroupDelete>()
+            .ForMember(gd => gd.DeleteId, opt => opt.MapFrom(qgm => qgm.QuitId))
+            .ForMember(gd => gd.GroupId, opt => opt.MapFrom(qgm => qgm.GroupId))
+            .ForMember(gd => gd.MemberId, opt => opt.MapFrom(qgm => qgm.UserId))
+            .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(qgm => qgm.UserId))
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(qgm => 1)) // 1表示主动退出
+            .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(qgm => DateTime.Parse(qgm.Time)));
+
+        // 添加RemoveMemberMessage到GroupDelete的映射
+        CreateMap<RemoveMemberMessage, GroupDelete>()
+            .ForMember(gd => gd.DeleteId, opt => opt.MapFrom(rmm => rmm.RemoveId))
+            .ForMember(gd => gd.GroupId, opt => opt.MapFrom(rmm => rmm.GroupId))
+            .ForMember(gd => gd.MemberId, opt => opt.MapFrom(rmm => rmm.MemberId))
+            .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(rmm => rmm.UserId))
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(rmm => 2)) // 2表示被踢出
+            .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(rmm => DateTime.Parse(rmm.Time)));
+
+        // 添加DisbandGroupMessage到GroupDelete的映射
+        CreateMap<DisbandGroupMessage, GroupDelete>()
+            .ForMember(gd => gd.DeleteId, opt => opt.MapFrom(dgm => dgm.DisBandId))
+            .ForMember(gd => gd.GroupId, opt => opt.MapFrom(dgm => dgm.GroupId))
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(dgm => 3)) // 3表示群解散
+            .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(dgm => dgm.UserId))
+            .ForMember(gd => gd.MemberId, opt => opt.MapFrom(dgm => dgm.MemberId))
+            .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(dgm => DateTime.Parse(dgm.Time)));
     }
 }

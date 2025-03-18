@@ -127,7 +127,7 @@ public class GroupGroupList : UserControl
                         // 按名字大小插入新项
                         var index = _itemCollection.Cast<ListBoxItem>()
                             .Select((item, idx) => new { item, idx })
-                            .FirstOrDefault(x => string.Compare(((GroupRelationDto)x.item.DataContext).GroupDto.Name,
+                            .FirstOrDefault(x => string.Compare(((GroupRelationDto)x.item?.DataContext).GroupDto.Name,
                                 newItem.GroupDto.Name, StringComparison.Ordinal) > 0)?.idx ?? _itemCollection.Count;
 
                         _itemCollection.Insert(index, listItem);

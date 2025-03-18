@@ -211,6 +211,7 @@ public class UserDtoManager : IUserDtoManager
             if (groupRelation != null)
             {
                 _ = Task.Run(async () => groupRelation.GroupDto = await GetGroupDto(userId, groupId));
+                //groupRelation.GroupDto = await GetGroupDto(userId, groupId);
                 _groupRelationDtos.TryAdd(groupId, groupRelation);
             }
 

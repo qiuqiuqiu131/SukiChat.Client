@@ -10,32 +10,35 @@ namespace ChatClient.Tool.ManagerInterface;
 public interface IUserManager
 {
     // 是否登录
-    public bool IsLogin { get; }
+    bool IsLogin { get; }
 
     // 登录用户信息
-    public UserDto? User { get; }
-    public AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
-    public AvaloniaList<FriendRequestDto>? FriendRequests { get; }
-    public AvaloniaList<GroupFriendDto>? GroupFriends { get; }
-    public AvaloniaList<FriendChatDto>? FriendChats { get; }
-    public AvaloniaList<GroupChatDto>? GroupChats { get; }
-    public AvaloniaList<GroupGroupDto>? GroupGroups { get; }
-    public AvaloniaList<GroupReceivedDto>? GroupReceiveds { get; }
-    public AvaloniaList<GroupRequestDto>? GroupRequests { get; }
+    UserDto? User { get; }
+    AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
+    AvaloniaList<FriendRequestDto>? FriendRequests { get; }
+    AvaloniaList<GroupFriendDto>? GroupFriends { get; }
+    AvaloniaList<FriendChatDto>? FriendChats { get; }
+    AvaloniaList<GroupChatDto>? GroupChats { get; }
+    AvaloniaList<GroupGroupDto>? GroupGroups { get; }
+    AvaloniaList<GroupReceivedDto>? GroupReceiveds { get; }
+    AvaloniaList<GroupRequestDto>? GroupRequests { get; }
 
     // 用户登录请求
-    public Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
+    Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
 
     // 用户登出请求
-    public Task<CommonResponse?> Logout();
+    Task<CommonResponse?> Logout();
 
     // 重置头像
-    public Task<bool> ResetHead(Bitmap? bitmap);
+    Task<bool> ResetHead(Bitmap? bitmap);
 
     // 保存用户信息
-    public Task SaveUser();
+    Task SaveUser();
 
-    public Task<FriendRelationDto?> NewFriendReceive(string friendId);
-    public Task<GroupRelationDto?> NewGroupReceive(string groupId);
-    public Task<GroupMemberDto?> NewGroupMember(string groupId, string userId);
+    Task<FriendRelationDto?> NewFriendReceive(string friendId);
+    Task<GroupRelationDto?> NewGroupReceive(string groupId);
+    Task<GroupMemberDto?> NewGroupMember(string groupId, string userId);
+
+    Task DeleteFriend(string friendId, string groupName);
+    Task DeleteGroup(string groupId, string groupName);
 }

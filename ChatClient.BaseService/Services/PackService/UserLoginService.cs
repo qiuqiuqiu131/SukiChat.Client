@@ -194,13 +194,18 @@ internal class UserLoginService : BaseService, IUserLoginService
             OperateFriendRequestMesssages(userId, outlineResponse.FriendRequests),
             OperateNewFriendMessages(userId, outlineResponse.NewFriends),
             OperateFriendChatMessages(userId, outlineResponse.FriendChats),
-            OperateFriendDeleteMessages(userId, outlineResponse.FriendDeletes),
             OperateEnterGroupMessages(userId, outlineResponse.EnterGroups),
             OperateGroupChatMessages(userId, outlineResponse.GroupChats),
-            OperateGroupRequestMessage(userId, outlineResponse.GroupRequests),
-            OperateGroupDeleteMessages(userId, outlineResponse.GroupDeletes)
+            OperateGroupRequestMessage(userId, outlineResponse.GroupRequests)
         ];
         await Task.WhenAll(tasks);
+
+        List<Task> deleteTask =
+        [
+            OperateFriendDeleteMessages(userId, outlineResponse.FriendDeletes),
+            OperateGroupDeleteMessages(userId, outlineResponse.GroupDeletes)
+        ];
+        await Task.WhenAll(deleteTask);
     }
 
     #region OperateOutLineData(处理离线未处理的消息,直接对本地数据库进行操作)

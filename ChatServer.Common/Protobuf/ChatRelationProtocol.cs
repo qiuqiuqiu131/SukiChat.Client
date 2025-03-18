@@ -94,19 +94,19 @@ namespace ChatServer.Common.Protobuf {
             "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
             "bnNlEg4KBnVzZXJJZBgCIAEoCRIPCgdncm91cElkGAMgASgJEg4KBnF1aXRJ",
             "ZBgEIAEoBRIMCgR0aW1lGAUgASgJIjYKE0Rpc2JhbmRHcm91cFJlcXVlc3QS",
-            "DgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkilQEKE0Rpc2JhbmRH",
+            "DgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkipwEKE0Rpc2JhbmRH",
             "cm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNv",
             "bW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIOCgZ1c2VySWQYAiABKAkS",
-            "DwoHZ3JvdXBJZBgDIAEoCRIRCglkaXNCYW5kSWQYBCABKAUSDAoEdGltZRgF",
-            "IAEoCSJIChNSZW1vdmVNZW1iZXJSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIP",
-            "Cgdncm91cElkGAIgASgJEhAKCG1lbWJlcklkGAMgASgJIqYBChNSZW1vdmVN",
-            "ZW1iZXJNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5D",
-            "b21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIgASgJ",
-            "Eg8KB2dyb3VwSWQYAyABKAkSEAoIbWVtYmVySWQYBCABKAkSEAoIcmVtb3Zl",
-            "SWQYBSABKAUSDAoEdGltZRgGIAEoCSJ6ChJHcm91cERlbGV0ZU1lc3NhZ2US",
-            "EAoIZGVsZXRlSWQYASABKAUSDwoHZ3JvdXBJZBgCIAEoCRIRCglvcGVyYXRl",
-            "SWQYAyABKAkSEAoIbWVtYmVySWQYBCABKAkSDAoEdGltZRgFIAEoCRIOCgZt",
-            "ZXRob2QYBiABKAViBnByb3RvMw=="));
+            "DwoHZ3JvdXBJZBgDIAEoCRIQCghtZW1iZXJJZBgEIAEoCRIRCglkaXNCYW5k",
+            "SWQYBSABKAUSDAoEdGltZRgGIAEoCSJIChNSZW1vdmVNZW1iZXJSZXF1ZXN0",
+            "Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJEhAKCG1lbWJlcklk",
+            "GAMgASgJIqYBChNSZW1vdmVNZW1iZXJNZXNzYWdlEjwKCHJlc3BvbnNlGAEg",
+            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
+            "c2USDgoGdXNlcklkGAIgASgJEg8KB2dyb3VwSWQYAyABKAkSEAoIbWVtYmVy",
+            "SWQYBCABKAkSEAoIcmVtb3ZlSWQYBSABKAUSDAoEdGltZRgGIAEoCSJ6ChJH",
+            "cm91cERlbGV0ZU1lc3NhZ2USEAoIZGVsZXRlSWQYASABKAUSDwoHZ3JvdXBJ",
+            "ZBgCIAEoCRIRCglvcGVyYXRlSWQYAyABKAkSEAoIbWVtYmVySWQYBCABKAkS",
+            "DAoEdGltZRgFIAEoCRIOCgZtZXRob2QYBiABKAViBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -137,7 +137,7 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.QuitGroupRequest), global::ChatServer.Common.Protobuf.QuitGroupRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.QuitGroupMessage), global::ChatServer.Common.Protobuf.QuitGroupMessage.Parser, new[]{ "Response", "UserId", "GroupId", "QuitId", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.DisbandGroupRequest), global::ChatServer.Common.Protobuf.DisbandGroupRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.DisbandGroupMessage), global::ChatServer.Common.Protobuf.DisbandGroupMessage.Parser, new[]{ "Response", "UserId", "GroupId", "DisBandId", "Time" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.DisbandGroupMessage), global::ChatServer.Common.Protobuf.DisbandGroupMessage.Parser, new[]{ "Response", "UserId", "GroupId", "MemberId", "DisBandId", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.RemoveMemberRequest), global::ChatServer.Common.Protobuf.RemoveMemberRequest.Parser, new[]{ "UserId", "GroupId", "MemberId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.RemoveMemberMessage), global::ChatServer.Common.Protobuf.RemoveMemberMessage.Parser, new[]{ "Response", "UserId", "GroupId", "MemberId", "RemoveId", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupDeleteMessage), global::ChatServer.Common.Protobuf.GroupDeleteMessage.Parser, new[]{ "DeleteId", "GroupId", "OperateId", "MemberId", "Time", "Method" }, null, null, null, null)
@@ -6081,6 +6081,7 @@ namespace ChatServer.Common.Protobuf {
       response_ = other.response_ != null ? other.response_.Clone() : null;
       userId_ = other.userId_;
       groupId_ = other.groupId_;
+      memberId_ = other.memberId_;
       disBandId_ = other.disBandId_;
       time_ = other.time_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -6124,8 +6125,19 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "memberId" field.</summary>
+    public const int MemberIdFieldNumber = 4;
+    private string memberId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string MemberId {
+      get { return memberId_; }
+      set {
+        memberId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "disBandId" field.</summary>
-    public const int DisBandIdFieldNumber = 4;
+    public const int DisBandIdFieldNumber = 5;
     private int disBandId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int DisBandId {
@@ -6136,7 +6148,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "time" field.</summary>
-    public const int TimeFieldNumber = 5;
+    public const int TimeFieldNumber = 6;
     private string time_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string Time {
@@ -6162,6 +6174,7 @@ namespace ChatServer.Common.Protobuf {
       if (!object.Equals(Response, other.Response)) return false;
       if (UserId != other.UserId) return false;
       if (GroupId != other.GroupId) return false;
+      if (MemberId != other.MemberId) return false;
       if (DisBandId != other.DisBandId) return false;
       if (Time != other.Time) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -6173,6 +6186,7 @@ namespace ChatServer.Common.Protobuf {
       if (response_ != null) hash ^= Response.GetHashCode();
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
+      if (MemberId.Length != 0) hash ^= MemberId.GetHashCode();
       if (DisBandId != 0) hash ^= DisBandId.GetHashCode();
       if (Time.Length != 0) hash ^= Time.GetHashCode();
       if (_unknownFields != null) {
@@ -6200,12 +6214,16 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(26);
         output.WriteString(GroupId);
       }
+      if (MemberId.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(MemberId);
+      }
       if (DisBandId != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(DisBandId);
       }
       if (Time.Length != 0) {
-        output.WriteRawTag(42);
+        output.WriteRawTag(50);
         output.WriteString(Time);
       }
       if (_unknownFields != null) {
@@ -6224,6 +6242,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (GroupId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
+      }
+      if (MemberId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MemberId);
       }
       if (DisBandId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(DisBandId);
@@ -6253,6 +6274,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.GroupId.Length != 0) {
         GroupId = other.GroupId;
+      }
+      if (other.MemberId.Length != 0) {
+        MemberId = other.MemberId;
       }
       if (other.DisBandId != 0) {
         DisBandId = other.DisBandId;
@@ -6286,11 +6310,15 @@ namespace ChatServer.Common.Protobuf {
             GroupId = input.ReadString();
             break;
           }
-          case 32: {
+          case 34: {
+            MemberId = input.ReadString();
+            break;
+          }
+          case 40: {
             DisBandId = input.ReadInt32();
             break;
           }
-          case 42: {
+          case 50: {
             Time = input.ReadString();
             break;
           }

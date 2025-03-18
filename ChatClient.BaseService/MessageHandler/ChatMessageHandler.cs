@@ -14,6 +14,8 @@ internal class ChatMessageHandler : MessageHandlerBase
 {
     private readonly IMapper _mapper;
 
+    private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+
     public ChatMessageHandler(IContainerProvider containerProvider, IMapper mapper) : base(containerProvider)
     {
         _mapper = mapper;
@@ -108,6 +110,8 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     private async Task OnGroupChatMessage(IScopedProvider scopedprovider, GroupChatMessage message)
     {
+        await _semaphoreSlim.WaitAsync();
+
         // 将消息存入数据库
         var groupChatPackService = scopedprovider.Resolve<IGroupChatPackService>();
         await groupChatPackService.GroupChatMessageOperate(message);
@@ -166,5 +170,9 @@ internal class ChatMessageHandler : MessageHandlerBase
             await chatService.ReadAllChatMessage(_userManager.User!.Id, message.GroupId, message.Id,
                 FileTarget.Group);
         }
+
+        await Task.Delay(50);
+
+        _semaphoreSlim.Release();
     }
 }

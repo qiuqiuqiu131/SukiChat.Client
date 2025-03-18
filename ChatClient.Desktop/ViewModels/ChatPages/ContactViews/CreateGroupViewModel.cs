@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using ChatClient.BaseService.Services;
@@ -33,7 +34,7 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
 
     public AvaloniaList<GroupFriendDto> GroupFriends { get; init; }
 
-    public DelegateCommand OKCommand { get; set; }
+    public AsyncDelegateCommand OKCommand { get; set; }
     public DelegateCommand CancleCommand { get; set; }
     public DelegateCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
 
@@ -42,7 +43,7 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
         _userManager = userManager;
         _containerProvider = containerProvider;
 
-        OKCommand = new DelegateCommand(CreateGroup, CanCreateGroup);
+        OKCommand = new AsyncDelegateCommand(CreateGroup, CanCreateGroup);
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
         SelectionChangedCommand = new DelegateCommand<SelectionChangedEventArgs>(SelectionChanged);
 
@@ -55,7 +56,7 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
     /// <summary>
     /// 创建群聊
     /// </summary>
-    private async void CreateGroup()
+    private async Task CreateGroup()
     {
         List<string> friendIds = SelectedFriends.Select(d => d.Id).ToList();
         var groupService = _containerProvider.Resolve<IGroupService>();

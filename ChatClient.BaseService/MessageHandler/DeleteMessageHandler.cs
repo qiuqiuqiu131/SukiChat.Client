@@ -1,5 +1,6 @@
 using AutoMapper;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Events;
@@ -47,7 +48,7 @@ public class DeleteMessageHandler : MessageHandlerBase
     /// <returns></returns>
     private async Task OnDeleteFriendMessage(IScopedProvider scopedprovider, DeleteFriendMessage message)
     {
-        if (!(message is { Response: { State: true } })) return;
+        if (message is not { Response: { State: true } }) return;
 
         IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
         var friendRelationRepository = unitOfWork.GetRepository<FriendRelation>();
@@ -59,28 +60,8 @@ public class DeleteMessageHandler : MessageHandlerBase
         var friendPackService = scopedprovider.Resolve<IFriendPackService>();
         _ = await friendPackService.FriendDeleteMessageOperate(_userManager.User!.Id, message);
 
-        // 删除好友列表
-        var friendGroup = _userManager.GroupFriends!.FirstOrDefault(d => d.GroupName.Equals(groupName));
-        if (friendGroup != null)
-        {
-            var friend = friendGroup.Friends.FirstOrDefault(d => d.Id.Equals(friendId));
-            if (friend != null)
-                friendGroup.Friends.Remove(friend);
-            if (friendGroup.Friends.Count == 0)
-            {
-                _userManager.GroupFriends!.Remove(friendGroup);
-            }
-        }
-
-        // 删除聊天列表
-        var friendChat = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
-        if (friendChat != null)
-        {
-            _userManager.FriendChats!.Remove(friendChat);
-            friendChat.Dispose();
-        }
-
-        // TODO:添加好友删除消息
+        // UI同步删除好友
+        await _userManager.DeleteFriend(friendId, groupName);
     }
 
     /// <summary>
@@ -92,6 +73,13 @@ public class DeleteMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnQuitGroupMessage(IScopedProvider scopedprovider, QuitGroupMessage message)
     {
+        if (message is not { Response: { State: true } }) return;
+
+        var groupPackService = scopedprovider.Resolve<IGroupPackService>();
+        _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
+
+        if (message.UserId.Equals(_userManager.User.Id))
+            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
     }
 
     /// <summary>
@@ -103,6 +91,13 @@ public class DeleteMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnRemoveMemberMessage(IScopedProvider scopedprovider, RemoveMemberMessage message)
     {
+        if (message is not { Response: { State: true } }) return;
+
+        var groupPackService = scopedprovider.Resolve<IGroupPackService>();
+        _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
+
+        if (message.MemberId.Equals(_userManager.User.Id))
+            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
     }
 
     /// <summary>
@@ -114,5 +109,12 @@ public class DeleteMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnDisbandGroupMessage(IScopedProvider scopedprovider, DisbandGroupMessage message)
     {
+        if (message is not { Response: { State: true } }) return;
+
+        var groupPackService = scopedprovider.Resolve<IGroupPackService>();
+        _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
+
+        if (message.MemberId.Equals(_userManager.User.Id))
+            await _userManager.DeleteGroup(_userManager.User.Id, message.GroupId);
     }
 }

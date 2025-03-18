@@ -137,6 +137,7 @@ internal class UserManager : IUserManager
         if (User == null) return null;
 
         var dto = await _userDtoManager.GetFriendRelationDto(User.Id, friendId);
+        _ = await _userDtoManager.GetUserDto(friendId);
         if (dto != null)
         {
             var groupFriend = GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
@@ -175,6 +176,7 @@ internal class UserManager : IUserManager
         if (User == null) return null;
 
         var dto = await _userDtoManager.GetGroupRelationDto(User!.Id, groupId);
+        _ = await _userDtoManager.GetGroupDto(User.Id, groupId);
         if (dto != null)
         {
             var groupGroup = GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
@@ -223,6 +225,40 @@ internal class UserManager : IUserManager
         }
 
         return dto;
+    }
+
+    /// <summary>
+    /// 删除好友
+    /// </summary>
+    public async Task DeleteFriend(string friendId, string groupName)
+    {
+        // 删除好友列表
+        var friendGroup = GroupFriends!.FirstOrDefault(d => d.GroupName.Equals(groupName));
+        if (friendGroup != null)
+        {
+            var friend = friendGroup.Friends.FirstOrDefault(d => d.Id.Equals(friendId));
+            if (friend != null)
+                friendGroup.Friends.Remove(friend);
+            if (friendGroup.Friends.Count == 0)
+            {
+                GroupFriends!.Remove(friendGroup);
+            }
+        }
+
+        // 删除聊天列表
+        var friendChat = FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
+        if (friendChat != null)
+        {
+            FriendChats!.Remove(friendChat);
+            friendChat.Dispose();
+        }
+
+        // TODO:添加好友删除消息
+    }
+
+    public async Task DeleteGroup(string userId, string friendId)
+    {
+        return;
     }
 
     #endregion

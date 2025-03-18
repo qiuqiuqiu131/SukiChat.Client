@@ -63,8 +63,9 @@ public partial class ChatLeftPanelView : UserControl
                 _itemCollection.Remove(item);
                 _itemCollection.Insert(0, item);
                 var radioButton = item as RadioButton;
+                if (radioButton == null) return;
                 radioButton.IsChecked = true;
-                radioButton.Command.Execute(dataContext);
+                radioButton.Command?.Execute(dataContext);
                 return;
             }
             else if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
@@ -72,8 +73,9 @@ public partial class ChatLeftPanelView : UserControl
                 _itemCollection.Remove(item);
                 _itemCollection.Insert(0, item);
                 var radioButton = item as RadioButton;
+                if (radioButton == null) return;
                 radioButton.IsChecked = true;
-                radioButton.Command.Execute(dataContext);
+                radioButton.Command?.Execute(dataContext);
                 return;
             }
         }

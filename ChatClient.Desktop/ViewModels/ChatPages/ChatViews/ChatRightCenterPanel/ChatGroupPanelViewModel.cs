@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -257,7 +258,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         ChatInputPanelViewModel.UpdateChatMessages(SelectedGroup.InputMessages);
 
         SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
-        SelectedGroup.GroupRelationDto!.GroupDto!.OnGroupChanged += GroupDtoOnOnGroupChanged;
+        if (SelectedGroup.GroupRelationDto.GroupDto != null)
+            SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
@@ -265,7 +267,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         if (SelectedGroup != null)
         {
             SelectedGroup.GroupRelationDto!.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
-            SelectedGroup.GroupRelationDto!.GroupDto!.OnGroupChanged -= GroupDtoOnOnGroupChanged;
+            if (SelectedGroup.GroupRelationDto.GroupDto != null)
+                SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged -= GroupDtoOnOnGroupChanged;
             SelectedGroup = null;
         }
     }
