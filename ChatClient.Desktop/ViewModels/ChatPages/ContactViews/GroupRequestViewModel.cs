@@ -19,8 +19,10 @@ public class GroupRequestViewModel : ViewModelBase
 {
     public AvaloniaList<GroupReceivedDto> GroupReceivedDtos { get; init; }
     public AvaloniaList<GroupRequestDto> GroupRequestDtos { get; init; }
+    public AvaloniaList<GroupDeleteDto> GroupDeleteDtos { get; init; }
 
-    public bool IsRequestEmpty => GroupReceivedDtos.Count == 0 && GroupRequestDtos.Count == 0;
+    public bool IsRequestEmpty =>
+        GroupReceivedDtos.Count == 0 && GroupRequestDtos.Count == 0 && GroupDeleteDtos.Count == 0;
 
     public DelegateCommand<GroupReceivedDto> AcceptCommand { get; init; }
     public DelegateCommand<GroupReceivedDto> RejectCommand { get; init; }
@@ -43,8 +45,10 @@ public class GroupRequestViewModel : ViewModelBase
 
         GroupReceivedDtos = _userManager.GroupReceiveds!;
         GroupRequestDtos = _userManager.GroupRequests!;
-        GroupReceivedDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
-        GroupRequestDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
+        GroupDeleteDtos = _userManager.GroupDeletes!;
+        GroupReceivedDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
+        GroupRequestDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
+        GroupDeleteDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
 
         AcceptCommand = new DelegateCommand<GroupReceivedDto>(AcceptRequest);
         RejectCommand = new DelegateCommand<GroupReceivedDto>(RejectRequest);

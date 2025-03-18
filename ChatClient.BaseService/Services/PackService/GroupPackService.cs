@@ -12,9 +12,10 @@ namespace ChatClient.BaseService.Services.PackService;
 
 public interface IGroupPackService
 {
-    Task<AvaloniaList<GroupRelationDto>> GetGroupRelationDtos(string userId);
-    Task<AvaloniaList<GroupRequestDto>> GetGroupRequestDtos(string userId);
-    Task<AvaloniaList<GroupReceivedDto>> GetGroupReceivedDtos(string userId);
+    Task<AvaloniaList<GroupRelationDto>?> GetGroupRelationDtos(string userId);
+    Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId);
+    Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId);
+    Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
     Task<bool> GroupDeleteMessageOperate(string userId, IMessage message);
@@ -36,7 +37,7 @@ public class GroupPackService : BaseService, IGroupPackService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
-    public async Task<AvaloniaList<GroupRelationDto>> GetGroupRelationDtos(string userId)
+    public async Task<AvaloniaList<GroupRelationDto>?> GetGroupRelationDtos(string userId)
     {
         var result = new AvaloniaList<GroupRelationDto>();
 
@@ -86,14 +87,14 @@ public class GroupPackService : BaseService, IGroupPackService
     public async Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId)
     {
         var groupIds = await _scopedProvider.Resolve<IGroupGetService>().GetGroupsOfUserManager(userId);
-        var groupRequestRepository = _unitOfWork.GetRepository<GroupReceived>();
-        var groupRequests = await groupRequestRepository.GetAllAsync(
+        var groupReceiveRepository = _unitOfWork.GetRepository<GroupReceived>();
+        var groupReceiveds = await groupReceiveRepository.GetAllAsync(
             predicate: d => groupIds.Contains(d.GroupId),
             orderBy: d => d.OrderByDescending(g => g.ReceiveTime));
 
-        if (groupRequests == null) return null;
+        if (groupReceiveds == null) return null;
 
-        var groupRequestDtos = _mapper.Map<List<GroupReceivedDto>>(groupRequests);
+        var groupRequestDtos = _mapper.Map<List<GroupReceivedDto>>(groupReceiveds);
         foreach (var dto in groupRequestDtos)
             _ = Task.Run(async () =>
             {
@@ -104,6 +105,28 @@ public class GroupPackService : BaseService, IGroupPackService
             });
 
         return new AvaloniaList<GroupReceivedDto>(groupRequestDtos);
+    }
+
+    public async Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId)
+    {
+        var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
+        var groupDeletes = await groupDeleteRepository.GetAllAsync(
+            predicate: d => d.OperateUserId.Equals(userId) || d.MemberId.Equals(userId),
+            orderBy: d => d.OrderByDescending(g => g.DeleteTime));
+
+        if (groupDeletes == null) return null;
+
+        var groupDeleteDtos = _mapper.Map<List<GroupDeleteDto>>(groupDeletes);
+        foreach (var dto in groupDeleteDtos)
+        {
+            _ = Task.Run(async () =>
+            {
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                dto.UserDto = await _userManager.GetUserDto(dto.OperateUserId);
+            });
+        }
+
+        return new AvaloniaList<GroupDeleteDto>(groupDeleteDtos);
     }
 
     public async Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message)

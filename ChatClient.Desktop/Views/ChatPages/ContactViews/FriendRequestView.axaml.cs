@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using ChatClient.Tool.Data;
 
@@ -32,6 +32,16 @@ public partial class FriendRequestView : UserControl
         set => SetValue(FriendReceivedDtosProperty, value);
     }
 
+    public static readonly StyledProperty<AvaloniaList<FriendDeleteDto>> FriendDeleteDtosProperty
+        = AvaloniaProperty.Register<FriendRequestView, AvaloniaList<FriendDeleteDto>>(
+            nameof(FriendDeleteDtos));
+
+    public AvaloniaList<FriendDeleteDto> FriendDeleteDtos
+    {
+        get => GetValue(FriendDeleteDtosProperty);
+        set => SetValue(FriendDeleteDtosProperty, value);
+    }
+
     private bool isInit;
     private ItemCollection _itemCollection;
 
@@ -49,6 +59,7 @@ public partial class FriendRequestView : UserControl
 
         FriendReceivedDtos.CollectionChanged += OnCollectionChanged;
         FriendRequestDtos.CollectionChanged += OnCollectionChanged;
+        FriendDeleteDtos.CollectionChanged += OnCollectionChanged;
         InitItems();
     }
 
@@ -69,45 +80,42 @@ public partial class FriendRequestView : UserControl
         // 创建一个新的列表来存储合并后的结果
         var mergedList = new List<object>();
 
-        // 使用两个索引来遍历两个列表
-        int requestIndex = 0;
-        int receivedIndex = 0;
+        // 将所有项目添加到合并列表中
+        foreach (var requestDto in FriendRequestDtos)
+            mergedList.Add(requestDto);
 
-        // 合并两个列表
-        while (requestIndex < FriendRequestDtos.Count && receivedIndex < FriendReceivedDtos.Count)
+        foreach (var receivedDto in FriendReceivedDtos)
+            mergedList.Add(receivedDto);
+
+        foreach (var deleteDto in FriendDeleteDtos)
+            mergedList.Add(deleteDto);
+
+        // 按时间戳降序排序
+        mergedList.Sort((a, b) =>
         {
-            var requestDto = FriendRequestDtos[requestIndex];
-            var receivedDto = FriendReceivedDtos[receivedIndex];
+            var timeA = GetTimestamp(a);
+            var timeB = GetTimestamp(b);
+            // 降序排序，所以比较 B 和 A
+            return timeB.CompareTo(timeA);
+        });
 
-            // 比较两个项目的时间戳，确保降序排序
-            if (requestDto.RequestTime >= receivedDto.ReceiveTime)
-            {
-                mergedList.Add(requestDto);
-                requestIndex++;
-            }
-            else
-            {
-                mergedList.Add(receivedDto);
-                receivedIndex++;
-            }
-        }
+        // 清空 _itemCollection
+        _itemCollection.Clear();
 
-        // 添加剩余的 FriendRequestDtos
-        while (requestIndex < FriendRequestDtos.Count)
-        {
-            mergedList.Add(FriendRequestDtos[requestIndex]);
-            requestIndex++;
-        }
-
-        // 添加剩余的 FriendReceivedDtos
-        while (receivedIndex < FriendReceivedDtos.Count)
-        {
-            mergedList.Add(FriendReceivedDtos[receivedIndex]);
-            receivedIndex++;
-        }
-
-        // 清空 _itemCollection 并添加排序后的项目
+        // 添加排序后的项目
         foreach (var item in mergedList)
             _itemCollection.Add(item);
+    }
+
+    // 辅助方法：从不同类型的对象获取时间戳
+    private DateTime GetTimestamp(object item)
+    {
+        return item switch
+        {
+            FriendRequestDto requestDto => requestDto.RequestTime,
+            FriendReceiveDto receiveDto => receiveDto.ReceiveTime,
+            FriendDeleteDto deleteDto => deleteDto.DeleteTime, // 假设有DeleteTime属性
+            _ => DateTime.MinValue // 默认值，确保未知类型排在最后
+        };
     }
 }

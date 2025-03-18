@@ -16,10 +16,12 @@ public interface IUserManager
     UserDto? User { get; }
     AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
     AvaloniaList<FriendRequestDto>? FriendRequests { get; }
+    AvaloniaList<FriendDeleteDto>? FriendDeletes { get; }
     AvaloniaList<GroupFriendDto>? GroupFriends { get; }
     AvaloniaList<FriendChatDto>? FriendChats { get; }
     AvaloniaList<GroupChatDto>? GroupChats { get; }
     AvaloniaList<GroupGroupDto>? GroupGroups { get; }
+    AvaloniaList<GroupDeleteDto>? GroupDeletes { get; }
     AvaloniaList<GroupReceivedDto>? GroupReceiveds { get; }
     AvaloniaList<GroupRequestDto>? GroupRequests { get; }
 

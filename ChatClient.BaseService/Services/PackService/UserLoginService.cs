@@ -79,10 +79,11 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendReceives = (await friendPackService.GetFriendReceiveDtos(userId) ?? []);
-                user.FriendRequests = (await friendPackService.GetFriendRequestDtos(userId) ?? []);
+                user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
+                user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
+                user.FriendDeletes = await friendPackService.GetFriendDeleteDtos(userId);
                 var friends = await friendPackService.GetFriendRelationDtos(userId);
-                user.GroupFriends = new(friends
+                user.GroupFriends = new AvaloniaList<GroupFriendDto>(friends
                     .GroupBy(d => d.Grouping)
                     .Select(d => new GroupFriendDto
                     {
@@ -96,15 +97,16 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
-                user.FriendChatDtos = await friendChatPackService.GetFriendChatDtos(userId);
+                user.FriendChats = await friendChatPackService.GetFriendChatDtos(userId);
             }),
             Task.Run(async () =>
             {
                 var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
                 user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
                 user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
+                user.GroupDeletes = await groupPackService.GetGroupDeleteDtos(userId);
                 var groups = await groupPackService.GetGroupRelationDtos(userId);
-                user.GroupGroupDtos = new(groups
+                user.GroupGroups = new AvaloniaList<GroupGroupDto>(groups
                     .GroupBy(d => d.Grouping)
                     .Select(d => new GroupGroupDto()
                     {
@@ -118,7 +120,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
-                user.GroupChatDtos = await groupChatPackService.GetGroupChatDtos(userId);
+                user.GroupChats = await groupChatPackService.GetGroupChatDtos(userId);
             })
         ];
 

@@ -14,7 +14,8 @@ public interface IFriendPackService
 {
     Task<AvaloniaList<FriendReceiveDto>?> GetFriendReceiveDtos(string userId);
     Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId);
-    Task<AvaloniaList<FriendRelationDto>> GetFriendRelationDtos(string userId);
+    Task<AvaloniaList<FriendRelationDto>?> GetFriendRelationDtos(string userId);
+    Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId);
     Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
     Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages);
     Task<bool> FriendDeleteMessageOperate(string userId, DeleteFriendMessage message);
@@ -52,9 +53,8 @@ public class FriendPackService : BaseService, IFriendPackService
         if (friendReceive == null) return null;
 
         var friendReceiveDtos = _mapper.Map<List<FriendReceiveDto>>(friendReceive);
-        List<Task> tasks = new();
         foreach (var dto in friendReceiveDtos)
-            tasks.Add(Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserFromId); }));
+            _ = Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserFromId); });
 
         return new AvaloniaList<FriendReceiveDto>(friendReceiveDtos);
     }
@@ -69,9 +69,8 @@ public class FriendPackService : BaseService, IFriendPackService
         if (friendRequests == null) return null;
 
         var friendRequestDtos = _mapper.Map<List<FriendRequestDto>>(friendRequests);
-        List<Task> tasks = new();
         foreach (var dto in friendRequestDtos)
-            tasks.Add(Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserTargetId); }));
+            _ = Task.Run(async () => { dto.UserDto = await _userDtoManager.GetUserDto(dto.UserTargetId); });
 
         return new AvaloniaList<FriendRequestDto>(friendRequestDtos);
     }
@@ -96,6 +95,31 @@ public class FriendPackService : BaseService, IFriendPackService
         }
 
         return result;
+    }
+
+    public async Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId)
+    {
+        var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
+        var friendDeletes = await friendDeleteRepository.GetAllAsync(
+            predicate: d => d.UseId1.Equals(userId) || d.UserId2.Equals(userId),
+            orderBy: d => d.OrderByDescending(p => p.DeleteTime));
+
+        if (friendDeletes == null) return null;
+
+        var friendDeleteDtos = _mapper.Map<List<FriendDeleteDto>>(friendDeletes);
+
+        foreach (var friendDeleteDto in friendDeleteDtos)
+        {
+            _ = Task.Run(async () =>
+            {
+                friendDeleteDto.IsUser = friendDeleteDto.UseId1.Equals(userId);
+                friendDeleteDto.UserDto = friendDeleteDto.IsUser
+                    ? await _userDtoManager.GetUserDto(friendDeleteDto.UserId2)
+                    : await _userDtoManager.GetUserDto(friendDeleteDto.UseId1);
+            });
+        }
+
+        return new AvaloniaList<FriendDeleteDto>(friendDeleteDtos);
     }
 
     /// <summary>

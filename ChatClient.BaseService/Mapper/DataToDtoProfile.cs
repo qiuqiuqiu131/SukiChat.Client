@@ -45,5 +45,8 @@ internal class DataToDtoProfile : Profile
         CreateMap<ChatGroup, GroupChatData>()
             .ForMember(gcd => gcd.ChatMessages,
                 opt => opt.MapFrom(cg => ChatMessageTool.DecruptChatMessageDto(cg.Message)));
+
+        CreateMap<FriendDelete, FriendDeleteDto>().ReverseMap();
+        CreateMap<GroupDelete, GroupDeleteDto>().ReverseMap();
     }
 }

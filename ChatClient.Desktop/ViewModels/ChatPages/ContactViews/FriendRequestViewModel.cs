@@ -17,8 +17,10 @@ public class FriendRequestViewModel : ViewModelBase
 {
     public AvaloniaList<FriendReceiveDto> FriendReceivedDtos { get; init; }
     public AvaloniaList<FriendRequestDto> FriendRequestDtos { get; init; }
+    public AvaloniaList<FriendDeleteDto> FriendDeleteDtos { get; init; }
 
-    public bool IsRequestEmpty => FriendReceivedDtos.Count == 0 && FriendRequestDtos.Count == 0;
+    public bool IsRequestEmpty =>
+        FriendReceivedDtos.Count == 0 && FriendRequestDtos.Count == 0 && FriendDeleteDtos.Count == 0;
 
     public DelegateCommand<FriendReceiveDto> AcceptCommand { get; init; }
     public DelegateCommand<FriendReceiveDto> RejectCommand { get; init; }
@@ -40,8 +42,10 @@ public class FriendRequestViewModel : ViewModelBase
 
         FriendReceivedDtos = _userManager.FriendReceives!;
         FriendRequestDtos = _userManager.FriendRequests!;
-        FriendReceivedDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
-        FriendRequestDtos.CollectionChanged += (sender, args) => { RaisePropertyChanged(nameof(IsRequestEmpty)); };
+        FriendDeleteDtos = _userManager.FriendDeletes!;
+        FriendReceivedDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
+        FriendRequestDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
+        FriendDeleteDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
 
         AcceptCommand = new DelegateCommand<FriendReceiveDto>(AcceptRequest);
         RejectCommand = new DelegateCommand<FriendReceiveDto>(RejectRequest);

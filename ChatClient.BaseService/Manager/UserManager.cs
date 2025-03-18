@@ -25,10 +25,12 @@ internal class UserManager : IUserManager
     public UserDto? User => UserData?.UserDetail;
     public AvaloniaList<FriendReceiveDto>? FriendReceives => UserData?.FriendReceives;
     public AvaloniaList<FriendRequestDto>? FriendRequests => UserData?.FriendRequests;
+    public AvaloniaList<FriendDeleteDto>? FriendDeletes => UserData?.FriendDeletes;
     public AvaloniaList<GroupFriendDto>? GroupFriends => UserData?.GroupFriends;
-    public AvaloniaList<FriendChatDto>? FriendChats => UserData?.FriendChatDtos;
-    public AvaloniaList<GroupChatDto>? GroupChats => UserData?.GroupChatDtos;
-    public AvaloniaList<GroupGroupDto>? GroupGroups => UserData?.GroupGroupDtos;
+    public AvaloniaList<FriendChatDto>? FriendChats => UserData?.FriendChats;
+    public AvaloniaList<GroupChatDto>? GroupChats => UserData?.GroupChats;
+    public AvaloniaList<GroupGroupDto>? GroupGroups => UserData?.GroupGroups;
+    public AvaloniaList<GroupDeleteDto>? GroupDeletes => UserData?.GroupDeletes;
     public AvaloniaList<GroupReceivedDto>? GroupReceiveds => UserData?.GroupReceiveds;
     public AvaloniaList<GroupRequestDto>? GroupRequests => UserData?.GroupRequests;
 
@@ -98,7 +100,7 @@ internal class UserManager : IUserManager
     /// <summary>
     /// 添加头像
     /// </summary>
-    /// <param name="filePath"></param>
+    /// <param name="bitmap"></param>
     /// <returns></returns>
     public async Task<bool> ResetHead(Bitmap? bitmap)
     {
@@ -124,7 +126,7 @@ internal class UserManager : IUserManager
     public async Task SaveUser()
     {
         var userService = _containerProvider.Resolve<IUserService>();
-        await userService.SaveUser(User);
+        await userService.SaveUser(User!);
     }
 
     #region NewDto
@@ -158,7 +160,7 @@ internal class UserManager : IUserManager
             }
 
             if (FriendChats == null)
-                UserData!.FriendChatDtos = new AvaloniaList<FriendChatDto>();
+                UserData!.FriendChats = new AvaloniaList<FriendChatDto>();
             FriendChats!.Add(new FriendChatDto
             {
                 FriendRelatoinDto = dto,
@@ -188,7 +190,7 @@ internal class UserManager : IUserManager
             else
             {
                 if (GroupGroups == null)
-                    UserData!.GroupGroupDtos = new AvaloniaList<GroupGroupDto>();
+                    UserData!.GroupGroups = new AvaloniaList<GroupGroupDto>();
                 GroupGroups!.Add(new GroupGroupDto
                 {
                     GroupName = dto.Grouping,
@@ -197,7 +199,7 @@ internal class UserManager : IUserManager
             }
 
             if (GroupChats == null)
-                UserData!.GroupChatDtos = new AvaloniaList<GroupChatDto>();
+                UserData!.GroupChats = new AvaloniaList<GroupChatDto>();
             GroupChats!.Add(new GroupChatDto
             {
                 GroupRelationDto = dto,
