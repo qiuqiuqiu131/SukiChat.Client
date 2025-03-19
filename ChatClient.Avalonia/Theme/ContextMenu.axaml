@@ -1,0 +1,43 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTheme x:Key="SukiContextMenuStyle" TargetType="ContextMenu">
+        <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiMenuBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <!--  Tiny margin helps prevent mouse-over immediately  -->
+                <LayoutTransformControl Name="PART_LayoutTransform"
+                                        Margin="0"
+                                        RenderTransformOrigin="0%, 0%">
+                    <Panel>
+                        <Border Margin="5"
+                                BoxShadow="{DynamicResource SukiPopupShadow}"
+                                CornerRadius="{TemplateBinding CornerRadius}" />
+                        <Border Margin="4"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                ClipToBounds="True"
+                                CornerRadius="{TemplateBinding CornerRadius}">
+                            <Panel Background="{DynamicResource PopupGradientBrush}">
+                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                KeyboardNavigation.TabNavigation="Continue" />
+                            </Panel>
+                        </Border>
+                    </Panel>
+                </LayoutTransformControl>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^ /template/ MenuItem">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+    </ControlTheme>
+    <ControlTheme x:Key="{x:Type ContextMenu}"
+                  BasedOn="{StaticResource SukiContextMenuStyle}"
+                  TargetType="ContextMenu" />
+</ResourceDictionary>

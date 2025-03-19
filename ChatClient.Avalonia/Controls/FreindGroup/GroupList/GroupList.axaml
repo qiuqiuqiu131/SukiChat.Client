@@ -24,7 +24,7 @@
                         </Interaction.Behaviors>
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" Spacing="-1" />
+                                <StackPanel Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>

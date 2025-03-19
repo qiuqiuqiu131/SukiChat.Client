@@ -45,6 +45,7 @@
                                 FontSize="12"
                                 Classes="NoShadow"
                                 LetterSpacing="0.5"
+                                ContextFlyout="{x:Null}"
                                 Text="{TemplateBinding SearchText}"
                                 Watermark="Search">
                                 <Interaction.Behaviors>

@@ -28,11 +28,14 @@
         <entry key="ChatClient.Avalonia/Controls/SeparateGroupsView/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeperateGroupsView/SeperateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Button.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/ContextMenu.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Expander.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Index.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ListBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ListBoxItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ListItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/MenuFlyout.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/MenuItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/MySukiSideMenuStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/MySukiWindowStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/RatioButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

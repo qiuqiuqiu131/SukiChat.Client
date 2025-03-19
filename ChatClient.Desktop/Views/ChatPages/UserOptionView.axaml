@@ -127,6 +127,11 @@
                     </Panel>
                 </Button>
             </Panel>
+            <MenuItem Header="haha">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="Cutlery" />
+                </MenuItem.Icon>
+            </MenuItem>
         </StackPanel>
     </ScrollViewer>
 </UserControl>
