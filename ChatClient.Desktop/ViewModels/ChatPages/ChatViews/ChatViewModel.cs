@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
@@ -66,35 +67,150 @@ public class ChatViewModel : ChatPageBase
 
         // 生成面板VM
         ChatLeftPanelViewModel = new ChatLeftPanelViewModel(this, containerProvider);
+
+        InitChatDtos();
     }
+
+    #region 初始化和绑定Dto事件
+
+    private void InitChatDtos()
+    {
+        foreach (var friend in Friends)
+        {
+            if (friend.FriendRelatoinDto != null)
+                friend.FriendRelatoinDto.OnFriendRelationChanged += FriendRelatoinDtoOnOnFriendRelationChanged;
+            else
+                friend.PropertyChanged += OnPropertyChanged;
+        }
+
+        foreach (var group in Groups)
+        {
+            if (group.GroupRelationDto != null)
+                group.GroupRelationDto.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+            else
+                group.PropertyChanged += OnPropertyChanged;
+        }
+    }
+
+    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is FriendChatDto friendChatDto)
+        {
+            if (e.PropertyName.Equals(nameof(FriendChatDto.FriendRelatoinDto)))
+            {
+                if (friendChatDto.FriendRelatoinDto != null)
+                    friendChatDto.FriendRelatoinDto.OnFriendRelationChanged +=
+                        FriendRelatoinDtoOnOnFriendRelationChanged;
+                friendChatDto.PropertyChanged -= OnPropertyChanged;
+            }
+        }
+        else if (sender is GroupChatDto groupChatDto)
+        {
+            if (e.PropertyName.Equals(nameof(GroupChatDto.GroupRelationDto)))
+            {
+                if (groupChatDto.GroupRelationDto != null)
+                    groupChatDto.GroupRelationDto.OnGroupRelationChanged +=
+                        GroupRelationDtoOnOnGroupRelationChanged;
+                groupChatDto.PropertyChanged -= OnPropertyChanged;
+            }
+        }
+    }
+
+    private void GroupRelationDtoOnOnGroupRelationChanged(GroupRelationDto obj)
+    {
+        var groupService = _containerProvider.Resolve<IGroupService>();
+        groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
+    }
+
+    private void FriendRelatoinDtoOnOnFriendRelationChanged(FriendRelationDto obj)
+    {
+        var friendService = _containerProvider.Resolve<IFriendService>();
+        friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
+    }
+
+    #endregion
 
     private void ClearSelected(FriendChatDto? friendChatDto, GroupChatDto? groupChatDto)
     {
-        // 处理上一个选中的好友
-        if (friendChatDto is { ChatMessages.Count: > 1 })
+        try
         {
-            // 移除错误消息
-            var errorMessage = friendChatDto.ChatMessages.Where(d => d.IsError);
-            friendChatDto.ChatMessages.RemoveAll(errorMessage);
+            // 处理上一个选中的好友
+            if (friendChatDto is { ChatMessages.Count: > 0 })
+            {
+                // 找到最后一条非错误消息
+                var lastValidMessage = friendChatDto.ChatMessages
+                    .Where(m => !m.IsError).MaxBy(m => m.ChatId);
 
-            friendChatDto.HasMoreMessage = true;
-            // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
-            friendChatDto.ChatMessages.RemoveRange(0, friendChatDto.ChatMessages.Count - 1);
+                if (lastValidMessage != null)
+                {
+                    // 创建要移除的消息列表（除了最后一条有效消息）
+                    var messagesToRemove = friendChatDto.ChatMessages
+                        .Where(m => m != lastValidMessage)
+                        .ToList();
+
+                    // Dispose并移除其他消息
+                    foreach (var message in messagesToRemove)
+                    {
+                        message.Dispose();
+                        friendChatDto.ChatMessages.Remove(message);
+                    }
+
+                    friendChatDto.HasMoreMessage = true;
+                }
+                else
+                {
+                    // 没有有效消息，释放所有消息并清空集合
+                    foreach (var chatMessage in friendChatDto.ChatMessages)
+                    {
+                        chatMessage.Dispose();
+                    }
+                    friendChatDto.ChatMessages.Clear();
+                    friendChatDto.HasMoreMessage = false;
+                }
+            }
+
+            // 处理上一个选中的群组
+            if (groupChatDto is { ChatMessages.Count: > 0 })
+            {
+                // 找到最后一条非错误消息
+                var lastValidMessage = groupChatDto.ChatMessages
+                    .Where(m => !m.IsError).MaxBy(m => m.ChatId);
+
+                if (lastValidMessage != null)
+                {
+                    // 创建要移除的消息列表（除了最后一条有效消息）
+                    var messagesToRemove = groupChatDto.ChatMessages
+                        .Where(m => m != lastValidMessage)
+                        .ToList();
+
+                    // Dispose并移除其他消息
+                    foreach (var message in messagesToRemove)
+                    {
+                        message.Dispose();
+                        groupChatDto.ChatMessages.Remove(message);
+                    }
+
+                    groupChatDto.HasMoreMessage = true;
+                }
+                else
+                {
+                    // 没有有效消息，释放所有消息并清空集合
+                    foreach (var chatMessage in groupChatDto.ChatMessages)
+                    {
+                        chatMessage.Dispose();
+                    }
+                    groupChatDto.ChatMessages.Clear();
+                    groupChatDto.HasMoreMessage = false;
+                }
+            }
+
+            // 使用更彻底的垃圾回收策略
+            GC.Collect(2, GCCollectionMode.Forced, true, true);
         }
-
-        // 处理上一个选中的好友
-        if (groupChatDto is { ChatMessages.Count: > 1 })
+        catch (Exception ex)
         {
-            // 移除错误消息
-            var errorMessage = groupChatDto.ChatMessages.Where(d => d.IsError);
-            groupChatDto.ChatMessages.RemoveAll(errorMessage);
-
-            groupChatDto.HasMoreMessage = true;
-            // 将PreviousSelectedFriend的聊天记录裁剪到只剩1条
-            groupChatDto.ChatMessages.RemoveRange(0, groupChatDto.ChatMessages.Count - 1);
+            Console.WriteLine($"清理聊天记录时出错: {ex.Message}");
         }
-
-        GC.Collect();
     }
 
     #region FriendChat

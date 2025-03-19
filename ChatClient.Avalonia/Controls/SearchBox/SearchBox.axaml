@@ -8,59 +8,61 @@
     <Style Selector="searchBox|SearchBox">
         <Setter Property="Template">
             <ControlTemplate>
-                <suki:GlassCard
-                    Name="BaseCard"
-                    CornerRadius="8"
-                    VerticalAlignment="Bottom"
-                    BorderThickness="1"
-                    HorizontalAlignment="Stretch"
-                    Height="30"
-                    Margin="0"
-                    Padding="8,3,0,3"
-                    BorderBrush="{DynamicResource SukiBorder}"
-                    Classes="Search"
-                    IsAnimated="False">
-                    <suki:GlassCard.Transitions>
-                        <Transitions>
-                            <CornerRadiusTransition Property="CornerRadius" Duration="0.35" />
-                            <DoubleTransition Property="Width" Duration="0.35" />
-                            <BrushTransition Property="BorderBrush" Duration="0.35" />
-                        </Transitions>
-                    </suki:GlassCard.Transitions>
-                    <DockPanel LastChildFill="True">
-                        <PathIcon
-                            Width="12"
-                            Height="12"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            Data="{x:Static suki:Icons.Search}"
-                            DockPanel.Dock="Left"
-                            Foreground="{DynamicResource SukiLowText}" />
-                        <TextBox
-                            Name="PART_TextBox"
-                            Padding="-3,3,0,0"
-                            Margin="0"
-                            suki:TextBoxExtensions.AddDeleteButton="True"
-                            BorderThickness="0"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Classes="NoShadow"
-                            LetterSpacing="0.5"
-                            Text="{TemplateBinding SearchText}"
-                            Watermark="Search">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="GotFocus">
-                                    <ChangePropertyAction TargetObject="{Binding #BaseCard}" PropertyName="BorderBrush"
-                                                          Value="{DynamicResource SukiPrimaryColor75}" />
-                                </EventTriggerBehavior>
-                                <EventTriggerBehavior EventName="LostFocus">
-                                    <ChangePropertyAction TargetObject="{Binding #BaseCard}" PropertyName="BorderBrush"
-                                                          Value="{DynamicResource SukiBorder}" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                        </TextBox>
-                    </DockPanel>
-                </suki:GlassCard>
+                <Border Padding="2">
+                    <suki:GlassCard
+                        Name="BaseCard"
+                        CornerRadius="8"
+                        VerticalAlignment="Bottom"
+                        BorderThickness="1.1"
+                        HorizontalAlignment="Stretch"
+                        Height="30"
+                        Margin="0"
+                        Padding="8,3,0,3"
+                        BorderBrush="{DynamicResource SukiBorderBrush}"
+                        Classes="Search"
+                        IsAnimated="False">
+                        <suki:GlassCard.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                            </Transitions>
+                        </suki:GlassCard.Transitions>
+                        <DockPanel LastChildFill="True">
+                            <PathIcon
+                                Width="12"
+                                Height="12"
+                                Margin="5,0,0,0"
+                                VerticalAlignment="Center"
+                                Data="{x:Static suki:Icons.Search}"
+                                DockPanel.Dock="Left"
+                                Foreground="{DynamicResource SukiLowText}" />
+                            <TextBox
+                                Name="PART_TextBox"
+                                Padding="-3,3,0,0"
+                                Margin="0"
+                                suki:TextBoxExtensions.AddDeleteButton="True"
+                                BorderThickness="0"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Classes="NoShadow"
+                                LetterSpacing="0.5"
+                                Text="{TemplateBinding SearchText}"
+                                Watermark="Search">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="GotFocus">
+                                        <ChangePropertyAction TargetObject="{Binding #BaseCard}"
+                                                              PropertyName="BorderBrush"
+                                                              Value="{DynamicResource SukiPrimaryColor75}" />
+                                    </EventTriggerBehavior>
+                                    <EventTriggerBehavior EventName="LostFocus">
+                                        <ChangePropertyAction TargetObject="{Binding #BaseCard}"
+                                                              PropertyName="BorderBrush"
+                                                              Value="{DynamicResource SukiBorderBrush}" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                            </TextBox>
+                        </DockPanel>
+                    </suki:GlassCard>
+                </Border>
             </ControlTemplate>
         </Setter>
     </Style>

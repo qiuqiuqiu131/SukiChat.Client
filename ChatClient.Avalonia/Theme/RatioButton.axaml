@@ -50,8 +50,8 @@
         <Style Selector="^:pointerover">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.4" />
-                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
+                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
                 <Setter Property="CornerRadius" Value="5" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
@@ -61,8 +61,8 @@
         <Style Selector="^:checked">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.4" />
-                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
+                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
                 <Setter Property="CornerRadius" Value="13" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">

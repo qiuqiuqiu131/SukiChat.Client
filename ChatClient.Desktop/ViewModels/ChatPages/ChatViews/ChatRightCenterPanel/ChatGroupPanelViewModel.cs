@@ -259,7 +259,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
         if (SelectedGroup.GroupRelationDto != null)
         {
-            SelectedGroup.GroupRelationDto!.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
             if (SelectedGroup.GroupRelationDto.GroupDto != null)
                 SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
         }
@@ -269,7 +268,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     {
         if (SelectedGroup is { GroupRelationDto: not null })
         {
-            SelectedGroup.GroupRelationDto!.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
             if (SelectedGroup.GroupRelationDto.GroupDto != null)
                 SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged -= GroupDtoOnOnGroupChanged;
             SelectedGroup = null;

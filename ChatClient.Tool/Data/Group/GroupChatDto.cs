@@ -13,7 +13,12 @@ public class GroupChatDto : BindableBase, IDisposable
     public GroupRelationDto? GroupRelationDto
     {
         get => _groupRelationDto;
-        set => SetProperty(ref _groupRelationDto, value);
+        set
+        {
+            SetProperty(ref _groupRelationDto, value);
+            if (_groupRelationDto != null)
+                _groupRelationDto.OnGroupRelationChanged += delegate { OnLastChatMessagesChanged.Invoke(this); };
+        }
     }
 
     // 是否存在更多历史聊天记录

@@ -1,27 +1,29 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="Button.Add">
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
                     <Border Name="PART_Border"
-                            Opacity="0.3"
+                            Opacity="0.15"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="SineEaseInOut" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.2" Easing="SineEaseInOut" />
                             </Transitions>
                         </Border.Transitions>
                     </Border>
                     <ContentPresenter Name="PART_ContentPresenter"
                                       Margin="0,0,0,0"
-                                      CornerRadius="0"
                                       Padding="{TemplateBinding Padding}"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       Background="Transparent"
+                                      BorderThickness="0"
                                       Content="{TemplateBinding Content}"
                                       ContentTemplate="{TemplateBinding ContentTemplate}">
                         <ContentPresenter.Transitions>
@@ -37,8 +39,11 @@
         </Setter>
     </Style>
 
-    <Style Selector="Button.Add:pointerover /template/ Border#PART_Border">
-        <Setter Property="Opacity" Value="0." />
+    <Style Selector="Button.Add:pointerover">
+        <Style Selector="^ /template/ Border#PART_Border">
+            <Setter Property="Opacity" Value="0.25" />
+        </Style>
+        <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
     </Style>
 
     <Style Selector="Button.Void">

@@ -5,11 +5,18 @@ using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data;
 
-public class ChatMessageDto
+public class ChatMessageDto : IDisposable
 {
     public ChatMessage.ContentOneofCase Type { get; set; }
 
     public object Content { get; set; }
+
+    public void Dispose()
+    {
+        if (Content is IDisposable disposable)
+            disposable.Dispose();
+        Content = null;
+    }
 }
 
 public class TextMessDto
@@ -31,7 +38,7 @@ public class ImageMessDto : BindableBase, IDisposable
 
     public void Dispose()
     {
-        imageSource?.Dispose();
+        imageSource = null;
     }
 }
 
@@ -72,9 +79,14 @@ public class FileMessDto : BindableBase
     #endregion
 }
 
-public class SystemMessDto : BindableBase
+public class SystemMessDto : BindableBase, IDisposable
 {
     public List<SystemMessBlockDto> Blocks { get; set; } = new();
+
+    public void Dispose()
+    {
+        Blocks.Clear();
+    }
 }
 
 public class SystemMessBlockDto

@@ -3,7 +3,7 @@ using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data;
 
-public class GroupChatData : BindableBase
+public class GroupChatData : BindableBase, IDisposable
 {
     // 是否显示时间条
     private bool _showTime = false;
@@ -77,5 +77,14 @@ public class GroupChatData : BindableBase
     {
         get => _chatMessages;
         set => SetProperty(ref _chatMessages, value);
+    }
+
+    public void Dispose()
+    {
+        owner = null;
+
+        foreach (var chatMessage in ChatMessages)
+            chatMessage.Dispose();
+        _chatMessages.Clear();
     }
 }

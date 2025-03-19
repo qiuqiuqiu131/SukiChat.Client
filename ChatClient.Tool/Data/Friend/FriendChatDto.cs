@@ -18,10 +18,13 @@ public class FriendChatDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _friendRelationDto, value))
             {
-                if (FriendRelatoinDto != null && FriendRelatoinDto.UserDto != null)
-                    FriendRelatoinDto.UserDto.OnUserOnlineChanged += () =>
+                if (_friendRelationDto != null)
+                    _friendRelationDto.OnFriendRelationChanged += delegate { OnLastChatMessagesChanged?.Invoke(this); };
+
+                if (_friendRelationDto != null && _friendRelationDto.UserDto != null)
+                    _friendRelationDto.UserDto.OnUserOnlineChanged += () =>
                     {
-                        if (FriendRelatoinDto?.UserDto.IsOnline == false)
+                        if (_friendRelationDto?.UserDto.IsOnline == false)
                             IsWriting = false;
                     };
             }
@@ -93,19 +96,6 @@ public class FriendChatDto : BindableBase, IDisposable
     private void ChatMessagesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         UpdateChatMessages();
-
-        // if (IsSelected) return;
-        //
-        // // 新添加的消息
-        // if (e.Action == NotifyCollectionChangedAction.Add && e.NewStartingIndex != 0)
-        // {
-        //     foreach (var newItem in e.NewItems)
-        //     {
-        //         var chatData = (ChatData)newItem;
-        //         if (!chatData.IsUser)
-        //             UnReadMessageCount++;
-        //     }
-        // }
     }
 
     public void UpdateChatMessages()

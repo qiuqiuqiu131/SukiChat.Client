@@ -41,9 +41,8 @@
                             Name="PART_AddButton"
                             CornerRadius="8"
                             Padding="0"
-                            Margin="7,3,0,1"
+                            Margin="7,3,0,2"
                             VerticalAlignment="Bottom"
-                            BorderThickness="0"
                             DockPanel.Dock="Right"
                             Click="PART_AddButton_OnClick"
                             Height="29"
@@ -60,15 +59,23 @@
                                 <StackPanel.Styles>
                                     <Style Selector="Button.Shake:pointerover avalonia|MaterialIcon">
                                         <Style.Animations>
-                                            <Animation Easing="CubicEaseInOut"
-                                                       Duration="0:0:0.2"
-                                                       IterationCount="2"
-                                                       FillMode="Forward">
+                                            <Animation
+                                                Duration="0:0:0.35"
+                                                IterationCount="1"
+                                                FillMode="Forward">
                                                 <KeyFrame Cue="0%">
                                                     <Setter Property="ScaleTransform.ScaleX" Value="1" />
                                                     <Setter Property="ScaleTransform.ScaleY" Value="1" />
                                                 </KeyFrame>
-                                                <KeyFrame Cue="50%">
+                                                <KeyFrame Cue="35%">
+                                                    <Setter Property="ScaleTransform.ScaleX" Value="1.1" />
+                                                    <Setter Property="ScaleTransform.ScaleY" Value="1.1" />
+                                                </KeyFrame>
+                                                <KeyFrame Cue="70%">
+                                                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                                </KeyFrame>
+                                                <KeyFrame Cue="85%">
                                                     <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
                                                     <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
                                                 </KeyFrame>
@@ -80,7 +87,8 @@
                                         </Style.Animations>
                                     </Style>
                                 </StackPanel.Styles>
-                                <Button Classes="Void Shake" HorizontalAlignment="Left" Margin="3,3,3,0" Padding="5,5"
+                                <Button Classes="Void Shake" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5"
+                                        Margin="3,3,3,0" Padding="5,5"
                                         Command="{Binding CreateGroupCommand}">
                                     <Interaction.Behaviors>
                                         <EventTriggerBehavior EventName="Click">
@@ -99,7 +107,8 @@
                                                    Margin="10,0,0,1.5" />
                                     </Grid>
                                 </Button>
-                                <Button Classes="Void Shake" HorizontalAlignment="Left" Margin="3,0,3,3"
+                                <Button Classes="Void Shake" HorizontalAlignment="Left" RenderTransformOrigin="0.5,0.5"
+                                        Margin="3,0,3,3"
                                         Padding="5,5"
                                         Command="{Binding AddNewFriendCommand}">
                                     <Interaction.Behaviors>

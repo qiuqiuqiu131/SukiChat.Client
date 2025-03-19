@@ -23,7 +23,7 @@ public class GroupRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref grouping, value))
             {
-                OnGroupRelationChanged?.Invoke();
+                OnGroupRelationChanged?.Invoke(this);
             }
         }
     }
@@ -38,7 +38,7 @@ public class GroupRelationDto : BindableBase, IDisposable
             if (string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(_remark)) return;
             if (SetProperty(ref _remark, value))
             {
-                OnGroupRelationChanged?.Invoke();
+                OnGroupRelationChanged?.Invoke(this);
             }
         }
     }
@@ -53,7 +53,7 @@ public class GroupRelationDto : BindableBase, IDisposable
             if (string.IsNullOrWhiteSpace(value) && string.IsNullOrWhiteSpace(_nickName)) return;
             if (SetProperty(ref _nickName, value))
             {
-                OnGroupRelationChanged?.Invoke();
+                OnGroupRelationChanged?.Invoke(this);
             }
         }
     }
@@ -67,7 +67,7 @@ public class GroupRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _cantDisturb, value))
             {
-                OnGroupRelationChanged?.Invoke();
+                OnGroupRelationChanged?.Invoke(this);
             }
         }
     }
@@ -81,7 +81,7 @@ public class GroupRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _isTop, value))
             {
-                OnGroupRelationChanged?.Invoke();
+                OnGroupRelationChanged?.Invoke(this);
             }
         }
     }
@@ -112,7 +112,7 @@ public class GroupRelationDto : BindableBase, IDisposable
     public bool IsManager => status is 0 or 1;
     public bool IsOwner => status == 0;
 
-    public event Action OnGroupRelationChanged;
+    public event Action<GroupRelationDto> OnGroupRelationChanged;
 
     public void Dispose()
     {

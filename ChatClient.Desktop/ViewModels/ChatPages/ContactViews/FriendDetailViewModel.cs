@@ -48,22 +48,10 @@ public class FriendDetailViewModel : ViewModelBase
     {
         var parameters = navigationContext.Parameters;
         Friend = parameters.GetValue<FriendRelationDto>("dto");
-        if (Friend != null)
-            Friend.OnFriendRelationChanged += Friend_OnFriendRelationChanged;
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        if (Friend != null)
-        {
-            Friend.OnFriendRelationChanged -= Friend_OnFriendRelationChanged;
-            Friend = null;
-        }
-    }
-
-    private void Friend_OnFriendRelationChanged()
-    {
-        var friendService = _containerProvider.Resolve<IFriendService>();
-        friendService.UpdateFriendRelation(_userManager.User.Id, Friend);
+        Friend = null;
     }
 }

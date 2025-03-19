@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
+using ChatClient.DataBase.Data;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
@@ -268,7 +269,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         }
     }
 
-    private void Friend_OnFriendRelationChanged()
+    private void Friend_OnFriendRelationChanged(FriendRelationDto dto)
     {
         var friendService = _containerProvider.Resolve<IFriendService>();
         friendService.UpdateFriendRelation(_userManager.User!.Id, SelectedFriend!.FriendRelatoinDto!);

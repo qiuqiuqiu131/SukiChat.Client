@@ -2,7 +2,7 @@ using System.Collections.ObjectModel;
 
 namespace ChatClient.Tool.Data;
 
-public class ChatData : BindableBase
+public class ChatData : BindableBase, IDisposable
 {
     // 是否显示时间条
     private bool _showTime = false;
@@ -68,5 +68,12 @@ public class ChatData : BindableBase
     {
         get => _chatMessages;
         set => SetProperty(ref _chatMessages, value);
+    }
+
+    public void Dispose()
+    {
+        foreach (var chatMessage in ChatMessages)
+            chatMessage.Dispose();
+        ChatMessages.Clear();
     }
 }

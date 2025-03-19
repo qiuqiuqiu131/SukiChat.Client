@@ -50,7 +50,6 @@ public class GroupDetailViewModel : ViewModelBase
         Group = parameters.GetValue<GroupRelationDto>("dto");
         if (Group != null)
         {
-            Group.OnGroupRelationChanged += Group_OnGroupRelationChanged;
             Group.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
         }
     }
@@ -59,7 +58,6 @@ public class GroupDetailViewModel : ViewModelBase
     {
         if (Group != null)
         {
-            Group.OnGroupRelationChanged -= Group_OnGroupRelationChanged;
             Group.GroupDto.OnGroupChanged -= GroupDtoOnOnGroupChanged;
             Group = null;
         }

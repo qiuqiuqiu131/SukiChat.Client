@@ -23,7 +23,7 @@ public class FriendRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref grouping, value))
             {
-                OnFriendRelationChanged?.Invoke();
+                OnFriendRelationChanged?.Invoke(this);
             }
         }
     }
@@ -37,7 +37,7 @@ public class FriendRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _remark, value))
             {
-                OnFriendRelationChanged?.Invoke();
+                OnFriendRelationChanged?.Invoke(this);
             }
         }
     }
@@ -51,7 +51,7 @@ public class FriendRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _cantDisturb, value))
             {
-                OnFriendRelationChanged?.Invoke();
+                OnFriendRelationChanged?.Invoke(this);
             }
         }
     }
@@ -65,7 +65,7 @@ public class FriendRelationDto : BindableBase, IDisposable
         {
             if (SetProperty(ref _isTop, value))
             {
-                OnFriendRelationChanged?.Invoke();
+                OnFriendRelationChanged?.Invoke(this);
             }
         }
     }
@@ -78,7 +78,7 @@ public class FriendRelationDto : BindableBase, IDisposable
         set => SetProperty(ref _lastChatId, value);
     }
 
-    public event Action OnFriendRelationChanged;
+    public event Action<FriendRelationDto> OnFriendRelationChanged;
 
     public void Dispose()
     {
