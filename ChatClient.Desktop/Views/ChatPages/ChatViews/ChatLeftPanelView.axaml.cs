@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Threading;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Tool.Data;
@@ -43,7 +44,7 @@ public partial class ChatLeftPanelView : UserControl
 
     #endregion
 
-    private ItemCollection _itemCollection;
+    private readonly ItemCollection _itemCollection;
 
     // 添加预定义的菜单
     private readonly ContextMenu _friendContextMenu;
@@ -52,7 +53,7 @@ public partial class ChatLeftPanelView : UserControl
     // 在类的顶部添加私有字段来存储活动菜单
     private ContextMenu? _activeContextMenu;
 
-    private IEventAggregator eventAggregator;
+    private readonly IEventAggregator eventAggregator;
 
     // 缓存置顶项数量，避免重复计算
     private int _topItemsCount = 0;
@@ -393,58 +394,20 @@ public partial class ChatLeftPanelView : UserControl
     // 创建好友菜单
     private ContextMenu CreateFriendContextMenu()
     {
-        var menu = new ContextMenu();
+        // 从资源中获取模板并创建菜单
+        var template = this.FindResource("FriendMenu") as DataTemplate;
+        // 创建一个默认的数据上下文对象（实际使用时会被替换）
+        var content = template!.Build(null);
 
-        // 置顶选项
-        var topMenuItem = new MenuItem
-        {
-            Icon = new MaterialIcon { Kind = MaterialIconKind.ArrowCollapseUp }
-        };
-        topMenuItem.Click += OnFriendTopMenuItemClick;
-        menu.Items.Add(topMenuItem);
-
-        // 复制ID
-        var copyIdMenuItem = new MenuItem
-        {
-            Header = "复制ID",
-            Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy }
-        };
-        copyIdMenuItem.Click += OnFriendCopyIdClick;
-        menu.Items.Add(copyIdMenuItem);
-
-        // 不打扰选项
-        var disturbMenuItem = new MenuItem
-        {
-            Icon = new MaterialIcon { Kind = MaterialIconKind.BellOutline }
-        };
-        disturbMenuItem.Click += OnFriendDisturbMenuItemClick;
-        menu.Items.Add(disturbMenuItem);
-
-        // 分隔线
-        menu.Items.Add(new Separator());
-
-        // 从列表中移除
-        var clearMenuItem = new MenuItem
-        {
-            Header = "从消息列表中移除",
-            Icon = new MaterialIcon { Kind = MaterialIconKind.DeleteOutline }
-        };
-        clearMenuItem.Click += OnFriendClearMenuItemClick;
-        menu.Items.Add(clearMenuItem);
-
-        // 保存当前DataContext供关闭后清理
-        menu.Closed += OnContextMenuClosed;
-
-        return menu;
+        return (content as ContextMenu)!;
     }
 
     // 事件处理方法使用附加属性而非闭包
     private void OnFriendTopMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (_friendContextMenu.DataContext is FriendChatDto friendChat &&
-            friendChat.FriendRelatoinDto != null)
+        if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
         {
-            friendChat.FriendRelatoinDto.IsTop = !friendChat.FriendRelatoinDto.IsTop;
+            friendRelation.IsTop = !friendRelation.IsTop;
         }
 
         _friendContextMenu.Close();
@@ -452,14 +415,10 @@ public partial class ChatLeftPanelView : UserControl
 
     private void OnFriendCopyIdClick(object? sender, RoutedEventArgs e)
     {
-        if (_friendContextMenu.DataContext is FriendChatDto friendChat &&
-            friendChat.FriendRelatoinDto != null)
+        if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
         {
-            var topLevel = TopLevel.GetTopLevel((Control)sender);
-            if (topLevel != null)
-            {
-                topLevel.Clipboard?.SetTextAsync(friendChat.FriendRelatoinDto.Id);
-            }
+            var topLevel = TopLevel.GetTopLevel((Control)sender!);
+            topLevel?.Clipboard?.SetTextAsync(friendRelation.Id);
         }
 
         _friendContextMenu.Close();
@@ -467,10 +426,9 @@ public partial class ChatLeftPanelView : UserControl
 
     private void OnFriendDisturbMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (_friendContextMenu.DataContext is FriendChatDto friendChat &&
-            friendChat.FriendRelatoinDto != null)
+        if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
         {
-            friendChat.FriendRelatoinDto.CantDisturb = !friendChat.FriendRelatoinDto.CantDisturb;
+            friendRelation.CantDisturb = !friendRelation.CantDisturb;
         }
 
         _friendContextMenu.Close();
@@ -498,58 +456,19 @@ public partial class ChatLeftPanelView : UserControl
     // 创建群组菜单
     private ContextMenu CreateGroupContextMenu()
     {
-        var menu = new ContextMenu();
+        var template = this.FindResource("GroupMenu") as DataTemplate;
+        // 创建一个默认的数据上下文对象（实际使用时会被替换）
+        var content = template!.Build(null);
 
-        // 置顶选项
-        var topMenuItem = new MenuItem
-        {
-            Icon = new MaterialIcon { Kind = MaterialIconKind.ArrowCollapseUp }
-        };
-        topMenuItem.Click += OnGroupTopMenuItemClick;
-        menu.Items.Add(topMenuItem);
-
-        // 复制群ID
-        var copyIdMenuItem = new MenuItem
-        {
-            Header = "复制群ID",
-            Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy }
-        };
-        copyIdMenuItem.Click += OnGroupCopyIdClick;
-        menu.Items.Add(copyIdMenuItem);
-
-        // 不打扰选项
-        var disturbMenuItem = new MenuItem
-        {
-            Icon = new MaterialIcon { Kind = MaterialIconKind.BellOutline }
-        };
-        disturbMenuItem.Click += OnGroupDisturbMenuItemClick;
-        menu.Items.Add(disturbMenuItem);
-
-        // 分隔线
-        menu.Items.Add(new Separator());
-
-        // 从列表中移除
-        var clearMenuItem = new MenuItem
-        {
-            Header = "从消息列表中移除",
-            Icon = new MaterialIcon { Kind = MaterialIconKind.DeleteOutline }
-        };
-        clearMenuItem.Click += OnGroupClearMenuItemClick;
-        menu.Items.Add(clearMenuItem);
-
-        // 保存当前DataContext供关闭后清理
-        menu.Closed += OnContextMenuClosed;
-
-        return menu;
+        return (content as ContextMenu)!;
     }
 
     // 群组菜单项事件处理方法
     private void OnGroupTopMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (_groupContextMenu.DataContext is GroupChatDto groupChat &&
-            groupChat.GroupRelationDto != null)
+        if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
         {
-            groupChat.GroupRelationDto.IsTop = !groupChat.GroupRelationDto.IsTop;
+            groupRelation.IsTop = !groupRelation.IsTop;
         }
 
         _groupContextMenu.Close();
@@ -557,13 +476,10 @@ public partial class ChatLeftPanelView : UserControl
 
     private void OnGroupCopyIdClick(object? sender, RoutedEventArgs e)
     {
-        if (_groupContextMenu.DataContext is GroupChatDto groupChat)
+        if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
         {
-            var topLevel = TopLevel.GetTopLevel((Control)sender);
-            if (topLevel != null)
-            {
-                topLevel.Clipboard?.SetTextAsync(groupChat.GroupId);
-            }
+            var topLevel = TopLevel.GetTopLevel((Control)sender!);
+            topLevel?.Clipboard?.SetTextAsync(groupRelation.Id);
         }
 
         _groupContextMenu.Close();
@@ -571,10 +487,9 @@ public partial class ChatLeftPanelView : UserControl
 
     private void OnGroupDisturbMenuItemClick(object? sender, RoutedEventArgs e)
     {
-        if (_groupContextMenu.DataContext is GroupChatDto groupChat &&
-            groupChat.GroupRelationDto != null)
+        if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
         {
-            groupChat.GroupRelationDto.CantDisturb = !groupChat.GroupRelationDto.CantDisturb;
+            groupRelation.CantDisturb = !groupRelation.CantDisturb;
         }
 
         _groupContextMenu.Close();
@@ -651,48 +566,12 @@ public partial class ChatLeftPanelView : UserControl
             if (dataContext is FriendChatDto friendChat)
             {
                 selectedMenu = _friendContextMenu;
-                selectedMenu.DataContext = friendChat;
-
-                // 更新菜单项状态
-                bool isTop = friendChat.FriendRelatoinDto?.IsTop == true;
-                bool cantDisturb = friendChat.FriendRelatoinDto?.CantDisturb == true;
-
-                var topMenuItem = (MenuItem)selectedMenu.Items[0]!;
-                topMenuItem.Header = isTop ? "取消置顶" : "置顶聊天";
-                topMenuItem.Icon = new MaterialIcon
-                {
-                    Kind = isTop ? MaterialIconKind.ArrowExpandDown : MaterialIconKind.ArrowCollapseUp
-                };
-
-                var disturbMenuItem = (MenuItem)selectedMenu.Items[2]!;
-                disturbMenuItem.Header = cantDisturb ? "接收消息提醒" : "消息免打扰";
-                disturbMenuItem.Icon = new MaterialIcon
-                {
-                    Kind = cantDisturb ? MaterialIconKind.BellOutline : MaterialIconKind.BellOffOutline
-                };
+                selectedMenu.DataContext = friendChat.FriendRelatoinDto;
             }
             else if (dataContext is GroupChatDto groupChat)
             {
                 selectedMenu = _groupContextMenu;
-                selectedMenu.DataContext = groupChat;
-
-                // 更新菜单项状态
-                bool isTop = groupChat.GroupRelationDto?.IsTop == true;
-                bool cantDisturb = groupChat.GroupRelationDto?.CantDisturb == true;
-
-                var topMenuItem = (MenuItem)selectedMenu.Items[0]!;
-                topMenuItem.Header = isTop ? "取消置顶" : "置顶聊天";
-                topMenuItem.Icon = new MaterialIcon
-                {
-                    Kind = isTop ? MaterialIconKind.ArrowExpandDown : MaterialIconKind.ArrowCollapseUp
-                };
-
-                var disturbMenuItem = (MenuItem)selectedMenu.Items[2]!;
-                disturbMenuItem.Header = cantDisturb ? "接收消息提醒" : "消息免打扰";
-                disturbMenuItem.Icon = new MaterialIcon
-                {
-                    Kind = cantDisturb ? MaterialIconKind.BellOutline : MaterialIconKind.BellOffOutline
-                };
+                selectedMenu.DataContext = groupChat.GroupRelationDto;
             }
 
             if (selectedMenu != null)

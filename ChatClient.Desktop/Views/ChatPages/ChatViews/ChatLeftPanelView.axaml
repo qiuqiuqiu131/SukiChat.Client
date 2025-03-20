@@ -20,6 +20,78 @@
     <UserControl.Resources>
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
+        <DataTemplate x:Key="FriendMenu" DataType="data:FriendRelationDto">
+            <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
+                <MenuItem IsVisible="{Binding IsTop}" Header="取消置顶" Click="OnFriendTopMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ArrowExpandDown" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding !IsTop}" Header="置顶聊天" Click="OnFriendTopMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ArrowCollapseUp" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="复制群ID" Click="OnFriendCopyIdClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding CantDisturb}" Header="接受消息提醒" Click="OnFriendDisturbMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="BellOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding !CantDisturb}" Header="消息免打扰" Click="OnFriendDisturbMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="BellOffOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Margin="5" />
+                <MenuItem Header="删除聊天" Click="OnFriendClearMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="DeleteOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </DataTemplate>
+        <DataTemplate x:Key="GroupMenu" DataType="group:GroupRelationDto">
+            <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
+                <MenuItem IsVisible="{Binding IsTop}" Header="取消置顶" Click="OnGroupTopMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ArrowExpandDown" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding !IsTop}" Header="置顶聊天" Click="OnGroupTopMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ArrowCollapseUp" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="复制群ID" Click="OnGroupCopyIdClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="ContentCopy" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding CantDisturb}" Header="接收消息提醒"
+                          Click="OnGroupDisturbMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="BellOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem IsVisible="{Binding !CantDisturb}" Header="消息免打扰"
+                          Click="OnGroupDisturbMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="BellOffOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator Margin="5" />
+                <MenuItem Header="删除聊天" Click="OnGroupClearMenuItemClick">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="DeleteOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </DataTemplate>
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="RadioButton.IsTop">
@@ -128,27 +200,37 @@
                                        TextTrimming="CharacterEllipsis"
                                        Foreground="{DynamicResource SukiText}"
                                        Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
-                            <Border Grid.Column="1"
-                                    Height="16"
-                                    CornerRadius="8"
-                                    Background="Red"
-                                    Padding="5,0"
-                                    Margin="0,5"
-                                    HorizontalAlignment="Right"
-                                    IsVisible="{Binding UnReadMessageCount}">
-                                <Interaction.Behaviors>
-                                    <DataTriggerBehavior
-                                        Binding="{Binding FriendRelatoinDto.CantDisturb}" Value="True">
-                                        <ChangePropertyAction PropertyName="Background" Value="Gray" />
-                                    </DataTriggerBehavior>
-                                </Interaction.Behaviors>
-                                <TextBlock FontSize="11"
-                                           Margin="0,0,0,1"
-                                           HorizontalAlignment="Center"
-                                           Foreground="White"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
-                            </Border>
+                            <Panel Grid.Column="1">
+                                <Panel
+                                    IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Equal = False,Value=0}}">
+                                    <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
+                                                           IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
+                                                           Opacity="0.4" />
+                                </Panel>
+                                <Border Height="16"
+                                        CornerRadius="8"
+                                        Padding="5,0"
+                                        Margin="0,0"
+                                        Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
+                                        HorizontalAlignment="Right"
+                                        IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Value=0}}">
+                                    <Border.Styles>
+                                        <Style Selector="Border">
+                                            <Setter Property="Background" Value="Red" />
+                                        </Style>
+                                        <Style Selector="Border.CantDisturb">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource SukiMediumBorderBrush}" />
+                                        </Style>
+                                    </Border.Styles>
+                                    <TextBlock FontSize="11"
+                                               Margin="0,0,0,1"
+                                               HorizontalAlignment="Center"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                                </Border>
+                            </Panel>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -231,27 +313,37 @@
                                         Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
                                 </TextBlock>
                             </Grid>
-                            <Border Grid.Column="1"
-                                    Height="16"
-                                    CornerRadius="8"
-                                    Background="Red"
-                                    Margin="0,5"
-                                    Padding="5,0"
-                                    HorizontalAlignment="Right"
-                                    IsVisible="{Binding UnReadMessageCount}">
-                                <Interaction.Behaviors>
-                                    <DataTriggerBehavior
-                                        Binding="{Binding GroupRelationDto.CantDisturb}" Value="True">
-                                        <ChangePropertyAction PropertyName="Background" Value="Gray" />
-                                    </DataTriggerBehavior>
-                                </Interaction.Behaviors>
-                                <TextBlock FontSize="11"
-                                           Margin="0,0,0,1"
-                                           HorizontalAlignment="Center"
-                                           Foreground="White"
-                                           VerticalAlignment="Center"
-                                           Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
-                            </Border>
+                            <Panel Grid.Column="1">
+                                <Panel
+                                    IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Equal = False,Value=0}}">
+                                    <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
+                                                           IsVisible="{Binding GroupRelationDto.CantDisturb}"
+                                                           Opacity="0.4" />
+                                </Panel>
+                                <Border Height="16"
+                                        CornerRadius="8"
+                                        Padding="5,0"
+                                        Margin="0,0"
+                                        Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
+                                        HorizontalAlignment="Right"
+                                        IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Value=0}}">
+                                    <Border.Styles>
+                                        <Style Selector="Border">
+                                            <Setter Property="Background" Value="Red" />
+                                        </Style>
+                                        <Style Selector="Border.CantDisturb">
+                                            <Setter Property="Background"
+                                                    Value="{DynamicResource SukiMediumBorderBrush}" />
+                                        </Style>
+                                    </Border.Styles>
+                                    <TextBlock FontSize="11"
+                                               Margin="0,0,0,1"
+                                               HorizontalAlignment="Center"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                                </Border>
+                            </Panel>
                         </Grid>
                     </Grid>
                 </Grid>

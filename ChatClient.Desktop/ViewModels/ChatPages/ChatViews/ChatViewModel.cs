@@ -118,14 +118,20 @@ public class ChatViewModel : ChatPageBase
 
     private void GroupRelationDtoOnOnGroupRelationChanged(GroupRelationDto obj)
     {
-        var groupService = _containerProvider.Resolve<IGroupService>();
-        groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
+        Task.Run(() =>
+        {
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
+        });
     }
 
     private void FriendRelatoinDtoOnOnFriendRelationChanged(FriendRelationDto obj)
     {
-        var friendService = _containerProvider.Resolve<IFriendService>();
-        friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
+        Task.Run(() =>
+        {
+            var friendService = _containerProvider.Resolve<IFriendService>();
+            friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
+        });
     }
 
     #endregion
@@ -164,6 +170,7 @@ public class ChatViewModel : ChatPageBase
                     {
                         chatMessage.Dispose();
                     }
+
                     friendChatDto.ChatMessages.Clear();
                     friendChatDto.HasMoreMessage = false;
                 }
@@ -199,6 +206,7 @@ public class ChatViewModel : ChatPageBase
                     {
                         chatMessage.Dispose();
                     }
+
                     groupChatDto.ChatMessages.Clear();
                     groupChatDto.HasMoreMessage = false;
                 }

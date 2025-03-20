@@ -6,6 +6,7 @@ namespace ChatClient.Avalonia.Converter;
 
 public class IntEqualityConverter : MarkupExtension, IValueConverter
 {
+    public bool Equal { get; set; } = true;
     public int Value { get; set; }
 
     public override object ProvideValue(IServiceProvider serviceProvider)
@@ -16,7 +17,7 @@ public class IntEqualityConverter : MarkupExtension, IValueConverter
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is int i)
-            return i == Value;
+            return Equal ? i == Value : i != Value;
         return false;
     }
 

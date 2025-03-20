@@ -124,14 +124,17 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
             if (!data.IsSystem)
             {
                 data.IsUser = groupChat.UserFromId.Equals(userId);
-                Task.Run(
-                    async () => data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId));
+                _ = Task.Run(
+                        async () => data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId))
+                    .ConfigureAwait(false);
             }
 
-            chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
-                FileTarget.Group);
+            _ = chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
+                FileTarget.Group).ConfigureAwait(false);
             groupChatDatas.Add(data);
         }
+
+        groupChats.Clear();
 
         return groupChatDatas;
     }
