@@ -281,7 +281,7 @@
                     <!-- 聊天内容 -->
                     <groupChatUi1:GroupChatUI Name="ChatUI"
                                               Margin="0"
-                                              HeadClickCommand="{Binding HeadClickCommand}"
+                                              HeadClick="ChatUI_OnHeadClick"
                                               Messages="{Binding SelectedGroup.ChatMessages}"
                                               FileMessageClickCommand="{Binding FileMessageClickCommand}"
                                               SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"

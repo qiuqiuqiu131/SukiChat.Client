@@ -14,11 +14,13 @@ using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Navigation.Regions;
@@ -28,6 +30,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel
 public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
@@ -47,7 +50,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     #region Command
 
     public DelegateCommand SearchMoreCommand { get; private set; }
-    public DelegateCommand<GroupChatData> HeadClickCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public DelegateCommand QuitGroupCommand { get; private set; }
     public DelegateCommand DeleteGroupCommand { get; private set; }
@@ -55,16 +57,17 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     #endregion
 
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
+        IEventAggregator eventAggregator,
         IUserManager userManager,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
+        _eventAggregator = eventAggregator;
         _userManager = userManager;
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
 
-        HeadClickCommand = new DelegateCommand<GroupChatData>(HeadClick);
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         QuitGroupCommand = new DelegateCommand(QuitGroup);
@@ -89,12 +92,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         if (SelectedGroup == null) return;
         var groupService = _containerProvider.Resolve<IGroupService>();
         var result = await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
-    }
-
-    private void HeadClick(GroupChatData obj)
-    {
-        //TODO: 转跳到群组详情页
-        Console.WriteLine("HeadClick:" + obj);
     }
 
     /// <summary>

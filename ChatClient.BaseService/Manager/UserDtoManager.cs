@@ -125,7 +125,11 @@ public class UserDtoManager : IUserDtoManager
             // 如果获取到用户信息，添加到缓存中
             if (friend != null)
             {
-                _ = Task.Run(async () => friend.UserDto = await GetUserDto(friendId));
+                _ = Task.Run(async () =>
+                {
+                    friend.UserDto = await GetUserDto(friendId);
+                    if (friend.UserDto != null) friend.UserDto.IsFriend = true;
+                });
                 _friendRelationDtos.TryAdd(friendId, friend);
             }
 

@@ -3,9 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.Avalonia.Controls.OverlaySplitView;
+using ChatClient.BaseService.Manager;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
 using Prism.Navigation;
 
@@ -13,10 +17,18 @@ namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 
 public partial class ChatGroupPanelView : UserControl, IDestructible
 {
-    private SubscriptionToken? token;
+    private readonly IEventAggregator _eventAggregator;
+    private readonly IUserManager _userManager;
+    private readonly IUserDtoManager _userDtoManager;
 
-    public ChatGroupPanelView(IEventAggregator eventAggregator)
+    private readonly SubscriptionToken? token;
+
+    public ChatGroupPanelView(IEventAggregator eventAggregator, IUserManager userManager,
+        IUserDtoManager userDtoManager)
     {
+        _eventAggregator = eventAggregator;
+        _userManager = userManager;
+        _userDtoManager = userDtoManager;
         InitializeComponent();
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
             .Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
@@ -42,5 +54,14 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
     public void Destroy()
     {
         token?.Dispose();
+    }
+
+    private async void ChatUI_OnHeadClick(object? sender, GroupHeadClickEventArgs e)
+    {
+        var userDto = e.User.IsUser
+            ? _userManager.User
+            : (await _userDtoManager.GetUserDto(e.User.Owner.UserId));
+        _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
+            .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));
     }
 }

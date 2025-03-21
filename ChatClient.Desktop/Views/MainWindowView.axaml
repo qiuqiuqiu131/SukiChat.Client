@@ -7,10 +7,13 @@
                  xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                  xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
                  xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
+                 xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+                 xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+                 xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
                  Theme="{StaticResource MySukiWindowTheme}"
                  mc:Ignorable="d"
-                 Width="1000"
-                 Height="650"
+                 Width="1050"
+                 Height="680"
                  MinHeight="500"
                  MinWidth="800"
                  TitleBarAnimationEnabled="False"
@@ -27,6 +30,11 @@
                  FontFamily="{StaticResource MiSans}"
                  Title="Suki Chat">
     <Window.Resources>
+        <!-- <DataTemplate x:Key="MessageBox" x:DataType="data:UserDto"> -->
+        <!--     <Popup IsOpen="False" IsLightDismissEnabled="True"> -->
+        <!--         <userControls:UserMessageBox /> -->
+        <!--     </Popup> -->
+        <!-- </DataTemplate> -->
         <ControlTheme x:Key="{x:Type suki:SukiDialog}" TargetType="suki:SukiDialog">
             <Setter Property="ClipToBounds" Value="False" />
             <Setter Property="Template">
@@ -105,12 +113,19 @@
         </ControlTheme>
     </Window.Resources>
 
+    <Window.Styles>
+        <Style Selector="TrayIcon">
+            <Setter Property="TextBlock.FontSize" Value="12" />
+        </Style>
+    </Window.Styles>
+
     <Panel>
         <suki:SukiSideMenu IsSearchEnabled="False"
                            IsMenuExpanded="False"
                            IsToggleButtonVisible="False"
                            Theme="{StaticResource SukiSideMenuStyle}"
                            ItemsSource="{Binding ChatPages}"
+                           CloseMenuClicked="Button_OnClick"
                            SelectedItem="{Binding ActivePage}">
             <suki:SukiSideMenu.Styles>
                 <Style Selector="Image.AppIcon">
@@ -149,7 +164,6 @@
                         <Image Width="80"
                                Height="80"
                                Classes="AppIcon"
-                               PointerPressed="InputElement_OnPointerPressed"
                                Source="{Binding User.HeadImage}" />
                     </Panel>
                     <TextBlock Classes="h3" Margin="0,10" FontSize="15" HorizontalAlignment="Center"
@@ -157,25 +171,8 @@
                 </StackPanel>
             </suki:SukiSideMenu.HeaderContent>
             <suki:SukiSideMenu.LeftBottomContent>
-                <Panel Width="38" Height="38" Margin="0,10,0,15">
-                    <Panel.Clip>
-                        <EllipseGeometry Center="19,19" RadiusX="19" RadiusY="19" />
-                    </Panel.Clip>
-                    <Image Width="38"
-                           Height="38"
-                           Classes="AppIcon"
-                           Source="{Binding User.HeadImage}">
-                        <Interaction.Behaviors>
-                            <EventTriggerBehavior EventName="PointerPressed">
-                                <ChangePropertyAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
-                                                      PropertyName="IsToggleButtonVisible"
-                                                      Value="True" />
-                                <CallMethodAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
-                                                  MethodName="MenuExpandedClicked" />
-                            </EventTriggerBehavior>
-                        </Interaction.Behaviors>
-                    </Image>
-                </Panel>
+                <circleImage:CircleImage Size="38" Image="{Binding User.HeadImage}" Margin="0,10,0,15"
+                                         PointerPressed="InputElement_OnPointerPressed" />
             </suki:SukiSideMenu.LeftBottomContent>
             <suki:SukiSideMenu.FooterContent>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
@@ -212,6 +209,11 @@
                 </StackPanel>
             </suki:SukiSideMenu.FooterContent>
         </suki:SukiSideMenu>
+
+        <Popup IsOpen="False" Name="MessageBox" IsLightDismissEnabled="True" DataContext="{x:Null}">
+            <userControls:UserMessageBox />
+        </Popup>
+
         <Border Name="BackgroundBorder" Background="#66000000" Opacity="0" IsVisible="False">
             <Border.Transitions>
                 <Transitions>

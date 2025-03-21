@@ -70,6 +70,22 @@ namespace ChatClient.Tool.Data
 
         private int headCount;
 
+        public bool IsUser
+        {
+            get => isUser;
+            set => SetProperty(ref isUser, value);
+        }
+
+        private bool isUser = false;
+
+        public bool IsFriend
+        {
+            get => isFriend;
+            set => SetProperty(ref isFriend, value);
+        }
+
+        private bool isFriend = false;
+
         public DateTime RegisteTime
         {
             get => registeTime;

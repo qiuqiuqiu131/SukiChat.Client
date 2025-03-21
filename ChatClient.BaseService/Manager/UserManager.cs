@@ -260,7 +260,8 @@ internal class UserManager : IUserManager
             friendChat.Dispose();
         }
 
-        // TODO:添加好友删除消息
+        var user = await _userDtoManager.GetUserDto(friendId);
+        user.IsFriend = false;
     }
 
     public async Task DeleteGroup(string groupId, string groupName)
@@ -285,8 +286,6 @@ internal class UserManager : IUserManager
             GroupChats!.Remove(groupChat);
             groupChat.Dispose();
         }
-
-        // 添加群聊退出消息
     }
 
     public async Task RemoveMember(string groupId, string memberId)

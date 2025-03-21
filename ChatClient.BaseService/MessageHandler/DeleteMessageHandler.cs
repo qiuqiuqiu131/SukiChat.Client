@@ -1,8 +1,11 @@
 using AutoMapper;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
+using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatServer.Common.Protobuf;
 
@@ -66,6 +69,17 @@ public class DeleteMessageHandler : MessageHandlerBase
 
         // UI同步删除好友
         await _userManager.DeleteFriend(friendId, groupName);
+
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var friendDeleteDto = _mapper.Map<FriendDeleteDto>(message);
+        _ = Task.Run(async () =>
+        {
+            friendDeleteDto.IsUser = friendDeleteDto.UseId1.Equals(_userManager.User.Id);
+            friendDeleteDto.UserDto = friendDeleteDto.IsUser
+                ? await userDtoManager.GetUserDto(friendDeleteDto.UserId2)
+                : await userDtoManager.GetUserDto(friendDeleteDto.UseId1);
+        });
+        _userManager.FriendDeletes?.Add(friendDeleteDto);
     }
 
     /// <summary>
@@ -90,6 +104,16 @@ public class DeleteMessageHandler : MessageHandlerBase
 
         if (message.UserId.Equals(_userManager.User.Id))
             await _userManager.DeleteGroup(message.GroupId, groupName);
+
+        // 添加解散群聊消息
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var deleteDto = _mapper.Map<GroupDeleteDto>(message);
+        _ = Task.Run(async () =>
+        {
+            deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+            deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
+        });
+        _userManager.GroupDeletes?.Add(deleteDto);
     }
 
     /// <summary>
@@ -113,6 +137,16 @@ public class DeleteMessageHandler : MessageHandlerBase
 
         if (message.MemberId.Equals(_userManager.User.Id))
             await _userManager.DeleteGroup(message.GroupId, groupName);
+
+        // 添加解散群聊消息
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var deleteDto = _mapper.Map<GroupDeleteDto>(message);
+        _ = Task.Run(async () =>
+        {
+            deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+            deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
+        });
+        _userManager.GroupDeletes?.Add(deleteDto);
     }
 
     /// <summary>
@@ -136,6 +170,16 @@ public class DeleteMessageHandler : MessageHandlerBase
 
         if (message.MemberId.Equals(_userManager.User.Id))
             await _userManager.DeleteGroup(message.GroupId, groupName);
+
+        // 添加解散群聊消息
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var deleteDto = _mapper.Map<GroupDeleteDto>(message);
+        _ = Task.Run(async () =>
+        {
+            deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+            deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
+        });
+        _userManager.GroupDeletes?.Add(deleteDto);
     }
 
     /// <summary>

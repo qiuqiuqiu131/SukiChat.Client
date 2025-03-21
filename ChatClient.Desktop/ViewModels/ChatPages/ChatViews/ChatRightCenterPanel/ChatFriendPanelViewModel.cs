@@ -8,14 +8,17 @@ using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Navigation.Regions;
@@ -25,6 +28,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel
 public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
@@ -45,24 +49,24 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     #region Command
 
     public DelegateCommand SearchMoreCommand { get; private set; }
-    public DelegateCommand<ChatData> HeadClickCommand { get; private set; }
     public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public DelegateCommand DeleteFriendCommand { get; private set; }
 
     #endregion
 
     public ChatFriendPanelViewModel(IContainerProvider containerProvider,
+        IEventAggregator eventAggregator,
         IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
+        _eventAggregator = eventAggregator;
         _userManager = userManager;
 
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, InputMessageChanged);
 
-        HeadClickCommand = new DelegateCommand<ChatData>(HeadClick);
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
         DeleteFriendCommand = new DelegateCommand(DeleteFriend);
@@ -76,7 +80,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     {
         if (SelectedFriend == null) return;
         var chatService = _containerProvider.Resolve<IChatService>();
-        chatService.SendFriendWritingMessage(_userManager.User!.Id, SelectedFriend.FriendRelatoinDto!.Id, isInputing);
+        chatService.SendFriendWritingMessage(_userManager.User.Id, SelectedFriend.FriendRelatoinDto.Id, isInputing);
     }
 
     /// <summary>
@@ -86,13 +90,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     {
         if (SelectedFriend == null) return;
         var friendService = _containerProvider.Resolve<IFriendService>();
-        friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend!.UserId);
-    }
-
-    private void HeadClick(ChatData obj)
-    {
-        //TODO: 转跳到好友详情页
-        Console.WriteLine("HeadClick:" + obj.IsUser);
+        friendService.DeleteFriend(_userManager.User.Id, SelectedFriend.UserId);
     }
 
     /// <summary>

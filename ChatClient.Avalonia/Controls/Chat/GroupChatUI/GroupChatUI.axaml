@@ -59,6 +59,11 @@
                                               ItemsSource="{TemplateBinding Messages}"
                                               Margin="0,0,-15,0"
                                               Padding="0,0,0,5">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical" Spacing="5" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
                                     <ItemsControl.DataTemplates>
                                         <DataTemplate DataType="data:GroupChatData">
                                             <Grid>
@@ -160,16 +165,8 @@
                                                                     VerticalAlignment="Top"
                                                                     Margin="16,0,8,0"
                                                                     Image="{Binding Owner.HeadImage}"
-                                                                    Size="35">
-                                                                    <Interaction.Behaviors>
-                                                                        <EventTriggerBehavior
-                                                                            EventName="PointerPressed">
-                                                                            <InvokeCommandAction
-                                                                                Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommand}"
-                                                                                CommandParameter="{Binding}" />
-                                                                        </EventTriggerBehavior>
-                                                                    </Interaction.Behaviors>
-                                                                </circleImage:CircleImage>
+                                                                    Size="35"
+                                                                    PointerPressed="Head_OnPointerPressed" />
                                                                 <DockPanel LastChildFill="True" Margin="0,-5,0,0">
                                                                     <TextBlock DockPanel.Dock="Top"
                                                                                HorizontalAlignment="Left"
@@ -231,16 +228,8 @@
                                                                     VerticalAlignment="Top"
                                                                     DockPanel.Dock="Right"
                                                                     Image="{Binding $parent[groupChatUi:GroupChatUI].UserImageSource}"
-                                                                    Size="35">
-                                                                    <Interaction.Behaviors>
-                                                                        <EventTriggerBehavior
-                                                                            EventName="PointerPressed">
-                                                                            <InvokeCommandAction
-                                                                                Command="{Binding $parent[groupChatUi:GroupChatUI].HeadClickCommnad}"
-                                                                                CommandParameter="{Binding}" />
-                                                                        </EventTriggerBehavior>
-                                                                    </Interaction.Behaviors>
-                                                                </circleImage:CircleImage>
+                                                                    Size="35"
+                                                                    PointerPressed="Head_OnPointerPressed" />
                                                                 <DockPanel LastChildFill="True" Margin="0,-5,0,0">
                                                                     <TextBlock DockPanel.Dock="Top"
                                                                                HorizontalAlignment="Right"

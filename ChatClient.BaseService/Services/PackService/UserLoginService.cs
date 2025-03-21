@@ -75,7 +75,11 @@ internal class UserLoginService : BaseService, IUserLoginService
         var user = new UserData();
         List<Task> tasks =
         [
-            Task.Run(async () => { user.UserDetail = (await _userDtoManager.GetUserDto(userId))!; }),
+            Task.Run(async () =>
+            {
+                user.UserDetail = (await _userDtoManager.GetUserDto(userId));
+                if (user.UserDetail != null) user.UserDetail.IsUser = true;
+            }),
             Task.Run(async () =>
             {
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();

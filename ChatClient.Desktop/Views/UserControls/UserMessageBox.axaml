@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="data:UserDto"
+             Background="Transparent"
+             x:Class="ChatClient.Desktop.Views.UserControls.UserMessageBox">
+    <Border Background="{DynamicResource SukiGlassCardBackground}" Padding="15" CornerRadius="7" Margin="7"
+            BoxShadow="3 3 10 #66000000">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Spacing="15">
+                <circleImage:CircleImage Size="60" Image="{Binding HeadImage}" />
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="4" Margin="10,0,50,0">
+                    <StackPanel Orientation="Horizontal" Height="20">
+                        <SelectableTextBlock Text="{Binding Name}"
+                                             FontSize="16.5" />
+                        <ContentControl Content="{Binding Sex,Converter={converter:SexIconKindConverter Size=17}}"
+                                        VerticalAlignment="Bottom" Margin="5,2" />
+                    </StackPanel>
+                    <SelectableTextBlock Text="{Binding Id,StringFormat=ID: {0}}"
+                                         FontSize="12"
+                                         Opacity="0.7" />
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Spacing="7"
+                                    IsVisible="{Binding IsOnline}">
+                            <Ellipse Fill="LimeGreen" Width="13" Height="13" />
+                            <TextBlock Text="在线" FontSize="13" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Spacing="7"
+                                    IsVisible="{Binding !IsOnline}">
+                            <Ellipse Fill="Red" Width="13" Height="13" />
+                            <TextBlock Text="离线" FontSize="13" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                        IsVisible="{Binding IsUser}"
+                        Margin="15,15,15,5">
+                <Button Content="编辑信息"
+                        Classes="Flat"
+                        Margin="0"
+                        Padding="15,7"
+                        FontSize="14" />
+            </StackPanel>
+
+            <Grid IsVisible="{Binding !IsUser}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            IsVisible="{Binding IsFriend}"
+                            Margin="15,15,15,5">
+                    <Button Content="发消息"
+                            Classes="Flat"
+                            Margin="0"
+                            Padding="15,7"
+                            FontSize="14" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            IsVisible="{Binding !IsFriend}"
+                            Margin="15,15,15,5">
+                    <Button Content="添加好友"
+                            Classes="Flat"
+                            Margin="0"
+                            Padding="15,7"
+                            FontSize="14" />
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </Border>
+</UserControl>

@@ -2,7 +2,7 @@ namespace ChatClient.Tool.Data.Group;
 
 public class GroupDeleteDto : BindableBase, IDisposable
 {
-    public string DeleteId { get; set; }
+    public int DeleteId { get; set; }
     public string GroupId { get; set; }
 
     public string MemberId { get; set; }

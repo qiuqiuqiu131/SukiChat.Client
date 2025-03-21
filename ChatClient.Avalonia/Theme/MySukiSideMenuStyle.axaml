@@ -239,12 +239,12 @@
                                         </Button>
                                         <Button Name="PART_CloseButton"
                                                 Classes="Basic Rounded WindowControlsButton Close">
-                                            <Interaction.Behaviors>
-                                                <EventTriggerBehavior EventName="Click">
-                                                    <CallMethodAction TargetObject="{Binding $parent[suki:SukiWindow]}"
-                                                                      MethodName="Close" />
-                                                </EventTriggerBehavior>
-                                            </Interaction.Behaviors>
+                                            <!-- <Interaction.Behaviors> -->
+                                            <!--     <EventTriggerBehavior EventName="Click"> -->
+                                            <!--         <CallMethodAction TargetObject="{Binding $parent[suki:SukiWindow]}" -->
+                                            <!--                           MethodName="Close" /> -->
+                                            <!--     </EventTriggerBehavior> -->
+                                            <!-- </Interaction.Behaviors> -->
                                             <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
                                         </Button>
                                     </StackPanel>

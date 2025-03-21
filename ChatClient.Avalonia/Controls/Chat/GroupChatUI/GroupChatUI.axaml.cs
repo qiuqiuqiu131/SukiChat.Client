@@ -106,16 +106,12 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
-    #region HeadClickCommnad
+    #region HeadClickEvent
 
-    public static readonly StyledProperty<ICommand> HeadClickCommandProperty =
-        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(HeadClickCommand));
+    public event EventHandler<GroupHeadClickEventArgs> HeadClick;
 
-    public ICommand HeadClickCommand
-    {
-        get => GetValue(HeadClickCommandProperty);
-        set => SetValue(HeadClickCommandProperty, value);
-    }
+    public static readonly RoutedEvent<GroupHeadClickEventArgs> HeadClickEvent =
+        RoutedEvent.Register<GroupChatUI, GroupHeadClickEventArgs>(nameof(HeadClick), RoutingStrategies.Bubble);
 
     #endregion
 
@@ -445,4 +441,41 @@ public partial class GroupChatUI : UserControl
     }
 
     #endregion
+
+    private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.GetCurrentPoint(sender as Control).Properties.IsLeftButtonPressed)
+        {
+            if (sender is Control control)
+            {
+                if (control.DataContext is GroupChatData chatData)
+                {
+                    RaiseEvent(new GroupHeadClickEventArgs(sender, HeadClickEvent, chatData, e));
+                }
+            }
+        }
+    }
+}
+
+/// <summary>
+/// 头像点击事件参数
+/// </summary>
+public class GroupHeadClickEventArgs : RoutedEventArgs
+{
+    /// <summary>
+    /// 用户数据
+    /// </summary>
+    public GroupChatData User { get; }
+
+    /// <summary>
+    /// 鼠标点击事件
+    /// </summary>
+    public PointerPressedEventArgs PointerPressedEventArgs { get; }
+
+    public GroupHeadClickEventArgs(object sender, RoutedEvent routeEvent, GroupChatData user,
+        PointerPressedEventArgs args) : base(routeEvent, sender)
+    {
+        User = user;
+        PointerPressedEventArgs = args;
+    }
 }

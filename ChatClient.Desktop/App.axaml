@@ -13,6 +13,7 @@
         <suki:SukiTheme />
         <avalonia:MaterialIconStyles />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/Index.axaml" />
+
         <Style Selector="TextBlock">
             <Setter Property="FontFamily" Value="{StaticResource MiSans}" />
         </Style>
@@ -21,6 +22,13 @@
         </Style>
         <Style Selector="TextBox">
             <Setter Property="FontFamily" Value="{StaticResource MiSans}" />
+        </Style>
+
+        <Style Selector="TrayIcon">
+            <Setter Property="TextBlock.FontSize" Value="12" />
+        </Style>
+        <Style Selector="NativeMenuItem">
+            <Setter Property="TextBlock.FontSize" Value="12" />
         </Style>
     </Application.Styles>
 </Application>

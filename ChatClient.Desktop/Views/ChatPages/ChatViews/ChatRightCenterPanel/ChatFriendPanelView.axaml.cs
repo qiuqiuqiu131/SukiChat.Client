@@ -2,9 +2,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using ChatClient.Avalonia.Controls.Chat.ChatUI;
+using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
+using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
 using Prism.Navigation;
 
@@ -12,10 +16,15 @@ namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 
 public partial class ChatFriendPanelView : UserControl, IDestructible
 {
-    private SubscriptionToken? token;
+    private readonly IEventAggregator _eventAggregator;
+    private readonly IUserManager _userManager;
+    private readonly SubscriptionToken? token;
 
-    public ChatFriendPanelView(IEventAggregator eventAggregator)
+    public ChatFriendPanelView(IEventAggregator eventAggregator, IUserManager userManager,
+        IUserDtoManager userDtoManager)
     {
+        _eventAggregator = eventAggregator;
+        _userManager = userManager;
         InitializeComponent();
 
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
@@ -42,5 +51,14 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
     public void Destroy()
     {
         token?.Dispose();
+    }
+
+    private void ChatUI_OnHeadClick(object? sender, FriendHeadClickEventArgs e)
+    {
+        var userDto = e.User.IsUser
+            ? _userManager.User
+            : ((ChatFriendPanelViewModel)DataContext!).SelectedFriend.FriendRelatoinDto.UserDto;
+        _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
+            .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));
     }
 }

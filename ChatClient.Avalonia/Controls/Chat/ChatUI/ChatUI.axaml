@@ -62,6 +62,11 @@
                                               ItemsSource="{TemplateBinding Messages}"
                                               Margin="0,0,-15,0"
                                               Padding="0,0,0,5">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical" Spacing="5" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
                                     <ItemsControl.DataTemplates>
                                         <DataTemplate DataType="data:ChatData">
                                             <Grid>
@@ -125,18 +130,10 @@
                                                             <circleImage:CircleImage
                                                                 DockPanel.Dock="Left"
                                                                 VerticalAlignment="Top"
+                                                                PointerPressed="Head_OnPointerPressed"
                                                                 Margin="16,0,8,0"
                                                                 Image="{Binding $parent[chatUi:ChatUI].FriendImageSource}"
-                                                                Size="35">
-                                                                <Interaction.Behaviors>
-                                                                    <EventTriggerBehavior
-                                                                        EventName="PointerPressed">
-                                                                        <InvokeCommandAction
-                                                                            Command="{Binding $parent[chatUi:ChatUI].HeadClickCommnad}"
-                                                                            CommandParameter="{Binding}" />
-                                                                    </EventTriggerBehavior>
-                                                                </Interaction.Behaviors>
-                                                            </circleImage:CircleImage>
+                                                                Size="35" />
                                                             <StackPanel Orientation="Horizontal"
                                                                         HorizontalAlignment="Left">
                                                                 <suki:GlassCard Classes="Friend"
@@ -184,17 +181,9 @@
                                                                 Margin="8,0,16,0"
                                                                 VerticalAlignment="Top"
                                                                 DockPanel.Dock="Right"
+                                                                PointerPressed="Head_OnPointerPressed"
                                                                 Image="{Binding $parent[chatUi:ChatUI].UserImageSource}"
-                                                                Size="35">
-                                                                <Interaction.Behaviors>
-                                                                    <EventTriggerBehavior
-                                                                        EventName="PointerPressed">
-                                                                        <InvokeCommandAction
-                                                                            Command="{Binding $parent[chatUi:ChatUI].HeadClickCommnad}"
-                                                                            CommandParameter="{Binding}" />
-                                                                    </EventTriggerBehavior>
-                                                                </Interaction.Behaviors>
-                                                            </circleImage:CircleImage>
+                                                                Size="35" />
                                                             <StackPanel Orientation="Horizontal"
                                                                         HorizontalAlignment="Right">
                                                                 <Grid VerticalAlignment="Bottom" Width="20" Height="20"

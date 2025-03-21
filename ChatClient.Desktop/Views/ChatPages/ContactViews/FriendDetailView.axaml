@@ -57,7 +57,7 @@
                 </Panel>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Name}"
-                                         Height="20"
+                                         Height="22"
                                          FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Id,StringFormat=ID: {0}}"
                                          FontSize="12.5"
@@ -94,7 +94,8 @@
                     </Style>
                 </StackPanel.Styles>
                 <StackPanel Orientation="Horizontal" Spacing="3">
-                    <ContentControl Content="{Binding Friend.UserDto.Sex,Converter={converter:SexIconKindConverter}}" />
+                    <ContentControl
+                        Content="{Binding Friend.UserDto.Sex,Converter={converter:SexIconKindConverter Size= 15}}" />
                     <TextBlock Text="{Binding Friend.UserDto.Sex,Converter={converter:SexConverter}}" />
                 </StackPanel>
                 <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"

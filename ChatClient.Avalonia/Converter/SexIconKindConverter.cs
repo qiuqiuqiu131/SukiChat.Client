@@ -10,6 +10,8 @@ namespace ChatClient.Avalonia.Converter;
 
 public class SexIconKindConverter : MarkupExtension, IValueConverter
 {
+    public double Size { get; set; }
+
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
         return this;
@@ -23,12 +25,12 @@ public class SexIconKindConverter : MarkupExtension, IValueConverter
             {
                 Sex.Female => new MaterialIcon()
                 {
-                    Width = 15, Height = 15, Foreground = new SolidColorBrush { Color = Colors.HotPink },
+                    Width = Size, Height = Size, Foreground = new SolidColorBrush { Color = Colors.HotPink },
                     Kind = MaterialIconKind.GenderFemale
                 },
                 Sex.Male => new MaterialIcon()
                 {
-                    Width = 15, Height = 15, Foreground = new SolidColorBrush { Color = Colors.DodgerBlue },
+                    Width = Size, Height = Size, Foreground = new SolidColorBrush { Color = Colors.DodgerBlue },
                     Kind = MaterialIconKind.GenderMale
                 },
             };

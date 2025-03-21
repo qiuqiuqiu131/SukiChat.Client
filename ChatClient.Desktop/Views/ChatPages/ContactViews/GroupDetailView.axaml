@@ -58,6 +58,7 @@
                 </Panel>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Name}"
+                                         Height="22"
                                          FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Id,StringFormat=ID: {0}}"
                                          FontSize="12.5"
