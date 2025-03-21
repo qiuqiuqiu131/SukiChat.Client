@@ -7,11 +7,18 @@
     <Style Selector="groupList|GroupList">
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander FontSize="14"
-                          Theme="{StaticResource ChatExpander}"
-                          FontWeight="SemiBold">
+                <Expander Theme="{StaticResource ChatExpander}">
                     <Expander.Header>
-                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Right"
+                                       Opacity="0.65"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Margin="10,0"
+                                       Text="{Binding $parent[groupList:GroupList].GroupContents.Count}"
+                                       FontSize="11" />
+                            <TextBlock Text="{TemplateBinding Header}" />
+                        </DockPanel>
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
                              SelectedItem="{Binding $parent[groupList:GroupList].SelectedItem,Mode=TwoWay}"
@@ -29,8 +36,8 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="data:FriendRelationDto">
-                                <Grid Height="46" ClipToBounds="False">
-                                    <Grid ColumnDefinitions="42,*" Margin="6,3">
+                                <Grid Height="55" ClipToBounds="False">
+                                    <Grid ColumnDefinitions="42,*" Margin="6,7">
                                         <Grid Width="42" Height="42">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding UserDto.HeadImage}" />
@@ -41,9 +48,6 @@
                                                     IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    FontSize="14"
-                                                    Opacity="0.9"
-                                                    FontWeight="DemiBold"
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource SukiText}">
                                                     <Run Text="{Binding Remark}" />
@@ -55,10 +59,7 @@
                                                     IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    FontSize="14"
-                                                    Opacity="0.9"
                                                     TextTrimming="CharacterEllipsis"
-                                                    FontWeight="DemiBold"
                                                     Text="{Binding UserDto.Name}"
                                                     Foreground="{DynamicResource SukiText}" />
                                             </Grid>
@@ -75,20 +76,20 @@
                                                          Width="10"
                                                          Height="10"
                                                          VerticalAlignment="Center"
-                                                         Margin="2,3,2,0" />
+                                                         Margin="0,0,0,3" />
                                                 <Ellipse IsVisible="{Binding !UserDto.IsOnline}"
                                                          Fill="Red"
                                                          Width="10"
                                                          Height="10"
                                                          VerticalAlignment="Center"
-                                                         Margin="2,3,2,0" />
+                                                         Margin="0,0,0,3" />
                                                 <TextBlock
                                                     Text="{Binding UserDto.IsOnline,Converter={converter:OnlineConverter}}"
                                                     Opacity="0.6"
                                                     Foreground="{DynamicResource SukiText}"
-                                                    FontSize="11.5"
+                                                    FontSize="12"
                                                     FontWeight="Normal"
-                                                    Margin="0"
+                                                    Margin="2,0,2,3"
                                                     Padding="0" />
                                                 <TextBlock Text="]" Opacity="0.6" FontSize="11.5" Margin="0"
                                                            Foreground="{DynamicResource SukiText}"

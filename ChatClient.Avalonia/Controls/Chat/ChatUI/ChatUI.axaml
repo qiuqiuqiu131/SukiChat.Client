@@ -76,7 +76,7 @@
                                                                     <Setter Property="Opacity" Value="0" />
                                                                 </KeyFrame>
                                                                 <KeyFrame Cue="100%">
-                                                                    <Setter Property="Opacity" Value="0.8" />
+                                                                    <Setter Property="Opacity" Value="0.7" />
                                                                 </KeyFrame>
                                                             </Animation>
                                                         </Style.Animations>
@@ -91,9 +91,9 @@
                                                                 <KeyFrame Cue="0%">
                                                                     <Setter Property="Opacity" Value="0" />
                                                                     <Setter Property="ScaleTransform.ScaleX"
-                                                                            Value="0.6" />
+                                                                            Value="0.7" />
                                                                     <Setter Property="ScaleTransform.ScaleY"
-                                                                            Value="0.6" />
+                                                                            Value="0.7" />
                                                                 </KeyFrame>
                                                                 <KeyFrame Cue="100%">
                                                                     <Setter Property="Opacity" Value="1" />
@@ -109,7 +109,7 @@
                                                     <TextBlock
                                                         Classes="FadeIn"
                                                         Margin="5"
-                                                        Opacity="0.6"
+                                                        Opacity="0.7"
                                                         IsVisible="{Binding ShowTime}"
                                                         FontSize="11.5"
                                                         Foreground="{DynamicResource SukiText}"
@@ -120,7 +120,7 @@
                                                           RenderTransformOrigin="0%,100%"
                                                           Classes="FadeIn"
                                                           IsVisible="{Binding !IsUser}">
-                                                        <DockPanel Margin="0,0,50,0">
+                                                        <DockPanel Margin="0,0,60,0">
                                                             <!-- Head -->
                                                             <circleImage:CircleImage
                                                                 DockPanel.Dock="Left"
@@ -178,7 +178,7 @@
                                                           RenderTransformOrigin="100%,100%"
                                                           IsVisible="{Binding IsUser}"
                                                           Classes="FadeIn">
-                                                        <DockPanel Margin="50,0,0,0">
+                                                        <DockPanel Margin="60,0,0,0">
                                                             <!-- Head -->
                                                             <circleImage:CircleImage
                                                                 Margin="8,0,16,0"

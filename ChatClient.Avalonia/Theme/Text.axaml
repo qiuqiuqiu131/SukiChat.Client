@@ -53,12 +53,17 @@
         </MenuFlyout>
     </Styles.Resources>
 
-    <Style Selector="TextBox">
-        <Setter Property="LetterSpacing" Value="1.5" />
+    <Style Selector="TextBlock">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="14.5" />
     </Style>
-
-    <Style Selector="TextBlock, TextBox, Button, RadioButton, DropDownButton">
-        <Setter Property="TextBlock.FontFamily" Value="宋体,Simsun,微软雅黑,Microsoft YaHei,苹方-简,宋体-简" />
+    <Style Selector="TextBox">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="14.5" />
+    </Style>
+    <Style Selector="SelectableTextBlock">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="14.5" />
     </Style>
 
     <Style Selector="TextBox.Trans">

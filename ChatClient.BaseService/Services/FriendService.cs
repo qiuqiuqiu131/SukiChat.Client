@@ -83,7 +83,7 @@ internal class FriendService : BaseService, IFriendService
         return (true, result.Response.Message);
     }
 
-    public async Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "")
+    public async Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "默认分组")
     {
         var time = DateTime.Now;
         FriendResponseFromClient response = new()

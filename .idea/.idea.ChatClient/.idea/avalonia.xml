@@ -19,6 +19,7 @@
         <entry key="ChatClient.Avalonia/Controls/GroupGroup/GroupSepatateGroupsView/GroupSeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/GroupList/GroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiFriendGroup/MultiGroupList/MultiGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiGroupList/MultiGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiSeparateGroupView/MultiSeparateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MyHead.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -40,6 +41,9 @@
         <entry key="ChatClient.Avalonia/Theme/MySukiWindowStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/RatioButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/SukiSideMenu.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/TabButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/TabControl.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/TabItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Text.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/TextBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ToggleButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -89,6 +93,7 @@
         <entry key="ChatClient.Desktop/Views/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ScreenshotWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SukiDialogWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/CommonDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EmojiPickerView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
       </map>

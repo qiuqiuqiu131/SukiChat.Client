@@ -6,11 +6,18 @@
     <Style Selector="groupList|GroupGroupList">
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander FontSize="14"
-                          Theme="{StaticResource ChatExpander}"
-                          FontWeight="SemiBold">
+                <Expander Theme="{StaticResource ChatExpander}">
                     <Expander.Header>
-                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Right"
+                                       Opacity="0.65"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Margin="10,0"
+                                       Text="{Binding $parent[groupList:GroupGroupList].GroupContents.Count}"
+                                       FontSize="11" />
+                            <TextBlock Text="{TemplateBinding Header}" />
+                        </DockPanel>
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
                              SelectedItem="{Binding $parent[groupList:GroupGroupList].SelectedItem,Mode=TwoWay}"
@@ -28,8 +35,8 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="group:GroupRelationDto">
-                                <Grid Height="46">
-                                    <Grid Margin="6,3" ColumnDefinitions="42,*">
+                                <Grid Height="55">
+                                    <Grid Margin="6,7" ColumnDefinitions="42,*">
                                         <Grid Width="42" Height="42">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding GroupDto.HeadImage}" />
@@ -40,9 +47,6 @@
                                                     IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    FontSize="14"
-                                                    Opacity="0.9"
-                                                    FontWeight="DemiBold"
                                                     TextTrimming="CharacterEllipsis"
                                                     Foreground="{DynamicResource SukiText}">
                                                     <Run Text="{Binding Remark}" />
@@ -54,10 +58,7 @@
                                                     IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
-                                                    FontSize="14"
-                                                    Opacity="0.9"
                                                     TextTrimming="CharacterEllipsis"
-                                                    FontWeight="DemiBold"
                                                     Text="{Binding GroupDto.Name}"
                                                     Foreground="{DynamicResource SukiText}" />
                                             </Grid>

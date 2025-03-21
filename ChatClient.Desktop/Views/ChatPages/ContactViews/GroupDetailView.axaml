@@ -58,8 +58,7 @@
                 </Panel>
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Name}"
-                                         FontWeight="DemiBold"
-                                         FontSize="16.5" />
+                                         FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Id,StringFormat=ID: {0}}"
                                          FontSize="12.5"
                                          Opacity="0.7" />
@@ -80,11 +79,10 @@
                 <DockPanel Margin="5" IsVisible="{Binding !Group.IsOwner}">
                     <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
-                    <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                    <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" />
                     <editableTextBlock:EditableTextBlock
                         DefaultText="设置群聊备注"
                         Text="{Binding Group.Remark,Mode=TwoWay}"
-                        FontSize="13.5"
                         DockPanel.Dock="Right"
                         HorizontalContentAlignment="Right"
                         VerticalAlignment="Center" />
@@ -92,11 +90,10 @@
                 <DockPanel Margin="5" IsVisible="{Binding Group.IsOwner}">
                     <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
-                    <TextBlock Text="群名" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                    <TextBlock Text="群名" DockPanel.Dock="Left" Margin="0,3" />
                     <editableTextBlock:EditableTextBlock
                         DefaultText="更改群名"
                         Text="{Binding Group.GroupDto.Name,Mode=TwoWay}"
-                        FontSize="13.5"
                         DockPanel.Dock="Right"
                         HorizontalContentAlignment="Right"
                         VerticalAlignment="Center" />
@@ -105,11 +102,10 @@
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="AccountOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="群聊昵称" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="群聊昵称" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     Text="{Binding Group.NickName,Mode=TwoWay}"
                     DefaultText="设置群聊昵称"
-                    FontSize="14"
                     DockPanel.Dock="Right"
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
@@ -117,7 +113,7 @@
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="BookOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="群分组" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="群分组" DockPanel.Dock="Left" Margin="0,3" />
                 <TextBox DockPanel.Dock="Right"
                          Text="{Binding Group.Grouping,Mode=TwoWay}"
                          IsReadOnly="True"
@@ -130,12 +126,11 @@
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="NoteTextOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="群介绍" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="群介绍" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     IsVisible="{Binding Group.IsOwner}"
                     Text="{Binding Group.GroupDto.Description,Mode=TwoWay}"
                     DefaultText="设置群介绍"
-                    FontSize="14"
                     DockPanel.Dock="Right"
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
@@ -153,7 +148,7 @@
                 <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
-                    <TextBlock Margin="0,3" FontSize="14">
+                    <TextBlock Margin="0,3">
                         <Run Text="群成员(" />
                         <Run Text="{Binding Group.GroupDto.GroupMembers.Count}" />
                         <Run Text=")" />

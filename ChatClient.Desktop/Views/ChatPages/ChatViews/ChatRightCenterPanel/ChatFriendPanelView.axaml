@@ -68,17 +68,15 @@
                             Text="{Binding SelectedFriend.FriendRelatoinDto.Remark}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
-                            FontSize="16.5"
-                            Foreground="{DynamicResource SukiText}"
-                            FontWeight="DemiBold" />
+                            FontSize="17"
+                            Foreground="{DynamicResource SukiText}" />
                         <TextBlock
                             IsVisible="{Binding SelectedFriend.FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                             Text="{Binding SelectedFriend.FriendRelatoinDto.UserDto.Name}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
-                            FontSize="16.5"
-                            Foreground="{DynamicResource SukiText}"
-                            FontWeight="DemiBold" />
+                            FontSize="17"
+                            Foreground="{DynamicResource SukiText}" />
                     </Grid>
                     <Grid VerticalAlignment="Center"
                           IsVisible="{Binding SelectedFriend.FriendRelatoinDto.UserDto.IsOnline}" Margin="10">
@@ -93,13 +91,13 @@
                             <TextBlock Text="在线"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}"
-                                       FontSize="12" />
+                                       FontSize="12.5" />
                         </StackPanel>
                         <TextBlock IsVisible="{Binding SelectedFriend.IsWriting}"
                                    Text="对方正在输入..."
                                    Margin="5,5,5,0"
                                    VerticalAlignment="Center"
-                                   FontSize="12"
+                                   FontSize="12.5"
                                    Foreground="{DynamicResource SukiText}" />
                     </Grid>
                     <Grid VerticalAlignment="Center"
@@ -113,7 +111,7 @@
                             <TextBlock Text="离线"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}"
-                                       FontSize="12" />
+                                       FontSize="12.5" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -142,8 +140,7 @@
                                         <Grid RowDefinitions="1.1*,*">
                                             <TextBlock TextTrimming="CharacterEllipsis"
                                                        Grid.Row="0"
-                                                       FontWeight="SemiBold"
-                                                       FontSize="13.5"
+                                                       FontSize="14"
                                                        Text="{Binding SelectedFriend.FriendRelatoinDto.UserDto.Name}" />
                                             <Border Grid.Row="1"
                                                     Margin="0,2"
@@ -162,7 +159,7 @@
                             </suki:GlassCard>
 
                             <StackPanel Orientation="Vertical" Margin="0,-3">
-                                <TextBlock Text="好友备注" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                <TextBlock Text="好友备注" Margin="15,0" FontSize="13.5" Opacity="0.75"
                                            HorizontalAlignment="Left" />
                                 <TextBox CornerRadius="6"
                                          Padding="8,4"

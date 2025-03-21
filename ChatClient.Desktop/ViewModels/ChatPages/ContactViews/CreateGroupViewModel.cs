@@ -20,6 +20,7 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
 {
     private readonly IUserManager _userManager;
     private readonly IContainerProvider _containerProvider;
+    private readonly IEventAggregator _eventAggregator;
 
     private string? _searchText;
 
@@ -38,10 +39,12 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
     public DelegateCommand CancleCommand { get; set; }
     public DelegateCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
 
-    public CreateGroupViewModel(IUserManager userManager, IContainerProvider containerProvider)
+    public CreateGroupViewModel(IUserManager userManager, IContainerProvider containerProvider,
+        IEventAggregator eventAggregator)
     {
         _userManager = userManager;
         _containerProvider = containerProvider;
+        _eventAggregator = eventAggregator;
 
         OKCommand = new AsyncDelegateCommand(CreateGroup, CanCreateGroup);
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
@@ -98,10 +101,12 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        _eventAggregator.GetEvent<DialogShowEvent>().Publish(false);
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
+        _eventAggregator.GetEvent<DialogShowEvent>().Publish(true);
     }
 
     public DialogCloseListener RequestClose { get; }

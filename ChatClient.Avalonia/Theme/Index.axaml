@@ -3,6 +3,7 @@
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="TabItem.axaml" />
                 <ResourceInclude Source="ContextMenu.axaml" />
                 <ResourceInclude Source="MenuItem.axaml" />
                 <ResourceInclude Source="MenuFlyout.axaml" />
@@ -15,6 +16,7 @@
     </Styles.Resources>
 
     <StyleInclude Source="Text.axaml" />
+    <StyleInclude Source="TabButton.axaml" />
     <StyleInclude Source="RatioButton.axaml" />
     <StyleInclude Source="ListBox.axaml" />
     <StyleInclude Source="ListBoxItem.axaml" />

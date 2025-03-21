@@ -4,12 +4,13 @@ using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
 using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
-public class AddNewFriendViewModel : ViewModelBase
+public class AddNewFriendViewModel : ViewModelBase, IDialogAware
 {
     private string? id;
 
@@ -92,4 +93,20 @@ public class AddNewFriendViewModel : ViewModelBase
                 .WithContent(message)
                 .Queue();
     }
+
+    #region DialogAware
+
+    public bool CanCloseDialog() => true;
+
+    public void OnDialogClosed()
+    {
+    }
+
+    public void OnDialogOpened(IDialogParameters parameters)
+    {
+    }
+
+    public DialogCloseListener RequestClose { get; }
+
+    #endregion
 }

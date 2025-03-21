@@ -177,6 +177,7 @@
                             theme:TextBoxExtensions.AddDeleteButton="True"
                             MaxLength="15"
                             FontSize="13.5"
+                            LetterSpacing="1"
                             Text="{Binding Name}"
                             Watermark="Name" />
                         <TextBlock
@@ -197,6 +198,7 @@
                             MaxLength="16"
                             FontSize="13.5"
                             PasswordChar="*"
+                            LetterSpacing="1.5"
                             Text="{Binding Password}"
                             Watermark="Password" />
                         <TextBlock
@@ -217,6 +219,7 @@
                             MaxLength="16"
                             PasswordChar="*"
                             FontSize="13.5"
+                            LetterSpacing="1.5"
                             Text="{Binding RePassword}"
                             Watermark="RePassword" />
                         <TextBlock

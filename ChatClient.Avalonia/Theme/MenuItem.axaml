@@ -31,7 +31,7 @@
                                                   DockPanel.Dock="Left" />
                                 <TextBlock Name="PART_InputGestureText"
                                            VerticalAlignment="Center"
-                                           Margin="20,6,5,5"
+                                           Margin="15,6,5,5"
                                            FontSize="13"
                                            DockPanel.Dock="Right"
                                            HorizontalAlignment="Right"

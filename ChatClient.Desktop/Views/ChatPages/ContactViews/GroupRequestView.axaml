@@ -30,10 +30,6 @@
                 Margin="25,7,10,7"
                 Padding="25,0"
                 CornerRadius="5">
-                <suki:GlassCard.Effect>
-                    <DropShadowEffect OffsetX="2" OffsetY="2" BlurRadius="10" Color="{DynamicResource SukiText}"
-                                      Opacity="0.3" />
-                </suki:GlassCard.Effect>
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
@@ -88,10 +84,6 @@
                 Margin="25,7,10,7"
                 Padding="25,0"
                 CornerRadius="5">
-                <suki:GlassCard.Effect>
-                    <DropShadowEffect OffsetX="2" OffsetY="2" BlurRadius="10" Color="{DynamicResource SukiText}"
-                                      Opacity="0.3" />
-                </suki:GlassCard.Effect>
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
@@ -166,10 +158,6 @@
                 Margin="25,7,10,7"
                 Padding="25,0"
                 CornerRadius="5">
-                <suki:GlassCard.Effect>
-                    <DropShadowEffect OffsetX="2" OffsetY="2" BlurRadius="10" Color="{DynamicResource SukiText}"
-                                      Opacity="0.3" />
-                </suki:GlassCard.Effect>
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <TextBlock Text="{Binding UserDto.Name,StringFormat=处理者: {0}}" FontSize="12" Opacity="0.6"

@@ -6,11 +6,18 @@
     <Style Selector="multiGroupList|MultiGroupList">
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander FontSize="13.5"
-                          Theme="{StaticResource ChatExpander}"
-                          FontWeight="SemiBold">
+                <Expander Theme="{StaticResource ChatExpander}">
                     <Expander.Header>
-                        <TextBlock FontSize="13.5" FontWeight="DemiBold" Text="{TemplateBinding Header}" />
+                        <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
+                            <TextBlock DockPanel.Dock="Right"
+                                       Opacity="0.65"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       Margin="10,0"
+                                       Text="{Binding $parent[multiGroupList:MultiGroupList].GroupContents.Count}"
+                                       FontSize="11" />
+                            <TextBlock Text="{TemplateBinding Header}" />
+                        </DockPanel>
                     </Expander.Header>
                     <ListBox Name="PART_ListBox"
                              SelectionMode="Multiple,Toggle"
@@ -29,17 +36,13 @@
                                         <TextBlock Grid.Column="1"
                                                    Margin="10,0"
                                                    VerticalAlignment="Center"
-                                                   FontSize="13.5"
                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                                   FontWeight="DemiBold"
                                                    Foreground="{DynamicResource SukiText}"
                                                    Text="{Binding  UserDto.Name}" />
                                         <TextBlock Grid.Column="1"
                                                    Margin="10,0"
                                                    VerticalAlignment="Center"
-                                                   FontSize="13.5"
                                                    IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                   FontWeight="DemiBold"
                                                    Foreground="{DynamicResource SukiText}"
                                                    Text="{Binding  Remark}" />
                                     </Grid>

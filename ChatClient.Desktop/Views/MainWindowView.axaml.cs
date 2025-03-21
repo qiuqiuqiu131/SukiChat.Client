@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -24,14 +25,20 @@ public partial class MainWindowView : SukiWindow, IDisposable
         _eventAggregator = eventAggregator;
         InitializeComponent();
 
-        // 字体渲染模式：Alias - 锯齿、Antialias - 抗锯齿、SubpixelAntialias - 次像素抗锯齿
-        RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
-
-        // 如果发现图片呈现不清晰，应该可以通过该配置优化渲染：位图插值模式
-        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
-
-        // 如果发现形状边缘有锯齿，应该可以通过该配置优化渲染：边缘渲染模式
-        RenderOptions.SetEdgeMode(this, EdgeMode.Antialias);
+        eventAggregator.GetEvent<DialogShowEvent>().Subscribe(async show =>
+        {
+            if (show)
+            {
+                BackgroundBorder.IsVisible = true;
+                BackgroundBorder.Opacity = 1;
+            }
+            else
+            {
+                BackgroundBorder.Opacity = 0;
+                await Task.Delay(400);
+                BackgroundBorder.IsVisible = false;
+            }
+        });
     }
 
     private SukiDialogHost? _dialogHost;

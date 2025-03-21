@@ -24,6 +24,7 @@
                     </Border>
                     <ContentPresenter Name="PART_ContentPresenter"
                                       Margin="0,0,0,0"
+                                      HorizontalAlignment="Stretch"
                                       Padding="{TemplateBinding Padding}"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       Background="Transparent"

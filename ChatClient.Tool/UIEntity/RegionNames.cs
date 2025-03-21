@@ -8,4 +8,6 @@ public static class RegionNames
     public static string ContactsRegion = "ContactsRegion";
 
     public static string ChatRightRegion = "ChatRightRegion";
+
+    public static string AddFriendRegion = "AddFriendRegion";
 }

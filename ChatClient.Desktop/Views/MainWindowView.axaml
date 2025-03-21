@@ -6,7 +6,6 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                  xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-                 xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
                  xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
                  Theme="{StaticResource MySukiWindowTheme}"
                  mc:Ignorable="d"
@@ -23,9 +22,9 @@
                  BackgroundAnimationEnabled="{Binding  CurrentThemeStyle.AnimationsEnabled}"
                  BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
                  BackgroundTransitionsEnabled="{Binding CurrentThemeStyle.TransitionsEnabled}"
-                 FontSize="15"
                  Icon="/Assets/ChartDonutVariant.ico"
                  ShowTitlebarBackground="False"
+                 FontFamily="{StaticResource MiSans}"
                  Title="Suki Chat">
     <Window.Resources>
         <ControlTheme x:Key="{x:Type suki:SukiDialog}" TargetType="suki:SukiDialog">
@@ -106,111 +105,120 @@
         </ControlTheme>
     </Window.Resources>
 
-    <suki:SukiSideMenu IsSearchEnabled="False"
-                       IsMenuExpanded="False"
-                       IsToggleButtonVisible="False"
-                       Theme="{StaticResource SukiSideMenuStyle}"
-                       ItemsSource="{Binding ChatPages}"
-                       SelectedItem="{Binding ActivePage}">
-        <suki:SukiSideMenu.Styles>
-            <Style Selector="Image.AppIcon">
-                <Setter Property="Transitions">
-                    <Transitions>
-                        <DoubleTransition Property="Opacity" Duration="0.1" />
-                    </Transitions>
-                </Setter>
-                <Style Selector="^:pointerover">
-                    <Setter Property="Opacity" Value="0.7" />
+    <Panel>
+        <suki:SukiSideMenu IsSearchEnabled="False"
+                           IsMenuExpanded="False"
+                           IsToggleButtonVisible="False"
+                           Theme="{StaticResource SukiSideMenuStyle}"
+                           ItemsSource="{Binding ChatPages}"
+                           SelectedItem="{Binding ActivePage}">
+            <suki:SukiSideMenu.Styles>
+                <Style Selector="Image.AppIcon">
+                    <Setter Property="Transitions">
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0.1" />
+                        </Transitions>
+                    </Setter>
+                    <Style Selector="^:pointerover">
+                        <Setter Property="Opacity" Value="0.7" />
+                    </Style>
                 </Style>
-            </Style>
-        </suki:SukiSideMenu.Styles>
+            </suki:SukiSideMenu.Styles>
 
-        <suki:SukiSideMenu.ItemTemplate>
-            <DataTemplate>
-                <suki:SukiSideMenuItem FontWeight="SemiBold" FontSize="13"
-                                       Padding="15,5"
-                                       CornerRadius="7"
-                                       Classes="Compact"
-                                       IsTopMenuExpanded="True"
-                                       Header="{Binding DisplayName}">
-                    <suki:SukiSideMenuItem.Icon>
-                        <avalonia:MaterialIcon Width="20" Height="20" Margin="5" Kind="{Binding Icon}" />
-                    </suki:SukiSideMenuItem.Icon>
-                </suki:SukiSideMenuItem>
-            </DataTemplate>
-        </suki:SukiSideMenu.ItemTemplate>
+            <suki:SukiSideMenu.ItemTemplate>
+                <DataTemplate>
+                    <suki:SukiSideMenuItem FontWeight="SemiBold" FontSize="13"
+                                           Padding="15,5"
+                                           CornerRadius="7"
+                                           Classes="Compact"
+                                           IsTopMenuExpanded="True"
+                                           Header="{Binding DisplayName}">
+                        <suki:SukiSideMenuItem.Icon>
+                            <avalonia:MaterialIcon Width="20" Height="20" Margin="5" Kind="{Binding Icon}" />
+                        </suki:SukiSideMenuItem.Icon>
+                    </suki:SukiSideMenuItem>
+                </DataTemplate>
+            </suki:SukiSideMenu.ItemTemplate>
 
-        <suki:SukiSideMenu.HeaderContent>
-            <StackPanel Orientation="Vertical" Margin="0,10">
-                <Panel Width="80" Height="80">
+            <suki:SukiSideMenu.HeaderContent>
+                <StackPanel Orientation="Vertical" Margin="0,10">
+                    <Panel Width="80" Height="80">
+                        <Panel.Clip>
+                            <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                        </Panel.Clip>
+                        <Image Width="80"
+                               Height="80"
+                               Classes="AppIcon"
+                               PointerPressed="InputElement_OnPointerPressed"
+                               Source="{Binding User.HeadImage}" />
+                    </Panel>
+                    <TextBlock Classes="h3" Margin="0,10" FontSize="15" HorizontalAlignment="Center"
+                               Text="{Binding User.Name}" />
+                </StackPanel>
+            </suki:SukiSideMenu.HeaderContent>
+            <suki:SukiSideMenu.LeftBottomContent>
+                <Panel Width="38" Height="38" Margin="0,10,0,15">
                     <Panel.Clip>
-                        <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
+                        <EllipseGeometry Center="19,19" RadiusX="19" RadiusY="19" />
                     </Panel.Clip>
-                    <Image Width="80"
-                           Height="80"
+                    <Image Width="38"
+                           Height="38"
                            Classes="AppIcon"
-                           PointerPressed="InputElement_OnPointerPressed"
-                           Source="{Binding User.HeadImage}" />
+                           Source="{Binding User.HeadImage}">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="PointerPressed">
+                                <ChangePropertyAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
+                                                      PropertyName="IsToggleButtonVisible"
+                                                      Value="True" />
+                                <CallMethodAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
+                                                  MethodName="MenuExpandedClicked" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </Image>
                 </Panel>
-                <TextBlock Classes="h3" Margin="0,10" FontSize="15" HorizontalAlignment="Center"
-                           Text="{Binding User.Name}" />
-            </StackPanel>
-        </suki:SukiSideMenu.HeaderContent>
-        <suki:SukiSideMenu.LeftBottomContent>
-            <Panel Width="38" Height="38" Margin="0,10,0,15">
-                <Panel.Clip>
-                    <EllipseGeometry Center="19,19" RadiusX="19" RadiusY="19" />
-                </Panel.Clip>
-                <Image Width="38"
-                       Height="38"
-                       Classes="AppIcon"
-                       Source="{Binding User.HeadImage}">
-                    <Interaction.Behaviors>
-                        <EventTriggerBehavior EventName="PointerPressed">
-                            <ChangePropertyAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
-                                                  PropertyName="IsToggleButtonVisible"
-                                                  Value="True" />
-                            <CallMethodAction TargetObject="{Binding $parent[suki:SukiSideMenu]}"
-                                              MethodName="MenuExpandedClicked" />
-                        </EventTriggerBehavior>
-                    </Interaction.Behaviors>
-                </Image>
-            </Panel>
-        </suki:SukiSideMenu.LeftBottomContent>
-        <suki:SukiSideMenu.FooterContent>
-            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <StackPanel.Styles>
-                    <Style Selector="Button">
-                        <Setter Property="Width" Value="40" />
-                        <Setter Property="Height" Value="40" />
-                    </Style>
-                    <Style Selector="Button avalonia|MaterialIcon">
-                        <Setter Property="Width" Value="25" />
-                        <Setter Property="Height" Value="25" />
-                        <Setter Property="Transitions">
-                            <Transitions>
-                                <DoubleTransition Property="Width" Duration="0.1" />
-                                <DoubleTransition Property="Height" Duration="0.1" />
-                            </Transitions>
-                        </Setter>
-                    </Style>
+            </suki:SukiSideMenu.LeftBottomContent>
+            <suki:SukiSideMenu.FooterContent>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Width" Value="40" />
+                            <Setter Property="Height" Value="40" />
+                        </Style>
+                        <Style Selector="Button avalonia|MaterialIcon">
+                            <Setter Property="Width" Value="25" />
+                            <Setter Property="Height" Value="25" />
+                            <Setter Property="Transitions">
+                                <Transitions>
+                                    <DoubleTransition Property="Width" Duration="0.1" />
+                                    <DoubleTransition Property="Height" Duration="0.1" />
+                                </Transitions>
+                            </Setter>
+                        </Style>
 
-                    <Style Selector="Button:pointerover avalonia|MaterialIcon">
-                        <Setter Property="Width" Value="28" />
-                        <Setter Property="Height" Value="28" />
-                    </Style>
-                </StackPanel.Styles>
-                <Button Classes="Basic"
-                        Command="{Binding ExitCommnad}"
-                        ToolTip.ShowDelay="500"
-                        RenderTransformOrigin="50%,50%">
-                    <avalonia:MaterialIcon Kind="ExitToApp" />
-                    <ToolTip.Tip>
-                        <TextBlock Text="退出登录" FontSize="12" />
-                    </ToolTip.Tip>
-                </Button>
-            </StackPanel>
-        </suki:SukiSideMenu.FooterContent>
-    </suki:SukiSideMenu>
+                        <Style Selector="Button:pointerover avalonia|MaterialIcon">
+                            <Setter Property="Width" Value="28" />
+                            <Setter Property="Height" Value="28" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button Classes="Basic"
+                            Command="{Binding ExitCommnad}"
+                            ToolTip.ShowDelay="500"
+                            RenderTransformOrigin="50%,50%">
+                        <avalonia:MaterialIcon Kind="ExitToApp" />
+                        <ToolTip.Tip>
+                            <TextBlock Text="退出登录" FontSize="12" />
+                        </ToolTip.Tip>
+                    </Button>
+                </StackPanel>
+            </suki:SukiSideMenu.FooterContent>
+        </suki:SukiSideMenu>
+        <Border Name="BackgroundBorder" Background="#66000000" Opacity="0" IsVisible="False">
+            <Border.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.4" Easing="CubicEaseOut" />
+                </Transitions>
+            </Border.Transitions>
+        </Border>
+    </Panel>
 
 </suki:SukiWindow>

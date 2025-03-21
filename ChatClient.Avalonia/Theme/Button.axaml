@@ -2,12 +2,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="Button.Add">
         <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderThickness" Value="1.5" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
                     <Border Name="PART_Border"
-                            Opacity="0.15"
+                            Opacity="0.5"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -41,7 +41,7 @@
 
     <Style Selector="Button.Add:pointerover">
         <Style Selector="^ /template/ Border#PART_Border">
-            <Setter Property="Opacity" Value="0.25" />
+            <Setter Property="Opacity" Value="0.5" />
         </Style>
         <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
     </Style>

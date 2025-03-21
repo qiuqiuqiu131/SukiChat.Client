@@ -66,26 +66,23 @@
                             Text="{Binding SelectedGroup.GroupRelationDto.Remark}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
-                            FontSize="16.5"
-                            Foreground="{DynamicResource SukiText}"
-                            FontWeight="DemiBold" />
+                            FontSize="16"
+                            Foreground="{DynamicResource SukiText}" />
                         <TextBlock
                             IsVisible="{Binding SelectedGroup.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                             Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
-                            FontSize="16.5"
-                            Foreground="{DynamicResource SukiText}"
-                            FontWeight="DemiBold" />
+                            FontSize="16"
+                            Foreground="{DynamicResource SukiText}" />
                     </Grid>
                     <TextBlock
                         Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers.Count,StringFormat=({0})}"
                         Margin="0,0,0,10"
                         VerticalAlignment="Center"
                         LetterSpacing="1"
-                        FontSize="16.5"
-                        Foreground="{DynamicResource SukiText}"
-                        FontWeight="DemiBold" />
+                        FontSize="16"
+                        Foreground="{DynamicResource SukiText}" />
                 </StackPanel>
             </DockPanel>
         </suki:GlassCard>
@@ -115,8 +112,7 @@
                                         <Grid RowDefinitions="1.1*,*">
                                             <TextBlock TextTrimming="CharacterEllipsis"
                                                        Grid.Row="0"
-                                                       FontWeight="SemiBold"
-                                                       FontSize="13.5"
+                                                       FontSize="14"
                                                        Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}" />
                                             <Border Grid.Row="1"
                                                     Margin="0,2"
@@ -137,7 +133,7 @@
                             <suki:GlassCard CornerRadius="6" Padding="10" Margin="0">
                                 <DockPanel LastChildFill="True">
                                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
-                                        <TextBlock Margin="5" Text="群聊成员" FontWeight="SemiBold" FontSize="13"
+                                        <TextBlock Margin="5" Text="群聊成员" FontSize="13.5"
                                                    DockPanel.Dock="Left" />
                                         <TextBlock
                                             Margin="5"
@@ -175,7 +171,7 @@
 
                             <StackPanel Orientation="Vertical" Margin="0,-3"
                                         IsVisible="{Binding SelectedGroup.GroupRelationDto.IsOwner}">
-                                <TextBlock Text="群名" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                <TextBlock Text="群名" Margin="15,0" FontSize="13.5" Opacity="0.75"
                                            HorizontalAlignment="Left" />
                                 <TextBox CornerRadius="6"
                                          Padding="8,4"
@@ -191,7 +187,7 @@
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,-3">
-                                <TextBlock Text="我的本群昵称" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                <TextBlock Text="我的本群昵称" Margin="15,0" FontSize="13.5" Opacity="0.75"
                                            HorizontalAlignment="Left" />
                                 <TextBox CornerRadius="6"
                                          Padding="8,4"
@@ -208,7 +204,7 @@
 
                             <StackPanel Orientation="Vertical" Margin="0,-3"
                                         IsVisible="{Binding !SelectedGroup.GroupRelationDto.IsOwner}">
-                                <TextBlock Text="群聊备注" Margin="15,0" FontSize="13.5" Opacity="0.6"
+                                <TextBlock Text="群聊备注" Margin="15,0" FontSize="13.5" Opacity="0.75"
                                            HorizontalAlignment="Left" />
                                 <TextBox CornerRadius="6"
                                          Padding="8,4"

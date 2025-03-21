@@ -5,7 +5,6 @@
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages"
     d:DesignHeight="450"
@@ -127,11 +126,17 @@
                     </Panel>
                 </Button>
             </Panel>
-            <MenuItem Header="haha">
-                <MenuItem.Icon>
-                    <avalonia:MaterialIcon Kind="Cutlery" />
-                </MenuItem.Icon>
-            </MenuItem>
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Light" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Regular" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Normal" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Medium" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="SemiBold" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="DemiBold" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Bold" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="ExtraBold" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="Black" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="UltraBold" />
+            <TextBlock Text="聊天消息" FontSize="14" FontWeight="ExtraBlack" />
         </StackPanel>
     </ScrollViewer>
 </UserControl>

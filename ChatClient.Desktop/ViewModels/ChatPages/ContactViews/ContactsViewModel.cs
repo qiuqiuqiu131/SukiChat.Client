@@ -70,8 +70,7 @@ public class ContactsViewModel : ChatPageBase
 
     private void AddNewFriend()
     {
-        var view = _containerProvider.Resolve<AddNewFriendView>();
-        view.Show();
+        _dialogService.Show(nameof(AddNewFriendView));
     }
 
     private void CreateGroup()
@@ -86,13 +85,13 @@ public class ContactsViewModel : ChatPageBase
         if (obj is FriendRelationDto friendRelationDto)
         {
             INavigationParameters parameters = new NavigationParameters();
-            parameters.Add("dto", obj);
+            parameters.Add("dto", friendRelationDto);
             ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
         }
         else if (obj is GroupRelationDto groupRelationDto)
         {
             INavigationParameters parameters = new NavigationParameters();
-            parameters.Add("dto", obj);
+            parameters.Add("dto", groupRelationDto);
             ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
         }
     }

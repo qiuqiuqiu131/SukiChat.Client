@@ -11,7 +11,7 @@
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             Width="550" Height="480"
+             Width="550" Height="550"
              x:DataType="vm:CreateGroupViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.CreateGroupView">
     <Grid ColumnDefinitions="*,1.1*">
@@ -21,9 +21,10 @@
                             Grid.Row="0"
                             CornerRadius="0">
                 <searchBox:SearchBox HorizontalAlignment="Stretch"
+                                     WaterMask="搜索"
                                      VerticalAlignment="Bottom" />
             </suki:GlassCard>
-            <suki:GlassCard Padding="8" Margin="0" CornerRadius="0" Grid.Row="1">
+            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0" Grid.Row="1">
                 <Grid>
                     <TextBlock Text="还没有添加好友"
                                Margin="0,50"
@@ -35,9 +36,13 @@
                     </TextBlock>
                     <DockPanel LastChildFill="True"
                                IsVisible="{Binding !GroupFriends.Count,Converter={converter:ListEmptyConverter}}">
+                        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource SukiBorderBrush}"
+                                DockPanel.Dock="Top">
+                            <TextBlock Text="选择好友创建" VerticalAlignment="Center" FontSize="14" Margin="20,10" />
+                        </Border>
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                             <multiSeparateGroupView:MultiSeparateGroupView
-                                Margin="5"
+                                Margin="10,5"
                                 x:Name="MultiSeparateGroupView"
                                 SelectionChangedCommand="{Binding SelectionChangedCommand}"
                                 GroupFriends="{Binding GroupFriends}" />
@@ -62,7 +67,7 @@
                                        IsVisible="{Binding SelectedFriends.Count}"
                                        Opacity="0.75"
                                        Text="{Binding SelectedFriends.Count,StringFormat=已选择 {0} 个好友}" />
-                            <TextBlock FontSize="13.5" FontWeight="DemiBold" Text="创建群聊" />
+                            <TextBlock FontSize="13.5" Text="创建群聊" />
                         </DockPanel>
                     </Grid>
                     <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
@@ -115,8 +120,7 @@
                                             <TextBlock Grid.Column="1"
                                                        Margin="20,0"
                                                        VerticalAlignment="Center"
-                                                       FontSize="13.5"
-                                                       FontWeight="DemiBold"
+                                                       FontSize="14"
                                                        Text="{Binding  UserDto.Name}" />
                                         </Grid>
                                     </DockPanel>

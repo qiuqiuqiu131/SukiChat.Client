@@ -13,11 +13,12 @@
                         Name="BaseCard"
                         CornerRadius="8"
                         VerticalAlignment="Bottom"
-                        BorderThickness="1.1"
+                        BorderThickness="1.5"
                         HorizontalAlignment="Stretch"
-                        Height="30"
+                        Height="27"
                         Margin="0"
                         Padding="8,3,0,3"
+                        Background="{DynamicResource SukiBorderBrush}"
                         BorderBrush="{DynamicResource SukiBorderBrush}"
                         Classes="Search"
                         IsAnimated="False">
@@ -47,7 +48,7 @@
                                 LetterSpacing="0.5"
                                 ContextFlyout="{x:Null}"
                                 Text="{TemplateBinding SearchText}"
-                                Watermark="Search">
+                                Watermark="{TemplateBinding WaterMask}">
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="GotFocus">
                                         <ChangePropertyAction TargetObject="{Binding #BaseCard}"

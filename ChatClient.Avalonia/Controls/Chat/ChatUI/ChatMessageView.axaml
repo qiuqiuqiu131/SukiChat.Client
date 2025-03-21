@@ -12,6 +12,12 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.ChatUI.ChatMessageView">
     <UserControl.Styles>
+        <Style Selector="ProgressBar:horizontal /template/ suki|GlassCard#PART_RootBorder">
+            <Setter Property="MinHeight" Value="5" />
+            <Setter Property="Height" Value="5" />
+            <Setter Property="MaxHeight" Value="8" />
+        </Style>
+
         <Style Selector="chatUi1|ChatMessageView">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -20,11 +26,11 @@
                             <DataTemplate DataType="data:TextMessDto">
                                 <SelectableTextBlock Text="{Binding Text}"
                                                      FontSize="14"
+                                                     Opacity="0.85"
                                                      HorizontalAlignment="Center"
                                                      Margin="3,0,2,2"
                                                      Padding="2"
-                                                     MaxWidth="350"
-                                                     TextWrapping="Wrap" LetterSpacing="0.5" />
+                                                     TextWrapping="Wrap" />
                             </DataTemplate>
                             <DataTemplate DataType="data:ImageMessDto">
                                 <Grid Classes="Icon">
@@ -90,6 +96,7 @@
                                                          DockPanel.Dock="Bottom"
                                                          IsVisible="{Binding FileProcessDto,Converter={converter:CheckIsNullConverter}}"
                                                          Maximum="1"
+                                                         ShowProgressText="False"
                                                          Value="{Binding FileProcessDto.Progress}" />
                                             <Grid ColumnDefinitions="160,45" Margin="0,0,0,5">
                                                 <StackPanel Orientation="Vertical"
@@ -159,6 +166,7 @@
                                             <ProgressBar Width="100" DockPanel.Dock="Bottom"
                                                          Margin="0,-5,0,0"
                                                          Maximum="1"
+                                                         ShowProgressText="False"
                                                          IsVisible="{Binding FileProcessDto,Converter={converter:CheckIsNullConverter}}"
                                                          Value="{Binding FileProcessDto.Progress}" />
                                             <Grid ColumnDefinitions="45,160" Margin="0,0,0,5">

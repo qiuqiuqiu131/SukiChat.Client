@@ -73,7 +73,7 @@
                                                                     <Setter Property="Opacity" Value="0" />
                                                                 </KeyFrame>
                                                                 <KeyFrame Cue="100%">
-                                                                    <Setter Property="Opacity" Value="0.8" />
+                                                                    <Setter Property="Opacity" Value="0.7" />
                                                                 </KeyFrame>
                                                             </Animation>
                                                         </Style.Animations>
@@ -105,7 +105,7 @@
                                                     <TextBlock
                                                         Classes="FadeIn"
                                                         Margin="5"
-                                                        Opacity="0.6"
+                                                        Opacity="0.7"
                                                         IsVisible="{Binding ShowTime}"
                                                         FontSize="12"
                                                         Foreground="{DynamicResource SukiText}"
@@ -174,7 +174,7 @@
                                                                     <TextBlock DockPanel.Dock="Top"
                                                                                HorizontalAlignment="Left"
                                                                                Text="{Binding Owner.NickName}"
-                                                                               FontSize="11.5"
+                                                                               FontSize="12"
                                                                                Padding="0"
                                                                                Margin="0,0,0,3"
                                                                                Opacity="0.7" />
@@ -245,7 +245,7 @@
                                                                     <TextBlock DockPanel.Dock="Top"
                                                                                HorizontalAlignment="Right"
                                                                                Text="{Binding Owner.NickName}"
-                                                                               FontSize="11.5"
+                                                                               FontSize="12"
                                                                                Padding="0"
                                                                                Margin="0,0,0,3"
                                                                                Opacity="0.7" />

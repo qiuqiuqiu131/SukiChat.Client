@@ -41,29 +41,29 @@
                             Name="PART_AddButton"
                             CornerRadius="8"
                             Padding="0"
-                            Margin="7,3,0,2"
+                            Margin="7,3,0,1.5"
                             VerticalAlignment="Bottom"
                             DockPanel.Dock="Right"
                             Click="PART_AddButton_OnClick"
-                            Height="29"
-                            Width="29"
-                            Background="{DynamicResource SukiGlassCardBackground}">
+                            Height="27"
+                            Width="27"
+                            Background="{DynamicResource SukiBorderBrush}">
                         <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
                     </Button>
-                    <searchBox:SearchBox SearchText="{Binding SearchText}" />
+                    <searchBox:SearchBox WaterMask="搜索" SearchText="{Binding SearchText}" />
                 </DockPanel>
             </suki:GlassCard>
 
             <!-- 好友列表 -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
-                          Margin="0,10,0,0">
+                          Margin="0,0,0,0">
                 <StackPanel x:Name="LeftPanel" Orientation="Vertical"
                             content:StackPanelExtensions.AnimatedScroll="True">
                     <Button Classes="Chat"
                             Margin="0"
                             HorizontalContentAlignment="Stretch"
                             Click="Button_OnClick"
-                            Padding="20,7"
+                            Padding="20,9"
                             Command="{Binding ToFriendRequestViewCommand}">
                         <Grid>
                             <PathIcon HorizontalAlignment="Right"
@@ -76,12 +76,12 @@
                                     <RotateTransform Angle="180" />
                                 </PathIcon.RenderTransform>
                             </PathIcon>
-                            <TextBlock Text="好友通知" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Left" />
+                            <TextBlock Text="好友通知" HorizontalAlignment="Left" />
                         </Grid>
                     </Button>
                     <Button Classes="Chat"
                             Margin="0"
-                            Padding="20,7"
+                            Padding="20,9"
                             HorizontalContentAlignment="Stretch"
                             Click="Button_OnClick"
                             Command="{Binding ToGroupRequestViewCommand}">
@@ -96,10 +96,10 @@
                                     <RotateTransform Angle="180" />
                                 </PathIcon.RenderTransform>
                             </PathIcon>
-                            <TextBlock Text="群聊通知" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Left" />
+                            <TextBlock Text="群聊通知" HorizontalAlignment="Left" />
                         </Grid>
                     </Button>
-                    <Border Background="{DynamicResource SukiPrimaryColor10}" Height="2" Margin="5" />
+                    <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" />
                     <TabControl TabIndex="0">
                         <TabControl.ItemsPanel>
                             <ItemsPanelTemplate>

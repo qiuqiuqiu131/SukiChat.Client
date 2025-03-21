@@ -34,7 +34,7 @@
                     Text="账号" />
                 <TextBox
                     MaxLength="10"
-                    LetterSpacing="1"
+                    LetterSpacing="1.5"
                     FontSize="13.5"
                     Text="{Binding Id}"
                     Watermark="ID" />
@@ -47,6 +47,7 @@
                     MaxLength="16"
                     PasswordChar="*"
                     FontSize="13.5"
+                    LetterSpacing="1"
                     Text="{Binding Password}"
                     Watermark="Password" />
                 <CheckBox Margin="5,5,5,0" IsChecked="{Binding LoginData.RememberPassword}">

@@ -6,9 +6,21 @@
     xmlns:controls="https://github.com/kikipoulet/SukiUI"
     xmlns:suki="clr-namespace:SukiUI;assembly=SukiUI"
     RequestedThemeVariant="Default">
+    <Application.Resources>
+        <FontFamily x:Key="MiSans">avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
+    </Application.Resources>
     <Application.Styles>
         <suki:SukiTheme />
         <avalonia:MaterialIconStyles />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/Index.axaml" />
+        <Style Selector="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource MiSans}" />
+        </Style>
+        <Style Selector="SelectableTextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource MiSans}" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="FontFamily" Value="{StaticResource MiSans}" />
+        </Style>
     </Application.Styles>
 </Application>

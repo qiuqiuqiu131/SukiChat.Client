@@ -15,6 +15,7 @@
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     d:DesignHeight="650"
     d:DesignWidth="300"
+    FontSize="15"
     x:DataType="vm:ChatLeftPanelViewModel"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -145,7 +146,7 @@
             <RadioButton GroupName="Friends"
                          Margin="0"
                          RenderTransformOrigin="0.5,0.5"
-                         Height="58"
+                         Height="65"
                          Classes.IsTop="{Binding FriendRelatoinDto.IsTop}"
                          Classes="Chat Content Enter"
                          CornerRadius="0"
@@ -157,7 +158,7 @@
                     <!-- 头像 -->
                     <circleImage:CircleImage Image="{Binding FriendRelatoinDto.UserDto.HeadImage}" Size="42" />
                     <!-- 简略信息 -->
-                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
+                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,4,0,4">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
                             <Grid Grid.Column="0">
                                 <TextBlock
@@ -165,8 +166,6 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     TextTrimming="CharacterEllipsis"
-                                    Opacity="0.9"
-                                    FontWeight="DemiBold"
                                     Foreground="{DynamicResource SukiText}"
                                     Text="{Binding  FriendRelatoinDto.Remark}" />
                                 <TextBlock
@@ -174,8 +173,6 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
                                     TextTrimming="CharacterEllipsis"
-                                    Opacity="0.9"
-                                    FontWeight="DemiBold"
                                     Foreground="{DynamicResource SukiText}"
                                     Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
                             </Grid>
@@ -186,7 +183,6 @@
                                        Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
                                        Margin="0,5"
                                        Opacity="0.6"
-                                       LetterSpacing="0.5"
                                        FontSize="11.5" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
@@ -196,13 +192,12 @@
                                        FontSize="12"
                                        Opacity="0.6"
                                        Margin="0,0,20,0"
-                                       LetterSpacing="0.5"
                                        TextTrimming="CharacterEllipsis"
                                        Foreground="{DynamicResource SukiText}"
                                        Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
                             <Panel Grid.Column="1">
                                 <Panel
-                                    IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Equal = False,Value=0}}">
+                                    IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Value=0}}">
                                     <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
                                                            IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
                                                            Opacity="0.4" />
@@ -213,7 +208,7 @@
                                         Margin="0,0"
                                         Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
                                         HorizontalAlignment="Right"
-                                        IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Value=0}}">
+                                        IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Equal=False,Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
                                             <Setter Property="Background" Value="Red" />
@@ -239,7 +234,7 @@
         <DataTemplate DataType="group:GroupChatDto">
             <RadioButton GroupName="Friends"
                          Margin="0"
-                         Height="58"
+                         Height="65"
                          RenderTransformOrigin="0.5,0.5"
                          Classes="Chat Content Enter"
                          Classes.IsTop="{Binding GroupRelationDto.IsTop}"
@@ -252,25 +247,23 @@
                     <!-- 头像 -->
                     <circleImage:CircleImage Image="{Binding GroupRelationDto.GroupDto.HeadImage}" Size="42" />
                     <!-- 简略信息 -->
-                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
+                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,4,0,4">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
                             <Grid Grid.Column="0">
                                 <TextBlock
                                     IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Opacity="0.9"
                                     TextTrimming="CharacterEllipsis"
-                                    FontWeight="DemiBold"
+                                    FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
                                     Text="{Binding  GroupRelationDto.Remark}" />
                                 <TextBlock
                                     IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Opacity="0.9"
                                     TextTrimming="CharacterEllipsis"
-                                    FontWeight="DemiBold"
+                                    FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
                                     Text="{Binding  GroupRelationDto.GroupDto.Name}" />
                             </Grid>
@@ -281,7 +274,6 @@
                                        Foreground="{DynamicResource SukiText}"
                                        Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
                                        Margin="0,5"
-                                       LetterSpacing="0.5"
                                        Opacity="0.6"
                                        FontSize="11.5" />
                         </Grid>
@@ -292,12 +284,11 @@
                                            VerticalAlignment="Center"
                                            FontSize="12"
                                            Margin="0,0,20,0"
-                                           LetterSpacing="0.5"
                                            Opacity="0.6"
                                            TextTrimming="CharacterEllipsis"
                                            Foreground="{DynamicResource SukiText}">
                                     <Run Text="{Binding LastChatMessages.Owner.NickName}" />
-                                    <Run Text=": " />
+                                    <Run Text=":" />
                                     <Run
                                         Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
                                 </TextBlock>
@@ -305,7 +296,6 @@
                                            VerticalAlignment="Center"
                                            FontSize="12"
                                            Margin="0,0,20,0"
-                                           LetterSpacing="0.5"
                                            Opacity="0.6"
                                            TextTrimming="CharacterEllipsis"
                                            Foreground="{DynamicResource SukiText}">
@@ -315,7 +305,7 @@
                             </Grid>
                             <Panel Grid.Column="1">
                                 <Panel
-                                    IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Equal = False,Value=0}}">
+                                    IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Value=0}}">
                                     <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
                                                            IsVisible="{Binding GroupRelationDto.CantDisturb}"
                                                            Opacity="0.4" />
@@ -326,7 +316,7 @@
                                         Margin="0,0"
                                         Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
                                         HorizontalAlignment="Right"
-                                        IsVisible="{Binding ChatMessages.Count,Converter={converter:IntEqualityConverter Value=0}}">
+                                        IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Equal = False, Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
                                             <Setter Property="Background" Value="Red" />
@@ -370,16 +360,16 @@
                         Name="PART_AddButton"
                         CornerRadius="8"
                         Padding="0"
-                        Margin="7,3,0,2"
+                        Margin="7,3,0,1"
                         VerticalAlignment="Bottom"
                         DockPanel.Dock="Right"
                         Click="PART_AddButton_OnClick"
-                        Height="29"
-                        Width="29"
-                        Background="{DynamicResource SukiGlassCardBackground}">
+                        Height="27"
+                        Width="27"
+                        Background="{DynamicResource SukiBorderBrush}">
                     <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
                 </Button>
-                <searchBox:SearchBox SearchText="{Binding SearchText}" />
+                <searchBox:SearchBox WaterMask="搜索" SearchText="{Binding SearchText}" />
             </DockPanel>
         </suki:GlassCard>
         <!-- 好友列表 -->

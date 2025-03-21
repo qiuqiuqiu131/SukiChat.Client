@@ -3,6 +3,7 @@
         xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock"
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
     <Style Selector="editableTextBlock|EditableTextBlock">
+        <Setter Property="FontSize" Value="14" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
@@ -19,6 +20,7 @@
                         <TextBlock Name="PART_TextBlock"
                                    IsVisible="{Binding $parent[editableTextBlock:EditableTextBlock].Text,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                    Background="Transparent"
+                                   Opacity="0.9"
                                    Padding="50,0,0,0"
                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                    FontSize="{TemplateBinding FontSize}"
@@ -26,8 +28,9 @@
                                    Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text}" />
                     </Grid>
                     <TextBox Name="PART_TextBox"
-                             Padding="5,3"
+                             Padding="8,4"
                              Width="150"
+                             Opacity="0.9"
                              MinHeight="0"
                              Classes="Editable"
                              Watermark="{Binding $parent[editableTextBlock:EditableTextBlock].DefaultText}"

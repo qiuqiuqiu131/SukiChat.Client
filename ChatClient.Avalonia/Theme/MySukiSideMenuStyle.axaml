@@ -21,6 +21,7 @@
                                     </Style>
                                 </Grid.Styles>
                                 <suki:GlassCard Name="Glass"
+                                                Background="{DynamicResource SukiPrimaryColor10}"
                                                 BorderThickness="0,0,1,0"
                                                 CornerRadius="0"
                                                 IsAnimated="False" />

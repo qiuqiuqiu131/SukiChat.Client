@@ -24,7 +24,7 @@
                                               HorizontalContentAlignment="Stretch"
                                               Background="{DynamicResource SukiGlassCardBackground}"
                                               BorderBrush="{DynamicResource SukiPrimaryColor7}"
-                                              Padding="0,7"
+                                              Padding="0,10"
                                               CornerRadius="0"
                                               Classes="Chat Expand"
                                               IsChecked="{TemplateBinding IsExpanded,Mode=TwoWay}">
@@ -38,7 +38,7 @@
                                                     Value="{DynamicResource SukiPrimaryColor}" />
                                         </Style>
                                     </ToggleButton.Styles>
-                                    <Grid ColumnDefinitions="Auto,Auto,*">
+                                    <Grid ColumnDefinitions="Auto,*">
                                         <PathIcon Name="PART_Icon"
                                                   Classes="Flippable"
                                                   Width="12"
@@ -55,7 +55,7 @@
                                             </PathIcon.Transitions>
                                         </PathIcon>
                                         <ContentPresenter Grid.Column="1"
-                                                          HorizontalAlignment="Left"
+                                                          HorizontalAlignment="Stretch"
                                                           VerticalAlignment="Center"
                                                           Opacity="0.9"
                                                           Content="{TemplateBinding Header}"

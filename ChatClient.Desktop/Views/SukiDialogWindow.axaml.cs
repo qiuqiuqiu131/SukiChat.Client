@@ -1,6 +1,9 @@
+using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Dialogs;
 using SukiUI.Controls;
@@ -28,4 +31,10 @@ public partial class SukiDialogWindow : SukiWindow, IDialogWindow
     }
 
     public IDialogResult Result { get; set; }
+
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        Opacity = 1;
+    }
 }

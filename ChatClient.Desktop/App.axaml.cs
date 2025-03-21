@@ -15,6 +15,7 @@ using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.Login;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
@@ -22,6 +23,7 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Desktop.Views.Login;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.UIEntity;
@@ -93,6 +95,8 @@ public class App : PrismApplication
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
         containerRegistry.RegisterDialog<CreateGroupView, CreateGroupViewModel>();
+        containerRegistry.RegisterDialog<AddNewFriendView, AddNewFriendViewModel>();
+        containerRegistry.RegisterDialog<CommonDialogView, CommonDialogViewModel>();
 
         var views = ConfigureViews(containerRegistry);
         DataTemplates.Add(new ViewLocator(views));

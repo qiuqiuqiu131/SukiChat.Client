@@ -48,11 +48,10 @@ public class ChatLeftPanelViewModel : ViewModelBase
 
     private void AddNewFriend()
     {
-        var view = _containerProvider.Resolve<AddNewFriendView>();
-        view.Show();
+        _dialogService.Show(nameof(AddNewFriendView));
     }
 
-    private async void CreateGroup()
+    private void CreateGroup()
     {
         _dialogService.ShowDialog(nameof(CreateGroupView));
     }

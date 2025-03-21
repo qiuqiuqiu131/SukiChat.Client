@@ -16,8 +16,8 @@ public class IntEqualityConverter : MarkupExtension, IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is int i)
-            return Equal ? i == Value : i != Value;
+        if (value is int)
+            return Equal ? (int)value == Value : (int)value != Value;
         return false;
     }
 

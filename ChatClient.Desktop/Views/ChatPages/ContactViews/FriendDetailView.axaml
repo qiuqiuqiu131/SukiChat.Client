@@ -58,8 +58,7 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Name}"
                                          Height="20"
-                                         FontWeight="DemiBold"
-                                         FontSize="16.5" />
+                                         FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Id,StringFormat=ID: {0}}"
                                          FontSize="12.5"
                                          Opacity="0.7" />
@@ -106,10 +105,9 @@
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     Text="{Binding Friend.Remark,Mode=TwoWay}"
-                    FontSize="14"
                     DefaultText="设置好友备注"
                     DockPanel.Dock="Right"
                     HorizontalContentAlignment="Right"
@@ -118,7 +116,7 @@
             <DockPanel Margin="5">
                 <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="好友分组" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="好友分组" DockPanel.Dock="Left" Margin="0,3" />
                 <TextBox DockPanel.Dock="Right"
                          Text="{Binding Friend.Grouping}"
                          IsReadOnly="True"
@@ -131,7 +129,7 @@
             <DockPanel Margin="5" IsVisible="{Binding Friend.UserDto.Introduction}">
                 <avalonia:MaterialIcon Kind="PencilOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="个性签名" DockPanel.Dock="Left" Margin="0,3" FontSize="14" />
+                <TextBlock Text="个性签名" DockPanel.Dock="Left" Margin="0,3" />
                 <TextBlock DockPanel.Dock="Right"
                            Text="{Binding Friend.UserDto.Introduction}"
                            Padding="10,3"
