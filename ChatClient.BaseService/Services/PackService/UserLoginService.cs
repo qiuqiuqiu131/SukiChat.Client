@@ -162,12 +162,17 @@ internal class UserLoginService : BaseService, IUserLoginService
         [
             OperateFriendRequestMesssages(userId, outlineResponse.FriendRequests),
             OperateNewFriendMessages(userId, outlineResponse.NewFriends),
-            OperateFriendChatMessages(userId, outlineResponse.FriendChats),
             OperateEnterGroupMessages(userId, outlineResponse.EnterGroups),
-            OperateGroupChatMessages(userId, outlineResponse.GroupChats),
             OperateGroupRequestMessage(userId, outlineResponse.GroupRequests)
         ];
         await Task.WhenAll(tasks);
+
+        List<Task> chatTask =
+        [
+            OperateFriendChatMessages(userId, outlineResponse.FriendChats),
+            OperateGroupChatMessages(userId, outlineResponse.GroupChats),
+        ];
+        await Task.WhenAll(chatTask);
 
         List<Task> deleteTask =
         [
@@ -311,7 +316,7 @@ internal class UserLoginService : BaseService, IUserLoginService
         if (groupChatMessages.Count == 0) return;
 
         var groupChatService = _scopedProvider.Resolve<IGroupChatPackService>();
-        await groupChatService.GroupChatMessagesOperate(groupChatMessages);
+        await groupChatService.GroupChatMessagesOperate(userId, groupChatMessages);
         if (groupChatService is IDisposable disposable)
             disposable.Dispose();
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,74 +68,7 @@ public class ChatViewModel : ChatPageBase
 
         // 生成面板VM
         ChatLeftPanelViewModel = new ChatLeftPanelViewModel(this, containerProvider);
-
-        InitChatDtos();
     }
-
-    #region 初始化和绑定Dto事件
-
-    private void InitChatDtos()
-    {
-        foreach (var friend in Friends)
-        {
-            if (friend.FriendRelatoinDto != null)
-                friend.FriendRelatoinDto.OnFriendRelationChanged += FriendRelatoinDtoOnOnFriendRelationChanged;
-            else
-                friend.PropertyChanged += OnPropertyChanged;
-        }
-
-        foreach (var group in Groups)
-        {
-            if (group.GroupRelationDto != null)
-                group.GroupRelationDto.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
-            else
-                group.PropertyChanged += OnPropertyChanged;
-        }
-    }
-
-    private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (sender is FriendChatDto friendChatDto)
-        {
-            if (e.PropertyName.Equals(nameof(FriendChatDto.FriendRelatoinDto)))
-            {
-                if (friendChatDto.FriendRelatoinDto != null)
-                    friendChatDto.FriendRelatoinDto.OnFriendRelationChanged +=
-                        FriendRelatoinDtoOnOnFriendRelationChanged;
-                friendChatDto.PropertyChanged -= OnPropertyChanged;
-            }
-        }
-        else if (sender is GroupChatDto groupChatDto)
-        {
-            if (e.PropertyName.Equals(nameof(GroupChatDto.GroupRelationDto)))
-            {
-                if (groupChatDto.GroupRelationDto != null)
-                    groupChatDto.GroupRelationDto.OnGroupRelationChanged +=
-                        GroupRelationDtoOnOnGroupRelationChanged;
-                groupChatDto.PropertyChanged -= OnPropertyChanged;
-            }
-        }
-    }
-
-    private void GroupRelationDtoOnOnGroupRelationChanged(GroupRelationDto obj)
-    {
-        Task.Run(() =>
-        {
-            var groupService = _containerProvider.Resolve<IGroupService>();
-            groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
-        });
-    }
-
-    private void FriendRelatoinDtoOnOnFriendRelationChanged(FriendRelationDto obj)
-    {
-        Task.Run(() =>
-        {
-            var friendService = _containerProvider.Resolve<IFriendService>();
-            friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
-        });
-    }
-
-    #endregion
 
     private void ClearSelected(FriendChatDto? friendChatDto, GroupChatDto? groupChatDto)
     {

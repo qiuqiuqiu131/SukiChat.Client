@@ -70,6 +70,19 @@ public class FriendRelationDto : BindableBase, IDisposable
         }
     }
 
+    private bool _isChatting;
+    public bool IsChatting
+    {
+        get => _isChatting;
+        set
+        {
+            if(SetProperty(ref _isChatting, value))
+            {
+                OnFriendRelationChanged?.Invoke(this);
+            }
+        }
+    }
+
     private int _lastChatId;
 
     public int LastChatId

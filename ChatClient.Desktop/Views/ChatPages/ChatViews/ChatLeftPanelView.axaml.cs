@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -9,10 +10,12 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Threading;
+using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Material.Icons.Avalonia;
 using Prism.Events;
@@ -74,29 +77,34 @@ public partial class ChatLeftPanelView : UserControl
         _groupContextMenu = CreateGroupContextMenu();
     }
 
-    private void SendMessageToView(object obj)
+    /// <summary>
+    /// 转跳到指定的聊天对象
+    /// </summary>
+    /// <param name="obj"></param>
+    private async void SendMessageToView(object? obj)
     {
+        if (obj == null) return;
+
+        // 确保添加了聊天Dto
+        var chatService = App.Current.Container.Resolve<IChatService>();
+        await chatService.AddChatDto(obj);
+
         foreach (var item in _itemCollection)
         {
-            var dataContext = ((Control)item!).DataContext;
+            var radioButton = item as RadioButton;
+            if (radioButton == null) return;
+            var dataContext = radioButton.DataContext;
             if (dataContext is FriendChatDto friendChat && friendChat.FriendRelatoinDto == obj)
             {
-                _itemCollection.Remove(item);
-                _itemCollection.Insert(0, item);
-                var radioButton = item as RadioButton;
-                if (radioButton == null) return;
                 radioButton.IsChecked = true;
-                radioButton.Command?.Execute(dataContext);
+                radioButton.Command.Execute(friendChat);
                 return;
             }
-            else if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
+
+            if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
             {
-                _itemCollection.Remove(item);
-                _itemCollection.Insert(0, item);
-                var radioButton = item as RadioButton;
-                if (radioButton == null) return;
                 radioButton.IsChecked = true;
-                radioButton.Command?.Execute(dataContext);
+                radioButton.Command.Execute(groupChat);
                 return;
             }
         }
@@ -170,18 +178,18 @@ public partial class ChatLeftPanelView : UserControl
         RecalculateTopItemsCount();
     }
 
-    private void ItemsSourceOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    private async void ItemsSourceOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add)
+            if (e.NewItems == null) return;
+            foreach (var newItem in e.NewItems)
             {
-                if (e.NewItems == null) return;
-                foreach (var newItem in e.NewItems)
-                {
-                    bool isTop = IsItemTop(newItem);
-                    Control? control = null;
+                bool isTop = IsItemTop(newItem);
+                Control? control = null;
 
+                Dispatcher.UIThread.Invoke(() =>
+                {
                     if (newItem is FriendChatDto friendChat)
                     {
                         friendChat.OnLastChatMessagesChanged += SortItemControl;
@@ -197,64 +205,76 @@ public partial class ChatLeftPanelView : UserControl
                     {
                         control.DataContext = newItem;
                         int index = FindInsertIndex(newItem, isTop);
+
                         _itemCollection.Insert(index, control);
 
                         if (isTop)
                             _topItemsCount++; // 更新置顶计数
                     }
-                }
+                });
             }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            if (e.OldItems == null) return;
+            eventAggregator.GetEvent<SelectChatDtoChanged>().Publish();
+
+            bool isSelected = false;
+            int index = 0;
+            foreach (var item in e.OldItems)
             {
-                if (e.OldItems == null) return;
-                eventAggregator.GetEvent<SelectChatDtoChanged>().Publish();
+                var control = _itemCollection.FirstOrDefault(d => ((Control)d!).DataContext == item);
+                if (control == null) continue;
+                bool isTop = IsItemTop(item);
+                if (isTop)
+                    _topItemsCount--; // 减少置顶计数
 
-                bool isSelected = false;
-                foreach (var item in e.OldItems)
+                var dt = ((Control)control).DataContext;
+                if (dt is FriendChatDto friendChat)
                 {
-                    var control = _itemCollection.FirstOrDefault(d => ((Control)d!).DataContext == item);
-                    if (control == null) continue;
-                    bool isTop = IsItemTop(item);
-                    if (isTop)
-                        _topItemsCount--; // 减少置顶计数
-
-                    _itemCollection.Remove(control);
-
-                    var dt = ((Control)control).DataContext;
-                    if (dt is FriendChatDto friendChat)
+                    if (friendChat.IsSelected)
                     {
-                        if (friendChat.IsSelected) isSelected = true;
-                        friendChat.OnLastChatMessagesChanged -= SortItemControl;
-                    }
-                    else if (dt is GroupChatDto groupChat)
-                    {
-                        if (groupChat.IsSelected) isSelected = true;
-                        groupChat.OnLastChatMessagesChanged -= SortItemControl;
+                        isSelected = true;
+                        index = _itemCollection.IndexOf(control);
                     }
 
-                    ((Control)control).DataContext = null;
+                    friendChat.OnLastChatMessagesChanged -= SortItemControl;
+                }
+                else if (dt is GroupChatDto groupChat)
+                {
+                    if (groupChat.IsSelected)
+                    {
+                        isSelected = true;
+                        index = _itemCollection.IndexOf(control);
+                    }
+
+                    groupChat.OnLastChatMessagesChanged -= SortItemControl;
                 }
 
-                if (isSelected)
-                {
-                    int index = e.OldStartingIndex - 1;
-                    if (index < 0) index = 0;
+                _itemCollection.Remove(control);
 
-                    if (_itemCollection.Count != 0)
-                    {
-                        var control = _itemCollection.GetAt(index);
-                        if (control is not RadioButton radioButton) return;
-                        radioButton.IsChecked = true;
-                        radioButton.Command!.Execute(radioButton.DataContext);
-                    }
-                    else
-                    {
-                        var viewModel = (ChatLeftPanelViewModel)DataContext!;
-                        viewModel.FriendSelectionChangedCommand.Execute(null);
-                    }
+                ((Control)control).DataContext = null;
+            }
+
+            if (true)
+            {
+                if (index >= _itemCollection.Count) index = _itemCollection.Count - 1;
+
+                if (_itemCollection.Count != 0)
+                {
+                    var control = _itemCollection.GetAt(index);
+                    if (control is not RadioButton radioButton) return;
+                    await Task.Delay(50);
+                    radioButton.IsChecked = true;
+                    radioButton.Command!.Execute(radioButton.DataContext);
+                }
+                else
+                {
+                    var viewModel = (ChatLeftPanelViewModel)DataContext!;
+                    viewModel.FriendSelectionChangedCommand.Execute(null);
                 }
             }
-        });
+        }
     }
 
     // 排序
@@ -437,6 +457,17 @@ public partial class ChatLeftPanelView : UserControl
     private void OnFriendClearMenuItemClick(object? sender, RoutedEventArgs e)
     {
         // 处理从列表移除
+        if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
+        {
+            friendRelation.IsChatting = false;
+            var dto = FriendItemsSource.FirstOrDefault(d => d.FriendRelatoinDto == friendRelation);
+            if (dto != null)
+                FriendItemsSource.Remove(dto);
+
+            // 重新计算置顶项数量
+            RecalculateTopItemsCount();
+        }
+
         _friendContextMenu.Close();
     }
 
@@ -498,7 +529,17 @@ public partial class ChatLeftPanelView : UserControl
     private void OnGroupClearMenuItemClick(object? sender, RoutedEventArgs e)
     {
         // 处理从列表移除
-        // 如果需要实现移除逻辑，可以在这里添加
+        if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
+        {
+            groupRelation.IsChatting = false;
+            var dto = GroupItemsSource.FirstOrDefault(d => d.GroupRelationDto == groupRelation);
+            if (dto != null)
+                GroupItemsSource.Remove(dto);
+
+            // 重新计算置顶项数量
+            RecalculateTopItemsCount();
+        }
+
         _groupContextMenu.Close();
     }
 

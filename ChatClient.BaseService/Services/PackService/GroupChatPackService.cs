@@ -15,11 +15,12 @@ namespace ChatClient.BaseService.Services.PackService;
 
 public interface IGroupChatPackService
 {
+    Task<GroupChatDto> GetGroupChatDto(string userId, string groupId);
     Task<AvaloniaList<GroupChatDto>> GetGroupChatDtos(string userId);
     Task<List<GroupChatData>> GetGroupChatDataAsync(string? userId, string groupId, int chatId, int nextCount);
 
     Task<bool> GroupChatMessageOperate(GroupChatMessage groupChatMessage);
-    Task<bool> GroupChatMessagesOperate(IEnumerable<GroupChatMessage> groupChatMessages);
+    Task<bool> GroupChatMessagesOperate(string userId, IEnumerable<GroupChatMessage> groupChatMessages);
 }
 
 public class GroupChatPackService : BaseService, IGroupChatPackService
@@ -37,7 +38,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
-    private async Task<GroupChatDto> GetGroupChatDto(string userId, string groupId)
+    public async Task<GroupChatDto> GetGroupChatDto(string userId, string groupId)
     {
         // 获取最后一条消息
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
@@ -79,7 +80,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         // 获取所有好友的Id
         var groupService = _scopedProvider.Resolve<IGroupGetService>();
-        var groupIds = await groupService.GetGroupIds(userId);
+        var groupIds = await groupService.GetGroupChatIds(userId);
 
         foreach (var groupId in groupIds)
         {
@@ -173,20 +174,23 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     /// </summary>
     /// <param name="groupChatMessages"></param>
     /// <returns></returns>
-    public async Task<bool> GroupChatMessagesOperate(IEnumerable<GroupChatMessage> groupChatMessages)
+    public async Task<bool> GroupChatMessagesOperate(string userId, IEnumerable<GroupChatMessage> groupChatMessages)
     {
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
+        var relationRepository = _unitOfWork.GetRepository<GroupRelation>();
         foreach (var chatMessage in groupChatMessages)
         {
             var chatGroup = _mapper.Map<ChatGroup>(chatMessage);
             var result =
                 await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatGroup.ChatId));
             if (result != null)
-            {
                 chatGroup.Id = result.Id;
-            }
-
             chatGroupRepository.Update(chatGroup);
+
+            var relation = await relationRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.UserId.Equals(userId) && d.GroupId.Equals(chatMessage.GroupId),
+                disableTracking: false);
+            relation.IsChatting = true;
         }
 
         await _unitOfWork.SaveChangesAsync();

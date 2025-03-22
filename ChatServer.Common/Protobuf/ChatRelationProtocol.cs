@@ -42,73 +42,74 @@ namespace ChatServer.Common.Protobuf {
             "dFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21t",
             "b24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiUwoYRnJpZW5kUmVzcG9uc2VG",
             "cm9tU2VydmVyEhEKCXJlcXVlc3RJZBgBIAEoBRIOCgZhY2NlcHQYAiABKAgS",
-            "FAoMcmVzcG9uc2VUaW1lGAMgASgJIqQBChBOZXdGcmllbmRNZXNzYWdlEg4K",
+            "FAoMcmVzcG9uc2VUaW1lGAMgASgJIrgBChBOZXdGcmllbmRNZXNzYWdlEg4K",
             "BnVzZXJJZBgBIAEoCRIQCghmcmluZWRJZBgCIAEoCRIQCghncm91cGluZxgD",
             "IAEoCRIUCgxyZWxhdGlvblRpbWUYBCABKAkSDgoGcmVtYXJrGAUgASgJEhMK",
             "C2NhbnREaXN0dXJiGAYgASgIEg0KBWlzVG9wGAcgASgIEhIKCmxhc3RDaGF0",
-            "SWQYCCABKAUihQEKG1VwZGF0ZUZyaWVuZFJlbGF0aW9uUmVxdWVzdBIOCgZ1",
-            "c2VySWQYASABKAkSEAoIZnJpZW5kSWQYAiABKAkSEAoIZ3JvdXBpbmcYAyAB",
-            "KAkSDgoGcmVtYXJrGAQgASgJEhMKC2NhbnREaXN0dXJiGAUgASgIEg0KBWlz",
-            "VG9wGAYgASgIInYKFFVwZGF0ZUZyaWVuZFJlbGF0aW9uEjwKCHJlc3BvbnNl",
-            "GAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVz",
-            "cG9uc2USDgoGdXNlcklkGAIgASgJEhAKCGZyaWVuZElkGAMgASgJIjcKE0Rl",
-            "bGV0ZUZyaWVuZFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEhAKCGZyaWVuZElk",
-            "GAIgASgJIpUBChNEZWxldGVGcmllbmRNZXNzYWdlEjwKCHJlc3BvbnNlGAEg",
-            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
-            "c2USDgoGdXNlcklkGAIgASgJEhAKCGZyaWVuZElkGAMgASgJEhAKCGRlbGV0",
-            "ZUlkGAQgASgFEgwKBHRpbWUYBSABKAkiVwoTRnJpZW5kRGVsZXRlTWVzc2Fn",
-            "ZRIQCghkZWxldGVJZBgBIAEoBRIOCgZ1c2VySWQYAiABKAkSEAoIZnJpZW5k",
-            "SWQYAyABKAkSDAoEdGltZRgEIAEoCSI2ChJDcmVhdGVHcm91cFJlcXVlc3QS",
-            "DgoGdXNlcklkGAEgASgJEhAKCGZyaWVuZElkGAMgAygJIoUBChNDcmVhdGVH",
-            "cm91cFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5D",
-            "b21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEo",
-            "CRIMCgR0aW1lGAMgASgJEhEKCWdyb3VwTmFtZRgEIAEoCSJ9ChBQdWxsR3Jv",
-            "dXBNZXNzYWdlEg8KB2dyb3VwSWQYASABKAkSEgoKdXNlcklkRnJvbRgCIAEo",
-            "CRIUCgx1c2VySWRUYXJnZXQYAyABKAkSDgoGc3RhdHVzGAQgASgFEhAKCGdy",
-            "b3VwaW5nGAUgASgJEgwKBHRpbWUYBiABKAkiTgoaSm9pbkdyb3VwUmVxdWVz",
-            "dEZyb21DbGllbnQSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkS",
-            "DwoHbWVzc2FnZRgDIAEoCSKUAQoiSm9pbkdyb3VwUmVxdWVzdFJlc3BvbnNl",
-            "RnJvbVNlcnZlchI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29t",
-            "bW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEg8KB2dyb3VwSWQYAiABKAkS",
-            "EQoJcmVxdWVzdElkGAMgASgFEgwKBHRpbWUYBCABKAkibwoaSm9pbkdyb3Vw",
-            "UmVxdWVzdEZyb21TZXJ2ZXISEQoJcmVxdWVzdElkGAEgASgFEg4KBnVzZXJJ",
-            "ZBgCIAEoCRIPCgdncm91cElkGAMgASgJEgwKBHRpbWUYBCABKAkSDwoHbWVz",
-            "c2FnZRgFIAEoCSJQChtKb2luR3JvdXBSZXNwb25zZUZyb21DbGllbnQSEQoJ",
-            "cmVxdWVzdElkGAEgASgFEg4KBnVzZXJJZBgCIAEoCRIOCgZhY2NlcHQYAyAB",
-            "KAgipAEKI0pvaW5Hcm91cFJlc3BvbnNlUmVzcG9uc2VGcm9tU2VydmVyEjwK",
-            "CHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
-            "Q29tbW9uUmVzcG9uc2USEQoJcmVxdWVzdElkGAIgASgFEg4KBnVzZXJJZBgD",
-            "IAEoCRIMCgR0aW1lGAQgASgJEg4KBmFjY2VwdBgFIAEoCCJ4ChtKb2luR3Jv",
-            "dXBSZXNwb25zZUZyb21TZXJ2ZXISEQoJcmVxdWVzdElkGAEgASgFEhIKCnVz",
-            "ZXJJZEZyb20YAiABKAkSFAoMdXNlcklkVGFyZ2V0GAMgASgJEg4KBmFjY2Vw",
-            "dBgEIAEoCBIMCgR0aW1lGAUgASgJIkUKFE5ld01lbWJlckpvaW5NZXNzYWdl",
-            "Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJEgwKBHRpbWUYAyAB",
-            "KAkilQEKGlVwZGF0ZUdyb3VwUmVsYXRpb25SZXF1ZXN0Eg4KBnVzZXJJZBgB",
-            "IAEoCRIPCgdncm91cElkGAIgASgJEhAKCGdyb3VwaW5nGAMgASgJEhAKCG5p",
-            "Y2tOYW1lGAQgASgJEg4KBnJlbWFyaxgFIAEoCRITCgtjYW50RGlzdHVyYhgG",
-            "IAEoCBINCgVpc1RvcBgHIAEoCCJ0ChNVcGRhdGVHcm91cFJlbGF0aW9uEjwK",
-            "CHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
-            "Q29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIgASgJEg8KB2dyb3VwSWQYAyAB",
-            "KAkiMwoQUXVpdEdyb3VwUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3Jv",
-            "dXBJZBgCIAEoCSKPAQoQUXVpdEdyb3VwTWVzc2FnZRI8CghyZXNwb25zZRgB",
-            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
-            "bnNlEg4KBnVzZXJJZBgCIAEoCRIPCgdncm91cElkGAMgASgJEg4KBnF1aXRJ",
-            "ZBgEIAEoBRIMCgR0aW1lGAUgASgJIjYKE0Rpc2JhbmRHcm91cFJlcXVlc3QS",
-            "DgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkipwEKE0Rpc2JhbmRH",
-            "cm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNv",
-            "bW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIOCgZ1c2VySWQYAiABKAkS",
-            "DwoHZ3JvdXBJZBgDIAEoCRIQCghtZW1iZXJJZBgEIAEoCRIRCglkaXNCYW5k",
-            "SWQYBSABKAUSDAoEdGltZRgGIAEoCSJIChNSZW1vdmVNZW1iZXJSZXF1ZXN0",
-            "Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJEhAKCG1lbWJlcklk",
-            "GAMgASgJIqYBChNSZW1vdmVNZW1iZXJNZXNzYWdlEjwKCHJlc3BvbnNlGAEg",
-            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
-            "c2USDgoGdXNlcklkGAIgASgJEg8KB2dyb3VwSWQYAyABKAkSEAoIbWVtYmVy",
-            "SWQYBCABKAkSEAoIcmVtb3ZlSWQYBSABKAUSDAoEdGltZRgGIAEoCSJ6ChJH",
-            "cm91cERlbGV0ZU1lc3NhZ2USEAoIZGVsZXRlSWQYASABKAUSDwoHZ3JvdXBJ",
-            "ZBgCIAEoCRIRCglvcGVyYXRlSWQYAyABKAkSEAoIbWVtYmVySWQYBCABKAkS",
-            "DAoEdGltZRgFIAEoCRIOCgZtZXRob2QYBiABKAUiTQoaR3JvdXBNZW1lYmVy",
-            "UmVtb3ZlZE1lc3NhZ2USDwoHZ3JvdXBJZBgBIAEoCRIQCghtZW1iZXJJZBgC",
-            "IAEoCRIMCgR0aW1lGAMgASgJYgZwcm90bzM="));
+            "SWQYCCABKAUSEgoKaXNDaGF0dGluZxgJIAEoCCKZAQobVXBkYXRlRnJpZW5k",
+            "UmVsYXRpb25SZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmllbmRJZBgC",
+            "IAEoCRIQCghncm91cGluZxgDIAEoCRIOCgZyZW1hcmsYBCABKAkSEwoLY2Fu",
+            "dERpc3R1cmIYBSABKAgSDQoFaXNUb3AYBiABKAgSEgoKaXNDaGF0dGluZxgH",
+            "IAEoCCJ2ChRVcGRhdGVGcmllbmRSZWxhdGlvbhI8CghyZXNwb25zZRgBIAEo",
+            "CzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNl",
+            "Eg4KBnVzZXJJZBgCIAEoCRIQCghmcmllbmRJZBgDIAEoCSI3ChNEZWxldGVG",
+            "cmllbmRSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmllbmRJZBgCIAEo",
+            "CSKVAQoTRGVsZXRlRnJpZW5kTWVzc2FnZRI8CghyZXNwb25zZRgBIAEoCzIq",
+            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEg4K",
+            "BnVzZXJJZBgCIAEoCRIQCghmcmllbmRJZBgDIAEoCRIQCghkZWxldGVJZBgE",
+            "IAEoBRIMCgR0aW1lGAUgASgJIlcKE0ZyaWVuZERlbGV0ZU1lc3NhZ2USEAoI",
+            "ZGVsZXRlSWQYASABKAUSDgoGdXNlcklkGAIgASgJEhAKCGZyaWVuZElkGAMg",
+            "ASgJEgwKBHRpbWUYBCABKAkiNgoSQ3JlYXRlR3JvdXBSZXF1ZXN0Eg4KBnVz",
+            "ZXJJZBgBIAEoCRIQCghmcmllbmRJZBgDIAMoCSKFAQoTQ3JlYXRlR3JvdXBS",
+            "ZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9u",
+            "LlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEg8KB2dyb3VwSWQYAiABKAkSDAoE",
+            "dGltZRgDIAEoCRIRCglncm91cE5hbWUYBCABKAkifQoQUHVsbEdyb3VwTWVz",
+            "c2FnZRIPCgdncm91cElkGAEgASgJEhIKCnVzZXJJZEZyb20YAiABKAkSFAoM",
+            "dXNlcklkVGFyZ2V0GAMgASgJEg4KBnN0YXR1cxgEIAEoBRIQCghncm91cGlu",
+            "ZxgFIAEoCRIMCgR0aW1lGAYgASgJIk4KGkpvaW5Hcm91cFJlcXVlc3RGcm9t",
+            "Q2xpZW50Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJEg8KB21l",
+            "c3NhZ2UYAyABKAkilAEKIkpvaW5Hcm91cFJlcXVlc3RSZXNwb25zZUZyb21T",
+            "ZXJ2ZXISPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Q",
+            "cm90b2J1Zi5Db21tb25SZXNwb25zZRIPCgdncm91cElkGAIgASgJEhEKCXJl",
+            "cXVlc3RJZBgDIAEoBRIMCgR0aW1lGAQgASgJIm8KGkpvaW5Hcm91cFJlcXVl",
+            "c3RGcm9tU2VydmVyEhEKCXJlcXVlc3RJZBgBIAEoBRIOCgZ1c2VySWQYAiAB",
+            "KAkSDwoHZ3JvdXBJZBgDIAEoCRIMCgR0aW1lGAQgASgJEg8KB21lc3NhZ2UY",
+            "BSABKAkiUAobSm9pbkdyb3VwUmVzcG9uc2VGcm9tQ2xpZW50EhEKCXJlcXVl",
+            "c3RJZBgBIAEoBRIOCgZ1c2VySWQYAiABKAkSDgoGYWNjZXB0GAMgASgIIqQB",
+            "CiNKb2luR3JvdXBSZXNwb25zZVJlc3BvbnNlRnJvbVNlcnZlchI8CghyZXNw",
+            "b25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1v",
+            "blJlc3BvbnNlEhEKCXJlcXVlc3RJZBgCIAEoBRIOCgZ1c2VySWQYAyABKAkS",
+            "DAoEdGltZRgEIAEoCRIOCgZhY2NlcHQYBSABKAgieAobSm9pbkdyb3VwUmVz",
+            "cG9uc2VGcm9tU2VydmVyEhEKCXJlcXVlc3RJZBgBIAEoBRISCgp1c2VySWRG",
+            "cm9tGAIgASgJEhQKDHVzZXJJZFRhcmdldBgDIAEoCRIOCgZhY2NlcHQYBCAB",
+            "KAgSDAoEdGltZRgFIAEoCSJFChROZXdNZW1iZXJKb2luTWVzc2FnZRIOCgZ1",
+            "c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIMCgR0aW1lGAMgASgJIqkB",
+            "ChpVcGRhdGVHcm91cFJlbGF0aW9uUmVxdWVzdBIOCgZ1c2VySWQYASABKAkS",
+            "DwoHZ3JvdXBJZBgCIAEoCRIQCghncm91cGluZxgDIAEoCRIQCghuaWNrTmFt",
+            "ZRgEIAEoCRIOCgZyZW1hcmsYBSABKAkSEwoLY2FudERpc3R1cmIYBiABKAgS",
+            "DQoFaXNUb3AYByABKAgSEgoKaXNDaGF0dGluZxgIIAEoCCJ0ChNVcGRhdGVH",
+            "cm91cFJlbGF0aW9uEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5D",
+            "b21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIgASgJ",
+            "Eg8KB2dyb3VwSWQYAyABKAkiMwoQUXVpdEdyb3VwUmVxdWVzdBIOCgZ1c2Vy",
+            "SWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCSKPAQoQUXVpdEdyb3VwTWVzc2Fn",
+            "ZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
+            "YnVmLkNvbW1vblJlc3BvbnNlEg4KBnVzZXJJZBgCIAEoCRIPCgdncm91cElk",
+            "GAMgASgJEg4KBnF1aXRJZBgEIAEoBRIMCgR0aW1lGAUgASgJIjYKE0Rpc2Jh",
+            "bmRHcm91cFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiAB",
+            "KAkipwEKE0Rpc2JhbmRHcm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsy",
+            "Ki5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIO",
+            "CgZ1c2VySWQYAiABKAkSDwoHZ3JvdXBJZBgDIAEoCRIQCghtZW1iZXJJZBgE",
+            "IAEoCRIRCglkaXNCYW5kSWQYBSABKAUSDAoEdGltZRgGIAEoCSJIChNSZW1v",
+            "dmVNZW1iZXJSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIg",
+            "ASgJEhAKCG1lbWJlcklkGAMgASgJIqYBChNSZW1vdmVNZW1iZXJNZXNzYWdl",
+            "EjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9i",
+            "dWYuQ29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIgASgJEg8KB2dyb3VwSWQY",
+            "AyABKAkSEAoIbWVtYmVySWQYBCABKAkSEAoIcmVtb3ZlSWQYBSABKAUSDAoE",
+            "dGltZRgGIAEoCSJ6ChJHcm91cERlbGV0ZU1lc3NhZ2USEAoIZGVsZXRlSWQY",
+            "ASABKAUSDwoHZ3JvdXBJZBgCIAEoCRIRCglvcGVyYXRlSWQYAyABKAkSEAoI",
+            "bWVtYmVySWQYBCABKAkSDAoEdGltZRgFIAEoCRIOCgZtZXRob2QYBiABKAUi",
+            "TQoaR3JvdXBNZW1lYmVyUmVtb3ZlZE1lc3NhZ2USDwoHZ3JvdXBJZBgBIAEo",
+            "CRIQCghtZW1iZXJJZBgCIAEoCRIMCgR0aW1lGAMgASgJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -118,8 +119,8 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromClient), global::ChatServer.Common.Protobuf.FriendResponseFromClient.Parser, new[]{ "RequestId", "Accept", "Group", "ResponseTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromClientResponse), global::ChatServer.Common.Protobuf.FriendResponseFromClientResponse.Parser, new[]{ "Response" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendResponseFromServer), global::ChatServer.Common.Protobuf.FriendResponseFromServer.Parser, new[]{ "RequestId", "Accept", "ResponseTime" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.NewFriendMessage), global::ChatServer.Common.Protobuf.NewFriendMessage.Parser, new[]{ "UserId", "FrinedId", "Grouping", "RelationTime", "Remark", "CantDisturb", "IsTop", "LastChatId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendRelationRequest), global::ChatServer.Common.Protobuf.UpdateFriendRelationRequest.Parser, new[]{ "UserId", "FriendId", "Grouping", "Remark", "CantDisturb", "IsTop" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.NewFriendMessage), global::ChatServer.Common.Protobuf.NewFriendMessage.Parser, new[]{ "UserId", "FrinedId", "Grouping", "RelationTime", "Remark", "CantDisturb", "IsTop", "LastChatId", "IsChatting" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendRelationRequest), global::ChatServer.Common.Protobuf.UpdateFriendRelationRequest.Parser, new[]{ "UserId", "FriendId", "Grouping", "Remark", "CantDisturb", "IsTop", "IsChatting" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendRelation), global::ChatServer.Common.Protobuf.UpdateFriendRelation.Parser, new[]{ "Response", "UserId", "FriendId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.DeleteFriendRequest), global::ChatServer.Common.Protobuf.DeleteFriendRequest.Parser, new[]{ "UserId", "FriendId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.DeleteFriendMessage), global::ChatServer.Common.Protobuf.DeleteFriendMessage.Parser, new[]{ "Response", "UserId", "FriendId", "DeleteId", "Time" }, null, null, null, null),
@@ -134,7 +135,7 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.JoinGroupResponseResponseFromServer), global::ChatServer.Common.Protobuf.JoinGroupResponseResponseFromServer.Parser, new[]{ "Response", "RequestId", "UserId", "Time", "Accept" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.JoinGroupResponseFromServer), global::ChatServer.Common.Protobuf.JoinGroupResponseFromServer.Parser, new[]{ "RequestId", "UserIdFrom", "UserIdTarget", "Accept", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.NewMemberJoinMessage), global::ChatServer.Common.Protobuf.NewMemberJoinMessage.Parser, new[]{ "UserId", "GroupId", "Time" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupRelationRequest), global::ChatServer.Common.Protobuf.UpdateGroupRelationRequest.Parser, new[]{ "UserId", "GroupId", "Grouping", "NickName", "Remark", "CantDisturb", "IsTop" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupRelationRequest), global::ChatServer.Common.Protobuf.UpdateGroupRelationRequest.Parser, new[]{ "UserId", "GroupId", "Grouping", "NickName", "Remark", "CantDisturb", "IsTop", "IsChatting" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupRelation), global::ChatServer.Common.Protobuf.UpdateGroupRelation.Parser, new[]{ "Response", "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.QuitGroupRequest), global::ChatServer.Common.Protobuf.QuitGroupRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.QuitGroupMessage), global::ChatServer.Common.Protobuf.QuitGroupMessage.Parser, new[]{ "Response", "UserId", "GroupId", "QuitId", "Time" }, null, null, null, null),
@@ -1441,6 +1442,7 @@ namespace ChatServer.Common.Protobuf {
       cantDisturb_ = other.cantDisturb_;
       isTop_ = other.isTop_;
       lastChatId_ = other.lastChatId_;
+      isChatting_ = other.isChatting_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1537,6 +1539,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "isChatting" field.</summary>
+    public const int IsChattingFieldNumber = 9;
+    private bool isChatting_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsChatting {
+      get { return isChatting_; }
+      set {
+        isChatting_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as NewFriendMessage);
@@ -1558,6 +1571,7 @@ namespace ChatServer.Common.Protobuf {
       if (CantDisturb != other.CantDisturb) return false;
       if (IsTop != other.IsTop) return false;
       if (LastChatId != other.LastChatId) return false;
+      if (IsChatting != other.IsChatting) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1572,6 +1586,7 @@ namespace ChatServer.Common.Protobuf {
       if (CantDisturb != false) hash ^= CantDisturb.GetHashCode();
       if (IsTop != false) hash ^= IsTop.GetHashCode();
       if (LastChatId != 0) hash ^= LastChatId.GetHashCode();
+      if (IsChatting != false) hash ^= IsChatting.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1617,6 +1632,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(64);
         output.WriteInt32(LastChatId);
       }
+      if (IsChatting != false) {
+        output.WriteRawTag(72);
+        output.WriteBool(IsChatting);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1648,6 +1667,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (LastChatId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastChatId);
+      }
+      if (IsChatting != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1683,6 +1705,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.LastChatId != 0) {
         LastChatId = other.LastChatId;
+      }
+      if (other.IsChatting != false) {
+        IsChatting = other.IsChatting;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1727,6 +1752,10 @@ namespace ChatServer.Common.Protobuf {
             LastChatId = input.ReadInt32();
             break;
           }
+          case 72: {
+            IsChatting = input.ReadBool();
+            break;
+          }
         }
       }
     }
@@ -1767,6 +1796,7 @@ namespace ChatServer.Common.Protobuf {
       remark_ = other.remark_;
       cantDisturb_ = other.cantDisturb_;
       isTop_ = other.isTop_;
+      isChatting_ = other.isChatting_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1841,6 +1871,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "isChatting" field.</summary>
+    public const int IsChattingFieldNumber = 7;
+    private bool isChatting_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsChatting {
+      get { return isChatting_; }
+      set {
+        isChatting_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UpdateFriendRelationRequest);
@@ -1860,6 +1901,7 @@ namespace ChatServer.Common.Protobuf {
       if (Remark != other.Remark) return false;
       if (CantDisturb != other.CantDisturb) return false;
       if (IsTop != other.IsTop) return false;
+      if (IsChatting != other.IsChatting) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1872,6 +1914,7 @@ namespace ChatServer.Common.Protobuf {
       if (Remark.Length != 0) hash ^= Remark.GetHashCode();
       if (CantDisturb != false) hash ^= CantDisturb.GetHashCode();
       if (IsTop != false) hash ^= IsTop.GetHashCode();
+      if (IsChatting != false) hash ^= IsChatting.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1909,6 +1952,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(48);
         output.WriteBool(IsTop);
       }
+      if (IsChatting != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsChatting);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1933,6 +1980,9 @@ namespace ChatServer.Common.Protobuf {
         size += 1 + 1;
       }
       if (IsTop != false) {
+        size += 1 + 1;
+      }
+      if (IsChatting != false) {
         size += 1 + 1;
       }
       if (_unknownFields != null) {
@@ -1963,6 +2013,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.IsTop != false) {
         IsTop = other.IsTop;
+      }
+      if (other.IsChatting != false) {
+        IsChatting = other.IsChatting;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1997,6 +2050,10 @@ namespace ChatServer.Common.Protobuf {
           }
           case 48: {
             IsTop = input.ReadBool();
+            break;
+          }
+          case 56: {
+            IsChatting = input.ReadBool();
             break;
           }
         }
@@ -5024,6 +5081,7 @@ namespace ChatServer.Common.Protobuf {
       remark_ = other.remark_;
       cantDisturb_ = other.cantDisturb_;
       isTop_ = other.isTop_;
+      isChatting_ = other.isChatting_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -5109,6 +5167,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "isChatting" field.</summary>
+    public const int IsChattingFieldNumber = 8;
+    private bool isChatting_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsChatting {
+      get { return isChatting_; }
+      set {
+        isChatting_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UpdateGroupRelationRequest);
@@ -5129,6 +5198,7 @@ namespace ChatServer.Common.Protobuf {
       if (Remark != other.Remark) return false;
       if (CantDisturb != other.CantDisturb) return false;
       if (IsTop != other.IsTop) return false;
+      if (IsChatting != other.IsChatting) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -5142,6 +5212,7 @@ namespace ChatServer.Common.Protobuf {
       if (Remark.Length != 0) hash ^= Remark.GetHashCode();
       if (CantDisturb != false) hash ^= CantDisturb.GetHashCode();
       if (IsTop != false) hash ^= IsTop.GetHashCode();
+      if (IsChatting != false) hash ^= IsChatting.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -5183,6 +5254,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(56);
         output.WriteBool(IsTop);
       }
+      if (IsChatting != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(IsChatting);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -5210,6 +5285,9 @@ namespace ChatServer.Common.Protobuf {
         size += 1 + 1;
       }
       if (IsTop != false) {
+        size += 1 + 1;
+      }
+      if (IsChatting != false) {
         size += 1 + 1;
       }
       if (_unknownFields != null) {
@@ -5243,6 +5321,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.IsTop != false) {
         IsTop = other.IsTop;
+      }
+      if (other.IsChatting != false) {
+        IsChatting = other.IsChatting;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -5281,6 +5362,10 @@ namespace ChatServer.Common.Protobuf {
           }
           case 56: {
             IsTop = input.ReadBool();
+            break;
+          }
+          case 64: {
+            IsChatting = input.ReadBool();
             break;
           }
         }

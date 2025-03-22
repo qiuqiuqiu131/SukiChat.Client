@@ -5,6 +5,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
@@ -44,6 +45,12 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     private async Task OnFriendChatMessage(IScopedProvider scopedprovider, FriendChatMessage chatMessage)
     {
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var friendRelationDto = await userDtoManager.GetFriendRelationDto(_userManager.User.Id, chatMessage.UserFromId);
+
+        var chatService = scopedprovider.Resolve<IChatService>();
+        await chatService.AddChatDto(friendRelationDto);
+
         // 将消息存入数据库
         var friendChatPackService = scopedprovider.Resolve<IFriendChatPackService>();
         await friendChatPackService.FriendChatMessageOperate(chatMessage);
@@ -58,17 +65,20 @@ internal class ChatMessageHandler : MessageHandlerBase
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(chatMessage.Messages)
         };
         // 注入消息资源
-        var chatService = scopedprovider.Resolve<IChatService>();
         _ = chatService.OperateChatMessage(chatMessage.UserFromId, chatData.ChatId, chatData.ChatMessages,
             FileTarget.User);
 
         // 更新消息Dto
-        var friendChat = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
+        FriendChatDto friendChat =
+            _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
 
-        Dispatcher.UIThread.Invoke(() =>
+        _ = Dispatcher.UIThread.InvokeAsync(async () =>
         {
             if (friendChat != null && friendChat.ChatMessages.Count != 0)
             {
+                // 判断是否已经存在chatId
+                if (friendChat.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(chatData.ChatId)) != null) return;
+
                 var last = friendChat.ChatMessages.Last();
                 if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
                     chatData.ShowTime = true;
@@ -117,11 +127,15 @@ internal class ChatMessageHandler : MessageHandlerBase
     {
         await _semaphoreSlim.WaitAsync();
 
+        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+        var groupRelationDto = await userDtoManager.GetGroupRelationDto(_userManager.User.Id, message.GroupId);
+
+        var chatService = scopedprovider.Resolve<IChatService>();
+        await chatService.AddChatDto(groupRelationDto);
+
         // 将消息存入数据库
         var groupChatPackService = scopedprovider.Resolve<IGroupChatPackService>();
         await groupChatPackService.GroupChatMessageOperate(message);
-
-        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
 
         // 生成消息Dto
         var chatData = new GroupChatData
@@ -139,19 +153,20 @@ internal class ChatMessageHandler : MessageHandlerBase
             chatData.Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
 
         // 注入消息资源
-        var chatService = scopedprovider.Resolve<IChatService>();
         _ = chatService.OperateChatMessage(message.GroupId, chatData.ChatId, chatData.ChatMessages,
             FileTarget.Group);
 
         // 更新消息Dto
-        var groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
+        GroupChatDto groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
         if (groupChat == null) return; // 提前返回，避免后续重复判断
 
-        Dispatcher.UIThread.Invoke(async () =>
+        _ = Dispatcher.UIThread.InvokeAsync(async () =>
         {
             // 确定插入位置
             if (groupChat.ChatMessages.Count > 0)
             {
+                if (groupChat.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(chatData.ChatId)) != null) return;
+
                 // 查找第一个 ChatId 大于当前消息 ChatId 的消息位置
                 var nextMessage = groupChat.ChatMessages.FirstOrDefault(d => d.ChatId > chatData.ChatId);
                 var index = nextMessage != null

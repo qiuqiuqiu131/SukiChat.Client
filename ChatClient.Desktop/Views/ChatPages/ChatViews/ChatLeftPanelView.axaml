@@ -2,54 +2,66 @@
     x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatLeftPanelView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
-    xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-    xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
-    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+    xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+    xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
     d:DesignHeight="650"
     d:DesignWidth="300"
-    FontSize="15"
     x:DataType="vm:ChatLeftPanelViewModel"
+    FontSize="15"
     mc:Ignorable="d">
     <UserControl.Resources>
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
         <DataTemplate x:Key="FriendMenu" DataType="data:FriendRelationDto">
             <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
-                <MenuItem IsVisible="{Binding IsTop}" Header="取消置顶" Click="OnFriendTopMenuItemClick">
+                <MenuItem
+                    Click="OnFriendTopMenuItemClick"
+                    Header="取消置顶"
+                    IsVisible="{Binding IsTop}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ArrowExpandDown" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding !IsTop}" Header="置顶聊天" Click="OnFriendTopMenuItemClick">
+                <MenuItem
+                    Click="OnFriendTopMenuItemClick"
+                    Header="置顶聊天"
+                    IsVisible="{Binding !IsTop}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ArrowCollapseUp" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="复制群ID" Click="OnFriendCopyIdClick">
+                <MenuItem Click="OnFriendCopyIdClick" Header="复制群ID">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding CantDisturb}" Header="接受消息提醒" Click="OnFriendDisturbMenuItemClick">
+                <MenuItem
+                    Click="OnFriendDisturbMenuItemClick"
+                    Header="接受消息提醒"
+                    IsVisible="{Binding CantDisturb}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="BellOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding !CantDisturb}" Header="消息免打扰" Click="OnFriendDisturbMenuItemClick">
+                <MenuItem
+                    Click="OnFriendDisturbMenuItemClick"
+                    Header="消息免打扰"
+                    IsVisible="{Binding !CantDisturb}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="BellOffOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Margin="5" />
-                <MenuItem Header="删除聊天" Click="OnFriendClearMenuItemClick">
+                <MenuItem Click="OnFriendClearMenuItemClick" Header="删除聊天">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="DeleteOutline" />
                     </MenuItem.Icon>
@@ -58,35 +70,45 @@
         </DataTemplate>
         <DataTemplate x:Key="GroupMenu" DataType="group:GroupRelationDto">
             <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
-                <MenuItem IsVisible="{Binding IsTop}" Header="取消置顶" Click="OnGroupTopMenuItemClick">
+                <MenuItem
+                    Click="OnGroupTopMenuItemClick"
+                    Header="取消置顶"
+                    IsVisible="{Binding IsTop}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ArrowExpandDown" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding !IsTop}" Header="置顶聊天" Click="OnGroupTopMenuItemClick">
+                <MenuItem
+                    Click="OnGroupTopMenuItemClick"
+                    Header="置顶聊天"
+                    IsVisible="{Binding !IsTop}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ArrowCollapseUp" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="复制群ID" Click="OnGroupCopyIdClick">
+                <MenuItem Click="OnGroupCopyIdClick" Header="复制群ID">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ContentCopy" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding CantDisturb}" Header="接收消息提醒"
-                          Click="OnGroupDisturbMenuItemClick">
+                <MenuItem
+                    Click="OnGroupDisturbMenuItemClick"
+                    Header="接收消息提醒"
+                    IsVisible="{Binding CantDisturb}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="BellOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem IsVisible="{Binding !CantDisturb}" Header="消息免打扰"
-                          Click="OnGroupDisturbMenuItemClick">
+                <MenuItem
+                    Click="OnGroupDisturbMenuItemClick"
+                    Header="消息免打扰"
+                    IsVisible="{Binding !CantDisturb}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="BellOffOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Margin="5" />
-                <MenuItem Header="删除聊天" Click="OnGroupClearMenuItemClick">
+                <MenuItem Click="OnGroupClearMenuItemClick" Header="删除聊天">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="DeleteOutline" />
                     </MenuItem.Icon>
@@ -125,10 +147,11 @@
         </Style>
         <Style Selector="RadioButton.Enter:visible">
             <Style.Animations>
-                <Animation Duration="0:0:0.3"
-                           FillMode="Forward"
-                           IterationCount="1"
-                           Easing="CubicEaseInOut">
+                <Animation
+                    Easing="CubicEaseInOut"
+                    FillMode="Forward"
+                    IterationCount="1"
+                    Duration="0:0:0.3">
                     <KeyFrame Cue="0%">
                         <Setter Property="ScaleTransform.ScaleX" Value="0" />
                         <Setter Property="ScaleTransform.ScaleY" Value="0" />
@@ -143,87 +166,100 @@
     </UserControl.Styles>
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:FriendChatDto">
-            <RadioButton GroupName="Friends"
-                         Margin="0"
-                         RenderTransformOrigin="0.5,0.5"
-                         Height="65"
-                         Classes.IsTop="{Binding FriendRelatoinDto.IsTop}"
-                         Classes="Chat Content Enter"
-                         CornerRadius="0"
-                         PointerPressed="Button_OnPointerPressed"
-                         Click="Button_OnClick"
-                         Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
-                         CommandParameter="{Binding }">
+            <RadioButton
+                Height="65"
+                Margin="0"
+                Classes="Chat Content Enter"
+                Classes.IsTop="{Binding FriendRelatoinDto.IsTop}"
+                Click="Button_OnClick"
+                Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                CommandParameter="{Binding}"
+                CornerRadius="0"
+                GroupName="ChatLeft"
+                PointerPressed="Button_OnPointerPressed"
+                RenderTransformOrigin="0.5,0.5">
                 <Grid Name="Root_Grid" ColumnDefinitions="42,*">
-                    <!-- 头像 -->
+                    <!--  头像  -->
                     <circleImage:CircleImage Image="{Binding FriendRelatoinDto.UserDto.HeadImage}" Size="42" />
-                    <!-- 简略信息 -->
-                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,4,0,4">
+                    <!--  简略信息  -->
+                    <Grid
+                        Grid.Column="1"
+                        Margin="10,4,0,4"
+                        RowDefinitions="1.2*,1*">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
                             <Grid Grid.Column="0">
                                 <TextBlock
-                                    IsVisible="{Binding FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
                                     Foreground="{DynamicResource SukiText}"
-                                    Text="{Binding  FriendRelatoinDto.Remark}" />
+                                    IsVisible="{Binding FriendRelatoinDto.Remark, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{Binding FriendRelatoinDto.Remark}"
+                                    TextTrimming="CharacterEllipsis" />
                                 <TextBlock
-                                    IsVisible="{Binding FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
                                     Foreground="{DynamicResource SukiText}"
-                                    Text="{Binding  FriendRelatoinDto.UserDto.Name}" />
+                                    IsVisible="{Binding FriendRelatoinDto.Remark, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    Text="{Binding FriendRelatoinDto.UserDto.Name}"
+                                    TextTrimming="CharacterEllipsis" />
                             </Grid>
-                            <TextBlock Grid.Column="1" HorizontalAlignment="Right"
-                                       Name="Time_Text"
-                                       VerticalAlignment="Top"
-                                       Foreground="{DynamicResource SukiText}"
-                                       Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
-                                       Margin="0,5"
-                                       Opacity="0.6"
-                                       FontSize="11.5" />
+                            <TextBlock
+                                Name="Time_Text"
+                                Grid.Column="1"
+                                Margin="0,5"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                FontSize="11.5"
+                                Foreground="{DynamicResource SukiText}"
+                                Opacity="0.6"
+                                Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
-                            <TextBlock Grid.Column="0"
-                                       Name="Chat_Mess_Txt"
-                                       VerticalAlignment="Center"
-                                       FontSize="12"
-                                       Opacity="0.6"
-                                       Margin="0,0,20,0"
-                                       TextTrimming="CharacterEllipsis"
-                                       Foreground="{DynamicResource SukiText}"
-                                       Text="{Binding LastChatMessages.ChatMessages,Converter={StaticResource ChatMessageToStringConverter}}" />
+                            <TextBlock
+                                Name="Chat_Mess_Txt"
+                                Grid.Column="0"
+                                Margin="0,0,20,0"
+                                VerticalAlignment="Center"
+                                FontSize="12"
+                                Foreground="{DynamicResource SukiText}"
+                                Opacity="0.6"
+                                Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
+                                TextTrimming="CharacterEllipsis" />
                             <Panel Grid.Column="1">
                                 <Panel
-                                    IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Value=0}}">
-                                    <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
-                                                           IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
-                                                           Opacity="0.4" />
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">
+                                    <avalonia:MaterialIcon
+                                        Width="16"
+                                        Height="16"
+                                        IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
+                                        Kind="BellOffOutline"
+                                        Opacity="0.4" />
                                 </Panel>
-                                <Border Height="16"
-                                        CornerRadius="8"
-                                        Padding="5,0"
-                                        Margin="0,0"
-                                        Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
-                                        HorizontalAlignment="Right"
-                                        IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Equal=False,Value=0}}">
+                                <Border
+                                    Height="16"
+                                    Margin="0,0"
+                                    Padding="5,0"
+                                    HorizontalAlignment="Right"
+                                    Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
+                                    CornerRadius="8"
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
                                             <Setter Property="Background" Value="Red" />
                                         </Style>
                                         <Style Selector="Border.CantDisturb">
                                             <Setter Property="Background"
-                                                    Value="{DynamicResource SukiMediumBorderBrush}" />
+                                                    Value="{DynamicResource SukiControlBorderBrush}" />
                                         </Style>
                                     </Border.Styles>
-                                    <TextBlock FontSize="11"
-                                               Margin="0,0,0,1"
-                                               HorizontalAlignment="Center"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                                    <TextBlock
+                                        Margin="2,0,-1,0"
+                                        Padding="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="11"
+                                        Foreground="White"
+                                        Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
                                 </Border>
                             </Panel>
                         </Grid>
@@ -232,106 +268,119 @@
             </RadioButton>
         </DataTemplate>
         <DataTemplate DataType="group:GroupChatDto">
-            <RadioButton GroupName="Friends"
-                         Margin="0"
-                         Height="65"
-                         RenderTransformOrigin="0.5,0.5"
-                         Classes="Chat Content Enter"
-                         Classes.IsTop="{Binding GroupRelationDto.IsTop}"
-                         PointerPressed="Button_OnPointerPressed"
-                         Click="Button_OnClick"
-                         CornerRadius="0"
-                         Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).GroupSelectionChangedCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
-                         CommandParameter="{Binding }">
+            <RadioButton
+                Height="65"
+                Margin="0"
+                Classes="Chat Content Enter"
+                Classes.IsTop="{Binding GroupRelationDto.IsTop}"
+                Click="Button_OnClick"
+                Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).GroupSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                CommandParameter="{Binding}"
+                CornerRadius="0"
+                GroupName="ChatLeft"
+                PointerPressed="Button_OnPointerPressed"
+                RenderTransformOrigin="0.5,0.5">
                 <Grid Name="Root_Grid" ColumnDefinitions="42,*">
-                    <!-- 头像 -->
+                    <!--  头像  -->
                     <circleImage:CircleImage Image="{Binding GroupRelationDto.GroupDto.HeadImage}" Size="42" />
-                    <!-- 简略信息 -->
-                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,4,0,4">
+                    <!--  简略信息  -->
+                    <Grid
+                        Grid.Column="1"
+                        Margin="10,4,0,4"
+                        RowDefinitions="1.2*,1*">
                         <Grid Grid.Row="0" ColumnDefinitions="*,auto">
                             <Grid Grid.Column="0">
                                 <TextBlock
-                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
                                     FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
-                                    Text="{Binding  GroupRelationDto.Remark}" />
+                                    IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{Binding GroupRelationDto.Remark}"
+                                    TextTrimming="CharacterEllipsis" />
                                 <TextBlock
-                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    TextTrimming="CharacterEllipsis"
                                     FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
-                                    Text="{Binding  GroupRelationDto.GroupDto.Name}" />
+                                    IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    Text="{Binding GroupRelationDto.GroupDto.Name}"
+                                    TextTrimming="CharacterEllipsis" />
                             </Grid>
-                            <TextBlock Grid.Column="1"
-                                       HorizontalAlignment="Right"
-                                       Name="Time_Text"
-                                       VerticalAlignment="Top"
-                                       Foreground="{DynamicResource SukiText}"
-                                       Text="{Binding LastChatMessages.Time,Converter={StaticResource DateTimeConverter}}"
-                                       Margin="0,5"
-                                       Opacity="0.6"
-                                       FontSize="11.5" />
+                            <TextBlock
+                                Name="Time_Text"
+                                Grid.Column="1"
+                                Margin="0,5"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                FontSize="11.5"
+                                Foreground="{DynamicResource SukiText}"
+                                Opacity="0.6"
+                                Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
                             <Grid Grid.Column="0"
-                                  IsVisible="{Binding LastChatMessages,Converter={converter:NullValueConverter}}">
-                                <TextBlock IsVisible="{Binding !LastChatMessages.IsSystem}"
-                                           VerticalAlignment="Center"
-                                           FontSize="12"
-                                           Margin="0,0,20,0"
-                                           Opacity="0.6"
-                                           TextTrimming="CharacterEllipsis"
-                                           Foreground="{DynamicResource SukiText}">
+                                  IsVisible="{Binding LastChatMessages, Converter={converter:NullValueConverter}}">
+                                <TextBlock
+                                    Margin="0,0,20,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SukiText}"
+                                    IsVisible="{Binding !LastChatMessages.IsSystem}"
+                                    Opacity="0.6"
+                                    TextTrimming="CharacterEllipsis">
                                     <Run Text="{Binding LastChatMessages.Owner.NickName}" />
                                     <Run Text=":" />
                                     <Run
-                                        Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
+                                        Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
                                 </TextBlock>
-                                <TextBlock IsVisible="{Binding LastChatMessages.IsSystem}"
-                                           VerticalAlignment="Center"
-                                           FontSize="12"
-                                           Margin="0,0,20,0"
-                                           Opacity="0.6"
-                                           TextTrimming="CharacterEllipsis"
-                                           Foreground="{DynamicResource SukiText}">
+                                <TextBlock
+                                    Margin="0,0,20,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SukiText}"
+                                    IsVisible="{Binding LastChatMessages.IsSystem}"
+                                    Opacity="0.6"
+                                    TextTrimming="CharacterEllipsis">
                                     <Run
-                                        Text="{Binding LastChatMessages.ChatMessages,Mode=OneWay,Converter={StaticResource ChatMessageToStringConverter}}" />
+                                        Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
                                 </TextBlock>
                             </Grid>
                             <Panel Grid.Column="1">
                                 <Panel
-                                    IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Value=0}}">
-                                    <avalonia:MaterialIcon Kind="BellOffOutline" Width="16" Height="16"
-                                                           IsVisible="{Binding GroupRelationDto.CantDisturb}"
-                                                           Opacity="0.4" />
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">
+                                    <avalonia:MaterialIcon
+                                        Width="16"
+                                        Height="16"
+                                        IsVisible="{Binding GroupRelationDto.CantDisturb}"
+                                        Kind="BellOffOutline"
+                                        Opacity="0.4" />
                                 </Panel>
-                                <Border Height="16"
-                                        CornerRadius="8"
-                                        Padding="5,0"
-                                        Margin="0,0"
-                                        Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
-                                        HorizontalAlignment="Right"
-                                        IsVisible="{Binding UnReadMessageCount,Converter={converter:IntEqualityConverter Equal = False, Value=0}}">
+                                <Border
+                                    Height="16"
+                                    Margin="0,0"
+                                    Padding="5,0"
+                                    HorizontalAlignment="Right"
+                                    Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
+                                    CornerRadius="8"
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
                                             <Setter Property="Background" Value="Red" />
                                         </Style>
                                         <Style Selector="Border.CantDisturb">
                                             <Setter Property="Background"
-                                                    Value="{DynamicResource SukiMediumBorderBrush}" />
+                                                    Value="{DynamicResource SukiControlBorderBrush}" />
                                         </Style>
                                     </Border.Styles>
-                                    <TextBlock FontSize="11"
-                                               Margin="0,0,0,1"
-                                               HorizontalAlignment="Center"
-                                               Foreground="White"
-                                               VerticalAlignment="Center"
-                                               Text="{Binding UnReadMessageCount,Converter={converter:UnReadMessageCountConverter}}" />
+                                    <TextBlock
+                                        Margin="0,0,0,1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        FontSize="11"
+                                        Padding="0"
+                                        Foreground="White"
+                                        Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
                                 </Border>
                             </Panel>
                         </Grid>
@@ -347,38 +396,48 @@
         <Binding Path="ChatViewModel.Groups" />
     </chatViews:ChatLeftPanelView.GroupItemsSource>
     <Grid Margin="0" RowDefinitions="70,*">
-        <suki:GlassCard Padding="0" Margin="0" CornerRadius="0" Opacity="0.5" Grid.Row="0" Grid.RowSpan="2" />
-        <!-- 顶部 -->
-        <suki:GlassCard Padding="8"
-                        Grid.Row="0"
-                        CornerRadius="2"
-                        Height="70"
-                        Margin="0,0,0,0"
-                        BorderThickness="0,0,0,1.5">
+        <suki:GlassCard
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Margin="0"
+            Padding="0"
+            CornerRadius="0"
+            Opacity="0.5" />
+        <!--  顶部  -->
+        <suki:GlassCard
+            Grid.Row="0"
+            Height="70"
+            Margin="0,0,0,0"
+            Padding="8"
+            BorderThickness="0,0,0,1.5"
+            CornerRadius="2">
             <DockPanel LastChildFill="True">
-                <Button Classes="Add"
-                        Name="PART_AddButton"
-                        CornerRadius="8"
-                        Padding="0"
-                        Margin="7,3,0,1"
-                        VerticalAlignment="Bottom"
-                        DockPanel.Dock="Right"
-                        Click="PART_AddButton_OnClick"
-                        Height="27"
-                        Width="27"
-                        Background="{DynamicResource SukiBorderBrush}">
-                    <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
+                <Button
+                    Name="PART_AddButton"
+                    Width="27"
+                    Height="27"
+                    Margin="7,3,0,1"
+                    Padding="0"
+                    VerticalAlignment="Bottom"
+                    Background="{DynamicResource SukiBorderBrush}"
+                    Classes="Add"
+                    Click="PART_AddButton_OnClick"
+                    CornerRadius="8"
+                    DockPanel.Dock="Right">
+                    <avalonia:MaterialIcon HorizontalAlignment="Center" Kind="Plus" />
                 </Button>
-                <searchBox:SearchBox WaterMask="搜索" SearchText="{Binding SearchText}" />
+                <searchBox:SearchBox SearchText="{Binding SearchText}" WaterMask="搜索" />
             </DockPanel>
         </suki:GlassCard>
-        <!-- 好友列表 -->
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                      Grid.Row="1"
-                      VerticalScrollBarVisibility="Hidden">
-            <ItemsControl x:Name="Items"
-                          Margin="0,0,0,40"
-                          suki:ItemsControlExtensions.AnimatedScroll="True">
+        <!--  好友列表  -->
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Hidden">
+            <ItemsControl
+                x:Name="Items"
+                Margin="0,0,0,40"
+                suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
@@ -390,8 +449,10 @@
                             <Setter Property="Margin" Value="6,5,6,5" />
                             <Setter Property="Transitions">
                                 <Transitions>
-                                    <ThicknessTransition Property="Margin" Duration="0:0:0.25"
-                                                         Easing="SineEaseInOut" />
+                                    <ThicknessTransition
+                                        Easing="SineEaseInOut"
+                                        Property="Margin"
+                                        Duration="0:0:0.25" />
                                 </Transitions>
                             </Setter>
                         </Style>

@@ -86,6 +86,19 @@ public class GroupRelationDto : BindableBase, IDisposable
         }
     }
 
+    private bool _isChatting;
+    public bool IsChatting
+    {
+        get => _isChatting;
+        set
+        {
+            if(SetProperty(ref _isChatting, value))
+            {
+                OnGroupRelationChanged?.Invoke(this);
+            }
+        }
+    }
+
     private int _lastChatId;
 
     public int LastChatId

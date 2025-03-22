@@ -17,7 +17,7 @@ public class GroupChatDto : BindableBase, IDisposable
         {
             SetProperty(ref _groupRelationDto, value);
             if (_groupRelationDto != null)
-                _groupRelationDto.OnGroupRelationChanged += delegate { OnLastChatMessagesChanged.Invoke(this); };
+                _groupRelationDto.OnGroupRelationChanged += delegate { OnLastChatMessagesChanged?.Invoke(this); };
         }
     }
 

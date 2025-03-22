@@ -72,6 +72,7 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
             if (dto != null)
             {
                 IEventAggregator eventAggregator = _containerProvider.Resolve<IEventAggregator>();
+                _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
                 eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(dto);
             }
         }

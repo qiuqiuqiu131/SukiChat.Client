@@ -13,6 +13,7 @@ namespace ChatClient.BaseService.Services;
 
 public interface IFriendChatPackService
 {
+    Task<FriendChatDto> GetFriendChatDto(string userId, string targetId);
     Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId);
     Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
 
@@ -41,7 +42,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     /// <param name="userId"></param>
     /// <param name="targetId"></param>
     /// <returns></returns>
-    private async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
+    public async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
     {
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
         var friendChat = await friendChatRepository.GetFirstOrDefaultAsync(
@@ -82,7 +83,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
 
         // 获取所有好友的Id
         var friendService = _scopedProvider.Resolve<IFriendService>();
-        var friendIds = await friendService.GetFriendIds(userId);
+        var friendIds = await friendService.GetFriendChatIds(userId);
 
         // 获取好友的聊天记录
         foreach (var friendId in friendIds)
@@ -174,6 +175,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     public async Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages)
     {
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+        var relationRepository = _unitOfWork.GetRepository<FriendRelation>();
         foreach (var chatMessage in chatMessages)
         {
             var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
@@ -181,8 +183,17 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
                 await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(chatPrivate.ChatId));
             if (result != null)
                 chatPrivate.Id = result.Id;
-
             chatPrivateRepository.Update(chatPrivate);
+
+            var relation1 = await relationRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.User1Id.Equals(chatMessage.UserFromId) && d.User2Id.Equals(chatMessage.UserTargetId),
+                disableTracking: false);
+            relation1.IsChatting = true;
+
+            var relation2 = await relationRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.User1Id.Equals(chatMessage.UserTargetId) && d.User2Id.Equals(chatMessage.UserFromId),
+                disableTracking: false);
+            relation2.IsChatting = true;
         }
 
         await _unitOfWork.SaveChangesAsync();

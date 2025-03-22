@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
+using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Ioc;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
@@ -20,6 +25,7 @@ namespace ChatClient.Desktop.ViewModels;
 public class MainWindowViewModel : ViewModelBase, IDisposable
 {
     private readonly IEventAggregator _eventAggregator;
+    private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
     #region IsConnected
@@ -78,6 +84,9 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     #endregion
 
+    private AvaloniaList<GroupFriendDto> GroupFriends => _userManager.GroupFriends;
+    private AvaloniaList<GroupGroupDto> GroupGroups => _userManager.GroupGroups;
+
     public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
 
     public ISukiToastManager ToastManager { get; init; }
@@ -91,9 +100,11 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         ISukiToastManager toastManager,
         ISukiDialogManager dialogManager,
         IEventAggregator eventAggregator,
+        IContainerProvider containerProvider,
         IUserManager userManager)
     {
         _eventAggregator = eventAggregator;
+        _containerProvider = containerProvider;
         _userManager = userManager;
         ToastManager = toastManager;
         DialogManager = dialogManager;
@@ -107,7 +118,106 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         ExitCommnad = new DelegateCommand(TryExit);
 
         RegisterEvent();
+        RegisterDtoEvent();
     }
+
+    #region RelationDtoUpdate
+
+    private void RegisterDtoEvent()
+    {
+        foreach (var groupFriendDto in GroupFriends)
+        {
+            groupFriendDto.Friends.CollectionChanged += OnRelationCollectionChanged;
+            foreach (var friend in groupFriendDto.Friends)
+                friend.OnFriendRelationChanged += FriendRelationDtoOnOnFriendRelationChanged;
+        }
+
+        foreach (var groupGroupDto in GroupGroups)
+        {
+            groupGroupDto.Groups.CollectionChanged += OnRelationCollectionChanged;
+            foreach (var group in groupGroupDto.Groups)
+                group.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+        }
+
+        GroupFriends.CollectionChanged += OnCollectionChanged;
+        GroupGroups.CollectionChanged += OnCollectionChanged;
+    }
+
+    private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is GroupFriendDto groupFriendDto)
+                {
+                    groupFriendDto.Friends.CollectionChanged += OnRelationCollectionChanged;
+                }
+                else if (item is GroupGroupDto groupGroupDto)
+                {
+                    groupGroupDto.Groups.CollectionChanged += OnRelationCollectionChanged;
+                }
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var item in e.OldItems)
+            {
+                if (item is GroupFriendDto groupFriendDto)
+                {
+                    groupFriendDto.Friends.CollectionChanged -= OnRelationCollectionChanged;
+                }
+                else if (item is GroupGroupDto groupGroupDto)
+                {
+                    groupGroupDto.Groups.CollectionChanged -= OnRelationCollectionChanged;
+                }
+            }
+        }
+    }
+
+    private void OnRelationCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is FriendRelationDto friendRelationDto)
+                    friendRelationDto.OnFriendRelationChanged += FriendRelationDtoOnOnFriendRelationChanged;
+                else if (item is GroupRelationDto groupRelationDto)
+                    groupRelationDto.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var item in e.OldItems)
+            {
+                if (item is FriendRelationDto friendRelationDto)
+                    friendRelationDto.OnFriendRelationChanged -= FriendRelationDtoOnOnFriendRelationChanged;
+                else if (item is GroupRelationDto groupRelationDto)
+                    groupRelationDto.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
+            }
+        }
+    }
+
+    private void GroupRelationDtoOnOnGroupRelationChanged(GroupRelationDto obj)
+    {
+        Task.Run(() =>
+        {
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
+        });
+    }
+
+    private void FriendRelationDtoOnOnFriendRelationChanged(FriendRelationDto obj)
+    {
+        Task.Run(() =>
+        {
+            var friendService = _containerProvider.Resolve<IFriendService>();
+            friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
+        });
+    }
+
+    #endregion
 
     #region RegisterEvent
 
@@ -167,6 +277,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     #endregion
 
+    #region ViewLogic
+
     private void ForceToExit(string Content)
     {
         DialogManager.CreateDialog()
@@ -198,6 +310,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         TranslateWindowHelper.TranslateToLoginWindow();
     }
+
+    #endregion
 
     #region Dispose
 

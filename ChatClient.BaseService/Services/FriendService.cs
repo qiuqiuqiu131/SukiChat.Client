@@ -6,6 +6,7 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
@@ -14,6 +15,7 @@ public interface IFriendService
     public Task<(bool, string)> AddFriend(string userId, string targetId, string group);
     public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "");
     public Task<List<string>> GetFriendIds(string userId);
+    public Task<List<string>> GetFriendChatIds(string userId);
     public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     public Task<bool> UpdateFriendRelation(string userId, FriendRelationDto friendRelationDto);
     public Task<bool> DeleteFriend(string userId, string friendId);
@@ -135,11 +137,19 @@ internal class FriendService : BaseService, IFriendService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<List<string>> GetFriendIds(string userId)
+    public Task<List<string>> GetFriendIds(string userId)
     {
         var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
-        var friendRelations = await friendRelationRepository.GetAllAsync(predicate: d => d.User1Id.Equals(userId));
-        return friendRelations.Select(d => d.User2Id).ToList();
+        return friendRelationRepository.GetAll(predicate: d => d.User1Id.Equals(userId))
+            .Select(d => d.User2Id).ToListAsync();
+    }
+
+    public Task<List<string>> GetFriendChatIds(string userId)
+    {
+        var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+        return friendRelationRepository
+            .GetAll(predicate: d => d.User1Id.Equals(userId) && d.IsChatting)
+            .Select(d => d.User2Id).ToListAsync();
     }
 
     public async Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId)
@@ -157,9 +167,11 @@ internal class FriendService : BaseService, IFriendService
         {
             UserId = userId,
             FriendId = friendRelationDto.Id,
+            Grouping = friendRelationDto.Grouping,
             Remark = friendRelationDto.Remark ?? string.Empty,
             CantDisturb = friendRelationDto.CantDisturb,
-            IsTop = friendRelationDto.IsTop
+            IsTop = friendRelationDto.IsTop,
+            IsChatting = friendRelationDto.IsChatting
         };
 
         var response = await _messageHelper.SendMessageWithResponse<UpdateFriendRelation>(request);
@@ -177,6 +189,7 @@ internal class FriendService : BaseService, IFriendService
                 entity.CantDisturb = friendRelationDto.CantDisturb;
                 entity.IsTop = friendRelationDto.IsTop;
                 entity.Remark = friendRelationDto.Remark;
+                entity.IsChatting = friendRelationDto.IsChatting;
             }
 
             try

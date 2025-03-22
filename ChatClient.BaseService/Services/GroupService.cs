@@ -102,7 +102,8 @@ public class GroupService : BaseService, IGroupService
             Remark = groupRelationDto.Remark ?? string.Empty,
             CantDisturb = groupRelationDto.CantDisturb,
             IsTop = groupRelationDto.IsTop,
-            NickName = groupRelationDto.NickName ?? string.Empty
+            NickName = groupRelationDto.NickName ?? string.Empty,
+            IsChatting = groupRelationDto.IsChatting
         };
 
         var response = await _messageHelper.SendMessageWithResponse<UpdateGroupRelation>(request);
@@ -121,6 +122,7 @@ public class GroupService : BaseService, IGroupService
                 entity.CantDisturb = groupRelationDto.CantDisturb;
                 entity.IsTop = groupRelationDto.IsTop;
                 entity.NickName = groupRelationDto.NickName;
+                entity.IsChatting = groupRelationDto.IsChatting;
             }
 
             try

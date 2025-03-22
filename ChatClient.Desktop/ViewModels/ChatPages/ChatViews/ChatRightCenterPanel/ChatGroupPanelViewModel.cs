@@ -271,20 +271,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         }
     }
 
-    private async void GroupRelationDtoOnOnGroupRelationChanged()
-    {
-        if (SelectedGroup?.GroupRelationDto == null) return;
-
-        var groupService = _containerProvider.Resolve<IGroupService>();
-        await groupService.UpdateGroupRelation(_userManager.User!.Id, SelectedGroup.GroupRelationDto);
-
-        IUserDtoManager userDtoManager = _containerProvider.Resolve<IUserDtoManager>();
-        var memberDto =
-            await userDtoManager.GetGroupMemberDto(SelectedGroup.GroupRelationDto.GroupDto!.Id, _userManager.User.Id);
-        if (memberDto != null)
-            memberDto.NickName = SelectedGroup.GroupRelationDto.NickName!;
-    }
-
     private async void GroupDtoOnOnGroupChanged()
     {
         if (SelectedGroup?.GroupRelationDto?.GroupDto == null) return;

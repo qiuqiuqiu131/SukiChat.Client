@@ -14,6 +14,7 @@ namespace ChatClient.BaseService.Services;
 public interface IGroupGetService
 {
     Task<List<string>> GetGroupIds(string userId);
+    Task<List<string>> GetGroupChatIds(string userId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
     Task<List<string>?> GetGroupMemberIds(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
@@ -38,6 +39,13 @@ public class GroupGetService : BaseService, IGroupGetService
     {
         var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
         return groupRelationRepository.GetAll(predicate: d => d.UserId.Equals(userId))
+            .Select(d => d.GroupId).ToListAsync();
+    }
+
+    public Task<List<string>> GetGroupChatIds(string userId)
+    {
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        return groupRelationRepository.GetAll(predicate: d => d.UserId.Equals(userId) && d.IsChatting)
             .Select(d => d.GroupId).ToListAsync();
     }
 

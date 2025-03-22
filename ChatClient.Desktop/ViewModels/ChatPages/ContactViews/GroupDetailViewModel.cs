@@ -39,9 +39,9 @@ public class GroupDetailViewModel : ViewModelBase
 
     private async void SendMessage()
     {
+        var group = Group;
         _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
-        await Task.Delay(50);
-        _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(Group);
+        _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(group);
     }
 
     public override void OnNavigatedTo(NavigationContext navigationContext)

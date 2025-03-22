@@ -270,7 +270,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     private void Friend_OnFriendRelationChanged(FriendRelationDto dto)
     {
         var friendService = _containerProvider.Resolve<IFriendService>();
-        friendService.UpdateFriendRelation(_userManager.User!.Id, SelectedFriend!.FriendRelatoinDto!);
+        friendService.UpdateFriendRelation(_userManager.User!.Id, dto);
     }
 
     public void Destroy()

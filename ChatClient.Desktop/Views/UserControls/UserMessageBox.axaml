@@ -11,7 +11,7 @@
              Background="Transparent"
              x:Class="ChatClient.Desktop.Views.UserControls.UserMessageBox">
     <Border Background="{DynamicResource SukiGlassCardBackground}" Padding="15" CornerRadius="7" Margin="7"
-            BoxShadow="3 3 10 #66000000">
+            BoxShadow="3 3 10 #44000000">
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal" Spacing="15">
                 <circleImage:CircleImage Size="60" Image="{Binding HeadImage}" />

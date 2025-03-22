@@ -39,9 +39,9 @@ public class FriendDetailViewModel : ViewModelBase
 
     private async void SendMessage()
     {
+        var friend = Friend;
         _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
-        await Task.Delay(50);
-        _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(Friend);
+        _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(friend);
     }
 
     public override void OnNavigatedTo(NavigationContext navigationContext)

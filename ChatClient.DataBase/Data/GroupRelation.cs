@@ -28,4 +28,6 @@ public class GroupRelation
     public bool IsTop { get; set; } = false;
 
     public int LastChatId { get; set; }
+
+    public bool IsChatting { get; set; }
 }

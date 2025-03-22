@@ -1,10 +1,13 @@
 using AutoMapper;
 using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
+using ChatClient.BaseService.Manager;
+using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
@@ -22,6 +25,7 @@ public interface IChatService
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
     Task UpdateFileMess(FileMessDto messages);
     Task<bool> ReadAllChatMessage(string userId, string targetId, int chatId, FileTarget fileTarget);
+    Task AddChatDto(object obj);
 }
 
 internal class ChatService : BaseService, IChatService
@@ -337,6 +341,11 @@ internal class ChatService : BaseService, IChatService
                         await _unitOfWork.SaveChangesAsync();
                     }
 
+                    var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+                    var friendRelation = await userDtoManager.GetFriendRelationDto(userId, targetId);
+                    if (friendRelation != null)
+                        friendRelation.LastChatId = lastChatId;
+
                     return true;
                 }
             }
@@ -365,6 +374,11 @@ internal class ChatService : BaseService, IChatService
                         await _unitOfWork.SaveChangesAsync();
                     }
                 }
+
+                var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+                var groupRelation = await userDtoManager.GetGroupRelationDto(userId, targetId);
+                if (groupRelation != null)
+                    groupRelation.LastChatId = lastChatId;
 
                 return true;
             }
@@ -423,6 +437,32 @@ internal class ChatService : BaseService, IChatService
                     }
                 }
             }
+        }
+    }
+
+    public async Task AddChatDto(object obj)
+    {
+        var userManager = _scopedProvider.Resolve<IUserManager>();
+        if (obj is FriendRelationDto friendRelationDto)
+        {
+            var dto = userManager.FriendChats!.FirstOrDefault(d => d.FriendRelatoinDto == friendRelationDto);
+            if (dto != null) return;
+
+            var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
+            var friendChatDto =
+                await friendChatPackService.GetFriendChatDto(userManager.User!.Id, friendRelationDto.Id);
+            userManager.FriendChats!.Add(friendChatDto);
+            friendRelationDto.IsChatting = true;
+        }
+        else if (obj is GroupRelationDto groupRelationDto)
+        {
+            var dto = userManager.GroupChats!.FirstOrDefault(d => d.GroupRelationDto == groupRelationDto);
+            if (dto != null) return;
+
+            var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
+            var groupChatDto = await groupChatPackService.GetGroupChatDto(userManager.User!.Id, groupRelationDto.Id);
+            userManager.GroupChats!.Add(groupChatDto);
+            groupRelationDto.IsChatting = true;
         }
     }
 }

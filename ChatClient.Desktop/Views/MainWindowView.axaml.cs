@@ -54,40 +54,40 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
         eventAggregator.GetEvent<UserMessageBoxShowEvent>().Subscribe(ShowUserMessageBox);
 
-        #region TrayIcon
-
-        var trayIcon = new TrayIcon
-        {
-            Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico"),
-            ToolTipText = "Suki Chat",
-            Menu = new NativeMenu
-            {
-                Items =
-                {
-                    new NativeMenuItem
-                    {
-                        Header = "Show",
-                        Command = new DelegateCommand(() =>
-                        {
-                            Show();
-                            WindowState = WindowState.Normal;
-                        })
-                    },
-                    new NativeMenuItem
-                    {
-                        Header = "Exit",
-                        Command = new DelegateCommand(() =>
-                        {
-                            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime
-                                desktop)
-                                desktop.Shutdown();
-                        })
-                    }
-                }
-            }
-        };
-
-        #endregion
+        // #region TrayIcon
+        //
+        // var trayIcon = new TrayIcon
+        // {
+        //     Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico"),
+        //     ToolTipText = "Suki Chat",
+        //     Menu = new NativeMenu
+        //     {
+        //         Items =
+        //         {
+        //             new NativeMenuItem
+        //             {
+        //                 Header = "Show",
+        //                 Command = new DelegateCommand(() =>
+        //                 {
+        //                     Show();
+        //                     WindowState = WindowState.Normal;
+        //                 })
+        //             },
+        //             new NativeMenuItem
+        //             {
+        //                 Header = "Exit",
+        //                 Command = new DelegateCommand(() =>
+        //                 {
+        //                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime
+        //                         desktop)
+        //                         desktop.Shutdown();
+        //                 })
+        //             }
+        //         }
+        //     }
+        // };
+        //
+        // #endregion
     }
 
     private SukiDialogHost? _dialogHost;

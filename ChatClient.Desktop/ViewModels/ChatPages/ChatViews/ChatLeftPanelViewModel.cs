@@ -1,5 +1,8 @@
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
+using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.PackService;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Tool.Common;
