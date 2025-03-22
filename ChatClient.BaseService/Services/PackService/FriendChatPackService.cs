@@ -188,12 +188,14 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
             var relation1 = await relationRepository.GetFirstOrDefaultAsync(
                 predicate: d => d.User1Id.Equals(chatMessage.UserFromId) && d.User2Id.Equals(chatMessage.UserTargetId),
                 disableTracking: false);
-            relation1.IsChatting = true;
+            if (chatMessage.Id > relation1.LastChatId)
+                relation1.IsChatting = true;
 
             var relation2 = await relationRepository.GetFirstOrDefaultAsync(
                 predicate: d => d.User1Id.Equals(chatMessage.UserTargetId) && d.User2Id.Equals(chatMessage.UserFromId),
                 disableTracking: false);
-            relation2.IsChatting = true;
+            if (chatMessage.Id > relation2.LastChatId)
+                relation2.IsChatting = true;
         }
 
         await _unitOfWork.SaveChangesAsync();

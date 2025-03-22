@@ -190,7 +190,8 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
             var relation = await relationRepository.GetFirstOrDefaultAsync(
                 predicate: d => d.UserId.Equals(userId) && d.GroupId.Equals(chatMessage.GroupId),
                 disableTracking: false);
-            relation.IsChatting = true;
+            if (relation.LastChatId < chatMessage.Id)
+                relation.LastChatId = chatMessage.Id;
         }
 
         await _unitOfWork.SaveChangesAsync();
