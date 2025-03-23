@@ -189,6 +189,7 @@ internal class FriendService : BaseService, IFriendService
                 entity.CantDisturb = friendRelationDto.CantDisturb;
                 entity.IsTop = friendRelationDto.IsTop;
                 entity.Remark = friendRelationDto.Remark;
+                entity.Grouping = friendRelationDto.Grouping;
                 entity.IsChatting = friendRelationDto.IsChatting;
             }
 

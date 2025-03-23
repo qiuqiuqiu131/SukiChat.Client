@@ -64,6 +64,7 @@ public class GroupList : UserControl
     private bool inited = false;
 
     private ListBox _listBox;
+    private Expander _expander;
     private ItemCollection _itemCollection;
     private IDataTemplate _dataTemplate;
 
@@ -71,6 +72,8 @@ public class GroupList : UserControl
     {
         base.OnApplyTemplate(e);
         _listBox = e.NameScope.Get<ListBox>("PART_ListBox");
+        _expander = e.NameScope.Get<Expander>("PART_Expander");
+
         _itemCollection = _listBox.Items;
         _dataTemplate = _listBox.ItemTemplate;
         _listBox.SelectionChanged += OnSelectionChanged;
@@ -170,5 +173,23 @@ public class GroupList : UserControl
     {
         if (e.AddedItems.Count == 0 && e.RemovedItems.Count == 1) return;
         RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, e.RemovedItems, e.AddedItems));
+    }
+
+    public void Open()
+    {
+        _expander.IsExpanded = true;
+    }
+
+    public void Close()
+    {
+        _expander.IsExpanded = false;
+    }
+
+    public void SelectItem(FriendRelationDto friendRelationDto)
+    {
+        var listItem = _itemCollection.Cast<ListBoxItem>()
+            .FirstOrDefault(item => item.DataContext == friendRelationDto);
+        if (listItem != null)
+            _listBox.SelectedItem = listItem;
     }
 }

@@ -157,7 +157,7 @@ public class GroupSeparateGroupsView : UserControl
     private void OnGroupFriendsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
         if (!Inited) return;
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Invoke(async () =>
         {
             if (args.Action == NotifyCollectionChangedAction.Add)
             {
@@ -173,6 +173,8 @@ public class GroupSeparateGroupsView : UserControl
                             contorl.SelectionChanged += OnSelectionChanged;
                             contorl.PointerPressed += ControlOnPointerPressed;
                             InsertControlByGroupName(contorl); // 按GroupName排序插入
+                            await Task.Delay(50);
+                            contorl.Open();
                         }
                     }
                 }
@@ -249,7 +251,23 @@ public class GroupSeparateGroupsView : UserControl
         if (!Inited) return;
         foreach (var items in _itemCollection)
             if (items is GroupGroupList.GroupGroupList groupItem)
+            {
                 groupItem.SelectedItem = null;
+                groupItem.Close();
+            }
+    }
+
+    public void SelectItem(GroupRelationDto groupRelationDto)
+    {
+        if (!Inited) return;
+        var groupFriend = _itemCollection.FirstOrDefault(d =>
+            d is Control control && control.DataContext is GroupGroupDto groupGroup &&
+            groupGroup.GroupName.Equals(groupRelationDto.Grouping)) as GroupGroupList.GroupGroupList;
+
+        if (groupFriend == null) return;
+
+        groupFriend.Open();
+        groupFriend.SelectItem(groupRelationDto);
     }
 
     private void InsertControlByGroupName(Control control)

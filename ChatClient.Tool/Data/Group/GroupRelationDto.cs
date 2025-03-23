@@ -16,14 +16,22 @@ public class GroupRelationDto : BindableBase, IDisposable
 
     private string grouping;
 
+    public string GroupingWithoutEvent
+    {
+        get => grouping;
+        set => SetProperty(ref grouping, value);
+    }
+
     public string Grouping
     {
         get => grouping;
         set
         {
+            var origion = grouping;
             if (SetProperty(ref grouping, value))
             {
                 OnGroupRelationChanged?.Invoke(this);
+                OnGroupingChanged?.Invoke(this, origion);
             }
         }
     }
@@ -87,12 +95,13 @@ public class GroupRelationDto : BindableBase, IDisposable
     }
 
     private bool _isChatting;
+
     public bool IsChatting
     {
         get => _isChatting;
         set
         {
-            if(SetProperty(ref _isChatting, value))
+            if (SetProperty(ref _isChatting, value))
             {
                 OnGroupRelationChanged?.Invoke(this);
             }
@@ -126,6 +135,7 @@ public class GroupRelationDto : BindableBase, IDisposable
     public bool IsOwner => status == 0;
 
     public event Action<GroupRelationDto> OnGroupRelationChanged;
+    public event Action<GroupRelationDto, string> OnGroupingChanged;
 
     public void Dispose()
     {

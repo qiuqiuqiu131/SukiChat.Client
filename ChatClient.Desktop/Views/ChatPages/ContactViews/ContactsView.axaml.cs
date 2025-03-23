@@ -5,23 +5,41 @@ using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.UIEntity;
 using Material.Icons;
 using Material.Icons.Avalonia;
+using Prism.Events;
 using Prism.Ioc;
+using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
 
-public partial class ContactsView : UserControl
+public partial class ContactsView : UserControl, IDestructible
 {
     // 在类的顶部添加私有字段来存储活动菜单
     private ContextMenu? _activeContextMenu;
 
+    private SubscriptionToken token1;
+    private SubscriptionToken token2;
+
     public ContactsView()
     {
         InitializeComponent();
+
+        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+        token1 = eventAggregator.GetEvent<FriendRelationSelectEvent>().Subscribe(SelectFriendRelationEvent);
+        token2 = eventAggregator.GetEvent<GroupRelationSelectEvent>().Subscribe(SelectGroupRelationEvent);
     }
+
+    private void SelectGroupRelationEvent(GroupRelationDto obj) =>
+        GroupView.SelectItem(obj);
+
+    private void SelectFriendRelationEvent(FriendRelationDto obj) =>
+        FriendView.SelectItem(obj);
 
     protected override void OnUnloaded(RoutedEventArgs e)
     {
@@ -85,5 +103,11 @@ public partial class ContactsView : UserControl
     {
         GroupView.ClearAllSelected();
         FriendView.ClearAllSelected();
+    }
+
+    public void Destroy()
+    {
+        token1.Dispose();
+        token2.Dispose();
     }
 }

@@ -14,16 +14,24 @@ public class FriendRelationDto : BindableBase, IDisposable
         set => SetProperty(ref _userDto, value);
     }
 
-    private string grouping;
+    public string grouping;
+
+    public string GroupingWithoutEvent
+    {
+        get => grouping;
+        set => SetProperty(ref grouping, value);
+    }
 
     public string Grouping
     {
         get => grouping;
         set
         {
+            var origion = grouping;
             if (SetProperty(ref grouping, value))
             {
                 OnFriendRelationChanged?.Invoke(this);
+                OnGroupingChanged?.Invoke(this, origion);
             }
         }
     }
@@ -71,12 +79,13 @@ public class FriendRelationDto : BindableBase, IDisposable
     }
 
     private bool _isChatting;
+
     public bool IsChatting
     {
         get => _isChatting;
         set
         {
-            if(SetProperty(ref _isChatting, value))
+            if (SetProperty(ref _isChatting, value))
             {
                 OnFriendRelationChanged?.Invoke(this);
             }
@@ -92,6 +101,7 @@ public class FriendRelationDto : BindableBase, IDisposable
     }
 
     public event Action<FriendRelationDto> OnFriendRelationChanged;
+    public event Action<FriendRelationDto, string> OnGroupingChanged;
 
     public void Dispose()
     {

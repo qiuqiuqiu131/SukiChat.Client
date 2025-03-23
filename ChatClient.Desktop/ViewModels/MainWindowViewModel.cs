@@ -129,14 +129,20 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         {
             groupFriendDto.Friends.CollectionChanged += OnRelationCollectionChanged;
             foreach (var friend in groupFriendDto.Friends)
+            {
                 friend.OnFriendRelationChanged += FriendRelationDtoOnOnFriendRelationChanged;
+                friend.OnGroupingChanged += FriendRelationDtoOnOnGroupingChanged;
+            }
         }
 
         foreach (var groupGroupDto in GroupGroups)
         {
             groupGroupDto.Groups.CollectionChanged += OnRelationCollectionChanged;
             foreach (var group in groupGroupDto.Groups)
+            {
                 group.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+                group.OnGroupingChanged += GroupRelationDtoOnOnGroupingChanged;
+            }
         }
 
         GroupFriends.CollectionChanged += OnCollectionChanged;
@@ -182,9 +188,15 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             foreach (var item in e.NewItems)
             {
                 if (item is FriendRelationDto friendRelationDto)
+                {
                     friendRelationDto.OnFriendRelationChanged += FriendRelationDtoOnOnFriendRelationChanged;
+                    friendRelationDto.OnGroupingChanged += FriendRelationDtoOnOnGroupingChanged;
+                }
                 else if (item is GroupRelationDto groupRelationDto)
+                {
                     groupRelationDto.OnGroupRelationChanged += GroupRelationDtoOnOnGroupRelationChanged;
+                    groupRelationDto.OnGroupingChanged += GroupRelationDtoOnOnGroupingChanged;
+                }
             }
         }
         else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -192,28 +204,64 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             foreach (var item in e.OldItems)
             {
                 if (item is FriendRelationDto friendRelationDto)
+                {
                     friendRelationDto.OnFriendRelationChanged -= FriendRelationDtoOnOnFriendRelationChanged;
+                    friendRelationDto.OnGroupingChanged -= FriendRelationDtoOnOnGroupingChanged;
+                }
                 else if (item is GroupRelationDto groupRelationDto)
+                {
                     groupRelationDto.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
+                    groupRelationDto.OnGroupingChanged -= GroupRelationDtoOnOnGroupingChanged;
+                }
             }
         }
     }
 
+    private async void GroupRelationDtoOnOnGroupingChanged(GroupRelationDto obj, string origionName)
+    {
+        var groupList1 = _userManager.GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(origionName));
+        if (groupList1 != null)
+            groupList1.Groups.Remove(obj);
+
+        var groupList2 = _userManager.GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
+        if (groupList2 != null)
+            groupList2.Groups.Add(obj);
+
+        await Task.Delay(50);
+
+        _eventAggregator.GetEvent<GroupRelationSelectEvent>().Publish(obj);
+    }
+
+    private async void FriendRelationDtoOnOnGroupingChanged(FriendRelationDto obj, string origionName)
+    {
+        var groupList1 = _userManager.GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(origionName));
+        if (groupList1 != null)
+            groupList1.Friends.Remove(obj);
+
+        var groupList2 = _userManager.GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
+        if (groupList2 != null)
+            groupList2.Friends.Add(obj);
+
+        await Task.Delay(50);
+
+        _eventAggregator.GetEvent<FriendRelationSelectEvent>().Publish(obj);
+    }
+
     private void GroupRelationDtoOnOnGroupRelationChanged(GroupRelationDto obj)
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             var groupService = _containerProvider.Resolve<IGroupService>();
-            groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
+            var result = await groupService.UpdateGroupRelation(_userManager.User!.Id, obj);
         });
     }
 
     private void FriendRelationDtoOnOnFriendRelationChanged(FriendRelationDto obj)
     {
-        Task.Run(() =>
+        Task.Run(async () =>
         {
             var friendService = _containerProvider.Resolve<IFriendService>();
-            friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
+            var result = await friendService.UpdateFriendRelation(_userManager.User!.Id, obj);
         });
     }
 

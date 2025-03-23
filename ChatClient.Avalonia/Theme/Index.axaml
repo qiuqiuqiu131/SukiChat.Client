@@ -22,6 +22,7 @@
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="ComboBox.axaml" />
     <StyleInclude Source="../Controls/OverlaySplitView/OverlaySplitView.axaml" />
     <StyleInclude Source="../Controls/FreindGroup/GroupList/GroupList.axaml" />
     <StyleInclude Source="../Controls/FreindGroup/SeparateGroupsView/SeparateGroupsView.axaml" />

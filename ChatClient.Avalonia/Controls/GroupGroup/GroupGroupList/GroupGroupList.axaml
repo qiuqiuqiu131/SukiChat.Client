@@ -6,7 +6,7 @@
     <Style Selector="groupList|GroupGroupList">
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander Theme="{StaticResource ChatExpander}">
+                <Expander Name="PART_Expander" Theme="{StaticResource ChatExpander}">
                     <Expander.Header>
                         <DockPanel LastChildFill="True" HorizontalAlignment="Stretch">
                             <TextBlock DockPanel.Dock="Right"

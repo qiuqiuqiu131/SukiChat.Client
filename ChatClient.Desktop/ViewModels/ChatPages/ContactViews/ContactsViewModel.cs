@@ -103,7 +103,7 @@ public class ContactsViewModel : ChatPageBase
                 var dto = obj as GroupFriendDto;
                 var friends = dto.Friends;
                 foreach (var friend in friends)
-                    friend.Grouping = "默认分组";
+                    friend.GroupingWithoutEvent = "默认分组";
 
                 GroupFriends.Remove(dto);
                 GroupFriends.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Friends.AddRange(friends);
@@ -113,7 +113,7 @@ public class ContactsViewModel : ChatPageBase
                 var dto = obj as GroupGroupDto;
                 var groups = dto.Groups;
                 foreach (var group in groups)
-                    group.Grouping = "默认分组";
+                    group.GroupingWithoutEvent = "默认分组";
 
                 GroupGroups.Remove(dto);
                 GroupGroups.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Groups.AddRange(groups);
@@ -162,30 +162,20 @@ public class ContactsViewModel : ChatPageBase
             if (type == 0)
             {
                 var dto = obj as GroupFriendDto;
+                dto.GroupName = groupName;
                 var friends = dto.Friends;
                 foreach (var friend in friends)
-                    friend.Grouping = groupName;
+                    friend.GroupingWithoutEvent = groupName;
 
-                GroupFriends.Remove(dto);
-                GroupFriends.Add(new GroupFriendDto
-                {
-                    GroupName = groupName,
-                    Friends = friends
-                });
+                await Task.Delay(50);
             }
             else
             {
                 var dto = obj as GroupGroupDto;
+                dto.GroupName = groupName;
                 var groups = dto.Groups;
                 foreach (var group in groups)
-                    group.Grouping = groupName;
-
-                GroupGroups.Remove(dto);
-                GroupGroups.Add(new GroupGroupDto
-                {
-                    GroupName = groupName,
-                    Groups = groups
-                });
+                    group.GroupingWithoutEvent = groupName;
             }
         }
     }

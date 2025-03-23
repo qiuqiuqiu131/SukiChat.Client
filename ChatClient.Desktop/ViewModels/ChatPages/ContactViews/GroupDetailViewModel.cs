@@ -1,4 +1,8 @@
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Collections;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Common;
@@ -25,6 +29,9 @@ public class GroupDetailViewModel : ViewModelBase
         set => SetProperty(ref _group, value);
     }
 
+
+    public AvaloniaList<string>? GroupNames { get; private set; }
+
     public DelegateCommand SendMessageCommand { get; init; }
 
     public GroupDetailViewModel(IContainerProvider containerProvider, IEventAggregator eventAggregator,
@@ -35,6 +42,55 @@ public class GroupDetailViewModel : ViewModelBase
         _userManager = userManager;
 
         SendMessageCommand = new DelegateCommand(SendMessage);
+
+        GroupNames = new AvaloniaList<string>(_userManager.GroupGroups?.Select(d => d.GroupName).Order());
+        if (_userManager.GroupGroups != null)
+            _userManager.GroupGroups.CollectionChanged += GroupGroupsOnCollectionChanged;
+    }
+
+    private void GroupGroupsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            foreach (var item in e.NewItems)
+            {
+                if (item is GroupGroupDto groupGroup)
+                {
+                    // 如果GroupNames中不包含此分组名称，则按顺序插入
+                    if (!GroupNames.Contains(groupGroup.GroupName))
+                    {
+                        // 找到正确的插入位置
+                        int insertIndex = 0;
+                        while (insertIndex < GroupNames.Count &&
+                               string.Compare(GroupNames[insertIndex], groupGroup.GroupName) < 0)
+                        {
+                            insertIndex++;
+                        }
+
+                        // 在正确位置插入
+                        GroupNames.Insert(insertIndex, groupGroup.GroupName);
+                    }
+                }
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            foreach (var item in e.OldItems)
+            {
+                if (item is GroupGroupDto groupGroup)
+                {
+                    // 检查是否有其他分组使用相同的名称
+                    bool nameStillInUse = _userManager.GroupGroups?.Any(g => g.GroupName == groupGroup.GroupName) ??
+                                          false;
+
+                    // 如果没有其他分组使用此名称，则从列表中移除
+                    if (!nameStillInUse && GroupNames.Contains(groupGroup.GroupName))
+                    {
+                        GroupNames.Remove(groupGroup.GroupName);
+                    }
+                }
+            }
+        }
     }
 
     private async void SendMessage()

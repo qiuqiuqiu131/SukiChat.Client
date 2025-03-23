@@ -86,8 +86,8 @@
                     FontSize="14"
                     Command="{Binding SendMessageCommand}" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" Spacing="3">
-            <StackPanel Orientation="Horizontal" Spacing="15" Margin="5">
+        <StackPanel Orientation="Vertical" Spacing="0">
+            <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,8">
                 <StackPanel.Styles>
                     <Style Selector="TextBlock">
                         <Setter Property="FontSize" Value="12" />
@@ -103,10 +103,10 @@
                 <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"
                            Text="{Binding Friend.UserDto.Birth,Converter={converter:DateOfMDConverter}}" />
             </StackPanel>
-            <DockPanel Margin="5">
+            <DockPanel Height="40">
                 <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="备注" DockPanel.Dock="Left" Margin="0,3" />
+                <TextBlock Text="备注" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     Text="{Binding Friend.Remark,Mode=TwoWay}"
                     DefaultText="设置好友备注"
@@ -114,23 +114,21 @@
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
             </DockPanel>
-            <DockPanel Margin="5">
+            <DockPanel Height="40">
                 <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="好友分组" DockPanel.Dock="Left" Margin="0,3" />
-                <TextBox DockPanel.Dock="Right"
-                         Text="{Binding Friend.Grouping}"
-                         IsReadOnly="True"
-                         Padding="10,3"
-                         MinHeight="0"
-                         HorizontalAlignment="Right"
-                         Margin="0"
-                         Classes="Editable" />
+                <TextBlock Text="好友分组" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,3" />
+                <ComboBox HorizontalAlignment="Right"
+                          Margin="0,7"
+                          Padding="0"
+                          FontSize="13"
+                          ItemsSource="{Binding GroupNames}"
+                          SelectedValue="{Binding Friend.Grouping}" />
             </DockPanel>
-            <DockPanel Margin="5" IsVisible="{Binding Friend.UserDto.Introduction}">
+            <DockPanel Height="40" IsVisible="{Binding Friend.UserDto.Introduction}">
                 <avalonia:MaterialIcon Kind="PencilOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="个性签名" DockPanel.Dock="Left" Margin="0,3" />
+                <TextBlock Text="个性签名" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
                 <TextBlock DockPanel.Dock="Right"
                            Text="{Binding Friend.UserDto.Introduction}"
                            Padding="10,3"
