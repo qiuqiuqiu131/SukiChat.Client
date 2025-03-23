@@ -21,6 +21,7 @@ using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
+using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Desktop.Views.UserControls;
@@ -97,6 +98,9 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<CreateGroupView, CreateGroupViewModel>();
         containerRegistry.RegisterDialog<AddNewFriendView, AddNewFriendViewModel>();
         containerRegistry.RegisterDialog<CommonDialogView, CommonDialogViewModel>();
+        containerRegistry.RegisterDialog<AddGroupView, AddGroupViewModel>();
+        containerRegistry.RegisterDialog<RenameGroupView, RenameGroupViewModel>();
+        containerRegistry.RegisterDialog<DeleteGroupView, DeleteGroupViewModel>();
 
         var views = ConfigureViews(containerRegistry);
         DataTemplates.Add(new ViewLocator(views));

@@ -118,7 +118,7 @@ public class MultiSeparateGroupView : UserControl
                             control.DataContext = groupFriend;
                             control.SelectionChanged += OnSelectionChanged;
                             groupFriend.DeSelectItemEvent += friend => control.DeSelectItems(friend);
-                            _itemCollection.Add(control);
+                            InsertControlByGroupName(control);
                         }
                     }
                 }
@@ -148,6 +148,39 @@ public class MultiSeparateGroupView : UserControl
         if (sender is MultiGroupList.MultiGroupList groupList)
         {
             SelectionChangedCommand.Execute(args);
+        }
+    }
+
+    // 按GroupName顺序插入控件
+    private void InsertControlByGroupName(Control control)
+    {
+        if (control.DataContext is not GroupFriendDto groupFriend)
+            return;
+
+        // 查找合适的插入位置
+        int insertIndex = 0;
+        for (int i = 0; i < _itemCollection.Count; i++)
+        {
+            if (_itemCollection[i] is Control existingControl &&
+                existingControl.DataContext is GroupFriendDto existingGroup)
+            {
+                if (string.Compare(existingGroup.GroupName, groupFriend.GroupName, StringComparison.Ordinal) > 0)
+                {
+                    // 找到第一个GroupName大于当前项的位置
+                    break;
+                }
+            }
+            insertIndex++;
+        }
+
+        // 在确定的位置插入控件
+        if (insertIndex >= _itemCollection.Count)
+        {
+            _itemCollection.Add(control);
+        }
+        else
+        {
+            _itemCollection.Insert(insertIndex, control);
         }
     }
 }

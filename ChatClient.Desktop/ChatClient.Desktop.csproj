@@ -86,6 +86,14 @@
             <DependentUpon>ChatRightTopPanelView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\Dialog\AddNewFriendView.axaml.cs">
+            <DependentUpon>AddNewFriendView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\Dialog\CreateGroupView.axaml.cs">
+            <DependentUpon>CreateGroupView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

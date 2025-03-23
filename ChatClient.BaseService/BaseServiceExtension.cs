@@ -48,7 +48,8 @@ public static class BaseServiceExtension
             .Register<IUserLoginService, UserLoginService>()
             .Register<IChatService, ChatService>()
             .Register<IGroupGetService, GroupGetService>()
-            .Register<IGroupService, GroupService>();
+            .Register<IGroupService, GroupService>()
+            .Register<IUserGroupService, UserGroupService>();
 
         // 注册PackService
         containerRegistry.Register<IFriendChatPackService, FriendChatPackService>()

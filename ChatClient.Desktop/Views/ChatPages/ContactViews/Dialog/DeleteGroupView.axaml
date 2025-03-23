@@ -1,0 +1,25 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             xmlns:icons="https://github.com/kikipoulet/SukiUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Width="300"
+             x:DataType="contactViews:DeleteGroupViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog.DeleteGroupView">
+    <Grid RowDefinitions="25,0.5,auto,auto">
+        <Button Name="PART_CloseButton" HorizontalAlignment="Right" Width="25" Height="25" Margin="10,0"
+                Classes="Basic Rounded WindowControlsButton Close"
+                Command="{Binding CancelCommand}">
+            <PathIcon Data="{x:Static icons:Icons.WindowClose}" Width="10" Height="10" />
+        </Button>
+        <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+        <TextBlock Grid.Row="2" Height="30" Margin="18,15" FontSize="15" Text="确定删除分组吗？" />
+        <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
+            <Button Content="确定" Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14" />
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5" Content="取消"
+                    Command="{Binding CancelCommand}" FontSize="14" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="contactViews:RenameGroupViewModel"
+             Width="300"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog.RenameGroupView">
+    <Grid RowDefinitions="25,0.5,auto,auto">
+        <TextBlock Grid.Row="0" Text="重命名分组" VerticalAlignment="Center" Margin="5" FontSize="13.5"
+                   HorizontalAlignment="Center" />
+        <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+        <TextBox Name="InputBox" Grid.Row="2" Height="30" Margin="10,15" Padding="4,0,4,0" Watermark="填写分组"
+                 FontSize="14.5"
+                 Text="{Binding GroupName}" />
+        <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
+            <Button Content="确定" Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14" />
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5" Content="取消"
+                    Command="{Binding CancelCommand}" FontSize="14" />
+        </StackPanel>
+    </Grid>
+</UserControl>

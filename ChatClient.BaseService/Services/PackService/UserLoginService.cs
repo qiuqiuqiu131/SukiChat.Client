@@ -22,6 +22,8 @@ internal class UserLoginService : BaseService, IUserLoginService
     private readonly IUserDtoManager _userDtoManager;
     private readonly IUnitOfWork _unitOfWork;
 
+    private IEnumerable<UserGroupMessage>? _userGroupMessages;
+
     public UserLoginService(IContainerProvider containerProvider,
         IMessageHelper messageHelper,
         IMapper mapper,
@@ -86,14 +88,42 @@ internal class UserLoginService : BaseService, IUserLoginService
                 user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
                 user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
                 user.FriendDeletes = await friendPackService.GetFriendDeleteDtos(userId);
+
+                // 分组好友
                 var friends = await friendPackService.GetFriendRelationDtos(userId);
-                user.GroupFriends = new AvaloniaList<GroupFriendDto>(friends
-                    .GroupBy(d => d.Grouping)
+                var groupFriends = _userGroupMessages?
+                    .Where(d => d.GroupType == 0)
                     .Select(d => new GroupFriendDto
                     {
-                        Friends = new AvaloniaList<FriendRelationDto>(d),
-                        GroupName = d.Key
-                    }));
+                        GroupName = d.GroupName,
+                        Friends = []
+                    }).ToList() ?? [];
+                if (!groupFriends.Exists(d => d.GroupName.Equals("默认分组")))
+                {
+                    groupFriends.Add(new GroupFriendDto()
+                    {
+                        GroupName = "默认分组",
+                        Friends = []
+                    });
+                }
+
+                foreach (var friend in friends)
+                {
+                    var group = groupFriends.FirstOrDefault(d => d.GroupName.Equals(friend.Grouping));
+                    if (group != null)
+                        group.Friends.Add(friend);
+                    else
+                    {
+                        groupFriends.Add(new GroupFriendDto
+                        {
+                            GroupName = friend.Grouping,
+                            Friends = [friend]
+                        });
+                    }
+                }
+
+                var sortedGroups = groupFriends.OrderBy(g => g.GroupName).ToList();
+                user.GroupFriends = new AvaloniaList<GroupFriendDto>(sortedGroups);
 
                 if (friendPackService is IDisposable disposable)
                     disposable.Dispose();
@@ -109,14 +139,42 @@ internal class UserLoginService : BaseService, IUserLoginService
                 user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
                 user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
                 user.GroupDeletes = await groupPackService.GetGroupDeleteDtos(userId);
+
+                // 分组群聊
                 var groups = await groupPackService.GetGroupRelationDtos(userId);
-                user.GroupGroups = new AvaloniaList<GroupGroupDto>(groups
-                    .GroupBy(d => d.Grouping)
-                    .Select(d => new GroupGroupDto()
+                var groupGroups = _userGroupMessages?
+                    .Where(d => d.GroupType == 1)
+                    .Select(d => new GroupGroupDto
                     {
-                        Groups = new AvaloniaList<GroupRelationDto>(d),
-                        GroupName = d.Key
-                    }));
+                        GroupName = d.GroupName,
+                        Groups = []
+                    }).ToList() ?? [];
+                if (!groupGroups.Exists(d => d.GroupName.Equals("默认分组")))
+                {
+                    groupGroups.Add(new GroupGroupDto
+                    {
+                        GroupName = "默认分组",
+                        Groups = []
+                    });
+                }
+
+                foreach (var group in groups)
+                {
+                    var groupDto = groupGroups.FirstOrDefault(d => d.GroupName.Equals(group.Grouping));
+                    if (groupDto != null)
+                        groupDto.Groups.Add(group);
+                    else
+                    {
+                        groupGroups.Add(new GroupGroupDto
+                        {
+                            GroupName = group.Grouping,
+                            Groups = [group]
+                        });
+                    }
+                }
+
+                var sortedGroupGroups = groupGroups.OrderBy(g => g.GroupName).ToList();
+                user.GroupGroups = new AvaloniaList<GroupGroupDto>(sortedGroupGroups);
 
                 if (groupPackService is IDisposable disposable)
                     disposable.Dispose();
@@ -156,6 +214,9 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("Get Outline Message Cost Time:" + (end - start));
 
         if (outlineResponse == null) return;
+
+        // 暂存用户分组信息
+        _userGroupMessages = outlineResponse.UserGroups;
 
         // 处理离线消息
         List<Task> tasks =

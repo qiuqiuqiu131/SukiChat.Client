@@ -1,7 +1,5 @@
 using AutoMapper;
 using Avalonia.Collections;
-using Avalonia.Threading;
-using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;

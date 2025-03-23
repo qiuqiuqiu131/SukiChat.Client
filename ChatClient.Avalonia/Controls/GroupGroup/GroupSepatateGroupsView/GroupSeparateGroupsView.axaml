@@ -2,7 +2,29 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView"
         xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
-        xmlns:groupGroupList="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupGroupList">
+        xmlns:groupGroupList="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupGroupList"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Styles.Resources>
+        <DataTemplate x:Key="Menu">
+            <ContextMenu Placement="Pointer" x:DataType="group:GroupGroupDto">
+                <MenuItem Header="添加分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="Add" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="重命名分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="RenameOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="删除分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="DeleteOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </DataTemplate>
+    </Styles.Resources>
     <Style Selector="separateGroupsView|GroupSeparateGroupsView">
         <Setter Property="Template">
             <ControlTemplate>

@@ -100,7 +100,7 @@
                         </Grid>
                     </Button>
                     <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" />
-                    <TabControl TabIndex="0">
+                    <TabControl TabIndex="0" Margin="0,10,0,0">
                         <TabControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" />
@@ -121,6 +121,9 @@
                                     IsVisible="{Binding !GroupFriends,Converter={converter:ListEmptyConverter}}"
                                     GroupFriends="{Binding GroupFriends}"
                                     SelectionChanged="FriendSelectionChanged"
+                                    DeleteGroupCommand="{Binding DeleteGroupCommand}"
+                                    AddGroupCommand="{Binding AddGroupCommand}"
+                                    RenameGroupCommand="{Binding RenameGroupCommand}"
                                     SelectionChangedCommand="{Binding SelectedChangedCommand}" />
                             </Panel>
                         </TabItem>
@@ -137,6 +140,9 @@
                                     IsVisible="{Binding !GroupGroups.Count,Converter={converter:ListEmptyConverter}}"
                                     GroupFriends="{Binding GroupGroups}"
                                     SelectionChanged="GroupSelectionChanged"
+                                    DeleteGroupCommand="{Binding DeleteGroupCommand}"
+                                    AddGroupCommand="{Binding AddGroupCommand}"
+                                    RenameGroupCommand="{Binding RenameGroupCommand}"
                                     SelectionChangedCommand="{Binding SelectedChangedCommand}" />
                             </Panel>
                         </TabItem>

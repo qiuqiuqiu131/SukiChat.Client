@@ -59,4 +59,9 @@ public class SearchBox : UserControl
         base.OnGotFocus(e);
         _textBox.Focus();
     }
+
+    protected override void OnLostFocus(RoutedEventArgs e)
+    {
+        base.OnLostFocus(e);
+    }
 }
