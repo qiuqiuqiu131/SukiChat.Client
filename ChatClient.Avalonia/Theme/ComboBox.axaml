@@ -52,7 +52,7 @@
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Margin="0,0,0,0" Padding="0">
+                <Border Margin="0,0,0,0" Padding="3,0,0,0">
                     <Border.Styles>
                         <Style Selector="ContentControl.ghost TextBlock">
                             <Setter Property="Foreground" Value="Transparent" />
@@ -62,6 +62,9 @@
                         </Style>
                         <Style Selector="ToggleButton:checked">
                             <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ComboBoxItem">
+                            <Setter Property="FontSize" Value="{Binding $parent[ComboBox].FontSize}" />
                         </Style>
                     </Border.Styles>
                     <icons:GlassCard Name="border"
@@ -76,7 +79,6 @@
                             </Transitions>
                         </icons:GlassCard.Transitions>
                         <Grid ColumnDefinitions="*,Auto">
-
                             <Grid.Resources>
                                 <icons:BiggestItemConverter x:Key="BigItem" />
                             </Grid.Resources>
@@ -90,7 +92,8 @@
                                                                    Converter={x:Static ObjectConverters.IsNull}}"
                                        Text="{TemplateBinding PlaceholderText}" />
                             <ContentControl Margin="7,1,0,0"
-                                            HorizontalContentAlignment="Center"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            FontSize="{Binding $parent[ComboBox].FontSize}"
                                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                             Classes="ghost"
                                             Content="{TemplateBinding ItemsSource,
@@ -98,7 +101,8 @@
                                             ContentTemplate="{TemplateBinding ItemTemplate}"
                                             Foreground="Transparent" />
                             <ContentControl Margin="7,1,0,0"
-                                            HorizontalContentAlignment="Center"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            FontSize="{Binding $parent[ComboBox].FontSize}"
                                             VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                             Content="{TemplateBinding SelectionBoxItem}"
                                             ContentTemplate="{TemplateBinding ItemTemplate}"

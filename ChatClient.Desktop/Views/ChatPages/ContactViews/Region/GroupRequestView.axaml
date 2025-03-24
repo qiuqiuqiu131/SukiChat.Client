@@ -1,21 +1,20 @@
-<UserControl
-    x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.FriendRequestView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-    xmlns:contactViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
-    xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-    xmlns:theme="https://github.com/kikipoulet/SukiUI"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    x:DataType="vm:FriendRequestViewModel"
-    mc:Ignorable="d">
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:contactViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:extenstions="clr-namespace:ChatClient.Avalonia.Extenstions;assembly=ChatClient.Avalonia"
+             xmlns:region="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="region1:GroupRequestViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupRequestView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
@@ -23,9 +22,10 @@
         </Style>
     </UserControl.Styles>
     <UserControl.DataTemplates>
-        <DataTemplate DataType="data:FriendRequestDto">
+        <DataTemplate DataType="group:GroupRequestDto">
             <suki:GlassCard
                 Background="{DynamicResource SukiPrimaryColor5}"
+                IsAnimated="True"
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
@@ -35,26 +35,35 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                            <StackPanel Orientation="Vertical" Spacing="2">
+                                <TextBlock HorizontalAlignment="Right"
+                                           Text="已同意" FontSize="12"
+                                           Opacity="0.6" IsVisible="{Binding IsAccept}" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           Text="已拒绝" FontSize="12"
+                                           Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           Opacity="0.6" FontSize="12"
+                                           Text="{Binding AcceptByGroupMemberDto.NickName,StringFormat=处理者: {0}}" />
+                            </StackPanel>
                         </Grid>
-                        <TextBlock Text="等待验证" FontSize="12" Opacity="0.6"
+                        <TextBlock Text="等待验证" FontSize="12" Opacity="0.65"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding !IsSolved}" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Image="{Binding UserDto.HeadImage}" />
+                        <circleImage:CircleImage Size="37" Image="{Binding GroupDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
-                            <StackPanel Orientation="Horizontal" Spacing="5">
+                            <StackPanel Orientation="Horizontal" Spacing="2">
                                 <TextBlock
                                     FontSize="13.5"
                                     FontWeight="SemiBold"
-                                    Text="{Binding UserDto.Name}" />
+                                    Text="{Binding GroupDto.Name}" />
                                 <TextBlock Text="正在验证你的邀请"
                                            Foreground="{DynamicResource SukiText}"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding RequestTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="13"
+                                           FontSize="12.5"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -68,8 +77,9 @@
                 </DockPanel>
             </suki:GlassCard>
         </DataTemplate>
-        <DataTemplate DataType="data:FriendReceiveDto">
+        <DataTemplate DataType="group:GroupReceivedDto">
             <suki:GlassCard
+                IsAnimated="True"
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
@@ -79,8 +89,17 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                            <StackPanel Orientation="Vertical" Spacing="5">
+                                <TextBlock HorizontalAlignment="Right"
+                                           Text="已同意" FontSize="12"
+                                           Opacity="0.6" IsVisible="{Binding IsAccept}" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           Text="已拒绝" FontSize="12"
+                                           Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                                <TextBlock HorizontalAlignment="Right"
+                                           Opacity="0.6" FontSize="12"
+                                           Text="{Binding AcceptByGroupMemberDto.NickName,StringFormat=处理者: {0}}" />
+                            </StackPanel>
                         </Grid>
                         <StackPanel IsVisible="{Binding !IsSolved}"
                                     Margin="0,0,-10,0"
@@ -89,16 +108,16 @@
                             <Button Classes="Outlined" Padding="8,4" Margin="0"
                                     CommandParameter="{Binding}"
                                     Opacity="0.9"
-                                    Command="{Binding ((vm:FriendRequestViewModel)DataContext).AcceptCommand,
+                                    Command="{Binding ((region1:GroupRequestViewModel)DataContext).AcceptCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="同意" FontSize="12" />
                             </Button>
                             <Button Classes="Outlined Accent" Padding="8,4" Margin="0"
                                     Opacity="0.9"
                                     CommandParameter="{Binding}"
-                                    Command="{Binding ((vm:FriendRequestViewModel)DataContext).RejectCommand,
+                                    Command="{Binding ((region1:GroupRequestViewModel)DataContext).RejectCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="拒绝" FontSize="12" />
+                                <TextBlock Text="拒绝" FontSize="13" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -110,12 +129,15 @@
                                     FontSize="13.5"
                                     FontWeight="SemiBold"
                                     Text="{Binding UserDto.Name}" />
-                                <TextBlock Text="请求加为好友"
+                                <TextBlock Text="请求加入群聊"
                                            Foreground="{DynamicResource SukiText}"
                                            FontSize="13" />
+                                <TextBlock Text="{Binding GroupDto.Name,StringFormat=({0}) }"
+                                           FontWeight="SemiBold"
+                                           FontSize="13.5" />
                                 <TextBlock Text="{Binding ReceiveTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="13"
-                                           Opacity="0.6" />
+                                           FontSize="12.5"
+                                           Opacity="0.65" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Text="留言：" FontSize="12" Opacity="0.6" Margin="0" />
@@ -128,10 +150,11 @@
                 </DockPanel>
             </suki:GlassCard>
         </DataTemplate>
-        <DataTemplate DataType="data:FriendDeleteDto">
+        <DataTemplate DataType="group:GroupDeleteDto">
             <suki:GlassCard
-                BorderBrush="{DynamicResource SukiAccentColor50}"
+                IsAnimated="True"
                 Background="{DynamicResource SukiAccentColor5}"
+                BorderBrush="{DynamicResource SukiAccentColor50}"
                 BorderThickness="0.5"
                 Height="65"
                 Margin="25,7,10,7"
@@ -139,33 +162,31 @@
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
-                        <TextBlock Opacity="0.6" FontSize="12" VerticalAlignment="Center"
-                                   Text="{Binding UserDto.Name,StringFormat=处理者: {0}}"
-                                   IsVisible="{Binding !IsUser}" />
-                        <TextBlock Opacity="0.6" FontSize="12" Text="处理者:你" VerticalAlignment="Center"
-                                   IsVisible="{Binding IsUser}" />
+                        <TextBlock Text="{Binding UserDto.Name,StringFormat=处理者: {0}}" FontSize="12" Opacity="0.6"
+                                   VerticalAlignment="Center" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Image="{Binding UserDto.HeadImage}" />
+                        <circleImage:CircleImage Size="37" Image="{Binding GroupDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
-                                <TextBlock
-                                    FontSize="13.5"
-                                    FontWeight="SemiBold"
-                                    Text="{Binding UserDto.Name}" />
-                                <TextBlock Text="删除好友"
+                                <TextBlock Text="{Binding GroupDto.Name }"
+                                           FontWeight="SemiBold"
+                                           FontSize="13.5" />
+                                <TextBlock Text="删除群聊"
                                            Foreground="{DynamicResource SukiText}"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding DeleteTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="13"
-                                           Opacity="0.6" />
+                                           FontSize="12.5"
+                                           Opacity="0.65" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Row="1">
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Text="消息：" FontSize="12" Opacity="0.6" />
-                                <TextBlock Text="你已将其删除" FontSize="12" Opacity="0.6" Margin="0"
-                                           IsVisible="{Binding IsUser}" />
-                                <TextBlock Text="你已被删除" FontSize="12" Opacity="0.6" Margin="0"
-                                           IsVisible="{Binding !IsUser}" />
+                                <TextBlock Text="已被群主解散" FontSize="12" Opacity="0.6" Margin="0"
+                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=0}}" />
+                                <TextBlock Text="你被移除群聊" FontSize="12" Opacity="0.6" Margin="0"
+                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=1}}" />
+                                <TextBlock Text="你退出了群聊" FontSize="12" Opacity="0.6" Margin="0"
+                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=2}}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>
@@ -173,19 +194,19 @@
             </suki:GlassCard>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <contactViews:FriendRequestView.FriendRequestDtos>
-        <Binding Path="FriendRequestDtos" />
-    </contactViews:FriendRequestView.FriendRequestDtos>
-    <contactViews:FriendRequestView.FriendReceivedDtos>
-        <Binding Path="FriendReceivedDtos" />
-    </contactViews:FriendRequestView.FriendReceivedDtos>
-    <contactViews:FriendRequestView.FriendDeleteDtos>
-        <Binding Path="FriendDeleteDtos" />
-    </contactViews:FriendRequestView.FriendDeleteDtos>
+    <region:GroupRequestView.GroupRequestDtos>
+        <Binding Path="GroupRequestDtos" />
+    </region:GroupRequestView.GroupRequestDtos>
+    <region:GroupRequestView.GroupReceivedDtos>
+        <Binding Path="GroupReceivedDtos" />
+    </region:GroupRequestView.GroupReceivedDtos>
+    <region:GroupRequestView.GroupDeleteDtos>
+        <Binding Path="GroupDeleteDtos" />
+    </region:GroupRequestView.GroupDeleteDtos>
     <Grid>
         <Grid RowDefinitions="65,*" IsVisible="{Binding !IsRequestEmpty}">
             <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0">
-                <TextBlock Text="好友通知" FontSize="16.5" VerticalAlignment="Bottom"
+                <TextBlock Text="群聊通知" FontSize="16.5" VerticalAlignment="Bottom"
                            FontWeight="SemiBold"
                            DockPanel.Dock="Left"
                            Margin="10,10" />
@@ -224,7 +245,7 @@
                           Margin="10,0"
                           IsVisible="{Binding !IsRequestEmpty}"
                           VerticalScrollBarVisibility="Visible">
-                <ItemsControl Name="RequestItemsControl" theme:ItemsControlExtensions.AnimatedScroll="False">
+                <ItemsControl Name="RequestItemsControl" extenstions:ItemsControlExtensions.AnimatedScroll="False">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Vertical" />

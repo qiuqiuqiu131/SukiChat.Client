@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:searchUserGroup="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="searchUserGroup:AddGroupRequestViewModel"
+             x:Class="ChatClient.Desktop.Views.SearchUserGroupView.AddGroupRequestView">
+    <Grid RowDefinitions="25,0.5,*,auto">
+        <Grid Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <TextBlock Grid.Row="0" Text="添加分组" VerticalAlignment="Center" Margin="5" FontSize="13.5"
+                       HorizontalAlignment="Center" />
+            <Button Name="PART_CloseButton"
+                    Margin="5,0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CancleCommand}"
+                    Classes="Basic Rounded WindowControlsButton Close">
+                <PathIcon Width="8" Height="8" Data="{x:Static suki:Icons.WindowClose}" />
+            </Button>
+        </Grid>
+        <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+        <ScrollViewer Grid.Row="2" Padding="8,0,0,0" VerticalScrollBarVisibility="Visible"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel suki:StackPanelExtensions.AnimatedScroll="True" Margin="15" Orientation="Vertical"
+                        Spacing="12">
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,5">
+                    <circleImage:CircleImage Image="{Binding GroupDto.HeadImage}" Size="40"
+                                             DockPanel.Dock="Left" />
+                    <Grid RowDefinitions="1.3*,*" Margin="13,0">
+                        <TextBlock Text="{Binding GroupDto.Name}" FontSize="14.5" VerticalAlignment="Center" />
+                        <TextBlock Grid.Row="1" Text="{Binding GroupDto.Id}" FontSize="12"
+                                   VerticalAlignment="Center"
+                                   Opacity="0.6" />
+                    </Grid>
+                </StackPanel>
+                <TextBox Margin="-3,0" Text="{Binding Message}" MinHeight="120"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         VerticalContentAlignment="Top"
+                         Watermark="填写验证信息" />
+            </StackPanel>
+        </ScrollViewer>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="15,5,15,10" Spacing="10">
+            <Button Padding="15,5" Margin="0" Classes="Flat" Command="{Binding SendGroupRequestCommand}">
+                <TextBlock Text="发送" FontSize="13.5" />
+            </Button>
+            <Button Padding="15,5" Margin="0" Command="{Binding CancleCommand}">
+                <TextBlock Text="取消" FontSize="13.5" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

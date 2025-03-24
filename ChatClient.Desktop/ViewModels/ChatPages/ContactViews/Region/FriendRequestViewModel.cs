@@ -1,7 +1,6 @@
 using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -11,7 +10,7 @@ using Prism.Ioc;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
 public class FriendRequestViewModel : ViewModelBase
 {
@@ -57,7 +56,7 @@ public class FriendRequestViewModel : ViewModelBase
 
         isOperate = true;
         var _friendService = _containerProvider.Resolve<IFriendService>();
-        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false, "默认分组");
+        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false);
         if (state)
         {
             obj.IsAccept = true;
@@ -80,7 +79,7 @@ public class FriendRequestViewModel : ViewModelBase
 
         isOperate = true;
         var _friendService = _containerProvider.Resolve<IFriendService>();
-        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "默认分组");
+        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "", "默认分组");
         if (state)
         {
             obj.IsAccept = true;

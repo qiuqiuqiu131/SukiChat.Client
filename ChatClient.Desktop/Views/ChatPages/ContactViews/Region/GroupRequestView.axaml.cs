@@ -6,46 +6,46 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Group;
 
-namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
+namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
-public partial class FriendRequestView : UserControl
+public partial class GroupRequestView : UserControl
 {
-    public static readonly StyledProperty<AvaloniaList<FriendRequestDto>> FriendRequestDtosProperty
-        = AvaloniaProperty.Register<FriendRequestView, AvaloniaList<FriendRequestDto>>(
-            nameof(FriendRequestDtos));
+    public static readonly StyledProperty<AvaloniaList<GroupRequestDto>> GroupRequestDtosProperty
+        = AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupRequestDto>>(
+            nameof(GroupRequestDtos));
 
-    public AvaloniaList<FriendRequestDto> FriendRequestDtos
+    public AvaloniaList<GroupRequestDto> GroupRequestDtos
     {
-        get => GetValue(FriendRequestDtosProperty);
-        set => SetValue(FriendRequestDtosProperty, value);
+        get => GetValue(GroupRequestDtosProperty);
+        set => SetValue(GroupRequestDtosProperty, value);
     }
 
-    public static readonly StyledProperty<AvaloniaList<FriendReceiveDto>> FriendReceivedDtosProperty =
-        AvaloniaProperty.Register<FriendRequestView, AvaloniaList<FriendReceiveDto>>(
-            nameof(FriendReceiveDto));
+    public static readonly StyledProperty<AvaloniaList<GroupReceivedDto>> GroupReceivedDtosProperty =
+        AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupReceivedDto>>(
+            nameof(GroupReceivedDtos));
 
-    public AvaloniaList<FriendReceiveDto> FriendReceivedDtos
+    public AvaloniaList<GroupReceivedDto> GroupReceivedDtos
     {
-        get => GetValue(FriendReceivedDtosProperty);
-        set => SetValue(FriendReceivedDtosProperty, value);
+        get => GetValue(GroupReceivedDtosProperty);
+        set => SetValue(GroupReceivedDtosProperty, value);
     }
 
-    public static readonly StyledProperty<AvaloniaList<FriendDeleteDto>> FriendDeleteDtosProperty
-        = AvaloniaProperty.Register<FriendRequestView, AvaloniaList<FriendDeleteDto>>(
-            nameof(FriendDeleteDtos));
+    public static readonly StyledProperty<AvaloniaList<GroupDeleteDto>> GroupDeleteDtosProperty =
+        AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupDeleteDto>>(
+            nameof(GroupDeleteDtos));
 
-    public AvaloniaList<FriendDeleteDto> FriendDeleteDtos
+    public AvaloniaList<GroupDeleteDto> GroupDeleteDtos
     {
-        get => GetValue(FriendDeleteDtosProperty);
-        set => SetValue(FriendDeleteDtosProperty, value);
+        get => GetValue(GroupDeleteDtosProperty);
+        set => SetValue(GroupDeleteDtosProperty, value);
     }
 
     private bool isInit;
     private ItemCollection _itemCollection;
 
-    public FriendRequestView()
+    public GroupRequestView()
     {
         InitializeComponent();
         _itemCollection = RequestItemsControl.Items;
@@ -57,9 +57,9 @@ public partial class FriendRequestView : UserControl
         if (isInit) return;
         isInit = true;
 
-        FriendReceivedDtos.CollectionChanged += OnCollectionChanged;
-        FriendRequestDtos.CollectionChanged += OnCollectionChanged;
-        FriendDeleteDtos.CollectionChanged += OnCollectionChanged;
+        GroupReceivedDtos.CollectionChanged += OnCollectionChanged;
+        GroupRequestDtos.CollectionChanged += OnCollectionChanged;
+        GroupDeleteDtos.CollectionChanged += OnCollectionChanged;
         InitItems();
     }
 
@@ -81,13 +81,13 @@ public partial class FriendRequestView : UserControl
         var mergedList = new List<object>();
 
         // 将所有项目添加到合并列表中
-        foreach (var requestDto in FriendRequestDtos)
+        foreach (var requestDto in GroupRequestDtos)
             mergedList.Add(requestDto);
 
-        foreach (var receivedDto in FriendReceivedDtos)
+        foreach (var receivedDto in GroupReceivedDtos)
             mergedList.Add(receivedDto);
 
-        foreach (var deleteDto in FriendDeleteDtos)
+        foreach (var deleteDto in GroupDeleteDtos)
             mergedList.Add(deleteDto);
 
         // 按时间戳降序排序
@@ -112,9 +112,9 @@ public partial class FriendRequestView : UserControl
     {
         return item switch
         {
-            FriendRequestDto requestDto => requestDto.RequestTime,
-            FriendReceiveDto receiveDto => receiveDto.ReceiveTime,
-            FriendDeleteDto deleteDto => deleteDto.DeleteTime, // 假设有DeleteTime属性
+            GroupRequestDto requestDto => requestDto.RequestTime,
+            GroupReceivedDto receiveDto => receiveDto.ReceiveTime,
+            GroupDeleteDto deleteDto => deleteDto.DeleteTime, // 假设有DeleteTime属性
             _ => DateTime.MinValue // 默认值，确保未知类型排在最后
         };
     }

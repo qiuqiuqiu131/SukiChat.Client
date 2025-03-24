@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using ChatClient.Tool.ManagerInterface;
@@ -36,5 +37,13 @@ public partial class SukiDialogWindow : SukiWindow, IDialogWindow
     {
         base.OnOpened(e);
         Opacity = 1;
+    }
+
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+
+        if (e.Handled) return;
+        FocusManager?.ClearFocus();
     }
 }

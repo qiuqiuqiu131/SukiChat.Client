@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+             xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup.Region"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="region:SearchAllViewModel"
+             x:Class="ChatClient.Desktop.Views.SearchUserGroupView.Region.SearchAllView">
+    <UserControl.DataTemplates>
+        <DataTemplate x:DataType="data:UserDto">
+            <suki:GlassCard IsInteractive="True" Margin="1" Height="55" CornerRadius="7" Padding=" 14,3">
+                <DockPanel VerticalAlignment="Center" LastChildFill="False">
+                    <StackPanel Orientation="Horizontal">
+                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="40"
+                                                 DockPanel.Dock="Left" />
+                        <Grid RowDefinitions="1.3*,*" Margin="10,0">
+                            <TextBlock Text="{Binding Name}" FontSize="14.5" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.6" />
+                        </Grid>
+                    </StackPanel>
+                    <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}" Opacity="0.6" />
+                        <Panel IsVisible="{Binding !IsUser}">
+                            <Button Padding="12,4" Margin="0"
+                                    IsVisible="{Binding !IsFriend}"
+                                    CommandParameter="{Binding}"
+                                    Command="{Binding ((region:SearchAllViewModel)DataContext).AddFriendRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                <TextBlock Text="添加" FontSize="12.5" />
+                            </Button>
+                            <Button FontSize="12" Padding="12,4" Margin="0"
+                                    IsVisible="{Binding IsFriend}"
+                                    CommandParameter="{Binding}"
+                                    Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                <TextBlock Text="发消息" FontSize="12.5" />
+                            </Button>
+                        </Panel>
+                    </Panel>
+                </DockPanel>
+            </suki:GlassCard>
+        </DataTemplate>
+        <DataTemplate x:DataType="group:GroupDto">
+            <suki:GlassCard IsInteractive="True" Margin="1" Height="55" CornerRadius="7" Padding=" 14,3">
+                <DockPanel VerticalAlignment="Center" LastChildFill="False">
+                    <StackPanel Orientation="Horizontal">
+                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="40"
+                                                 DockPanel.Dock="Left" />
+                        <Grid RowDefinitions="1.3*,*" Margin="10,0">
+                            <TextBlock Text="{Binding Name}" FontSize="14.5" VerticalAlignment="Center" />
+                            <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Opacity="0.6" />
+                        </Grid>
+                    </StackPanel>
+                    <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Padding="12,4" Margin="0"
+                                IsVisible="{Binding !IsEntered}"
+                                CommandParameter="{Binding}"
+                                Command="{Binding ((region:SearchAllViewModel)DataContext).AddGroupRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                            <TextBlock Text="添加" FontSize="12.5" />
+                        </Button>
+                        <Button FontSize="12" Padding="12,4" Margin="0"
+                                IsVisible="{Binding IsEntered}"
+                                CommandParameter="{Binding}"
+                                Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                            <TextBlock Text="发消息" FontSize="12.5" />
+                        </Button>
+                    </Panel>
+                </DockPanel>
+            </suki:GlassCard>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <Grid Margin="20,10,20,20">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Opacity="0.6"
+                    IsVisible="{Binding IsEmpty}">
+            <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
+            <TextBlock Text="输入关键词搜索" FontSize="15" />
+        </StackPanel>
+        <ScrollViewer IsVisible="{Binding !IsEmpty}">
+            <ItemsControl ItemsSource="{Binding AllDtos}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="3" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

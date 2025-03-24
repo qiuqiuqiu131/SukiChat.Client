@@ -12,8 +12,14 @@ namespace ChatClient.BaseService.Services;
 
 public interface IFriendService
 {
-    public Task<(bool, string)> AddFriend(string userId, string targetId, string group);
-    public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "");
+    public Task<bool> IsFriend(string userId, string targetId);
+
+    public Task<(bool, string)> AddFriend(string userId, string targetId, string remark = "", string group = "默认分组",
+        string message = "");
+
+    public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string remark = "",
+        string group = "默认分组");
+
     public Task<List<string>> GetFriendIds(string userId);
     public Task<List<string>> GetFriendChatIds(string userId);
     public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
@@ -36,6 +42,12 @@ internal class FriendService : BaseService, IFriendService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
+    public Task<bool> IsFriend(string userId, string targetId)
+    {
+        var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+        return friendRelationRepository.ExistsAsync(d => d.User1Id.Equals(userId) && d.User2Id.Equals(targetId));
+    }
+
     /// <summary>
     /// 发送好友请求
     /// </summary>
@@ -43,13 +55,16 @@ internal class FriendService : BaseService, IFriendService
     /// <param name="targetId"></param>
     /// <param name="group"></param>
     /// <returns></returns>
-    public async Task<(bool, string)> AddFriend(string userId, string targetId, string group)
+    public async Task<(bool, string)> AddFriend(string userId, string targetId, string remark = "",
+        string group = "默认分组", string message = "")
     {
         FriendRequestFromClient friendRequestFromUser = new FriendRequestFromClient
         {
             UserFromId = userId,
             UserTargetId = targetId,
             Group = group,
+            Remark = remark,
+            Message = message,
             RequestTime = DateTime.Now.ToString()
         };
 
@@ -60,8 +75,8 @@ internal class FriendService : BaseService, IFriendService
         // 请求失败
         if (!(result is { Response: { State: true } }))
         {
-            string message = result == null ? "请求超时" : result.Response.Message;
-            return (false, message);
+            string mess = result == null ? "请求超时" : result.Response.Message;
+            return (false, mess);
         }
 
         var friendRequest = new FriendRequest
@@ -69,9 +84,10 @@ internal class FriendService : BaseService, IFriendService
             RequestId = result.RequestId,
             UserFromId = result.Request.UserFromId,
             UserTargetId = result.Request.UserTargetId,
-            Message = "",
+            Message = message,
             RequestTime = DateTime.Parse(result.RequestTime),
-            Group = group
+            Group = group,
+            Remark = remark
         };
         await _unitOfWork.GetRepository<FriendRequest>().InsertAsync(friendRequest);
         await _unitOfWork.SaveChangesAsync();
@@ -85,7 +101,8 @@ internal class FriendService : BaseService, IFriendService
         return (true, result.Response.Message);
     }
 
-    public async Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string group = "默认分组")
+    public async Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string remark = "",
+        string group = "默认分组")
     {
         var time = DateTime.Now;
         FriendResponseFromClient response = new()
@@ -93,6 +110,7 @@ internal class FriendService : BaseService, IFriendService
             Accept = state,
             RequestId = requestId,
             Group = group,
+            Remark = remark,
             ResponseTime = time.ToString()
         };
 

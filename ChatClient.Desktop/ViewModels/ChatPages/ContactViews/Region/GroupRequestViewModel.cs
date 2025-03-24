@@ -1,11 +1,7 @@
-using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
-using ChatClient.DataBase.Data;
 using ChatClient.Tool.Common;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
@@ -13,7 +9,7 @@ using Prism.Ioc;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
 public class GroupRequestViewModel : ViewModelBase
 {

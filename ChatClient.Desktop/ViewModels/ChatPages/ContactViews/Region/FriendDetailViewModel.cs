@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Collections;
-using ChatClient.BaseService.Services;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -15,7 +11,7 @@ using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Navigation.Regions;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
 public class FriendDetailViewModel : ViewModelBase, IDestructible
 {

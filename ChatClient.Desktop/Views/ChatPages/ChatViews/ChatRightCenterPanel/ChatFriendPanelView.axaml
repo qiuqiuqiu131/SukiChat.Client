@@ -259,10 +259,10 @@
                         <Button
                             Content="发送"
                             Classes="Flat"
+                            CornerRadius="6"
                             FontSize="13"
-                            FontWeight="SemiBold"
-                            Padding="20,6,20,6"
-                            Margin="10,0,10,5"
+                            Padding="23,5,23,5"
+                            Margin="10,0,15,10"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Command="{Binding ChatInputPanelViewModel.SendMessageCommand}" />

@@ -8,10 +8,13 @@
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:searchUserGroup="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="700" Height="750"
-             x:DataType="contactViews:AddNewFriendViewModel"
-             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.AddNewFriendView">
+             Width="650" Height="750"
+             MinHeight="750"
+             MinWidth="650"
+             x:DataType="searchUserGroup:SearchUserGroupViewModel"
+             x:Class="ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView">
     <DockPanel LastChildFill="True">
         <Grid VerticalAlignment="Top"
               Background="Transparent"
@@ -89,13 +92,8 @@
                               Data="{x:Static suki:Icons.WindowRestore}" />
                 </Button>
                 <Button Name="PART_CloseButton"
+                        Command="{Binding CancleCommand}"
                         Classes="Basic Rounded WindowControlsButton Close">
-                    <Interaction.Behaviors>
-                        <EventTriggerBehavior EventName="Click">
-                            <CallMethodAction TargetObject="{Binding $parent[suki:SukiWindow]}"
-                                              MethodName="Close" />
-                        </EventTriggerBehavior>
-                    </Interaction.Behaviors>
                     <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
                 </Button>
             </StackPanel>
@@ -103,15 +101,20 @@
                        HorizontalAlignment="Center"
                        FontSize="13.5" />
         </Grid>
-        <StackPanel Orientation="Vertical">
-            <searchBox:SearchBox Name="SearchBox" WaterMask="输入搜索关键字" Margin="20,10" />
-            <TabControl Margin="0" SelectionChanged="SelectingItemsControl_OnSelectionChanged">
-                <TabItem Header="全部" FontSize="13" Margin="12,0" />
-                <TabItem Header="用户" FontSize="13" Margin="12,0" />
-                <TabItem Header="群聊" FontSize="13" Margin="12,0" />
-            </TabControl>
-            <Border Margin="3,5,3,0" Background="{DynamicResource SukiMediumBorderBrush}" Height="2" />
-            <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.AddFriendRegion}" />
-        </StackPanel>
+        <DockPanel LastChildFill="True">
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+                <searchBox:SearchBox Name="SearchBox" TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
+                                     Margin="20,10" />
+                <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+                    <TabItem Header="全部" FontSize="13" Margin="12,0" />
+                    <TabItem Header="用户" FontSize="13" Margin="12,0" />
+                    <TabItem Header="群聊" FontSize="13" Margin="12,0" />
+                </TabControl>
+                <Border Margin="3,5,3,0" Background="{DynamicResource SukiMediumBorderBrush}" Height="2" />
+            </StackPanel>
+            <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.AddFriendRegion}"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch" />
+        </DockPanel>
     </DockPanel>
 </UserControl>

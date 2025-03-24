@@ -7,9 +7,10 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="contactViews:GroupDetailViewModel"
-             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.GroupDetailView">
+             x:DataType="region:GroupDetailViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupDetailView">
     <UserControl.Styles>
         <Style Selector="Image.AppIcon">
             <Setter Property="Transitions">

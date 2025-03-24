@@ -125,11 +125,6 @@ internal class UserLoginService : BaseService, IUserLoginService
                 var sortedGroups = groupFriends.OrderBy(g => g.GroupName).ToList();
                 user.GroupFriends = new AvaloniaList<GroupFriendDto>(sortedGroups);
 
-                if (friendPackService is IDisposable disposable)
-                    disposable.Dispose();
-            }),
-            Task.Run(async () =>
-            {
                 var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
                 user.FriendChats = await friendChatPackService.GetFriendChatDtos(userId);
             }),
@@ -176,11 +171,6 @@ internal class UserLoginService : BaseService, IUserLoginService
                 var sortedGroupGroups = groupGroups.OrderBy(g => g.GroupName).ToList();
                 user.GroupGroups = new AvaloniaList<GroupGroupDto>(sortedGroupGroups);
 
-                if (groupPackService is IDisposable disposable)
-                    disposable.Dispose();
-            }),
-            Task.Run(async () =>
-            {
                 var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
                 user.GroupChats = await groupChatPackService.GetGroupChatDtos(userId);
             })

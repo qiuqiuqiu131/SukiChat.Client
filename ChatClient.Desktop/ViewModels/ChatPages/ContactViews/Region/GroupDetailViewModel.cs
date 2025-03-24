@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Collections;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
@@ -14,7 +12,7 @@ using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation.Regions;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
 public class GroupDetailViewModel : ViewModelBase
 {

@@ -3,23 +3,24 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
-using ChatClient.Desktop.UIEntity;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
-using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
-using DryIoc.ImTools;
 using Material.Icons;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using Prism.Navigation;
+using FriendDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendDetailView;
+using FriendRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendRequestView;
+using GroupDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupDetailView;
+using GroupRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupRequestView;
+using SearchUserGroupView = ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
@@ -236,7 +237,7 @@ public class ContactsViewModel : ChatPageBase
 
     private void AddNewFriend()
     {
-        _dialogService.Show(nameof(AddNewFriendView));
+        _dialogService.Show(nameof(SearchUserGroupView));
     }
 
     private void CreateGroup()

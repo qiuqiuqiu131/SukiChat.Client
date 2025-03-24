@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.Login;
@@ -68,6 +69,14 @@ public static class TranslateWindowHelper
                 if (wd is IDisposable disposable)
                     disposable.Dispose();
             }
+        }
+    }
+
+    public static void ActivateMainWindow()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.MainWindow?.Activate();
         }
     }
 }

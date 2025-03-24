@@ -64,6 +64,12 @@ public class EditableTextBlock : UserControl
         _defaultTextBox.PointerPressed += TextBlockOnPointerPressed;
         _textBox.LostFocus += TextBoxOnLostFocus;
         _textBox.KeyDown += TextBoxOnKeyDown;
+        _textBox.PointerPressed += TextBoxOnPointerPressed;
+    }
+
+    private void TextBoxOnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        e.Handled = true;
     }
 
     private void TextBoxOnKeyDown(object? sender, KeyEventArgs e)

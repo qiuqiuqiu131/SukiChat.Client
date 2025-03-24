@@ -93,6 +93,14 @@ public class GroupDto : BindableBase, IDisposable
 
     private Bitmap headImage;
 
+    private bool isEntered;
+
+    public bool IsEntered
+    {
+        get => isEntered;
+        set => SetProperty(ref isEntered, value);
+    }
+
     public event Action OnGroupChanged;
 
     public GroupDto()

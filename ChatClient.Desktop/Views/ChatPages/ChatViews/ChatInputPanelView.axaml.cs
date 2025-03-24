@@ -5,14 +5,11 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.UserControls;
-using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
@@ -54,6 +51,7 @@ public partial class ChatInputPanelView : UserControl
                     {
                         textBox.TextChanged -= ControlOnTextChanged;
                         textBox.GotFocus -= ControlOnGotFocus;
+                        textBox.KeyDown -= ControlOnKeyDown;
                     }
 
                 _itemCollection.Clear();
@@ -73,6 +71,7 @@ public partial class ChatInputPanelView : UserControl
                             control.DataContext = text;
                             control.TextChanged += ControlOnTextChanged;
                             control.GotFocus += ControlOnGotFocus;
+                            control.KeyDown += ControlOnKeyDown;
 
                             _itemCollection.Add(control);
                         }
@@ -109,6 +108,7 @@ public partial class ChatInputPanelView : UserControl
 
                 control.TextChanged += ControlOnTextChanged;
                 control.GotFocus += ControlOnGotFocus;
+                control.KeyDown += ControlOnKeyDown;
 
                 _itemCollection.Add(control);
             }
@@ -133,6 +133,7 @@ public partial class ChatInputPanelView : UserControl
                 {
                     textBox.TextChanged -= ControlOnTextChanged;
                     textBox.GotFocus -= ControlOnGotFocus;
+                    textBox.KeyDown -= ControlOnKeyDown;
                 }
 
                 removeItems.Add(control);
@@ -143,6 +144,51 @@ public partial class ChatInputPanelView : UserControl
 
             if (InputMessages.Count == 0)
                 InputMessages.Add(string.Empty);
+        }
+    }
+
+    /// <summary>
+    /// 接受输入框的键盘事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ControlOnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is TextBox textBox)
+        {
+            if (e.Key == Key.Enter && (e.KeyModifiers == KeyModifiers.Shift || e.KeyModifiers == KeyModifiers.Control))
+            {
+                int selectionStart = textBox.SelectionStart < textBox.SelectionEnd
+                    ? textBox.SelectionStart
+                    : textBox.SelectionEnd;
+                int selectionEnd = textBox.SelectionStart < textBox.SelectionEnd
+                    ? textBox.SelectionEnd
+                    : textBox.SelectionStart;
+                ;
+
+                // 如果有选中的文本，则替换选中的文本
+                if (selectionStart != selectionEnd)
+                {
+                    string orgionText = textBox.Text;
+                    // 替换选中的文本为换行符
+                    textBox.Text = orgionText.Remove(selectionStart, selectionEnd - selectionStart)
+                        .Insert(selectionStart, Environment.NewLine);
+
+                    // 将光标移动到新插入的换行符之后
+                    textBox.SelectionStart = selectionStart + Environment.NewLine.Length;
+                    textBox.SelectionEnd = selectionStart + Environment.NewLine.Length;
+                }
+                else
+                {
+                    // 如果没有选中文本，则在光标位置插入换行符
+                    int caretIndex = textBox.CaretIndex;
+                    textBox.Text = textBox.Text.Insert(caretIndex, Environment.NewLine);
+                    textBox.CaretIndex = caretIndex + Environment.NewLine.Length;
+                }
+
+                e.Handled = true;
+            }
         }
     }
 
@@ -201,5 +247,17 @@ public partial class ChatInputPanelView : UserControl
         textBox.Text += e.Emoji;
         textBox.Focus();
         ScrollViewer.ScrollToEnd();
+    }
+
+    private void ScrollViewer_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            if (DataContext is ChatInputPanelViewModel chatInputPanelViewModel)
+            {
+                if (chatInputPanelViewModel.SendMessageCommand.CanExecute())
+                    chatInputPanelViewModel.SendMessageCommand.Execute();
+            }
+        }
     }
 }

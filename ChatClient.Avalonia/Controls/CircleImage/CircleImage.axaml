@@ -23,6 +23,7 @@
                         <Image
                             Width="{Binding $parent[circleImage:CircleImage].Size}"
                             Height="{Binding $parent[circleImage:CircleImage].Size}"
+                            Stretch="Fill"
                             Source="{Binding  $parent[circleImage:CircleImage].Image}" />
                     </Panel>
                 </ControlTemplate>

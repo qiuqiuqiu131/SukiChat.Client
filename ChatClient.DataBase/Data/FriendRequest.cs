@@ -19,6 +19,8 @@ public class FriendRequest
 
     public string Group { get; set; }
 
+    public string Remark { get; set; }
+
     public DateTime RequestTime { get; set; }
 
     public bool IsAccept { get; set; }

@@ -32,6 +32,7 @@
                              Width="150"
                              Opacity="0.9"
                              MinHeight="0"
+                             ContextFlyout="{x:Null}"
                              Classes="Editable"
                              Watermark="{Binding $parent[editableTextBlock:EditableTextBlock].DefaultText}"
                              Margin="0"

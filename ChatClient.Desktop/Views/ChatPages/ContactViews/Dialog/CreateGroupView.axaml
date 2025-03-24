@@ -56,9 +56,14 @@
                 <StackPanel DockPanel.Dock="Bottom"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
+                            Spacing="10"
                             Margin="15">
-                    <Button Content="确定" Command="{Binding OKCommand}" />
-                    <Button Content="取消" Command="{Binding CancleCommand}" />
+                    <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}">
+                        <TextBlock Text="确定" FontSize="13.5" />
+                    </Button>
+                    <Button Padding="15,5" Command="{Binding CancleCommand}">
+                        <TextBlock Text="取消" FontSize="13.5" />
+                    </Button>
                 </StackPanel>
                 <Grid RowDefinitions="Auto,*">
                     <Grid Grid.Row="0">
@@ -70,64 +75,66 @@
                             <TextBlock FontSize="13.5" Text="创建群聊" />
                         </DockPanel>
                     </Grid>
-                    <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
-                        <ItemsControl.Styles>
-                            <Style Selector="Grid.Item Border#Back">
-                                <Setter Property="Opacity" Value="0" />
-                            </Style>
-                            <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
-                                <Setter Property="Opacity" Value="0.3" />
-                            </Style>
-                            <Style Selector="Grid.Item:pointerover Border#Back">
-                                <Setter Property="Opacity" Value="0.6" />
-                            </Style>
-                            <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
-                                <Setter Property="Opacity" Value="0.7" />
-                            </Style>
-                        </ItemsControl.Styles>
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Vertical" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Height="44" Classes="Item" Background="Transparent"
-                                      PointerPressed="InputElement_OnPointerPressed">
-                                    <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" />
-                                    <DockPanel LastChildFill="True" Margin="5,0">
-                                        <avalonia:MaterialIcon DockPanel.Dock="Right"
-                                                               Name="Icon"
-                                                               Margin="10,7"
-                                                               Kind="CancelCircle"
-                                                               Width="15"
-                                                               Height="15" />
-                                        <Grid Margin="15,7" ColumnDefinitions="36,*">
-                                            <Grid Width="36" Height="36">
-                                                <Panel Width="36" Height="36">
-                                                    <Panel.Clip>
-                                                        <EllipseGeometry
-                                                            Center="18,18"
-                                                            RadiusX="18"
-                                                            RadiusY="18" />
-                                                    </Panel.Clip>
-                                                    <Image
-                                                        Width="36"
-                                                        Height="36"
-                                                        Source="{Binding  UserDto.HeadImage}" />
-                                                </Panel>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                        <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
+                            <ItemsControl.Styles>
+                                <Style Selector="Grid.Item Border#Back">
+                                    <Setter Property="Opacity" Value="0" />
+                                </Style>
+                                <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
+                                    <Setter Property="Opacity" Value="0.3" />
+                                </Style>
+                                <Style Selector="Grid.Item:pointerover Border#Back">
+                                    <Setter Property="Opacity" Value="0.6" />
+                                </Style>
+                                <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
+                                    <Setter Property="Opacity" Value="0.7" />
+                                </Style>
+                            </ItemsControl.Styles>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="44" Classes="Item" Background="Transparent"
+                                          PointerPressed="InputElement_OnPointerPressed">
+                                        <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" />
+                                        <DockPanel LastChildFill="True" Margin="5,0">
+                                            <avalonia:MaterialIcon DockPanel.Dock="Right"
+                                                                   Name="Icon"
+                                                                   Margin="10,7"
+                                                                   Kind="CancelCircle"
+                                                                   Width="15"
+                                                                   Height="15" />
+                                            <Grid Margin="15,7" ColumnDefinitions="36,*">
+                                                <Grid Width="36" Height="36">
+                                                    <Panel Width="36" Height="36">
+                                                        <Panel.Clip>
+                                                            <EllipseGeometry
+                                                                Center="18,18"
+                                                                RadiusX="18"
+                                                                RadiusY="18" />
+                                                        </Panel.Clip>
+                                                        <Image
+                                                            Width="36"
+                                                            Height="36"
+                                                            Source="{Binding  UserDto.HeadImage}" />
+                                                    </Panel>
+                                                </Grid>
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="20,0"
+                                                           VerticalAlignment="Center"
+                                                           FontSize="14"
+                                                           Text="{Binding  UserDto.Name}" />
                                             </Grid>
-                                            <TextBlock Grid.Column="1"
-                                                       Margin="20,0"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="14"
-                                                       Text="{Binding  UserDto.Name}" />
-                                        </Grid>
-                                    </DockPanel>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                        </DockPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </DockPanel>
         </Grid>

@@ -11,10 +11,11 @@ namespace ChatClient.BaseService.Services;
 
 public interface IGroupService
 {
+    Task<bool> IsMember(string userId, string groupId);
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto);
     Task<bool> UpdateGroup(string userId, GroupDto groupDto);
-    Task<(bool, string)> JoinGroupRequest(string userId, string groupId);
+    Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message);
     Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept);
     Task<(bool, string)> QuitGroupRequest(string userId, string groupId);
     Task<(bool, string)> RemoveMemberRequest(string userId, string groupId, string memberId);
@@ -33,6 +34,12 @@ public class GroupService : BaseService, IGroupService
         _mapper = mapper;
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
         _messageHelper = _scopedProvider.Resolve<IMessageHelper>();
+    }
+
+    public Task<bool> IsMember(string userId, string groupId)
+    {
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        return groupRelationRepository.ExistsAsync(d => d.UserId.Equals(userId) && d.GroupId.Equals(groupId));
     }
 
     /// <summary>
@@ -168,13 +175,13 @@ public class GroupService : BaseService, IGroupService
     /// <param name="groupId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<(bool, string)> JoinGroupRequest(string userId, string groupId)
+    public async Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message)
     {
         var joinGroupRequest = new JoinGroupRequestFromClient
         {
             UserId = userId,
             GroupId = groupId,
-            Message = ""
+            Message = message
         };
 
         var response =
@@ -190,7 +197,7 @@ public class GroupService : BaseService, IGroupService
                 GroupId = groupId,
                 RequestId = response.RequestId,
                 RequestTime = DateTime.Parse(response.Time),
-                Message = "",
+                Message = message,
                 IsSolved = false
             };
             groupRequestRepository.Update(groupRequest);

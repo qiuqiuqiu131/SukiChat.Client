@@ -1,10 +1,57 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox"
-        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
         <searchBox:SearchBox Width="200" Margin="20" />
     </Design.PreviewWith>
+    <Styles.Resources>
+        <MenuFlyout x:Key="DefaultTextBoxContextFlyout" Placement="Bottom">
+            <MenuItem x:Name="TextBoxContextFlyoutCutItem"
+                      Command="{Binding $parent[TextBox].Cut}"
+                      Header="剪切"
+                      InputGesture="{x:Static TextBox.CutGesture}"
+                      IsEnabled="{Binding $parent[TextBox].CanCut}">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="ContentCut">
+                        <avalonia:MaterialIcon.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="-90" />
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </TransformGroup>
+                        </avalonia:MaterialIcon.RenderTransform>
+                    </avalonia:MaterialIcon>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="TextBoxContextFlyoutCopyItem"
+                      Command="{Binding $parent[TextBox].Copy}"
+                      Header="复制"
+                      InputGesture="{x:Static TextBox.CopyGesture}"
+                      IsEnabled="{Binding $parent[TextBox].CanCopy}">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="ContentCopy" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="TextBoxContextFlyoutPasteItem"
+                      Command="{Binding $parent[TextBox].Paste}"
+                      Header="粘贴"
+                      InputGesture="{x:Static TextBox.PasteGesture}"
+                      IsEnabled="{Binding $parent[TextBox].CanPaste}">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="ContentPaste" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem x:Name="TextBoxContextFlyoutSelectAllItem"
+                      Command="{Binding $parent[TextBox].SelectAll}"
+                      Header="选择全部"
+                      IsEnabled="{Binding $parent[TextBox].Text,Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="CheckboxMarkedCircleOutline" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </MenuFlyout>
+    </Styles.Resources>
     <Style Selector="searchBox|SearchBox">
         <Setter Property="Template">
             <ControlTemplate>
@@ -46,8 +93,8 @@
                                 FontSize="12"
                                 Classes="NoShadow"
                                 LetterSpacing="0.5"
-                                ContextFlyout="{x:Null}"
-                                Text="{TemplateBinding SearchText}"
+                                ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
+                                Text="{Binding $parent[searchBox:SearchBox].SearchText, Mode=TwoWay}"
                                 Watermark="{TemplateBinding WaterMask}">
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="GotFocus">

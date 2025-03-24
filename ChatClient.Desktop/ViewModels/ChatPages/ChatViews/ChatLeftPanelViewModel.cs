@@ -12,6 +12,7 @@ using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
 using SukiUI.Dialogs;
+using SearchUserGroupView = ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
@@ -51,7 +52,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
 
     private void AddNewFriend()
     {
-        _dialogService.Show(nameof(AddNewFriendView));
+        _dialogService.Show(nameof(SearchUserGroupView));
     }
 
     private void CreateGroup()

@@ -1,20 +1,18 @@
-using System;
-using System.Globalization;
-using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using ChatClient.BaseService;
-using ChatClient.BaseService.Helper;
 using ChatClient.Client;
 using ChatClient.DataBase;
-using ChatClient.Desktop.UIEntity;
 using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 using ChatClient.Desktop.ViewModels.Login;
+using ChatClient.Desktop.ViewModels.SearchUserGroup;
+using ChatClient.Desktop.ViewModels.SearchUserGroup.Region;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
@@ -22,8 +20,9 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
-using ChatClient.Desktop.Views.ContactDetailView;
 using ChatClient.Desktop.Views.Login;
+using ChatClient.Desktop.Views.SearchUserGroupView;
+using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
@@ -35,6 +34,11 @@ using Prism.Modularity;
 using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
+using AddFriendRequestView = ChatClient.Desktop.Views.SearchUserGroupView.AddFriendRequestView;
+using FriendDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendDetailView;
+using FriendRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendRequestView;
+using GroupDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupDetailView;
+using GroupRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupRequestView;
 
 namespace ChatClient.Desktop;
 
@@ -92,15 +96,20 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<ChatEmptyView>();
         containerRegistry.RegisterForNavigation<ChatFriendPanelView, ChatFriendPanelViewModel>();
         containerRegistry.RegisterForNavigation<ChatGroupPanelView, ChatGroupPanelViewModel>();
+        containerRegistry.RegisterForNavigation<SearchFriendView, SearchFriendViewModel>();
+        containerRegistry.RegisterForNavigation<SearchGroupView, SearchGroupViewModel>();
+        containerRegistry.RegisterForNavigation<SearchAllView, SearchAllViewModel>();
 
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
         containerRegistry.RegisterDialog<CreateGroupView, CreateGroupViewModel>();
-        containerRegistry.RegisterDialog<AddNewFriendView, AddNewFriendViewModel>();
+        containerRegistry.RegisterDialog<SearchUserGroupView, SearchUserGroupViewModel>();
         containerRegistry.RegisterDialog<CommonDialogView, CommonDialogViewModel>();
         containerRegistry.RegisterDialog<AddGroupView, AddGroupViewModel>();
         containerRegistry.RegisterDialog<RenameGroupView, RenameGroupViewModel>();
         containerRegistry.RegisterDialog<DeleteGroupView, DeleteGroupViewModel>();
+        containerRegistry.RegisterDialog<AddFriendRequestView, AddFriendRequestViewModel>();
+        containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
 
         var views = ConfigureViews(containerRegistry);
         DataTemplates.Add(new ViewLocator(views));

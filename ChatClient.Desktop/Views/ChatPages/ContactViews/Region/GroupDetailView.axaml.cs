@@ -1,24 +1,22 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
-using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 using ChatClient.Tool.Tools;
 
-namespace ChatClient.Desktop.Views.ContactDetailView;
+namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
-public partial class FriendDetailView : UserControl
+public partial class GroupDetailView : UserControl
 {
-    public FriendDetailView()
+    public GroupDetailView()
     {
         InitializeComponent();
     }
 
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        Bitmap bitmap = ((FriendDetailViewModel)DataContext!).Friend.UserDto.HeadImage;
+        Bitmap bitmap = ((GroupDetailViewModel)DataContext!).Group.GroupDto.HeadImage;
         ImageTool.OpenImageInSystemViewer(bitmap);
     }
 }

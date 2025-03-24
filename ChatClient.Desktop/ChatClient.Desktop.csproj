@@ -78,20 +78,36 @@
             <DependentUpon>ContactsView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\ChatPages\ContactViews\FriendDetailView.axaml.cs">
-            <DependentUpon>FriendDetailView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Views\ChatPages\ChatViews\ChatRightCenterPanel\ChatFriendPanelView.axaml.cs">
             <DependentUpon>ChatRightTopPanelView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\ChatPages\ContactViews\Dialog\AddNewFriendView.axaml.cs">
+        <Compile Update="Views\ChatPages\ContactViews\Dialog\CreateGroupView.axaml.cs">
+            <DependentUpon>CreateGroupView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SearchUserGroupView\SearchUserGroupView.axaml.cs">
             <DependentUpon>AddNewFriendView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\ChatPages\ContactViews\Dialog\CreateGroupView.axaml.cs">
-            <DependentUpon>CreateGroupView.axaml</DependentUpon>
+        <Compile Update="Views\ChatPages\ContactViews\Region\FriendDetailView.axaml.cs">
+            <DependentUpon>FriendDetailView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\Region\GroupDetailView.axaml.cs">
+            <DependentUpon>GroupDetailView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\Region\FriendRequestView.axaml.cs">
+            <DependentUpon>FriendRequestView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ContactViews\Region\GroupRequestView.axaml.cs">
+            <DependentUpon>GroupRequestView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SearchUserGroupView\AddFriendRequestView.axaml.cs">
+            <DependentUpon>AddFriendRequestView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>
@@ -101,6 +117,8 @@
         <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml"/>
         <UpToDateCheckInput Remove="Styles\TextStyles.axaml"/>
         <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -122,5 +140,10 @@
         <AvaloniaResource Update="Assets\ChartDonutVariant.ico">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </AvaloniaResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml"/>
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml"/>
     </ItemGroup>
 </Project>
