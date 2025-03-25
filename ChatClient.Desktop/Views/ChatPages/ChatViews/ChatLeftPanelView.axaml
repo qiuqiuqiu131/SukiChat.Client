@@ -293,7 +293,6 @@
                                 <TextBlock
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
                                     IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                     Text="{Binding GroupRelationDto.Remark}"
@@ -301,7 +300,6 @@
                                 <TextBlock
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    FontWeight="Medium"
                                     Foreground="{DynamicResource SukiText}"
                                     IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     Text="{Binding GroupRelationDto.GroupDto.Name}"

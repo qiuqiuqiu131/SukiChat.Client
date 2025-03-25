@@ -1,59 +1,19 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:icons="https://github.com/kikipoulet/SukiUI">
-    <Style Selector="ComboBoxItem">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
-        <Setter Property="FontSize" Value="13" />
+        xmlns:formComboBox="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormComboBox"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+    <Design.PreviewWith>
+        <Border Padding="20" Width="200">
+            <formComboBox:FormComboBox PlaceholderText="Hello" />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="formComboBox|FormComboBox">
+        <Setter Property="Padding" Value="10,5" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Name="BorderBasicStyle"
-                        Margin="3,0,3,3"
-                        Padding="5,0"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="6">
-                    <DockPanel>
-                        <PathIcon Name="CheckSelected"
-                                  Width="12"
-                                  Height="12"
-                                  Margin="0,0,3,0"
-                                  Data="{x:Static icons:Icons.Check}"
-                                  DockPanel.Dock="Right"
-                                  Foreground="{DynamicResource SukiPrimaryColor}" />
-                        <ContentPresenter Name="PART_ContentPresenter"
-                                          Margin="1"
-                                          Padding="7,3"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          CornerRadius="{DynamicResource SmallCornerRadius}" />
-
-                    </DockPanel>
-                </Border>
-            </ControlTemplate>
-        </Setter>
-    </Style>
-
-    <Style Selector="ComboBox">
-        <Setter Property="BorderThickness" Value="1,1,1,1" />
-        <Setter Property="BorderBrush" Value="{DynamicResource SukiControlBorderBrush}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
-        <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="6,6,-6,6" />
-        <Setter Property="MinHeight" Value="10" />
-        <Setter Property="PlaceholderForeground" Value="{DynamicResource SukiLowText}" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border Margin="0,0,0,0" Padding="3,0,0,0">
-                    <Border.Styles>
+                <suki:GlassCard CornerRadius="7" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding Margin}">
+                    <suki:GlassCard.Styles>
                         <Style Selector="ContentControl.ghost TextBlock">
                             <Setter Property="Foreground" Value="Transparent" />
                         </Style>
@@ -66,40 +26,43 @@
                         <Style Selector="ComboBoxItem">
                             <Setter Property="FontSize" Value="{Binding $parent[ComboBox].FontSize}" />
                         </Style>
-                    </Border.Styles>
-                    <icons:GlassCard Name="border"
-                                     Classes="Discrete" Padding="{TemplateBinding Padding}"
-                                     BorderBrush="{TemplateBinding BorderBrush}"
-                                     BorderThickness="{TemplateBinding BorderThickness}"
-
-                                     CornerRadius="{TemplateBinding CornerRadius}">
-                        <icons:GlassCard.Transitions>
+                    </suki:GlassCard.Styles>
+                    <suki:GlassCard Name="border"
+                                    Classes="Discrete" Padding="{TemplateBinding Padding}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                        <suki:GlassCard.Transitions>
                             <Transitions>
                                 <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
                             </Transitions>
-                        </icons:GlassCard.Transitions>
-                        <Grid ColumnDefinitions="*,Auto">
+                        </suki:GlassCard.Transitions>
+                        <Grid ColumnDefinitions="Auto,*,Auto">
                             <Grid.Resources>
-                                <icons:BiggestItemConverter x:Key="BigItem" />
+                                <suki:BiggestItemConverter x:Key="BigItem" />
                             </Grid.Resources>
+                            <TextBlock FontSize="{TemplateBinding FontSize}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0"
+                                       Text="{TemplateBinding Head}" />
                             <TextBlock Name="PlaceholderTextBlock"
-                                       Grid.Column="0"
-                                       Margin="7,1,0,0"
+                                       Grid.Column="1"
+                                       Margin="12,0,0,0"
                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                        VerticalAlignment="Center"
                                        Foreground="{TemplateBinding PlaceholderForeground}"
                                        IsVisible="{TemplateBinding SelectionBoxItem,
                                                                    Converter={x:Static ObjectConverters.IsNull}}"
                                        Text="{TemplateBinding PlaceholderText}" />
-                            <ContentControl Margin="10,2,0,1"
+                            <ContentControl Grid.Column="1" Margin="12,0,0,0"
                                             HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                             FontSize="{Binding $parent[ComboBox].FontSize}"
-                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            VerticalAlignment="Center"
                                             Content="{TemplateBinding SelectionBoxItem}"
                                             ContentTemplate="{TemplateBinding ItemTemplate}"
                                             Foreground="{DynamicResource SukiText}" />
                             <ToggleButton Name="toggle"
-                                          Grid.Column="1"
+                                          Grid.Column="2"
                                           Margin="10,0,0,0"
                                           Background="Transparent"
                                           BorderThickness="0"
@@ -110,7 +73,7 @@
                                           IsChecked="{TemplateBinding IsDropDownOpen,
                                                                       Mode=TwoWay}">
                                 <Path Width="8"
-                                      Height="4"
+                                      Height="6"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z"
@@ -120,16 +83,16 @@
                             <Popup Name="PART_Popup"
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
-                                   HorizontalOffset="-5"
+                                   HorizontalOffset="-2.5"
                                    IsLightDismissEnabled="True"
                                    IsOpen="{TemplateBinding IsDropDownOpen,
                                                             Mode=TwoWay}"
                                    PlacementTarget="{TemplateBinding}">
                                 <LayoutTransformControl Name="PART_LayoutTransform" RenderTransformOrigin="50%, 0%">
 
-                                    <Border Name="B1" Padding="5,10,5,5">
+                                    <Border Name="B1" Padding="0,10,0,0">
                                         <Panel>
-                                            <Border Margin="10,-10,0,0"
+                                            <Border Margin="10,-10,5,5"
                                                     Background="{DynamicResource SukiCardBackground}"
                                                     BorderBrush="{DynamicResource SukiMenuBorderBrush}"
                                                     BorderThickness="1,1,1,1"
@@ -152,8 +115,8 @@
                                 </LayoutTransformControl>
                             </Popup>
                         </Grid>
-                    </icons:GlassCard>
-                </Border>
+                    </suki:GlassCard>
+                </suki:GlassCard>
             </ControlTemplate>
         </Setter>
     </Style>

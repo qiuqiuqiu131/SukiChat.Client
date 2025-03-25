@@ -1,4 +1,3 @@
-using System;
 using ChatClient.Tool.Events;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -7,9 +6,10 @@ using Prism.Mvvm;
 
 namespace ChatClient.Desktop.ViewModels.UserControls;
 
-public class CommonDialogViewModel : BindableBase, IDialogAware
+public class WarningDialogViewModel : BindableBase, IDialogAware
 {
     private readonly IEventAggregator _eventAggregator;
+
     private string _message;
 
     public string Message
@@ -18,14 +18,20 @@ public class CommonDialogViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _message, value);
     }
 
-    public DelegateCommand OkCommand { get; }
-    public DelegateCommand CancelCommand { get; }
+    private string _title;
 
-    public CommonDialogViewModel(IEventAggregator eventAggregator)
+    public string Title
+    {
+        get => _title;
+        set => SetProperty(ref _title, value);
+    }
+
+    public DelegateCommand OkCommand { get; }
+
+    public WarningDialogViewModel(IEventAggregator eventAggregator)
     {
         _eventAggregator = eventAggregator;
         OkCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.OK)));
-        CancelCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
     }
 
 
@@ -42,6 +48,7 @@ public class CommonDialogViewModel : BindableBase, IDialogAware
     {
         _eventAggregator.GetEvent<DialogShowEvent>().Publish(true);
         Message = parameters.GetValue<string>("message");
+        Title = parameters.GetValue<string>("title") ?? string.Empty;
     }
 
     public DialogCloseListener RequestClose { get; }

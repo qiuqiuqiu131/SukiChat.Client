@@ -138,6 +138,7 @@
                            IsVisible="{Binding !Group.IsOwner}"
                            Text="{Binding Group.GroupDto.Description,Converter={converter:DefaultTextConverter DefaultText=暂无介绍}}"
                            Padding="10,3"
+                           VerticalAlignment="Center"
                            MinHeight="0"
                            TextTrimming="CharacterEllipsis"
                            MaxWidth="200"

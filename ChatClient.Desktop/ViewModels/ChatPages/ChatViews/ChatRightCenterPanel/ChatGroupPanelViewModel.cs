@@ -5,11 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
@@ -20,6 +22,7 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -32,6 +35,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
+    private readonly IDialogService _dialogService;
 
     public ThemeStyle ThemeStyle { get; set; }
 
@@ -59,11 +63,13 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
         IUserManager userManager,
+        IDialogService dialogService,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
         _userManager = userManager;
+        _dialogService = dialogService;
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
@@ -90,8 +96,18 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     private async void QuitGroup()
     {
         if (SelectedGroup == null) return;
+        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
+            new DialogParameters { { "message", "确定退出此群聊吗？" } });
+
+        if (result.Result != ButtonResult.OK) return;
         var groupService = _containerProvider.Resolve<IGroupService>();
-        var result = await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
+        await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
+
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = $"您已退出群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
+            Type = NotificationType.Success
+        });
     }
 
     /// <summary>

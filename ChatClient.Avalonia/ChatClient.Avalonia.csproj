@@ -19,6 +19,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Reference Include="Notification.Avalonia">
+            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\Notification.Avalonia.dll</HintPath>
+        </Reference>
         <Reference Include="SukiUI">
             <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\SukiUI.dll</HintPath>
         </Reference>

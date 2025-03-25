@@ -213,7 +213,7 @@
                                                    TextBlock.FontSize="{TemplateBinding FontSize}"
                                                    TextBlock.Foreground="{TemplateBinding Foreground}"
                                                    TextWrapping="{TemplateBinding TextWrapping}"
-                                                   VerticalAlignment="Top" />
+                                                   VerticalAlignment="Center" />
                                 </Grid>
                             </DataValidationErrors>
                         </Border>

@@ -1,25 +1,24 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services;
-using ChatClient.Desktop.Views.Login;
+using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
-using Prism.Events;
+using Prism.Dialogs;
 using Prism.Ioc;
 using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
-public class RegisterWindowViewModel : ValidateBindableBase
+public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
 {
+    #region IsConnected
+
     private Connect _isConnected;
 
     public Connect IsConnected
@@ -28,17 +27,11 @@ public class RegisterWindowViewModel : ValidateBindableBase
         set => SetProperty(ref _isConnected, value);
     }
 
-    private ThemeStyle _currentThemeStyle;
-
-    public ThemeStyle CurrentThemeStyle
-    {
-        get => _currentThemeStyle;
-        private set => SetProperty(ref _currentThemeStyle, value);
-    }
+    #endregion
 
     #region 昵称(Name)
 
-    private string? name;
+    private string? name = "";
 
     [InputRequired(ErrorMessage = "昵称不能为空")]
     public string? Name
@@ -62,7 +55,7 @@ public class RegisterWindowViewModel : ValidateBindableBase
 
     #region 密码(Password)
 
-    private string? password;
+    private string? password = "";
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
     public string? Password
@@ -86,7 +79,7 @@ public class RegisterWindowViewModel : ValidateBindableBase
 
     #region 密码(Password)
 
-    private string? repassword;
+    private string? repassword = "";
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
     public string? RePassword
@@ -125,22 +118,22 @@ public class RegisterWindowViewModel : ValidateBindableBase
     #endregion
 
     public DelegateCommand RegisterCommand { get; init; }
-    public event Action RegisterSuccessEvent;
+    public DelegateCommand CancelCommand { get; init; }
 
-    public ISukiDialogManager DialogManager { get; init; }
-    public IContainerProvider _containerProvider;
+    public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();
+
+    private readonly IContainerProvider _containerProvider;
 
     public RegisterWindowViewModel(IContainerProvider containerProvider,
-        IConnection connection,
-        IThemeStyle themeStyle)
+        IConnection connection)
     {
         _containerProvider = containerProvider;
-        DialogManager = new SukiDialogManager();
 
         IsConnected = connection.IsConnected;
-        CurrentThemeStyle = themeStyle.CurrentThemeStyle;
 
         RegisterCommand = new DelegateCommand(Register, CanRegister);
+        CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
+
         ErrorsChanged += delegate
         {
             RegisterCommand.RaiseCanExecuteChanged();
@@ -161,11 +154,7 @@ public class RegisterWindowViewModel : ValidateBindableBase
         if (!Password.Equals(RePassword))
         {
             DialogManager.CreateDialog()
-                .OfType(NotificationType.Error)
-                .WithTitle("注册失败")
-                .WithContent("请检查密码是否输入正确")
-                .OnDismissed(d => { RePassword = null; })
-                .Dismiss().ByClickingBackground()
+                .WithViewModel(d => new SukiDialogViewModel(d, NotificationType.Error, "注册失败", "两次密码不一致"))
                 .TryShow();
             return;
         }
@@ -175,29 +164,36 @@ public class RegisterWindowViewModel : ValidateBindableBase
         var result = await _registerService.Register(Name!, Password!);
         IsBusy = false;
 
-        if (result != null && result.State == true)
+        if (result is { State: true })
         {
             DialogManager.CreateDialog()
-                .OfType(NotificationType.Success)
-                .WithTitle("注册成功")
-                .WithContent("点击确定,回到登录界面")
-                .Dismiss().ByClickingBackground()
-                .OnDismissed(d => { RegisterSuccessEvent?.Invoke(); })
+                .WithViewModel(d =>
+                    new SukiDialogViewModel(d, NotificationType.Information, "注册成功", "将返回登录界面",
+                        () => { RequestClose.Invoke(); }))
                 .TryShow();
         }
         else
         {
             DialogManager.CreateDialog()
-                .OfType(NotificationType.Error)
-                .WithTitle("注册失败")
-                .WithContent("请检查密码是否输入正确")
-                .OnDismissed(d =>
-                {
-                    Password = null;
-                    RePassword = null;
-                })
-                .Dismiss().ByClickingBackground()
+                .WithViewModel(d =>
+                    new SukiDialogViewModel(d, NotificationType.Information, "注册失败", "请检查网络连接", () => { }))
                 .TryShow();
         }
     }
+
+    #region DialogAware
+
+    public bool CanCloseDialog() => true;
+
+    public void OnDialogClosed()
+    {
+    }
+
+    public void OnDialogOpened(IDialogParameters parameters)
+    {
+    }
+
+    public DialogCloseListener RequestClose { get; }
+
+    #endregion
 }

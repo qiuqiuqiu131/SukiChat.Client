@@ -43,31 +43,34 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                         IsVisible="{Binding IsUser}"
                         Margin="15,15,15,5">
-                <Button Content="编辑信息"
-                        Classes="Flat"
+                <Button Classes="Flat"
                         Margin="0"
-                        Padding="15,7"
-                        FontSize="14" />
+                        Padding="15,5"
+                        Click="EditUserData">
+                    <TextBlock Text="添加好友" FontSize="13.5" />
+                </Button>
             </StackPanel>
 
             <Grid IsVisible="{Binding !IsUser}">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                             IsVisible="{Binding IsFriend}"
                             Margin="15,15,15,5">
-                    <Button Content="发消息"
-                            Classes="Flat"
+                    <Button Classes="Flat"
                             Margin="0"
-                            Padding="15,7"
-                            FontSize="14" />
+                            Padding="15,5"
+                            Click="SendMessageToView">
+                        <TextBlock Text="添加好友" FontSize="13.5" />
+                    </Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                             IsVisible="{Binding !IsFriend}"
                             Margin="15,15,15,5">
-                    <Button Content="添加好友"
-                            Classes="Flat"
+                    <Button Classes="Flat"
                             Margin="0"
-                            Padding="15,7"
-                            FontSize="14" />
+                            Padding="15,5"
+                            Click="AddFriend">
+                        <TextBlock Text="添加好友" FontSize="13.5" />
+                    </Button>
                 </StackPanel>
             </Grid>
         </StackPanel>

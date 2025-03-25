@@ -1,242 +1,68 @@
-<suki:SukiWindow
+<UserControl
     x:Class="ChatClient.Desktop.Views.Login.RegisterWindowView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:behavior="using:ChatClient.Avalonia.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
-    xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.Login"
-    Title=""
+    xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+    xmlns:theme="https://github.com/kikipoulet/SukiUI"
+    xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia"
     Width="360"
     Height="490"
-    prism:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="vm:RegisterWindowViewModel"
-    BackgroundAnimationEnabled="{Binding CurrentThemeStyle.AnimationsEnabled}"
-    BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
-    BackgroundTransitionsEnabled="{Binding CurrentThemeStyle.TransitionsEnabled}"
-    CanMaximize="False"
-    CanMinimize="False"
-    CanMove="True"
-    TitleBarAnimationEnabled="False"
-    CanResize="False"
-    WindowStartupLocation="CenterOwner"
-    Icon="/Assets/ChartDonutVariant.ico"
-    ShowBottomBorder="False"
-    ShowTitlebarBackground="False"
-    TitleFontSize="15"
     mc:Ignorable="d">
-    <suki:SukiWindow.Resources>
-        <ControlTheme x:Key="{x:Type suki:SukiDialog}" TargetType="suki:SukiDialog">
-            <Setter Property="ClipToBounds" Value="False" />
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Panel>
-                        <Border
-                            MinWidth="180"
-                            Padding="0"
-                            ClipToBounds="True"
-                            CornerRadius="25">
-                            <Panel>
-                                <Border
-                                    Background="{DynamicResource SukiCardBackground}"
-                                    CornerRadius="25"
-                                    IsVisible="{TemplateBinding ShowCardBackground}">
-                                    <Panel Margin="-5" Background="{DynamicResource PopupGradientBrush}" />
-                                </Border>
-                                <Grid
-                                    Margin="30,15,30,5"
-                                    ColumnDefinitions="*"
-                                    IsVisible="{Binding !IsViewModelOnly, RelativeSource={RelativeSource TemplatedParent}}"
-                                    RowDefinitions="Auto,Auto,*,Auto">
-                                    <Border
-                                        Grid.Row="0"
-                                        Margin="0,10,0,0"
-                                        IsVisible="{TemplateBinding IconColor,
-                                                                    Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Margin="0,24,0,0"
-                                        HorizontalAlignment="Center"
-                                        FontSize="17"
-                                        FontWeight="DemiBold"
-                                        IsVisible="{TemplateBinding Title,
-                                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                        Text="{TemplateBinding Title}" />
-                                    <ContentControl
-                                        Grid.Row="2"
-                                        MaxWidth="{TemplateBinding Content,
-                                                                   Converter={x:Static dialogs:DialogContentMaxWidthValueConverter.Instance}}"
-                                        Margin="0,24,0,0"
-                                        Content="{TemplateBinding Content}">
-                                        <ContentControl.Styles>
-                                            <Style Selector="TextBlock">
-                                                <Setter Property="FontSize" Value="13.5" />
-                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                            </Style>
-                                        </ContentControl.Styles>
-                                    </ContentControl>
-                                    <ItemsControl
-                                        Grid.Row="3"
-                                        Margin="0,26,0,0"
-                                        ItemsSource="{TemplateBinding ActionButtons}">
-                                        <ItemsControl.Styles>
-                                            <Style Selector="Button">
-                                                <Setter Property="Margin" Value="15,0,0,25" />
-                                            </Style>
-                                        </ItemsControl.Styles>
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-
-                                    </ItemsControl>
-                                </Grid>
-                                <ContentControl
-                                    Margin="15"
-                                    Content="{TemplateBinding ViewModel}"
-                                    IsVisible="{TemplateBinding IsViewModelOnly}" />
-                            </Panel>
-                        </Border>
-                        <Border
-                            Width="55"
-                            Height="55"
-                            Margin="0,-25,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            CornerRadius="35">
-                            <Panel>
-                                <Border
-                                    Width="55"
-                                    Height="55"
-                                    HorizontalAlignment="Center"
-                                    BoxShadow="{DynamicResource SukiBigPopupShadow}"
-                                    CornerRadius="50"
-                                    IsVisible="{TemplateBinding IconColor,
-                                                                Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                <Ellipse
-                                    Width="55"
-                                    Height="55"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Fill="{TemplateBinding IconColor}" />
-                                <PathIcon
-                                    Width="20"
-                                    Height="20"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Data="{TemplateBinding Icon}"
-                                    Foreground="White" />
-
-                            </Panel>
-                        </Border>
-                    </Panel>
-                </ControlTemplate>
-            </Setter>
-        </ControlTheme>
-    </suki:SukiWindow.Resources>
-    <suki:SukiWindow.RightWindowTitleBarControls>
-        <Panel Margin="2" IsVisible="{Binding !IsConnected.IsConnected}">
-            <avalonia:MaterialIcon
-                Width="17"
-                Height="17"
-                Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}"
-                Kind="WifiStrengthAlertOutline" />
+    <Grid RowDefinitions="30,*">
+        <Panel Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <Button Name="PART_CloseButton"
+                    HorizontalAlignment="Right"
+                    Margin="10,0"
+                    Command="{Binding CancelCommand}"
+                    Classes="Basic Rounded WindowControlsButton Close">
+                <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
+            </Button>
         </Panel>
-    </suki:SukiWindow.RightWindowTitleBarControls>
-    <ScrollViewer
-        Padding="15,0,0,0"
-        HorizontalScrollBarVisibility="Disabled"
-        VerticalScrollBarVisibility="Visible">
-        <StackPanel Margin="0,0,0,10">
-            <suki:BusyArea BusyText="Registering..." IsBusy="{Binding IsBusy}">
-                <StackPanel
-                    Width="260"
-                    HorizontalAlignment="Center"
-                    Orientation="Vertical"
-                    Spacing="10">
-                    <TextBlock
-                        Margin="0,5,0,27"
-                        HorizontalAlignment="Center"
-                        FontSize="18"
-                        FontWeight="DemiBold"
-                        Text="创建新账号" />
-                    <StackPanel Orientation="Vertical" Spacing="5">
-                        <TextBlock
-                            Margin="8,10,0,3"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource SukiLowText}"
-                            Text="昵称" />
-                        <TextBox
-                            theme:TextBoxExtensions.AddDeleteButton="True"
-                            MaxLength="15"
-                            FontSize="13.5"
-                            LetterSpacing="1"
-                            Text="{Binding Name}"
-                            Watermark="Name" />
-                        <TextBlock
-                            Margin="8,0,0,5"
-                            Classes="Caption"
-                            FontSize="12"
-                            IsVisible="{Binding HasNameErrors}"
-                            Text="{Binding NameError}" />
-                    </StackPanel>
-                    <StackPanel Spacing="5">
-                        <TextBlock
-                            Margin="8,5,0,3"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource SukiLowText}"
-                            Text="密码" />
-                        <TextBox
-                            theme:TextBoxExtensions.AddDeleteButton="True"
-                            MaxLength="16"
-                            FontSize="13.5"
-                            PasswordChar="*"
-                            LetterSpacing="1.5"
-                            Text="{Binding Password}"
-                            Watermark="Password" />
-                        <TextBlock
-                            Margin="8,0,0,5"
-                            Classes="Caption"
-                            FontSize="12"
-                            IsVisible="{Binding HasPasswordErrors}"
-                            Text="{Binding PasswordError}" />
-                    </StackPanel>
-                    <StackPanel Spacing="5">
-                        <TextBlock
-                            Margin="8,5,0,3"
-                            FontWeight="SemiBold"
-                            Foreground="{DynamicResource SukiLowText}"
-                            Text="再次输入" />
-                        <TextBox
-                            theme:TextBoxExtensions.AddDeleteButton="True"
-                            MaxLength="16"
-                            PasswordChar="*"
-                            FontSize="13.5"
-                            LetterSpacing="1.5"
-                            Text="{Binding RePassword}"
-                            Watermark="RePassword" />
-                        <TextBlock
-                            Margin="8,0,0,5"
-                            Classes="Caption"
-                            FontSize="12"
-                            IsVisible="{Binding HasRePasswordErrors}"
-                            Text="{Binding RePasswordError}" />
-                    </StackPanel>
-                </StackPanel>
-            </suki:BusyArea>
+        <DockPanel Grid.Row="1" HorizontalAlignment="Stretch">
             <Button
+                DockPanel.Dock="Bottom"
                 Width="200"
-                Margin="0,40,0,30"
+                Margin="0,25"
                 Classes="Flat Rounded"
                 Command="{Binding RegisterCommand}"
                 Content="发送消息" />
-        </StackPanel>
-    </ScrollViewer>
-</suki:SukiWindow>
+            <!-- <suki:Stepper></suki:Stepper> -->
+            <suki:BusyArea HorizontalAlignment="Stretch" BusyText="Registering..." IsBusy="{Binding IsBusy}">
+                <StackPanel
+                    Width="300"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical"
+                    Spacing="15">
+                    <TextBlock
+                        Margin="0,5,0,27"
+                        HorizontalAlignment="Center"
+                        FontSize="16.5"
+                        FontWeight="DemiBold"
+                        Text="创建新账号" />
+                    <formControls:FormTextBox Head="昵称" FontSize="14"
+                                              Height="40"
+                                              Text="{Binding Name}" WaterMask="填写昵称"
+                                              MaxLength="30" />
+                    <formControls:FormTextBox Head="密码" FontSize="14"
+                                              Height="40"
+                                              Text="{Binding Password}" WaterMask="填写密码"
+                                              MaxLength="18" />
+                    <formControls:FormTextBox Head="确认密码" FontSize="14"
+                                              Height="40"
+                                              Text="{Binding RePassword}" WaterMask="再次输入密码"
+                                              MaxLength="18" />
+                </StackPanel>
+            </suki:BusyArea>
+        </DockPanel>
+
+        <suki:SukiDialogHost Grid.RowSpan="2" Manager="{Binding DialogManager}" />
+    </Grid>
+</UserControl>

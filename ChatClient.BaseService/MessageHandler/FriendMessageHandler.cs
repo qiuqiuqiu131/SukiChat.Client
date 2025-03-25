@@ -15,12 +15,10 @@ namespace ChatClient.BaseService.MessageHandler;
 internal class FriendMessageHandler : MessageHandlerBase
 {
     private IMapper _mapper;
-    private ISukiToastManager _toastManager;
 
     public FriendMessageHandler(IContainerProvider containerProvider) : base(containerProvider)
     {
         _mapper = containerProvider.Resolve<IMapper>();
-        _toastManager = containerProvider.Resolve<ISukiToastManager>();
     }
 
     protected override void OnRegisterEvent(IEventAggregator eventAggregator)
@@ -52,7 +50,7 @@ internal class FriendMessageHandler : MessageHandlerBase
         var _userDtoManager = scope.Resolve<IUserDtoManager>();
         FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
         friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
-        _userManager.FriendReceives?.Insert(0,friendReceived);
+        _userManager.FriendReceives?.Insert(0, friendReceived);
 
         var _unitOfWork = scope.Resolve<IUnitOfWork>();
         var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
@@ -61,10 +59,10 @@ internal class FriendMessageHandler : MessageHandlerBase
 
         Dispatcher.UIThread.Invoke(() =>
         {
-            _toastManager.CreateSimpleInfoToast()
+            /*_toastManager.CreateSimpleInfoToast()
                 .WithTitle("好友请求")
                 .WithContent($"来自{friendReceived.UserDto!.Name} 的好友请求")
-                .Queue();
+                .Queue();*/
         });
     }
 
@@ -111,10 +109,10 @@ internal class FriendMessageHandler : MessageHandlerBase
 
             Dispatcher.UIThread.Invoke(() =>
             {
-                _toastManager.CreateSimpleInfoToast()
+                /*_toastManager.CreateSimpleInfoToast()
                     .WithTitle("新好友")
                     .WithContent($"{dto.UserDto.Name} 成为了你的好友")
-                    .Queue();
+                    .Queue();*/
             });
         }
     }

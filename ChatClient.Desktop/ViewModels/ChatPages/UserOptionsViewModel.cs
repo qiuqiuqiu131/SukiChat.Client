@@ -6,6 +6,7 @@ using ChatClient.Tool.Data.UserOption;
 using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
 using SukiUI.Dialogs;
 
@@ -13,6 +14,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages;
 
 public class UserOptionsViewModel : ChatPageBase
 {
+    private readonly IDialogService _dialogService;
     private UserDto user;
 
     public UserDto User
@@ -31,16 +33,11 @@ public class UserOptionsViewModel : ChatPageBase
 
     public DelegateCommand EditHeadCommand { get; init; }
 
-    private readonly IUserManager _userManager;
-    private readonly ISukiDialogManager _dialogManager;
-
-    public UserOptionsViewModel(
-        IUserManager userManager,
-        ISukiDialogManager dialogManager)
+    public UserOptionsViewModel(IDialogService dialogService,
+        IUserManager userManager)
         : base("用户", MaterialIconKind.User, 2)
     {
-        _userManager = userManager;
-        _dialogManager = dialogManager;
+        _dialogService = dialogService;
 
         User = userManager.User!;
         EditHeadCommand = new DelegateCommand(EditHead);
@@ -57,7 +54,6 @@ public class UserOptionsViewModel : ChatPageBase
 
     private void EditHead()
     {
-        var window = App.Current.Container.Resolve<UserHeadEditView>();
-        window.Show();
+        _dialogService.Show(nameof(UserHeadEditView));
     }
 }

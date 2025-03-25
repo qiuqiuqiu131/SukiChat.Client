@@ -179,8 +179,7 @@
                                     <DockPanel HorizontalAlignment="Stretch">
                                         <TextBlock Text="设为置顶" FontSize="13.5" DockPanel.Dock="Left"
                                                    VerticalAlignment="Center" />
-                                        <ToggleButton Classes="Switch"
-                                                      VerticalAlignment="Center"
+                                        <ToggleSwitch VerticalAlignment="Center"
                                                       Margin="0"
                                                       HorizontalAlignment="Right"
                                                       RenderTransformOrigin="0.5,0.5"
@@ -189,13 +188,12 @@
                                             <ToggleButton.RenderTransform>
                                                 <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
                                             </ToggleButton.RenderTransform>
-                                        </ToggleButton>
+                                        </ToggleSwitch>
                                     </DockPanel>
                                     <DockPanel HorizontalAlignment="Stretch">
                                         <TextBlock Text="消息免打扰" FontSize="13.5" DockPanel.Dock="Left"
                                                    VerticalAlignment="Center" />
-                                        <ToggleButton Classes="Switch"
-                                                      VerticalAlignment="Center"
+                                        <ToggleSwitch VerticalAlignment="Center"
                                                       HorizontalAlignment="Right"
                                                       Margin="0"
                                                       RenderTransformOrigin="0.5,0.5"
@@ -204,7 +202,7 @@
                                             <ToggleButton.RenderTransform>
                                                 <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
                                             </ToggleButton.RenderTransform>
-                                        </ToggleButton>
+                                        </ToggleSwitch>
                                     </DockPanel>
                                 </StackPanel>
                             </suki:GlassCard>

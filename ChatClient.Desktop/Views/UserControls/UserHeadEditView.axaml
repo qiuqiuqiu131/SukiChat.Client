@@ -1,328 +1,216 @@
-<suki:SukiWindow
+<UserControl
     x:Class="ChatClient.Desktop.Views.UserControls.UserHeadEditView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
     xmlns:helpers="clr-namespace:SukiUI.Helpers;assembly=SukiUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="http://prismlibrary.com/"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
-    Title="更改头像"
-    Width="520"
-    Height="700"
-    MinWidth="400"
-    MinHeight="550"
-    prism:ViewModelLocator.AutoWireViewModel="True"
+    xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+    xmlns:content="https://github.com/kikipoulet/SukiUI"
+    Width="410"
+    Height="550"
     x:DataType="vm:UserHeadEditViewModel"
-    BackgroundAnimationEnabled="{Binding CurrentThemeStyle.AnimationsEnabled}"
-    BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
-    BackgroundTransitionsEnabled="{Binding CurrentThemeStyle.TransitionsEnabled}"
-    CanMaximize="False"
-    Icon="/Assets/ChartDonutVariant.ico"
-    ShowBottomBorder="False"
-    ShowTitlebarBackground="False"
-    TitleFontSize="12.5"
-    IsTitleBarVisible="False"
-    TitleBarAnimationEnabled="False"
-    TitleFontWeight="DemiBold"
-    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <Window.Resources>
-        <ControlTheme x:Key="{x:Type suki:SukiDialog}" TargetType="suki:SukiDialog">
-            <Setter Property="ClipToBounds" Value="False" />
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Panel>
-                        <Border
-                            MinWidth="180"
-                            Padding="0"
-                            ClipToBounds="True"
-                            CornerRadius="25">
-                            <Panel>
-                                <Border
-                                    Background="{DynamicResource SukiCardBackground}"
-                                    CornerRadius="25"
-                                    IsVisible="{TemplateBinding ShowCardBackground}">
-                                    <Panel Margin="-5" Background="{DynamicResource PopupGradientBrush}" />
-                                </Border>
-                                <Grid
-                                    Margin="30,15,30,5"
-                                    ColumnDefinitions="*"
-                                    IsVisible="{Binding !IsViewModelOnly, RelativeSource={RelativeSource TemplatedParent}}"
-                                    RowDefinitions="Auto,Auto,*,Auto">
-                                    <Border
-                                        Grid.Row="0"
-                                        Margin="0,10,0,0"
-                                        IsVisible="{TemplateBinding IconColor,
-                                                                    Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Margin="0,24,0,0"
-                                        HorizontalAlignment="Center"
-                                        FontSize="17"
-                                        FontWeight="DemiBold"
-                                        IsVisible="{TemplateBinding Title,
-                                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                        Text="{TemplateBinding Title}" />
-                                    <ContentControl
-                                        Grid.Row="2"
-                                        MaxWidth="{TemplateBinding Content,
-                                                                   Converter={x:Static dialogs:DialogContentMaxWidthValueConverter.Instance}}"
-                                        Margin="0,24,0,0"
-                                        Content="{TemplateBinding Content}">
-                                        <ContentControl.Styles>
-                                            <Style Selector="TextBlock">
-                                                <Setter Property="FontSize" Value="13.5" />
-                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                            </Style>
-                                        </ContentControl.Styles>
-                                    </ContentControl>
-                                    <ItemsControl
-                                        Grid.Row="3"
-                                        Margin="0,26,0,0"
-                                        ItemsSource="{TemplateBinding ActionButtons}">
-                                        <ItemsControl.Styles>
-                                            <Style Selector="Button">
-                                                <Setter Property="Margin" Value="15,0,0,25" />
-                                            </Style>
-                                        </ItemsControl.Styles>
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-
-                                    </ItemsControl>
-                                </Grid>
-                                <ContentControl
-                                    Margin="15"
-                                    Content="{TemplateBinding ViewModel}"
-                                    IsVisible="{TemplateBinding IsViewModelOnly}" />
-                            </Panel>
-                        </Border>
-                        <Border
-                            Width="55"
-                            Height="55"
-                            Margin="0,-25,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            CornerRadius="35">
-                            <Panel>
-                                <Border
-                                    Width="55"
-                                    Height="55"
-                                    HorizontalAlignment="Center"
-                                    BoxShadow="{DynamicResource SukiBigPopupShadow}"
-                                    CornerRadius="50"
-                                    IsVisible="{TemplateBinding IconColor,
-                                                                Converter={x:Static ObjectConverters.IsNotNull}}" />
-                                <Ellipse
-                                    Width="55"
-                                    Height="55"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Fill="{TemplateBinding IconColor}" />
-                                <PathIcon
-                                    Width="20"
-                                    Height="20"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Data="{TemplateBinding Icon}"
-                                    Foreground="White" />
-
-                            </Panel>
-                        </Border>
-                    </Panel>
-                </ControlTemplate>
-            </Setter>
-        </ControlTheme>
-    </Window.Resources>
-    <suki:SukiWindow.Hosts>
-        <suki:SukiDialogHost Manager="{Binding DialogManager}" />
-    </suki:SukiWindow.Hosts>
-    <suki:BusyArea BusyText="上传中" IsBusy="{Binding IsBusy}">
-        <ScrollViewer
-            Margin="20"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Hidden">
-            <StackPanel Orientation="Vertical" Spacing="15">
-                <suki:GlassCard
-                    Padding="20"
-                    ClipToBounds="True"
-                    CornerRadius="10">
-                    <suki:GroupBox Header=" 头像编辑"
-                                   Foreground="{DynamicResource SukiText}"
-                                   FontSize="17"
-                                   FontWeight="Bold">
-                        <StackPanel Orientation="Vertical" Spacing="15">
-                            <Canvas
-                                Width="300"
-                                Height="300"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center">
-                                <Canvas.ClipToBounds>True</Canvas.ClipToBounds>
-                                <Image
-                                    x:Name="HeadImage"
-                                    MinWidth="300"
-                                    MinHeight="300"
-                                    Margin="0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    PointerMoved="HeadImage_OnPointerMoved"
-                                    PointerPressed="HeadImage_OnPointerPressed"
-                                    PointerReleased="HeadImage_OnPointerReleased"
-                                    Stretch="Uniform" />
-                                <Path
-                                    Fill="#222"
-                                    Opacity="0.5"
-                                    Stroke="{DynamicResource SukiLowText}"
-                                    StrokeThickness="1">
-                                    <Path.Data>
-                                        <CombinedGeometry GeometryCombineMode="Exclude">
-                                            <CombinedGeometry.Geometry1>
-                                                <RectangleGeometry Rect="0,0,300,300" />
-                                            </CombinedGeometry.Geometry1>
-                                            <CombinedGeometry.Geometry2>
-                                                <EllipseGeometry
-                                                    Center="150,150"
-                                                    RadiusX="150"
-                                                    RadiusY="150" />
-                                            </CombinedGeometry.Geometry2>
-                                        </CombinedGeometry>
-                                    </Path.Data>
-                                </Path>
-                            </Canvas>
-                            <Grid ColumnDefinitions="30,*,30">
-                                <Grid.Styles>
-                                    <Style Selector="Button:pointerover">
-                                        <Setter Property="Cursor" Value="Hand" />
-                                    </Style>
-                                </Grid.Styles>
-                                <Button
-                                    x:Name="SubButton"
-                                    Grid.Column="0"
-                                    Padding="3"
-                                    FontWeight="Bold"
-                                    FontSize="15"
-                                    Classes="Basic">
-                                    <avalonia:MaterialIcon
-                                        Width="20"
-                                        Height="20"
-                                        Foreground="{DynamicResource SukiPrimaryColor75}"
-                                        Kind="MinusCircleOutline" />
-                                </Button>
-                                <Slider
-                                    x:Name="ScaleSlider"
-                                    Grid.Column="1"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    ValueChanged="RangeBase_OnValueChanged" />
-                                <Button
-                                    x:Name="AddButton"
-                                    Grid.Column="2"
-                                    Padding="3"
-                                    FontSize="15"
-                                    FontWeight="Bold"
-                                    Classes="Basic">
-                                    <avalonia:MaterialIcon
-                                        Width="20"
-                                        Height="20"
-                                        Foreground="{DynamicResource SukiPrimaryColor75}"
-                                        Kind="PlusCircleOutline" />
-                                </Button>
-                            </Grid>
-                        </StackPanel>
-                    </suki:GroupBox>
-                </suki:GlassCard>
-                <suki:GlassCard>
-                    <Expander ExpandDirection="Down" Header="历史头像" FontWeight="DemiBold" CornerRadius="10">
-                        <ListBox
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Classes="Void"
-                            SelectedItem="{Binding SelectedItem}"
-                            ItemsSource="{Binding HeadList}">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="SelectionChanged">
-                                    <InvokeCommandAction Command="{Binding SelectedHeadChangedCommand}" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <ListBox.Styles>
-                                <Style Selector="ListBox.Void ListBoxItem suki|GlassCard">
-                                    <Setter Property="Transitions">
-                                        <Transitions>
-                                            <ThicknessTransition Property="BorderThickness" Duration="0.2" />
-                                            <BrushTransition Property="BorderBrush" Duration="0.2" />
-                                            <BrushTransition Property="Background" Duration="0.2" />
-                                        </Transitions>
-                                    </Setter>
-                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
-                                    <Setter Property="BorderThickness" Value="1" />
-                                </Style>
-                                <Style Selector="ListBox.Void ListBoxItem:pointerover suki|GlassCard">
-                                    <Setter Property="BorderThickness" Value="3" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}"></Setter>
-                                </Style>
-                                <Style Selector="ListBox.Void ListBoxItem:selected suki|GlassCard">
-                                    <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
-                                    <Setter Property="BorderThickness" Value="3" />
-                                    <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
-                                </Style>
-                            </ListBox.Styles>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Width="75" Height="75">
-                                        <suki:GlassCard helpers:AnimationExtensions.FadeIn="500"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        CornerRadius="5"
-                                                        Padding="8">
-                                            <Image
-                                                Width="60"
-                                                Height="60"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Source="{Binding}"
-                                                Stretch="Uniform" />
-                                        </suki:GlassCard>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Expander>
-                </suki:GlassCard>
-                <Grid>
+    <Grid RowDefinitions="35,*">
+        <Panel Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <TextBlock Text="编辑头像" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Button Name="PART_CloseButton"
+                    HorizontalAlignment="Right"
+                    Margin="10,0"
+                    Command="{Binding CancelCommand}"
+                    Classes="Basic Rounded WindowControlsButton Close">
+                <PathIcon Data="{x:Static content:Icons.WindowClose}" Height="8" Width="8" />
+            </Button>
+        </Panel>
+        <suki:BusyArea Grid.Row="1" BusyText="上传中" IsBusy="{Binding IsBusy}">
+            <DockPanel LastChildFill="True">
+                <Grid DockPanel.Dock="Bottom" Margin="20,5,20,15">
                     <Button
                         HorizontalAlignment="Left"
-                        Command="{Binding AddHeadCommnad}"
-                        Content="添加本地图片"
-                        FontWeight="DemiBold"
-                        FontSize="13" />
+                        Padding="15,5"
+                        Command="{Binding AddHeadCommnad}">
+                        <TextBlock Text="添加图片" FontSize="13.5" />
+                    </Button>
                     <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right">
                         <Button
+                            Classes="Flat"
+                            Padding="15,5"
                             HorizontalAlignment="Right"
-                            Command="{Binding SaveHeadCommand}"
-                            Content="确认"
-                            FontWeight="DemiBold"
-                            FontSize="13" />
+                            Command="{Binding SaveHeadCommand}">
+                            <TextBlock Text="确认" FontSize="13.5" />
+                        </Button>
                         <Button
-                            Classes="Accent"
                             HorizontalAlignment="Right"
-                            Command="{Binding CancleCommand}"
-                            Content="取消"
-                            FontWeight="DemiBold"
-                            FontSize="13" />
+                            Padding="15,5"
+                            Command="{Binding CancelCommand}">
+                            <TextBlock Text="取消" FontSize="13.5" />
+                        </Button>
                     </StackPanel>
                 </Grid>
-            </StackPanel>
-        </ScrollViewer>
-    </suki:BusyArea>
-</suki:SukiWindow>
+                <ScrollViewer
+                    Margin="20,7"
+                    x:Name="ScrollViewer"
+                    VerticalAlignment="Stretch"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Spacing="15" Margin="0,5,0,15">
+                        <suki:GlassCard
+                            Padding="10"
+                            ClipToBounds="True"
+                            CornerRadius="7">
+                            <StackPanel Orientation="Vertical" Spacing="15">
+                                <Canvas
+                                    Width="300"
+                                    Height="300"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center">
+                                    <Canvas.ClipToBounds>True</Canvas.ClipToBounds>
+                                    <Image
+                                        x:Name="HeadImage"
+                                        MinWidth="300"
+                                        MinHeight="300"
+                                        Margin="0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        PointerMoved="HeadImage_OnPointerMoved"
+                                        PointerPressed="HeadImage_OnPointerPressed"
+                                        PointerReleased="HeadImage_OnPointerReleased"
+                                        Stretch="Uniform" />
+                                    <Path
+                                        Fill="#222"
+                                        Opacity="0.5"
+                                        Stroke="{DynamicResource SukiLowText}"
+                                        StrokeThickness="1">
+                                        <Path.Data>
+                                            <CombinedGeometry GeometryCombineMode="Exclude">
+                                                <CombinedGeometry.Geometry1>
+                                                    <RectangleGeometry Rect="0,0,300,300" />
+                                                </CombinedGeometry.Geometry1>
+                                                <CombinedGeometry.Geometry2>
+                                                    <EllipseGeometry
+                                                        Center="150,150"
+                                                        RadiusX="150"
+                                                        RadiusY="150" />
+                                                </CombinedGeometry.Geometry2>
+                                            </CombinedGeometry>
+                                        </Path.Data>
+                                    </Path>
+                                </Canvas>
+                                <Grid ColumnDefinitions="30,*,30">
+                                    <Grid.Styles>
+                                        <Style Selector="Button:pointerover">
+                                            <Setter Property="Cursor" Value="Hand" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <Button
+                                        x:Name="SubButton"
+                                        Grid.Column="0"
+                                        Padding="3"
+                                        FontWeight="Bold"
+                                        FontSize="15"
+                                        Classes="Basic">
+                                        <avalonia:MaterialIcon
+                                            Width="20"
+                                            Height="20"
+                                            Foreground="{DynamicResource SukiPrimaryColor75}"
+                                            Kind="MinusCircleOutline" />
+                                    </Button>
+                                    <Slider
+                                        x:Name="ScaleSlider"
+                                        Grid.Column="1"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        ValueChanged="RangeBase_OnValueChanged" />
+                                    <Button
+                                        x:Name="AddButton"
+                                        Grid.Column="2"
+                                        Padding="3"
+                                        FontSize="15"
+                                        FontWeight="Bold"
+                                        Classes="Basic">
+                                        <avalonia:MaterialIcon
+                                            Width="20"
+                                            Height="20"
+                                            Foreground="{DynamicResource SukiPrimaryColor75}"
+                                            Kind="PlusCircleOutline" />
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </suki:GlassCard>
+                        <suki:GlassCard Padding="10" CornerRadius="7">
+                            <Expander ExpandDirection="Down" Padding="0,5" FontWeight="DemiBold" CornerRadius="7">
+                                <Expander.Header>
+                                    <TextBlock Text="历史头像" FontSize="14" />
+                                </Expander.Header>
+                                <ListBox
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Classes="Void"
+                                    SelectedItem="{Binding SelectedItem}"
+                                    ItemsSource="{Binding HeadList}">
+                                    <Interaction.Behaviors>
+                                        <EventTriggerBehavior EventName="SelectionChanged">
+                                            <InvokeCommandAction Command="{Binding SelectedHeadChangedCommand}" />
+                                        </EventTriggerBehavior>
+                                    </Interaction.Behaviors>
+                                    <ListBox.Styles>
+                                        <Style Selector="ListBox.Void ListBoxItem suki|GlassCard">
+                                            <Setter Property="Transitions">
+                                                <Transitions>
+                                                    <ThicknessTransition Property="BorderThickness" Duration="0.2" />
+                                                    <BrushTransition Property="BorderBrush" Duration="0.2" />
+                                                    <BrushTransition Property="Background" Duration="0.2" />
+                                                </Transitions>
+                                            </Setter>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SukiBorderBrush}" />
+                                            <Setter Property="BorderThickness" Value="1" />
+                                        </Style>
+                                        <Style Selector="ListBox.Void ListBoxItem:pointerover suki|GlassCard">
+                                            <Setter Property="BorderThickness" Value="3" />
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}"></Setter>
+                                        </Style>
+                                        <Style Selector="ListBox.Void ListBoxItem:selected suki|GlassCard">
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
+                                            <Setter Property="BorderThickness" Value="3" />
+                                            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor50}" />
+                                        </Style>
+                                    </ListBox.Styles>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Width="60" Height="60">
+                                                <suki:GlassCard helpers:AnimationExtensions.FadeIn="500"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                CornerRadius="5"
+                                                                Padding="8">
+                                                    <Image
+                                                        Width="50"
+                                                        Height="50"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Source="{Binding}"
+                                                        Stretch="Uniform" />
+                                                </suki:GlassCard>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Expander>
+                        </suki:GlassCard>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </suki:BusyArea>
+    </Grid>
+</UserControl>

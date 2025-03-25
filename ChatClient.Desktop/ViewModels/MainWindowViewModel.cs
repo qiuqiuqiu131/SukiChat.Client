@@ -4,10 +4,11 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
-using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
@@ -15,6 +16,7 @@ using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
@@ -25,6 +27,7 @@ namespace ChatClient.Desktop.ViewModels;
 public class MainWindowViewModel : ViewModelBase, IDisposable
 {
     private readonly IEventAggregator _eventAggregator;
+    private readonly IDialogService _dialogService;
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
 
@@ -89,25 +92,22 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
 
-    public ISukiToastManager ToastManager { get; init; }
-    public ISukiDialogManager DialogManager { get; init; }
+    public INotificationMessageManager NotificationMessageManager { get; init; } = new NotificationMessageManager();
 
-    public DelegateCommand ExitCommnad { get; init; }
+    public AsyncDelegateCommand ExitCommnad { get; init; }
 
     public MainWindowViewModel(IEnumerable<ChatPageBase> chatPages,
         IThemeStyle themeStyle,
         IConnection connection,
-        ISukiToastManager toastManager,
-        ISukiDialogManager dialogManager,
         IEventAggregator eventAggregator,
+        IDialogService dialogService,
         IContainerProvider containerProvider,
         IUserManager userManager)
     {
         _eventAggregator = eventAggregator;
+        _dialogService = dialogService;
         _containerProvider = containerProvider;
         _userManager = userManager;
-        ToastManager = toastManager;
-        DialogManager = dialogManager;
 
         ChatPages = new AvaloniaList<ChatPageBase>(chatPages.OrderBy(x => x.Index).ThenBy(x => x.DisplayName));
 
@@ -115,7 +115,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
 
-        ExitCommnad = new DelegateCommand(TryExit);
+        ExitCommnad = new AsyncDelegateCommand(TryExit);
 
         RegisterEvent();
         RegisterDtoEvent();
@@ -277,7 +277,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         {
             if (User.Id.Equals(d.Id))
             {
-                Dispatcher.UIThread.Invoke(() => { ForceToExit("您的账号在其他设备上登录，您被迫下线。"); });
+                Dispatcher.UIThread.Invoke(() => { ForceToExit("您的账号在其他设备上登录！"); });
             }
         });
         tokens.Add(token1);
@@ -294,8 +294,13 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         });
         tokens.Add(token3);
 
+        var token4 = _eventAggregator.GetEvent<NotificationEvent>().Subscribe(d =>
+        {
+            NotificationMessageManager.ShowMessage(d.Message, d.Type, TimeSpan.FromSeconds(1.5));
+        });
+        tokens.Add(token4);
+
         IsConnected.ConnecttedChanged += ConnectionChanged;
-        CurrentThemeStyle.ThemeStyleChanged += ThemeStyleChanged;
     }
 
     private void UnRegisterEvent()
@@ -304,59 +309,46 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             token.Dispose();
         tokens.Clear();
         IsConnected.ConnecttedChanged -= ConnectionChanged;
-        CurrentThemeStyle.ThemeStyleChanged -= ThemeStyleChanged;
     }
 
     private void ConnectionChanged(bool connected)
     {
         if (!connected)
         {
-            Dispatcher.UIThread.Invoke(() => { ForceToExit("与服务器断开连接，您被迫下线。"); });
+            Dispatcher.UIThread.Invoke(() => { ForceToExit("服务器断开连接！"); });
         }
-    }
-
-    private void ThemeStyleChanged((string, string) variant)
-    {
-        ToastManager.CreateSimpleInfoToast()
-            .WithTitle("主题更改")
-            .WithContent($"{variant.Item1}更改为{variant.Item2}")
-            .Queue();
     }
 
     #endregion
 
     #region ViewLogic
 
-    private void ForceToExit(string Content)
+    private async Task ForceToExit(string Content)
     {
-        DialogManager.CreateDialog()
-            .OfType(NotificationType.Warning)
-            .WithTitle("退出登录")
-            .WithContent(Content)
-            .WithActionButton("确定", _ => Exit(), true)
-            .TryShow();
+        var result = await _dialogService.ShowDialogAsync(nameof(WarningDialogView),
+            new DialogParameters { { "message", Content }, { "title", "登录异常" } });
+        if (result.Result != ButtonResult.OK) return;
+
+        await Exit();
     }
 
-    private void TryExit()
+    private async Task TryExit()
     {
-        DialogManager.CreateDialog()
-            .WithTitle("退出登录")
-            .WithContent("您确定要退出SukiChat吗？退出后，需要重新登录。")
-            .WithActionButton("退出", _ => { Exit(); }, true)
-            .WithActionButton("取消", _ => { }, true)
-            .Dismiss().ByClickingBackground()
-            .TryShow();
+        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
+            new DialogParameters { { "message", "确定退出登录吗？" } });
+        if (result.Result != ButtonResult.OK) return;
+
+        await Exit();
     }
 
     /// <summary>
     /// 退回到登录界面
     /// </summary>
-    private void Exit()
+    private async Task Exit()
     {
         // 退出登录
-        _userManager.Logout();
-
-        TranslateWindowHelper.TranslateToLoginWindow();
+        await _userManager.Logout();
+        _ = Task.Run(() => { TranslateWindowHelper.TranslateToLoginWindow(); });
     }
 
     #endregion

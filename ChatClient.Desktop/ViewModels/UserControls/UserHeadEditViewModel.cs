@@ -4,21 +4,20 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Views.UserControls;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using Prism.Commands;
+using Prism.Dialogs;
+using Prism.Ioc;
 using Prism.Mvvm;
-using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.UserControls;
 
-public class UserHeadEditViewModel : BindableBase
+public class UserHeadEditViewModel : BindableBase, IDialogAware
 {
     #region Properties
 
@@ -46,14 +45,6 @@ public class UserHeadEditViewModel : BindableBase
         set => SetProperty(ref isBusy, value);
     }
 
-    private ThemeStyle _currentThemeStyle;
-
-    public ThemeStyle CurrentThemeStyle
-    {
-        get => _currentThemeStyle;
-        set => SetProperty(ref _currentThemeStyle, value);
-    }
-
     private ObservableCollection<Bitmap> _headList;
 
     public ObservableCollection<Bitmap> HeadList
@@ -62,18 +53,10 @@ public class UserHeadEditViewModel : BindableBase
         set => SetProperty(ref _headList, value);
     }
 
-    private ISukiDialogManager _dialogManager;
-
-    public ISukiDialogManager DialogManager
-    {
-        get => _dialogManager;
-        set => SetProperty(ref _dialogManager, value);
-    }
-
     public DelegateCommand AddHeadCommnad { get; init; }
     public DelegateCommand SaveHeadCommand { get; init; }
     public DelegateCommand SelectedHeadChangedCommand { get; init; }
-    public DelegateCommand CancleCommand { get; init; }
+    public DelegateCommand CancelCommand { get; init; }
 
     #endregion
 
@@ -83,22 +66,22 @@ public class UserHeadEditViewModel : BindableBase
     public Control? View;
 
     private readonly IUserManager _userManager;
+    private readonly IContainerProvider _containerProvider;
 
-    public UserHeadEditViewModel(IUserManager userManager, IUserService userService, IThemeStyle themeStyle)
+    public UserHeadEditViewModel(IUserManager userManager, IContainerProvider containerProvider)
     {
         _userManager = userManager;
-        _currentThemeStyle = themeStyle.CurrentThemeStyle;
+        _containerProvider = containerProvider;
         CurrentHead = userManager.User!.HeadImage;
 
         AddHeadCommnad = new DelegateCommand(AddHead);
         SaveHeadCommand = new DelegateCommand(SaveHead);
         SelectedHeadChangedCommand = new DelegateCommand(SelectedHeadChanged);
-        CancleCommand = new DelegateCommand(() => ((UserHeadEditView)View).Close());
-
-        DialogManager = new SukiDialogManager();
+        CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
 
         if (_userManager.User?.HeadCount != 0)
         {
+            var userService = _containerProvider.Resolve<IUserService>();
             userService.GetHeadImages(userManager.User).ContinueWith(list =>
             {
                 _headImages = list.Result;
@@ -162,11 +145,12 @@ public class UserHeadEditViewModel : BindableBase
             _userManager.User.HeadIndex = _headImages.FirstOrDefault(x => x.Value == SelectedItem).Key;
             _userManager.SaveUser();
 
-            ((UserHeadEditView)View).Close();
-
             foreach (var value in _headImages.Values)
                 value.Dispose();
             _headImages.Clear();
+
+            RequestClose.Invoke();
+
             return;
         }
 
@@ -181,18 +165,31 @@ public class UserHeadEditViewModel : BindableBase
             SelectedItem = bitmap;
             ImageChanged?.Invoke(bitmap);
 
-            ((UserHeadEditView)View).Close();
-
             foreach (var value in _headImages.Values)
                 value.Dispose();
             _headImages.Clear();
+
+            RequestClose.Invoke();
         }
         else
-            _dialogManager.CreateDialog()
-                .OfType(NotificationType.Error)
-                .WithTitle("上传失败")
-                .WithContent("上传头像失败，请检查网络连接并重试")
-                .Dismiss().ByClickingBackground()
-                .TryShow();
+        {
+            // 通知
+        }
     }
+
+    #region DialogAware
+
+    public bool CanCloseDialog() => true;
+
+    public void OnDialogClosed()
+    {
+    }
+
+    public void OnDialogOpened(IDialogParameters parameters)
+    {
+    }
+
+    public DialogCloseListener RequestClose { get; }
+
+    #endregion
 }

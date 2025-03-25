@@ -16,9 +16,13 @@
                  MaxLength="10"
                  Text="{Binding GroupName}" />
         <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
-            <Button Content="确定" Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14" />
-            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5" Content="取消"
-                    Command="{Binding CancelCommand}" FontSize="14" />
+            <Button Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14">
+                <TextBlock Text="确定" FontSize="13.5" />
+            </Button>
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5"
+                    Command="{Binding CancelCommand}">
+                <TextBlock Text="取消" FontSize="13.5" />
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

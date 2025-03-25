@@ -16,14 +16,11 @@ namespace ChatClient.BaseService.MessageHandler;
 internal class GroupMessageHandler : MessageHandlerBase
 {
     private readonly IMapper _mapper;
-    private readonly ISukiToastManager _toastManager;
 
     public GroupMessageHandler(IContainerProvider containerProvider,
-        IMapper mapper,
-        ISukiToastManager toastManager) : base(containerProvider)
+        IMapper mapper) : base(containerProvider)
     {
         _mapper = mapper;
-        _toastManager = toastManager;
     }
 
     protected override void OnRegisterEvent(IEventAggregator eventAggregator)

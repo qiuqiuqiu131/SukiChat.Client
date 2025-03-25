@@ -1,8 +1,8 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;
@@ -11,9 +11,9 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Navigation.Regions;
-using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
@@ -103,19 +103,21 @@ public class LoginViewModel : ViewModelBase, IDisposable
     public DelegateCommand ToRegisterViewCommand { get; init; }
     public DelegateCommand ToForgetViewCommand { get; init; }
 
+    public INotificationMessageManager NotificationManager { get; init; } = new NotificationMessageManager();
+
     private readonly IRegionManager _regionManager;
     private readonly IContainerProvider _containerProvider;
-    private readonly ISukiDialogManager _dialogManager;
+    private readonly IDialogService _dialogService;
 
     public LoginViewModel(IConnection connection,
         IRegionManager regionManager,
         ILoginData loginData,
         IContainerProvider containerProvider,
-        ISukiDialogManager dialogManager)
+        IDialogService dialogService)
     {
         _regionManager = regionManager;
         _containerProvider = containerProvider;
-        _dialogManager = dialogManager;
+        _dialogService = dialogService;
         LoginData = loginData.LoginData;
         IsConnected = connection.IsConnected;
 
@@ -158,16 +160,9 @@ public class LoginViewModel : ViewModelBase, IDisposable
         }
         else
         {
-            string title = result == null ? "网络错误" : "登录失败";
-            string content = result == null ? "请检查网络连接" : "请检查账号和密码是否正确";
-
+            string title = result == null ? "网络错误" : "登录失败,请检查账号密码";
+            NotificationManager.ShowMessage(title, NotificationType.Error, TimeSpan.FromSeconds(1.5));
             Password = null;
-            _dialogManager.CreateDialog()
-                .OfType(NotificationType.Warning)
-                .WithTitle(title)
-                .WithContent(content)
-                .Dismiss().ByClickingBackground()
-                .TryShow();
         }
 
         IsBusy = false;
@@ -197,21 +192,12 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToRegisterView()
     {
-        if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
-        {
-            var window = App.Current.Container.Resolve<RegisterWindowView>();
-            window.ShowDialog(desktopLifetime.MainWindow!);
-        }
+        _dialogService.Show(nameof(RegisterWindowView));
     }
 
     private void ToForgetView()
     {
-        _dialogManager.CreateDialog()
-            .OfType(NotificationType.Error)
-            .WithTitle("登录失败")
-            .WithContent("请检查账号和密码是否正确")
-            .Dismiss().ByClickingBackground()
-            .TryShow();
+        NotificationManager.ShowMessage("请联系管理员重置密码", NotificationType.Information, TimeSpan.FromSeconds(1.5));
     }
 
     #region Dispose

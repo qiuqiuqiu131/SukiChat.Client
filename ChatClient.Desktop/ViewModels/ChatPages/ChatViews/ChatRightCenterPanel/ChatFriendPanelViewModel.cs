@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
@@ -18,6 +19,7 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -29,6 +31,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IDialogService _dialogService;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
@@ -50,17 +53,19 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
     public DelegateCommand SearchMoreCommand { get; private set; }
     public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
-    public DelegateCommand DeleteFriendCommand { get; private set; }
+    public AsyncDelegateCommand DeleteFriendCommand { get; private set; }
 
     #endregion
 
     public ChatFriendPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
+        IDialogService dialogService,
         IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
+        _dialogService = dialogService;
         _userManager = userManager;
 
         ThemeStyle = themeStyle.CurrentThemeStyle;
@@ -69,7 +74,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
-        DeleteFriendCommand = new DelegateCommand(DeleteFriend);
+        DeleteFriendCommand = new AsyncDelegateCommand(DeleteFriend);
     }
 
     /// <summary>
@@ -86,11 +91,21 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     /// <summary>
     /// 删除好友
     /// </summary>
-    private void DeleteFriend()
+    private async Task DeleteFriend()
     {
         if (SelectedFriend == null) return;
+        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
+            new DialogParameters { { "message", "确定删除此好友吗？" } });
+
+        if (result.Result != ButtonResult.OK) return;
         var friendService = _containerProvider.Resolve<IFriendService>();
-        friendService.DeleteFriend(_userManager.User.Id, SelectedFriend.UserId);
+        await friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend.UserId);
+
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = $"您已删除好友 {SelectedFriend.FriendRelatoinDto?.UserDto?.Name ?? string.Empty}",
+            Type = NotificationType.Success
+        });
     }
 
     /// <summary>

@@ -134,6 +134,7 @@
                            Text="{Binding Friend.UserDto.Introduction}"
                            Padding="10,3"
                            MinHeight="0"
+                           VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis"
                            MaxWidth="200"
                            HorizontalAlignment="Right"

@@ -1,41 +1,24 @@
 using System;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Primitives.PopupPositioning;
-using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using ChatClient.Desktop.ViewModels;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
-using Prism.Commands;
 using Prism.Events;
-using Prism.Navigation.Regions;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views;
 
 public partial class MainWindowView : SukiWindow, IDisposable
 {
-    private readonly IEventAggregator _eventAggregator;
-
     private readonly IUserManager _userManager;
-    // private readonly IDataTemplate messageBoxTemplate;
 
     public MainWindowView(IEventAggregator eventAggregator, IUserManager userManager)
     {
-        _eventAggregator = eventAggregator;
         _userManager = userManager;
         InitializeComponent();
-
-        // messageBoxTemplate = Resources["MessageBox"]! as IDataTemplate;
 
         eventAggregator.GetEvent<DialogShowEvent>().Subscribe(async show =>
         {
@@ -90,36 +73,6 @@ public partial class MainWindowView : SukiWindow, IDisposable
         // #endregion
     }
 
-    private SukiDialogHost? _dialogHost;
-    private SukiToastHost? _toastHost;
-
-    protected override void OnOpened(EventArgs e)
-    {
-        _dialogHost = new SukiDialogHost
-        {
-            Manager = ((MainWindowViewModel)DataContext)!.DialogManager
-        };
-
-        _toastHost = new SukiToastHost
-        {
-            Manager = ((MainWindowViewModel)DataContext)!.ToastManager
-        };
-
-        Hosts.Add(_dialogHost);
-        Hosts.Add(_toastHost);
-    }
-
-    protected override void OnClosed(EventArgs e)
-    {
-        if (_dialogHost != null)
-            Hosts.Remove(_dialogHost);
-        if (_toastHost != null)
-            Hosts.Remove(_toastHost);
-
-        _dialogHost.Manager = null;
-        _toastHost.Manager = null;
-    }
-
     private void ShowUserMessageBox(UserMessageBoxShowArgs args)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
@@ -168,8 +121,9 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        WindowState = WindowState.Minimized;
-        Hide();
+        // WindowState = WindowState.Minimized;
+        // Hide();
+        Close();
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)

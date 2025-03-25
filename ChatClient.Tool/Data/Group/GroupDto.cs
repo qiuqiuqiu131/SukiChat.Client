@@ -122,9 +122,7 @@ public class GroupDto : BindableBase, IDisposable
         headImage = null;
         OnGroupChanged = null;
 
-        foreach (var groupMember in groupMembers)
-            groupMember.Dispose();
-        groupMembers.Clear();
+        groupMembers?.Clear();
         groupMembers = null;
     }
 }

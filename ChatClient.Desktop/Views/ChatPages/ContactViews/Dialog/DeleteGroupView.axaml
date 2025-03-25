@@ -15,11 +15,15 @@
             <PathIcon Data="{x:Static icons:Icons.WindowClose}" Width="10" Height="10" />
         </Button>
         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
-        <TextBlock Grid.Row="2" Height="30" Margin="18,15" FontSize="15" Text="确定删除分组吗？" />
+        <TextBlock Grid.Row="2" Height="30" Margin="18,15" FontSize="14.5" Text="确定删除分组吗？" />
         <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
-            <Button Content="确定" Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14" />
-            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5" Content="取消"
-                    Command="{Binding CancelCommand}" FontSize="14" />
+            <Button Classes="Flat" Command="{Binding SureCommand}" Padding="15,5" FontSize="14">
+                <TextBlock Text="确定" FontSize="13.5" />
+            </Button>
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5"
+                    Command="{Binding CancelCommand}">
+                <TextBlock Text="取消" FontSize="13.5" />
+            </Button>
         </StackPanel>
     </Grid>
 </UserControl>

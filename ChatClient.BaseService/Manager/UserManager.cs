@@ -56,7 +56,7 @@ internal class UserManager : IUserManager
         var loginService = _containerProvider.Resolve<ILoginService>();
         var response = await loginService.Login(id, password, isRemember);
 
-        if (!(response is { State: true })) return null;
+        if (!(response is { State: true })) return response;
 
         // 调用userService获取用户完整数据
         var _userService = _containerProvider.Resolve<IUserLoginService>();
@@ -91,7 +91,7 @@ internal class UserManager : IUserManager
 
         _userDtoManager.Clear();
 
-        var imageManager = _containerProvider.Resolve<ImageManager>();
+        var imageManager = _containerProvider.Resolve<IImageManager>();
         imageManager.ClearCache();
 
         return response;

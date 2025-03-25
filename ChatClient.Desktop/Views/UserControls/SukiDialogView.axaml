@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:colorTheme="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="userControls:SukiDialogViewModel"
+             x:Class="ChatClient.Desktop.Views.UserControls.SukiDialogView">
+    <Grid RowDefinitions="25,0.5,auto,auto">
+        <avalonia:MaterialIcon Kind="AlertCircle"
+                               Foreground="{x:Static colorTheme:NotificationColor.ErrorIconForeground}" Height="22"
+                               Width="22" HorizontalAlignment="Left"
+                               VerticalAlignment="Top"
+                               IsVisible="{Binding IsError}"
+                               Margin="7,4,0,0" />
+        <TextBlock HorizontalAlignment="Center" FontSize="15"
+                   IsVisible="{Binding Title,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                   Text="{Binding Title}" Margin="10,7" />
+        <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+        <TextBlock Grid.Row="2" Height="30" Margin="18,15,18,5" FontSize="14.5" Text="{Binding Message}" />
+        <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
+            <Button Classes="Flat" Command="{Binding SureCommand}"
+                    IsVisible="{Binding ShowSureButton}"
+                    Padding="15,5" FontSize="14">
+                <TextBlock Text="确定" FontSize="13.5" />
+            </Button>
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5"
+                    IsVisible="{Binding ShowCancelButton}"
+                    Command="{Binding CancelCommand}">
+                <TextBlock Text="取消" FontSize="13.5" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

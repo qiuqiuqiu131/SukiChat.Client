@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.Avalonia.Controls.OverlaySplitView;
 using ChatClient.BaseService.Manager;
@@ -31,7 +32,7 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
         _userDtoManager = userDtoManager;
         InitializeComponent();
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
-            .Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
+            .Subscribe(() => { Dispatcher.UIThread.Invoke(() => { OverlaySplitView.IsPaneOpen = false; }); });
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)

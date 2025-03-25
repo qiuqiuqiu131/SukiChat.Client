@@ -28,24 +28,6 @@ public partial class LoginWindowView : SukiWindow, IDisposable
 
     private SukiDialogHost? _dialogHost;
 
-    protected override void OnOpened(EventArgs e)
-    {
-        _dialogHost = new SukiDialogHost
-        {
-            Manager = ((LoginWindowViewModel)DataContext)!.DialogManager
-        };
-
-        Hosts.Add(_dialogHost);
-    }
-
-    protected override void OnClosed(EventArgs e)
-    {
-        if (_dialogHost != null)
-            Hosts.Remove(_dialogHost);
-
-        _dialogHost.Manager = null;
-    }
-
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);

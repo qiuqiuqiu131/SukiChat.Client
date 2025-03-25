@@ -1,14 +1,15 @@
-using System.Collections.Generic;
-using System.Linq;
+using System;
+using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using ChatClient.BaseService.Services;
-using ChatClient.Tool.Data;
+using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Mvvm;
-using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels.SearchUserGroup;
 
@@ -16,7 +17,6 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
-    private readonly ISukiToastManager _toastManager;
 
     private GroupDto _groupDto;
 
@@ -34,16 +34,18 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _message, value);
     }
 
+    public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
+
     public DelegateCommand SendGroupRequestCommand { get; }
     public DelegateCommand CancleCommand { get; }
 
+    private bool isSended;
+
     public AddGroupRequestViewModel(IContainerProvider containerProvider,
-        IUserManager userManager,
-        ISukiToastManager toastManager)
+        IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
-        _toastManager = toastManager;
 
         SendGroupRequestCommand = new DelegateCommand(SendGroupRequest);
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
@@ -51,10 +53,19 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
 
     private async void SendGroupRequest()
     {
+        if (isSended) return;
+
+        isSended = true;
+
         var _groupService = _containerProvider.Resolve<IGroupService>();
         var (state, message) =
             await _groupService.JoinGroupRequest(_userManager.User!.Id, _groupDto.Id,
                 Message ?? "");
+        if (state)
+            NotificationMessageManager.ShowMessage("入群请求发送成功", NotificationType.Success, TimeSpan.FromSeconds(1.5));
+        else
+            NotificationMessageManager.ShowMessage("入群请求发送失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
+        await Task.Delay(TimeSpan.FromSeconds(0.9));
         RequestClose.Invoke();
     }
 

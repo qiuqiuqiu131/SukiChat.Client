@@ -11,8 +11,6 @@ namespace ChatClient.Desktop.ViewModels.Login;
 
 public class LoginWindowViewModel : ViewModelBase, IDisposable
 {
-    public ISukiDialogManager DialogManager { get; init; }
-
     private Connect _isConnected;
 
     public Connect IsConnected
@@ -29,10 +27,8 @@ public class LoginWindowViewModel : ViewModelBase, IDisposable
         private set => SetProperty(ref _currentThemeStyle, value);
     }
 
-    public LoginWindowViewModel(IThemeStyle themeStyle, IConnection connection, ISukiDialogManager dialogManager)
+    public LoginWindowViewModel(IThemeStyle themeStyle, IConnection connection)
     {
-        DialogManager = dialogManager;
-
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
     }

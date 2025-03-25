@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
@@ -17,7 +21,6 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
-    private readonly ISukiToastManager _toastManager;
 
     private UserDto _userDto;
 
@@ -59,16 +62,18 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _groups, value);
     }
 
+    public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
+
     public DelegateCommand SendFriendRequestCommand { get; }
     public DelegateCommand CancleCommand { get; }
 
+    private bool isSended = false;
+
     public AddFriendRequestViewModel(IContainerProvider containerProvider,
-        IUserManager userManager,
-        ISukiToastManager toastManager)
+        IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
-        _toastManager = toastManager;
 
         Groups = _userManager.GroupFriends!.Select(d => d.GroupName).Order().ToList();
 
@@ -78,10 +83,19 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
 
     private async void SendFriendRequest()
     {
+        if (isSended) return;
+
+        isSended = true;
+
         var _friendService = _containerProvider.Resolve<IFriendService>();
         var (state, message) =
             await _friendService.AddFriend(_userManager.User!.Id, _userDto.Id, Remark ?? "", Group ?? "默认分组",
                 Message ?? "");
+        if (state)
+            NotificationMessageManager.ShowMessage("好友请求已发送", NotificationType.Success, TimeSpan.FromSeconds(1.5));
+        else
+            NotificationMessageManager.ShowMessage("好友请求失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
+        await Task.Delay(TimeSpan.FromSeconds(0.9));
         RequestClose.Invoke();
     }
 

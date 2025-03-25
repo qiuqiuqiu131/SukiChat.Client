@@ -13,14 +13,11 @@ namespace ChatClient.BaseService.MessageHandler;
 
 public class GroupRelationMessageHandler : MessageHandlerBase
 {
-    private readonly ISukiToastManager _toastManager;
     private readonly IMapper _mapper;
 
     public GroupRelationMessageHandler(IContainerProvider containerProvider,
-        ISukiToastManager toastManager,
         IMapper mapper) : base(containerProvider)
     {
-        _toastManager = toastManager;
         _mapper = mapper;
     }
 
@@ -96,10 +93,10 @@ public class GroupRelationMessageHandler : MessageHandlerBase
 
         Dispatcher.UIThread.Invoke(() =>
         {
-            _toastManager.CreateSimpleInfoToast()
+            /*_toastManager.CreateSimpleInfoToast()
                 .WithTitle("好友请求")
                 .WithContent($"来自{groupReceivedDto.UserDto!.Name} 的好友请求")
-                .Queue();
+                .Queue();*/
         });
     }
 

@@ -12,7 +12,7 @@ using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.UserControls;
 
-public partial class UserHeadEditView : SukiWindow
+public partial class UserHeadEditView : UserControl
 {
     public UserHeadEditView()
     {
@@ -40,7 +40,7 @@ public partial class UserHeadEditView : SukiWindow
     private TranslateTransform _translateTransform = new() { X = 0, Y = 0 };
     private ScaleTransform _scaleTransform = new() { ScaleX = 1, ScaleY = 1 };
 
-    protected override void OnOpened(EventArgs e)
+    protected override void OnLoaded(RoutedEventArgs e)
     {
         // 初始化Picture
         var group = new TransformGroup();
@@ -53,6 +53,8 @@ public partial class UserHeadEditView : SukiWindow
         dataContext.View = this;
         ImageChanged(dataContext.CurrentHead);
         dataContext.ImageChanged += ImageChanged;
+
+        ScrollViewer.Offset = new Vector(ScrollViewer.Offset.X, 0);
     }
 
     private Bitmap bitmap;
