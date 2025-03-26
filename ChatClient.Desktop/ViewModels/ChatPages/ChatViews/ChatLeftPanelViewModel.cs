@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -20,6 +21,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IDialogService _dialogService;
+    private readonly ISukiDialogManager _sukiDialogManager;
 
     public ChatViewModel ChatViewModel { get; init; }
 
@@ -41,6 +43,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
     {
         _containerProvider = containerProvider;
         _dialogService = containerProvider.Resolve<IDialogService>();
+        _sukiDialogManager = containerProvider.Resolve<ISukiDialogManager>();
 
         ChatViewModel = chatViewModel;
 
@@ -57,6 +60,8 @@ public class ChatLeftPanelViewModel : ViewModelBase
 
     private void CreateGroup()
     {
-        _dialogService.ShowDialog(nameof(CreateGroupView));
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CreateGroupViewModel(d, null))
+            .TryShow();
     }
 }

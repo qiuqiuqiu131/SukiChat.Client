@@ -78,7 +78,13 @@ public class FriendChatDto : BindableBase, IDisposable
     public int UnReadMessageCount
     {
         get => unReadMessageCount;
-        set => SetProperty(ref unReadMessageCount, value);
+        set
+        {
+            if (SetProperty(ref unReadMessageCount, value))
+            {
+                OnUnReadMessageCountChanged?.Invoke();
+            }
+        }
     }
 
     public bool IsSelected { get; set; }
@@ -87,6 +93,7 @@ public class FriendChatDto : BindableBase, IDisposable
     public AvaloniaList<object> InputMessages { get; set; } = new();
 
     public event Action<FriendChatDto> OnLastChatMessagesChanged;
+    public event Action OnUnReadMessageCountChanged;
 
     public FriendChatDto()
     {
@@ -106,6 +113,7 @@ public class FriendChatDto : BindableBase, IDisposable
     public void Dispose()
     {
         OnLastChatMessagesChanged = null;
+        OnUnReadMessageCountChanged = null;
 
         _friendRelationDto = null;
 

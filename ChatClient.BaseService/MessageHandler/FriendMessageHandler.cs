@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 using SukiUI.Toasts;
@@ -50,7 +51,17 @@ internal class FriendMessageHandler : MessageHandlerBase
         var _userDtoManager = scope.Resolve<IUserDtoManager>();
         FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
         friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
+        // UI处理
         _userManager.FriendReceives?.Insert(0, friendReceived);
+        if (_userManager is not
+            { CurrentChatPage: "通讯录", CurrentContactState: ContactState.FriendRequest, User: not null })
+            _userManager.User!.UnreadFriendMessageCount++;
+        else
+        {
+            _userManager.User!.LastReadFriendMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
+            _userManager.User!.UnreadFriendMessageCount = 0;
+            _userManager.SaveUser();
+        }
 
         var _unitOfWork = scope.Resolve<IUnitOfWork>();
         var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
@@ -91,7 +102,28 @@ internal class FriendMessageHandler : MessageHandlerBase
             dto.IsSolved = true;
             dto.IsAccept = friendResponseFromServer.Accept;
             dto.SolveTime = DateTime.Parse(friendResponseFromServer.ResponseTime);
+
+            _userManager.FriendRequests?.Remove(dto);
+            _userManager.FriendRequests?.Insert(0, dto);
         }
+        else
+        {
+            var request = _mapper.Map<FriendRequestDto>(result);
+            var userDtoManager = scope.Resolve<IUserDtoManager>();
+            request.UserDto = await userDtoManager.GetUserDto(result.UserTargetId);
+
+            _userManager.FriendRequests?.Insert(0, request);
+        }
+
+        // if (_userManager is not
+        //     { CurrentChatPage: "通讯录", CurrentContactState: ContactState.FriendRequest, User: not null })
+        //     _userManager.User!.UnreadFriendMessageCount++;
+        // else
+        // {
+        //     _userManager.User!.LastReadFriendMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
+        //     _userManager.User!.UnreadFriendMessageCount = 0;
+        //     _userManager.SaveUser();
+        // }
     }
 
     /// <summary>

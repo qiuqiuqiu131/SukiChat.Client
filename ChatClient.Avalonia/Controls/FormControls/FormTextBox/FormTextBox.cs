@@ -14,19 +14,19 @@ public class FormTextBox : UserControl
         set => SetValue(HeadProperty, value);
     }
 
-    public static readonly StyledProperty<string> TextProperty = AvaloniaProperty.Register<FormTextBox, string>(
+    public static readonly StyledProperty<string?> TextProperty = AvaloniaProperty.Register<FormTextBox, string?>(
         "Text");
 
-    public string Text
+    public string? Text
     {
         get => GetValue(TextProperty);
         set => SetValue(TextProperty, value);
     }
 
-    public static readonly StyledProperty<string> WaterMaskProperty = AvaloniaProperty.Register<FormTextBox, string>(
+    public static readonly StyledProperty<string?> WaterMaskProperty = AvaloniaProperty.Register<FormTextBox, string?>(
         "WaterMask");
 
-    public string WaterMask
+    public string? WaterMask
     {
         get => GetValue(WaterMaskProperty);
         set => SetValue(WaterMaskProperty, value);

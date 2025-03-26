@@ -20,14 +20,26 @@ public class User
 
     public int HeadCount { get; set; }
 
+    public DateTime LastReadFriendMessageTime { get; set; } = DateTime.MinValue;
+
+    public DateTime LastReadGroupMessageTime { get; set; } = DateTime.MinValue;
+
+    public DateTime LastDeleteFriendMessageTime { get; set; } = DateTime.MinValue;
+
+    public DateTime LastDeleteGroupMessageTime { get; set; } = DateTime.MinValue;
+
     [Required] public DateTime RegisteTime { get; set; }
 
     public void Copy(User other)
     {
-        this.Name = other.Name;
-        this.Password = other.Password;
-        this.HeadCount = other.HeadCount;
-        this.HeadIndex = other.HeadIndex;
-        this.Introduction = other.Introduction;
+        Name = other.Name;
+        Password = other.Password;
+        HeadCount = other.HeadCount;
+        LastDeleteFriendMessageTime = other.LastDeleteFriendMessageTime;
+        LastDeleteGroupMessageTime = other.LastDeleteGroupMessageTime;
+        LastReadFriendMessageTime = other.LastReadFriendMessageTime;
+        LastReadGroupMessageTime = other.LastReadGroupMessageTime;
+        HeadIndex = other.HeadIndex;
+        Introduction = other.Introduction;
     }
 }

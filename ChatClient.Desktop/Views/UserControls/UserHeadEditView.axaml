@@ -11,7 +11,7 @@
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:content="https://github.com/kikipoulet/SukiUI"
     Width="410"
-    Height="550"
+    Height="570"
     x:DataType="vm:UserHeadEditViewModel"
     mc:Ignorable="d">
     <Grid RowDefinitions="35,*">

@@ -189,7 +189,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
                 predicate: d => d.UserId.Equals(userId) && d.GroupId.Equals(chatMessage.GroupId),
                 disableTracking: false);
             if (relation.LastChatId < chatMessage.Id)
-                relation.LastChatId = chatMessage.Id;
+                relation.IsChatting = true;
         }
 
         await _unitOfWork.SaveChangesAsync();

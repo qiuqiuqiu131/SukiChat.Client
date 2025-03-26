@@ -17,6 +17,14 @@ internal class ProtoToDtoProfile : Profile
         #region UserDto + UserMessage
 
         CreateMap<UserDto, UserMessage>()
+            .ForMember(um => um.LastReadFriendMessageTime,
+                opt => opt.MapFrom(u => u.LastReadFriendMessageTime.ToString()))
+            .ForMember(um => um.LastReadGroupMessageTime,
+                opt => opt.MapFrom(u => u.LastReadGroupMessageTime.ToString()))
+            .ForMember(um => um.LastDeleteFriendMessageTime,
+                opt => opt.MapFrom(u => u.LastDeleteFriendMessageTime.ToString()))
+            .ForMember(um => um.LastDeleteGroupMessageTime,
+                opt => opt.MapFrom(u => u.LastDeleteGroupMessageTime.ToString()))
             .ForMember(um => um.RegisterTime, opt => opt.MapFrom(u => u.RegisteTime.ToString()))
             .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.Introduction ?? string.Empty))
             .ForMember(um => um.Birth, opt => opt.MapFrom(u => u.Birth == null ? string.Empty : u.Birth.ToString()))
@@ -28,7 +36,15 @@ internal class ProtoToDtoProfile : Profile
                 opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Introduction) ? null : um.Introduction))
             .ForMember(u => u.Birth,
                 opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateOnly?)null : DateOnly.Parse(um.Birth)))
-            .ForMember(u => u.Sex, opt => opt.MapFrom(um => um.IsMale ? Sex.Male : Sex.Female));
+            .ForMember(u => u.Sex, opt => opt.MapFrom(um => um.IsMale ? Sex.Male : Sex.Female))
+            .ForMember(u => u.LastReadFriendMessageTime,
+                opt => opt.MapFrom(um => DateTime.Parse(um.LastReadFriendMessageTime)))
+            .ForMember(u => u.LastReadGroupMessageTime,
+                opt => opt.MapFrom(um => DateTime.Parse(um.LastReadGroupMessageTime)))
+            .ForMember(u => u.LastDeleteFriendMessageTime,
+                opt => opt.MapFrom(um => DateTime.Parse(um.LastDeleteFriendMessageTime)))
+            .ForMember(u => u.LastDeleteGroupMessageTime,
+                opt => opt.MapFrom(um => DateTime.Parse(um.LastDeleteGroupMessageTime)));
 
         #endregion
 
@@ -104,7 +120,7 @@ internal class ProtoToDtoProfile : Profile
             .ForMember(gd => gd.GroupId, opt => opt.MapFrom(qgm => qgm.GroupId))
             .ForMember(gd => gd.MemberId, opt => opt.MapFrom(qgm => qgm.UserId))
             .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(qgm => qgm.UserId))
-            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(qgm => 1)) // 1表示主动退出
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(qgm => 0)) // 1表示主动退出
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(qgm => DateTime.Parse(qgm.Time)));
 
         // 添加RemoveMemberMessage到GroupDelete的映射
@@ -113,14 +129,14 @@ internal class ProtoToDtoProfile : Profile
             .ForMember(gd => gd.GroupId, opt => opt.MapFrom(rmm => rmm.GroupId))
             .ForMember(gd => gd.MemberId, opt => opt.MapFrom(rmm => rmm.MemberId))
             .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(rmm => rmm.UserId))
-            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(rmm => 2)) // 2表示被踢出
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(rmm => 1)) // 2表示被踢出
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(rmm => DateTime.Parse(rmm.Time)));
 
         // 添加DisbandGroupMessage到GroupDelete的映射
         CreateMap<DisbandGroupMessage, GroupDeleteDto>()
             .ForMember(gd => gd.DeleteId, opt => opt.MapFrom(dgm => dgm.DisBandId))
             .ForMember(gd => gd.GroupId, opt => opt.MapFrom(dgm => dgm.GroupId))
-            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(dgm => 3)) // 3表示群解散
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(dgm => 2)) // 3表示群解散
             .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(dgm => dgm.UserId))
             .ForMember(gd => gd.MemberId, opt => opt.MapFrom(dgm => dgm.MemberId))
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(dgm => DateTime.Parse(dgm.Time)));

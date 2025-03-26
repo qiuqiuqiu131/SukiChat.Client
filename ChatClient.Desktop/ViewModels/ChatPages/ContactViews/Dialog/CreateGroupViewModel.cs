@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +15,13 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 
-public class CreateGroupViewModel : BindableBase, IDialogAware
+public class CreateGroupViewModel : BindableBase
 {
+    private readonly ISukiDialog _dialog;
+    private readonly Action<IDialogResult>? RequestClose;
+
     private readonly IUserManager _userManager;
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
@@ -32,25 +36,30 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
 
     public AvaloniaList<FriendRelationDto> SelectedFriends { get; private set; } = new();
 
-
     public AvaloniaList<GroupFriendDto> GroupFriends { get; init; }
 
     public AsyncDelegateCommand OKCommand { get; set; }
     public DelegateCommand CancleCommand { get; set; }
     public DelegateCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
 
-    public CreateGroupViewModel(IUserManager userManager, IContainerProvider containerProvider,
-        IEventAggregator eventAggregator)
+    public CreateGroupViewModel(ISukiDialog dialog, Action<IDialogResult>? requestClose)
     {
-        _userManager = userManager;
-        _containerProvider = containerProvider;
-        _eventAggregator = eventAggregator;
+        _containerProvider = App.Current.Container.Resolve<IContainerProvider>();
+        _userManager = _containerProvider.Resolve<IUserManager>();
+        _eventAggregator = _containerProvider.Resolve<IEventAggregator>();
+
+        _dialog = dialog;
+        RequestClose = requestClose;
 
         OKCommand = new AsyncDelegateCommand(CreateGroup, CanCreateGroup);
-        CancleCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
+        CancleCommand = new DelegateCommand(() =>
+        {
+            _dialog.Dismiss();
+            RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
+        });
         SelectionChangedCommand = new DelegateCommand<SelectionChangedEventArgs>(SelectionChanged);
 
-        GroupFriends = userManager.GroupFriends!;
+        GroupFriends = _userManager.GroupFriends!;
         GroupFriends.CollectionChanged += (sender, args) => OKCommand.RaiseCanExecuteChanged();
     }
 
@@ -67,7 +76,9 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
         if (result.Item1)
         {
             var dto = await _userManager.NewGroupReceive(result.Item2);
-            RequestClose.Invoke(ButtonResult.OK);
+
+            _dialog.Dismiss();
+            RequestClose?.Invoke(new DialogResult(ButtonResult.OK));
 
             if (dto != null)
             {
@@ -95,22 +106,4 @@ public class CreateGroupViewModel : BindableBase, IDialogAware
             }
         }
     }
-
-    #region Dialog
-
-    public bool CanCloseDialog() => true;
-
-    public void OnDialogClosed()
-    {
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(false);
-    }
-
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(true);
-    }
-
-    public DialogCloseListener RequestClose { get; }
-
-    #endregion
 }

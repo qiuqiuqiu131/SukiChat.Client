@@ -35,7 +35,7 @@
                                  Watermark="{TemplateBinding WaterMask}"
                                  VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding $parent[formControls:FormTextBox].Text}" />
+                                 Text="{Binding $parent[formControls:FormTextBox].Text,Mode=TwoWay}" />
                     </DockPanel>
                 </suki:GlassCard>
             </ControlTemplate>

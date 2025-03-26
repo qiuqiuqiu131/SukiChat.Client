@@ -27,38 +27,38 @@ namespace ChatServer.Common.Protobuf {
             "Ch1Qcm90by9DaGF0R3JvdXBQcm90b2NvbC5wcm90bxIaQ2hhdFNlcnZlci5D",
             "b21tb24uUHJvdG9idWYaHFByb3RvL0NoYXRCYXNlUHJvdG9jb2wucHJvdG8i",
             "NgoTR3JvdXBNZXNzYWdlUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3Jv",
-            "dXBJZBgCIAEoCSK6AQoMR3JvdXBNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgL",
+            "dXBJZBgCIAEoCSLQAQoMR3JvdXBNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgL",
             "MiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2US",
             "DwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1lGAMgASgJEhMKC2Rlc2NyaXB0aW9u",
-            "GAQgASgJEhEKCWhlYWRJbmRleBgFIAEoBRISCgpjcmVhdGVUaW1lGAYgASgJ",
-            "EhEKCWlzRGlzYmFuZBgHIAEoCCI2ChNHcm91cE1lbWJlcnNSZXF1ZXN0Eg4K",
-            "BnVzZXJJZBgBIAEoCRIPCgdncm91cElkGAIgASgJIqUBChNHcm91cE1lbWJl",
-            "cnNNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21t",
-            "b24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCRI/",
-            "CgdtZW1iZXJzGAMgAygLMi4uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
-            "R3JvdXBNZW1iZXJNZXNzYWdlIjcKEkdyb3VwTWVtYmVyUmVxdWVzdBIPCgdn",
-            "cm91cElkGAEgASgJEhAKCG1lbWJlcklkGAIgASgJIpMBChJHcm91cE1lbWJl",
-            "ck1lc3NhZ2USDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkSEAoI",
-            "am9pblRpbWUYAyABKAkSFQoNbGFzdFNwZWFrVGltZRgEIAEoCRIOCgZzdGF0",
-            "dXMYBSABKAUSEAoIbmlja25hbWUYBiABKAkSEQoJaGVhZEluZGV4GAcgASgF",
-            "IjgKFUdyb3VwTWVtYmVySWRzUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoH",
-            "Z3JvdXBJZBgCIAEoCSI0Cg5Hcm91cE1lbWJlcklkcxIPCgdncm91cElkGAEg",
-            "ASgJEhEKCW1lbWJlcklkcxgCIAMoCSLWAQoRRW50ZXJHcm91cE1lc3NhZ2US",
-            "DwoHZ3JvdXBJZBgBIAEoCRIOCgZ1c2VySWQYAiABKAkSDgoGc3RhdHVzGAMg",
-            "ASgJEhAKCGdyb3VwaW5nGAQgASgJEhAKCGpvaW5UaW1lGAUgASgJEhAKCE5p",
-            "Y2tOYW1lGAYgASgJEg4KBlJlbWFyaxgHIAEoCRITCgtjYW50RGlzdHVyYhgI",
-            "IAEoCBINCgVpc1RvcBgJIAEoCBISCgpsYXN0Q2hhdElkGAogASgFEhIKCmlz",
-            "Q2hhdHRpbmcYCyABKAgicgoZVXBkYXRlR3JvdXBNZXNzYWdlUmVxdWVzdBIO",
-            "CgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1lGAMgASgJ",
-            "EhMKC2Rlc2NyaXB0aW9uGAQgASgJEhEKCWhlYWRJbmRleBgFIAEoBSJjChJV",
-            "cGRhdGVHcm91cE1lc3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2Vy",
-            "dmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRIPCgdncm91cElk",
-            "GAIgASgJYgZwcm90bzM="));
+            "GAQgASgJEhEKCWhlYWRJbmRleBgFIAEoBRIUCgxpc0N1c3RvbUhlYWQYBiAB",
+            "KAgSEgoKY3JlYXRlVGltZRgHIAEoCRIRCglpc0Rpc2JhbmQYCCABKAgiNgoT",
+            "R3JvdXBNZW1iZXJzUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJ",
+            "ZBgCIAEoCSKlAQoTR3JvdXBNZW1iZXJzTWVzc2FnZRI8CghyZXNwb25zZRgB",
+            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
+            "bnNlEg8KB2dyb3VwSWQYAiABKAkSPwoHbWVtYmVycxgDIAMoCzIuLkNoYXRT",
+            "ZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkdyb3VwTWVtYmVyTWVzc2FnZSI3ChJH",
+            "cm91cE1lbWJlclJlcXVlc3QSDwoHZ3JvdXBJZBgBIAEoCRIQCghtZW1iZXJJ",
+            "ZBgCIAEoCSKTAQoSR3JvdXBNZW1iZXJNZXNzYWdlEg4KBnVzZXJJZBgBIAEo",
+            "CRIPCgdncm91cElkGAIgASgJEhAKCGpvaW5UaW1lGAMgASgJEhUKDWxhc3RT",
+            "cGVha1RpbWUYBCABKAkSDgoGc3RhdHVzGAUgASgFEhAKCG5pY2tuYW1lGAYg",
+            "ASgJEhEKCWhlYWRJbmRleBgHIAEoBSI4ChVHcm91cE1lbWJlcklkc1JlcXVl",
+            "c3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkiNAoOR3JvdXBN",
+            "ZW1iZXJJZHMSDwoHZ3JvdXBJZBgBIAEoCRIRCgltZW1iZXJJZHMYAiADKAki",
+            "1gEKEUVudGVyR3JvdXBNZXNzYWdlEg8KB2dyb3VwSWQYASABKAkSDgoGdXNl",
+            "cklkGAIgASgJEg4KBnN0YXR1cxgDIAEoCRIQCghncm91cGluZxgEIAEoCRIQ",
+            "Cghqb2luVGltZRgFIAEoCRIQCghOaWNrTmFtZRgGIAEoCRIOCgZSZW1hcmsY",
+            "ByABKAkSEwoLY2FudERpc3R1cmIYCCABKAgSDQoFaXNUb3AYCSABKAgSEgoK",
+            "bGFzdENoYXRJZBgKIAEoBRISCgppc0NoYXR0aW5nGAsgASgIInIKGVVwZGF0",
+            "ZUdyb3VwTWVzc2FnZVJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3Vw",
+            "SWQYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCRIR",
+            "CgloZWFkSW5kZXgYBSABKAUiYwoSVXBkYXRlR3JvdXBNZXNzYWdlEjwKCHJl",
+            "c3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29t",
+            "bW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessageRequest), global::ChatServer.Common.Protobuf.GroupMessageRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessage), global::ChatServer.Common.Protobuf.GroupMessage.Parser, new[]{ "Response", "GroupId", "Name", "Description", "HeadIndex", "CreateTime", "IsDisband" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessage), global::ChatServer.Common.Protobuf.GroupMessage.Parser, new[]{ "Response", "GroupId", "Name", "Description", "HeadIndex", "IsCustomHead", "CreateTime", "IsDisband" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersRequest), global::ChatServer.Common.Protobuf.GroupMembersRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMembersMessage), global::ChatServer.Common.Protobuf.GroupMembersMessage.Parser, new[]{ "Response", "GroupId", "Members" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberRequest), global::ChatServer.Common.Protobuf.GroupMemberRequest.Parser, new[]{ "GroupId", "MemberId" }, null, null, null, null),
@@ -267,6 +267,7 @@ namespace ChatServer.Common.Protobuf {
       name_ = other.name_;
       description_ = other.description_;
       headIndex_ = other.headIndex_;
+      isCustomHead_ = other.isCustomHead_;
       createTime_ = other.createTime_;
       isDisband_ = other.isDisband_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -332,8 +333,19 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "isCustomHead" field.</summary>
+    public const int IsCustomHeadFieldNumber = 6;
+    private bool isCustomHead_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsCustomHead {
+      get { return isCustomHead_; }
+      set {
+        isCustomHead_ = value;
+      }
+    }
+
     /// <summary>Field number for the "createTime" field.</summary>
-    public const int CreateTimeFieldNumber = 6;
+    public const int CreateTimeFieldNumber = 7;
     private string createTime_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string CreateTime {
@@ -344,7 +356,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "isDisband" field.</summary>
-    public const int IsDisbandFieldNumber = 7;
+    public const int IsDisbandFieldNumber = 8;
     private bool isDisband_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool IsDisband {
@@ -372,6 +384,7 @@ namespace ChatServer.Common.Protobuf {
       if (Name != other.Name) return false;
       if (Description != other.Description) return false;
       if (HeadIndex != other.HeadIndex) return false;
+      if (IsCustomHead != other.IsCustomHead) return false;
       if (CreateTime != other.CreateTime) return false;
       if (IsDisband != other.IsDisband) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -385,6 +398,7 @@ namespace ChatServer.Common.Protobuf {
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Description.Length != 0) hash ^= Description.GetHashCode();
       if (HeadIndex != 0) hash ^= HeadIndex.GetHashCode();
+      if (IsCustomHead != false) hash ^= IsCustomHead.GetHashCode();
       if (CreateTime.Length != 0) hash ^= CreateTime.GetHashCode();
       if (IsDisband != false) hash ^= IsDisband.GetHashCode();
       if (_unknownFields != null) {
@@ -420,12 +434,16 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(40);
         output.WriteInt32(HeadIndex);
       }
+      if (IsCustomHead != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsCustomHead);
+      }
       if (CreateTime.Length != 0) {
-        output.WriteRawTag(50);
+        output.WriteRawTag(58);
         output.WriteString(CreateTime);
       }
       if (IsDisband != false) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(64);
         output.WriteBool(IsDisband);
       }
       if (_unknownFields != null) {
@@ -450,6 +468,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (HeadIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(HeadIndex);
+      }
+      if (IsCustomHead != false) {
+        size += 1 + 1;
       }
       if (CreateTime.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(CreateTime);
@@ -485,6 +506,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.HeadIndex != 0) {
         HeadIndex = other.HeadIndex;
+      }
+      if (other.IsCustomHead != false) {
+        IsCustomHead = other.IsCustomHead;
       }
       if (other.CreateTime.Length != 0) {
         CreateTime = other.CreateTime;
@@ -526,11 +550,15 @@ namespace ChatServer.Common.Protobuf {
             HeadIndex = input.ReadInt32();
             break;
           }
-          case 50: {
+          case 48: {
+            IsCustomHead = input.ReadBool();
+            break;
+          }
+          case 58: {
             CreateTime = input.ReadString();
             break;
           }
-          case 56: {
+          case 64: {
             IsDisband = input.ReadBool();
             break;
           }

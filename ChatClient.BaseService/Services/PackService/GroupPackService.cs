@@ -13,9 +13,9 @@ namespace ChatClient.BaseService.Services.PackService;
 public interface IGroupPackService
 {
     Task<AvaloniaList<GroupRelationDto>?> GetGroupRelationDtos(string userId);
-    Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId);
-    Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId);
-    Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId);
+    Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId, DateTime lastDeleteTime);
+    Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId, DateTime lastDeleteTime);
+    Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId, DateTime lastDeleteTime);
     Task<bool> OperatePullGroupMessage(string userId, PullGroupMessage message);
     Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages);
     Task<bool> GroupDeleteMessageOperate(string userId, IMessage message);
@@ -63,12 +63,12 @@ public class GroupPackService : BaseService, IGroupPackService
         return result;
     }
 
-    public async Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId)
+    public async Task<AvaloniaList<GroupRequestDto>?> GetGroupRequestDtos(string userId, DateTime lastDeleteTime)
     {
         var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
         var groupRequests = await groupRequestRepository.GetAllAsync(
-            predicate: d => d.UserFromId.Equals(userId),
-            orderBy: order => order.OrderByDescending(d => d.RequestTime));
+            predicate: d => d.UserFromId.Equals(userId) && (d.SolveTime ?? d.RequestTime) > lastDeleteTime,
+            orderBy: order => order.OrderByDescending(d => d.SolveTime ?? d.RequestTime));
 
         if (groupRequests == null) return null;
 
@@ -84,13 +84,13 @@ public class GroupPackService : BaseService, IGroupPackService
         return new AvaloniaList<GroupRequestDto>(friendRequestDtos);
     }
 
-    public async Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId)
+    public async Task<AvaloniaList<GroupReceivedDto>?> GetGroupReceivedDtos(string userId, DateTime lastDeleteTime)
     {
         var groupIds = await _scopedProvider.Resolve<IGroupGetService>().GetGroupsOfUserManager(userId);
         var groupReceiveRepository = _unitOfWork.GetRepository<GroupReceived>();
         var groupReceiveds = await groupReceiveRepository.GetAllAsync(
-            predicate: d => groupIds.Contains(d.GroupId),
-            orderBy: d => d.OrderByDescending(g => g.ReceiveTime));
+            predicate: d => groupIds.Contains(d.GroupId) && (d.SolveTime ?? d.ReceiveTime) > lastDeleteTime,
+            orderBy: d => d.OrderByDescending(g => g.SolveTime ?? g.ReceiveTime));
 
         if (groupReceiveds == null) return null;
 
@@ -107,11 +107,12 @@ public class GroupPackService : BaseService, IGroupPackService
         return new AvaloniaList<GroupReceivedDto>(groupRequestDtos);
     }
 
-    public async Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId)
+    public async Task<AvaloniaList<GroupDeleteDto>?> GetGroupDeleteDtos(string userId, DateTime lastDeleteTime)
     {
         var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
         var groupDeletes = await groupDeleteRepository.GetAllAsync(
-            predicate: d => d.OperateUserId.Equals(userId) || d.MemberId.Equals(userId),
+            predicate: d =>
+                (d.OperateUserId.Equals(userId) || d.MemberId.Equals(userId)) && d.DeleteTime > lastDeleteTime,
             orderBy: d => d.OrderByDescending(g => g.DeleteTime));
 
         if (groupDeletes == null) return null;

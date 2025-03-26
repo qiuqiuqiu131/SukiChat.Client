@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:icons="https://github.com/kikipoulet/SukiUI"
+             xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia"
+             xmlns:formComboBox="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormComboBox;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:formDatePicker="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormDatePicker;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Width="430"
+             Height="500"
+             Background="Transparent"
+             x:DataType="userControls:EditUserDataViewModel"
+             x:Class="ChatClient.Desktop.Views.SukiDialog.EditUserDataView">
+    <Grid RowDefinitions="30,*">
+        <Panel Grid.Row="0">
+            <TextBlock Text="编辑信息" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Button x:Name="PART_CloseButton" HorizontalAlignment="Right" Width="25" Height="25" Margin="10,0"
+                    Classes="Basic Rounded WindowControlsButton Close"
+                    Command="{Binding CancelCommand}">
+                <PathIcon Data="{x:Static icons:Icons.WindowClose}" Width="8" Height="8" />
+            </Button>
+        </Panel>
+        <DockPanel LastChildFill="True" Grid.Row="1">
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,15">
+                <Button Margin="5,0" Padding="15,5" Classes="Flat" Command="{Binding SaveCommand}">
+                    <TextBlock Text="保存" FontSize="13.5" />
+                </Button>
+                <Button Margin="5,0" Padding="15,5" Command="{Binding CancelCommand}">
+                    <TextBlock Text="取消" FontSize="13.5" />
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="15" Spacing="15">
+                <Grid Width="70" Height="70" HorizontalAlignment="Center" Margin="20,0,20,15">
+                    <circleImage:CircleImage Image="{Binding UserDto.HeadImage}" Size="70" />
+                    <Button
+                        Width="20"
+                        Height="20"
+                        Padding="1.5"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Classes="Normal Void"
+                        ToolTip.ShowDelay="500"
+                        Command="{Binding EditHeadCommand}">
+                        <Button.Styles>
+                            <Style Selector="Button.Normal:pointerover">
+                                <Setter Property="RenderTransform" Value="scale(1.06,1.06)" />
+                                <Setter Property="Cursor" Value="Hand" />
+                            </Style>
+                        </Button.Styles>
+                        <Panel ToolTip.ShowDelay="500">
+                            <ToolTip.Tip>
+                                <TextBlock FontSize="12"
+                                           Text="编辑头像" />
+                            </ToolTip.Tip>
+                            <Ellipse
+                                Width="20"
+                                Height="20"
+                                Fill="White" />
+                            <Ellipse
+                                Width="20"
+                                Height="20"
+                                StrokeThickness="1.5"
+                                Stroke="{DynamicResource SukiPrimaryColor50}"
+                                Fill="{DynamicResource SukiPrimaryColor50}" />
+                            <avalonia:MaterialIcon
+                                Width="13"
+                                Height="13"
+                                Foreground="{DynamicResource SukiLowText}"
+                                Kind="CircleEditOutline" />
+                        </Panel>
+                    </Button>
+                </Grid>
+                <formControls:FormTextBox Text="{Binding Name,Mode=TwoWay}" Height="35" Head="昵称"
+                                          FontSize="14"
+                                          WaterMask="设置昵称" MaxLength="30" />
+                <formControls:FormTextBox Text="{Binding Introduction,Mode=TwoWay}"
+                                          FontSize="14"
+                                          Height="35" Head="个签"
+                                          WaterMask="编辑个签，展示我的独特态度" MaxLength="100" />
+                <formComboBox:FormComboBox Head="性别"
+                                           FontSize="14"
+                                           Height="35"
+                                           ItemsSource="{Binding SexEnum}"
+                                           SelectedItem="{Binding Sex,Mode=TwoWay}">
+                    <formComboBox:FormComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={converter:SexConverter}}" />
+                        </DataTemplate>
+                    </formComboBox:FormComboBox.ItemTemplate>
+                </formComboBox:FormComboBox>
+                <formDatePicker:FormDatePicker Name="datePicker"
+                                               MonthFormat="MM"
+                                               YearFormat="yyyy"
+                                               DayFormat="dd"
+                                               Height="35" FontSize="14" Head="生日" />
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

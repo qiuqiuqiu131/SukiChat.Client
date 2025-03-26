@@ -57,7 +57,7 @@
                         Name="notificationMessageBorder"
                         Classes.start="{TemplateBinding StartAnimation}"
                         Classes.dismiss="{TemplateBinding DismissAnimation}"
-                        MinHeight="35"
+                        MinHeight="45"
                         CornerRadius="7"
                         VerticalAlignment="Top"
                         Background="{DynamicResource SukiGlassCardOpaqueBackground}"

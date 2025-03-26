@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.BaseService.Manager;
@@ -28,7 +29,7 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
         InitializeComponent();
 
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
-            .Subscribe(() => { OverlaySplitView.IsPaneOpen = false; });
+            .Subscribe(() => { Dispatcher.UIThread.Invoke(() => { return OverlaySplitView.IsPaneOpen = false; }); });
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)

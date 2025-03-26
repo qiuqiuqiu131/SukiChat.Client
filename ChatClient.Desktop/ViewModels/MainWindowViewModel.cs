@@ -8,6 +8,7 @@ using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -20,7 +21,6 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
-using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels;
 
@@ -69,6 +69,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             {
                 previousPage?.OnNavigatedFrom();
                 _activePage?.OnNavigatedTo();
+                _userManager.CurrentChatPage = ActivePage?.DisplayName ?? "";
             }
         }
     }
@@ -92,6 +93,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
 
+    public ISukiDialogManager SukiDialogManager { get; init; }
+
     public INotificationMessageManager NotificationMessageManager { get; init; } = new NotificationMessageManager();
 
     public AsyncDelegateCommand ExitCommnad { get; init; }
@@ -101,6 +104,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         IConnection connection,
         IEventAggregator eventAggregator,
         IDialogService dialogService,
+        ISukiDialogManager sukiDialogManager,
         IContainerProvider containerProvider,
         IUserManager userManager)
     {
@@ -108,6 +112,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         _dialogService = dialogService;
         _containerProvider = containerProvider;
         _userManager = userManager;
+
+        SukiDialogManager = sukiDialogManager;
 
         ChatPages = new AvaloniaList<ChatPageBase>(chatPages.OrderBy(x => x.Index).ThenBy(x => x.DisplayName));
 
@@ -300,6 +306,14 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         });
         tokens.Add(token4);
 
+        var token5 = _eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Subscribe(d =>
+        {
+            var page = ChatPages.FirstOrDefault(p => p.DisplayName.Equals(d.Item1));
+            if (page != null)
+                page.UnReadMessageCount = d.Item2;
+        });
+        tokens.Add(token5);
+
         IsConnected.ConnecttedChanged += ConnectionChanged;
     }
 
@@ -325,20 +339,28 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     private async Task ForceToExit(string Content)
     {
-        var result = await _dialogService.ShowDialogAsync(nameof(WarningDialogView),
-            new DialogParameters { { "message", Content }, { "title", "登录异常" } });
-        if (result.Result != ButtonResult.OK) return;
+        async void ForceToExitCallback(IDialogResult dialogResult)
+        {
+            if (dialogResult.Result == ButtonResult.OK)
+                await Exit();
+        }
 
-        await Exit();
+        SukiDialogManager.CreateDialog()
+            .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
+            .TryShow();
     }
 
     private async Task TryExit()
     {
-        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
-            new DialogParameters { { "message", "确定退出登录吗？" } });
-        if (result.Result != ButtonResult.OK) return;
+        async void TryExitCallback(IDialogResult dialogResult)
+        {
+            if (dialogResult.Result == ButtonResult.OK)
+                await Exit();
+        }
 
-        await Exit();
+        SukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定要退出登录吗？", TryExitCallback))
+            .TryShow();
     }
 
     /// <summary>

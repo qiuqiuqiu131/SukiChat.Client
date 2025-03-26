@@ -110,6 +110,22 @@
             <DependentUpon>AddFriendRequestView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\SukiDialog\EditUserDataView.axaml.cs">
+            <DependentUpon>EditUserDataView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SukiDialog\CommonDialogView.axaml.cs">
+            <DependentUpon>CommonDialogView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SukiDialog\WarningDialogView.axaml.cs">
+            <DependentUpon>WarningDialogView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\SukiDialog\SukiDialogView.axaml.cs">
+            <DependentUpon>SukiDialogView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

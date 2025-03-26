@@ -3,6 +3,7 @@ using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.ManagerInterface;
@@ -11,6 +12,10 @@ public interface IUserManager
 {
     // 是否登录
     bool IsLogin { get; }
+
+    // 用户状态
+    string CurrentChatPage { get; set; }
+    ContactState CurrentContactState { get; set; }
 
     // 登录用户信息
     UserDto? User { get; }

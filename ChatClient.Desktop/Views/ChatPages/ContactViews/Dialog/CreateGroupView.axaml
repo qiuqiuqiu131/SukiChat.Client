@@ -9,22 +9,24 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Width="550" Height="550"
-             x:DataType="vm:CreateGroupViewModel"
+             Background="Transparent"
+             x:DataType="dialog:CreateGroupViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.CreateGroupView">
     <Grid ColumnDefinitions="*,1.1*">
         <Grid Grid.Column="0" RowDefinitions="50,*">
             <suki:GlassCard Padding="8"
                             Margin="0"
                             Grid.Row="0"
-                            CornerRadius="0">
+                            CornerRadius="7,0,0,0">
                 <searchBox:SearchBox HorizontalAlignment="Stretch"
                                      WaterMask="搜索"
                                      VerticalAlignment="Bottom" />
             </suki:GlassCard>
-            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0" Grid.Row="1">
+            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0,0,0,7" Grid.Row="1">
                 <Grid>
                     <TextBlock Text="还没有添加好友"
                                Margin="0,50"

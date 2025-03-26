@@ -24,5 +24,5 @@ public class FriendReceived
 
     public bool IsSolved { get; set; }
 
-    public DateTime SolveTime { get; set; }
+    public DateTime? SolveTime { get; set; }
 }

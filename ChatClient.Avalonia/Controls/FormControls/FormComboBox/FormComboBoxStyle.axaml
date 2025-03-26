@@ -27,16 +27,9 @@
                             <Setter Property="FontSize" Value="{Binding $parent[ComboBox].FontSize}" />
                         </Style>
                     </suki:GlassCard.Styles>
-                    <suki:GlassCard Name="border"
-                                    Classes="Discrete" Padding="{TemplateBinding Padding}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="{TemplateBinding CornerRadius}">
-                        <suki:GlassCard.Transitions>
-                            <Transitions>
-                                <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
-                            </Transitions>
-                        </suki:GlassCard.Transitions>
+                    <Border Name="border"
+                            Background="Transparent"
+                            Classes="Discrete" Padding="0">
                         <Grid ColumnDefinitions="Auto,*,Auto">
                             <Grid.Resources>
                                 <suki:BiggestItemConverter x:Key="BigItem" />
@@ -115,7 +108,7 @@
                                 </LayoutTransformControl>
                             </Popup>
                         </Grid>
-                    </suki:GlassCard>
+                    </Border>
                 </suki:GlassCard>
             </ControlTemplate>
         </Setter>

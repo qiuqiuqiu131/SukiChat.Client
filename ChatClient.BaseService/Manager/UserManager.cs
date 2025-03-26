@@ -36,6 +36,14 @@ internal class UserManager : IUserManager
 
     #endregion
 
+    #region UserState
+
+    public string CurrentChatPage { get; set; } = "聊天";
+
+    public ContactState CurrentContactState { get; set; } = ContactState.None;
+
+    #endregion
+
     private readonly IEventAggregator _eventAggregator;
     private readonly IUserDtoManager _userDtoManager;
     private readonly IContainerProvider _containerProvider;
@@ -142,7 +150,8 @@ internal class UserManager : IUserManager
         if (User == null) return null;
 
         var dto = await _userDtoManager.GetFriendRelationDto(User.Id, friendId);
-        _ = await _userDtoManager.GetUserDto(friendId);
+        if (dto.UserDto == null)
+            dto.UserDto = await _userDtoManager.GetUserDto(friendId);
         if (dto != null)
         {
             var groupFriend = GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
@@ -181,7 +190,9 @@ internal class UserManager : IUserManager
         if (User == null) return null;
 
         var dto = await _userDtoManager.GetGroupRelationDto(User!.Id, groupId);
-        _ = await _userDtoManager.GetGroupDto(User.Id, groupId);
+        if (dto.GroupDto == null)
+            dto.GroupDto = await _userDtoManager.GetGroupDto(User.Id, groupId);
+
         if (dto != null)
         {
             var groupGroup = GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
@@ -245,7 +256,7 @@ internal class UserManager : IUserManager
             if (friend != null)
             {
                 friendGroup.Friends.Remove(friend);
-                friend.Dispose();
+                await _userDtoManager.RemoveFriendRelationDto(friendId);
             }
 
             if (friendGroup.Friends.Count == 0)
@@ -273,7 +284,7 @@ internal class UserManager : IUserManager
             if (group != null)
             {
                 groupGroup.Groups.Remove(group);
-                group.Dispose();
+                await _userDtoManager.RemoveGroupRelationDto(groupId);
             }
 
             if (groupGroup.Groups.Count == 0)
@@ -295,7 +306,7 @@ internal class UserManager : IUserManager
         if (memberDto != null && groupDto != null)
         {
             groupDto.GroupMembers.Remove(memberDto);
-            memberDto.Dispose();
+            await _userDtoManager.RemoveGroupMemberDto(groupId, memberId);
         }
     }
 

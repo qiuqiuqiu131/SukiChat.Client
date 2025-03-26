@@ -9,6 +9,7 @@ using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -24,6 +25,7 @@ using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Navigation.Regions;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
@@ -31,7 +33,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
-    private readonly IDialogService _dialogService;
+    private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
 
     public ThemeStyle ThemeStyle { get; set; }
@@ -59,13 +61,13 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
     public ChatFriendPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
-        IDialogService dialogService,
+        ISukiDialogManager sukiDialogManager,
         IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
-        _dialogService = dialogService;
+        _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
 
         ThemeStyle = themeStyle.CurrentThemeStyle;
@@ -94,18 +96,23 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     private async Task DeleteFriend()
     {
         if (SelectedFriend == null) return;
-        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
-            new DialogParameters { { "message", "确定删除此好友吗？" } });
 
-        if (result.Result != ButtonResult.OK) return;
-        var friendService = _containerProvider.Resolve<IFriendService>();
-        await friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend.UserId);
-
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        async void DeleteFriendCallback(IDialogResult result)
         {
-            Message = $"您已删除好友 {SelectedFriend.FriendRelatoinDto?.UserDto?.Name ?? string.Empty}",
-            Type = NotificationType.Success
-        });
+            if (result.Result != ButtonResult.OK) return;
+            var friendService = _containerProvider.Resolve<IFriendService>();
+            await friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend.UserId);
+
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = $"您已删除好友 {SelectedFriend.FriendRelatoinDto?.UserDto?.Name ?? string.Empty}",
+                Type = NotificationType.Success
+            });
+        }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定删除好友吗？", DeleteFriendCallback))
+            .TryShow();
     }
 
     /// <summary>

@@ -58,7 +58,13 @@ public class GroupChatDto : BindableBase, IDisposable
     public int UnReadMessageCount
     {
         get => unReadMessageCount;
-        set => SetProperty(ref unReadMessageCount, value);
+        set
+        {
+            if (SetProperty(ref unReadMessageCount, value))
+            {
+                OnUnReadMessageCountChanged?.Invoke();
+            }
+        }
     }
 
     public bool IsSelected { get; set; }
@@ -67,6 +73,7 @@ public class GroupChatDto : BindableBase, IDisposable
     public AvaloniaList<object> InputMessages { get; set; } = new();
 
     public event Action<GroupChatDto> OnLastChatMessagesChanged;
+    public event Action OnUnReadMessageCountChanged;
 
     public GroupChatDto()
     {
@@ -86,6 +93,7 @@ public class GroupChatDto : BindableBase, IDisposable
     public void Dispose()
     {
         OnLastChatMessagesChanged = null;
+        OnUnReadMessageCountChanged = null;
 
         InputMessages.Clear();
         InputMessages = null;

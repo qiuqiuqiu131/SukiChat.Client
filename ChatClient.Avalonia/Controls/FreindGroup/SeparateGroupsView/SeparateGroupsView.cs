@@ -203,8 +203,6 @@ public class SeparateGroupsView : UserControl
                             contorl.SelectionChanged += OnSelectionChanged;
                             contorl.PointerPressed += ControlOnPointerPressed;
                             InsertControlByGroupName(contorl); // 按GroupName排序插入
-                            await Task.Delay(50);
-                            contorl.Open();
                         }
                     }
                 }

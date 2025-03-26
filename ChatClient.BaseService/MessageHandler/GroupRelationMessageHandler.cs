@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using SukiUI.Toasts;
 
@@ -84,7 +85,18 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         GroupReceivedDto groupReceivedDto = _mapper.Map<GroupReceivedDto>(message);
         groupReceivedDto.UserDto = await _userDtoManager.GetUserDto(message.UserId);
         groupReceivedDto.GroupDto = await _userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+
+        // UI处理
         _userManager.GroupReceiveds?.Insert(0, groupReceivedDto);
+        if (_userManager is not
+            { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null })
+            _userManager.User!.UnreadGroupMessageCount++;
+        else
+        {
+            _userManager.User!.LastReadGroupMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
+            _userManager.User!.UnreadGroupMessageCount = 0;
+            _userManager.SaveUser();
+        }
 
         var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
         var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
@@ -102,7 +114,7 @@ public class GroupRelationMessageHandler : MessageHandlerBase
 
 
     /// <summary>
-    /// 处理加入群聊回应
+    /// 处理加入群聊回应,发送请求的用户处理
     /// </summary>
     /// <param name="scopedprovider"></param>
     /// <param name="message"></param>
@@ -149,7 +161,26 @@ public class GroupRelationMessageHandler : MessageHandlerBase
             dto.SolveTime = DateTime.Parse(message.Time);
             dto.AcceptByUserId = message.UserIdFrom;
             dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, message.UserIdFrom);
+
+            _userManager.GroupRequests?.Remove(dto);
+            _userManager.GroupRequests?.Insert(0, dto);
         }
+        else
+        {
+            var request = _mapper.Map<GroupRequestDto>(result);
+            request.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(result.GroupId, message.UserIdFrom);
+            _userManager.GroupRequests?.Insert(0, request);
+        }
+
+        // if (_userManager is not
+        //     { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null })
+        //     _userManager.User!.UnreadGroupMessageCount++;
+        // else
+        // {
+        //     _userManager.User!.LastReadGroupMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
+        //     _userManager.User!.UnreadGroupMessageCount = 0;
+        //     _userManager.SaveUser();
+        // }
 
         // 加入群聊
         if (dto?.IsAccept ?? false)
@@ -212,6 +243,9 @@ public class GroupRelationMessageHandler : MessageHandlerBase
             dto.AcceptByUserId = message.UserId;
             var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
             dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
+
+            _userManager.GroupReceiveds?.Remove(dto);
+            _userManager.GroupReceiveds?.Insert(0, dto);
         }
     }
 }

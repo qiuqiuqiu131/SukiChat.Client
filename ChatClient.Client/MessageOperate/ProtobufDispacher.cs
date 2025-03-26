@@ -29,6 +29,7 @@ namespace ChatClient.MessageOperate
 
         // 消息队列
         private readonly BlockingCollection<IMessage> queue = new BlockingCollection<IMessage>();
+
         // 信号量,控制消息队列大小
         private readonly SemaphoreSlim semaphore;
 
@@ -64,6 +65,7 @@ namespace ChatClient.MessageOperate
         }
 
         #region Process
+
         /// <summary>
         /// 控制消息队列的执行
         /// </summary>
@@ -106,15 +108,15 @@ namespace ChatClient.MessageOperate
             using (var scope = container.CreateScope())
             {
                 // 获取处理器实例，一个Protobuf消息对应多个处理器
-                var processors = (IEnumerable<object>)scope.Resolve(processorsType)!;
-
-                // 获取处理方法
-                MethodInfo? processMethod = processorType.GetMethod("Process");
-
-                // 触发处理方法
-                foreach (var processor in processors)
+                try
                 {
-                    try
+                    var processors = (IEnumerable<object>)scope.Resolve(processorsType)!;
+
+                    // 获取处理方法
+                    MethodInfo? processMethod = processorType.GetMethod("Process");
+
+                    // 触发处理方法
+                    foreach (var processor in processors)
                     {
                         // 调用处理器
                         if (processMethod != null)
@@ -123,14 +125,14 @@ namespace ChatClient.MessageOperate
                             await task;
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        //logger.Error(ex.Message + ex.StackTrace);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
         }
+
         #endregion
     }
-
 }

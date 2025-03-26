@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
@@ -10,12 +11,14 @@ using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using Material.Icons;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Navigation;
+using SukiUI.Dialogs;
 using FriendDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendDetailView;
 using FriendRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendRequestView;
 using GroupDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupDetailView;
@@ -34,8 +37,10 @@ public class ContactsViewModel : ChatPageBase
         set => SetProperty(ref searchText, value);
     }
 
-    public AvaloniaList<GroupFriendDto> GroupFriends { get; init; }
-    public AvaloniaList<GroupGroupDto> GroupGroups { get; set; }
+    public AvaloniaList<GroupFriendDto> GroupFriends => _userManager.GroupFriends!;
+    public AvaloniaList<GroupGroupDto> GroupGroups => _userManager.GroupGroups!;
+
+    public UserDto User => _userManager.User!;
 
     public DelegateCommand<object?> SelectedChangedCommand { get; set; }
     public DelegateCommand ToFriendRequestViewCommand { get; init; }
@@ -47,14 +52,17 @@ public class ContactsViewModel : ChatPageBase
     public AsyncDelegateCommand<object> DeleteGroupCommand { get; init; }
 
     private readonly IContainerProvider _containerProvider;
+    private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
     private readonly IDialogService _dialogService;
 
     public ContactsViewModel(IContainerProvider containerProvider,
+        ISukiDialogManager sukiDialogManager,
         IUserManager userManager)
         : base("通讯录", MaterialIconKind.ContactPhone, 1)
     {
         _containerProvider = containerProvider;
+        _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
         _dialogService = containerProvider.Resolve<IDialogService>();
 
@@ -67,8 +75,11 @@ public class ContactsViewModel : ChatPageBase
         RenameGroupCommand = new AsyncDelegateCommand<object>(RenameGroup);
         DeleteGroupCommand = new AsyncDelegateCommand<object>(DeleteGroup);
 
-        GroupFriends = userManager.GroupFriends!;
-        GroupGroups = userManager.GroupGroups!;
+        User.OnUnreadMessageCountChanged += () =>
+        {
+            UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
+        };
+        UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
     }
 
     #region CommandMethod
@@ -90,36 +101,41 @@ public class ContactsViewModel : ChatPageBase
             if (origionName.Equals("默认分组")) return;
         }
 
-        var parameters = new DialogParameters { { "dto", obj } };
-        var result = await _dialogService.ShowDialogAsync(nameof(DeleteGroupView), parameters);
-        if (result.Result != ButtonResult.OK) return;
-
-        var userGroupService = _containerProvider.Resolve<IUserGroupService>();
-        var res = await userGroupService.DeleteGroupAsync(_userManager.User!.Id, origionName, type);
-
-        if (res)
+        async void DeleteGroupCallback(IDialogResult result)
         {
-            if (type == 0)
-            {
-                var dto = obj as GroupFriendDto;
-                var friends = dto.Friends;
-                foreach (var friend in friends)
-                    friend.GroupingWithoutEvent = "默认分组";
+            if (result.Result != ButtonResult.OK) return;
 
-                GroupFriends.Remove(dto);
-                GroupFriends.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Friends.AddRange(friends);
-            }
-            else
-            {
-                var dto = obj as GroupGroupDto;
-                var groups = dto.Groups;
-                foreach (var group in groups)
-                    group.GroupingWithoutEvent = "默认分组";
+            var userGroupService = _containerProvider.Resolve<IUserGroupService>();
+            var res = await userGroupService.DeleteGroupAsync(_userManager.User!.Id, origionName, type);
 
-                GroupGroups.Remove(dto);
-                GroupGroups.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Groups.AddRange(groups);
+            if (res)
+            {
+                if (type == 0)
+                {
+                    var dto = obj as GroupFriendDto;
+                    var friends = dto.Friends;
+                    foreach (var friend in friends)
+                        friend.GroupingWithoutEvent = "默认分组";
+
+                    GroupFriends.Remove(dto);
+                    GroupFriends.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Friends.AddRange(friends);
+                }
+                else
+                {
+                    var dto = obj as GroupGroupDto;
+                    var groups = dto.Groups;
+                    foreach (var group in groups)
+                        group.GroupingWithoutEvent = "默认分组";
+
+                    GroupGroups.Remove(dto);
+                    GroupGroups.FirstOrDefault(d => d.GroupName.Equals("默认分组"))?.Groups.AddRange(groups);
+                }
             }
         }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new DeleteGroupViewModel(d, DeleteGroupCallback))
+            .TryShow();
     }
 
     private async Task RenameGroup(object obj)
@@ -139,99 +155,120 @@ public class ContactsViewModel : ChatPageBase
             if (origionName.Equals("默认分组")) return;
         }
 
-        var parameters = new DialogParameters { { "dto", obj } };
-        var result = await _dialogService.ShowDialogAsync(nameof(RenameGroupView), parameters);
-        if (result.Result != ButtonResult.OK) return;
-
-        var groupName = result.Parameters.GetValue<string>("GroupName");
-        if (type == 0)
+        async void RenameGroupCallback(IDialogResult result)
         {
-            var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));
-            if (gf != null) return;
-        }
-        else if (type == 1)
-        {
-            var gg = GroupGroups.FirstOrDefault(d => d.GroupName.Equals(groupName));
-            if (gg != null) return;
-        }
+            if (result.Result != ButtonResult.OK) return;
 
-        var userGroupService = _containerProvider.Resolve<IUserGroupService>();
-        var res = await userGroupService.RenameGroupAsync(_userManager.User!.Id, origionName, groupName, type);
-
-        if (res)
-        {
+            var groupName = result.Parameters.GetValue<string>("GroupName");
             if (type == 0)
             {
-                var dto = obj as GroupFriendDto;
-                dto.GroupName = groupName;
-                var friends = dto.Friends;
-                foreach (var friend in friends)
-                    friend.GroupingWithoutEvent = groupName;
-
-                await Task.Delay(50);
+                var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));
+                if (gf != null) return;
             }
-            else
+            else if (type == 1)
             {
-                var dto = obj as GroupGroupDto;
-                dto.GroupName = groupName;
-                var groups = dto.Groups;
-                foreach (var group in groups)
-                    group.GroupingWithoutEvent = groupName;
+                var gg = GroupGroups.FirstOrDefault(d => d.GroupName.Equals(groupName));
+                if (gg != null) return;
+            }
+
+            var userGroupService = _containerProvider.Resolve<IUserGroupService>();
+            var res = await userGroupService.RenameGroupAsync(_userManager.User!.Id, origionName, groupName, type);
+
+            if (res)
+            {
+                if (type == 0)
+                {
+                    var dto = obj as GroupFriendDto;
+                    dto.GroupName = groupName;
+                    var friends = dto.Friends;
+                    foreach (var friend in friends)
+                        friend.GroupingWithoutEvent = groupName;
+
+                    await Task.Delay(50);
+                }
+                else
+                {
+                    var dto = obj as GroupGroupDto;
+                    dto.GroupName = groupName;
+                    var groups = dto.Groups;
+                    foreach (var group in groups)
+                        group.GroupingWithoutEvent = groupName;
+                }
             }
         }
+
+        // 显示dialog
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new RenameGroupViewModel(d, RenameGroupCallback, origionName))
+            .TryShow();
     }
 
     private async Task AddGroup(object obj)
     {
-        var result = await _dialogService.ShowDialogAsync(nameof(AddGroupView));
-        if (result.Result != ButtonResult.OK) return;
-
-        int type = obj is GroupFriendDto ? 0 : 1;
-
-        var groupName = result.Parameters.GetValue<string>("GroupName");
-        if (type == 0)
+        async void AddGroupCallback(IDialogResult result)
         {
-            var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));
-            if (gf != null) return;
-        }
-        else if (type == 1)
-        {
-            var gg = GroupGroups.FirstOrDefault(d => d.GroupName.Equals(groupName));
-            if (gg != null) return;
-        }
+            if (result.Result != ButtonResult.OK) return;
 
-        var userGroupService = _containerProvider.Resolve<IUserGroupService>();
-        var res = await userGroupService.AddGroupAsync(_userManager.User!.Id, groupName, type);
+            int type = obj is GroupFriendDto ? 0 : 1;
 
-        if (res)
-        {
-            // 添加分组
+            var groupName = result.Parameters.GetValue<string>("GroupName");
             if (type == 0)
             {
-                GroupFriends.Add(new GroupFriendDto
-                {
-                    GroupName = groupName,
-                    Friends = []
-                });
+                var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));
+                if (gf != null) return;
             }
-            else
+            else if (type == 1)
             {
-                GroupGroups.Add(new GroupGroupDto
+                var gg = GroupGroups.FirstOrDefault(d => d.GroupName.Equals(groupName));
+                if (gg != null) return;
+            }
+
+            var userGroupService = _containerProvider.Resolve<IUserGroupService>();
+            var res = await userGroupService.AddGroupAsync(_userManager.User!.Id, groupName, type);
+
+            if (res)
+            {
+                // 添加分组
+                if (type == 0)
                 {
-                    GroupName = groupName,
-                    Groups = []
-                });
+                    GroupFriends.Add(new GroupFriendDto
+                    {
+                        GroupName = groupName,
+                        Friends = []
+                    });
+                }
+                else
+                {
+                    GroupGroups.Add(new GroupGroupDto
+                    {
+                        GroupName = groupName,
+                        Groups = []
+                    });
+                }
             }
         }
+
+        // 显示dialog
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new AddGroupViewModel(d, AddGroupCallback))
+            .TryShow();
     }
 
     private void ToGroupRequestView()
     {
+        _userManager.CurrentContactState = ContactState.GroupRequest;
+        _userManager.User!.LastReadGroupMessageTime = DateTime.Now;
+        _userManager.User.UnreadGroupMessageCount = 0;
+        _userManager.SaveUser();
         ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupRequestView));
     }
 
     private void ToFriendRequestView()
     {
+        _userManager.CurrentContactState = ContactState.FriendRequest;
+        _userManager.User!.LastReadFriendMessageTime = DateTime.Now;
+        _userManager.User.UnreadFriendMessageCount = 0;
+        _userManager.SaveUser();
         ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendRequestView));
     }
 
@@ -254,12 +291,16 @@ public class ContactsViewModel : ChatPageBase
             INavigationParameters parameters = new NavigationParameters();
             parameters.Add("dto", friendRelationDto);
             ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
+
+            _userManager.CurrentContactState = ContactState.None;
         }
         else if (obj is GroupRelationDto groupRelationDto)
         {
             INavigationParameters parameters = new NavigationParameters();
             parameters.Add("dto", groupRelationDto);
             ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
+
+            _userManager.CurrentContactState = ContactState.None;
         }
     }
 
@@ -267,6 +308,7 @@ public class ContactsViewModel : ChatPageBase
 
     public override void OnNavigatedFrom()
     {
+        _userManager.CurrentContactState = ContactState.None;
         ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
     }
 }

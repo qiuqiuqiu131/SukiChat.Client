@@ -14,5 +14,7 @@ public class Group
 
     public int HeadIndex { get; set; } = 1;
 
+    public bool IsCustomHead { get; set; } = false;
+
     public bool IsDisband { get; set; } = false;
 }

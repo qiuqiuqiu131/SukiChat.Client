@@ -163,8 +163,6 @@ public class ChatViewModel : ChatPageBase
     /// <param name="friendChatDto">被选中的好友</param>
     public async Task FriendSelectionChanged(FriendChatDto? friendChatDto)
     {
-        if (friendChatDto == SelectedFriend) return;
-
         if (friendChatDto == null)
         {
             SelectedGroup = null;
@@ -172,6 +170,8 @@ public class ChatViewModel : ChatPageBase
             ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
+
+        if (friendChatDto == SelectedFriend) return;
 
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         if (friendChatDto.ChatMessages.Count == 0)

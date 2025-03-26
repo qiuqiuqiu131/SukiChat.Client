@@ -1,10 +1,15 @@
+using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
+using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
@@ -22,21 +27,23 @@ public class GroupRequestViewModel : ViewModelBase
 
     public DelegateCommand<GroupReceivedDto> AcceptCommand { get; init; }
     public DelegateCommand<GroupReceivedDto> RejectCommand { get; init; }
+    public DelegateCommand ClearAllCommand { get; init; }
+
     private bool isOperate = false;
 
     private readonly IContainerProvider _containerProvider;
-    private readonly ISukiDialogManager _dialogManager;
-    private readonly ISukiToastManager _toastManager;
+    private readonly ISukiDialogManager _sukiDialogManager;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
 
     public GroupRequestViewModel(IContainerProvider containerProvider,
-        ISukiDialogManager dialogManager,
-        ISukiToastManager toastManager,
+        ISukiDialogManager sukiDialogManager,
+        IEventAggregator eventAggregator,
         IUserManager _userManager)
     {
         _containerProvider = containerProvider;
-        _dialogManager = dialogManager;
-        _toastManager = toastManager;
+        _sukiDialogManager = sukiDialogManager;
+        _eventAggregator = eventAggregator;
         this._userManager = _userManager;
 
         GroupReceivedDtos = _userManager.GroupReceiveds!;
@@ -48,6 +55,34 @@ public class GroupRequestViewModel : ViewModelBase
 
         AcceptCommand = new DelegateCommand<GroupReceivedDto>(AcceptRequest);
         RejectCommand = new DelegateCommand<GroupReceivedDto>(RejectRequest);
+        ClearAllCommand = new DelegateCommand(ClearAll);
+    }
+
+    private void ClearAll()
+    {
+        async void ClearAllCallback(IDialogResult result)
+        {
+            if (result.Result != ButtonResult.OK) return;
+
+            GroupReceivedDtos.Clear();
+            GroupRequestDtos.Clear();
+            GroupDeleteDtos.Clear();
+
+            var userManager = _containerProvider.Resolve<IUserManager>();
+            var userDto = userManager.User;
+            userDto!.LastDeleteGroupMessageTime = DateTime.Now;
+            await userManager.SaveUser();
+
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "群聊消息已清空",
+                Type = NotificationType.Information
+            });
+        }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定清空所有消息吗？", ClearAllCallback))
+            .TryShow();
     }
 
     private async void RejectRequest(GroupReceivedDto obj)
@@ -59,11 +94,11 @@ public class GroupRequestViewModel : ViewModelBase
         var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, false);
         if (!state)
         {
-            _toastManager.CreateToast()
-                .OfType(NotificationType.Error)
-                .WithTitle("操作失败")
-                .WithContent(message)
-                .Queue();
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "操作失败",
+                Type = NotificationType.Error
+            });
         }
 
         isOperate = false;
@@ -77,11 +112,11 @@ public class GroupRequestViewModel : ViewModelBase
         var _groupService = _containerProvider.Resolve<IGroupService>();
         var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
         if (!state)
-            _toastManager.CreateToast()
-                .OfType(NotificationType.Error)
-                .WithTitle("操作失败")
-                .WithContent(message)
-                .Queue();
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "操作失败",
+                Type = NotificationType.Error
+            });
 
         isOperate = false;
     }

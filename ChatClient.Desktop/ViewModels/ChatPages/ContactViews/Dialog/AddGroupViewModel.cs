@@ -1,14 +1,16 @@
+using System;
 using ChatClient.Tool.Events;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Mvvm;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
-public class AddGroupViewModel : BindableBase, IDialogAware
+public class AddGroupViewModel : BindableBase
 {
-    private readonly IEventAggregator _eventAggregator;
+    private readonly ISukiDialog _dialog;
     private string? groupName;
 
     public string? GroupName
@@ -24,20 +26,26 @@ public class AddGroupViewModel : BindableBase, IDialogAware
     public DelegateCommand SureCommand { get; set; }
     public DelegateCommand CancelCommand { get; set; }
 
-    public AddGroupViewModel(IEventAggregator eventAggregator)
+    private readonly Action<DialogResult> RequestClose;
+
+    public AddGroupViewModel(ISukiDialog dialog, Action<DialogResult> requestClose)
     {
-        _eventAggregator = eventAggregator;
+        _dialog = dialog;
+        RequestClose = requestClose;
+
         SureCommand = new DelegateCommand(Sure, CanSure);
         CancelCommand = new DelegateCommand(Cancel);
     }
 
     private void Cancel()
     {
-        RequestClose.Invoke(ButtonResult.Cancel);
+        _dialog.Dismiss();
+        RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
     }
 
     private void Sure()
     {
+        _dialog.Dismiss();
         var result = new DialogResult
         {
             Result = ButtonResult.OK,
@@ -47,22 +55,4 @@ public class AddGroupViewModel : BindableBase, IDialogAware
     }
 
     private bool CanSure() => !string.IsNullOrWhiteSpace(GroupName);
-
-    #region DialogAware
-
-    public bool CanCloseDialog() => true;
-
-    public void OnDialogClosed()
-    {
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(false);
-    }
-
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(true);
-    }
-
-    public DialogCloseListener RequestClose { get; }
-
-    #endregion
 }

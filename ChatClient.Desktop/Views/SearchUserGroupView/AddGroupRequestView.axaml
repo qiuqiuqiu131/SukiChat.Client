@@ -6,8 +6,10 @@
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="searchUserGroup:AddGroupRequestViewModel"
+             Width="320" Height="450"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.AddGroupRequestView">
     <Grid RowDefinitions="25,0.5,*,auto">
         <Grid Background="Transparent">
@@ -54,5 +56,7 @@
                 <TextBlock Text="取消" FontSize="13.5" />
             </Button>
         </StackPanel>
+
+        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" Grid.RowSpan="4" />
     </Grid>
 </UserControl>

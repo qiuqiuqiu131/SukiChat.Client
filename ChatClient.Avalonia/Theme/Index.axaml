@@ -12,6 +12,8 @@
                 <ResourceInclude Source="ToolTip.axaml" />
                 <ResourceInclude Source="MySukiSideMenuStyle.axaml" />
                 <ResourceInclude Source="SukiDialog.axaml" />
+                <ResourceInclude Source="SukiSideMenuItem.axaml" />
+                <ResourceInclude Source="SukiDialogHost.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
@@ -24,7 +26,9 @@
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
+    <StyleInclude Source="DatePicker.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormTextBox/FormTextBoxStyle.axaml" />
+    <StyleInclude Source="../Controls/FormControls/FormDatePicker/FormDatePicker.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormComboBox/FormComboBoxStyle.axaml" />
     <StyleInclude Source="../Controls/OverlaySplitView/OverlaySplitView.axaml" />
     <StyleInclude Source="../Controls/FreindGroup/GroupList/GroupList.axaml" />

@@ -11,6 +11,7 @@ using ChatClient.Avalonia;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -27,6 +28,7 @@ using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Navigation.Regions;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
@@ -34,8 +36,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
+    private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
-    private readonly IDialogService _dialogService;
 
     public ThemeStyle ThemeStyle { get; set; }
 
@@ -62,14 +64,15 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
+        ISukiDialogManager sukiDialogManager,
         IUserManager userManager,
         IDialogService dialogService,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
+        _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
-        _dialogService = dialogService;
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
@@ -83,31 +86,52 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// <summary>
     /// 请求解散群聊
     /// </summary>
-    private async void DeleteGroup()
+    private void DeleteGroup()
     {
         if (SelectedGroup == null) return;
-        var groupService = _containerProvider.Resolve<IGroupService>();
-        var result = await groupService.DisbandGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
+
+        async void DeleteGroupCallback(IDialogResult result)
+        {
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            var res = await groupService.DisbandGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
+            if (res.Item1)
+            {
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = $"您已解散群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
+                    Type = NotificationType.Success
+                });
+            }
+        }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定解散此群聊吗？", DeleteGroupCallback))
+            .TryShow();
     }
 
     /// <summary>
     /// 请求退出群聊
     /// </summary>
-    private async void QuitGroup()
+    private void QuitGroup()
     {
         if (SelectedGroup == null) return;
-        var result = await _dialogService.ShowDialogAsync(nameof(CommonDialogView),
-            new DialogParameters { { "message", "确定退出此群聊吗？" } });
 
-        if (result.Result != ButtonResult.OK) return;
-        var groupService = _containerProvider.Resolve<IGroupService>();
-        await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
-
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        async void QuitGroupCallback(IDialogResult result)
         {
-            Message = $"您已退出群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
-            Type = NotificationType.Success
-        });
+            if (result.Result != ButtonResult.OK) return;
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
+
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = $"您已退出群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
+                Type = NotificationType.Success
+            });
+        }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定退出此群聊吗？", QuitGroupCallback))
+            .TryShow();
     }
 
     /// <summary>

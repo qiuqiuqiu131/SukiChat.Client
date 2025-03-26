@@ -102,6 +102,38 @@ namespace ChatClient.Tool.Data
 
         private Bitmap headImage;
 
+        private DateTime lastReadFriendMessageTime;
+
+        public DateTime LastReadFriendMessageTime
+        {
+            get => lastReadFriendMessageTime;
+            set => SetProperty(ref lastReadFriendMessageTime, value);
+        }
+
+        private DateTime lastReadGroupMessageTime;
+
+        public DateTime LastReadGroupMessageTime
+        {
+            get => lastReadGroupMessageTime;
+            set => SetProperty(ref lastReadGroupMessageTime, value);
+        }
+
+        private DateTime lastDeleteFriendMessageTime;
+
+        public DateTime LastDeleteFriendMessageTime
+        {
+            get => lastDeleteFriendMessageTime;
+            set => SetProperty(ref lastDeleteFriendMessageTime, value);
+        }
+
+        private DateTime lastDeleteGroupMessageTime;
+
+        public DateTime LastDeleteGroupMessageTime
+        {
+            get => lastDeleteGroupMessageTime;
+            set => SetProperty(ref lastDeleteGroupMessageTime, value);
+        }
+
         private bool _isOnline;
 
         public bool IsOnline
@@ -114,12 +146,41 @@ namespace ChatClient.Tool.Data
             }
         }
 
+        private int unreadFriendMessageCount;
+
+        public int UnreadFriendMessageCount
+        {
+            get => unreadFriendMessageCount;
+            set
+            {
+                if (SetProperty(ref unreadFriendMessageCount, value))
+                {
+                    OnUnreadMessageCountChanged?.Invoke();
+                }
+            }
+        }
+
+        private int unreadGroupMessageCount;
+
+        public int UnreadGroupMessageCount
+        {
+            get => unreadGroupMessageCount;
+            set
+            {
+                if (SetProperty(ref unreadGroupMessageCount, value))
+                {
+                    OnUnreadMessageCountChanged?.Invoke();
+                }
+            }
+        }
+
         public event Action OnUserOnlineChanged;
+        public event Action OnUnreadMessageCountChanged;
 
         public void CopyFrom(UserDto dto)
         {
             Name = dto.Name;
-            Introduction = dto.Name;
+            Introduction = dto.Introduction;
             HeadIndex = dto.HeadIndex;
             HeadCount = dto.HeadCount;
             HeadImage = dto.HeadImage;
@@ -131,6 +192,7 @@ namespace ChatClient.Tool.Data
         {
             HeadImage = null;
             OnUserOnlineChanged = null;
+            OnUnreadMessageCountChanged = null;
         }
     }
 }

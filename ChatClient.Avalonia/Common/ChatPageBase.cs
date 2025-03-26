@@ -4,28 +4,31 @@ namespace ChatClient.Tool.Common;
 
 public class ChatPageBase(string displayName, MaterialIconKind icon, int index) : ValidateBindableBase
 {
-    private string _displayName = displayName;
-
     public string DisplayName
     {
-        get => _displayName;
-        set => SetProperty(ref _displayName, value);
+        get => displayName;
+        set => SetProperty(ref displayName, value);
     }
 
-    private MaterialIconKind _icon = icon;
+    private int unReadMessageCount;
+
+    public int UnReadMessageCount
+    {
+        get => unReadMessageCount;
+        set => SetProperty(ref unReadMessageCount, value);
+    }
+
 
     public MaterialIconKind Icon
     {
-        get => _icon;
-        set => SetProperty(ref _icon, value);
+        get => icon;
+        set => SetProperty(ref icon, value);
     }
-
-    private int _index = index;
 
     public int Index
     {
-        get => _index;
-        set => SetProperty(ref _index, value);
+        get => index;
+        set => SetProperty(ref index, value);
     }
 
     public virtual void OnNavigatedTo(INavigationParameters? parameters = null)

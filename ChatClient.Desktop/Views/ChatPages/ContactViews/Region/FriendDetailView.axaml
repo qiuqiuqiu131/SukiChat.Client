@@ -80,12 +80,12 @@
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="15,15,15,5">
-            <Button Content="发消息"
-                    Classes="Flat"
+            <Button Classes="Flat"
                     Margin="0"
-                    Padding="15,7"
-                    FontSize="14"
-                    Command="{Binding SendMessageCommand}" />
+                    Padding="20,8"
+                    Command="{Binding SendMessageCommand}">
+                <TextBlock Text="发消息" FontSize="14" />
+            </Button>
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="0">
             <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,8">

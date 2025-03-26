@@ -1,3 +1,4 @@
+using System;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
@@ -5,12 +6,14 @@ using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Mvvm;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
-public class RenameGroupViewModel : BindableBase, IDialogAware
+public class RenameGroupViewModel : BindableBase
 {
-    private readonly IEventAggregator _eventAggregator;
+    private readonly ISukiDialog _dialog;
+    private readonly Action<DialogResult> RequestClose;
     private string? groupName;
 
     public string? GroupName
@@ -26,20 +29,25 @@ public class RenameGroupViewModel : BindableBase, IDialogAware
     public DelegateCommand SureCommand { get; set; }
     public DelegateCommand CancelCommand { get; set; }
 
-    public RenameGroupViewModel(IEventAggregator eventAggregator)
+    public RenameGroupViewModel(ISukiDialog dialog, Action<DialogResult> requestClose, string groupName)
     {
-        _eventAggregator = eventAggregator;
+        _dialog = dialog;
+        RequestClose = requestClose;
         SureCommand = new DelegateCommand(Sure, CanSure);
         CancelCommand = new DelegateCommand(Cancel);
+        GroupName = groupName;
     }
 
     private void Cancel()
     {
-        RequestClose.Invoke(ButtonResult.Cancel);
+        _dialog.Dismiss();
+        RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
     }
 
     private void Sure()
     {
+        _dialog.Dismiss();
+
         var result = new DialogResult
         {
             Result = ButtonResult.OK,
@@ -49,28 +57,4 @@ public class RenameGroupViewModel : BindableBase, IDialogAware
     }
 
     private bool CanSure() => !string.IsNullOrWhiteSpace(GroupName);
-
-    #region DialogAware
-
-    public bool CanCloseDialog() => true;
-
-    public void OnDialogClosed()
-    {
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(false);
-    }
-
-    public void OnDialogOpened(IDialogParameters parameters)
-    {
-        var dto = parameters.GetValue<object>("dto");
-        if (dto is GroupFriendDto groupFriendDto)
-            GroupName = groupFriendDto.GroupName;
-        else if (dto is GroupGroupDto groupGroupDto)
-            GroupName = groupGroupDto.GroupName;
-
-        _eventAggregator.GetEvent<DialogShowEvent>().Publish(true);
-    }
-
-    public DialogCloseListener RequestClose { get; }
-
-    #endregion
 }

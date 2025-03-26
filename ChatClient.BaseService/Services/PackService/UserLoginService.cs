@@ -75,19 +75,19 @@ internal class UserLoginService : BaseService, IUserLoginService
     private async Task<UserData> LoadUserDate(string userId)
     {
         var user = new UserData();
+        user.UserDetail = await _userDtoManager.GetUserDto(userId);
+        if (user.UserDetail != null) user.UserDetail.IsUser = true;
         List<Task> tasks =
         [
             Task.Run(async () =>
             {
-                user.UserDetail = (await _userDtoManager.GetUserDto(userId));
-                if (user.UserDetail != null) user.UserDetail.IsUser = true;
-            }),
-            Task.Run(async () =>
-            {
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendReceives = await friendPackService.GetFriendReceiveDtos(userId);
-                user.FriendRequests = await friendPackService.GetFriendRequestDtos(userId);
-                user.FriendDeletes = await friendPackService.GetFriendDeleteDtos(userId);
+                user.FriendReceives =
+                    await friendPackService.GetFriendReceiveDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
+                user.FriendRequests =
+                    await friendPackService.GetFriendRequestDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
+                user.FriendDeletes =
+                    await friendPackService.GetFriendDeleteDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
 
                 // 分组好友
                 var friends = await friendPackService.GetFriendRelationDtos(userId);
@@ -131,9 +131,12 @@ internal class UserLoginService : BaseService, IUserLoginService
             Task.Run(async () =>
             {
                 var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
-                user.GroupReceiveds = await groupPackService.GetGroupReceivedDtos(userId);
-                user.GroupRequests = await groupPackService.GetGroupRequestDtos(userId);
-                user.GroupDeletes = await groupPackService.GetGroupDeleteDtos(userId);
+                user.GroupReceiveds =
+                    await groupPackService.GetGroupReceivedDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
+                user.GroupRequests =
+                    await groupPackService.GetGroupRequestDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
+                user.GroupDeletes =
+                    await groupPackService.GetGroupDeleteDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
 
                 // 分组群聊
                 var groups = await groupPackService.GetGroupRelationDtos(userId);
@@ -175,8 +178,25 @@ internal class UserLoginService : BaseService, IUserLoginService
                 user.GroupChats = await groupChatPackService.GetGroupChatDtos(userId);
             })
         ];
-
         await Task.WhenAll(tasks);
+
+        user.UserDetail.UnreadFriendMessageCount = user.FriendReceives.Count(d =>
+                                                       (d.SolveTime ?? d.ReceiveTime) >
+                                                       user.UserDetail.LastReadFriendMessageTime &&
+                                                       !d.UserFromId.Equals(userId))
+                                                   + user.FriendDeletes.Count(d =>
+                                                       d.DeleteTime >
+                                                       user.UserDetail.LastReadFriendMessageTime &&
+                                                       d.UserId2.Equals(userId));
+
+        user.UserDetail.UnreadGroupMessageCount = user.GroupReceiveds.Count(d =>
+                                                      (d.SolveTime ?? d.ReceiveTime) >
+                                                      user.UserDetail.LastReadGroupMessageTime &&
+                                                      !d.UserFromId.Equals(userId))
+                                                  + user.GroupDeletes.Count(d =>
+                                                      d.DeleteTime >
+                                                      user.UserDetail.LastReadGroupMessageTime &&
+                                                      d.MemberId.Equals(userId) && d.DeleteMethod != 0);
         return user;
     }
 

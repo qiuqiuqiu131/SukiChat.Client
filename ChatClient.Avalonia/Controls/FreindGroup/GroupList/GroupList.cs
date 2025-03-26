@@ -91,24 +91,27 @@ public class GroupList : UserControl
     {
         base.OnPropertyChanged(change);
         if (!inited) return;
-        if (change.Property == GroupContentsProperty)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            if (change.OldValue != null)
+            if (change.Property == GroupContentsProperty)
             {
-                _itemCollection.Clear();
-                if (change.OldValue is AvaloniaList<FriendRelationDto> oldValue)
-                    oldValue.CollectionChanged -= NewValueOnCollectionChanged;
-            }
-
-            if (change.NewValue != null)
-            {
-                if (change.NewValue is AvaloniaList<FriendRelationDto> newValue)
+                if (change.OldValue != null)
                 {
-                    InitItems(newValue);
-                    newValue.CollectionChanged += NewValueOnCollectionChanged;
+                    _itemCollection.Clear();
+                    if (change.OldValue is AvaloniaList<FriendRelationDto> oldValue)
+                        oldValue.CollectionChanged -= NewValueOnCollectionChanged;
+                }
+
+                if (change.NewValue != null)
+                {
+                    if (change.NewValue is AvaloniaList<FriendRelationDto> newValue)
+                    {
+                        InitItems(newValue);
+                        newValue.CollectionChanged += NewValueOnCollectionChanged;
+                    }
                 }
             }
-        }
+        });
     }
 
     private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

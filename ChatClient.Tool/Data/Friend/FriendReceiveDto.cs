@@ -27,9 +27,9 @@ public class FriendReceiveDto : BindableBase, IDisposable
         set => SetProperty(ref isSolved, value);
     }
 
-    private DateTime solveTime;
+    private DateTime? solveTime;
 
-    public DateTime SolveTime
+    public DateTime? SolveTime
     {
         get => solveTime;
         set => SetProperty(ref solveTime, value);

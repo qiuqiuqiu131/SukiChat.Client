@@ -12,10 +12,10 @@ namespace ChatClient.BaseService.Services;
 
 public interface IFriendPackService
 {
-    Task<AvaloniaList<FriendReceiveDto>?> GetFriendReceiveDtos(string userId);
-    Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId);
+    Task<AvaloniaList<FriendReceiveDto>?> GetFriendReceiveDtos(string userId, DateTime lastDeleteTime);
+    Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId, DateTime lastDeleteTime);
     Task<AvaloniaList<FriendRelationDto>?> GetFriendRelationDtos(string userId);
-    Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId);
+    Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId, DateTime lastDeleteTime);
     Task<bool> NewFriendMessageOperate(string userId, NewFriendMessage message);
     Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages);
     Task<bool> FriendDeleteMessageOperate(string userId, DeleteFriendMessage message);
@@ -43,12 +43,12 @@ public class FriendPackService : BaseService, IFriendPackService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<AvaloniaList<FriendReceiveDto>> GetFriendReceiveDtos(string userId)
+    public async Task<AvaloniaList<FriendReceiveDto>> GetFriendReceiveDtos(string userId, DateTime lastDeleteTime)
     {
         var friendReceiveRepository = _unitOfWork.GetRepository<FriendReceived>();
         var friendReceive = await friendReceiveRepository.GetAllAsync(
-            predicate: d => d.UserTargetId.Equals(userId),
-            orderBy: order => order.OrderByDescending(d => d.ReceiveTime));
+            predicate: d => d.UserTargetId.Equals(userId) && (d.SolveTime ?? d.ReceiveTime) > lastDeleteTime,
+            orderBy: order => order.OrderByDescending(d => d.SolveTime ?? d.ReceiveTime));
 
         if (friendReceive == null) return null;
 
@@ -59,12 +59,12 @@ public class FriendPackService : BaseService, IFriendPackService
         return new AvaloniaList<FriendReceiveDto>(friendReceiveDtos);
     }
 
-    public async Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId)
+    public async Task<AvaloniaList<FriendRequestDto>?> GetFriendRequestDtos(string userId, DateTime lastDeleteTime)
     {
         var friendRequestRepository = _unitOfWork.GetRepository<FriendRequest>();
         var friendRequests = await friendRequestRepository.GetAllAsync(
-            predicate: d => d.UserFromId.Equals(userId),
-            orderBy: order => order.OrderByDescending(d => d.RequestTime));
+            predicate: d => d.UserFromId.Equals(userId) && (d.SolveTime ?? d.RequestTime) > lastDeleteTime,
+            orderBy: order => order.OrderByDescending(d => d.SolveTime ?? d.RequestTime));
 
         if (friendRequests == null) return null;
 
@@ -97,11 +97,11 @@ public class FriendPackService : BaseService, IFriendPackService
         return result;
     }
 
-    public async Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId)
+    public async Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId, DateTime lastDeleteTime)
     {
         var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
         var friendDeletes = await friendDeleteRepository.GetAllAsync(
-            predicate: d => d.UseId1.Equals(userId) || d.UserId2.Equals(userId),
+            predicate: d => (d.UseId1.Equals(userId) || d.UserId2.Equals(userId)) && d.DeleteTime > lastDeleteTime,
             orderBy: d => d.OrderByDescending(p => p.DeleteTime));
 
         if (friendDeletes == null) return null;

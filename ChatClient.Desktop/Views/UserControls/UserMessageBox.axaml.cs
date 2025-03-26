@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ChatClient.BaseService.Manager;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -10,6 +11,7 @@ using ChatClient.Tool.ManagerInterface;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.Views.UserControls;
 
@@ -50,8 +52,10 @@ public partial class UserMessageBox : UserControl
     {
         if (DataContext is UserDto { IsUser: true } userDto)
         {
-            var dialogService = App.Current.Container.Resolve<IDialogService>();
-            dialogService.Show(nameof(EditUserDataView), new DialogParameters { { "UserDto", userDto } }, _ => { });
+            var dialogService = App.Current.Container.Resolve<ISukiDialogManager>();
+            dialogService.CreateDialog()
+                .WithViewModel(d => new EditUserDataViewModel(d, userDto))
+                .TryShow();
         }
     }
 }

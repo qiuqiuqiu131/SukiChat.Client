@@ -28,73 +28,76 @@ namespace ChatServer.Common.Protobuf {
             "bW1vbi5Qcm90b2J1ZhogUHJvdG8vQ2hhdFJlbGF0aW9uUHJvdG9jb2wucHJv",
             "dG8aI1Byb3RvL0NoYXRDb21tdW5pY2F0ZVByb3RvY29sLnByb3RvGh1Qcm90",
             "by9DaGF0R3JvdXBQcm90b2NvbC5wcm90bxocUHJvdG8vQ2hhdEJhc2VQcm90",
-            "b2NvbC5wcm90byIcCg5HZXRVc2VyUmVxdWVzdBIKCgJpZBgBIAEoCSK8AQoL",
+            "b2NvbC5wcm90byIcCg5HZXRVc2VyUmVxdWVzdBIKCgJpZBgBIAEoCSLKAgoL",
             "VXNlck1lc3NhZ2USCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIOCgZpc01h",
             "bGUYAyABKAgSDQoFYmlydGgYBCABKAkSEAoIcGFzc3dvcmQYBSABKAkSFAoM",
             "aW50cm9kdWN0aW9uGAYgASgJEhEKCWhlYWRJbmRleBgHIAEoDRIRCgloZWFk",
-            "Q291bnQYCCABKA0SFAoMcmVnaXN0ZXJUaW1lGAkgASgJEhAKCGlzT25saW5l",
-            "GAogASgIIl4KFVVwZGF0ZVVzZXJEYXRhUmVxdWVzdBIOCgZ1c2VySWQYASAB",
-            "KAkSNQoEdXNlchgCIAEoCzInLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
-            "LlVzZXJNZXNzYWdlIl4KDlVwZGF0ZVVzZXJEYXRhEjwKCHJlc3BvbnNlGAEg",
-            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
-            "c2USDgoGdXNlcklkGAIgASgJIkgKEFVzZXJHcm91cE1lc3NhZ2USDgoGdXNl",
-            "cklkGAEgASgJEhEKCWdyb3VwTmFtZRgCIAEoCRIRCglncm91cFR5cGUYAyAB",
-            "KAUiVgoTQWRkVXNlckdyb3VwUmVxdWVzdBI/Cgl1c2VyR3JvdXAYASABKAsy",
-            "LC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Vc2VyR3JvdXBNZXNzYWdl",
-            "IlQKFEFkZFVzZXJHcm91cFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiou",
-            "Q2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiWQoW",
-            "RGVsZXRlVXNlckdyb3VwUmVxdWVzdBI/Cgl1c2VyR3JvdXAYASABKAsyLC5D",
-            "aGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Vc2VyR3JvdXBNZXNzYWdlIlcK",
-            "F0RlbGV0ZVVzZXJHcm91cFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiou",
-            "Q2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UifwoW",
-            "UmVuYW1lVXNlckdyb3VwUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSPwoJdXNl",
-            "ckdyb3VwGAIgASgLMiwuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNl",
-            "ckdyb3VwTWVzc2FnZRIUCgxuZXdHcm91cE5hbWUYAyABKAkiVwoXUmVuYW1l",
-            "VXNlckdyb3VwUmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2Vy",
-            "dmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSIhChNHZXRVc2Vy",
-            "U2FmdHlSZXF1ZXN0EgoKAmlkGAEgASgJIikKBVNhZnR5EhAKCHF1ZXN0aW9u",
-            "GAEgASgJEg4KBmFuc3dlchgCIAEoCSJNCgxTYWZ0eU1lc3NhZ2USCgoCaWQY",
-            "ASABKAkSMQoGc2FmdHlzGAIgAygLMiEuQ2hhdFNlcnZlci5Db21tb24uUHJv",
-            "dG9idWYuU2FmdHkiSwoPVXBkYXRlVXNlclNhZnR5EjgKBnNhZnR5cxgBIAEo",
-            "CzIoLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlNhZnR5TWVzc2FnZSI7",
-            "ChVPdXRsaW5lTWVzc2FnZVJlcXVlc3QSCgoCaWQYASABKAkSFgoObGFzdExv",
-            "Z291dFRpbWUYAiABKAki0AEKFEZyaWVuZFJlcXVlc3RNZXNzYWdlEhEKCXJl",
-            "cXVlc3RJZBgBIAEoBRISCgp1c2VyRnJvbUlkGAIgASgJEhQKDHVzZXJUYXJn",
-            "ZXRJZBgDIAEoCRINCgVncm91cBgEIAEoCRITCgtyZXF1ZXN0VGltZRgFIAEo",
-            "CRIQCghpc0FjY2VwdBgGIAEoCBIQCghpc1NvbHZlZBgHIAEoCBISCgpzb2x2",
-            "ZWRUaW1lGAggASgJEg8KB21lc3NhZ2UYCSABKAkSDgoGcmVtYXJrGAogASgJ",
-            "IsMBChNHcm91cFJlcXVlc3RNZXNzYWdlEhEKCXJlcXVlc3RJZBgBIAEoBRIS",
-            "Cgp1c2VyRnJvbUlkGAIgASgJEg8KB2dyb3VwSWQYAyABKAkSEwoLcmVxdWVz",
-            "dFRpbWUYBCABKAkSEAoIaXNBY2NlcHQYBSABKAgSEAoIaXNTb2x2ZWQYBiAB",
-            "KAgSEgoKc29sdmVkVGltZRgHIAEoCRIPCgdtZXNzYWdlGAggASgJEhYKDmFj",
-            "Y2VwdEJ5VXNlcklkGAkgASgJIpIFChZPdXRsaW5lTWVzc2FnZVJlc3BvbnNl",
-            "EgoKAmlkGAEgASgJEkgKDmZyaWVuZFJlcXVlc3RzGAIgAygLMjAuQ2hhdFNl",
-            "cnZlci5Db21tb24uUHJvdG9idWYuRnJpZW5kUmVxdWVzdE1lc3NhZ2USQAoK",
-            "bmV3RnJpZW5kcxgDIAMoCzIsLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
-            "Lk5ld0ZyaWVuZE1lc3NhZ2USQgoLZnJpZW5kQ2hhdHMYBCADKAsyLS5DaGF0",
-            "U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GcmllbmRDaGF0TWVzc2FnZRJGCg1m",
-            "cmllbmREZWxldGVzGAUgAygLMi8uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9i",
-            "dWYuRnJpZW5kRGVsZXRlTWVzc2FnZRJCCgtlbnRlckdyb3VwcxgGIAMoCzIt",
-            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkVudGVyR3JvdXBNZXNzYWdl",
-            "EkAKCmdyb3VwQ2hhdHMYByADKAsyLC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90",
-            "b2J1Zi5Hcm91cENoYXRNZXNzYWdlEkYKDWdyb3VwUmVxdWVzdHMYCCADKAsy",
-            "Ly5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Hcm91cFJlcXVlc3RNZXNz",
-            "YWdlEkQKDGdyb3VwRGVsZXRlcxgJIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9u",
-            "LlByb3RvYnVmLkdyb3VwRGVsZXRlTWVzc2FnZRJACgp1c2VyR3JvdXBzGAog",
-            "AygLMiwuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNlckdyb3VwTWVz",
-            "c2FnZSI0ChFTZWFyY2hVc2VyUmVxdWVzdBIPCgdjb250ZW50GAEgASgJEg4K",
-            "BnVzZXJJZBgCIAEoCSJfChJTZWFyY2hVc2VyUmVzcG9uc2USPAoIcmVzcG9u",
-            "c2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25S",
-            "ZXNwb25zZRILCgNpZHMYAiADKAkiNQoSU2VhcmNoR3JvdXBSZXF1ZXN0Eg8K",
-            "B2NvbnRlbnQYASABKAkSDgoGdXNlcklkGAIgASgJImAKE1NlYXJjaEdyb3Vw",
-            "UmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1v",
-            "bi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZRILCgNpZHMYAiADKAliBnByb3Rv",
-            "Mw=="));
+            "Q291bnQYCCABKA0SIQoZbGFzdFJlYWRGcmllbmRNZXNzYWdlVGltZRgJIAEo",
+            "CRIgChhsYXN0UmVhZEdyb3VwTWVzc2FnZVRpbWUYCiABKAkSIwobbGFzdERl",
+            "bGV0ZUZyaWVuZE1lc3NhZ2VUaW1lGAsgASgJEiIKGmxhc3REZWxldGVHcm91",
+            "cE1lc3NhZ2VUaW1lGAwgASgJEhQKDHJlZ2lzdGVyVGltZRgNIAEoCRIQCghp",
+            "c09ubGluZRgOIAEoCCJeChVVcGRhdGVVc2VyRGF0YVJlcXVlc3QSDgoGdXNl",
+            "cklkGAEgASgJEjUKBHVzZXIYAiABKAsyJy5DaGF0U2VydmVyLkNvbW1vbi5Q",
+            "cm90b2J1Zi5Vc2VyTWVzc2FnZSJeCg5VcGRhdGVVc2VyRGF0YRI8CghyZXNw",
+            "b25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1v",
+            "blJlc3BvbnNlEg4KBnVzZXJJZBgCIAEoCSJIChBVc2VyR3JvdXBNZXNzYWdl",
+            "Eg4KBnVzZXJJZBgBIAEoCRIRCglncm91cE5hbWUYAiABKAkSEQoJZ3JvdXBU",
+            "eXBlGAMgASgFIlYKE0FkZFVzZXJHcm91cFJlcXVlc3QSPwoJdXNlckdyb3Vw",
+            "GAEgASgLMiwuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNlckdyb3Vw",
+            "TWVzc2FnZSJUChRBZGRVc2VyR3JvdXBSZXNwb25zZRI8CghyZXNwb25zZRgB",
+            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
+            "bnNlIlkKFkRlbGV0ZVVzZXJHcm91cFJlcXVlc3QSPwoJdXNlckdyb3VwGAEg",
+            "ASgLMiwuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNlckdyb3VwTWVz",
+            "c2FnZSJXChdEZWxldGVVc2VyR3JvdXBSZXNwb25zZRI8CghyZXNwb25zZRgB",
+            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
+            "bnNlIn8KFlJlbmFtZVVzZXJHcm91cFJlcXVlc3QSDgoGdXNlcklkGAEgASgJ",
+            "Ej8KCXVzZXJHcm91cBgCIAEoCzIsLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
+            "YnVmLlVzZXJHcm91cE1lc3NhZ2USFAoMbmV3R3JvdXBOYW1lGAMgASgJIlcK",
+            "F1JlbmFtZVVzZXJHcm91cFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiou",
+            "Q2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiIQoT",
+            "R2V0VXNlclNhZnR5UmVxdWVzdBIKCgJpZBgBIAEoCSIpCgVTYWZ0eRIQCghx",
+            "dWVzdGlvbhgBIAEoCRIOCgZhbnN3ZXIYAiABKAkiTQoMU2FmdHlNZXNzYWdl",
+            "EgoKAmlkGAEgASgJEjEKBnNhZnR5cxgCIAMoCzIhLkNoYXRTZXJ2ZXIuQ29t",
+            "bW9uLlByb3RvYnVmLlNhZnR5IksKD1VwZGF0ZVVzZXJTYWZ0eRI4CgZzYWZ0",
+            "eXMYASABKAsyKC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5TYWZ0eU1l",
+            "c3NhZ2UiOwoVT3V0bGluZU1lc3NhZ2VSZXF1ZXN0EgoKAmlkGAEgASgJEhYK",
+            "Dmxhc3RMb2dvdXRUaW1lGAIgASgJItABChRGcmllbmRSZXF1ZXN0TWVzc2Fn",
+            "ZRIRCglyZXF1ZXN0SWQYASABKAUSEgoKdXNlckZyb21JZBgCIAEoCRIUCgx1",
+            "c2VyVGFyZ2V0SWQYAyABKAkSDQoFZ3JvdXAYBCABKAkSEwoLcmVxdWVzdFRp",
+            "bWUYBSABKAkSEAoIaXNBY2NlcHQYBiABKAgSEAoIaXNTb2x2ZWQYByABKAgS",
+            "EgoKc29sdmVkVGltZRgIIAEoCRIPCgdtZXNzYWdlGAkgASgJEg4KBnJlbWFy",
+            "axgKIAEoCSLDAQoTR3JvdXBSZXF1ZXN0TWVzc2FnZRIRCglyZXF1ZXN0SWQY",
+            "ASABKAUSEgoKdXNlckZyb21JZBgCIAEoCRIPCgdncm91cElkGAMgASgJEhMK",
+            "C3JlcXVlc3RUaW1lGAQgASgJEhAKCGlzQWNjZXB0GAUgASgIEhAKCGlzU29s",
+            "dmVkGAYgASgIEhIKCnNvbHZlZFRpbWUYByABKAkSDwoHbWVzc2FnZRgIIAEo",
+            "CRIWCg5hY2NlcHRCeVVzZXJJZBgJIAEoCSKSBQoWT3V0bGluZU1lc3NhZ2VS",
+            "ZXNwb25zZRIKCgJpZBgBIAEoCRJICg5mcmllbmRSZXF1ZXN0cxgCIAMoCzIw",
+            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkZyaWVuZFJlcXVlc3RNZXNz",
+            "YWdlEkAKCm5ld0ZyaWVuZHMYAyADKAsyLC5DaGF0U2VydmVyLkNvbW1vbi5Q",
+            "cm90b2J1Zi5OZXdGcmllbmRNZXNzYWdlEkIKC2ZyaWVuZENoYXRzGAQgAygL",
+            "Mi0uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuRnJpZW5kQ2hhdE1lc3Nh",
+            "Z2USRgoNZnJpZW5kRGVsZXRlcxgFIAMoCzIvLkNoYXRTZXJ2ZXIuQ29tbW9u",
+            "LlByb3RvYnVmLkZyaWVuZERlbGV0ZU1lc3NhZ2USQgoLZW50ZXJHcm91cHMY",
+            "BiADKAsyLS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5FbnRlckdyb3Vw",
+            "TWVzc2FnZRJACgpncm91cENoYXRzGAcgAygLMiwuQ2hhdFNlcnZlci5Db21t",
+            "b24uUHJvdG9idWYuR3JvdXBDaGF0TWVzc2FnZRJGCg1ncm91cFJlcXVlc3Rz",
+            "GAggAygLMi8uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuR3JvdXBSZXF1",
+            "ZXN0TWVzc2FnZRJECgxncm91cERlbGV0ZXMYCSADKAsyLi5DaGF0U2VydmVy",
+            "LkNvbW1vbi5Qcm90b2J1Zi5Hcm91cERlbGV0ZU1lc3NhZ2USQAoKdXNlckdy",
+            "b3VwcxgKIAMoCzIsLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlVzZXJH",
+            "cm91cE1lc3NhZ2UiNAoRU2VhcmNoVXNlclJlcXVlc3QSDwoHY29udGVudBgB",
+            "IAEoCRIOCgZ1c2VySWQYAiABKAkiXwoSU2VhcmNoVXNlclJlc3BvbnNlEjwK",
+            "CHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
+            "Q29tbW9uUmVzcG9uc2USCwoDaWRzGAIgAygJIjUKElNlYXJjaEdyb3VwUmVx",
+            "dWVzdBIPCgdjb250ZW50GAEgASgJEg4KBnVzZXJJZBgCIAEoCSJgChNTZWFy",
+            "Y2hHcm91cFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZl",
+            "ci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USCwoDaWRzGAIgAygJ",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatRelationProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GetUserRequest), global::ChatServer.Common.Protobuf.GetUserRequest.Parser, new[]{ "Id" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UserMessage), global::ChatServer.Common.Protobuf.UserMessage.Parser, new[]{ "Id", "Name", "IsMale", "Birth", "Password", "Introduction", "HeadIndex", "HeadCount", "RegisterTime", "IsOnline" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UserMessage), global::ChatServer.Common.Protobuf.UserMessage.Parser, new[]{ "Id", "Name", "IsMale", "Birth", "Password", "Introduction", "HeadIndex", "HeadCount", "LastReadFriendMessageTime", "LastReadGroupMessageTime", "LastDeleteFriendMessageTime", "LastDeleteGroupMessageTime", "RegisterTime", "IsOnline" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateUserDataRequest), global::ChatServer.Common.Protobuf.UpdateUserDataRequest.Parser, new[]{ "UserId", "User" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateUserData), global::ChatServer.Common.Protobuf.UpdateUserData.Parser, new[]{ "Response", "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UserGroupMessage), global::ChatServer.Common.Protobuf.UserGroupMessage.Parser, new[]{ "UserId", "GroupName", "GroupType" }, null, null, null, null),
@@ -290,6 +293,10 @@ namespace ChatServer.Common.Protobuf {
       introduction_ = other.introduction_;
       headIndex_ = other.headIndex_;
       headCount_ = other.headCount_;
+      lastReadFriendMessageTime_ = other.lastReadFriendMessageTime_;
+      lastReadGroupMessageTime_ = other.lastReadGroupMessageTime_;
+      lastDeleteFriendMessageTime_ = other.lastDeleteFriendMessageTime_;
+      lastDeleteGroupMessageTime_ = other.lastDeleteGroupMessageTime_;
       registerTime_ = other.registerTime_;
       isOnline_ = other.isOnline_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -388,8 +395,52 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "lastReadFriendMessageTime" field.</summary>
+    public const int LastReadFriendMessageTimeFieldNumber = 9;
+    private string lastReadFriendMessageTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string LastReadFriendMessageTime {
+      get { return lastReadFriendMessageTime_; }
+      set {
+        lastReadFriendMessageTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastReadGroupMessageTime" field.</summary>
+    public const int LastReadGroupMessageTimeFieldNumber = 10;
+    private string lastReadGroupMessageTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string LastReadGroupMessageTime {
+      get { return lastReadGroupMessageTime_; }
+      set {
+        lastReadGroupMessageTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastDeleteFriendMessageTime" field.</summary>
+    public const int LastDeleteFriendMessageTimeFieldNumber = 11;
+    private string lastDeleteFriendMessageTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string LastDeleteFriendMessageTime {
+      get { return lastDeleteFriendMessageTime_; }
+      set {
+        lastDeleteFriendMessageTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lastDeleteGroupMessageTime" field.</summary>
+    public const int LastDeleteGroupMessageTimeFieldNumber = 12;
+    private string lastDeleteGroupMessageTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string LastDeleteGroupMessageTime {
+      get { return lastDeleteGroupMessageTime_; }
+      set {
+        lastDeleteGroupMessageTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "registerTime" field.</summary>
-    public const int RegisterTimeFieldNumber = 9;
+    public const int RegisterTimeFieldNumber = 13;
     private string registerTime_ = "";
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public string RegisterTime {
@@ -400,7 +451,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "isOnline" field.</summary>
-    public const int IsOnlineFieldNumber = 10;
+    public const int IsOnlineFieldNumber = 14;
     private bool isOnline_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool IsOnline {
@@ -431,6 +482,10 @@ namespace ChatServer.Common.Protobuf {
       if (Introduction != other.Introduction) return false;
       if (HeadIndex != other.HeadIndex) return false;
       if (HeadCount != other.HeadCount) return false;
+      if (LastReadFriendMessageTime != other.LastReadFriendMessageTime) return false;
+      if (LastReadGroupMessageTime != other.LastReadGroupMessageTime) return false;
+      if (LastDeleteFriendMessageTime != other.LastDeleteFriendMessageTime) return false;
+      if (LastDeleteGroupMessageTime != other.LastDeleteGroupMessageTime) return false;
       if (RegisterTime != other.RegisterTime) return false;
       if (IsOnline != other.IsOnline) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -447,6 +502,10 @@ namespace ChatServer.Common.Protobuf {
       if (Introduction.Length != 0) hash ^= Introduction.GetHashCode();
       if (HeadIndex != 0) hash ^= HeadIndex.GetHashCode();
       if (HeadCount != 0) hash ^= HeadCount.GetHashCode();
+      if (LastReadFriendMessageTime.Length != 0) hash ^= LastReadFriendMessageTime.GetHashCode();
+      if (LastReadGroupMessageTime.Length != 0) hash ^= LastReadGroupMessageTime.GetHashCode();
+      if (LastDeleteFriendMessageTime.Length != 0) hash ^= LastDeleteFriendMessageTime.GetHashCode();
+      if (LastDeleteGroupMessageTime.Length != 0) hash ^= LastDeleteGroupMessageTime.GetHashCode();
       if (RegisterTime.Length != 0) hash ^= RegisterTime.GetHashCode();
       if (IsOnline != false) hash ^= IsOnline.GetHashCode();
       if (_unknownFields != null) {
@@ -494,12 +553,28 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(64);
         output.WriteUInt32(HeadCount);
       }
-      if (RegisterTime.Length != 0) {
+      if (LastReadFriendMessageTime.Length != 0) {
         output.WriteRawTag(74);
+        output.WriteString(LastReadFriendMessageTime);
+      }
+      if (LastReadGroupMessageTime.Length != 0) {
+        output.WriteRawTag(82);
+        output.WriteString(LastReadGroupMessageTime);
+      }
+      if (LastDeleteFriendMessageTime.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(LastDeleteFriendMessageTime);
+      }
+      if (LastDeleteGroupMessageTime.Length != 0) {
+        output.WriteRawTag(98);
+        output.WriteString(LastDeleteGroupMessageTime);
+      }
+      if (RegisterTime.Length != 0) {
+        output.WriteRawTag(106);
         output.WriteString(RegisterTime);
       }
       if (IsOnline != false) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(112);
         output.WriteBool(IsOnline);
       }
       if (_unknownFields != null) {
@@ -533,6 +608,18 @@ namespace ChatServer.Common.Protobuf {
       }
       if (HeadCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(HeadCount);
+      }
+      if (LastReadFriendMessageTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(LastReadFriendMessageTime);
+      }
+      if (LastReadGroupMessageTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(LastReadGroupMessageTime);
+      }
+      if (LastDeleteFriendMessageTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(LastDeleteFriendMessageTime);
+      }
+      if (LastDeleteGroupMessageTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(LastDeleteGroupMessageTime);
       }
       if (RegisterTime.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(RegisterTime);
@@ -574,6 +661,18 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.HeadCount != 0) {
         HeadCount = other.HeadCount;
+      }
+      if (other.LastReadFriendMessageTime.Length != 0) {
+        LastReadFriendMessageTime = other.LastReadFriendMessageTime;
+      }
+      if (other.LastReadGroupMessageTime.Length != 0) {
+        LastReadGroupMessageTime = other.LastReadGroupMessageTime;
+      }
+      if (other.LastDeleteFriendMessageTime.Length != 0) {
+        LastDeleteFriendMessageTime = other.LastDeleteFriendMessageTime;
+      }
+      if (other.LastDeleteGroupMessageTime.Length != 0) {
+        LastDeleteGroupMessageTime = other.LastDeleteGroupMessageTime;
       }
       if (other.RegisterTime.Length != 0) {
         RegisterTime = other.RegisterTime;
@@ -625,10 +724,26 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 74: {
+            LastReadFriendMessageTime = input.ReadString();
+            break;
+          }
+          case 82: {
+            LastReadGroupMessageTime = input.ReadString();
+            break;
+          }
+          case 90: {
+            LastDeleteFriendMessageTime = input.ReadString();
+            break;
+          }
+          case 98: {
+            LastDeleteGroupMessageTime = input.ReadString();
+            break;
+          }
+          case 106: {
             RegisterTime = input.ReadString();
             break;
           }
-          case 80: {
+          case 112: {
             IsOnline = input.ReadBool();
             break;
           }

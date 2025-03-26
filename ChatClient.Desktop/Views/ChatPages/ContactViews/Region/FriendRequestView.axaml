@@ -5,10 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-    xmlns:contactViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
@@ -216,7 +214,7 @@
                             </Style>
                         </Style>
                     </StackPanel.Styles>
-                    <Button Classes="Basic" Margin="0" Padding="0">
+                    <Button Classes="Basic" Margin="0" Padding="0" Command="{Binding ClearAllCommand}">
                         <avalonia:MaterialIcon Kind="GarbageCanOutline" Width="23" Height="23" />
                     </Button>
                 </StackPanel>

@@ -7,6 +7,7 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.MessageHandler;
@@ -80,6 +81,16 @@ public class DeleteMessageHandler : MessageHandlerBase
                 : await userDtoManager.GetUserDto(friendDeleteDto.UseId1);
         });
         _userManager.FriendDeletes?.Add(friendDeleteDto);
+        if (_userManager is not
+                { CurrentChatPage: "通讯录", CurrentContactState: ContactState.FriendRequest, User: not null } &&
+            message.FriendId.Equals(_userManager.User!.Id))
+            _userManager.User!.UnreadFriendMessageCount++;
+        else
+        {
+            _userManager.User.LastReadFriendMessageTime = DateTime.Now;
+            _userManager.User.UnreadFriendMessageCount = 0;
+            _userManager.SaveUser();
+        }
     }
 
     /// <summary>
@@ -147,6 +158,16 @@ public class DeleteMessageHandler : MessageHandlerBase
             deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
         });
         _userManager.GroupDeletes?.Add(deleteDto);
+        if (_userManager is not
+                { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null } &&
+            message.MemberId.Equals(_userManager.User!.Id))
+            _userManager.User!.UnreadGroupMessageCount++;
+        else
+        {
+            _userManager.User.LastReadGroupMessageTime = DateTime.Now;
+            _userManager.User.UnreadGroupMessageCount = 0;
+            _userManager.SaveUser();
+        }
     }
 
     /// <summary>
@@ -180,6 +201,16 @@ public class DeleteMessageHandler : MessageHandlerBase
             deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
         });
         _userManager.GroupDeletes?.Add(deleteDto);
+        if (_userManager is not
+                { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null } &&
+            message.MemberId.Equals(_userManager.User!.Id))
+            _userManager.User!.UnreadGroupMessageCount++;
+        else
+        {
+            _userManager.User.LastReadGroupMessageTime = DateTime.Now;
+            _userManager.User.UnreadGroupMessageCount = 0;
+            _userManager.SaveUser();
+        }
     }
 
     /// <summary>

@@ -8,11 +8,19 @@ namespace ChatClient.BaseService.Manager;
 public interface IUserDtoManager
 {
     Task InitDtos(string userId);
+
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
     Task<GroupDto?> GetGroupDto(string userId, string groupId);
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+
+    Task RemoveUserDto(string id);
+    Task RemoveFriendRelationDto(string friendId);
+    Task RemoveGroupDto(string groupId);
+    Task RemoveGroupRelationDto(string groupId);
+    Task RemoveGroupMemberDto(string groupId, string memberId);
+
     void Clear();
 }
 
@@ -263,6 +271,78 @@ public class UserDtoManager : IUserDtoManager
             }
 
             return groupMember;
+        }
+        finally
+        {
+            _semaphore_5.Release();
+        }
+    }
+
+    public async Task RemoveUserDto(string id)
+    {
+        try
+        {
+            await _semaphore_1.WaitAsync();
+            _userDtos.TryRemove(id, out var user);
+            user?.Dispose();
+        }
+        finally
+        {
+            _semaphore_1.Release();
+        }
+    }
+
+    public async Task RemoveFriendRelationDto(string friendId)
+    {
+        try
+        {
+            await _semaphore_2.WaitAsync();
+            _friendRelationDtos.TryRemove(friendId, out var friendRelation);
+            friendRelation?.Dispose();
+        }
+        finally
+        {
+            _semaphore_2.Release();
+        }
+    }
+
+    public async Task RemoveGroupDto(string groupId)
+    {
+        try
+        {
+            await _semaphore_3.WaitAsync();
+            _groupDtos.TryRemove(groupId, out var group);
+            foreach (var member in group.GroupMembers)
+                await RemoveGroupMemberDto(groupId, member.UserId);
+            group?.Dispose();
+        }
+        finally
+        {
+            _semaphore_3.Release();
+        }
+    }
+
+    public async Task RemoveGroupRelationDto(string groupId)
+    {
+        try
+        {
+            await _semaphore_4.WaitAsync();
+            _groupRelationDtos.TryRemove(groupId, out var groupRelation);
+            groupRelation?.Dispose();
+        }
+        finally
+        {
+            _semaphore_4.Release();
+        }
+    }
+
+    public async Task RemoveGroupMemberDto(string groupId, string memberId)
+    {
+        try
+        {
+            await _semaphore_5.WaitAsync();
+            _groupMemberDtos.TryRemove(groupId + memberId, out var groupMember);
+            groupMember?.Dispose();
         }
         finally
         {

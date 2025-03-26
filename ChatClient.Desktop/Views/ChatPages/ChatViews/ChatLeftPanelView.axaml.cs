@@ -128,7 +128,7 @@ public partial class ChatLeftPanelView : UserControl
         foreach (var item in FriendItemsSource.Where(f => f.FriendRelatoinDto?.IsTop == true))
         {
             item.OnLastChatMessagesChanged += SortItemControl;
-
+            item.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
 
             var control = DataTemplates[0]?.Build(item);
             if (control == null) continue;
@@ -142,6 +142,7 @@ public partial class ChatLeftPanelView : UserControl
         foreach (var item in GroupItemsSource.Where(g => g.GroupRelationDto?.IsTop == true))
         {
             item.OnLastChatMessagesChanged += SortItemControl;
+            item.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
 
             var control = DataTemplates[1]?.Build(item);
             if (control == null) continue;
@@ -155,6 +156,7 @@ public partial class ChatLeftPanelView : UserControl
         foreach (var item in FriendItemsSource.Where(f => f.FriendRelatoinDto?.IsTop != true))
         {
             item.OnLastChatMessagesChanged += SortItemControl;
+            item.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
 
             var control = DataTemplates[0]?.Build(item);
             if (control == null) continue;
@@ -167,6 +169,7 @@ public partial class ChatLeftPanelView : UserControl
         foreach (var item in GroupItemsSource.Where(g => g.GroupRelationDto?.IsTop != true))
         {
             item.OnLastChatMessagesChanged += SortItemControl;
+            item.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
 
             var control = DataTemplates[1]?.Build(item);
             if (control == null) continue;
@@ -176,6 +179,7 @@ public partial class ChatLeftPanelView : UserControl
         }
 
         RecalculateTopItemsCount();
+        ItemOnOnUnReadMessageCountChanged();
     }
 
     private async void ItemsSourceOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -193,11 +197,13 @@ public partial class ChatLeftPanelView : UserControl
                     if (newItem is FriendChatDto friendChat)
                     {
                         friendChat.OnLastChatMessagesChanged += SortItemControl;
+                        friendChat.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
                         control = DataTemplates[0]?.Build(friendChat)!;
                     }
                     else if (newItem is GroupChatDto groupChat)
                     {
                         groupChat.OnLastChatMessagesChanged += SortItemControl;
+                        groupChat.OnUnReadMessageCountChanged += ItemOnOnUnReadMessageCountChanged;
                         control = DataTemplates[1]?.Build(groupChat)!;
                     }
 
@@ -219,45 +225,47 @@ public partial class ChatLeftPanelView : UserControl
             if (e.OldItems == null) return;
             eventAggregator.GetEvent<SelectChatDtoChanged>().Publish();
 
-            bool isSelected = false;
-            int index = 0;
-            foreach (var item in e.OldItems)
+            Dispatcher.UIThread.Invoke(async () =>
             {
-                var control = _itemCollection.FirstOrDefault(d => ((Control)d!).DataContext == item);
-                if (control == null) continue;
-                bool isTop = IsItemTop(item);
-                if (isTop)
-                    _topItemsCount--; // 减少置顶计数
-
-                var dt = ((Control)control).DataContext;
-                if (dt is FriendChatDto friendChat)
+                bool isSelected = false;
+                int index = 0;
+                foreach (var item in e.OldItems)
                 {
-                    if (friendChat.IsSelected)
+                    var control = _itemCollection.FirstOrDefault(d => ((Control)d!).DataContext == item);
+                    if (control == null) continue;
+                    bool isTop = IsItemTop(item);
+                    if (isTop)
+                        _topItemsCount--; // 减少置顶计数
+
+                    var dt = ((Control)control).DataContext;
+                    if (dt is FriendChatDto friendChat)
                     {
-                        isSelected = true;
-                        index = _itemCollection.IndexOf(control);
+                        if (friendChat.IsSelected)
+                        {
+                            isSelected = true;
+                            index = _itemCollection.IndexOf(control);
+                        }
+
+                        friendChat.OnLastChatMessagesChanged -= SortItemControl;
+                        friendChat.OnUnReadMessageCountChanged -= ItemOnOnUnReadMessageCountChanged;
+                    }
+                    else if (dt is GroupChatDto groupChat)
+                    {
+                        if (groupChat.IsSelected)
+                        {
+                            isSelected = true;
+                            index = _itemCollection.IndexOf(control);
+                        }
+
+                        groupChat.OnLastChatMessagesChanged -= SortItemControl;
+                        groupChat.OnUnReadMessageCountChanged -= ItemOnOnUnReadMessageCountChanged;
                     }
 
-                    friendChat.OnLastChatMessagesChanged -= SortItemControl;
-                }
-                else if (dt is GroupChatDto groupChat)
-                {
-                    if (groupChat.IsSelected)
-                    {
-                        isSelected = true;
-                        index = _itemCollection.IndexOf(control);
-                    }
+                    _itemCollection.Remove(control);
 
-                    groupChat.OnLastChatMessagesChanged -= SortItemControl;
+                    ((Control)control).DataContext = null;
                 }
 
-                _itemCollection.Remove(control);
-
-                ((Control)control).DataContext = null;
-            }
-
-            if (true)
-            {
                 if (index >= _itemCollection.Count) index = _itemCollection.Count - 1;
 
                 if (_itemCollection.Count != 0)
@@ -273,8 +281,23 @@ public partial class ChatLeftPanelView : UserControl
                     var viewModel = (ChatLeftPanelViewModel)DataContext!;
                     viewModel.FriendSelectionChangedCommand.Execute(null);
                 }
-            }
+            });
         }
+    }
+
+    // 当未读消息数量发生变化时触发
+    private void ItemOnOnUnReadMessageCountChanged()
+    {
+        // 重新计算所有未读消息数量
+        int count = 0;
+        foreach (var friendChatDto in FriendItemsSource)
+            if (friendChatDto.FriendRelatoinDto is { CantDisturb: false })
+                count += friendChatDto.UnReadMessageCount;
+        foreach (var groupChatDto in GroupItemsSource)
+            if (groupChatDto.GroupRelationDto is { CantDisturb: false })
+                count += groupChatDto.UnReadMessageCount;
+
+        eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Publish(("聊天", count));
     }
 
     // 排序
