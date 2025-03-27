@@ -84,21 +84,24 @@ public class GroupGetService : BaseService, IGroupGetService
         if (groupMemberMessage == null) return null;
 
         var groupMemberDto = _mapper.Map<GroupMemberDto>(groupMemberMessage);
-        var userService = _scopedProvider.Resolve<IUserService>();
         _ = Task.Run(async () =>
         {
+            var userService = _scopedProvider.Resolve<IUserService>();
             groupMemberDto.HeadImage =
                 await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
-        });
+        }).ConfigureAwait(false);
 
-        var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
-        var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
-        var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
-            predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
-        if (entity != null)
-            groupMember.Id = entity.Id;
-        groupMemberRepository.Update(groupMember);
-        await _unitOfWork.SaveChangesAsync();
+        if (groupMemberDto.Status != 3)
+        {
+            var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
+            var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
+            var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
+            if (entity != null)
+                groupMember.Id = entity.Id;
+            groupMemberRepository.Update(groupMember);
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         return groupMemberDto;
     }

@@ -61,10 +61,17 @@
                             Margin="13,5,0,0"
                             Orientation="Horizontal">
                     <Grid Margin="10,0,0,10">
+                        <Grid.Styles>
+                            <Style Selector="TextBlock:pointerover">
+                                <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                            </Style>
+                        </Grid.Styles>
                         <TextBlock
                             IsVisible="{Binding SelectedGroup.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                             Text="{Binding SelectedGroup.GroupRelationDto.Remark}"
+                            PointerPressed="HeadName_OnPointerPressed"
                             VerticalAlignment="Center"
+                            Padding="3,0"
                             LetterSpacing="1"
                             FontSize="16"
                             Foreground="{DynamicResource SukiText}" />
@@ -72,6 +79,8 @@
                             IsVisible="{Binding SelectedGroup.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                             Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.Name}"
                             VerticalAlignment="Center"
+                            PointerPressed="HeadName_OnPointerPressed"
+                            Padding="3,0"
                             LetterSpacing="1"
                             FontSize="16"
                             Foreground="{DynamicResource SukiText}" />

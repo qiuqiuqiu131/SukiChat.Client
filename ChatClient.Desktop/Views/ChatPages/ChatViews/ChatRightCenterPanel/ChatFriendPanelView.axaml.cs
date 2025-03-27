@@ -62,4 +62,11 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
         _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
             .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));
     }
+
+    private void HeadName_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        _eventAggregator.GetEvent<UserMessageBoxShowEvent>().Publish(
+            new UserMessageBoxShowArgs(((ChatFriendPanelViewModel)DataContext).SelectedFriend.FriendRelatoinDto.UserDto,
+                e) { BottomCheck = false, PlacementMode = PlacementMode.BottomEdgeAlignedLeft });
+    }
 }

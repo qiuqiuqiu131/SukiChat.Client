@@ -86,6 +86,14 @@ namespace ChatClient.Tool.Data
 
         private bool isFriend = false;
 
+        private string? remark;
+
+        public string? Remark
+        {
+            get => remark;
+            set => SetProperty(ref remark, value);
+        }
+
         public DateTime RegisteTime
         {
             get => registeTime;

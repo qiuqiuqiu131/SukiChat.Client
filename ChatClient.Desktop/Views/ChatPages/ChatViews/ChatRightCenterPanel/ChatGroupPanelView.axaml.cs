@@ -65,4 +65,12 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
         _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
             .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));
     }
+
+    private void HeadName_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        _eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Publish(
+            new GroupMessageBoxShowEventArgs(
+                ((ChatGroupPanelViewModel)DataContext).SelectedGroup.GroupRelationDto.GroupDto,
+                e) { PlacementMode = PlacementMode.BottomEdgeAlignedLeft });
+    }
 }

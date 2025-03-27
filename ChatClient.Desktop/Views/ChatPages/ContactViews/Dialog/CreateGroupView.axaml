@@ -77,7 +77,8 @@
                             <TextBlock FontSize="13.5" Text="创建群聊" />
                         </DockPanel>
                     </Grid>
-                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Hidden">
                         <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
                             <ItemsControl.Styles>
                                 <Style Selector="Grid.Item Border#Back">

@@ -1,4 +1,5 @@
 using ChatClient.BaseService.Helper;
+using ChatClient.BaseService.Manager;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
@@ -12,14 +13,12 @@ public interface ISearchService
     Task<List<object>> SearchAllAsync(string userId, string content);
 }
 
-public class SearchService : ISearchService
+public class SearchService : BaseService, ISearchService
 {
-    private readonly IContainerProvider _containerProvider;
     private readonly IMessageHelper _messageHelper;
 
-    public SearchService(IContainerProvider containerProvider, IMessageHelper messageHelper)
+    public SearchService(IContainerProvider containerProvider, IMessageHelper messageHelper) : base(containerProvider)
     {
-        _containerProvider = containerProvider;
         _messageHelper = messageHelper;
     }
 
@@ -35,8 +34,9 @@ public class SearchService : ISearchService
         if (result is { Response: { State: true } })
         {
             var list = new List<UserDto>();
-            var userService = _containerProvider.Resolve<IUserService>();
-            var friendService = _containerProvider.Resolve<IFriendService>();
+            var userService = _scopedProvider.Resolve<IUserService>();
+            var friendService = _scopedProvider.Resolve<IFriendService>();
+            var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
             foreach (var id in result.Ids)
             {
                 var userDto = await userService.GetUserDto(id);
@@ -45,7 +45,11 @@ public class SearchService : ISearchService
                     if (userDto.Id.Equals(userId))
                         userDto.IsUser = true;
                     else if (await friendService.IsFriend(userId, userDto.Id))
+                    {
+                        var relation = await userDtoManager.GetFriendRelationDto(userId, userDto.Id);
                         userDto.IsFriend = true;
+                        userDto.Remark = relation?.Remark;
+                    }
 
                     list.Add(userDto);
                 }
@@ -65,22 +69,29 @@ public class SearchService : ISearchService
             UserId = userId
         };
 
+        var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+
         var result = await _messageHelper.SendMessageWithResponse<SearchGroupResponse>(request);
         if (result is { Response: { State: true } })
         {
             var list = new List<GroupDto>();
-            var groupGetService = _containerProvider.Resolve<IGroupGetService>();
-            var groupService = _containerProvider.Resolve<IGroupService>();
+            var groupGetService = _scopedProvider.Resolve<IGroupGetService>();
+            var groupService = _scopedProvider.Resolve<IGroupService>();
             foreach (var id in result.Ids)
             {
-                var userDto = await groupGetService.GetGroupDto(userId, id);
-                if (userDto != null)
+                var groupDto = await groupGetService.GetGroupDto(userId, id);
+                if (groupDto != null)
                 {
-                    if (await groupService.IsMember(userId, userDto.Id))
-                        userDto.IsEntered = true;
+                    if (await groupService.IsMember(userId, groupDto.Id))
+                    {
+                        var relation = await userDtoManager.GetGroupRelationDto(userId, groupDto.Id);
+                        groupDto.IsEntered = true;
+                        groupDto.Remark = relation?.Remark;
+                    }
                     else
-                        userDto.IsEntered = false;
-                    list.Add(userDto);
+                        groupDto.IsEntered = false;
+
+                    list.Add(groupDto);
                 }
             }
 

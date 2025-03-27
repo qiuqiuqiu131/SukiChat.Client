@@ -32,7 +32,9 @@ public static class NotificationExtension
                 NotificationType.Error => NotificationColor.ErrorIconForeground,
             },
             Margin = new Thickness(20, 0, 0, 0),
-            VerticalAlignment = VerticalAlignment.Center
+            VerticalAlignment = VerticalAlignment.Center,
+            Height = 18,
+            Width = 18
         };
 
         manager.CreateMessage()

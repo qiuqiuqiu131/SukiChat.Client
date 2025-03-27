@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
@@ -11,7 +10,6 @@
              xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:chatRightCenterPanel1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatFriendPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatFriendPanelView">
@@ -63,19 +61,28 @@
                             Margin="13,5,0,0"
                             Orientation="Horizontal">
                     <Grid Margin="10,0,0,0">
+                        <Grid.Styles>
+                            <Style Selector="TextBlock:pointerover">
+                                <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                            </Style>
+                        </Grid.Styles>
                         <TextBlock
                             IsVisible="{Binding SelectedFriend.FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                             Text="{Binding SelectedFriend.FriendRelatoinDto.Remark}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
+                            Padding="3,0"
                             FontSize="17"
+                            PointerPressed="HeadName_OnPointerPressed"
                             Foreground="{DynamicResource SukiText}" />
                         <TextBlock
                             IsVisible="{Binding SelectedFriend.FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                             Text="{Binding SelectedFriend.FriendRelatoinDto.UserDto.Name}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
+                            Padding="3,0"
                             FontSize="17"
+                            PointerPressed="HeadName_OnPointerPressed"
                             Foreground="{DynamicResource SukiText}" />
                     </Grid>
                     <Grid VerticalAlignment="Center"

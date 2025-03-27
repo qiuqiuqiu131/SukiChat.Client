@@ -1,0 +1,62 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+    <Style Selector="Slider:horizontal">
+        <Setter Property="MinWidth" Value="40" />
+        <Setter Property="MinHeight" Value="15" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid Name="grid">
+                    <Grid.Resources>
+
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" MinHeight="15" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <suki:GlassCard Name="TrackBackground"
+                                    Grid.Row="1" Classes="Control"
+                                    Height="17"
+                                    Margin="8,0"
+                                    VerticalAlignment="Center"
+                                    BorderThickness="0"
+                                    CornerRadius="20" />
+
+                    <Track Name="PART_Track"
+                           Grid.Row="1"
+                           IsDirectionReversed="{TemplateBinding IsDirectionReversed}"
+                           Orientation="Horizontal">
+                        <Track.DecreaseButton>
+                            <RepeatButton Name="PART_DecreaseButton"
+                                          Height="18"
+                                          Margin="10,0,-29,0"
+                                          HorizontalAlignment="Stretch"
+                                          Background="{DynamicResource SukiPrimaryColor}"
+                                          BorderThickness="0"
+                                          CornerRadius="20" />
+                        </Track.DecreaseButton>
+                        <Track.IncreaseButton>
+                            <RepeatButton Name="PART_IncreaseButton" Classes="repeattrack" />
+                        </Track.IncreaseButton>
+                        <Thumb Name="thumb" Margin="6,0,0,0">
+                            <Thumb.Template>
+                                <ControlTemplate>
+                                    <Grid Width="25" Height="25">
+                                        <Border Width="14"
+                                                Height="14"
+                                                Margin="0"
+                                                Background="White"
+                                                BorderThickness="0"
+                                                Classes="ThumbBorder ThumbB"
+                                                CornerRadius="{DynamicResource MediumCornerRadius}" />
+                                    </Grid>
+                                </ControlTemplate>
+                            </Thumb.Template>
+                        </Thumb>
+                    </Track>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

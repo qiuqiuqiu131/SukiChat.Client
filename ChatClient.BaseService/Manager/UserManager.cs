@@ -273,6 +273,7 @@ internal class UserManager : IUserManager
 
         var user = await _userDtoManager.GetUserDto(friendId);
         user.IsFriend = false;
+        user.Remark = null;
     }
 
     public async Task DeleteGroup(string groupId, string groupName)
@@ -297,6 +298,10 @@ internal class UserManager : IUserManager
             GroupChats!.Remove(groupChat);
             groupChat.Dispose();
         }
+
+        var groupDto = await _userDtoManager.GetGroupDto(User.Id, groupId);
+        groupDto.IsEntered = false;
+        groupDto.Remark = null;
     }
 
     public async Task RemoveMember(string groupId, string memberId)

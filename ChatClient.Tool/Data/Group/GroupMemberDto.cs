@@ -20,13 +20,13 @@ public class GroupMemberDto : BindableBase, IDisposable
 
     private string groupId;
 
-    public DateTime JoinTime
+    public DateTime? JoinTime
     {
         get => joinTime;
         set => SetProperty(ref joinTime, value);
     }
 
-    private DateTime joinTime;
+    private DateTime? joinTime;
 
     public int Status
     {

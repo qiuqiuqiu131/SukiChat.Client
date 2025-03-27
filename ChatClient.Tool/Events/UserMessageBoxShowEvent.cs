@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Input;
 using ChatClient.Tool.Data;
 
@@ -14,6 +15,8 @@ public class UserMessageBoxShowArgs
     public UserDto User { get; }
 
     public bool BottomCheck { get; set; } = true;
+
+    public PlacementMode? PlacementMode { get; set; }
 
     public UserMessageBoxShowArgs(UserDto user, PointerPressedEventArgs args)
     {

@@ -192,7 +192,8 @@ internal class UserLoginService : BaseService, IUserLoginService
         user.UserDetail.UnreadGroupMessageCount = user.GroupReceiveds.Count(d =>
                                                       (d.SolveTime ?? d.ReceiveTime) >
                                                       user.UserDetail.LastReadGroupMessageTime &&
-                                                      !d.UserFromId.Equals(userId))
+                                                      !d.UserFromId.Equals(userId) &&
+                                                      (d.AcceptByUserId == null || !d.AcceptByUserId.Equals(userId)))
                                                   + user.GroupDeletes.Count(d =>
                                                       d.DeleteTime >
                                                       user.UserDetail.LastReadGroupMessageTime &&

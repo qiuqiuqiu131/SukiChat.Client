@@ -235,6 +235,8 @@
                                     <TextBlock
                                         x:Name="messageTextBlock"
                                         Grid.Row="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
                                         Classes=" notificationMessageTextStyle"
                                         Text="{TemplateBinding Message}"
                                         IsVisible="{TemplateBinding MessageVisibility}" />

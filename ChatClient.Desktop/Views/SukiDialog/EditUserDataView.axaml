@@ -36,42 +36,41 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="15" Spacing="15">
                 <Grid Width="70" Height="70" HorizontalAlignment="Center" Margin="20,0,20,15">
-                    <circleImage:CircleImage Image="{Binding UserDto.HeadImage}" Size="70" />
+                    <circleImage:CircleImage HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Image="{Binding UserDto.HeadImage}" Size="70" />
                     <Button
-                        Width="20"
-                        Height="20"
+                        Width="22"
+                        Height="22"
                         Padding="1.5"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        Classes="Normal Void"
-                        ToolTip.ShowDelay="500"
+                        Classes="Void Normal"
                         Command="{Binding EditHeadCommand}">
                         <Button.Styles>
                             <Style Selector="Button.Normal:pointerover">
-                                <Setter Property="RenderTransform" Value="scale(1.06,1.06)" />
                                 <Setter Property="Cursor" Value="Hand" />
                             </Style>
                         </Button.Styles>
-                        <Panel ToolTip.ShowDelay="500">
-                            <ToolTip.Tip>
-                                <TextBlock FontSize="12"
-                                           Text="编辑头像" />
-                            </ToolTip.Tip>
+                        <Panel>
                             <Ellipse
-                                Width="20"
-                                Height="20"
+                                Width="22"
+                                Height="22"
                                 Fill="White" />
                             <Ellipse
-                                Width="20"
-                                Height="20"
+                                Name="OuterEllipse"
+                                Width="22"
+                                Height="22"
                                 StrokeThickness="1.5"
-                                Stroke="{DynamicResource SukiPrimaryColor50}"
-                                Fill="{DynamicResource SukiPrimaryColor50}" />
+                                Stroke="{DynamicResource SukiLowText}"
+                                Fill="{DynamicResource SukiPrimaryColor10}" />
                             <avalonia:MaterialIcon
-                                Width="13"
-                                Height="13"
+                                Name="Icon"
+                                Width="15"
+                                Height="15"
                                 Foreground="{DynamicResource SukiLowText}"
-                                Kind="CircleEditOutline" />
+                                Kind="CircleEditOutline">
+                            </avalonia:MaterialIcon>
                         </Panel>
                     </Button>
                 </Grid>

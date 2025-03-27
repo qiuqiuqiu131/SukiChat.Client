@@ -152,6 +152,10 @@
             <userControls:UserMessageBox />
         </Popup>
 
+        <Popup IsOpen="False" Name="GroupMessageBox" IsLightDismissEnabled="True" DataContext="{x:Null}">
+            <userControls:GroupMessageBox />
+        </Popup>
+
         <suki:SukiDialogHost Manager="{Binding SukiDialogManager}" />
 
         <Border Name="BackgroundBorder" Background="#66000000" Opacity="0" IsVisible="False">

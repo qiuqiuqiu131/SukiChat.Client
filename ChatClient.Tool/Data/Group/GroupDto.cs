@@ -101,6 +101,14 @@ public class GroupDto : BindableBase, IDisposable
         set => SetProperty(ref isEntered, value);
     }
 
+    private string? remark;
+
+    public string? Remark
+    {
+        get => remark;
+        set => SetProperty(ref remark, value);
+    }
+
     public event Action OnGroupChanged;
 
     public GroupDto()

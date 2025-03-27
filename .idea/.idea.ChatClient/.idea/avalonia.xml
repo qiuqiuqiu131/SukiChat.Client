@@ -46,6 +46,7 @@
         <entry key="ChatClient.Avalonia/Theme/MySukiWindowStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/NotificationStyles.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/RatioButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/Slider.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/SukiDialog.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/SukiDialogHost.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/SukiSideMenu.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -128,6 +129,7 @@
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataDto.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EmojiPickerView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/GroupMessageBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/SukiDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserMessageBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

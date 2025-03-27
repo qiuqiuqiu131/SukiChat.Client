@@ -25,6 +25,7 @@
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="Slider.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
     <StyleInclude Source="DatePicker.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormTextBox/FormTextBoxStyle.axaml" />

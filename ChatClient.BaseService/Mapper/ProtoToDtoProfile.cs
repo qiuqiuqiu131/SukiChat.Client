@@ -66,7 +66,9 @@ internal class ProtoToDtoProfile : Profile
         #region GroupMemberDto + GroupMemberMessage
 
         CreateMap<GroupMemberMessage, GroupMemberDto>()
-            .ForMember(gm => gm.JoinTime, opt => opt.MapFrom(gmm => DateTime.Parse(gmm.JoinTime)));
+            .ForMember(gm => gm.JoinTime, opt =>
+                opt.MapFrom(gmm =>
+                    string.IsNullOrEmpty(gmm.JoinTime) ? (DateTime?)null : DateTime.Parse(gmm.JoinTime)));
 
         #endregion
 

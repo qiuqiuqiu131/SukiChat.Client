@@ -36,6 +36,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
         });
 
         eventAggregator.GetEvent<UserMessageBoxShowEvent>().Subscribe(ShowUserMessageBox);
+        eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Subscribe(ShowGroupMessageBox);
 
         // #region TrayIcon
         //
@@ -73,6 +74,38 @@ public partial class MainWindowView : SukiWindow, IDisposable
         // #endregion
     }
 
+    /// <summary>
+    /// 显示群组消息弹窗
+    /// </summary>
+    /// <param name="obj"></param>
+    private void ShowGroupMessageBox(GroupMessageBoxShowEventArgs args)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var topLevel = GetTopLevel(this);
+
+            // 获取当前鼠标位置和窗口宽度
+            var position = args.Args.GetPosition(topLevel);
+            var windowWidth = Bounds.Width;
+            var windowHeight = Bounds.Height;
+
+            GroupMessageBox.DataContext = args.Group;
+            GroupMessageBox.VerticalOffset = 0;
+            GroupMessageBox.HorizontalOffset = 0;
+
+            GroupMessageBox.PlacementTarget = args.Args.Source as Control;
+            GroupMessageBox.Placement = args.PlacementMode;
+
+            GroupMessageBox.UpdateLayout();
+
+            GroupMessageBox.IsOpen = true;
+        });
+    }
+
+    /// <summary>
+    /// 显示用户消息弹窗
+    /// </summary>
+    /// <param name="args"></param>
     private void ShowUserMessageBox(UserMessageBoxShowArgs args)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
@@ -91,7 +124,12 @@ public partial class MainWindowView : SukiWindow, IDisposable
             MessageBox.HorizontalOffset = 0;
 
             // 如果鼠标在窗口右侧1/3的位置，显示在鼠标的左下角
-            if (position.X > (windowWidth / 2))
+            if (args.PlacementMode != null)
+            {
+                MessageBox.PlacementTarget = args.Args.Source as Control;
+                MessageBox.Placement = args.PlacementMode.Value;
+            }
+            else if (position.X > (windowWidth / 2))
             {
                 MessageBox.PlacementTarget = args.Args.Source as Control;
                 MessageBox.Placement = PlacementMode.LeftEdgeAlignedTop;

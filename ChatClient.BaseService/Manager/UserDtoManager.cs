@@ -136,7 +136,11 @@ public class UserDtoManager : IUserDtoManager
                 _ = Task.Run(async () =>
                 {
                     friend.UserDto = await GetUserDto(friendId);
-                    if (friend.UserDto != null) friend.UserDto.IsFriend = true;
+                    if (friend.UserDto != null)
+                    {
+                        friend.UserDto.IsFriend = true;
+                        friend.UserDto.Remark = friend.Remark;
+                    }
                 });
                 _friendRelationDtos.TryAdd(friendId, friend);
             }
@@ -228,7 +232,15 @@ public class UserDtoManager : IUserDtoManager
             // 如果获取到用户信息，添加到缓存中
             if (groupRelation != null)
             {
-                _ = Task.Run(async () => groupRelation.GroupDto = await GetGroupDto(userId, groupId));
+                _ = Task.Run(async () =>
+                {
+                    groupRelation.GroupDto = await GetGroupDto(userId, groupId);
+                    if (groupRelation.GroupDto != null)
+                    {
+                        groupRelation.GroupDto.IsEntered = true;
+                        groupRelation.GroupDto.Remark = groupRelation.Remark;
+                    }
+                });
                 //groupRelation.GroupDto = await GetGroupDto(userId, groupId);
                 _groupRelationDtos.TryAdd(groupId, groupRelation);
             }
@@ -260,9 +272,9 @@ public class UserDtoManager : IUserDtoManager
             var groupService = _containerProvider.Resolve<IGroupGetService>();
             var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
 
-            // 销毁服务
-            if (groupService is IDisposable disposable)
-                disposable.Dispose();
+            // // 销毁服务
+            // if (groupService is IDisposable disposable)
+            //     disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (groupMember != null)
