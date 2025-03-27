@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
@@ -34,6 +36,38 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _message, value);
     }
 
+    private string? _remark;
+
+    public string? Remark
+    {
+        get => _remark;
+        set => SetProperty(ref _remark, value);
+    }
+
+    private string? _group;
+
+    public string? Group
+    {
+        get => _group;
+        set => SetProperty(ref _group, value);
+    }
+
+    private string? nickName;
+
+    public string? NickName
+    {
+        get => nickName;
+        set => SetProperty(ref nickName, value);
+    }
+
+    private List<string> _groups;
+
+    public List<string> Groups
+    {
+        get => _groups;
+        set => SetProperty(ref _groups, value);
+    }
+
     public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
 
     public DelegateCommand SendGroupRequestCommand { get; }
@@ -46,6 +80,8 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
+
+        Groups = _userManager.GroupGroups!.Select(d => d.GroupName).Order().ToList();
 
         SendGroupRequestCommand = new DelegateCommand(SendGroupRequest);
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke(new DialogResult(ButtonResult.Cancel)));
@@ -60,7 +96,7 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
         var _groupService = _containerProvider.Resolve<IGroupService>();
         var (state, message) =
             await _groupService.JoinGroupRequest(_userManager.User!.Id, _groupDto.Id,
-                Message ?? "");
+                Message ?? "", NickName ?? "", Group ?? "默认分组", Remark ?? "");
         if (state)
             NotificationMessageManager.ShowMessage("入群请求发送成功", NotificationType.Success, TimeSpan.FromSeconds(1.5));
         else
@@ -81,6 +117,7 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
     {
         GroupDto = parameters.GetValue<GroupDto>("GroupDto");
         Message = "我是" + _userManager.User!.Name;
+        Group = "默认分组";
     }
 
     public DialogCloseListener RequestClose { get; }

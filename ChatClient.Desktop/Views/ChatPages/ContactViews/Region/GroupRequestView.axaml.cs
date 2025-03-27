@@ -1,17 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
+using ChatClient.Avalonia.Controls.CircleImage;
+using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
+using Prism.Events;
+using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
 public partial class GroupRequestView : UserControl
 {
+    private readonly IEventAggregator _eventAggregator;
+
     public static readonly StyledProperty<AvaloniaList<GroupRequestDto>> GroupRequestDtosProperty
         = AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupRequestDto>>(
             nameof(GroupRequestDtos));
@@ -45,8 +55,9 @@ public partial class GroupRequestView : UserControl
     private bool isInit;
     private ItemCollection _itemCollection;
 
-    public GroupRequestView()
+    public GroupRequestView(IEventAggregator eventAggregator)
     {
+        _eventAggregator = eventAggregator;
         InitializeComponent();
         _itemCollection = RequestItemsControl.Items;
     }
@@ -71,6 +82,11 @@ public partial class GroupRequestView : UserControl
             {
                 foreach (var newItem in e.NewItems)
                     _itemCollection.Insert(0, newItem);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var oldItem in e.OldItems)
+                    _itemCollection.Remove(oldItem);
             }
         });
     }
@@ -117,5 +133,32 @@ public partial class GroupRequestView : UserControl
             GroupDeleteDto deleteDto => deleteDto.DeleteTime, // 假设有DeleteTime属性
             _ => DateTime.MinValue // 默认值，确保未知类型排在最后
         };
+    }
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is not GlassCard control) return;
+
+        CircleImage? head = control.GetVisualDescendants()
+            .OfType<CircleImage>()
+            .FirstOrDefault();
+
+        GroupDto? groupDto = null;
+        if (control.DataContext is GroupRequestDto requestDto)
+            groupDto = requestDto.GroupDto;
+        else if (control.DataContext is GroupRequestDto receiveDto)
+            groupDto = receiveDto.GroupDto;
+        else if (control.DataContext is GroupDeleteDto deleteDto)
+            groupDto = deleteDto.GroupDto;
+
+        if (groupDto != null && head != null)
+        {
+            e.Source = head;
+            _eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Publish(
+                new GroupMessageBoxShowEventArgs(groupDto, e)
+                {
+                    PlacementMode = PlacementMode.BottomEdgeAlignedLeft
+                });
+        }
     }
 }

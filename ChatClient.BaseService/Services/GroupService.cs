@@ -15,7 +15,10 @@ public interface IGroupService
     Task<(bool, string)> CreateGroup(string userId, List<string> members);
     Task<bool> UpdateGroupRelation(string userId, GroupRelationDto groupRelationDto);
     Task<bool> UpdateGroup(string userId, GroupDto groupDto);
-    Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message);
+
+    Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message, string nickName,
+        string grouping, string remark);
+
     Task<(bool, string)> JoinGroupResponse(string userId, int requestId, bool accept);
     Task<(bool, string)> QuitGroupRequest(string userId, string groupId);
     Task<(bool, string)> RemoveMemberRequest(string userId, string groupId, string memberId);
@@ -175,13 +178,17 @@ public class GroupService : BaseService, IGroupService
     /// <param name="groupId"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public async Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message)
+    public async Task<(bool, string)> JoinGroupRequest(string userId, string groupId, string message, string nickName,
+        string grouping, string remark)
     {
         var joinGroupRequest = new JoinGroupRequestFromClient
         {
             UserId = userId,
             GroupId = groupId,
-            Message = message
+            Message = message,
+            Grouping = grouping,
+            NickName = nickName,
+            Remark = remark
         };
 
         var response =
@@ -197,6 +204,9 @@ public class GroupService : BaseService, IGroupService
                 GroupId = groupId,
                 RequestId = response.RequestId,
                 RequestTime = DateTime.Parse(response.Time),
+                Grouping = grouping,
+                NickName = nickName,
+                Remark = remark,
                 Message = message,
                 IsSolved = false
             };

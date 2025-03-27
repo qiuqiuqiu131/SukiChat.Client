@@ -146,6 +146,8 @@ public class App : PrismApplication
             .AddView<ChatView, ChatViewModel>(services)
             .AddView<ContactsView, ContactsViewModel>(services)
             .AddView<ThemeView, ThemeViewModel>(services)
+            // 同意添加好友
+            .AddView<AcceptFriendView, AcceptFriendViewModel>(services)
             // 编辑用户信息
             .AddView<EditUserDataView, EditUserDataViewModel>(services)
             // 编辑分组

@@ -2,15 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="320" Height="450"
-             x:DataType="contactViews:AddFriendRequestViewModel"
-             x:Class="ChatClient.Desktop.Views.SearchUserGroupView.AddFriendRequestView">
+             Width="320" Height="420"
+             x:DataType="dialog:AcceptFriendViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog.AcceptFriendView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
@@ -19,15 +17,12 @@
     </UserControl.Styles>
     <Grid RowDefinitions="25,0.5,*,auto">
         <Grid Background="Transparent">
-            <Interaction.Behaviors>
-                <behaviors:WindowDragBehavior />
-            </Interaction.Behaviors>
-            <TextBlock Grid.Row="0" Text="添加分组" VerticalAlignment="Center" Margin="5" FontSize="13.5"
+            <TextBlock Grid.Row="0" Text="添加好友" VerticalAlignment="Center" Margin="5" FontSize="13.5"
                        HorizontalAlignment="Center" />
             <Button Name="PART_CloseButton"
                     Margin="5,0"
                     HorizontalAlignment="Right"
-                    Command="{Binding CancleCommand}"
+                    Command="{Binding CancelCommand}"
                     Classes="Basic Rounded WindowControlsButton Close">
                 <PathIcon Width="8" Height="8" Data="{x:Static suki:Icons.WindowClose}" />
             </Button>
@@ -36,8 +31,8 @@
         <ScrollViewer Grid.Row="2" Padding="8,0,0,0" VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Disabled">
             <StackPanel suki:StackPanelExtensions.AnimatedScroll="True" Margin="15" Orientation="Vertical"
-                        Spacing="12">
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,5">
+                        Spacing="15">
+                <StackPanel Orientation="Horizontal" Margin="0,15,0,10">
                     <circleImage:CircleImage Image="{Binding UserDto.HeadImage}" Size="40"
                                              DockPanel.Dock="Left" />
                     <Grid RowDefinitions="1.3*,*" Margin="13,0">
@@ -47,11 +42,6 @@
                                    Opacity="0.6" />
                     </Grid>
                 </StackPanel>
-                <TextBox Margin="-3,0" Text="{Binding Message}" MinHeight="120"
-                         AcceptsReturn="True"
-                         AcceptsTab="True"
-                         VerticalContentAlignment="Top"
-                         Watermark="填写验证信息" />
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="备注" Opacity="0.7" FontSize="12.5" />
                     <TextBox Text="{Binding Remark}" Watermark="填写备注" Margin="-3,0" />
@@ -65,14 +55,12 @@
             </StackPanel>
         </ScrollViewer>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="15,5,15,10" Spacing="10">
-            <Button Padding="15,5" Margin="0" Classes="Flat" Command="{Binding SendFriendRequestCommand}">
+            <Button Padding="15,5" Margin="0" Classes="Flat" Command="{Binding OkCommand}">
                 <TextBlock Text="发送" FontSize="13.5" />
             </Button>
-            <Button Padding="15,5" Margin="0" Command="{Binding CancleCommand}">
+            <Button Padding="15,5" Margin="0" Command="{Binding CancelCommand}">
                 <TextBlock Text="取消" FontSize="13.5" />
             </Button>
         </StackPanel>
-
-        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" Grid.RowSpan="4" />
     </Grid>
 </UserControl>

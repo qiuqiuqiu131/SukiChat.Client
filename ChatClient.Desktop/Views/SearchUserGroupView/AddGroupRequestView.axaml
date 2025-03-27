@@ -11,6 +11,12 @@
              x:DataType="searchUserGroup:AddGroupRequestViewModel"
              Width="320" Height="450"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.AddGroupRequestView">
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="4"></Setter>
+        </Style>
+    </UserControl.Styles>
     <Grid RowDefinitions="25,0.5,*,auto">
         <Grid Background="Transparent">
             <Interaction.Behaviors>
@@ -46,6 +52,20 @@
                          AcceptsTab="True"
                          VerticalContentAlignment="Top"
                          Watermark="填写验证信息" />
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="备注" Opacity="0.7" FontSize="12.5" />
+                    <TextBox Text="{Binding Remark}" Watermark="填写备注" Margin="-3,0" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="分组" FontSize="12.5" Opacity="0.7" />
+                    <ComboBox ItemsSource="{Binding Groups}" Margin="0,2" Height="35"
+                              HorizontalContentAlignment="Left"
+                              SelectedItem="{Binding Group}" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="群昵称" Opacity="0.7" FontSize="12.5" />
+                    <TextBox Text="{Binding NickName}" Watermark="填写群昵称" Margin="-3,0" />
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="15,5,15,10" Spacing="10">

@@ -89,35 +89,53 @@ public class GroupRequestViewModel : ViewModelBase
     {
         if (isOperate) return;
 
-        isOperate = true;
-        var _groupService = _containerProvider.Resolve<IGroupService>();
-        var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, false);
-        if (!state)
+        async void RejectRequestCallback(IDialogResult result)
         {
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            isOperate = false;
+            if (result.Result != ButtonResult.OK) return;
+
+            var _groupService = _containerProvider.Resolve<IGroupService>();
+            var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, false);
+            if (!state)
             {
-                Message = "操作失败",
-                Type = NotificationType.Error
-            });
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "操作失败",
+                    Type = NotificationType.Error
+                });
+            }
         }
 
-        isOperate = false;
+        isOperate = true;
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", RejectRequestCallback))
+            .TryShow();
     }
 
-    private async void AcceptRequest(GroupReceivedDto obj)
+    private void AcceptRequest(GroupReceivedDto obj)
     {
         if (isOperate) return;
 
-        isOperate = true;
-        var _groupService = _containerProvider.Resolve<IGroupService>();
-        var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
-        if (!state)
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "操作失败",
-                Type = NotificationType.Error
-            });
+        async void AcceptRequestCallback(IDialogResult result)
+        {
+            isOperate = false;
+            if (result.Result != ButtonResult.OK) return;
 
-        isOperate = false;
+            var _groupService = _containerProvider.Resolve<IGroupService>();
+            var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
+            if (!state)
+            {
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "操作失败",
+                    Type = NotificationType.Error
+                });
+            }
+        }
+
+        isOperate = true;
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", AcceptRequestCallback))
+            .TryShow();
     }
 }

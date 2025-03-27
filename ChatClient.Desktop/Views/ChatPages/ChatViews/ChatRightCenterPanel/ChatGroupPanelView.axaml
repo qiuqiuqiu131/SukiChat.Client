@@ -154,24 +154,39 @@
                                         </TextBlock>
                                     </DockPanel>
                                     <ItemsControl
-                                        Margin="5"
+                                        Margin="5,0"
                                         ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupClipMembers}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
+                                        <ItemsControl.Styles>
+                                            <Style Selector="Border.Member">
+                                                <Setter Property="Background" Value="Transparent" />
+                                            </Style>
+                                            <Style Selector="Border.Member:pointerover">
+                                                <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                                            </Style>
+                                        </ItemsControl.Styles>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <StackPanel Orientation="Vertical" Spacing="3" Width="46" Margin="0,10">
-                                                    <circleImage:CircleImage Size="32" Image="{Binding HeadImage}" />
-                                                    <TextBlock Text="{Binding NickName}"
-                                                               FontSize="12"
-                                                               HorizontalAlignment="Center"
-                                                               MaxWidth="35"
-                                                               Opacity="0.6"
-                                                               TextTrimming="CharacterEllipsis" />
-                                                </StackPanel>
+                                                <Border Width="47" Padding="0,7" Margin="0,3"
+                                                        Classes="Member"
+                                                        PointerPressed="InputElement_OnPointerPressed"
+                                                        CornerRadius="4">
+                                                    <StackPanel Orientation="Vertical" Spacing="3">
+                                                        <circleImage:CircleImage Size="32" Image="{Binding HeadImage}" />
+                                                        <TextBlock Text="{Binding NickName}"
+                                                                   FontSize="12"
+                                                                   Margin="0"
+                                                                   Padding="0"
+                                                                   HorizontalAlignment="Center"
+                                                                   MaxWidth="36"
+                                                                   Opacity="0.6"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+                                                </Border>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>

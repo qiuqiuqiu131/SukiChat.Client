@@ -19,6 +19,12 @@ public class GroupRequest
 
     public string Message { get; set; }
 
+    public string NickName { get; set; }
+
+    public string Grouping { get; set; }
+
+    public string Remark { get; set; }
+
     public bool IsAccept { get; set; } = false;
 
     public bool IsSolved { get; set; } = false;

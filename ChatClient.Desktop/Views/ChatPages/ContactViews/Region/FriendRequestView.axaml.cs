@@ -1,17 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using Avalonia.VisualTree;
+using ChatClient.Avalonia.Controls.CircleImage;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Events;
+using Prism.Events;
+using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
 public partial class FriendRequestView : UserControl
 {
+    private readonly IEventAggregator _eventAggregator;
+
     public static readonly StyledProperty<AvaloniaList<FriendRequestDto>> FriendRequestDtosProperty
         = AvaloniaProperty.Register<FriendRequestView, AvaloniaList<FriendRequestDto>>(
             nameof(FriendRequestDtos));
@@ -45,8 +54,9 @@ public partial class FriendRequestView : UserControl
     private bool isInit;
     private ItemCollection _itemCollection;
 
-    public FriendRequestView()
+    public FriendRequestView(IEventAggregator eventAggregator)
     {
+        _eventAggregator = eventAggregator;
         InitializeComponent();
         _itemCollection = RequestItemsControl.Items;
     }
@@ -71,6 +81,11 @@ public partial class FriendRequestView : UserControl
             {
                 foreach (var newItem in e.NewItems)
                     _itemCollection.Insert(0, newItem);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                foreach (var oldItem in e.OldItems)
+                    _itemCollection.Remove(oldItem);
             }
         });
     }
@@ -117,5 +132,33 @@ public partial class FriendRequestView : UserControl
             FriendDeleteDto deleteDto => deleteDto.DeleteTime, // 假设有DeleteTime属性
             _ => DateTime.MinValue // 默认值，确保未知类型排在最后
         };
+    }
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is not GlassCard control) return;
+
+        CircleImage? head = control.GetVisualDescendants()
+            .OfType<CircleImage>()
+            .FirstOrDefault();
+
+        UserDto? userDto = null;
+        if (control.DataContext is FriendRequestDto requestDto)
+            userDto = requestDto.UserDto;
+        else if (control.DataContext is FriendReceiveDto receiveDto)
+            userDto = receiveDto.UserDto;
+        else if (control.DataContext is FriendDeleteDto deleteDto)
+            userDto = deleteDto.UserDto;
+
+        if (userDto != null && head != null)
+        {
+            e.Source = head;
+            _eventAggregator.GetEvent<UserMessageBoxShowEvent>().Publish(
+                new UserMessageBoxShowArgs(userDto, e)
+                {
+                    BottomCheck = true,
+                    PlacementMode = PlacementMode.BottomEdgeAlignedLeft
+                });
+        }
     }
 }

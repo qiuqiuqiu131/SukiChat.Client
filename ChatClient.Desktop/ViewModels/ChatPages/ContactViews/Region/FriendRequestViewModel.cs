@@ -2,6 +2,7 @@ using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -84,49 +85,76 @@ public class FriendRequestViewModel : ViewModelBase
             .TryShow();
     }
 
-    private async void RejectRequest(FriendReceiveDto obj)
+    private void RejectRequest(FriendReceiveDto obj)
     {
         if (isOperate) return;
 
-        isOperate = true;
-        var _friendService = _containerProvider.Resolve<IFriendService>();
-        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false);
-        if (state)
+        async void RejectRequestCallback(IDialogResult result)
         {
-            obj.IsAccept = false;
-            obj.IsSolved = true;
-            obj.SolveTime = DateTime.Now;
-        }
-        else
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "操作失败",
-                Type = NotificationType.Error
-            });
+            isOperate = false;
+            if (result.Result != ButtonResult.OK) return;
 
-        isOperate = false;
+            var _friendService = _containerProvider.Resolve<IFriendService>();
+            var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false);
+            if (state)
+            {
+                obj.IsAccept = false;
+                obj.IsSolved = true;
+                obj.SolveTime = DateTime.Now;
+            }
+            else
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "操作失败",
+                    Type = NotificationType.Error
+                });
+        }
+
+        isOperate = true;
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", RejectRequestCallback))
+            .TryShow();
     }
 
-    private async void AcceptRequest(FriendReceiveDto obj)
+    private void AcceptRequest(FriendReceiveDto obj)
     {
         if (isOperate) return;
 
-        isOperate = true;
-        var _friendService = _containerProvider.Resolve<IFriendService>();
-        var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, "", "默认分组");
-        if (state)
+        async void AcceptRequestCallback(IDialogResult result)
         {
-            obj.IsAccept = true;
-            obj.IsSolved = true;
-            obj.SolveTime = DateTime.Now;
-        }
-        else
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "操作失败",
-                Type = NotificationType.Error
-            });
+            isOperate = false;
+            if (result.Result != ButtonResult.OK) return;
 
-        isOperate = false;
+            var remark = result.Parameters.ContainsKey("Remark") ? result.Parameters["Remark"] as string : string.Empty;
+            var group = result.Parameters.ContainsKey("Group") ? result.Parameters["Group"] as string : string.Empty;
+
+            var _friendService = _containerProvider.Resolve<IFriendService>();
+            var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, remark, group);
+            if (state)
+            {
+                obj.IsAccept = true;
+                obj.IsSolved = true;
+                obj.SolveTime = DateTime.Now;
+
+                var userManager = _containerProvider.Resolve<IUserManager>();
+                var userDto = userManager.User;
+                if (userDto != null)
+                {
+                    userDto.LastReadFriendMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
+                    await userManager.SaveUser();
+                }
+            }
+            else
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "操作失败",
+                    Type = NotificationType.Error
+                });
+        }
+
+        isOperate = true;
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new AcceptFriendViewModel(d, AcceptRequestCallback, obj.UserDto))
+            .TryShow();
     }
 }

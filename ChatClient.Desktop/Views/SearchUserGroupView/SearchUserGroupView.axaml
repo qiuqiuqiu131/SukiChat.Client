@@ -15,6 +15,12 @@
              MinWidth="650"
              x:DataType="searchUserGroup:SearchUserGroupViewModel"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView">
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="4"></Setter>
+        </Style>
+    </UserControl.Styles>
     <DockPanel LastChildFill="True">
         <Grid VerticalAlignment="Top"
               Background="Transparent"

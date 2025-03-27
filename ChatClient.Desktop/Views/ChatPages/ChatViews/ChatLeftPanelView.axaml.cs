@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -462,6 +463,13 @@ public partial class ChatLeftPanelView : UserControl
         {
             var topLevel = TopLevel.GetTopLevel((Control)sender!);
             topLevel?.Clipboard?.SetTextAsync(friendRelation.Id);
+
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "群ID已复制",
+                    Type = NotificationType.Success
+                }
+            );
         }
 
         _friendContextMenu.Close();
@@ -534,6 +542,13 @@ public partial class ChatLeftPanelView : UserControl
         {
             var topLevel = TopLevel.GetTopLevel((Control)sender!);
             topLevel?.Clipboard?.SetTextAsync(groupRelation.Id);
+
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "群ID已复制",
+                    Type = NotificationType.Success
+                }
+            );
         }
 
         _groupContextMenu.Close();

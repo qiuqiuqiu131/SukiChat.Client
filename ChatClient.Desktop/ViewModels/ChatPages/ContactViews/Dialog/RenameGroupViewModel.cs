@@ -1,14 +1,10 @@
 using System;
-using ChatClient.Tool.Data;
-using ChatClient.Tool.Data.Group;
-using ChatClient.Tool.Events;
 using Prism.Commands;
 using Prism.Dialogs;
-using Prism.Events;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 
 public class RenameGroupViewModel : BindableBase
 {

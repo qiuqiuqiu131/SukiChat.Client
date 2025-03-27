@@ -18,6 +18,27 @@
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
             <Setter Property="Width" Value="4"></Setter>
         </Style>
+
+        <Style Selector="suki|GlassCard">
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                    <BrushTransition Property="Background" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="suki|GlassCard.Request:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
+        </Style>
+        <Style Selector="suki|GlassCard.Receive:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
+        </Style>
+        <Style Selector="suki|GlassCard.Delete:pointerover">
+            <Setter Property="BorderBrush" Value="{DynamicResource SukiAccentColor}" />
+            <Setter Property="Background" Value="{DynamicResource SukiAccentColor25}" />
+        </Style>
     </UserControl.Styles>
     <UserControl.DataTemplates>
         <DataTemplate DataType="group:GroupRequestDto">
@@ -27,7 +48,9 @@
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
+                Classes="Request"
                 Margin="25,7,10,7"
+                PointerPressed="InputElement_OnPointerPressed"
                 Padding="25,0"
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
@@ -50,7 +73,7 @@
                                    IsVisible="{Binding !IsSolved}" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Image="{Binding GroupDto.HeadImage}" />
+                        <circleImage:CircleImage Name="Head" Size="37" Image="{Binding GroupDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="2">
                                 <TextBlock
@@ -81,7 +104,10 @@
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
                 Height="65"
+                Classes="Receive"
                 Margin="25,7,10,7"
+                PointerPressed="InputElement_OnPointerPressed"
+                Background="Transparent"
                 Padding="25,0"
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
@@ -120,7 +146,7 @@
                         </StackPanel>
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Image="{Binding UserDto.HeadImage}" />
+                        <circleImage:CircleImage Name="Head" Size="37" Image="{Binding UserDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
@@ -155,6 +181,8 @@
                 BorderBrush="{DynamicResource SukiAccentColor50}"
                 BorderThickness="0.5"
                 Height="65"
+                Classes="Delete"
+                PointerPressed="InputElement_OnPointerPressed"
                 Margin="25,7,10,7"
                 Padding="25,0"
                 CornerRadius="5">
@@ -164,7 +192,7 @@
                                    VerticalAlignment="Center" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Image="{Binding GroupDto.HeadImage}" />
+                        <circleImage:CircleImage Name="Head" Size="37" Image="{Binding GroupDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock Text="{Binding GroupDto.Name }"

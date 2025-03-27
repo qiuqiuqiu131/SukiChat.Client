@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;

@@ -145,7 +145,9 @@ public class GroupRelationMessageHandler : MessageHandlerBase
                 UserId = result.UserFromId,
                 Status = 2,
                 JoinTime = DateTime.Now,
-                Grouping = "默认分组"
+                Grouping = result.Grouping,
+                NickName = result.NickName,
+                Remark = result.Remark
             };
             await groupRelationRepository.InsertAsync(groupRelation);
             await _unitOfWork.SaveChangesAsync();

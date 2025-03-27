@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
@@ -117,6 +116,7 @@
                     Text="{Binding Friend.Remark,Mode=TwoWay}"
                     DefaultText="设置好友备注"
                     DockPanel.Dock="Right"
+                    FontSize="14"
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
             </DockPanel>
