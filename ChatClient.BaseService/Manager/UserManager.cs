@@ -16,6 +16,8 @@ internal class UserManager : IUserManager
 {
     public bool IsLogin { get; private set; } = false;
 
+    public MainWindowState WindowState { get; set; } = MainWindowState.Show;
+
     #region UserData(用户所有的数据)
 
     // 主体数据

@@ -16,6 +16,7 @@
                  Height="680"
                  MinHeight="500"
                  MinWidth="800"
+                 Icon="/Assets/Icon.ico"
                  TitleBarAnimationEnabled="False"
                  Padding="15,5"
                  x:Class="ChatClient.Desktop.Views.MainWindowView"
@@ -25,9 +26,7 @@
                  BackgroundAnimationEnabled="{Binding  CurrentThemeStyle.AnimationsEnabled}"
                  BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
                  BackgroundTransitionsEnabled="{Binding CurrentThemeStyle.TransitionsEnabled}"
-                 Icon="/Assets/ChartDonutVariant.ico"
                  ShowTitlebarBackground="False"
-                 FontFamily="{StaticResource MiSans}"
                  Title="Suki Chat">
     <Window.Styles>
         <Style Selector="TrayIcon">
@@ -80,7 +79,7 @@
                                     IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <TextBlock
                                         Padding="0"
-                                        Margin="0"
+                                        Margin="1,0,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="10"
@@ -148,11 +147,11 @@
             </suki:SukiSideMenu.FooterContent>
         </suki:SukiSideMenu>
 
-        <Popup IsOpen="False" Name="MessageBox" IsLightDismissEnabled="True" DataContext="{x:Null}">
+        <Popup IsOpen="False" Name="MessageBox" WindowManagerAddShadowHint="True" IsLightDismissEnabled="True" DataContext="{x:Null}">
             <userControls:UserMessageBox />
         </Popup>
 
-        <Popup IsOpen="False" Name="GroupMessageBox" IsLightDismissEnabled="True" DataContext="{x:Null}">
+        <Popup IsOpen="False" Name="GroupMessageBox" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" DataContext="{x:Null}">
             <userControls:GroupMessageBox />
         </Popup>
 

@@ -23,12 +23,6 @@ sealed class Program
             .UsePlatformDetect()
             // 此处是添加了一个内置默认字体
             .WithInterFont()
-            // // 此处配置自定义字体
-            // .With(new FontManagerOptions
-            // {
-            //     // 设置为默认字体
-            //     DefaultFamilyName = "avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans"
-            // })
             .LogToTrace();
 
         if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS() || OperatingSystem.IsLinux())

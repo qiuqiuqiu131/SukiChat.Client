@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:content="https://github.com/kikipoulet/SukiUI"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Width="400" Height="140"
+             Background="Transparent"
+             x:DataType="userControls:FriendChatMessageBoxViewModel"
+             x:Class="ChatClient.Desktop.Views.UserControls.FriendChatMessageBoxView">
+    <Interaction.Behaviors>
+        <EventTriggerBehavior EventName="PointerPressed">
+            <InvokeCommandAction Command="{Binding ClickCommand}" />
+        </EventTriggerBehavior>
+    </Interaction.Behaviors>
+    <Border CornerRadius="7"
+            Margin="10"
+            BorderBrush="{DynamicResource SukiControlBorderBrush}"
+            BorderThickness="1.5"
+            Background="{DynamicResource SukiGlassCardBackground}"
+            Padding="5,4"
+            BoxShadow="4 4 10 #44000000">
+        <DockPanel LastChildFill="True">
+            <Grid VerticalAlignment="Top" DockPanel.Dock="Top">
+                <StackPanel Orientation="Horizontal" Spacing="13" Margin="5,0" VerticalAlignment="Center">
+                    <Image Source="/Assets/Icon.ico" Width="14" Height="14" VerticalAlignment="Center" />
+                    <TextBlock Text="好友消息" FontSize="12" VerticalAlignment="Center" Margin="0,0,0,2" />
+                </StackPanel>
+                <Button Name="PART_CloseButton"
+                        HorizontalAlignment="Right"
+                        Margin="0"
+                        Command="{Binding CancelCommand}"
+                        Classes="Basic Rounded WindowControlsButton Close">
+                    <PathIcon Data="{x:Static content:Icons.WindowClose}" Height="8" Width="8" />
+                </Button>
+            </Grid>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                <circleImage:CircleImage Margin="10,0" Image="{Binding FriendRelation.UserDto.HeadImage}" Size="45" />
+                <Grid RowDefinitions="*,*" Margin="10,0,0,0">
+                    <TextBlock Grid.Row="0"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding FriendRelation.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                               Text="{Binding FriendRelation.Remark}" FontSize="14.5" />
+                    <TextBlock Grid.Row="0"
+                               VerticalAlignment="Center"
+                               IsVisible="{Binding FriendRelation.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                               Text="{Binding FriendRelation.UserDto.Name}" FontSize="14.5" />
+                    <TextBlock Grid.Row="1"
+                               FontSize="14"
+                               Opacity="0.8"
+                               VerticalAlignment="Center"
+                               TextWrapping="NoWrap"
+                               TextTrimming="CharacterEllipsis"
+                               Text="{Binding ChatData.ChatMessages,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
+                </Grid>
+            </StackPanel>
+        </DockPanel>
+    </Border>
+</UserControl>

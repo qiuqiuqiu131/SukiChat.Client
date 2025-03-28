@@ -51,6 +51,8 @@ public partial class ScreenshotWindow : Window
 
         InitializeComponent();
 
+        // Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
+
         CaptureScreen();
 
         InitializeSelectionBorder();

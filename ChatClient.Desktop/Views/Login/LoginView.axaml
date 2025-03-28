@@ -7,7 +7,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p1="https://github.com/kikipoulet/SukiUI"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:theme="clr-namespace:SukiUI.Theme;assembly=SukiUI"
     xmlns:vm="using:ChatClient.Desktop.ViewModels.Login"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"

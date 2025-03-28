@@ -13,6 +13,8 @@ public interface IUserManager
     // 是否登录
     bool IsLogin { get; }
 
+    MainWindowState WindowState { get; set; }
+
     // 用户状态
     string CurrentChatPage { get; set; }
     ContactState CurrentContactState { get; set; }
@@ -49,4 +51,11 @@ public interface IUserManager
     Task DeleteFriend(string friendId, string groupName);
     Task DeleteGroup(string groupId, string groupName);
     Task RemoveMember(string groupId, string memberId);
+}
+
+public enum MainWindowState
+{
+    Show,
+    Hide,
+    Close
 }

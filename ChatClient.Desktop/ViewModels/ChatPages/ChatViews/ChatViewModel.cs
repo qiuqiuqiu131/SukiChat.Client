@@ -176,11 +176,11 @@ public class ChatViewModel : ChatPageBase
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         if (friendChatDto.ChatMessages.Count == 0)
             friendChatDto.HasMoreMessage = false;
-        else if (friendChatDto.ChatMessages.Count < 15)
+        else if (friendChatDto.ChatMessages.Count < 10)
         {
             var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
 
-            int nextCount = 15 - friendChatDto.ChatMessages.Count;
+            int nextCount = 10 - friendChatDto.ChatMessages.Count;
             var chatDatas =
                 await chatPackService.GetFriendChatDataAsync(User?.Id, friendChatDto.UserId,
                     friendChatDto.ChatMessages[0].ChatId,
@@ -195,7 +195,7 @@ public class ChatViewModel : ChatPageBase
             foreach (var chatData in chatDatas)
             {
                 if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
-                    value -= 2.5f;
+                    value -= 2f;
                 else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
                     value -= 2f;
                 else
@@ -264,11 +264,11 @@ public class ChatViewModel : ChatPageBase
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         if (groupChatDto.ChatMessages.Count == 0)
             groupChatDto.HasMoreMessage = false;
-        else if (groupChatDto.ChatMessages.Count < 15)
+        else if (groupChatDto.ChatMessages.Count < 10)
         {
             var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
 
-            int nextCount = 15 - groupChatDto.ChatMessages.Count;
+            int nextCount = 10 - groupChatDto.ChatMessages.Count;
             var chatDatas =
                 await groupPackService.GetGroupChatDataAsync(User?.Id, groupChatDto.GroupId,
                     groupChatDto.ChatMessages[0].ChatId,
@@ -283,7 +283,7 @@ public class ChatViewModel : ChatPageBase
             foreach (var chatData in chatDatas)
             {
                 if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
-                    value -= 2.5f;
+                    value -= 2f;
                 else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
                     value -= 2f;
                 else

@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 using ChatClient.BaseService;
 using ChatClient.Client;
 using ChatClient.DataBase;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
@@ -28,6 +29,7 @@ using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.UIEntity;
 using Microsoft.Extensions.Configuration;
 using Prism.DryIoc;
@@ -81,6 +83,9 @@ public class App : PrismApplication
         containerRegistry.Register<LoginWindowView>().Register<LoginWindowViewModel>();
 
         containerRegistry.RegisterSingleton<ISukiDialogManager, SukiDialogManager>();
+        containerRegistry.Register<ICornerDialogService, CornerDialogService>();
+
+        containerRegistry.Register<CornerWindow>();
 
         // 注册导航View
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
@@ -110,6 +115,11 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
         // 头像编辑
         containerRegistry.RegisterDialog<UserHeadEditView, UserHeadEditViewModel>();
+
+        // 注册边角对话框
+        containerRegistry.Register<ICornerDialogWindow, CornerWindow>();
+        containerRegistry.RegisterDialog<FriendChatMessageBoxView, FriendChatMessageBoxViewModel>();
+        containerRegistry.RegisterDialog<GroupChatMessageBoxView, GroupChatMessageBoxViewModel>();
 
         var views = ConfigureViews(containerRegistry);
         DataTemplates.Add(new ViewLocator(views));

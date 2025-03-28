@@ -24,6 +24,9 @@ public partial class SukiDialogWindow : SukiWindow, IDialogWindow
         IsTitleBarVisible = false;
         IsMenuVisible = false;
         SizeToContent = SizeToContent.WidthAndHeight;
+        TitleBarAnimationEnabled = false;
+
+        // Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
 
         BackgroundAnimationEnabled = themeStyle.CurrentThemeStyle.AnimationsEnabled;
         BackgroundStyle = themeStyle.CurrentThemeStyle.BackgroundStyle;

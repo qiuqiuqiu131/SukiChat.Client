@@ -38,6 +38,7 @@ public static class BaseServiceExtension
         containerRegistry.Register<IMessageHelper, MessageHelper>()
             .Register<IFileIOHelper, ProtoFileIOHelper>()
             .Register<IFileOperateHelper, FileOperateHelper>()
+            .Register<ITaskbarFlashHelper, WindowTaskbarFlashHelper>()
             .Register<ISystemScalingHelper, WindowScalingHelper>();
 
         // 注册Service

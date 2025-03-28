@@ -1,6 +1,9 @@
 using System.Collections.ObjectModel;
 using AutoMapper;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
@@ -8,6 +11,7 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.MessageHandler;
@@ -72,7 +76,7 @@ internal class ChatMessageHandler : MessageHandlerBase
         FriendChatDto friendChat =
             _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
 
-        _ = Dispatcher.UIThread.InvokeAsync(async () =>
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             if (friendChat != null && friendChat.ChatMessages.Count != 0)
             {
@@ -94,6 +98,37 @@ internal class ChatMessageHandler : MessageHandlerBase
                     friendChat.UnReadMessageCount++;
             }
         });
+
+        if (!friendRelationDto.CantDisturb)
+        {
+            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                    cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                    {
+                        { "ChatData", chatData },
+                        { "Dto", friendRelationDto }
+                    }, null);
+                });
+            }
+
+            if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    {
+                        if (desktop.MainWindow != null)
+                        {
+                            var taskbarFlashHelper = scopedprovider.Resolve<ITaskbarFlashHelper>();
+                            taskbarFlashHelper.FlashWindow(desktop.MainWindow);
+                        }
+                    }
+                });
+            }
+        }
 
         if (friendChat != null && friendChat.IsSelected)
         {
@@ -160,7 +195,7 @@ internal class ChatMessageHandler : MessageHandlerBase
         GroupChatDto groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
         if (groupChat == null) return; // 提前返回，避免后续重复判断
 
-        _ = Dispatcher.UIThread.InvokeAsync(async () =>
+        await Dispatcher.UIThread.InvokeAsync(async () =>
         {
             // 确定插入位置
             if (groupChat.ChatMessages.Count > 0)
@@ -204,6 +239,37 @@ internal class ChatMessageHandler : MessageHandlerBase
                     FileTarget.Group);
             }
         });
+
+        if (!groupRelationDto.CantDisturb && !chatData.IsSystem)
+        {
+            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                    cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                    {
+                        { "ChatData", chatData },
+                        { "Dto", groupRelationDto }
+                    }, null);
+                });
+            }
+
+            if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    {
+                        if (desktop.MainWindow != null)
+                        {
+                            var taskbarFlashHelper = scopedprovider.Resolve<ITaskbarFlashHelper>();
+                            taskbarFlashHelper.FlashWindow(desktop.MainWindow);
+                        }
+                    }
+                });
+            }
+        }
 
         await Task.Delay(50);
 

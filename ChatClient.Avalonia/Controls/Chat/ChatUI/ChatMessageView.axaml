@@ -7,7 +7,6 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
-             xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
              xmlns:chatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.ChatUI.ChatMessageView">

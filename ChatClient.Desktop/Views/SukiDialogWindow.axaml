@@ -5,6 +5,9 @@
                  x:Class="ChatClient.Desktop.Views.SukiDialogWindow"
                  TitleBarAnimationEnabled="False"
                  WindowStartupLocation="CenterOwner"
+                 Width="160"
+                 Height="100"
+                 Icon="/Assets/Icon.ico"
                  Title="SukiDialogWindow">
     <suki:SukiWindow.Transitions>
         <Transitions>

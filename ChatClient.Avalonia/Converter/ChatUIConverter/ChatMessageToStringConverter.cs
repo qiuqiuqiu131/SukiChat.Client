@@ -2,13 +2,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 using Avalonia.Data.Converters;
+using Avalonia.Markup.Xaml;
 using ChatClient.Tool.Data;
 using ChatServer.Common.Protobuf;
 using Microsoft.Extensions.Primitives;
 
 namespace ChatClient.Avalonia.Converter;
 
-public class ChatMessageToStringConverter : IValueConverter
+public class ChatMessageToStringConverter : MarkupExtension, IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -50,5 +51,10 @@ public class ChatMessageToStringConverter : IValueConverter
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         return null;
+    }
+
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return this;
     }
 }

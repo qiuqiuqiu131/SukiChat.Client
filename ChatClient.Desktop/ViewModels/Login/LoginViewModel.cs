@@ -6,10 +6,13 @@ using Avalonia.Notification;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;
+using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
@@ -197,6 +200,8 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToForgetView()
     {
+        var cornerDialogManager = _containerProvider.Resolve<ICornerDialogService>();
+        cornerDialogManager.Show(nameof(FriendChatMessageBoxView), new DialogParameters { }, null);
         NotificationManager.ShowMessage("请联系管理员重置密码", NotificationType.Information, TimeSpan.FromSeconds(1.5));
     }
 

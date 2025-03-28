@@ -1,11 +1,15 @@
 using System;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
 using Prism.Events;
 using SukiUI.Controls;
 
@@ -14,12 +18,14 @@ namespace ChatClient.Desktop.Views;
 public partial class MainWindowView : SukiWindow, IDisposable
 {
     private readonly IUserManager _userManager;
+    private TrayIcon? _trayIcon;
 
     public MainWindowView(IEventAggregator eventAggregator, IUserManager userManager)
     {
         _userManager = userManager;
         InitializeComponent();
 
+        // Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
         eventAggregator.GetEvent<DialogShowEvent>().Subscribe(async show =>
         {
             if (show)
@@ -37,42 +43,10 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
         eventAggregator.GetEvent<UserMessageBoxShowEvent>().Subscribe(ShowUserMessageBox);
         eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Subscribe(ShowGroupMessageBox);
-
-        // #region TrayIcon
-        //
-        // var trayIcon = new TrayIcon
-        // {
-        //     Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico"),
-        //     ToolTipText = "Suki Chat",
-        //     Menu = new NativeMenu
-        //     {
-        //         Items =
-        //         {
-        //             new NativeMenuItem
-        //             {
-        //                 Header = "Show",
-        //                 Command = new DelegateCommand(() =>
-        //                 {
-        //                     Show();
-        //                     WindowState = WindowState.Normal;
-        //                 })
-        //             },
-        //             new NativeMenuItem
-        //             {
-        //                 Header = "Exit",
-        //                 Command = new DelegateCommand(() =>
-        //                 {
-        //                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime
-        //                         desktop)
-        //                         desktop.Shutdown();
-        //                 })
-        //             }
-        //         }
-        //     }
-        // };
-        //
-        // #endregion
+        eventAggregator.GetEvent<ShowWindowEvent>().Subscribe(ShowWindow);
     }
+
+    #region Message Box
 
     /// <summary>
     /// 显示群组消息弹窗
@@ -157,11 +131,101 @@ public partial class MainWindowView : SukiWindow, IDisposable
         });
     }
 
+    #endregion
+
+    protected override void OnOpened(EventArgs e)
+    {
+        base.OnOpened(e);
+        ShowTrayIcon();
+    }
+
+    protected override void OnClosed(EventArgs e)
+    {
+        base.OnClosed(e);
+        HideTrayIcon();
+    }
+
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        // WindowState = WindowState.Minimized;
-        // Hide();
-        Close();
+        WindowState = WindowState.Minimized;
+        Hide();
+        _userManager.WindowState = MainWindowState.Close;
+        // 显示trayIcon
+        // Close();
+    }
+
+    #region Tray Icon
+
+    private void ShowTrayIcon()
+    {
+        // 避免重复创建
+        if (_trayIcon != null)
+            return;
+
+        _trayIcon = new TrayIcon
+        {
+            Icon = Icon,
+            ToolTipText = "Suki Chat",
+            IsVisible = true,
+            Menu = new NativeMenu
+            {
+                Items =
+                {
+                    new NativeMenuItem
+                    {
+                        Header = "显示窗口",
+                        Command = new DelegateCommand(ShowWindow)
+                    },
+                    new NativeMenuItem
+                    {
+                        Header = "退出",
+                        Command = new DelegateCommand(() =>
+                        {
+                            if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime
+                                desktop)
+                                desktop.Shutdown();
+                        })
+                    }
+                }
+            }
+        };
+    }
+
+    private void HideTrayIcon()
+    {
+        if (_trayIcon != null)
+        {
+            _trayIcon.Dispose();
+            _trayIcon = null;
+        }
+    }
+
+    #endregion
+
+    private void ShowWindow()
+    {
+        if (_userManager.WindowState == MainWindowState.Show) return;
+
+        Show();
+        WindowState = WindowState.Normal;
+
+        Focus();
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == Window.WindowStateProperty)
+        {
+            if (WindowState == WindowState.Minimized)
+                _userManager.WindowState = MainWindowState.Hide;
+        }
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        _userManager.WindowState = MainWindowState.Show;
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -198,6 +262,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
             {
                 if (DataContext is IDisposable disposable)
                     disposable.Dispose();
+                HideTrayIcon();
             }
 
             // 释放非托管资源（如果有的话）
