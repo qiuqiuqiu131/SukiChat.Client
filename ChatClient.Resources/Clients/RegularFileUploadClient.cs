@@ -13,8 +13,6 @@ public class RegularFileUploadClient : IFileClient
     private readonly WeakReference<IChannel> _channel;
     private TaskCompletionSource<FileResponse>? taskCompletionSourceOfFileResponse;
 
-    private FileProcessDto? _fileProcessDto;
-
     private string? _fileName;
 
     public MemoryStream? _fileStream;
@@ -36,14 +34,10 @@ public class RegularFileUploadClient : IFileClient
     /// 1、连接超时会抛出ConnectTimeoutException
     /// 2、连接对象未初始化会抛出NullReferenceException
     /// </summary>
-    public async Task<FileResponse?> UploadFile(string targetPath, string fileName, byte[] file,
-        FileProcessDto? fileProcessDto = null)
+    public async Task<FileResponse?> UploadFile(string targetPath, string fileName, byte[] file)
     {
         if (!_channel.TryGetTarget(out IChannel? channel))
             throw new NullReferenceException();
-
-        // 存储文件下载进度
-        _fileProcessDto = fileProcessDto;
 
         // 生成Stream流
         _fileStream = new MemoryStream(file);
@@ -86,10 +80,6 @@ public class RegularFileUploadClient : IFileClient
             Console.WriteLine("服务器文件接受失败");
             return;
         }
-
-        // 更新上传进度
-        if (_fileProcessDto != null)
-            _fileProcessDto.CurrentSize += response.PackSize;
 
         if (response.PackIndex == _totelCount) return;
 
@@ -157,7 +147,6 @@ public class RegularFileUploadClient : IFileClient
             _fileStream = null;
         }
 
-        _fileProcessDto = null;
         _fileName = null;
     }
 }

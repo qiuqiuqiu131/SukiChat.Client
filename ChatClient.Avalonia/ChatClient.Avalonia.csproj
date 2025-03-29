@@ -28,7 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Controls\Chat\"/>
         <Folder Include="Controls\FreindGroup\"/>
         <Folder Include="Controls\MultiFriendGroup\"/>
     </ItemGroup>

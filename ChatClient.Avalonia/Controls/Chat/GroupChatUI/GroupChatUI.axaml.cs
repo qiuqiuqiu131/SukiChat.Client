@@ -6,7 +6,9 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
@@ -14,18 +16,24 @@ using Avalonia.Styling;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Tools;
+using Material.Icons;
+using Material.Icons.Avalonia;
 
 namespace ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 
 public partial class GroupChatUI : UserControl
 {
+    private ContextMenu? _contextMenu;
+
     public GroupChatUI()
     {
         InitializeComponent();
     }
 
+    #region ScrollField
+
     private ScrollViewer ChatScroll;
-    private ItemsControl ChatList;
     private Control Content;
 
     private bool isMovingToBottom = false;
@@ -69,13 +77,15 @@ public partial class GroupChatUI : UserControl
         }
     }
 
+    #endregion
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
         ChatScroll = e.NameScope.Get<ScrollViewer>("ChatScrollViewer");
         ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
-        ChatList = e.NameScope.Get<ItemsControl>("IC");
+        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, CurrentPosY); };
         Content = e.NameScope.Get<Control>("Content");
         Content.PropertyChanged += ContentOnPropertyChanged;
 
@@ -124,6 +134,19 @@ public partial class GroupChatUI : UserControl
     {
         get => GetValue(SearchMoreCommandProperty);
         set => SetValue(SearchMoreCommandProperty, value);
+    }
+
+    #endregion
+
+    #region NotificationEvent
+
+    public static readonly RoutedEvent<NotificationMessageEventArgs> NotificationEvent =
+        RoutedEvent.Register<GroupChatUI, NotificationMessageEventArgs>(nameof(Notification), RoutingStrategies.Bubble);
+
+    public event EventHandler<NotificationMessageEventArgs> Notification
+    {
+        add => AddHandler(NotificationEvent, value);
+        remove => RemoveHandler(NotificationEvent, value);
     }
 
     #endregion
@@ -185,6 +208,15 @@ public partial class GroupChatUI : UserControl
     {
         get => GetValue(FileMessageClickCommandProperty);
         set => SetValue(FileMessageClickCommandProperty, value);
+    }
+
+    public static readonly StyledProperty<ICommand> FileRestoreCommandProperty =
+        AvaloniaProperty.Register<ChatMessageView, ICommand>(nameof(FileRestoreCommand));
+
+    public ICommand FileRestoreCommand
+    {
+        get => GetValue(FileRestoreCommandProperty);
+        set => SetValue(FileRestoreCommandProperty, value);
     }
 
     #endregion
@@ -321,11 +353,9 @@ public partial class GroupChatUI : UserControl
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
-            if (ChatScroll != null)
-            {
-                ChatScroll.ScrollToEnd();
-                CurrentPosY = ChatScroll.Offset.Y;
-            }
+            ChatScroll.UpdateLayout();
+            ChatScroll.ScrollToEnd();
+            CurrentPosY = ChatScroll.Offset.Y;
         }, DispatcherPriority.Render);
     }
 
@@ -454,6 +484,165 @@ public partial class GroupChatUI : UserControl
                 }
             }
         }
+    }
+
+    // 消息被点击
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control && control.DataContext is ChatData chatData &&
+            e.GetCurrentPoint(control).Properties.IsRightButtonPressed)
+        {
+            // 如果点击了右键
+            if (_contextMenu != null)
+            {
+                _contextMenu.Close();
+                _contextMenu = null;
+            }
+
+            _contextMenu = CreateMenu(chatData);
+            _contextMenu.Placement = PlacementMode.Pointer;
+            // 获取鼠标位置
+            var position = e.GetPosition(this);
+            if (position.X > Bounds.Width / 2)
+                _contextMenu.PlacementAnchor = PopupAnchor.TopRight;
+            else
+                _contextMenu.PlacementAnchor = PopupAnchor.TopLeft;
+
+            _contextMenu.Open(this);
+        }
+    }
+
+    private ContextMenu? CreateMenu(ChatData chatData)
+    {
+        if (chatData.ChatMessages.Count != 1) return null;
+        ContextMenu contextMenu = new ContextMenu();
+        if (chatData.ChatMessages[0].Content is TextMessDto textMessDto)
+        {
+            var item1 = new MenuItem { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
+            item1.Click += (s, e) =>
+            {
+                var topLevel = TopLevel.GetTopLevel(this);
+                topLevel?.Clipboard?.SetTextAsync(textMessDto.Text);
+                RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "已复制到剪贴板",
+                    NotificationType.Information));
+            };
+            contextMenu.Items.Add(item1);
+        }
+        else if (chatData.ChatMessages[0].Content is ImageMessDto imageMessDto && imageMessDto.ImageSource is not null)
+        {
+            var item1 = new MenuItem { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
+            item1.Click += (s, e) =>
+            {
+                var topLevel = TopLevel.GetTopLevel(this);
+                var dataObject = new DataObject();
+                dataObject.Set(DataFormats.Files, imageMessDto.ImageSource);
+                topLevel?.Clipboard?.SetDataObjectAsync(dataObject);
+                RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片已复制到剪贴板",
+                    NotificationType.Information));
+            };
+            contextMenu.Items.Add(item1);
+
+            var item2 = new MenuItem
+                { Header = "打开图片", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
+            item2.Click += (s, e) => { ImageTool.OpenImageInSystemViewer(imageMessDto.ImageSource); };
+            contextMenu.Items.Add(item2);
+
+            var item3 = new MenuItem
+                { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
+            item3.Click += (s, e) =>
+            {
+                if (!string.IsNullOrEmpty(imageMessDto.ActualPath) && System.IO.File.Exists(imageMessDto.ActualPath))
+                {
+                    var argument = $"/select,\"{imageMessDto.ActualPath}\"";
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                    {
+                        UseShellExecute = true
+                    });
+                }
+            };
+            contextMenu.Items.Add(item3);
+        }
+        else if (chatData.ChatMessages[0].Content is FileMessDto fileMessDto)
+        {
+            if (fileMessDto.IsSuccess)
+            {
+                var item1 = new MenuItem
+                    { Header = "打开文件", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
+                item1.Click += (s, e) =>
+                {
+                    if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
+                        System.IO.File.Exists(fileMessDto.TargetFilePath))
+                    {
+                        var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
+                        System.Diagnostics.Process.Start(
+                            new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                            {
+                                UseShellExecute = true
+                            });
+                    }
+                    else
+                        fileMessDto.IsSuccess = false;
+                };
+                contextMenu.Items.Add(item1);
+
+                var item2 = new MenuItem
+                    { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
+                item2.Click += (s, e) =>
+                {
+                    if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
+                        System.IO.File.Exists(fileMessDto.TargetFilePath))
+                    {
+                        var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
+                        System.Diagnostics.Process.Start(
+                            new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                            {
+                                UseShellExecute = true
+                            });
+                    }
+                    else
+                        fileMessDto.IsSuccess = false;
+                };
+                contextMenu.Items.Add(item2);
+            }
+            else if (fileMessDto.IsExit)
+            {
+                var item1 = new MenuItem
+                    { Header = "下载", Icon = new MaterialIcon { Kind = MaterialIconKind.DownloadOutline } };
+                item1.Click += (s, e) => FileMessageClickCommand.Execute(fileMessDto);
+                contextMenu.Items.Add(item1);
+            }
+
+            if (fileMessDto.IsSuccess || fileMessDto.IsExit)
+            {
+                var item3 = new MenuItem
+                    { Header = "另存为", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentSaveMoveOutline } };
+                item3.Click += (s, e) => FileRestoreCommand.Execute(fileMessDto);
+                contextMenu.Items.Add(item3);
+            }
+        }
+
+        var comItem1 = new MenuItem
+            { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
+        contextMenu.Items.Add(comItem1);
+
+        var comItem2 = new MenuItem
+            { Header = "引用", Icon = new MaterialIcon { Kind = MaterialIconKind.CommentQuoteOutline } };
+        contextMenu.Items.Add(comItem2);
+
+        contextMenu.Items.Add(new Separator());
+
+        if (DateTime.Now - chatData.Time < TimeSpan.FromMinutes(2))
+        {
+            var comItem3 = new MenuItem
+                { Header = "撤回", Icon = new MaterialIcon { Kind = MaterialIconKind.UndoVariant } };
+            contextMenu.Items.Add(comItem3);
+        }
+
+        var comItem4 = new MenuItem
+            { Header = "删除", Icon = new MaterialIcon { Kind = MaterialIconKind.DeleteOutline } };
+        contextMenu.Items.Add(comItem4);
+
+        return contextMenu;
     }
 }
 

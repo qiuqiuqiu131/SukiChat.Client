@@ -57,6 +57,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
     public DelegateCommand SearchMoreCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public AsyncDelegateCommand<FileMessDto> FileRestoreCommand { get; private set; }
     public DelegateCommand QuitGroupCommand { get; private set; }
     public DelegateCommand DeleteGroupCommand { get; private set; }
 
@@ -78,6 +79,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
 
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
+        FileRestoreCommand = new AsyncDelegateCommand<FileMessDto>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         QuitGroupCommand = new DelegateCommand(QuitGroup);
         DeleteGroupCommand = new DelegateCommand(DeleteGroup);
@@ -147,13 +149,13 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         var chatDatas =
             await chatPackService.GetGroupChatDataAsync(_userManager.User?.Id, SelectedGroup.GroupId,
                 SelectedGroup.ChatMessages[0].ChatId,
-                15);
+                10);
 
         foreach (var chatData in chatDatas)
         {
             chatMessages.Insert(0, chatData);
             var duration = chatMessages[1].Time - chatData.Time;
-            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(5);
+            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(3);
         }
 
         // 将最后一条消息的时间显示出来
@@ -161,15 +163,72 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
             chatMessages[0].ShowTime = true;
 
         // 如果加载的消息不足15条，则说明没有更多消息了
-        if (chatDatas.Count() != 15)
+        if (chatDatas.Count() != 10)
             SelectedGroup.HasMoreMessage = false;
     }
+
+    #region DownloadFile
 
     /// <summary>
     /// 下载文件
     /// </summary>
     /// <param name="fileMess"></param>
     public async Task FileDownload(FileMessDto fileMess)
+    {
+        // 获取文件地址
+        // string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        // filePath = Path.Combine(filePath, "Downloads");
+
+        var appDataManager = _containerProvider.Resolve<IAppDataManager>();
+        var filePath = appDataManager
+            .GetFileInfo(Path.Combine("Groups", fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
+                "ChatFile", fileMess.FileName)).FullName;
+
+        if (string.IsNullOrWhiteSpace(filePath)) return;
+
+        // 记录另存文件路径
+        fileMess.TargetFilePath = filePath;
+
+        fileMess.IsDownloading = true;
+        var progress = new Progress<double>(d => fileMess.DownloadProgress = d);
+
+        // 开始下载文件
+        var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
+        var path = Path.Combine("Groups", fileMess.IsUser ? _userManager.User.Id : SelectedGroup!.GroupId, "ChatFile");
+        var result =
+            await fileIOHelper.DownloadLargeFileAsync(path, fileMess.FileName, filePath, progress);
+
+        // 记录文件下载完毕
+        fileMess.IsDownloading = false;
+        fileMess.IsSuccess = result;
+        fileMess.IsExit = result;
+
+        var chatService = _containerProvider.Resolve<IChatService>();
+        await chatService.UpdateFileMess(_userManager.User.Id, fileMess, FileTarget.Group);
+
+        if (result)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载成功",
+                Type = NotificationType.Success
+            });
+        }
+        else
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载失败",
+                Type = NotificationType.Error
+            });
+        }
+    }
+
+    /// <summary>
+    /// 另存文件
+    /// </summary>
+    /// <param name="fileMess"></param>
+    public async Task FileRestoreDownload(FileMessDto fileMess)
     {
         // 获取文件地址
         string filePath = "";
@@ -186,30 +245,32 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
-        // 记录另存文件路径
-        fileMess.TargetFilePath = filePath;
-        var chatService1 = _containerProvider.Resolve<IChatService>();
-        await chatService1.UpdateFileMess(fileMess);
-
-        fileMess.FileProcessDto = new FileProcessDto
-        {
-            CurrentSize = 0,
-            MaxSize = fileMess.FileSize
-        };
-
         // 开始下载文件
-        var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
-        var path = Path.Combine("Groups", SelectedGroup!.GroupId, "ChatFile");
+        var fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
         var result =
-            await fileIOHelper.DownloadLargeFileAsync(path, fileMess.FileName, filePath, fileMess.FileProcessDto);
+            await fileOperateHelper.SaveAsFile(fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
+                "ChatFile", fileMess.FileName, filePath,
+                FileTarget.Group);
 
-        fileMess.FileProcessDto = null;
-
-        // 记录文件下载完毕
-        fileMess.IsDownload = result;
-        var chatService2 = _containerProvider.Resolve<IChatService>();
-        await chatService2.UpdateFileMess(fileMess);
+        if (result)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载成功",
+                Type = NotificationType.Success
+            });
+        }
+        else
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载失败",
+                Type = NotificationType.Error
+            });
+        }
     }
+
+    #endregion
 
     #region SendChatMessage
 

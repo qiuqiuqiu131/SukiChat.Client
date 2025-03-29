@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Notification.Controls;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
@@ -68,5 +69,14 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
         _eventAggregator.GetEvent<UserMessageBoxShowEvent>().Publish(
             new UserMessageBoxShowArgs(((ChatFriendPanelViewModel)DataContext).SelectedFriend.FriendRelatoinDto.UserDto,
                 e) { BottomCheck = false, PlacementMode = PlacementMode.BottomEdgeAlignedLeft });
+    }
+
+    private void ChatUI_OnNotification(object? sender, NotificationMessageEventArgs e)
+    {
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = e.Message,
+            Type = e.Type
+        });
     }
 }

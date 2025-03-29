@@ -49,7 +49,7 @@ internal class UserService : BaseService, IUserService
     {
         if (User.HeadCount == 0)
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
             return bitmap;
         }
 
@@ -61,7 +61,7 @@ internal class UserService : BaseService, IUserService
             return file;
         else
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
             return bitmap;
         }
     }
@@ -70,7 +70,7 @@ internal class UserService : BaseService, IUserService
     {
         if (headIndex == -1)
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
             return bitmap;
         }
 

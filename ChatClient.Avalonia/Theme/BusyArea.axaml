@@ -1,0 +1,39 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="suki|BusyArea">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <ContentControl Name="BusyContent" Content="{TemplateBinding Content}" />
+                    <DockPanel Name="LoadingBusyArea"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               IsHitTestVisible="False"
+                               LastChildFill="True">
+                        <TextBlock Margin="3"
+                                   DockPanel.Dock="Bottom"
+                                   FontWeight="{DynamicResource DefaultDemiBold}"
+                                   IsVisible="{TemplateBinding BusyText,
+                                                                   Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                   Text="{TemplateBinding BusyText}" />
+
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          IsHitTestVisible="False"
+                                          Content="{TemplateBinding IsBusy, Converter={x:Static suki:ProgressToContentConverter.Instance}}">
+                        </ContentPresenter>
+
+
+                    </DockPanel>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

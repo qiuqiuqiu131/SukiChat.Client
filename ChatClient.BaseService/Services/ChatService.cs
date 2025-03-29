@@ -6,12 +6,12 @@ using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
+using File.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
@@ -20,10 +20,12 @@ public interface IChatService
 {
     Task<(bool, string)> SendChatMessage(string userId, string targetId, List<ChatMessageDto> messages);
     Task<(bool, string)> SendGroupChatMessage(string userId, string groupId, List<ChatMessageDto> messages);
-    Task OperateChatMessage(string id, int chatId, List<ChatMessageDto> chatMessages, FileTarget fileTarget);
+
+    Task OperateChatMessage(string userId, string id, int chatId, bool isUser, List<ChatMessageDto> chatMessages,
+        FileTarget fileTarget);
 
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
-    Task UpdateFileMess(FileMessDto messages);
+    Task UpdateFileMess(string userId, FileMessDto fileMess, FileTarget target);
     Task<bool> ReadAllChatMessage(string userId, string targetId, int chatId, FileTarget fileTarget);
     Task AddChatDto(object obj);
 }
@@ -32,17 +34,20 @@ internal class ChatService : BaseService, IChatService
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IAppDataManager _appDataManager;
     private readonly IMessageHelper _messageHelper;
     private readonly IImageManager _imageManager;
 
     public ChatService(IContainerProvider containerProvider,
         IMapper mapper,
+        IAppDataManager appDataManager,
         IMessageHelper messageHelper,
         IImageManager imageManager) : base(
         containerProvider)
     {
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
         _mapper = mapper;
+        _appDataManager = appDataManager;
         _messageHelper = messageHelper;
         _imageManager = imageManager;
     }
@@ -70,18 +75,26 @@ internal class ChatService : BaseService, IChatService
 
                 if (!state) return (false, message);
                 chatMessage.ImageMess.FilePath = message;
+                if (mess.Content is ImageMessDto imageMessDto)
+                    imageMessDto.ActualPath =
+                        _appDataManager.GetFilePath(Path.Combine("Users", userId, "ChatFile", message));
             }
             else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
             {
                 var fileMess = (FileMessDto)mess.Content;
-                var (state, message) = await UploadChatFile(userId, chatMessage.FileMess.FileName, FileTarget.User,
-                    fileMess.FileProcessDto);
+                fileMess.IsDownloading = true;
+                var progress = new Progress<double>(d => fileMess.DownloadProgress = d);
+                var (state, message) =
+                    await UploadChatFile(userId, chatMessage.FileMess.FileName, FileTarget.User, progress);
 
                 // 上传完成，取消下载状态
-                fileMess.FileProcessDto = null;
+                fileMess.IsDownloading = false;
+                fileMess.IsSuccess = state;
 
                 if (!state) return (false, message);
                 chatMessage.FileMess.FileName = message;
+                if (mess.Content is FileMessDto fileMessDto)
+                    fileMessDto.FileName = message;
             }
 
             chatMessages.Add(chatMessage);
@@ -146,15 +159,20 @@ internal class ChatService : BaseService, IChatService
 
                 if (!state) return (false, message);
                 chatMessage.ImageMess.FilePath = message;
+                if (mess.Content is ImageMessDto imageMessDto)
+                    imageMessDto.ActualPath =
+                        _appDataManager.GetFilePath(Path.Combine("Groups", groupId, "ChatFile", message));
             }
             else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
             {
                 var fileMess = (FileMessDto)mess.Content;
-                var (state, message) = await UploadChatFile(groupId, chatMessage.FileMess.FileName, FileTarget.Group,
-                    fileMess.FileProcessDto);
+                fileMess.IsDownloading = true;
+                var progress = new Progress<double>(d => fileMess.DownloadProgress = d);
+                var (state, message) =
+                    await UploadChatFile(groupId, chatMessage.FileMess.FileName, FileTarget.Group, progress);
 
-                // 上传完成，取消下载状态
-                fileMess.FileProcessDto = null;
+                fileMess.IsDownloading = false;
+                fileMess.IsSuccess = state;
 
                 if (!state) return (false, message);
                 chatMessage.FileMess.FileName = message;
@@ -256,7 +274,7 @@ internal class ChatService : BaseService, IChatService
     /// <param name="fileProcessDto"></param>
     /// <returns></returns>
     private async Task<(bool, string)> UploadChatFile(string Id, string filePath, FileTarget fileTarget,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         if (!System.IO.File.Exists(filePath)) return (false, "File not found");
 
@@ -270,7 +288,7 @@ internal class ChatService : BaseService, IChatService
         var path = Path.Combine(basePath, Id, "ChatFile");
 
         var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(filePath)}";
-        var result = await _fileIOHelper.UploadLargeFileAsync(path, fileName, filePath, fileProcessDto);
+        var result = await _fileIOHelper.UploadLargeFileAsync(path, fileName, filePath, fileProgress);
 
         if (result)
             return (true, fileName);
@@ -283,29 +301,41 @@ internal class ChatService : BaseService, IChatService
     /// 用于更新文件下载状态,数据库中更改
     /// </summary>
     /// <param name="fileMess"></param>
-    public async Task UpdateFileMess(FileMessDto fileMess)
+    public async Task UpdateFileMess(string userId, FileMessDto fileMess, FileTarget target)
     {
-        int chatId = fileMess.ChatId;
-        var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        var chatPrivate = await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.ChatId.Equals(chatId));
-
-        if (chatPrivate == null) return;
-
-        // 拼接消息
-        List<ChatMessageDto> messages =
-        [
-            new ChatMessageDto
+        if (target == FileTarget.User)
+        {
+            var chatPrivateFile = new ChatPrivateFile
             {
-                Type = ChatMessage.ContentOneofCase.FileMess,
-                Content = fileMess
-            }
-        ];
+                ChatId = fileMess.ChatId,
+                TargetPath = fileMess.TargetFilePath,
+                UserId = userId
+            };
+            var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivateFile>();
+            var chatPrivate = await chatPrivateRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.ChatId.Equals(fileMess.ChatId) && d.UserId.Equals(userId), disableTracking: false);
+            if (chatPrivate != null)
+                chatPrivate.TargetPath = fileMess.TargetFilePath;
+            else
+                await chatPrivateRepository.InsertAsync(chatPrivateFile);
+        }
+        else
+        {
+            var chatGroupFile = new ChatGroupFile
+            {
+                ChatId = fileMess.ChatId,
+                TargetPath = fileMess.TargetFilePath,
+                UserId = userId
+            };
+            var chatGroupRepository = _unitOfWork.GetRepository<ChatGroupFile>();
+            var chatGroup = await chatGroupRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.ChatId.Equals(fileMess.ChatId) && d.UserId.Equals(userId), disableTracking: false);
+            if (chatGroup != null)
+                chatGroup.TargetPath = fileMess.TargetFilePath;
+            else
+                await chatGroupRepository.InsertAsync(chatGroupFile);
+        }
 
-        string mess = ChatMessageTool.EncruptChatMessageDto(messages);
-        chatPrivate.Message = mess;
-
-        chatPrivateRepository.Update(chatPrivate);
         await _unitOfWork.SaveChangesAsync();
     }
 
@@ -396,8 +426,8 @@ internal class ChatService : BaseService, IChatService
     /// <param name="chatId"></param>
     /// <param name="chatMessages"></param>
     /// <param name="fileTarget"></param>
-    public async Task OperateChatMessage(string id,
-        int chatId,
+    public async Task OperateChatMessage(string userId, string id,
+        int chatId, bool isUser,
         List<ChatMessageDto> chatMessages, FileTarget fileTarget)
     {
         foreach (var chatMessage in chatMessages)
@@ -405,6 +435,15 @@ internal class ChatService : BaseService, IChatService
             if (chatMessage.Type == ChatMessage.ContentOneofCase.ImageMess)
             {
                 var messContent = (ImageMessDto)chatMessage.Content;
+                var basePath = fileTarget switch
+                {
+                    FileTarget.Group => "Groups",
+                    FileTarget.User => "Users"
+                };
+                var actualPath = Path.Combine(basePath, id, "ChatFile", messContent.FilePath);
+                messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
+
+                // 获取文件
                 string filename = messContent.FilePath;
                 var content = await _imageManager.GetFile(
                     id, "ChatFile", filename, fileTarget);
@@ -412,30 +451,18 @@ internal class ChatService : BaseService, IChatService
                     messContent.ImageSource = content;
                 else
                 {
-                    //TODO:图片失效处理
+                    messContent.Failed = true;
+                    messContent.ImageSource = null;
                 }
             }
             else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)
             {
                 var messContent = (FileMessDto)chatMessage.Content;
                 messContent.ChatId = chatId;
-                if (string.IsNullOrWhiteSpace(messContent.TargetFilePath)) return;
-                FileInfo fileInfo = new FileInfo(messContent.TargetFilePath);
-                if (fileInfo.Exists && fileInfo.Length == messContent.FileSize)
-                    messContent.IsDownload = true;
-                else
-                {
-                    if (fileInfo.Exists)
-                    {
-                        FileProcessDto fileProcessDto = new FileProcessDto
-                        {
-                            FileName = messContent.FileName,
-                            CurrentSize = fileInfo.Length,
-                            MaxSize = messContent.FileSize
-                        };
-                        messContent.FileProcessDto = fileProcessDto;
-                    }
-                }
+                messContent.IsUser = isUser;
+
+                var fileManager = _scopedProvider.Resolve<IFileManager>();
+                await fileManager.OperateFileMessDto(id, userId, messContent, fileTarget);
             }
         }
     }

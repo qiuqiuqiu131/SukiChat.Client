@@ -13,6 +13,7 @@ using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
@@ -160,11 +161,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
                 FileName = filePath,
                 FileSize = (int)fileInfo.Length,
                 FileType = fileInfo.Extension,
-                FileProcessDto = new FileProcessDto
-                {
-                    CurrentSize = 0,
-                    MaxSize = fileInfo.Length
-                }
+                IsUser = true
             };
             sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
         }

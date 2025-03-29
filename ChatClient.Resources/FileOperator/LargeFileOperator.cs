@@ -10,6 +10,8 @@ public class LargeFileOperator : IDisposable
 {
     private readonly string _filePath;
     private readonly string _fileName;
+    private readonly IProgress<double> _fileProgress;
+
     private readonly int _bufferSize = 65536; // 64KB，与服务器分片大小匹配
     private readonly int _flushThreshold = 4194304; // 4MB，约64个分片后刷新
     private long _bytesWrittenSinceFlush = 0;
@@ -21,10 +23,11 @@ public class LargeFileOperator : IDisposable
 
     public event Action<bool>? OnFileDownloadFinished;
 
-    public LargeFileOperator(string filePath, string fileName)
+    public LargeFileOperator(string filePath, string fileName, IProgress<double> fileProgress)
     {
         _filePath = filePath;
         _fileName = fileName;
+        _fileProgress = fileProgress;
         _disposed = false;
     }
 
@@ -98,6 +101,7 @@ public class LargeFileOperator : IDisposable
             }
 
             _fileUnit.CurrentIndex = filePack.PackIndex;
+            _fileProgress.Report((double)_fileUnit.CurrentIndex / _fileUnit!.TotleCount);
 
             if (_bufferedStream != null)
             {

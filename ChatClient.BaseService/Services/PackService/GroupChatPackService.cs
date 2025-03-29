@@ -65,7 +65,8 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
-        _ = chatService.OperateChatMessage(groupChat.GroupId, groupChatData.ChatId, groupChatData.ChatMessages,
+        _ = chatService.OperateChatMessage(userId, groupChat.GroupId, groupChatData.ChatId, groupChatData.IsUser,
+            groupChatData.ChatMessages,
             FileTarget.Group);
 
         groupChatDto.ChatMessages.Add(groupChatData);
@@ -128,7 +129,7 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
                     .ConfigureAwait(false);
             }
 
-            _ = chatService.OperateChatMessage(groupChat.GroupId, data.ChatId, data.ChatMessages,
+            _ = chatService.OperateChatMessage(userId, groupChat.GroupId, data.ChatId, data.IsUser, data.ChatMessages,
                 FileTarget.Group).ConfigureAwait(false);
             groupChatDatas.Add(data);
         }

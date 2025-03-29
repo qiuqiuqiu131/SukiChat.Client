@@ -15,26 +15,20 @@ public class LargeFileDownloadClient : IFileClient
 
     private LargeFileOperator? _largeFileOperator;
 
-    // 用于记录当前文件上传下载的信息
-    private FileProcessDto? _fileProcessDto;
-
     public LargeFileDownloadClient(IChannel channel)
     {
         _channel = new WeakReference<IChannel>(channel);
     }
 
-    public async Task<bool> RequestFile(FileRequest message, string filePath, FileProcessDto? fileProcessDto = null)
+    public async Task<bool> RequestFile(FileRequest message, string filePath, IProgress<double> fileProgress)
     {
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
 
         try
         {
-            // 存储文件下载进度
-            _fileProcessDto = fileProcessDto;
-
             // 创建大文件处理器
-            _largeFileOperator = new LargeFileOperator(filePath, message.FileName);
+            _largeFileOperator = new LargeFileOperator(filePath, message.FileName, fileProgress);
             _largeFileOperator.OnFileDownloadFinished += OnFileDownloadFinished;
 
             // 添加channel管道的handler
@@ -43,37 +37,32 @@ public class LargeFileDownloadClient : IFileClient
             // 等待文件接受完毕或者出错
             taskCompletionSourceOfFileUnit = new TaskCompletionSource<bool>();
 
-            // 写入文件请求
-            await channel.WriteAndFlushProtobufAsync(message);
-
             // 使用超时保护
             using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20))) // 大文件可能需要更长时间
             {
-                var timeoutTask = Task.Delay(TimeSpan.FromSeconds(20), cts.Token);
-                var completedTask = await Task.WhenAny(taskCompletionSourceOfFileUnit.Task, timeoutTask);
-
-                if (completedTask == timeoutTask)
+                // 注册取消回调
+                cts.Token.Register(() =>
                 {
+                    taskCompletionSourceOfFileUnit?.TrySetCanceled();
                     Clear();
-                    throw new TimeoutException("大文件下载超时");
-                }
+                });
 
-                // 结束文件下载进度
-                if (_fileProcessDto != null)
-                    _fileProcessDto.CurrentSize = _fileProcessDto.MaxSize;
+                // 写入文件请求
+                await channel.WriteAndFlushProtobufAsync(message);
 
-                // 获取结果
-                return taskCompletionSourceOfFileUnit.Task.Result;
+
+                await taskCompletionSourceOfFileUnit.Task;
+
+                if (taskCompletionSourceOfFileUnit.Task.IsCanceled)
+                    return false;
+                else
+                    return taskCompletionSourceOfFileUnit.Task.Result;
             }
         }
         catch (Exception)
         {
             Clear();
             throw;
-        }
-        finally
-        {
-            _fileProcessDto = null;
         }
     }
 
@@ -94,20 +83,17 @@ public class LargeFileDownloadClient : IFileClient
     public async void OnFileHeaderReceived(FileHeader fileHeader)
     {
         var result = _largeFileOperator?.ReceiveFileHeader(fileHeader);
-        if (result ?? false)
+        // 开始读取文件
+        FilePackResponse response = new FilePackResponse
         {
-            // 开始读取文件
-            FilePackResponse response = new FilePackResponse
-            {
-                Success = true,
-                FileName = fileHeader.FileName,
-                PackIndex = 0,
-                Time = fileHeader.Time,
-                PackSize = 0
-            };
-            if (_channel.TryGetTarget(out var channel))
-                await channel.WriteAndFlushProtobufAsync(response);
-        }
+            Success = result ?? false,
+            FileName = fileHeader.FileName,
+            PackIndex = 0,
+            Time = fileHeader.Time,
+            PackSize = 0
+        };
+        if (_channel.TryGetTarget(out var channel))
+            await channel.WriteAndFlushProtobufAsync(response);
     }
 
     /// <summary>
@@ -125,8 +111,6 @@ public class LargeFileDownloadClient : IFileClient
             Time = filePack.Time,
             PackSize = filePack.PackSize
         };
-        if ((result ?? false) && _fileProcessDto != null)
-            _fileProcessDto.CurrentSize += filePack.PackSize;
 
         // 发送文件分片响应
         if (_channel.TryGetTarget(out var channel))
@@ -153,8 +137,6 @@ public class LargeFileDownloadClient : IFileClient
             _largeFileOperator.Clear();
             _largeFileOperator = null;
         }
-
-        _fileProcessDto = null;
 
         // 确保未完成任务被取消
         if (taskCompletionSourceOfFileUnit != null && !taskCompletionSourceOfFileUnit.Task.IsCompleted)

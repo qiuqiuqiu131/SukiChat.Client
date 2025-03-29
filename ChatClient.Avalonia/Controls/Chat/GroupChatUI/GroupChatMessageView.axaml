@@ -3,13 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
+             xmlns:chatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
-             xmlns:chatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="ChatClient.Avalonia.Controls.Chat.ChatUI.ChatMessageView">
+             x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:TextMessDto">
             <SelectableTextBlock Text="{Binding Text}"
@@ -96,9 +96,9 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Bottom" Margin="0,0,0,3" Height="16">
                         <ProgressBar Width="100"
+                                     VerticalAlignment="Center"
                                      Margin="0,0,0,0"
                                      IsVisible="{Binding IsDownloading}"
-                                     VerticalAlignment="Center"
                                      Maximum="1"
                                      ShowProgressText="True"
                                      FontSize="12"
@@ -144,6 +144,7 @@
                             <Border Width="38"
                                     Height="42"
                                     Cursor="Hand"
+                                    IsHitTestVisible="{Binding IsSuccess}"
                                     Background="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
                                     CornerRadius="5">
                                 <Interaction.Behaviors>
@@ -155,18 +156,18 @@
                                     HorizontalAlignment="Center"
                                     Margin="2,0,0,0"
                                     Foreground="White"
-                                    Height="33"
-                                    Width="33"
+                                    Height="35"
+                                    Width="35"
                                     Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
                             </Border>
                             <Border Width="38" Height="42" CornerRadius="5"
-                                    Cursor="Hand"
                                     IsVisible="{Binding !IsSuccess}"
+                                    Cursor="Hand"
                                     Background="#66000000">
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="PointerPressed">
                                         <InvokeCommandAction
-                                            Command="{Binding $parent[chatUi1:ChatUI].FileMessageClickCommand}"
+                                            Command="{Binding $parent[chatUi1:GroupChatUI].FileMessageClickCommand}"
                                             CommandParameter="{Binding}">
                                         </InvokeCommandAction>
                                     </EventTriggerBehavior>
@@ -193,7 +194,7 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
 
-        <Style Selector="chatUi1|ChatMessageView">
+        <Style Selector="chatUi1|GroupChatMessageView">
             <Setter Property="Template">
                 <ControlTemplate>
                     <Grid>
@@ -204,7 +205,7 @@
                                 HorizontalAlignment="Left"
                                 Content="{TemplateBinding Message}" />
                         </Border>
-                        <Border IsVisible="{Binding !$parent[chatUi1:ChatMessageView].IsLeft}"
+                        <Border IsVisible="{Binding !$parent[chatUi1:GroupChatMessageView].IsLeft}"
                                 Padding="0"
                                 HorizontalAlignment="Right">
                             <ContentControl

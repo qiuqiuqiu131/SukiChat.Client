@@ -23,11 +23,13 @@ public static class DataBaseExtensions
         containerRegistry.AddCustomRepository<FriendRelation, FriendRelationRepository>();
         containerRegistry.AddCustomRepository<FriendRequest, FriendRequestRepository>();
         containerRegistry.AddCustomRepository<FriendDelete, FriendDeleteRepository>();
+        containerRegistry.AddCustomRepository<ChatPrivateFile, ChatPrivateFileRepository>();
 
         containerRegistry.AddCustomRepository<Group, GroupRepository>();
         containerRegistry.AddCustomRepository<GroupRequest, GroupRequestRepository>();
         containerRegistry.AddCustomRepository<GroupRelation, GroupRelationRepository>();
         containerRegistry.AddCustomRepository<ChatGroup, ChatGroupRepository>();
         containerRegistry.AddCustomRepository<GroupDelete, GroupDeleteRepository>();
+        containerRegistry.AddCustomRepository<ChatGroupFile, ChatGroupFileRepository>();
     }
 }

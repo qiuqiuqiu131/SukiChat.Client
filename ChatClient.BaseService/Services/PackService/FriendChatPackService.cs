@@ -65,7 +65,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         // 生成ChatData（单条聊天消息，数组，包含文字图片等）
         var chatData = mapper.Map<ChatData>(friendChat);
         chatData.IsUser = friendChat.UserFromId.Equals(userId);
-        _ = chatService.OperateChatMessage(friendChat.UserFromId, chatData.ChatId, chatData.ChatMessages,
+        _ = chatService.OperateChatMessage(userId, friendChat.UserFromId, chatData.ChatId, chatData.IsUser,
+            chatData.ChatMessages,
             FileTarget.User);
 
         friendChatDto.ChatMessages.Add(chatData);
@@ -127,7 +128,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         {
             var data = mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
-            _ = chatService.OperateChatMessage(chatPrivate.UserFromId, data.ChatId, data.ChatMessages,
+            _ = chatService.OperateChatMessage(userId, chatPrivate.UserFromId, data.ChatId, data.IsUser,
+                data.ChatMessages,
                 FileTarget.User).ConfigureAwait(false);
             chatDatas.Add(data);
         }

@@ -13,9 +13,9 @@ public class LargeFileUploadClient : IFileClient
     private readonly WeakReference<IChannel> _channel;
     private TaskCompletionSource<FileResponse>? taskCompletionSourceOfFileResponse;
 
-    private FileProcessDto? _fileProcessDto;
-
     private string? _fileName;
+
+    private IProgress<double>? _fileProgress;
 
     // 文件流
     private FileStream? _fileStream;
@@ -40,19 +40,17 @@ public class LargeFileUploadClient : IFileClient
     /// <param name="file">大文件地址</param>
     /// <exception cref="NullReferenceException"></exception>
     public async Task UploadFile(string targetPath, string fileName, string filePath,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         if (!_channel.TryGetTarget(out IChannel? channel))
             throw new NullReferenceException();
-
-        // 存储文件下载进度
-        _fileProcessDto = fileProcessDto;
 
         // 打开文件
         _fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
         var fileInfo = new FileInfo(filePath);
 
         _fileName = fileName;
+        _fileProgress = fileProgress;
 
         // 初始化本地文件读取
         buffer = new byte[CHUNK_SIZE];
@@ -91,8 +89,7 @@ public class LargeFileUploadClient : IFileClient
         }
 
         // 上传完成，更新文件上传进度
-        if (_fileProcessDto != null)
-            _fileProcessDto.CurrentSize += response.PackSize;
+        _fileProgress?.Report((double)_packIndex / _totelCount);
 
         if (response.PackIndex == _totelCount) return;
 
@@ -164,7 +161,7 @@ public class LargeFileUploadClient : IFileClient
             _fileStream = null;
         }
 
-        _fileProcessDto = null;
+        _fileProgress = null;
         _fileName = null;
         buffer = null;
 

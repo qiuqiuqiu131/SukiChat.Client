@@ -20,12 +20,9 @@ namespace ChatClient.Resources.Clients;
 public class RegularFileDownloadClient : IFileClient
 {
     private readonly WeakReference<IChannel> _channel;
-    private TaskCompletionSource<FileUnit>? taskCompletionSourceOfFileUnit;
+    private TaskCompletionSource<FileUnit?>? taskCompletionSourceOfFileUnit;
 
     private RegularFileOperator _regularFileOperator;
-
-    // 用于记录当前文件上传下载的信息
-    private FileProcessDto? _fileProcessDto;
 
     public RegularFileDownloadClient(IChannel channel)
     {
@@ -42,27 +39,24 @@ public class RegularFileDownloadClient : IFileClient
     /// </summary>
     /// <param name="message">可传入不同的文件请求消息</param>
     /// <param name="fileProcessDto">可传入FileProcessDto，用于记录文件下载进度</param>
-    public async Task<FileUnit> RequestFile(FileRequest message, FileProcessDto? fileProcessDto = null)
+    public async Task<FileUnit?> RequestFile(FileRequest message, IProgress<double>? fileProgress)
     {
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
 
         try
         {
-            // 存储文件下载进度
-            _fileProcessDto = fileProcessDto;
-
             // 创建文件处理器
-            _regularFileOperator = new RegularFileOperator(message.FileName);
+            _regularFileOperator = new RegularFileOperator(message.FileName, fileProgress);
             _regularFileOperator.OnFileDownloadFinished += OnFileDownloadFinished;
 
             // 添加channel管道的handler
             channel.Pipeline.AddLast(new RegularFileDownloadServerHandler(this));
 
             // 等待文件接受完毕或者出错
-            taskCompletionSourceOfFileUnit = new TaskCompletionSource<FileUnit>();
+            taskCompletionSourceOfFileUnit = new TaskCompletionSource<FileUnit?>();
 
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(100)))
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(20)))
             {
                 // 注册取消回调
                 cts.Token.Register(() =>
@@ -74,29 +68,16 @@ public class RegularFileDownloadClient : IFileClient
                 // 写入文件请求
                 await channel.WriteAndFlushProtobufAsync(message);
 
-                // 等待完成或取消
-                var result = await taskCompletionSourceOfFileUnit.Task;
-
-                // 更新进度
-                if (_fileProcessDto != null)
-                    _fileProcessDto.CurrentSize = _fileProcessDto.MaxSize;
-
-                return result;
+                if (taskCompletionSourceOfFileUnit.Task.IsCanceled)
+                    return null;
+                else
+                    return taskCompletionSourceOfFileUnit.Task.Result;
             }
-        }
-        catch (TimeoutException)
-        {
-            Clear();
-            throw new TimeoutException("获取文件请求超时（100秒）");
         }
         catch (Exception ex)
         {
             Clear();
             throw;
-        }
-        finally
-        {
-            _fileProcessDto = null;
         }
     }
 
@@ -104,9 +85,11 @@ public class RegularFileDownloadClient : IFileClient
     /// 文件上传完成回调
     /// </summary>
     /// <param name="response"></param>
-    public void OnFileDownloadFinished(FileUnit fileUnit)
+    public void OnFileDownloadFinished(FileUnit? fileUnit)
     {
-        if (taskCompletionSourceOfFileUnit == null || taskCompletionSourceOfFileUnit.Task.IsCompleted) return;
+        if (taskCompletionSourceOfFileUnit == null || taskCompletionSourceOfFileUnit.Task.IsCompleted)
+            return;
+
         taskCompletionSourceOfFileUnit.SetResult(fileUnit);
     }
 
@@ -116,23 +99,19 @@ public class RegularFileDownloadClient : IFileClient
     /// <param name="fileHeader"></param>
     public async void OnFileHeaderReceived(FileHeader fileHeader)
     {
-        if (_fileProcessDto == null || !_fileProcessDto.FileName.Equals(fileHeader.FileName)) return;
         var result = _regularFileOperator?.ReceiveFileHeader(fileHeader);
 
-        if (result ?? false)
+        // 开始读取文件
+        FilePackResponse response = new FilePackResponse
         {
-            // 开始读取文件
-            FilePackResponse response = new FilePackResponse
-            {
-                Success = true,
-                FileName = fileHeader.FileName,
-                PackIndex = 0,
-                Time = fileHeader.Time,
-                PackSize = 0
-            };
-            if (_channel.TryGetTarget(out var channel))
-                await channel.WriteAndFlushProtobufAsync(response);
-        }
+            Success = result ?? false,
+            FileName = fileHeader.FileName,
+            PackIndex = 0,
+            Time = fileHeader.Time,
+            PackSize = 0
+        };
+        if (_channel.TryGetTarget(out var channel))
+            await channel.WriteAndFlushProtobufAsync(response);
     }
 
     /// <summary>
@@ -141,8 +120,8 @@ public class RegularFileDownloadClient : IFileClient
     /// <param name="filePack"></param>
     public async void OnNewFilePackReceived(FilePack filePack)
     {
-        if (_fileProcessDto == null || !_fileProcessDto.FileName.Equals(filePack.FileName)) return;
         var result = _regularFileOperator?.ReceiveFilePack(filePack);
+
         FilePackResponse response = new FilePackResponse
         {
             Success = result ?? false,
@@ -150,9 +129,6 @@ public class RegularFileDownloadClient : IFileClient
             PackIndex = filePack.PackIndex,
             Time = filePack.Time
         };
-        if ((result ?? false) && _fileProcessDto != null)
-            _fileProcessDto.CurrentSize += filePack.PackSize;
-
         // 发送文件分片响应
         if (_channel.TryGetTarget(out var channel))
             await channel.WriteAndFlushProtobufAsync(response);
@@ -186,13 +162,12 @@ public class RegularFileDownloadClient : IFileClient
             _regularFileOperator = null;
         }
 
-        _fileProcessDto = null;
-
         // 清理未完成的任务
         if (taskCompletionSourceOfFileUnit != null && !taskCompletionSourceOfFileUnit.Task.IsCompleted)
         {
             taskCompletionSourceOfFileUnit.TrySetCanceled();
         }
+
         taskCompletionSourceOfFileUnit = null;
     }
 }

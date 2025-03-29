@@ -5,6 +5,7 @@
       <map>
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/Chat/GroupChatUI/GroupChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/GroupChatUI/GroupChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -31,6 +32,7 @@
         <entry key="ChatClient.Avalonia/Controls/SearchBox/SearchBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeparateGroupsView/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeperateGroupsView/SeperateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/BusyArea.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Button.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ComboBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ContextMenu.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -45,6 +47,7 @@
         <entry key="ChatClient.Avalonia/Theme/MySukiSideMenuStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/MySukiWindowStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/NotificationStyles.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/ProgressBar.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/RatioButton.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Slider.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/SukiDialog.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

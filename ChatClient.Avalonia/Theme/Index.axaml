@@ -27,7 +27,9 @@
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="Slider.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
+    <StyleInclude Source="BusyArea.axaml" />
     <StyleInclude Source="DatePicker.axaml" />
+    <StyleInclude Source="ProgressBar.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormTextBox/FormTextBoxStyle.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormDatePicker/FormDatePicker.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormComboBox/FormComboBoxStyle.axaml" />

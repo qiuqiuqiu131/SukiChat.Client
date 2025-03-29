@@ -69,7 +69,9 @@ internal class ChatMessageHandler : MessageHandlerBase
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(chatMessage.Messages)
         };
         // 注入消息资源
-        _ = chatService.OperateChatMessage(chatMessage.UserFromId, chatData.ChatId, chatData.ChatMessages,
+        await chatService.OperateChatMessage(_userManager.User.Id, chatMessage.UserFromId, chatData.ChatId,
+            chatData.IsUser,
+            chatData.ChatMessages,
             FileTarget.User);
 
         // 更新消息Dto
@@ -84,7 +86,7 @@ internal class ChatMessageHandler : MessageHandlerBase
                 if (friendChat.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(chatData.ChatId)) != null) return;
 
                 var last = friendChat.ChatMessages.Last();
-                if (chatData.Time - last.Time > TimeSpan.FromMinutes(5))
+                if (chatData.Time - last.Time > TimeSpan.FromMinutes(3))
                     chatData.ShowTime = true;
                 friendChat.ChatMessages.Add(chatData);
                 if (!friendChat.IsSelected)
@@ -188,7 +190,8 @@ internal class ChatMessageHandler : MessageHandlerBase
             chatData.Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
 
         // 注入消息资源
-        _ = chatService.OperateChatMessage(message.GroupId, chatData.ChatId, chatData.ChatMessages,
+        await chatService.OperateChatMessage(_userManager.User.Id, message.GroupId, chatData.ChatId, chatData.IsUser,
+            chatData.ChatMessages,
             FileTarget.Group);
 
         // 更新消息Dto
@@ -279,6 +282,6 @@ internal class ChatMessageHandler : MessageHandlerBase
     // 辅助方法：判断是否应该显示时间（时间间隔超过5分钟）
     bool ShouldShowTime(DateTime current, DateTime previous)
     {
-        return current - previous > TimeSpan.FromMinutes(5);
+        return current - previous > TimeSpan.FromMinutes(3);
     }
 }

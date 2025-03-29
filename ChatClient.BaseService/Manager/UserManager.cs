@@ -69,10 +69,22 @@ internal class UserManager : IUserManager
         if (!(response is { State: true })) return response;
 
         // 调用userService获取用户完整数据
-        var _userService = _containerProvider.Resolve<IUserLoginService>();
-        UserData = await _userService.GetUserFullData(id);
-        if (_userService is IDisposable disposable)
-            disposable.Dispose();
+        try
+        {
+            var _userService = _containerProvider.Resolve<IUserLoginService>();
+            UserData = await _userService.GetUserFullData(id);
+            if (_userService is IDisposable disposable)
+                disposable.Dispose();
+        }
+        catch (Exception e)
+        {
+            await loginService.Logout(id);
+            return new CommonResponse
+            {
+                State = false,
+                Message = "加载错误，请重试"
+            };
+        }
 
         // 登录成功
         _ = loginService.LoginSuccess(UserData.UserDetail);

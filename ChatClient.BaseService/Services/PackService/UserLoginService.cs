@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services.PackService;
@@ -76,21 +77,51 @@ internal class UserLoginService : BaseService, IUserLoginService
     {
         var user = new UserData();
         user.UserDetail = await _userDtoManager.GetUserDto(userId);
-        if (user.UserDetail != null) user.UserDetail.IsUser = true;
+        if (user.UserDetail == null)
+            throw new NullReferenceException("UserDetail is null");
+        user.UserDetail.IsUser = true;
+
         List<Task> tasks =
         [
             Task.Run(async () =>
             {
                 var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
-                user.FriendReceives =
-                    await friendPackService.GetFriendReceiveDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
-                user.FriendRequests =
-                    await friendPackService.GetFriendRequestDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
-                user.FriendDeletes =
-                    await friendPackService.GetFriendDeleteDtos(userId, user.UserDetail.LastDeleteFriendMessageTime);
+                user.FriendReceives = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await friendPackService.GetFriendReceiveDtos(userId,
+                            user.UserDetail!.LastDeleteFriendMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+                user.FriendRequests = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await friendPackService.GetFriendRequestDtos(userId,
+                            user.UserDetail!.LastDeleteFriendMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
+                user.FriendDeletes = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await friendPackService.GetFriendDeleteDtos(userId,
+                            user.UserDetail!.LastDeleteFriendMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
+                user.FriendChats = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await friendChatPackService.GetFriendChatDtos(userId),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
 
                 // 分组好友
-                var friends = await friendPackService.GetFriendRelationDtos(userId);
+                var friends = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await friendPackService.GetFriendRelationDtos(userId),
+                    5, 50);
                 var groupFriends = _userGroupMessages?
                     .Where(d => d.GroupType == 0)
                     .Select(d => new GroupFriendDto
@@ -124,22 +155,46 @@ internal class UserLoginService : BaseService, IUserLoginService
 
                 var sortedGroups = groupFriends.OrderBy(g => g.GroupName).ToList();
                 user.GroupFriends = new AvaloniaList<GroupFriendDto>(sortedGroups);
-
-                var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
-                user.FriendChats = await friendChatPackService.GetFriendChatDtos(userId);
             }),
             Task.Run(async () =>
             {
                 var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
-                user.GroupReceiveds =
-                    await groupPackService.GetGroupReceivedDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
-                user.GroupRequests =
-                    await groupPackService.GetGroupRequestDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
-                user.GroupDeletes =
-                    await groupPackService.GetGroupDeleteDtos(userId, user.UserDetail.LastDeleteGroupMessageTime);
+                user.GroupReceiveds = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await groupPackService.GetGroupReceivedDtos(userId,
+                            user.UserDetail!.LastDeleteGroupMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                user.GroupRequests = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await groupPackService.GetGroupRequestDtos(userId,
+                            user.UserDetail!.LastDeleteGroupMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
+                user.GroupDeletes = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await groupPackService.GetGroupDeleteDtos(userId,
+                            user.UserDetail!.LastDeleteGroupMessageTime),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
+                user.GroupChats = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await groupChatPackService.GetGroupChatDtos(userId),
+                    5, 50);
+            }),
+            Task.Run(async () =>
+            {
+                var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
 
                 // 分组群聊
-                var groups = await groupPackService.GetGroupRelationDtos(userId);
+                var groups = await RetryHelper.ExecuteWithRetryAsync(async () =>
+                        await groupPackService.GetGroupRelationDtos(userId),
+                    5, 50);
                 var groupGroups = _userGroupMessages?
                     .Where(d => d.GroupType == 1)
                     .Select(d => new GroupGroupDto
@@ -173,9 +228,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
                 var sortedGroupGroups = groupGroups.OrderBy(g => g.GroupName).ToList();
                 user.GroupGroups = new AvaloniaList<GroupGroupDto>(sortedGroupGroups);
-
-                var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
-                user.GroupChats = await groupChatPackService.GetGroupChatDtos(userId);
             })
         ];
         await Task.WhenAll(tasks);

@@ -8,12 +8,9 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Services;
-using ChatClient.DataBase.Data;
 using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
@@ -54,7 +51,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     #region Command
 
     public DelegateCommand SearchMoreCommand { get; private set; }
-    public DelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
+    public AsyncDelegateCommand<FileMessDto> FileRestoreCommand { get; private set; }
     public AsyncDelegateCommand DeleteFriendCommand { get; private set; }
 
     #endregion
@@ -75,7 +73,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, InputMessageChanged);
 
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
-        FileMessageClickCommand = new DelegateCommand<FileMessDto>(FileDownload);
+        FileRestoreCommand = new AsyncDelegateCommand<FileMessDto>(FileRestoreDownload);
+        FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         DeleteFriendCommand = new AsyncDelegateCommand(DeleteFriend);
     }
 
@@ -134,7 +133,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         {
             chatMessages.Insert(0, chatData);
             var duration = chatMessages[1].Time - chatData.Time;
-            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(5);
+            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(3);
         }
 
         // 将最后一条消息的时间显示出来
@@ -146,11 +145,66 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
             SelectedFriend.HasMoreMessage = false;
     }
 
+    #region DownloadFile
+
     /// <summary>
     /// 下载文件
     /// </summary>
     /// <param name="fileMess"></param>
-    public async void FileDownload(FileMessDto fileMess)
+    public async Task FileDownload(FileMessDto fileMess)
+    {
+        // string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        // filePath = Path.Combine(filePath, "Downloads");
+        var appDataManager = _containerProvider.Resolve<IAppDataManager>();
+        var filePath = appDataManager
+            .GetFileInfo(Path.Combine("Users", fileMess.IsUser ? _userManager.User.Id : SelectedFriend.UserId,
+                "ChatFile", fileMess.FileName)).FullName;
+
+        if (string.IsNullOrWhiteSpace(filePath)) return;
+
+        // 记录另存文件路径
+        fileMess.TargetFilePath = filePath;
+
+        fileMess.IsDownloading = true;
+        var progress = new Progress<double>(d => { fileMess.DownloadProgress = d; });
+
+        // 开始下载文件
+        var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
+        var path = Path.Combine("Users", fileMess.IsUser ? _userManager.User.Id : SelectedFriend!.UserId, "ChatFile");
+        var result =
+            await fileIOHelper.DownloadLargeFileAsync(path, fileMess.FileName, filePath, progress);
+
+        // 记录文件下载完毕
+        fileMess.IsDownloading = false;
+        fileMess.IsSuccess = result;
+        fileMess.IsExit = result;
+
+        var chatService = _containerProvider.Resolve<IChatService>();
+        await chatService.UpdateFileMess(_userManager.User.Id, fileMess, FileTarget.User);
+
+        if (result)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载成功",
+                Type = NotificationType.Success
+            });
+        }
+        else
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载失败",
+                Type = NotificationType.Error
+            });
+        }
+    }
+
+    /// <summary>
+    /// 另存文件
+    /// </summary>
+    /// <param name="fileMess"></param>
+    public async Task FileRestoreDownload(FileMessDto fileMess)
     {
         // 获取文件地址
         string filePath = "";
@@ -167,30 +221,33 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
-        // 记录另存文件路径
-        fileMess.TargetFilePath = filePath;
-        var chatService1 = _containerProvider.Resolve<IChatService>();
-        await chatService1.UpdateFileMess(fileMess);
-
-        fileMess.FileProcessDto = new FileProcessDto
-        {
-            CurrentSize = 0,
-            MaxSize = fileMess.FileSize
-        };
-
         // 开始下载文件
-        var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
-        var path = Path.Combine("Users", SelectedFriend!.UserId, "ChatFile");
+        var fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
         var result =
-            await fileIOHelper.DownloadLargeFileAsync(path, fileMess.FileName, filePath, fileMess.FileProcessDto);
+            await fileOperateHelper.SaveAsFile(fileMess.IsUser ? _userManager.User.Id : SelectedFriend.UserId,
+                "ChatFile", fileMess.FileName, filePath,
+                FileTarget.User);
 
-        fileMess.FileProcessDto = null;
-
-        // 记录文件下载完毕
-        fileMess.IsDownload = result;
-        var chatService2 = _containerProvider.Resolve<IChatService>();
-        await chatService2.UpdateFileMess(fileMess);
+        if (result)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载成功",
+                Type = NotificationType.Success
+            });
+        }
+        else
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载失败",
+                Type = NotificationType.Error
+            });
+        }
     }
+
+    #endregion
+
 
     #region SendChatMessage
 

@@ -6,14 +6,18 @@ namespace ChatClient.Resources.FileOperator;
 public class RegularFileOperator : IDisposable
 {
     private readonly string _fileName;
+    private readonly IProgress<double>? _fileProgress;
+
     private FileUnit? _fileUnit;
+
     private bool _disposed = false;
 
-    public event Action<FileUnit> OnFileDownloadFinished;
+    public event Action<FileUnit?> OnFileDownloadFinished;
 
-    public RegularFileOperator(string fileName)
+    public RegularFileOperator(string fileName, IProgress<double>? fileProgress)
     {
         _fileName = fileName;
+        _fileProgress = fileProgress;
     }
 
     /// <summary>
@@ -42,20 +46,23 @@ public class RegularFileOperator : IDisposable
 
         try
         {
+            // 文件名不匹配或者文件单元为空
             if (!filePack.FileName.Equals(_fileName) || _fileUnit == null)
             {
-                if (_fileUnit != null)
-                    _fileUnit.Clear();
+                _fileUnit?.Clear();
                 OnFileDownloadFinished?.Invoke(null);
                 return false;
             }
 
+            // 添加文件包
             var result = _fileUnit.AddPack(filePack.PackIndex, filePack.Data);
+            // 更新进度
+            _fileProgress?.Report((double)_fileUnit!.CurrentIndex / _fileUnit!.TotleCount);
 
             if (_fileUnit.IsFinished)
             {
-                var completedUnit = _fileUnit;
-                OnFileDownloadFinished?.Invoke(completedUnit);
+                _fileProgress?.Report(1);
+                OnFileDownloadFinished?.Invoke(_fileUnit);
             }
 
             return result;
@@ -67,6 +74,7 @@ public class RegularFileOperator : IDisposable
                 _fileUnit.Clear();
                 _fileUnit = null;
             }
+
             OnFileDownloadFinished?.Invoke(null);
             return false;
         }
@@ -82,6 +90,8 @@ public class RegularFileOperator : IDisposable
 
         OnFileDownloadFinished = null;
     }
+
+    #region Dispose
 
     private void ThrowIfDisposed()
     {
@@ -111,4 +121,6 @@ public class RegularFileOperator : IDisposable
     {
         Dispose(false);
     }
+
+    #endregion
 }

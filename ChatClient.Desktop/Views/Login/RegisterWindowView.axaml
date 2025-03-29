@@ -9,6 +9,7 @@
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia"
+    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     Width="360"
     Height="490"
     x:DataType="vm:RegisterWindowViewModel"
@@ -41,6 +42,7 @@
                     HorizontalAlignment="Center"
                     Orientation="Vertical"
                     Spacing="15">
+                    <controls:NotificationMessage Message="已复制到剪切板" />
                     <TextBlock
                         Margin="0,5,0,27"
                         HorizontalAlignment="Center"

@@ -19,28 +19,28 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+        <TrimmerRootDescriptor Include="TrimmerRoots.xml"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Models\" />
-        <AvaloniaResource Include="Assets\**" />
+        <Folder Include="Models\"/>
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Remove="Assets\DefaultHead.ico" />
+        <AvaloniaResource Remove="Assets\DefaultHead.ico"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Assets\DefaultHead.ico" />
+        <None Remove="Assets\DefaultHead.ico"/>
     </ItemGroup>
 
     <ItemGroup>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -50,7 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj" />
+        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -129,18 +129,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\TextStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Assets\DefaultHead.ico">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\TextStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -162,7 +156,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml" />
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml" />
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml"/>
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml"/>
     </ItemGroup>
 </Project>

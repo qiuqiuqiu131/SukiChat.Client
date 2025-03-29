@@ -50,7 +50,11 @@ internal class MessageHelper : IMessageHelper
     public async Task<T?> SendMessageWithResponse<T>(IMessage message) where T : IMessage
     {
         TaskCompletionSource<T> taskCompletionSource = new TaskCompletionSource<T>();
-        var token = eventAggregator.GetEvent<ResponseEvent<T>>().Subscribe(e => taskCompletionSource.SetResult(e));
+        var token = eventAggregator.GetEvent<ResponseEvent<T>>().Subscribe(e =>
+        {
+            if (!taskCompletionSource.Task.IsCompleted)
+                taskCompletionSource.SetResult(e);
+        });
 
         if (!client.IsConnected || client.Channel == null)
             return default(T);
@@ -60,7 +64,7 @@ internal class MessageHelper : IMessageHelper
 
         Task wait = Task.Delay(TimeSpan.FromSeconds(int.Parse(configuration["OutOfTime"]!)));
         var task = await Task.WhenAny(taskCompletionSource.Task, wait);
-        token.Dispose();
+        token?.Dispose();
 
 
         if (task == taskCompletionSource.Task)

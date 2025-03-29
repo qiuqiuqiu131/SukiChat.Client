@@ -30,10 +30,20 @@ public class ImageMessDto : BindableBase, IDisposable
     public long FileSize { get; set; }
     private Bitmap? imageSource;
 
+    public string? ActualPath { get; set; }
+
     public Bitmap? ImageSource
     {
         get => imageSource;
         set => SetProperty(ref imageSource, value);
+    }
+
+    private bool failed = false;
+
+    public bool Failed
+    {
+        get => failed;
+        set => SetProperty(ref failed, value);
     }
 
     public void Dispose()
@@ -44,22 +54,41 @@ public class ImageMessDto : BindableBase, IDisposable
 
 public class FileMessDto : BindableBase
 {
+    public bool IsUser { get; set; }
     public int ChatId { get; set; }
-    public string FileName { get; set; }
+
+    private string fileName;
+
+    public string FileName
+    {
+        get => fileName;
+        set => SetProperty(ref fileName, value);
+    }
+
     public long FileSize { get; set; }
     public string FileType { get; set; }
 
     #region Property
 
-    private bool _isDownload = false;
+    // 文件是否下载成功，并且保存在本地
+    private bool isSuccess = false;
 
-    public bool IsDownload
+    public bool IsSuccess
     {
-        get => _isDownload;
-        set => SetProperty(ref _isDownload, value);
+        get => isSuccess;
+        set => SetProperty(ref isSuccess, value);
     }
 
-    // 记录另存地址
+    // 文件是否存在在服务器上
+    private bool isExit = false;
+
+    public bool IsExit
+    {
+        get => isExit;
+        set => SetProperty(ref isExit, value);
+    }
+
+    // 记录保存地址
     private string? _targetFilePath;
 
     public string? TargetFilePath
@@ -68,12 +97,20 @@ public class FileMessDto : BindableBase
         set => SetProperty(ref _targetFilePath, value);
     }
 
-    private FileProcessDto? _fileProcessDto;
+    private bool _isDownloading = false;
 
-    public FileProcessDto? FileProcessDto
+    public bool IsDownloading
     {
-        get => _fileProcessDto;
-        set => SetProperty(ref _fileProcessDto, value);
+        get => _isDownloading;
+        set => SetProperty(ref _isDownloading, value);
+    }
+
+    private double _downloadProgress = 0;
+
+    public double DownloadProgress
+    {
+        get => _downloadProgress;
+        set => SetProperty(ref _downloadProgress, value);
     }
 
     #endregion

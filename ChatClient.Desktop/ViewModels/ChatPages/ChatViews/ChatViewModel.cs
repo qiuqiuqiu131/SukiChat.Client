@@ -205,7 +205,7 @@ public class ChatViewModel : ChatPageBase
 
                 friendChatDto.ChatMessages.Insert(0, chatData);
                 var duration = friendChatDto.ChatMessages[1].Time - chatData.Time;
-                if (duration > TimeSpan.FromMinutes(5))
+                if (duration > TimeSpan.FromMinutes(3))
                     friendChatDto.ChatMessages[1].ShowTime = true;
                 else
                     friendChatDto.ChatMessages[1].ShowTime = false;
@@ -293,7 +293,7 @@ public class ChatViewModel : ChatPageBase
 
                 groupChatDto.ChatMessages.Insert(0, chatData);
                 var duration = groupChatDto.ChatMessages[1].Time - chatData.Time;
-                if (duration > TimeSpan.FromMinutes(5))
+                if (duration > TimeSpan.FromMinutes(3))
                     groupChatDto.ChatMessages[1].ShowTime = true;
                 else
                     groupChatDto.ChatMessages[1].ShowTime = false;

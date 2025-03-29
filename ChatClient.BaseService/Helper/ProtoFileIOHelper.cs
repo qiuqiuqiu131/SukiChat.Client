@@ -12,13 +12,11 @@ namespace ChatClient.BaseService.Helper;
 
 public class ProtoFileIOHelper : IFileIOHelper
 {
-    private readonly IConfigurationRoot _configurationRoot;
     private readonly IResourcesClientPool _resourcesClientPool;
     private IFileIOHelper _fileIoHelperImplementation;
 
-    public ProtoFileIOHelper(IConfigurationRoot configurationRoot, IResourcesClientPool resourcesClientPool)
+    public ProtoFileIOHelper(IResourcesClientPool resourcesClientPool)
     {
-        _configurationRoot = configurationRoot;
         _resourcesClientPool = resourcesClientPool;
     }
 
@@ -36,7 +34,7 @@ public class ProtoFileIOHelper : IFileIOHelper
             var client = await _resourcesClientPool.GetClientAsync<RegularFileUploadClient>();
 
             // 开启两个线程同时执行
-            var timeoutTask = Task.Delay(10000000);
+            var timeoutTask = Task.Delay(10000);
             var uploadTask = client.UploadFile(targetPath, fileName, file);
             // 等待其中一个线程执行完成
             var completedTask = await Task.WhenAny(uploadTask, timeoutTask);
@@ -59,19 +57,18 @@ public class ProtoFileIOHelper : IFileIOHelper
     }
 
     public async Task<bool> UploadLargeFileAsync(string targetPath, string fileName, string filePath,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         try
         {
             var client = await _resourcesClientPool.GetClientAsync<LargeFileUploadClient>();
-            await client.UploadFile(targetPath, fileName, filePath, fileProcessDto);
+            await client.UploadFile(targetPath, fileName, filePath, fileProgress);
             _resourcesClientPool.ReturnClient(client);
             return true;
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return false;
         }
     }
 
@@ -81,7 +78,7 @@ public class ProtoFileIOHelper : IFileIOHelper
     /// <param name="targetPath"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public async Task<byte[]?> GetFileAsync(string targetPath, string fileName)
+    public async Task<byte[]?> GetFileAsync(string targetPath, string fileName, IProgress<double>? fileProgress)
     {
         try
         {
@@ -93,11 +90,14 @@ public class ProtoFileIOHelper : IFileIOHelper
                 Type = Path.GetExtension(fileName)
             };
 
-            var fileProcessDto = new FileProcessDto { FileName = fileName };
-            var fileUnit = await client.RequestFile(request, fileProcessDto);
+            var fileUnit = await client.RequestFile(request, fileProgress);
 
-            var result = fileUnit.Combine();
+            byte[]? result = null;
+            if (fileUnit != null)
+                result = fileUnit.Combine();
+
             _resourcesClientPool.ReturnClient(client);
+
             return result;
         }
         catch (Exception e)
@@ -108,7 +108,7 @@ public class ProtoFileIOHelper : IFileIOHelper
     }
 
     public async Task<bool> DownloadLargeFileAsync(string targetPath, string fileName, string filePath,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         try
         {
@@ -119,11 +119,9 @@ public class ProtoFileIOHelper : IFileIOHelper
                 FileName = fileName,
                 Type = Path.GetExtension(fileName)
             };
-            if (fileProcessDto != null)
-                fileProcessDto.FileName = fileName;
 
             // 等待文件请求
-            var result = await client.RequestFile(request, filePath, fileProcessDto);
+            var result = await client.RequestFile(request, filePath, fileProgress);
 
             // 归还连接
             _resourcesClientPool.ReturnClient(client);
@@ -132,8 +130,7 @@ public class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            return false;
         }
     }
 

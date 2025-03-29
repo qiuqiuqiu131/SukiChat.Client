@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -51,6 +52,7 @@ public partial class ChatInputPanelView : UserControl
                     {
                         textBox.TextChanged -= ControlOnTextChanged;
                         textBox.GotFocus -= ControlOnGotFocus;
+                        textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
                         textBox.KeyDown -= ControlOnKeyDown;
                     }
 
@@ -70,6 +72,7 @@ public partial class ChatInputPanelView : UserControl
                             var control = (TextBox)DataTemplates[0].Build(text)!;
                             control.DataContext = text;
                             control.TextChanged += ControlOnTextChanged;
+                            control.PastingFromClipboard += ControlOnPastingFromClipboard;
                             control.GotFocus += ControlOnGotFocus;
                             control.KeyDown += ControlOnKeyDown;
 
@@ -108,6 +111,7 @@ public partial class ChatInputPanelView : UserControl
 
                 control.TextChanged += ControlOnTextChanged;
                 control.GotFocus += ControlOnGotFocus;
+                control.PastingFromClipboard += ControlOnPastingFromClipboard;
                 control.KeyDown += ControlOnKeyDown;
 
                 _itemCollection.Add(control);
@@ -133,6 +137,7 @@ public partial class ChatInputPanelView : UserControl
                 {
                     textBox.TextChanged -= ControlOnTextChanged;
                     textBox.GotFocus -= ControlOnGotFocus;
+                    textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
                     textBox.KeyDown -= ControlOnKeyDown;
                 }
 
@@ -146,6 +151,8 @@ public partial class ChatInputPanelView : UserControl
                 InputMessages.Add(string.Empty);
         }
     }
+
+    #region TextBoxEvent
 
     /// <summary>
     /// 接受输入框的键盘事件
@@ -192,6 +199,28 @@ public partial class ChatInputPanelView : UserControl
         }
     }
 
+    /// <summary>
+    /// 接受输入框的粘贴事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private async void ControlOnPastingFromClipboard(object? sender, RoutedEventArgs e)
+    {
+        // if (sender is TextBox textBox)
+        // {
+        //     var clipboard = TopLevel.GetTopLevel(textBox)?.Clipboard;
+        //     if (clipboard != null)
+        //     {
+        //         var datas = await clipboard.GetFormatsAsync();
+        //         foreach (var data in datas)
+        //         {
+        //             var obj = await clipboard.GetDataAsync(data);
+        //         }
+        //     }
+        // }
+    }
+
 
     /// <summary>
     /// 接受输入框的焦点事件
@@ -225,13 +254,30 @@ public partial class ChatInputPanelView : UserControl
         }
     }
 
+    #endregion
+
     private void InputItems_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        var textBox = (TextBox)_itemCollection.Last()!;
-        textBox.Focus();
-        ScrollViewer.ScrollToEnd();
+        if (sender is Control control)
+        {
+            if (e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
+            {
+                var textBox = (TextBox)_itemCollection.Last()!;
+                textBox.Focus();
+                ScrollViewer.ScrollToEnd();
 
-        e.Handled = true;
+                e.Handled = true;
+            }
+            else if (e.GetCurrentPoint(control).Properties.IsRightButtonPressed)
+            {
+                var textBox = (TextBox)_itemCollection.Last()!;
+                textBox.Focus();
+                if (textBox.ContextFlyout != null)
+                    textBox.ContextFlyout.ShowAt(textBox);
+
+                e.Handled = true;
+            }
+        }
     }
 
     private void SelectEmojis(object? sender, RoutedEventArgs e)

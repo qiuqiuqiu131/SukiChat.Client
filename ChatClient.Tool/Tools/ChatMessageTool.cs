@@ -86,13 +86,6 @@ public static class ChatMessageTool
                     stringBuilder.Append(fileMess.FileSize);
                     stringBuilder.Append("__");
                     stringBuilder.Append(fileMess.FileType);
-                    if (!string.IsNullOrWhiteSpace(fileMess.TargetFilePath))
-                    {
-                        stringBuilder.Append("__");
-                        stringBuilder.Append(fileMess.TargetFilePath);
-                        stringBuilder.Append("__");
-                        stringBuilder.Append(fileMess.IsDownload);
-                    }
 
                     stringBuilder.Append("1\n\t3\n\t1\n\t");
                     break;
@@ -225,13 +218,6 @@ public static class ChatMessageTool
                     break;
                 case ChatMessage.ContentOneofCase.FileMess:
                     string[] file_spliter = content.Split("__");
-                    string? targetFilePath = null;
-                    bool isDownload = false;
-                    if (file_spliter.Length == 5)
-                    {
-                        targetFilePath = file_spliter[3];
-                        isDownload = bool.Parse(file_spliter[4]);
-                    }
 
                     var fileMess = new ChatMessageDto
                     {
@@ -240,9 +226,7 @@ public static class ChatMessageTool
                         {
                             FileName = file_spliter[0],
                             FileSize = int.Parse(file_spliter[1]),
-                            FileType = file_spliter[2],
-                            TargetFilePath = targetFilePath,
-                            IsDownload = isDownload
+                            FileType = file_spliter[2]
                         }
                     };
                     chatMessages.Add(fileMess);

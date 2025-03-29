@@ -15,7 +15,6 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     public LoginWindowView()
     {
         InitializeComponent();
-        Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
     }
 
     private SukiDialogHost? _dialogHost;

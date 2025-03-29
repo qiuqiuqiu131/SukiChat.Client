@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.Avalonia.Controls.OverlaySplitView;
 using ChatClient.BaseService.Manager;
@@ -82,5 +83,14 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
             _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
                 .Publish(new UserMessageBoxShowArgs(userDto, e));
         }
+    }
+    
+    private void ChatUI_OnNotification(object? sender, NotificationMessageEventArgs e)
+    {
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = e.Message,
+            Type = e.Type
+        });
     }
 }

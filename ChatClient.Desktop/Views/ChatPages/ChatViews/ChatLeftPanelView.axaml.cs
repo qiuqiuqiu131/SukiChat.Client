@@ -466,8 +466,8 @@ public partial class ChatLeftPanelView : UserControl
 
             eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
-                    Message = "群ID已复制",
-                    Type = NotificationType.Success
+                    Message = "好友ID已复制",
+                    Type = NotificationType.Information
                 }
             );
         }
@@ -546,7 +546,7 @@ public partial class ChatLeftPanelView : UserControl
             eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
                     Message = "群ID已复制",
-                    Type = NotificationType.Success
+                    Type = NotificationType.Information
                 }
             );
         }

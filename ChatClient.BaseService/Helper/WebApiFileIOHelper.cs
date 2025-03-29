@@ -52,7 +52,7 @@ internal class WebApiFileIOHelper : IFileIOHelper
     }
 
     public async Task<bool> UploadLargeFileAsync(string targetPath, string fileName, string filePath,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         try
         {
@@ -89,13 +89,13 @@ internal class WebApiFileIOHelper : IFileIOHelper
         }
     }
 
-    public async Task<byte[]?> GetFileAsync(string targetPath, string fileName)
+    public async Task<byte[]?> GetFileAsync(string targetPath, string fileName, IProgress<double> fileProgress)
     {
         return await GetFileBaseAsync("download", targetPath, fileName);
     }
 
     public Task<bool> DownloadLargeFileAsync(string targetPath, string fileName, string filePath,
-        FileProcessDto? fileProcessDto = null)
+        IProgress<double> fileProgress)
     {
         throw new NotImplementedException();
     }

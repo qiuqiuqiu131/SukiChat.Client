@@ -53,6 +53,7 @@
                                         Classes="Basic"
                                         Command="{TemplateBinding SearchMoreCommand}">
                                     <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
+                                               Cursor="Hand"
                                                Foreground="{DynamicResource SukiPrimaryColor75}" />
                                 </Button>
                                 <ItemsControl Name="IC"
@@ -180,6 +181,7 @@
                                                                         <suki:GlassCard Classes="Friend"
                                                                             CornerRadius="6"
                                                                             MaxWidth="360"
+                                                                            PointerPressed="InputElement_OnPointerPressed"
                                                                             Padding="5">
                                                                             <suki:GlassCard.Styles>
                                                                                 <Style
@@ -204,7 +206,7 @@
                                                                                 </ItemsControl.ItemsPanel>
                                                                                 <ItemsControl.ItemTemplate>
                                                                                     <DataTemplate>
-                                                                                        <chatUi1:ChatMessageView
+                                                                                        <chatUI:GroupChatMessageView
                                                                                             IsLeft="True"
                                                                                             HorizontalAlignment="Left"
                                                                                             Message="{Binding Content}" />
@@ -259,6 +261,7 @@
                                                                         <suki:GlassCard Classes="Owner"
                                                                             CornerRadius="6"
                                                                             MaxWidth="350"
+                                                                            PointerPressed="InputElement_OnPointerPressed"
                                                                             Padding="5">
                                                                             <suki:GlassCard.Styles>
                                                                                 <Style
@@ -283,7 +286,7 @@
                                                                                 </ItemsControl.ItemsPanel>
                                                                                 <ItemsControl.ItemTemplate>
                                                                                     <DataTemplate>
-                                                                                        <chatUi1:ChatMessageView
+                                                                                        <chatUI:GroupChatMessageView
                                                                                             IsLeft="False"
                                                                                             HorizontalAlignment="Right"
                                                                                             Message="{Binding Content}" />
