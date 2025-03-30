@@ -24,7 +24,7 @@
         <DataTemplate DataType="data:ImageMessDto">
             <Panel>
                 <Panel
-                    IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNull}}">
+                    IsVisible="{Binding Failed}">
                     <Border Width="180"
                             Height="180"
                             ClipToBounds="True" Background="#ccc" CornerRadius="6">
@@ -39,55 +39,70 @@
                         </StackPanel>
                     </Border>
                 </Panel>
-                <Panel Classes="Icon"
-                       IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNotNull}}">
-                    <Panel.Styles>
-                        <Style Selector="Grid.Icon:pointerover Border#Icon">
-                            <Setter Property="Opacity" Value="0.45" />
-                        </Style>
-                    </Panel.Styles>
-                    <Border ClipToBounds="True" CornerRadius="6">
-                        <Image Name="ImageSource"
-                               ToolTip.ShowDelay="500"
-                               Source="{Binding ImageSource}">
-                            <ToolTip.Tip>
-                                <TextBlock FontSize="12"
-                                           Text="双击查看图片" />
-                            </ToolTip.Tip>
-                            <Interaction.Behaviors>
-                                <behaviors:ImageSizeAdjustBehavior />
-                                <behaviors:ImageShowBehavior />
-                            </Interaction.Behaviors>
-                        </Image>
+                <Panel IsVisible="{Binding !Failed}">
+                    <Border Width="150"
+                            IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNull}}"
+                            Height="150"
+                            ClipToBounds="True" Background="#ccc" CornerRadius="6">
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="10"
+                                    HorizontalAlignment="Center">
+                            <suki:Loading Foreground="#999" Width="30" Height="30" />
+                            <TextBlock Text="图片加载中" HorizontalAlignment="Center" Opacity="0.4"
+                                       FontSize="13" />
+                        </StackPanel>
                     </Border>
-                    <Border Name="Icon"
-                            HorizontalAlignment="Right"
-                            Background="#00000000"
-                            VerticalAlignment="Bottom"
-                            Opacity="0"
-                            Padding="3"
-                            Classes="Icon"
-                            Margin="7">
-                        <Border.Transitions>
-                            <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
-                            </Transitions>
-                        </Border.Transitions>
-                        <Interaction.Behaviors>
-                            <behaviors:ImageShowByClickBehavior
-                                TargetImage="{Binding ElementName=ImageSource}" />
-                        </Interaction.Behaviors>
-                        <Border.Styles>
-                            <Style Selector="Border.Icon:pointerover">
-                                <Setter Property="Opacity" Value="0.7" />
-                                <Setter Property="Cursor" Value="Hand" />
+                    <Panel Classes="Icon"
+                           IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <Panel.Styles>
+                            <Style Selector="Grid.Icon:pointerover Border#Icon">
+                                <Setter Property="Opacity" Value="0.45" />
                             </Style>
-                        </Border.Styles>
-                        <avalonia:MaterialIcon Width="20"
-                                               Foreground="White"
-                                               Height="20"
-                                               Kind="ImageSearch" />
-                    </Border>
+                        </Panel.Styles>
+                        <Border ClipToBounds="True" CornerRadius="6">
+                            <Image Name="ImageSource"
+                                   ToolTip.ShowDelay="500"
+                                   Source="{Binding ImageSource}">
+                                <ToolTip.Tip>
+                                    <TextBlock FontSize="12"
+                                               Text="双击查看图片" />
+                                </ToolTip.Tip>
+                                <Interaction.Behaviors>
+                                    <behaviors:ImageSizeAdjustBehavior />
+                                    <behaviors:ImageShowBehavior ImageMess="{Binding}" />
+                                </Interaction.Behaviors>
+                            </Image>
+                        </Border>
+                        <Border Name="Icon"
+                                HorizontalAlignment="Right"
+                                Background="#00000000"
+                                VerticalAlignment="Bottom"
+                                Opacity="0"
+                                Padding="3"
+                                Classes="Icon"
+                                Margin="7">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+                                </Transitions>
+                            </Border.Transitions>
+                            <Interaction.Behaviors>
+                                <behaviors:ImageShowByClickBehavior
+                                    TargetImage="{Binding ElementName=ImageSource}" />
+                            </Interaction.Behaviors>
+                            <Border.Styles>
+                                <Style Selector="Border.Icon:pointerover">
+                                    <Setter Property="Opacity" Value="0.7" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                </Style>
+                            </Border.Styles>
+                            <avalonia:MaterialIcon Width="20"
+                                                   Foreground="White"
+                                                   Height="20"
+                                                   Kind="ImageSearch" />
+                        </Border>
+                    </Panel>
                 </Panel>
             </Panel>
         </DataTemplate>

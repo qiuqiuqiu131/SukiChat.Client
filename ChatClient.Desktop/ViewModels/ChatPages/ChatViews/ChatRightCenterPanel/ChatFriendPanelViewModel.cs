@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
@@ -255,9 +256,9 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     /// 处理多成分聊天消息
     /// </summary>
     /// <param name="messages"></param>
-    public async void SendChatMessages(IEnumerable<object> messages)
+    public async Task<(bool, FileTarget)> SendChatMessages(IEnumerable<object> messages)
     {
-        if (SelectedFriend == null) return;
+        if (SelectedFriend == null) return (false, FileTarget.User);
 
         var chatMessageDtos = messages.Select(message => message switch
         {
@@ -274,7 +275,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
             _ => null
         }).Where(dto => dto != null).ToList();
 
-        await SendChatMessagesInternal(chatMessageDtos!);
+        return (await SendChatMessagesInternal(chatMessageDtos!), FileTarget.User);
     }
 
     /// <summary>
@@ -282,17 +283,17 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     /// </summary>
     /// <param name="type"></param>
     /// <param name="mess"></param>
-    public async void SendChatMessage(ChatMessage.ContentOneofCase type, object mess)
+    public async Task<(bool, FileTarget)> SendChatMessage(ChatMessage.ContentOneofCase type, object mess)
     {
-        if (SelectedFriend == null) return;
+        if (SelectedFriend == null) return (false, FileTarget.User);
 
         var chatMessage = new ChatMessageDto { Type = type, Content = mess };
-        await SendChatMessagesInternal([chatMessage]);
+        return (await SendChatMessagesInternal([chatMessage]), FileTarget.User);
     }
 
-    private async Task SendChatMessagesInternal(List<ChatMessageDto> chatMessageDtos)
+    private async Task<bool> SendChatMessagesInternal(List<ChatMessageDto> chatMessageDtos)
     {
-        if (SelectedFriend == null) return;
+        if (SelectedFriend == null) return false;
 
         bool showTime = SelectedFriend.ChatMessages.Count == 0 ||
                         DateTime.Now - SelectedFriend.ChatMessages.Last().Time > TimeSpan.FromMinutes(5);
@@ -319,6 +320,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         chatData.ChatId = int.TryParse(chatId, out int id) ? id : 0;
 
         SelectedFriend.UpdateChatMessages();
+
+        return state;
     }
 
     #endregion

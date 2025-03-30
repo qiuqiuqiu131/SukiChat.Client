@@ -5,19 +5,24 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Ioc;
+using SukiUI;
 using Action = Avalonia.Xaml.Interactivity.Action;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
@@ -37,15 +42,15 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
 
-    private Action<ChatMessage.ContentOneofCase, object> sendChatMessage;
-    private Action<IEnumerable<object>> sendChatMessages;
+    private Func<ChatMessage.ContentOneofCase, object, Task<(bool, FileTarget)>> sendChatMessage;
+    private Func<IEnumerable<object>, Task<(bool, FileTarget)>> sendChatMessages;
     private Action<bool>? inputMessageChanged;
 
     private bool isWriting;
 
     public ChatInputPanelViewModel(
-        Action<ChatMessage.ContentOneofCase, object> SendChatMessage,
-        Action<IEnumerable<object>> SendChatMessages,
+        Func<ChatMessage.ContentOneofCase, object, Task<(bool, FileTarget)>> SendChatMessage,
+        Func<IEnumerable<object>, Task<(bool, FileTarget)>> SendChatMessages,
         Action<bool>? InputMessageChanged = null)
     {
         sendChatMessages = SendChatMessages;
@@ -149,7 +154,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
                 ImageSource = bitmap
             };
 
-            sendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
+            await sendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
         }
 
         // 选择文件并发送
@@ -161,9 +166,18 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
                 FileName = filePath,
                 FileSize = (int)fileInfo.Length,
                 FileType = fileInfo.Extension,
+                TargetFilePath = filePath,
+                IsSuccess = true,
                 IsUser = true
             };
-            sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
+            var (result, target) = await sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
+            if (result)
+            {
+                fileMess.IsExit = true;
+                var chatService = App.Current.Container.Resolve<IChatService>();
+                var _userManager = App.Current.Container.Resolve<IUserManager>();
+                await chatService.UpdateFileMess(_userManager.User.Id, fileMess, target);
+            }
         }
 
         // 获取文件地址
@@ -176,6 +190,20 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
             if (handle == null) return;
 
             filePath = await SystemFileDialog.OpenFileAsync(handle.Value, "选择文件", "All Files\0*.*\0");
+
+            // var files = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            // {
+            //     AllowMultiple = false,
+            //     Title = "选择文件",
+            //     FileTypeFilter =
+            //     [
+            //         new FilePickerFileType("All Files (*.*)")
+            //         {
+            //             Patterns = new[] { "*.*" }
+            //         }
+            //     ]
+            // });
+            // filePath = files[0].Path.AbsolutePath;
         }
 
         if (string.IsNullOrWhiteSpace(filePath)) return;

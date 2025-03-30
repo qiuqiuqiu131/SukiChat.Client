@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia;
@@ -544,7 +545,20 @@ public partial class GroupChatUI : UserControl
 
             var item2 = new MenuItem
                 { Header = "打开图片", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
-            item2.Click += (s, e) => { ImageTool.OpenImageInSystemViewer(imageMessDto.ImageSource); };
+            item2.Click += (s, e) =>
+            {
+                if (System.IO.File.Exists(imageMessDto.ActualPath))
+                {
+                    Process.Start(new ProcessStartInfo(imageMessDto.ActualPath)
+                    {
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Normal
+                    });
+                }
+                else
+                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
+                        NotificationType.Information));
+            };
             contextMenu.Items.Add(item2);
 
             var item3 = new MenuItem
@@ -554,11 +568,14 @@ public partial class GroupChatUI : UserControl
                 if (!string.IsNullOrEmpty(imageMessDto.ActualPath) && System.IO.File.Exists(imageMessDto.ActualPath))
                 {
                     var argument = $"/select,\"{imageMessDto.ActualPath}\"";
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                    Process.Start(new ProcessStartInfo("explorer.exe", argument)
                     {
                         UseShellExecute = true
                     });
                 }
+                else
+                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
+                        NotificationType.Information));
             };
             contextMenu.Items.Add(item3);
         }
@@ -573,15 +590,18 @@ public partial class GroupChatUI : UserControl
                     if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
                         System.IO.File.Exists(fileMessDto.TargetFilePath))
                     {
-                        var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
-                        System.Diagnostics.Process.Start(
-                            new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
-                            {
-                                UseShellExecute = true
-                            });
+                        Process.Start(new ProcessStartInfo(fileMessDto.TargetFilePath)
+                        {
+                            UseShellExecute = true,
+                            WindowStyle = ProcessWindowStyle.Normal
+                        });
                     }
                     else
+                    {
                         fileMessDto.IsSuccess = false;
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
+                            NotificationType.Information));
+                    }
                 };
                 contextMenu.Items.Add(item1);
 
@@ -593,14 +613,19 @@ public partial class GroupChatUI : UserControl
                         System.IO.File.Exists(fileMessDto.TargetFilePath))
                     {
                         var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
-                        System.Diagnostics.Process.Start(
-                            new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                        Process.Start(
+                            new ProcessStartInfo("explorer.exe", argument)
                             {
-                                UseShellExecute = true
+                                UseShellExecute = true,
+                                WindowStyle = ProcessWindowStyle.Normal
                             });
                     }
                     else
+                    {
                         fileMessDto.IsSuccess = false;
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
+                            NotificationType.Information));
+                    }
                 };
                 contextMenu.Items.Add(item2);
             }

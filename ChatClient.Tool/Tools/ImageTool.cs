@@ -79,7 +79,8 @@ public static class ImageTool
         {
             StartInfo = new ProcessStartInfo(tempFilePath)
             {
-                UseShellExecute = true
+                UseShellExecute = true,
+                WindowStyle = ProcessWindowStyle.Normal
             }
         };
         process.Start();

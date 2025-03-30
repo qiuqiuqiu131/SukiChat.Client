@@ -188,7 +188,7 @@
                             <Grid
                                 x:Name="innerGrid"
                                 Grid.Row="1"
-                                Grid.Column="1"
+                                Grid.Column="0" Grid.ColumnSpan="4"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch">
                                 <Grid.ColumnDefinitions>

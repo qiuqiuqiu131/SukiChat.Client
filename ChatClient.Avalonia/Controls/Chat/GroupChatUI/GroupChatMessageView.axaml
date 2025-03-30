@@ -56,7 +56,7 @@
                             </ToolTip.Tip>
                             <Interaction.Behaviors>
                                 <behaviors:ImageSizeAdjustBehavior />
-                                <behaviors:ImageShowBehavior />
+                                <behaviors:ImageShowBehavior ImageMess="{Binding }" />
                             </Interaction.Behaviors>
                         </Image>
                     </Border>

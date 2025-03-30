@@ -1,8 +1,6 @@
-namespace ChatClient.Avalonia;
-
-using System;
 using System.Runtime.InteropServices;
-using PInvoke;
+
+namespace ChatClient.BaseService.Helper;
 
 public class SystemFileDialog
 {
@@ -40,7 +38,9 @@ public class SystemFileDialog
         public int FlagsEx;
     }
 
-    public static Task<string> OpenFileAsync(IntPtr ownerHandle, string windowName = "Open FIle", string filter = "Image Files\0*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.webp\0All Files\0*.*\0", string initialDir = "")
+    public static Task<string> OpenFileAsync(IntPtr ownerHandle, string windowName = "Open FIle",
+        string filter = "Image Files\0*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.webp\0All Files\0*.*\0",
+        string initialDir = "")
     {
         var tcs = new TaskCompletionSource<string>();
 
@@ -71,11 +71,11 @@ public class SystemFileDialog
     }
 
     public static Task<string> SaveFileAsync(
-    IntPtr ownerHandle,
-    string defaultFileName = "",
-    string windowName = "Save File",
-    string filter = "All Files\0*.*\0",
-    string initialDir = "")
+        IntPtr ownerHandle,
+        string defaultFileName = "",
+        string windowName = "Save File",
+        string filter = "All Files\0*.*\0",
+        string initialDir = "")
     {
         var tcs = new TaskCompletionSource<string>();
 
@@ -91,7 +91,7 @@ public class SystemFileDialog
                 lpstrFileTitle = new string(new char[64]),
                 lpstrInitialDir = initialDir,
                 lpstrTitle = windowName,
-                Flags = 0x00000002 | 0x00000004  // OFN_EXPLORER | OFN_OVERWRITEPROMPT
+                Flags = 0x00000002 | 0x00000004 // OFN_EXPLORER | OFN_OVERWRITEPROMPT
             };
 
             if (GetSaveFileName(ofn))

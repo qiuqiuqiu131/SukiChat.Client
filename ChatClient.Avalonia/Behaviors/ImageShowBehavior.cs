@@ -1,14 +1,27 @@
 using System.Diagnostics;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media.Imaging;
 using Avalonia.Xaml.Interactivity;
+using ChatClient.Tool.Data;
 using ChatClient.Tool.Tools;
 
 namespace ChatClient.Avalonia.Behaviors;
 
-public class ImageShowBehavior : Behavior<Image>
+public class ImageShowBehavior : Behavior<Control>
 {
+    public static readonly StyledProperty<ImageMessDto?> ImageMessProperty =
+        AvaloniaProperty.Register<ImageShowBehavior, ImageMessDto?>(
+            "ImageMess");
+
+    public ImageMessDto? ImageMess
+    {
+        get => GetValue(ImageMessProperty);
+        set => SetValue(ImageMessProperty, value);
+    }
+
+
     // 双击时间间隔阈值（单位：毫秒）
     private const int DoubleClickThreshold = 300;
 
@@ -47,7 +60,7 @@ public class ImageShowBehavior : Behavior<Image>
             if (_stopwatch.ElapsedMilliseconds <= DoubleClickThreshold)
             {
                 // 触发双击事件
-                OpenImage(image);
+                OpenImage();
                 _stopwatch.Reset();
             }
             else
@@ -58,9 +71,18 @@ public class ImageShowBehavior : Behavior<Image>
         }
     }
 
-    private void OpenImage(Image image)
+    private void OpenImage()
     {
-        Bitmap bitmap = (Bitmap)image.Source;
-        ImageTool.OpenImageInSystemViewer(bitmap);
+        if (ImageMess != null)
+        {
+            if (System.IO.File.Exists(ImageMess.ActualPath))
+                Process.Start(new ProcessStartInfo(ImageMess.ActualPath)
+                {
+                    UseShellExecute = true,
+                    WindowStyle = ProcessWindowStyle.Normal
+                });
+            else if (ImageMess.ImageSource != null)
+                ImageTool.OpenImageInSystemViewer(ImageMess.ImageSource);
+        }
     }
 }

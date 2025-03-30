@@ -114,6 +114,10 @@ internal class ChatService : BaseService, IChatService
         if (!(response is { Response: { State: true } }))
             return (false, response?.Response?.Message ?? "Failed to send message");
 
+        foreach (var message in messages)
+            if (message.Content is FileMessDto fileMessDto)
+                fileMessDto.ChatId = response.Id;
+
         //-- 操作: 将消息存入数据库 --//
         friendMessage.Id = response.Id;
         friendMessage.Time = response.Time;

@@ -6,6 +6,7 @@ using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.ManagerInterface;

@@ -8,6 +8,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
@@ -67,7 +68,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         IEventAggregator eventAggregator,
         ISukiDialogManager sukiDialogManager,
         IUserManager userManager,
-        IDialogService dialogService,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
@@ -278,9 +278,9 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// 处理多成分聊天消息
     /// </summary>
     /// <param name="messages"></param>
-    public async void SendChatMessages(IEnumerable<object> messages)
+    public async Task<(bool, FileTarget)> SendChatMessages(IEnumerable<object> messages)
     {
-        if (SelectedGroup == null) return;
+        if (SelectedGroup == null) return (false, FileTarget.Group);
 
         var chatMessageDtos = messages.Select(message => message switch
         {
@@ -297,7 +297,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
             _ => null
         }).Where(dto => dto != null).ToList();
 
-        await SendChatMessagesInternal(chatMessageDtos);
+        return (await SendChatMessagesInternal(chatMessageDtos), FileTarget.Group);
     }
 
     /// <summary>
@@ -305,17 +305,17 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// </summary>
     /// <param name="type"></param>
     /// <param name="mess"></param>
-    public async void SendChatMessage(ChatMessage.ContentOneofCase type, object mess)
+    public async Task<(bool, FileTarget)> SendChatMessage(ChatMessage.ContentOneofCase type, object mess)
     {
-        if (SelectedGroup == null) return;
+        if (SelectedGroup == null) return (false, FileTarget.Group);
 
         var chatMessage = new ChatMessageDto { Type = type, Content = mess };
-        await SendChatMessagesInternal(new List<ChatMessageDto> { chatMessage });
+        return (await SendChatMessagesInternal([chatMessage]), FileTarget.Group);
     }
 
-    private async Task SendChatMessagesInternal(List<ChatMessageDto> chatMessageDtos)
+    private async Task<bool> SendChatMessagesInternal(List<ChatMessageDto> chatMessageDtos)
     {
-        if (SelectedGroup == null) return;
+        if (SelectedGroup == null) return false;
 
         bool showTime = SelectedGroup.ChatMessages.Count == 0 ||
                         DateTime.Now - SelectedGroup.ChatMessages.Last().Time > TimeSpan.FromMinutes(5);
@@ -344,6 +344,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         chatData.ChatId = int.TryParse(chatId, out int id) ? id : 0;
 
         SelectedGroup.UpdateChatMessages();
+
+        return state;
     }
 
     #endregion

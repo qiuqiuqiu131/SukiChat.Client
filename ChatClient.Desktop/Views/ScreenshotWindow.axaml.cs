@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using ChatClient.Avalonia;
+using ChatClient.BaseService.Helper;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Tools;
 using Prism.Ioc;

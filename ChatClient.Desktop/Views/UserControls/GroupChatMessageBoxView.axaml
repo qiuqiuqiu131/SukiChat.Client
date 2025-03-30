@@ -26,8 +26,8 @@
         <DockPanel LastChildFill="True">
             <Grid VerticalAlignment="Top" DockPanel.Dock="Top">
                 <StackPanel Orientation="Horizontal" Spacing="13" Margin="5,0" VerticalAlignment="Center">
-                    <Image Source="/Assets/Icon.ico" Width="14" Height="14" VerticalAlignment="Center" />
-                    <TextBlock Text="群聊消息" FontSize="12" VerticalAlignment="Center" Margin="0,0,0,2" />
+                    <Image Source="/Assets/Icon.ico" Width="15" Height="15" VerticalAlignment="Center" />
+                    <TextBlock Text="群聊消息" FontSize="13" VerticalAlignment="Center" Margin="0,0,0,2" />
                 </StackPanel>
                 <Button Name="PART_CloseButton"
                         HorizontalAlignment="Right"
