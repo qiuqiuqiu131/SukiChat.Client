@@ -1,3 +1,4 @@
+using Avalonia.Notification;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
@@ -24,6 +25,8 @@ public class SearchUserGroupViewModel : ViewModelBase, IDialogAware
         get => group;
         set => SetProperty(ref group, value);
     }
+
+    public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
 
     public ThemeStyle CurrentThemeStyle { get; }
 

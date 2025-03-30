@@ -4,7 +4,7 @@ public class GroupRelationDto : BindableBase, IDisposable
 {
     public string Id { get; set; }
 
-    public DateTime GroupTime { get; set; }
+    public DateTime JoinTime { get; set; }
 
     private GroupDto? _groupDto;
 

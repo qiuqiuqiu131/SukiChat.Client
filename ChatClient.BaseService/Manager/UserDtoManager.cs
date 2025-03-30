@@ -24,7 +24,7 @@ public interface IUserDtoManager
     void Clear();
 }
 
-public class UserDtoManager : IUserDtoManager
+internal class UserDtoManager : IUserDtoManager
 {
     // 使用 ConcurrentDictionary 存储用户数据，确保线程安全
     private readonly ConcurrentDictionary<string, UserDto> _userDtos = new();

@@ -4,7 +4,7 @@ using ChatClient.Tool.HelperInterface;
 
 namespace ChatClient.BaseService.Helper;
 
-public class WindowTaskbarFlashHelper : ITaskbarFlashHelper
+internal class WindowTaskbarFlashHelper : ITaskbarFlashHelper
 {
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]

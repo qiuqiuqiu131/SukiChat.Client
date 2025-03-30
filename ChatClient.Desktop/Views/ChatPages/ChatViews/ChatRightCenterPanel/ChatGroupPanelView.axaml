@@ -154,7 +154,7 @@
                                         </TextBlock>
                                     </DockPanel>
                                     <ItemsControl
-                                        Margin="5,0"
+                                        Margin="3,0"
                                         ItemsSource="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupClipMembers}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -305,6 +305,8 @@
                                               Margin="0"
                                               HeadClick="ChatUI_OnHeadClick"
                                               Notification="ChatUI_OnNotification"
+                                              RetractMessageCommand="{Binding RetractMessageCommand}"
+                                              DeleteMessageCommand="{Binding DeleteMessageCommand}"
                                               Messages="{Binding SelectedGroup.ChatMessages}"
                                               FileRestoreCommand="{Binding }"
                                               FileMessageClickCommand="{Binding FileMessageClickCommand}"

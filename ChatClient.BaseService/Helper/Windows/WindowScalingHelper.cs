@@ -3,7 +3,7 @@ using ChatClient.Tool.HelperInterface;
 
 namespace ChatClient.BaseService.Helper;
 
-public class WindowScalingHelper : ISystemScalingHelper
+internal class WindowScalingHelper : ISystemScalingHelper
 {
     [DllImport("user32.dll")]
     private static extern IntPtr GetDC(IntPtr hwnd);

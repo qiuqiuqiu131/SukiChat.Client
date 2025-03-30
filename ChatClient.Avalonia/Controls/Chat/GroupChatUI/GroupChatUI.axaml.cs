@@ -222,6 +222,34 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
+    #region DeleteMessageCommand
+
+    public static readonly StyledProperty<ICommand> DeleteMessageCommandProperty =
+        AvaloniaProperty.Register<GroupChatUI, ICommand>(
+            "DeleteMessageCommand");
+
+    public ICommand DeleteMessageCommand
+    {
+        get => GetValue(DeleteMessageCommandProperty);
+        set => SetValue(DeleteMessageCommandProperty, value);
+    }
+
+    #endregion
+
+    #region RetractMessageCommand
+
+    public static readonly StyledProperty<ICommand> RetractMessageCommandProperty =
+        AvaloniaProperty.Register<GroupChatUI, ICommand>(
+            "RetractMessageCommand");
+
+    public ICommand RetractMessageCommand
+    {
+        get => GetValue(RetractMessageCommandProperty);
+        set => SetValue(RetractMessageCommandProperty, value);
+    }
+
+    #endregion
+
     #endregion
 
     #region ValueChanged
@@ -242,30 +270,35 @@ public partial class GroupChatUI : UserControl
             double maxOffsetY = MaxOffsetY;
             // 当前偏移量
             double OffsetYOrigion = ChatScroll.Offset.Y;
-            if (isMovingToBottom // 正在移动到底部
-                || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
+
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                // 等待渲染完成
-                await Task.Delay(50);
-                ScrollToBottom();
+                if (isMovingToBottom // 正在移动到底部
+                    || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
+                    || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 &&
+                    chatData.IsUser) // 是自己发送的消息
+                {
+                    // 等待渲染完成
+                    await Task.Delay(50);
+                    ScrollToBottom();
+                }
+                else if (e.NewStartingIndex == 0)
+                {
+                    lockScroll = true;
+                    lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
+                    await Task.Delay(200);
+                    lockScroll = false;
+                    lockBottomDistance = 0;
+                }
+                else
+                {
+                    //-- 新消息提醒 --//
+                    HaveUnReadMessage = true;
+                    int addCount = e.NewItems?.Count ?? 0;
+                    UnReadMessageCount += addCount;
+                }
             }
-            else if (e.NewStartingIndex == 0)
-            {
-                lockScroll = true;
-                lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
-                await Task.Delay(200);
-                lockScroll = false;
-                lockBottomDistance = 0;
-            }
-            else
-            {
-                //-- 新消息提醒 --//
-                HaveUnReadMessage = true;
-                int addCount = e.NewItems?.Count ?? 0;
-                UnReadMessageCount += addCount;
-            }
-        }, DispatcherPriority.Render);
+        });
     }
 
     #endregion
@@ -490,7 +523,7 @@ public partial class GroupChatUI : UserControl
     // 消息被点击
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is Control control && control.DataContext is ChatData chatData &&
+        if (sender is Control control && control.DataContext is GroupChatData chatData &&
             e.GetCurrentPoint(control).Properties.IsRightButtonPressed)
         {
             // 如果点击了右键
@@ -513,136 +546,147 @@ public partial class GroupChatUI : UserControl
         }
     }
 
-    private ContextMenu? CreateMenu(ChatData chatData)
+    private ContextMenu? CreateMenu(GroupChatData chatData)
     {
-        if (chatData.ChatMessages.Count != 1) return null;
         ContextMenu contextMenu = new ContextMenu();
-        if (chatData.ChatMessages[0].Content is TextMessDto textMessDto)
-        {
-            var item1 = new MenuItem { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
-            item1.Click += (s, e) =>
-            {
-                var topLevel = TopLevel.GetTopLevel(this);
-                topLevel?.Clipboard?.SetTextAsync(textMessDto.Text);
-                RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "已复制到剪贴板",
-                    NotificationType.Information));
-            };
-            contextMenu.Items.Add(item1);
-        }
-        else if (chatData.ChatMessages[0].Content is ImageMessDto imageMessDto && imageMessDto.ImageSource is not null)
-        {
-            var item1 = new MenuItem { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
-            item1.Click += (s, e) =>
-            {
-                var topLevel = TopLevel.GetTopLevel(this);
-                var dataObject = new DataObject();
-                dataObject.Set(DataFormats.Files, imageMessDto.ImageSource);
-                topLevel?.Clipboard?.SetDataObjectAsync(dataObject);
-                RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片已复制到剪贴板",
-                    NotificationType.Information));
-            };
-            contextMenu.Items.Add(item1);
 
-            var item2 = new MenuItem
-                { Header = "打开图片", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
-            item2.Click += (s, e) =>
-            {
-                if (System.IO.File.Exists(imageMessDto.ActualPath))
-                {
-                    Process.Start(new ProcessStartInfo(imageMessDto.ActualPath)
-                    {
-                        UseShellExecute = true,
-                        WindowStyle = ProcessWindowStyle.Normal
-                    });
-                }
-                else
-                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
-                        NotificationType.Information));
-            };
-            contextMenu.Items.Add(item2);
-
-            var item3 = new MenuItem
-                { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
-            item3.Click += (s, e) =>
-            {
-                if (!string.IsNullOrEmpty(imageMessDto.ActualPath) && System.IO.File.Exists(imageMessDto.ActualPath))
-                {
-                    var argument = $"/select,\"{imageMessDto.ActualPath}\"";
-                    Process.Start(new ProcessStartInfo("explorer.exe", argument)
-                    {
-                        UseShellExecute = true
-                    });
-                }
-                else
-                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
-                        NotificationType.Information));
-            };
-            contextMenu.Items.Add(item3);
-        }
-        else if (chatData.ChatMessages[0].Content is FileMessDto fileMessDto)
+        if (chatData.ChatMessages.Count == 1)
         {
-            if (fileMessDto.IsSuccess)
+            if (chatData.ChatMessages[0].Content is TextMessDto textMessDto)
             {
                 var item1 = new MenuItem
-                    { Header = "打开文件", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
+                    { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
                 item1.Click += (s, e) =>
                 {
-                    if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
-                        System.IO.File.Exists(fileMessDto.TargetFilePath))
+                    var topLevel = TopLevel.GetTopLevel(this);
+                    topLevel?.Clipboard?.SetTextAsync(textMessDto.Text);
+                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "已复制到剪贴板",
+                        NotificationType.Information));
+                };
+                contextMenu.Items.Add(item1);
+            }
+            else if (chatData.ChatMessages[0].Content is ImageMessDto imageMessDto && !imageMessDto.Failed)
+            {
+                var item1 = new MenuItem
+                    { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
+                item1.Click += (s, e) =>
+                {
+                    var topLevel = TopLevel.GetTopLevel(this);
+                    var dataObject = new DataObject();
+                    dataObject.Set(DataFormats.Files, imageMessDto.ImageSource);
+                    topLevel?.Clipboard?.SetDataObjectAsync(dataObject);
+                    RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片已复制到剪贴板",
+                        NotificationType.Information));
+                };
+                contextMenu.Items.Add(item1);
+
+                var item2 = new MenuItem
+                    { Header = "打开图片", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
+                item2.Click += (s, e) =>
+                {
+                    if (System.IO.File.Exists(imageMessDto.ActualPath))
                     {
-                        Process.Start(new ProcessStartInfo(fileMessDto.TargetFilePath)
+                        Process.Start(new ProcessStartInfo(imageMessDto.ActualPath)
                         {
                             UseShellExecute = true,
                             WindowStyle = ProcessWindowStyle.Normal
                         });
                     }
                     else
-                    {
-                        fileMessDto.IsSuccess = false;
-                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
                             NotificationType.Information));
-                    }
                 };
-                contextMenu.Items.Add(item1);
+                contextMenu.Items.Add(item2);
 
-                var item2 = new MenuItem
+                var item3 = new MenuItem
                     { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
-                item2.Click += (s, e) =>
+                item3.Click += (s, e) =>
                 {
-                    if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
-                        System.IO.File.Exists(fileMessDto.TargetFilePath))
+                    if (!string.IsNullOrEmpty(imageMessDto.ActualPath) &&
+                        System.IO.File.Exists(imageMessDto.ActualPath))
                     {
-                        var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
-                        Process.Start(
-                            new ProcessStartInfo("explorer.exe", argument)
+                        var argument = $"/select,\"{imageMessDto.ActualPath}\"";
+                        Process.Start(new ProcessStartInfo("explorer.exe", argument)
+                        {
+                            UseShellExecute = true
+                        });
+                    }
+                    else
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片不存在",
+                            NotificationType.Information));
+                };
+                contextMenu.Items.Add(item3);
+
+                var item4 = new MenuItem
+                    { Header = "另存为", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentSaveMoveOutline } };
+                item4.Click += (sender, args) => { FileRestoreCommand.Execute(imageMessDto); };
+                contextMenu.Items.Add(item4);
+            }
+            else if (chatData.ChatMessages[0].Content is FileMessDto fileMessDto)
+            {
+                if (fileMessDto.IsSuccess)
+                {
+                    var item1 = new MenuItem
+                        { Header = "打开文件", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOpenOutline } };
+                    item1.Click += (s, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
+                            System.IO.File.Exists(fileMessDto.TargetFilePath))
+                        {
+                            Process.Start(new ProcessStartInfo(fileMessDto.TargetFilePath)
                             {
                                 UseShellExecute = true,
                                 WindowStyle = ProcessWindowStyle.Normal
                             });
-                    }
-                    else
-                    {
-                        fileMessDto.IsSuccess = false;
-                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
-                            NotificationType.Information));
-                    }
-                };
-                contextMenu.Items.Add(item2);
-            }
-            else if (fileMessDto.IsExit)
-            {
-                var item1 = new MenuItem
-                    { Header = "下载", Icon = new MaterialIcon { Kind = MaterialIconKind.DownloadOutline } };
-                item1.Click += (s, e) => FileMessageClickCommand.Execute(fileMessDto);
-                contextMenu.Items.Add(item1);
-            }
+                        }
+                        else
+                        {
+                            fileMessDto.IsSuccess = false;
+                            RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
+                                NotificationType.Information));
+                        }
+                    };
+                    contextMenu.Items.Add(item1);
 
-            if (fileMessDto.IsSuccess || fileMessDto.IsExit)
-            {
-                var item3 = new MenuItem
-                    { Header = "另存为", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentSaveMoveOutline } };
-                item3.Click += (s, e) => FileRestoreCommand.Execute(fileMessDto);
-                contextMenu.Items.Add(item3);
+                    var item2 = new MenuItem
+                        { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
+                    item2.Click += (s, e) =>
+                    {
+                        if (!string.IsNullOrEmpty(fileMessDto.TargetFilePath) &&
+                            System.IO.File.Exists(fileMessDto.TargetFilePath))
+                        {
+                            var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
+                            Process.Start(
+                                new ProcessStartInfo("explorer.exe", argument)
+                                {
+                                    UseShellExecute = true,
+                                    WindowStyle = ProcessWindowStyle.Normal
+                                });
+                        }
+                        else
+                        {
+                            fileMessDto.IsSuccess = false;
+                            RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "文件不存在",
+                                NotificationType.Information));
+                        }
+                    };
+                    contextMenu.Items.Add(item2);
+                }
+                else if (fileMessDto.IsExit)
+                {
+                    var item1 = new MenuItem
+                        { Header = "下载", Icon = new MaterialIcon { Kind = MaterialIconKind.DownloadOutline } };
+                    item1.Click += (s, e) => FileMessageClickCommand.Execute(fileMessDto);
+                    contextMenu.Items.Add(item1);
+                }
+
+                if (fileMessDto.IsSuccess || fileMessDto.IsExit)
+                {
+                    var item3 = new MenuItem
+                        { Header = "另存为", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentSaveMoveOutline } };
+                    item3.Click += (s, e) => FileRestoreCommand.Execute(fileMessDto);
+                    contextMenu.Items.Add(item3);
+                }
             }
         }
 
@@ -656,15 +700,17 @@ public partial class GroupChatUI : UserControl
 
         contextMenu.Items.Add(new Separator());
 
-        if (DateTime.Now - chatData.Time < TimeSpan.FromMinutes(2))
+        if (DateTime.Now - chatData.Time < TimeSpan.FromMinutes(2) && chatData.IsUser)
         {
             var comItem3 = new MenuItem
                 { Header = "撤回", Icon = new MaterialIcon { Kind = MaterialIconKind.UndoVariant } };
+            comItem3.Click += (sender, args) => { RetractMessageCommand?.Execute(chatData); };
             contextMenu.Items.Add(comItem3);
         }
 
         var comItem4 = new MenuItem
             { Header = "删除", Icon = new MaterialIcon { Kind = MaterialIconKind.DeleteOutline } };
+        comItem4.Click += (sender, args) => { DeleteMessageCommand?.Execute(chatData); };
         contextMenu.Items.Add(comItem4);
 
         return contextMenu;

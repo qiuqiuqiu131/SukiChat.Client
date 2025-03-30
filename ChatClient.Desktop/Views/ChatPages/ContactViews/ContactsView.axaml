@@ -89,7 +89,7 @@
                                     IsVisible="{Binding User.UnreadFriendMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <TextBlock
                                         Padding="0"
-                                        Margin="0"
+                                        Margin="1,0.5,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         FontSize="10"

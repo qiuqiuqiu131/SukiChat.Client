@@ -147,11 +147,13 @@
             </suki:SukiSideMenu.FooterContent>
         </suki:SukiSideMenu>
 
-        <Popup IsOpen="False" Name="MessageBox" WindowManagerAddShadowHint="True" IsLightDismissEnabled="True" DataContext="{x:Null}">
+        <Popup IsOpen="False" Name="MessageBox" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True"
+               DataContext="{x:Null}">
             <userControls:UserMessageBox />
         </Popup>
 
-        <Popup IsOpen="False" Name="GroupMessageBox" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True" DataContext="{x:Null}">
+        <Popup IsOpen="False" Name="GroupMessageBox" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True"
+               DataContext="{x:Null}">
             <userControls:GroupMessageBox />
         </Popup>
 
@@ -165,7 +167,7 @@
             </Border.Transitions>
         </Border>
 
-        <controls:NotificationMessageContainer Width="350" Manager="{Binding NotificationMessageManager}" />
+        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" />
     </Panel>
 
 </suki:SukiWindow>

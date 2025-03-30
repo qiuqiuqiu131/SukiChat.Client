@@ -128,7 +128,7 @@ namespace ChatClient.MessageOperate
                 }
                 catch (Exception e)
                 {
-                    throw e;
+                    Console.WriteLine(e);
                 }
             }
         }

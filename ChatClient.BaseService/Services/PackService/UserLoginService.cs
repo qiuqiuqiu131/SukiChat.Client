@@ -295,6 +295,8 @@ internal class UserLoginService : BaseService, IUserLoginService
         [
             OperateFriendChatMessages(userId, outlineResponse.FriendChats),
             OperateGroupChatMessages(userId, outlineResponse.GroupChats),
+            OperateChatGroupDetailMessage(userId, outlineResponse.ChatGroupDetails),
+            OperateChatPrivateDetailMessage(userId, outlineResponse.ChatPrivateDetails)
         ];
         await Task.WhenAll(chatTask);
 
@@ -510,6 +512,32 @@ internal class UserLoginService : BaseService, IUserLoginService
         }
 
         groupRequestMessages.Clear();
+    }
+
+    private async Task OperateChatGroupDetailMessage(string userId,
+        IList<ChatGroupDetailMessage> chatGroupDetailMessages)
+    {
+        if (chatGroupDetailMessages.Count == 0) return;
+
+        var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
+        await groupChatPackService.ChatGroupDetailMessagesOperate(userId, chatGroupDetailMessages);
+        if (groupChatPackService is IDisposable disposable)
+            disposable.Dispose();
+
+        chatGroupDetailMessages.Clear();
+    }
+
+    private async Task OperateChatPrivateDetailMessage(string userId,
+        IList<ChatPrivateDetailMessage> chatPrivateDetailMessages)
+    {
+        if (chatPrivateDetailMessages.Count == 0) return;
+
+        var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
+        await friendChatPackService.ChatPrivateDetailMessagesOperate(userId, chatPrivateDetailMessages);
+        if (friendChatPackService is IDisposable disposable)
+            disposable.Dispose();
+
+        chatPrivateDetailMessages.Clear();
     }
 
     #endregion

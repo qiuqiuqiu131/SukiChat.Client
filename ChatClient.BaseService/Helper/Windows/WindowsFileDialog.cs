@@ -1,8 +1,10 @@
 using System.Runtime.InteropServices;
+using System.Text;
+using ChatClient.Tool.HelperInterface;
 
 namespace ChatClient.BaseService.Helper;
 
-public class SystemFileDialog
+internal class WindowsFileDialog : ISystemFileDialog
 {
     [DllImport("Comdlg32.dll", CharSet = CharSet.Auto)]
     private static extern bool GetOpenFileName([In, Out] OpenFileName ofn);
@@ -38,14 +40,16 @@ public class SystemFileDialog
         public int FlagsEx;
     }
 
-    public static Task<string> OpenFileAsync(IntPtr ownerHandle, string windowName = "Open FIle",
-        string filter = "Image Files\0*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.webp\0All Files\0*.*\0",
-        string initialDir = "")
+    public Task<string> OpenFileAsync(IntPtr ownerHandle, string windowName = "Open FIle",
+        string initialDir = "",
+        string[]? fileTypes = null)
     {
         var tcs = new TaskCompletionSource<string>();
 
         Task.Run(() =>
         {
+            var filter = BuildFilterString(fileTypes);
+
             OpenFileName ofn = new OpenFileName
             {
                 hwndOwner = ownerHandle,
@@ -70,17 +74,19 @@ public class SystemFileDialog
         return tcs.Task;
     }
 
-    public static Task<string> SaveFileAsync(
+    public Task<string> SaveFileAsync(
         IntPtr ownerHandle,
         string defaultFileName = "",
         string windowName = "Save File",
-        string filter = "All Files\0*.*\0",
-        string initialDir = "")
+        string initialDir = "",
+        string[]? fileTypes = null)
     {
         var tcs = new TaskCompletionSource<string>();
 
         Task.Run(() =>
         {
+            var filter = BuildFilterString(fileTypes);
+
             OpenFileName ofn = new OpenFileName
             {
                 hwndOwner = ownerHandle,
@@ -105,5 +111,36 @@ public class SystemFileDialog
         });
 
         return tcs.Task;
+    }
+
+    private string BuildFilterString(string[]? fileTypes)
+    {
+        if (fileTypes == null || fileTypes.Length == 0)
+        {
+            return "All Files\0*.*\0\0";
+        }
+
+        // 检查是否为成对的描述和文件类型格式
+        if (fileTypes.Length % 2 != 0)
+        {
+            throw new ArgumentException("fileTypes数组应该包含成对的描述和扩展名模式");
+        }
+
+        var filterBuilder = new StringBuilder();
+
+        for (int i = 0; i < fileTypes.Length; i += 2)
+        {
+            string description = fileTypes[i];
+            string extensions = fileTypes[i + 1];
+
+            filterBuilder.Append(description);
+            filterBuilder.Append('\0');
+            filterBuilder.Append(extensions);
+            filterBuilder.Append('\0');
+        }
+
+        filterBuilder.Append('\0'); // 终止字符
+
+        return filterBuilder.ToString();
     }
 }

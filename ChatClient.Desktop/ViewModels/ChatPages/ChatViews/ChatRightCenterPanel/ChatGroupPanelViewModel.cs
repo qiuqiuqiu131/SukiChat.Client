@@ -57,8 +57,10 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     #region Command
 
     public DelegateCommand SearchMoreCommand { get; private set; }
+    public DelegateCommand<GroupChatData> RetractMessageCommand { get; private set; }
+    public DelegateCommand<GroupChatData> DeleteMessageCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
-    public AsyncDelegateCommand<FileMessDto> FileRestoreCommand { get; private set; }
+    public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
     public DelegateCommand QuitGroupCommand { get; private set; }
     public DelegateCommand DeleteGroupCommand { get; private set; }
 
@@ -79,10 +81,100 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
 
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
-        FileRestoreCommand = new AsyncDelegateCommand<FileMessDto>(FileRestoreDownload);
+        RetractMessageCommand = new DelegateCommand<GroupChatData>(RetractMessage);
+        DeleteMessageCommand = new DelegateCommand<GroupChatData>(DeleteMessage);
+        FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         QuitGroupCommand = new DelegateCommand(QuitGroup);
         DeleteGroupCommand = new DelegateCommand(DeleteGroup);
+    }
+
+    /// <summary>
+    /// 撤回聊天记录
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void RetractMessage(GroupChatData obj)
+    {
+        if (SelectedGroup == null) return;
+
+        if (DateTime.Now - obj.Time > TimeSpan.FromMinutes(2))
+        {
+            _sukiDialogManager.CreateDialog()
+                .WithViewModel(d => new CommonDialogViewModel(d, "消息已超过2分钟，无法撤回", null))
+                .TryShow();
+        }
+        else
+        {
+            async void RetractMessageCallback(IDialogResult result)
+            {
+                if (result.Result != ButtonResult.OK) return;
+
+                var chatService = _containerProvider.Resolve<IChatService>();
+                var response = await chatService.RetractChatMessage(_userManager.User.Id, obj.ChatId, FileTarget.Group);
+
+                if (response)
+                {
+                    _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                    {
+                        Message = "消息撤回成功",
+                        Type = NotificationType.Success
+                    });
+                }
+                else
+                {
+                    _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                    {
+                        Message = "消息撤回失败",
+                        Type = NotificationType.Error
+                    });
+                }
+            }
+
+            _sukiDialogManager.CreateDialog()
+                .WithViewModel(d => new CommonDialogViewModel(d, "确定撤回此消息吗？", RetractMessageCallback))
+                .TryShow();
+        }
+    }
+
+    /// <summary>
+    /// 删除聊天消息
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void DeleteMessage(GroupChatData obj)
+    {
+        if (SelectedGroup == null) return;
+
+        async void DeleteMessageCallback(IDialogResult dialogResult)
+        {
+            if (dialogResult.Result != ButtonResult.OK) return;
+            var index = SelectedGroup.ChatMessages.IndexOf(obj);
+            SelectedGroup.ChatMessages.Remove(obj);
+            if (SelectedGroup.ChatMessages.Count > index && index > 0)
+            {
+                var last = SelectedGroup.ChatMessages[index];
+                if (last.Time - SelectedGroup.ChatMessages[index - 1].Time > TimeSpan.FromMinutes(3))
+                    last.ShowTime = true;
+                else
+                    last.ShowTime = false;
+            }
+            else if (SelectedGroup.ChatMessages.Count > index)
+                SelectedGroup.ChatMessages[0].ShowTime = true;
+
+            var chatService = _containerProvider.Resolve<IChatService>();
+            await chatService.DeleteChatMessage(_userManager.User!.Id, obj.ChatId, FileTarget.Group);
+
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "聊天消息已删除",
+                Type = NotificationType.Information
+            });
+        }
+
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定删除此聊天消息吗？", DeleteMessageCallback))
+            .TryShow();
     }
 
     /// <summary>
@@ -175,9 +267,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// <param name="fileMess"></param>
     public async Task FileDownload(FileMessDto fileMess)
     {
-        // 获取文件地址
-        // string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        // filePath = Path.Combine(filePath, "Downloads");
+        if (fileMess.IsSuccess) return;
 
         var appDataManager = _containerProvider.Resolve<IAppDataManager>();
         var filePath = appDataManager
@@ -228,44 +318,75 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     /// 另存文件
     /// </summary>
     /// <param name="fileMess"></param>
-    public async Task FileRestoreDownload(FileMessDto fileMess)
+    public async Task FileRestoreDownload(object mess)
     {
-        // 获取文件地址
-        string filePath = "";
-        if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (mess is FileMessDto fileMess)
         {
-            var window = desktop.MainWindow;
-            var handle = window!.TryGetPlatformHandle()?.Handle;
+            // 获取文件地址
+            string filePath = "";
+            if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = desktop.MainWindow;
+                var handle = window!.TryGetPlatformHandle()?.Handle;
 
-            if (handle == null) return;
+                if (handle == null) return;
 
-            filePath = await SystemFileDialog.SaveFileAsync(handle.Value, fileMess.FileName, "保存文件",
-                $"{fileMess.FileType}\0*{fileMess.FileType}\0");
+                var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
+                filePath = await systemFileDialog.SaveFileAsync(handle.Value, fileMess.FileName, "保存文件",
+                    "", [$"{fileMess.FileType}", $"*{fileMess.FileType}"]);
+            }
+
+            if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            // 开始下载文件
+            var fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
+            var result =
+                await fileOperateHelper.SaveAsFile(fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
+                    "ChatFile", fileMess.FileName, filePath,
+                    FileTarget.Group);
+
+            if (result)
+            {
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "文件另存成功",
+                    Type = NotificationType.Success
+                });
+            }
+            else
+            {
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "文件另存失败",
+                    Type = NotificationType.Error
+                });
+            }
         }
-
-        if (string.IsNullOrWhiteSpace(filePath)) return;
-
-        // 开始下载文件
-        var fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
-        var result =
-            await fileOperateHelper.SaveAsFile(fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
-                "ChatFile", fileMess.FileName, filePath,
-                FileTarget.Group);
-
-        if (result)
+        else if (mess is ImageMessDto imageMess && imageMess.ImageSource != null)
         {
+            // 获取文件地址
+            string filePath = "";
+            if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = desktop.MainWindow;
+                var handle = window!.TryGetPlatformHandle()?.Handle;
+
+                if (handle == null) return;
+
+                var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
+                filePath = await systemFileDialog.SaveFileAsync(handle.Value, imageMess.FilePath, "保存图片",
+                    "", [$".png", $"*.png"]);
+            }
+
+            if (string.IsNullOrWhiteSpace(filePath)) return;
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+                imageMess.ImageSource.Save(fileStream);
+
             _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
             {
-                Message = "文件下载成功",
+                Message = "图片另存成功",
                 Type = NotificationType.Success
-            });
-        }
-        else
-        {
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "文件下载失败",
-                Type = NotificationType.Error
             });
         }
     }

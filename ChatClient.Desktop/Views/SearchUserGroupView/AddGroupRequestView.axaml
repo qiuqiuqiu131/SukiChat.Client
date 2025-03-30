@@ -76,7 +76,5 @@
                 <TextBlock Text="取消" FontSize="13.5" />
             </Button>
         </StackPanel>
-
-        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" Grid.RowSpan="4" />
     </Grid>
 </UserControl>

@@ -31,10 +31,10 @@ public static class NotificationExtension
                 NotificationType.Warning => NotificationColor.WarningIconForeground,
                 NotificationType.Error => NotificationColor.ErrorIconForeground,
             },
-            Margin = new Thickness(20, 0, 0, 0),
+            Margin = new Thickness(10, 0, 0, 0),
             VerticalAlignment = VerticalAlignment.Center,
-            Height = 18,
-            Width = 18
+            Height = 20,
+            Width = 20
         };
 
         manager.CreateMessage()

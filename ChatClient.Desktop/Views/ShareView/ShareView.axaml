@@ -1,0 +1,140 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:shareView="clr-namespace:ChatClient.Desktop.ViewModels.ShareView"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="shareView:ShareViewModel"
+             x:Class="ChatClient.Desktop.Views.ShareView.ShareView">
+    <Grid ColumnDefinitions="*,1.1*">
+        <Grid Grid.Column="0" RowDefinitions="50,*">
+            <suki:GlassCard Padding="8"
+                            Margin="0"
+                            Grid.Row="0"
+                            CornerRadius="7,0,0,0">
+                <searchBox:SearchBox HorizontalAlignment="Stretch"
+                                     WaterMask="搜索"
+                                     VerticalAlignment="Bottom" />
+            </suki:GlassCard>
+            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0,0,0,7" Grid.Row="1">
+                <!-- <Grid> -->
+                <!--     <TextBlock Text="还没有添加好友" -->
+                <!--                Margin="0,50" -->
+                <!--                VerticalAlignment="Center" -->
+                <!--                HorizontalAlignment="Center" -->
+                <!--                Opacity="0.6" -->
+                <!--                FontWeight="SemiBold" -->
+                <!--                IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}"> -->
+                <!--     </TextBlock> -->
+                <!--     <DockPanel LastChildFill="True" -->
+                <!--                IsVisible="{Binding !GroupFriends.Count,Converter={converter:ListEmptyConverter}}"> -->
+                <!--         <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource SukiBorderBrush}" -->
+                <!--                 DockPanel.Dock="Top"> -->
+                <!--             <TextBlock Text="选择好友创建" VerticalAlignment="Center" FontSize="14" Margin="20,10" /> -->
+                <!--         </Border> -->
+                <!--         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"> -->
+                <!--             <multiSeparateGroupView:MultiSeparateGroupView -->
+                <!--                 Margin="10,5" -->
+                <!--                 x:Name="MultiSeparateGroupView" -->
+                <!--                 SelectionChangedCommand="{Binding SelectionChangedCommand}" -->
+                <!--                 GroupFriends="{Binding GroupFriends}" /> -->
+                <!--         </ScrollViewer> -->
+                <!--     </DockPanel> -->
+                <!-- </Grid> -->
+            </suki:GlassCard>
+        </Grid>
+        <Grid Grid.Column="1">
+            <DockPanel LastChildFill="True">
+                <!-- <StackPanel DockPanel.Dock="Bottom" -->
+                <!--             Orientation="Horizontal" -->
+                <!--             HorizontalAlignment="Right" -->
+                <!--             Spacing="10" -->
+                <!--             Margin="15"> -->
+                <!--     <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}"> -->
+                <!--         <TextBlock Text="确定" FontSize="13.5" /> -->
+                <!--     </Button> -->
+                <!--     <Button Padding="15,5" Command="{Binding CancleCommand}"> -->
+                <!--         <TextBlock Text="取消" FontSize="13.5" /> -->
+                <!--     </Button> -->
+                <!-- </StackPanel> -->
+                <!-- <Grid RowDefinitions="Auto,*"> -->
+                <!--     <Grid Grid.Row="0"> -->
+                <!--         <DockPanel LastChildFill="True" Margin="10"> -->
+                <!--             <TextBlock DockPanel.Dock="Right" FontSize="11" -->
+                <!--                        IsVisible="{Binding SelectedFriends.Count}" -->
+                <!--                        Opacity="0.75" -->
+                <!--                        Text="{Binding SelectedFriends.Count,StringFormat=已选择 {0} 个好友}" /> -->
+                <!--             <TextBlock FontSize="13.5" Text="创建群聊" /> -->
+                <!--         </DockPanel> -->
+                <!--     </Grid> -->
+                <!--     <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" -->
+                <!--                   VerticalScrollBarVisibility="Hidden"> -->
+                <!--         <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}"> -->
+                <!--             <ItemsControl.Styles> -->
+                <!--                 <Style Selector="Grid.Item Border#Back"> -->
+                <!--                     <Setter Property="Opacity" Value="0" /> -->
+                <!--                 </Style> -->
+                <!--                 <Style Selector="Grid.Item avalonia|MaterialIcon#Icon"> -->
+                <!--                     <Setter Property="Opacity" Value="0.3" /> -->
+                <!--                 </Style> -->
+                <!--                 <Style Selector="Grid.Item:pointerover Border#Back"> -->
+                <!--                     <Setter Property="Opacity" Value="0.6" /> -->
+                <!--                 </Style> -->
+                <!--                 <Style Selector="Grid.Item avalonia|MaterialIcon#Icon"> -->
+                <!--                     <Setter Property="Opacity" Value="0.7" /> -->
+                <!--                 </Style> -->
+                <!--             </ItemsControl.Styles> -->
+                <!--             <ItemsControl.ItemsPanel> -->
+                <!--                 <ItemsPanelTemplate> -->
+                <!--                     <StackPanel Orientation="Vertical" /> -->
+                <!--                 </ItemsPanelTemplate> -->
+                <!--             </ItemsControl.ItemsPanel> -->
+                <!--             <ItemsControl.ItemTemplate> -->
+                <!--                 <DataTemplate> -->
+                <!--                     <Grid Height="44" Classes="Item" Background="Transparent" -->
+                <!--                           PointerPressed="InputElement_OnPointerPressed"> -->
+                <!--                         <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" /> -->
+                <!--                         <DockPanel LastChildFill="True" Margin="5,0"> -->
+                <!--                             <avalonia:MaterialIcon DockPanel.Dock="Right" -->
+                <!--                                                    Name="Icon" -->
+                <!--                                                    Margin="10,7" -->
+                <!--                                                    Kind="CancelCircle" -->
+                <!--                                                    Width="15" -->
+                <!--                                                    Height="15" /> -->
+                <!--                             <Grid Margin="15,7" ColumnDefinitions="36,*"> -->
+                <!--                                 <Grid Width="36" Height="36"> -->
+                <!--                                     <Panel Width="36" Height="36"> -->
+                <!--                                         <Panel.Clip> -->
+                <!--                                             <EllipseGeometry -->
+                <!--                                                 Center="18,18" -->
+                <!--                                                 RadiusX="18" -->
+                <!--                                                 RadiusY="18" /> -->
+                <!--                                         </Panel.Clip> -->
+                <!--                                         <Image -->
+                <!--                                             Width="36" -->
+                <!--                                             Height="36" -->
+                <!--                                             Source="{Binding  UserDto.HeadImage}" /> -->
+                <!--                                     </Panel> -->
+                <!--                                 </Grid> -->
+                <!--                                 <TextBlock Grid.Column="1" -->
+                <!--                                            Margin="20,0" -->
+                <!--                                            VerticalAlignment="Center" -->
+                <!--                                            FontSize="14" -->
+                <!--                                            Text="{Binding  UserDto.Name}" /> -->
+                <!--                             </Grid> -->
+                <!--                         </DockPanel> -->
+                <!--                     </Grid> -->
+                <!--                 </DataTemplate> -->
+                <!--             </ItemsControl.ItemTemplate> -->
+                <!--         </ItemsControl> -->
+                <!--     </ScrollViewer> -->
+                <!-- </Grid> -->
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

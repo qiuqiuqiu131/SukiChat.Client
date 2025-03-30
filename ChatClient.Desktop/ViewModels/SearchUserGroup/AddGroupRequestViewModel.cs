@@ -68,7 +68,7 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _groups, value);
     }
 
-    public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
+    private INotificationMessageManager? notificationManager;
 
     public DelegateCommand SendGroupRequestCommand { get; }
     public DelegateCommand CancleCommand { get; }
@@ -98,10 +98,10 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
             await _groupService.JoinGroupRequest(_userManager.User!.Id, _groupDto.Id,
                 Message ?? "", NickName ?? "", Group ?? "默认分组", Remark ?? "");
         if (state)
-            NotificationMessageManager.ShowMessage("入群请求发送成功", NotificationType.Success, TimeSpan.FromSeconds(1.5));
+            notificationManager?.ShowMessage("入群请求发送成功", NotificationType.Success, TimeSpan.FromSeconds(1.5));
         else
-            NotificationMessageManager.ShowMessage("入群请求发送失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
-        await Task.Delay(TimeSpan.FromSeconds(0.9));
+            notificationManager?.ShowMessage("入群请求发送失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
+
         RequestClose.Invoke();
     }
 
@@ -111,10 +111,12 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        notificationManager = null;
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
+        notificationManager = parameters.GetValue<INotificationMessageManager>("notificationManager");
         GroupDto = parameters.GetValue<GroupDto>("GroupDto");
         Message = "我是" + _userManager.User!.Name;
         Group = "默认分组";

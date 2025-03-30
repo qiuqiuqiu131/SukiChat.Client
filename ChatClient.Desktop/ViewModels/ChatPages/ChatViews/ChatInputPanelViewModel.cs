@@ -5,25 +5,18 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
-using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform.Storage;
-using ChatClient.Avalonia;
-using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Data.File;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Ioc;
-using SukiUI;
-using Action = Avalonia.Xaml.Interactivity.Action;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
@@ -189,7 +182,8 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
             if (handle == null) return;
 
-            filePath = await SystemFileDialog.OpenFileAsync(handle.Value, "选择文件", "All Files\0*.*\0");
+            var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
+            filePath = await systemFileDialog.OpenFileAsync(handle.Value, "选择文件");
 
             // var files = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             // {

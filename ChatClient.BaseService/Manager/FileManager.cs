@@ -12,7 +12,7 @@ public interface IFileManager
     Task OperateFileMessDto(string id, string userId, FileMessDto fileMessDto, FileTarget fileTarget);
 }
 
-public class FileManager : IFileManager, IDisposable
+internal class FileManager : IFileManager, IDisposable
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IMessageHelper _messageHelper;

@@ -71,29 +71,32 @@ namespace ChatServer.Common.Protobuf {
             "C3JlcXVlc3RUaW1lGAQgASgJEhAKCGlzQWNjZXB0GAUgASgIEhAKCGlzU29s",
             "dmVkGAYgASgIEhIKCnNvbHZlZFRpbWUYByABKAkSDwoHbWVzc2FnZRgIIAEo",
             "CRIWCg5hY2NlcHRCeVVzZXJJZBgJIAEoCRIQCghncm91cGluZxgKIAEoCRIO",
-            "CgZyZW1hcmsYCyABKAkSEAoIbmlja05hbWUYDCABKAkikgUKFk91dGxpbmVN",
+            "CgZyZW1hcmsYCyABKAkSEAoIbmlja05hbWUYDCABKAkisgYKFk91dGxpbmVN",
             "ZXNzYWdlUmVzcG9uc2USCgoCaWQYASABKAkSSAoOZnJpZW5kUmVxdWVzdHMY",
             "AiADKAsyMC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GcmllbmRSZXF1",
             "ZXN0TWVzc2FnZRJACgpuZXdGcmllbmRzGAMgAygLMiwuQ2hhdFNlcnZlci5D",
             "b21tb24uUHJvdG9idWYuTmV3RnJpZW5kTWVzc2FnZRJCCgtmcmllbmRDaGF0",
             "cxgEIAMoCzItLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkZyaWVuZENo",
-            "YXRNZXNzYWdlEkYKDWZyaWVuZERlbGV0ZXMYBSADKAsyLy5DaGF0U2VydmVy",
-            "LkNvbW1vbi5Qcm90b2J1Zi5GcmllbmREZWxldGVNZXNzYWdlEkIKC2VudGVy",
-            "R3JvdXBzGAYgAygLMi0uQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuRW50",
-            "ZXJHcm91cE1lc3NhZ2USQAoKZ3JvdXBDaGF0cxgHIAMoCzIsLkNoYXRTZXJ2",
-            "ZXIuQ29tbW9uLlByb3RvYnVmLkdyb3VwQ2hhdE1lc3NhZ2USRgoNZ3JvdXBS",
-            "ZXF1ZXN0cxgIIAMoCzIvLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkdy",
-            "b3VwUmVxdWVzdE1lc3NhZ2USRAoMZ3JvdXBEZWxldGVzGAkgAygLMi4uQ2hh",
-            "dFNlcnZlci5Db21tb24uUHJvdG9idWYuR3JvdXBEZWxldGVNZXNzYWdlEkAK",
-            "CnVzZXJHcm91cHMYCiADKAsyLC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1",
-            "Zi5Vc2VyR3JvdXBNZXNzYWdlIjQKEVNlYXJjaFVzZXJSZXF1ZXN0Eg8KB2Nv",
-            "bnRlbnQYASABKAkSDgoGdXNlcklkGAIgASgJIl8KElNlYXJjaFVzZXJSZXNw",
-            "b25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlBy",
-            "b3RvYnVmLkNvbW1vblJlc3BvbnNlEgsKA2lkcxgCIAMoCSI1ChJTZWFyY2hH",
-            "cm91cFJlcXVlc3QSDwoHY29udGVudBgBIAEoCRIOCgZ1c2VySWQYAiABKAki",
-            "YAoTU2VhcmNoR3JvdXBSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNo",
-            "YXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlEgsKA2lk",
-            "cxgCIAMoCWIGcHJvdG8z"));
+            "YXRNZXNzYWdlElAKEmNoYXRQcml2YXRlRGV0YWlscxgFIAMoCzI0LkNoYXRT",
+            "ZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNoYXRQcml2YXRlRGV0YWlsTWVzc2Fn",
+            "ZRJGCg1mcmllbmREZWxldGVzGAYgAygLMi8uQ2hhdFNlcnZlci5Db21tb24u",
+            "UHJvdG9idWYuRnJpZW5kRGVsZXRlTWVzc2FnZRJCCgtlbnRlckdyb3VwcxgH",
+            "IAMoCzItLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkVudGVyR3JvdXBN",
+            "ZXNzYWdlEkAKCmdyb3VwQ2hhdHMYCCADKAsyLC5DaGF0U2VydmVyLkNvbW1v",
+            "bi5Qcm90b2J1Zi5Hcm91cENoYXRNZXNzYWdlEkwKEGNoYXRHcm91cERldGFp",
+            "bHMYCSADKAsyMi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5DaGF0R3Jv",
+            "dXBEZXRhaWxNZXNzYWdlEkYKDWdyb3VwUmVxdWVzdHMYCiADKAsyLy5DaGF0",
+            "U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Hcm91cFJlcXVlc3RNZXNzYWdlEkQK",
+            "DGdyb3VwRGVsZXRlcxgLIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
+            "YnVmLkdyb3VwRGVsZXRlTWVzc2FnZRJACgp1c2VyR3JvdXBzGAwgAygLMiwu",
+            "Q2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNlckdyb3VwTWVzc2FnZSI0",
+            "ChFTZWFyY2hVc2VyUmVxdWVzdBIPCgdjb250ZW50GAEgASgJEg4KBnVzZXJJ",
+            "ZBgCIAEoCSJfChJTZWFyY2hVc2VyUmVzcG9uc2USPAoIcmVzcG9uc2UYASAB",
+            "KAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25z",
+            "ZRILCgNpZHMYAiADKAkiNQoSU2VhcmNoR3JvdXBSZXF1ZXN0Eg8KB2NvbnRl",
+            "bnQYASABKAkSDgoGdXNlcklkGAIgASgJImAKE1NlYXJjaEdyb3VwUmVzcG9u",
+            "c2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90",
+            "b2J1Zi5Db21tb25SZXNwb25zZRILCgNpZHMYAiADKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatRelationProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor, global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -115,7 +118,7 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageRequest), global::ChatServer.Common.Protobuf.OutlineMessageRequest.Parser, new[]{ "Id", "LastLogoutTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendRequestMessage), global::ChatServer.Common.Protobuf.FriendRequestMessage.Parser, new[]{ "RequestId", "UserFromId", "UserTargetId", "Group", "RequestTime", "IsAccept", "IsSolved", "SolvedTime", "Message", "Remark" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupRequestMessage), global::ChatServer.Common.Protobuf.GroupRequestMessage.Parser, new[]{ "RequestId", "UserFromId", "GroupId", "RequestTime", "IsAccept", "IsSolved", "SolvedTime", "Message", "AcceptByUserId", "Grouping", "Remark", "NickName" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageResponse), global::ChatServer.Common.Protobuf.OutlineMessageResponse.Parser, new[]{ "Id", "FriendRequests", "NewFriends", "FriendChats", "FriendDeletes", "EnterGroups", "GroupChats", "GroupRequests", "GroupDeletes", "UserGroups" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.OutlineMessageResponse), global::ChatServer.Common.Protobuf.OutlineMessageResponse.Parser, new[]{ "Id", "FriendRequests", "NewFriends", "FriendChats", "ChatPrivateDetails", "FriendDeletes", "EnterGroups", "GroupChats", "ChatGroupDetails", "GroupRequests", "GroupDeletes", "UserGroups" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SearchUserRequest), global::ChatServer.Common.Protobuf.SearchUserRequest.Parser, new[]{ "Content", "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SearchUserResponse), global::ChatServer.Common.Protobuf.SearchUserResponse.Parser, new[]{ "Response", "Ids" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SearchGroupRequest), global::ChatServer.Common.Protobuf.SearchGroupRequest.Parser, new[]{ "Content", "UserId" }, null, null, null, null),
@@ -3723,9 +3726,11 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_ = other.friendRequests_.Clone();
       newFriends_ = other.newFriends_.Clone();
       friendChats_ = other.friendChats_.Clone();
+      chatPrivateDetails_ = other.chatPrivateDetails_.Clone();
       friendDeletes_ = other.friendDeletes_.Clone();
       enterGroups_ = other.enterGroups_.Clone();
       groupChats_ = other.groupChats_.Clone();
+      chatGroupDetails_ = other.chatGroupDetails_.Clone();
       groupRequests_ = other.groupRequests_.Clone();
       groupDeletes_ = other.groupDeletes_.Clone();
       userGroups_ = other.userGroups_.Clone();
@@ -3778,10 +3783,20 @@ namespace ChatServer.Common.Protobuf {
       get { return friendChats_; }
     }
 
+    /// <summary>Field number for the "chatPrivateDetails" field.</summary>
+    public const int ChatPrivateDetailsFieldNumber = 5;
+    private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage> _repeated_chatPrivateDetails_codec
+        = pb::FieldCodec.ForMessage(42, global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage.Parser);
+    private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage> chatPrivateDetails_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage> ChatPrivateDetails {
+      get { return chatPrivateDetails_; }
+    }
+
     /// <summary>Field number for the "friendDeletes" field.</summary>
-    public const int FriendDeletesFieldNumber = 5;
+    public const int FriendDeletesFieldNumber = 6;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.FriendDeleteMessage> _repeated_friendDeletes_codec
-        = pb::FieldCodec.ForMessage(42, global::ChatServer.Common.Protobuf.FriendDeleteMessage.Parser);
+        = pb::FieldCodec.ForMessage(50, global::ChatServer.Common.Protobuf.FriendDeleteMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.FriendDeleteMessage> friendDeletes_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.FriendDeleteMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.FriendDeleteMessage> FriendDeletes {
@@ -3789,9 +3804,9 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "enterGroups" field.</summary>
-    public const int EnterGroupsFieldNumber = 6;
+    public const int EnterGroupsFieldNumber = 7;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.EnterGroupMessage> _repeated_enterGroups_codec
-        = pb::FieldCodec.ForMessage(50, global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser);
+        = pb::FieldCodec.ForMessage(58, global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage> enterGroups_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.EnterGroupMessage> EnterGroups {
@@ -3799,19 +3814,29 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "groupChats" field.</summary>
-    public const int GroupChatsFieldNumber = 7;
+    public const int GroupChatsFieldNumber = 8;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.GroupChatMessage> _repeated_groupChats_codec
-        = pb::FieldCodec.ForMessage(58, global::ChatServer.Common.Protobuf.GroupChatMessage.Parser);
+        = pb::FieldCodec.ForMessage(66, global::ChatServer.Common.Protobuf.GroupChatMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage> groupChats_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupChatMessage> GroupChats {
       get { return groupChats_; }
     }
 
+    /// <summary>Field number for the "chatGroupDetails" field.</summary>
+    public const int ChatGroupDetailsFieldNumber = 9;
+    private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.ChatGroupDetailMessage> _repeated_chatGroupDetails_codec
+        = pb::FieldCodec.ForMessage(74, global::ChatServer.Common.Protobuf.ChatGroupDetailMessage.Parser);
+    private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatGroupDetailMessage> chatGroupDetails_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatGroupDetailMessage>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public pbc::RepeatedField<global::ChatServer.Common.Protobuf.ChatGroupDetailMessage> ChatGroupDetails {
+      get { return chatGroupDetails_; }
+    }
+
     /// <summary>Field number for the "groupRequests" field.</summary>
-    public const int GroupRequestsFieldNumber = 8;
+    public const int GroupRequestsFieldNumber = 10;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.GroupRequestMessage> _repeated_groupRequests_codec
-        = pb::FieldCodec.ForMessage(66, global::ChatServer.Common.Protobuf.GroupRequestMessage.Parser);
+        = pb::FieldCodec.ForMessage(82, global::ChatServer.Common.Protobuf.GroupRequestMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupRequestMessage> groupRequests_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupRequestMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupRequestMessage> GroupRequests {
@@ -3819,9 +3844,9 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "groupDeletes" field.</summary>
-    public const int GroupDeletesFieldNumber = 9;
+    public const int GroupDeletesFieldNumber = 11;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.GroupDeleteMessage> _repeated_groupDeletes_codec
-        = pb::FieldCodec.ForMessage(74, global::ChatServer.Common.Protobuf.GroupDeleteMessage.Parser);
+        = pb::FieldCodec.ForMessage(90, global::ChatServer.Common.Protobuf.GroupDeleteMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupDeleteMessage> groupDeletes_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupDeleteMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupDeleteMessage> GroupDeletes {
@@ -3829,9 +3854,9 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "userGroups" field.</summary>
-    public const int UserGroupsFieldNumber = 10;
+    public const int UserGroupsFieldNumber = 12;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.UserGroupMessage> _repeated_userGroups_codec
-        = pb::FieldCodec.ForMessage(82, global::ChatServer.Common.Protobuf.UserGroupMessage.Parser);
+        = pb::FieldCodec.ForMessage(98, global::ChatServer.Common.Protobuf.UserGroupMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.UserGroupMessage> userGroups_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.UserGroupMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.UserGroupMessage> UserGroups {
@@ -3855,9 +3880,11 @@ namespace ChatServer.Common.Protobuf {
       if(!friendRequests_.Equals(other.friendRequests_)) return false;
       if(!newFriends_.Equals(other.newFriends_)) return false;
       if(!friendChats_.Equals(other.friendChats_)) return false;
+      if(!chatPrivateDetails_.Equals(other.chatPrivateDetails_)) return false;
       if(!friendDeletes_.Equals(other.friendDeletes_)) return false;
       if(!enterGroups_.Equals(other.enterGroups_)) return false;
       if(!groupChats_.Equals(other.groupChats_)) return false;
+      if(!chatGroupDetails_.Equals(other.chatGroupDetails_)) return false;
       if(!groupRequests_.Equals(other.groupRequests_)) return false;
       if(!groupDeletes_.Equals(other.groupDeletes_)) return false;
       if(!userGroups_.Equals(other.userGroups_)) return false;
@@ -3871,9 +3898,11 @@ namespace ChatServer.Common.Protobuf {
       hash ^= friendRequests_.GetHashCode();
       hash ^= newFriends_.GetHashCode();
       hash ^= friendChats_.GetHashCode();
+      hash ^= chatPrivateDetails_.GetHashCode();
       hash ^= friendDeletes_.GetHashCode();
       hash ^= enterGroups_.GetHashCode();
       hash ^= groupChats_.GetHashCode();
+      hash ^= chatGroupDetails_.GetHashCode();
       hash ^= groupRequests_.GetHashCode();
       hash ^= groupDeletes_.GetHashCode();
       hash ^= userGroups_.GetHashCode();
@@ -3897,9 +3926,11 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_.WriteTo(output, _repeated_friendRequests_codec);
       newFriends_.WriteTo(output, _repeated_newFriends_codec);
       friendChats_.WriteTo(output, _repeated_friendChats_codec);
+      chatPrivateDetails_.WriteTo(output, _repeated_chatPrivateDetails_codec);
       friendDeletes_.WriteTo(output, _repeated_friendDeletes_codec);
       enterGroups_.WriteTo(output, _repeated_enterGroups_codec);
       groupChats_.WriteTo(output, _repeated_groupChats_codec);
+      chatGroupDetails_.WriteTo(output, _repeated_chatGroupDetails_codec);
       groupRequests_.WriteTo(output, _repeated_groupRequests_codec);
       groupDeletes_.WriteTo(output, _repeated_groupDeletes_codec);
       userGroups_.WriteTo(output, _repeated_userGroups_codec);
@@ -3917,9 +3948,11 @@ namespace ChatServer.Common.Protobuf {
       size += friendRequests_.CalculateSize(_repeated_friendRequests_codec);
       size += newFriends_.CalculateSize(_repeated_newFriends_codec);
       size += friendChats_.CalculateSize(_repeated_friendChats_codec);
+      size += chatPrivateDetails_.CalculateSize(_repeated_chatPrivateDetails_codec);
       size += friendDeletes_.CalculateSize(_repeated_friendDeletes_codec);
       size += enterGroups_.CalculateSize(_repeated_enterGroups_codec);
       size += groupChats_.CalculateSize(_repeated_groupChats_codec);
+      size += chatGroupDetails_.CalculateSize(_repeated_chatGroupDetails_codec);
       size += groupRequests_.CalculateSize(_repeated_groupRequests_codec);
       size += groupDeletes_.CalculateSize(_repeated_groupDeletes_codec);
       size += userGroups_.CalculateSize(_repeated_userGroups_codec);
@@ -3940,9 +3973,11 @@ namespace ChatServer.Common.Protobuf {
       friendRequests_.Add(other.friendRequests_);
       newFriends_.Add(other.newFriends_);
       friendChats_.Add(other.friendChats_);
+      chatPrivateDetails_.Add(other.chatPrivateDetails_);
       friendDeletes_.Add(other.friendDeletes_);
       enterGroups_.Add(other.enterGroups_);
       groupChats_.Add(other.groupChats_);
+      chatGroupDetails_.Add(other.chatGroupDetails_);
       groupRequests_.Add(other.groupRequests_);
       groupDeletes_.Add(other.groupDeletes_);
       userGroups_.Add(other.userGroups_);
@@ -3974,26 +4009,34 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 42: {
-            friendDeletes_.AddEntriesFrom(input, _repeated_friendDeletes_codec);
+            chatPrivateDetails_.AddEntriesFrom(input, _repeated_chatPrivateDetails_codec);
             break;
           }
           case 50: {
-            enterGroups_.AddEntriesFrom(input, _repeated_enterGroups_codec);
+            friendDeletes_.AddEntriesFrom(input, _repeated_friendDeletes_codec);
             break;
           }
           case 58: {
-            groupChats_.AddEntriesFrom(input, _repeated_groupChats_codec);
+            enterGroups_.AddEntriesFrom(input, _repeated_enterGroups_codec);
             break;
           }
           case 66: {
-            groupRequests_.AddEntriesFrom(input, _repeated_groupRequests_codec);
+            groupChats_.AddEntriesFrom(input, _repeated_groupChats_codec);
             break;
           }
           case 74: {
-            groupDeletes_.AddEntriesFrom(input, _repeated_groupDeletes_codec);
+            chatGroupDetails_.AddEntriesFrom(input, _repeated_chatGroupDetails_codec);
             break;
           }
           case 82: {
+            groupRequests_.AddEntriesFrom(input, _repeated_groupRequests_codec);
+            break;
+          }
+          case 90: {
+            groupDeletes_.AddEntriesFrom(input, _repeated_groupDeletes_codec);
+            break;
+          }
+          case 98: {
             userGroups_.AddEntriesFrom(input, _repeated_userGroups_codec);
             break;
           }

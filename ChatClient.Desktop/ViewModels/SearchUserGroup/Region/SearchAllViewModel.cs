@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
@@ -26,6 +28,8 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     private readonly IContainerProvider _containerProvider;
     private readonly IDialogService _dialogService;
     private readonly IUserManager _userManager;
+
+    private INotificationMessageManager? _notificationManager;
 
     private SubscriptionToken token;
 
@@ -83,7 +87,7 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
         object relation;
         if (obj is UserDto user)
         {
-            relation = await userDtoManager.GetGroupRelationDto(_userManager.User!.Id, user.Id);
+            relation = await userDtoManager.GetFriendRelationDto(_userManager.User!.Id, user.Id);
             if (relation == null) return;
         }
         else if (obj is GroupDto group)
@@ -108,7 +112,8 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     {
         _dialogService.Show(nameof(AddFriendRequestView), new DialogParameters
         {
-            { "UserDto", obj }
+            { "UserDto", obj },
+            { "notificationManager", _notificationManager }
         }, e => { });
     }
 
@@ -121,7 +126,8 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     {
         _dialogService.Show(nameof(AddGroupRequestView), new DialogParameters
         {
-            { "GroupDto", obj }
+            { "GroupDto", obj },
+            { "notificationManager", _notificationManager }
         }, e => { });
     }
 
@@ -152,10 +158,12 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
         if (!string.IsNullOrWhiteSpace(searchText))
             searchFriendSubject.OnNext(searchText);
+        _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
     }
 
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
+        _notificationManager = null;
     }
 
     #endregion

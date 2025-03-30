@@ -19,6 +19,7 @@ public interface IGroupChatPackService
 
     Task<bool> GroupChatMessageOperate(GroupChatMessage groupChatMessage);
     Task<bool> GroupChatMessagesOperate(string userId, IEnumerable<GroupChatMessage> groupChatMessages);
+    Task<bool> ChatGroupDetailMessagesOperate(string userId, IEnumerable<ChatGroupDetailMessage> chatGroupMessages);
 }
 
 public class GroupChatPackService : BaseService, IGroupChatPackService
@@ -38,18 +39,34 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
     public async Task<GroupChatDto> GetGroupChatDto(string userId, string groupId)
     {
+        #region 查询
+
         // 获取最后一条消息
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
-        var groupChat = await chatGroupRepository.GetFirstOrDefaultAsync(
-            predicate: d => d.GroupId.Equals(groupId),
-            orderBy: o => o.OrderByDescending(d => d.ChatId));
+        var chatDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
+
+        var groupChatQuery = chatGroupRepository.GetAll(
+            predicate: d => d.GroupId.Equals(groupId));
+
+        var chatDetailQuery = chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId));
+
+        var groupChatResultQuery = from chat in groupChatQuery
+            join detail in chatDetailQuery on chat.ChatId equals detail.ChatGroupId into detailGroup
+            from detail in detailGroup.DefaultIfEmpty()
+            where detail == null || !detail.IsDeleted
+            orderby chat.ChatId descending
+            select chat;
+
+        var groupChat = await groupChatResultQuery.FirstOrDefaultAsync();
+
+        #endregion
 
         GroupChatDto groupChatDto = new GroupChatDto();
         groupChatDto.GroupId = groupId;
         groupChatDto.GroupRelationDto = await _userDtoManager.GetGroupRelationDto(userId, groupId);
         groupChatDto.UnReadMessageCount =
             await GetUnReadChatMessageCount(userId, groupId, groupChatDto.GroupRelationDto!.LastChatId,
-                groupChatDto.GroupRelationDto.GroupTime);
+                groupChatDto.GroupRelationDto.JoinTime);
 
         if (groupChat == null)
             return groupChatDto;
@@ -65,9 +82,10 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
-        _ = chatService.OperateChatMessage(userId, groupChat.GroupId, groupChatData.ChatId, groupChatData.IsUser,
-            groupChatData.ChatMessages,
-            FileTarget.Group);
+        if (!groupChat.IsRetracted)
+            _ = chatService.OperateChatMessage(userId, groupChat.GroupId, groupChatData.ChatId, groupChatData.IsUser,
+                groupChatData.ChatMessages,
+                FileTarget.Group);
 
         groupChatDto.ChatMessages.Add(groupChatData);
         return groupChatDto;
@@ -106,12 +124,28 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
 
         if (relation == null) return [];
 
+        #region 查询
+
         // 从数据库中获取群聊消息
         var groupChatRepository = _unitOfWork.GetRepository<ChatGroup>();
-        var groupChats = await groupChatRepository.GetAll(
-                predicate: d => d.GroupId.Equals(groupId) && d.ChatId < chatId && d.Time >= relation.JoinTime,
-                orderBy: o => o.OrderByDescending(d => d.ChatId))
-            .Take(nextCount).ToListAsync();
+        var chatDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
+
+        var chatDetailQuery =
+            chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId) && d.ChatGroupId < chatId);
+
+        var groupChatsQuery = groupChatRepository.GetAll(
+            predicate: d => d.GroupId.Equals(groupId) && d.ChatId < chatId && d.Time >= relation.JoinTime);
+
+        var chatResultQuery = from chat in groupChatsQuery
+            join detail in chatDetailQuery on chat.ChatId equals detail.ChatGroupId into detailGroup
+            from detail in detailGroup.DefaultIfEmpty()
+            where detail == null || !detail.IsDeleted
+            orderby chat.ChatId descending
+            select chat;
+
+        var groupChats = await chatResultQuery.Take(nextCount).ToListAsync();
+
+        #endregion
 
         // 将ChatGroup转换为GroupChatData
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
@@ -129,8 +163,10 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
                     .ConfigureAwait(false);
             }
 
-            _ = chatService.OperateChatMessage(userId, groupChat.GroupId, data.ChatId, data.IsUser, data.ChatMessages,
-                FileTarget.Group).ConfigureAwait(false);
+            if (!groupChat.IsRetracted)
+                _ = chatService.OperateChatMessage(userId, groupChat.GroupId, data.ChatId, data.IsUser,
+                    data.ChatMessages,
+                    FileTarget.Group).ConfigureAwait(false);
             groupChatDatas.Add(data);
         }
 
@@ -191,6 +227,32 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
                 disableTracking: false);
             if (relation.LastChatId < chatMessage.Id)
                 relation.IsChatting = true;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    /// <summary>
+    /// 批量处理群聊详情消息
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="chatGroupMessages"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<bool> ChatGroupDetailMessagesOperate(string userId,
+        IEnumerable<ChatGroupDetailMessage> chatGroupMessages)
+    {
+        var chatGroupDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
+        foreach (var chatGroupMessage in chatGroupMessages)
+        {
+            var chatGroupDetail = _mapper.Map<ChatGroupDetail>(chatGroupMessage);
+            var result = chatGroupDetailRepository.GetFirstOrDefault(predicate: d =>
+                d.UserId.Equals(chatGroupDetail.UserId) && d.ChatGroupId.Equals(chatGroupDetail.ChatGroupId));
+            if (result != null)
+                chatGroupDetailRepository.Update(chatGroupDetail);
+            else
+                await chatGroupDetailRepository.InsertAsync(chatGroupDetail);
         }
 
         await _unitOfWork.SaveChangesAsync();

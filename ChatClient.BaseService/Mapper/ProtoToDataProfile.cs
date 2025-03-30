@@ -15,12 +15,16 @@ public class ProtoToDataProfile : Profile
             .ForMember(cp => cp.Message, opt => opt.MapFrom(cm => ChatMessageTool.EncruptChatMessage(cm.Messages)))
             .ForMember(cp => cp.Time, opt => opt.MapFrom(cm => DateTime.Parse(cm.Time)))
             .ForMember(cp => cp.ChatId, opt => opt.MapFrom(cm => cm.Id))
-            .ForMember(cp => cp.Id, opt => opt.Ignore());
+            .ForMember(cp => cp.Id, opt => opt.Ignore())
+            .ForMember(cp => cp.RetractedTime,
+                opt => opt.MapFrom(cm =>
+                    string.IsNullOrWhiteSpace(cm.RetractTime) ? DateTime.MinValue : DateTime.Parse(cm.RetractTime)));
 
         CreateMap<ChatPrivate, FriendChatMessage>()
             .ForMember(cm => cm.Messages, opt => opt.MapFrom(cp => ChatMessageTool.DecruptChatMessage(cp.Message)))
             .ForMember(cm => cm.Time, opt => opt.MapFrom(cp => cp.Time.ToString()))
-            .ForMember(cm => cm.Id, opt => opt.MapFrom(cp => cp.ChatId));
+            .ForMember(cm => cm.Id, opt => opt.MapFrom(cp => cp.ChatId))
+            .ForMember(cm => cm.RetractTime, opt => opt.MapFrom(cp => cp.RetractedTime.ToString()));
 
         #endregion
 
@@ -30,12 +34,16 @@ public class ProtoToDataProfile : Profile
             .ForMember(cg => cg.Message, opt => opt.MapFrom(gm => ChatMessageTool.EncruptChatMessage(gm.Messages)))
             .ForMember(cg => cg.Time, opt => opt.MapFrom(gm => DateTime.Parse(gm.Time)))
             .ForMember(cg => cg.ChatId, opt => opt.MapFrom(gm => gm.Id))
-            .ForMember(cg => cg.Id, opt => opt.Ignore());
+            .ForMember(cg => cg.Id, opt => opt.Ignore())
+            .ForMember(cg => cg.RetractedTime,
+                opt => opt.MapFrom(gm =>
+                    string.IsNullOrWhiteSpace(gm.RetractTime) ? DateTime.MinValue : DateTime.Parse(gm.RetractTime)));
 
         CreateMap<ChatGroup, GroupChatMessage>()
             .ForMember(gm => gm.Messages, opt => opt.MapFrom(cg => ChatMessageTool.DecruptChatMessage(cg.Message)))
             .ForMember(gm => gm.Time, opt => opt.MapFrom(cg => cg.Time.ToString()))
-            .ForMember(gm => gm.Id, opt => opt.MapFrom(cg => cg.ChatId));
+            .ForMember(gm => gm.Id, opt => opt.MapFrom(cg => cg.ChatId))
+            .ForMember(gm => gm.RetractTime, opt => opt.MapFrom(cg => cg.RetractedTime.ToString()));
 
         #endregion
 
@@ -135,5 +143,9 @@ public class ProtoToDataProfile : Profile
             .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(dgm => dgm.UserId))
             .ForMember(gd => gd.MemberId, opt => opt.MapFrom(dgm => dgm.MemberId))
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(dgm => DateTime.Parse(dgm.Time)));
+
+
+        CreateMap<ChatPrivateDetailMessage, ChatPrivateDetail>();
+        CreateMap<ChatGroupDetailMessage, ChatGroupDetail>();
     }
 }

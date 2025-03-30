@@ -26,46 +26,68 @@ namespace ChatServer.Common.Protobuf {
           string.Concat(
             "CiNQcm90by9DaGF0Q29tbXVuaWNhdGVQcm90b2NvbC5wcm90bxIaQ2hhdFNl",
             "cnZlci5Db21tb24uUHJvdG9idWYaHFByb3RvL0NoYXRCYXNlUHJvdG9jb2wu",
-            "cHJvdG8ikgEKEUZyaWVuZENoYXRNZXNzYWdlEhIKCnVzZXJGcm9tSWQYASAB",
+            "cHJvdG8ivAEKEUZyaWVuZENoYXRNZXNzYWdlEhIKCnVzZXJGcm9tSWQYASAB",
             "KAkSFAoMdXNlclRhcmdldElkGAIgASgJEgwKBHRpbWUYAyABKAkSOQoIbWVz",
             "c2FnZXMYBCADKAsyJy5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5DaGF0",
-            "TWVzc2FnZRIKCgJpZBgFIAEoBSJzChlGcmllbmRDaGF0TWVzc2FnZVJlc3Bv",
-            "bnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJv",
-            "dG9idWYuQ29tbW9uUmVzcG9uc2USCgoCaWQYAiABKAUSDAoEdGltZRgDIAEo",
-            "CSKMAQoQR3JvdXBDaGF0TWVzc2FnZRISCgp1c2VyRnJvbUlkGAEgASgJEg8K",
-            "B2dyb3VwSWQYAiABKAkSDAoEdGltZRgDIAEoCRI5CghtZXNzYWdlcxgEIAMo",
-            "CzInLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNoYXRNZXNzYWdlEgoK",
-            "AmlkGAUgASgFInIKGEdyb3VwQ2hhdE1lc3NhZ2VSZXNwb25zZRI8CghyZXNw",
-            "b25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1v",
-            "blJlc3BvbnNlEgoKAmlkGAIgASgFEgwKBHRpbWUYAyABKAkiUwoURnJpZW5k",
-            "V3JpdGluZ01lc3NhZ2USEgoKdXNlckZyb21JZBgBIAEoCRIUCgx1c2VyVGFy",
-            "Z2V0SWQYAiABKAkSEQoJaXNXcml0aW5nGAMgASgIIowCCgtDaGF0TWVzc2Fn",
-            "ZRI4Cgh0ZXh0TWVzcxgBIAEoCzIkLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
-            "YnVmLlRleHRNZXNzSAASOgoJaW1hZ2VNZXNzGAIgASgLMiUuQ2hhdFNlcnZl",
-            "ci5Db21tb24uUHJvdG9idWYuSW1hZ2VNZXNzSAASOAoIZmlsZU1lc3MYAyAB",
-            "KAsyJC5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GaWxlTWVzc0gAEkIK",
-            "DXN5c3RlbU1lc3NhZ2UYBCABKAsyKS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90",
-            "b2J1Zi5TeXN0ZW1NZXNzYWdlSABCCQoHY29udGVudCIYCghUZXh0TWVzcxIM",
-            "CgR0ZXh0GAEgASgJIi8KCUltYWdlTWVzcxIQCghmaWxlUGF0aBgBIAEoCRIQ",
-            "CghmaWxlU2l6ZRgCIAEoBSJACghGaWxlTWVzcxIQCghmaWxlTmFtZRgBIAEo",
-            "CRIQCghmaWxlU2l6ZRgCIAEoBRIQCghmaWxlVHlwZRgDIAEoCSJPCg1TeXN0",
-            "ZW1NZXNzYWdlEj4KBmJsb2NrcxgBIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9u",
-            "LlByb3RvYnVmLlN5c3RlbU1lc3NhZ2VCbG9jayIwChJTeXN0ZW1NZXNzYWdl",
-            "QmxvY2sSDAoEdGV4dBgBIAEoCRIMCgRib2xkGAIgASgIIlUKHVVwZGF0ZUZy",
-            "aWVuZExhc3RDaGF0SWRSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmll",
-            "bmRJZBgCIAEoCRISCgpsYXN0Q2hhdElkGAMgASgFIlMKHFVwZGF0ZUdyb3Vw",
-            "TGFzdENoYXRJZFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQY",
-            "AiABKAkSEgoKbGFzdENoYXRJZBgDIAEoBSJeCh5VcGRhdGVGcmllbmRMYXN0",
-            "Q2hhdElkUmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVy",
-            "LkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSJdCh1VcGRhdGVHcm91",
-            "cExhc3RDaGF0SWRSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRT",
-            "ZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlYgZwcm90bzM="));
+            "TWVzc2FnZRIKCgJpZBgFIAEoBRITCgtJc1JldHJhY3RlZBgGIAEoCBITCgty",
+            "ZXRyYWN0VGltZRgHIAEoCSJzChlGcmllbmRDaGF0TWVzc2FnZVJlc3BvbnNl",
+            "EjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9i",
+            "dWYuQ29tbW9uUmVzcG9uc2USCgoCaWQYAiABKAUSDAoEdGltZRgDIAEoCSK2",
+            "AQoQR3JvdXBDaGF0TWVzc2FnZRISCgp1c2VyRnJvbUlkGAEgASgJEg8KB2dy",
+            "b3VwSWQYAiABKAkSDAoEdGltZRgDIAEoCRI5CghtZXNzYWdlcxgEIAMoCzIn",
+            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNoYXRNZXNzYWdlEgoKAmlk",
+            "GAUgASgFEhMKC0lzUmV0cmFjdGVkGAYgASgIEhMKC3JldHJhY3RUaW1lGAcg",
+            "ASgJInIKGEdyb3VwQ2hhdE1lc3NhZ2VSZXNwb25zZRI8CghyZXNwb25zZRgB",
+            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
+            "bnNlEgoKAmlkGAIgASgFEgwKBHRpbWUYAyABKAkiUwoURnJpZW5kV3JpdGlu",
+            "Z01lc3NhZ2USEgoKdXNlckZyb21JZBgBIAEoCRIUCgx1c2VyVGFyZ2V0SWQY",
+            "AiABKAkSEQoJaXNXcml0aW5nGAMgASgIIowCCgtDaGF0TWVzc2FnZRI4Cgh0",
+            "ZXh0TWVzcxgBIAEoCzIkLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlRl",
+            "eHRNZXNzSAASOgoJaW1hZ2VNZXNzGAIgASgLMiUuQ2hhdFNlcnZlci5Db21t",
+            "b24uUHJvdG9idWYuSW1hZ2VNZXNzSAASOAoIZmlsZU1lc3MYAyABKAsyJC5D",
+            "aGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5GaWxlTWVzc0gAEkIKDXN5c3Rl",
+            "bU1lc3NhZ2UYBCABKAsyKS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5T",
+            "eXN0ZW1NZXNzYWdlSABCCQoHY29udGVudCIYCghUZXh0TWVzcxIMCgR0ZXh0",
+            "GAEgASgJIi8KCUltYWdlTWVzcxIQCghmaWxlUGF0aBgBIAEoCRIQCghmaWxl",
+            "U2l6ZRgCIAEoBSJACghGaWxlTWVzcxIQCghmaWxlTmFtZRgBIAEoCRIQCghm",
+            "aWxlU2l6ZRgCIAEoBRIQCghmaWxlVHlwZRgDIAEoCSJPCg1TeXN0ZW1NZXNz",
+            "YWdlEj4KBmJsb2NrcxgBIAMoCzIuLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3Rv",
+            "YnVmLlN5c3RlbU1lc3NhZ2VCbG9jayIwChJTeXN0ZW1NZXNzYWdlQmxvY2sS",
+            "DAoEdGV4dBgBIAEoCRIMCgRib2xkGAIgASgIIlUKHVVwZGF0ZUZyaWVuZExh",
+            "c3RDaGF0SWRSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIQCghmcmllbmRJZBgC",
+            "IAEoCRISCgpsYXN0Q2hhdElkGAMgASgFIlMKHFVwZGF0ZUdyb3VwTGFzdENo",
+            "YXRJZFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkS",
+            "EgoKbGFzdENoYXRJZBgDIAEoBSJeCh5VcGRhdGVGcmllbmRMYXN0Q2hhdElk",
+            "UmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1v",
+            "bi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSJdCh1VcGRhdGVHcm91cExhc3RD",
+            "aGF0SWRSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIu",
+            "Q29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlIlAKFkNoYXRHcm91cERl",
+            "dGFpbE1lc3NhZ2USDgoGdXNlcklkGAEgASgJEhMKC2NoYXRHcm91cElkGAIg",
+            "ASgFEhEKCWlzRGVsZXRlZBgDIAEoCCJUChhDaGF0UHJpdmF0ZURldGFpbE1l",
+            "c3NhZ2USDgoGdXNlcklkGAEgASgJEhUKDWNoYXRQcml2YXRlSWQYAiABKAUS",
+            "EQoJaXNEZWxldGVkGAMgASgIIj0KFkNoYXRHcm91cERlbGV0ZVJlcXVlc3QS",
+            "DgoGdXNlcklkGAEgASgJEhMKC2NoYXRHcm91cElkGAIgASgFIlcKF0NoYXRH",
+            "cm91cERlbGV0ZVJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNl",
+            "cnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiQQoYQ2hhdFBy",
+            "aXZhdGVEZWxldGVSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIVCg1jaGF0UHJp",
+            "dmF0ZUlkGAIgASgFIlkKGUNoYXRQcml2YXRlRGVsZXRlUmVzcG9uc2USPAoI",
+            "cmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5D",
+            "b21tb25SZXNwb25zZSJCChlDaGF0UHJpdmF0ZVJldHJhY3RSZXF1ZXN0Eg4K",
+            "BnVzZXJJZBgBIAEoCRIVCg1jaGF0UHJpdmF0ZUlkGAIgASgFIoABChlDaGF0",
+            "UHJpdmF0ZVJldHJhY3RNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hh",
+            "dFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDgoGdXNl",
+            "cklkGAIgASgJEhUKDWNoYXRQcml2YXRlSWQYAyABKAUiPgoXQ2hhdEdyb3Vw",
+            "UmV0cmFjdFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEhMKC2NoYXRHcm91cElk",
+            "GAIgASgFInwKF0NoYXRHcm91cFJldHJhY3RNZXNzYWdlEjwKCHJlc3BvbnNl",
+            "GAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVz",
+            "cG9uc2USDgoGdXNlcklkGAIgASgJEhMKC2NoYXRHcm91cElkGAMgASgFYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendChatMessage), global::ChatServer.Common.Protobuf.FriendChatMessage.Parser, new[]{ "UserFromId", "UserTargetId", "Time", "Messages", "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendChatMessage), global::ChatServer.Common.Protobuf.FriendChatMessage.Parser, new[]{ "UserFromId", "UserTargetId", "Time", "Messages", "Id", "IsRetracted", "RetractTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendChatMessageResponse), global::ChatServer.Common.Protobuf.FriendChatMessageResponse.Parser, new[]{ "Response", "Id", "Time" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessage), global::ChatServer.Common.Protobuf.GroupChatMessage.Parser, new[]{ "UserFromId", "GroupId", "Time", "Messages", "Id" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessage), global::ChatServer.Common.Protobuf.GroupChatMessage.Parser, new[]{ "UserFromId", "GroupId", "Time", "Messages", "Id", "IsRetracted", "RetractTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessageResponse), global::ChatServer.Common.Protobuf.GroupChatMessageResponse.Parser, new[]{ "Response", "Id", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendWritingMessage), global::ChatServer.Common.Protobuf.FriendWritingMessage.Parser, new[]{ "UserFromId", "UserTargetId", "IsWriting" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatMessage), global::ChatServer.Common.Protobuf.ChatMessage.Parser, new[]{ "TextMess", "ImageMess", "FileMess", "SystemMessage" }, new[]{ "Content" }, null, null, null),
@@ -77,7 +99,17 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdRequest), global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdRequest.Parser, new[]{ "UserId", "FriendId", "LastChatId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdRequest), global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdRequest.Parser, new[]{ "UserId", "GroupId", "LastChatId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdResponse), global::ChatServer.Common.Protobuf.UpdateFriendLastChatIdResponse.Parser, new[]{ "Response" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse), global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse.Parser, new[]{ "Response" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse), global::ChatServer.Common.Protobuf.UpdateGroupLastChatIdResponse.Parser, new[]{ "Response" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatGroupDetailMessage), global::ChatServer.Common.Protobuf.ChatGroupDetailMessage.Parser, new[]{ "UserId", "ChatGroupId", "IsDeleted" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage), global::ChatServer.Common.Protobuf.ChatPrivateDetailMessage.Parser, new[]{ "UserId", "ChatPrivateId", "IsDeleted" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatGroupDeleteRequest), global::ChatServer.Common.Protobuf.ChatGroupDeleteRequest.Parser, new[]{ "UserId", "ChatGroupId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatGroupDeleteResponse), global::ChatServer.Common.Protobuf.ChatGroupDeleteResponse.Parser, new[]{ "Response" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatPrivateDeleteRequest), global::ChatServer.Common.Protobuf.ChatPrivateDeleteRequest.Parser, new[]{ "UserId", "ChatPrivateId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatPrivateDeleteResponse), global::ChatServer.Common.Protobuf.ChatPrivateDeleteResponse.Parser, new[]{ "Response" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatPrivateRetractRequest), global::ChatServer.Common.Protobuf.ChatPrivateRetractRequest.Parser, new[]{ "UserId", "ChatPrivateId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatPrivateRetractMessage), global::ChatServer.Common.Protobuf.ChatPrivateRetractMessage.Parser, new[]{ "Response", "UserId", "ChatPrivateId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatGroupRetractRequest), global::ChatServer.Common.Protobuf.ChatGroupRetractRequest.Parser, new[]{ "UserId", "ChatGroupId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatGroupRetractMessage), global::ChatServer.Common.Protobuf.ChatGroupRetractMessage.Parser, new[]{ "Response", "UserId", "ChatGroupId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -117,6 +149,8 @@ namespace ChatServer.Common.Protobuf {
       time_ = other.time_;
       messages_ = other.messages_.Clone();
       id_ = other.id_;
+      isRetracted_ = other.isRetracted_;
+      retractTime_ = other.retractTime_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -179,6 +213,28 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "IsRetracted" field.</summary>
+    public const int IsRetractedFieldNumber = 6;
+    private bool isRetracted_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsRetracted {
+      get { return isRetracted_; }
+      set {
+        isRetracted_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "retractTime" field.</summary>
+    public const int RetractTimeFieldNumber = 7;
+    private string retractTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RetractTime {
+      get { return retractTime_; }
+      set {
+        retractTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as FriendChatMessage);
@@ -197,6 +253,8 @@ namespace ChatServer.Common.Protobuf {
       if (Time != other.Time) return false;
       if(!messages_.Equals(other.messages_)) return false;
       if (Id != other.Id) return false;
+      if (IsRetracted != other.IsRetracted) return false;
+      if (RetractTime != other.RetractTime) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -208,6 +266,8 @@ namespace ChatServer.Common.Protobuf {
       if (Time.Length != 0) hash ^= Time.GetHashCode();
       hash ^= messages_.GetHashCode();
       if (Id != 0) hash ^= Id.GetHashCode();
+      if (IsRetracted != false) hash ^= IsRetracted.GetHashCode();
+      if (RetractTime.Length != 0) hash ^= RetractTime.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -238,6 +298,14 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(40);
         output.WriteInt32(Id);
       }
+      if (IsRetracted != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsRetracted);
+      }
+      if (RetractTime.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RetractTime);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -258,6 +326,12 @@ namespace ChatServer.Common.Protobuf {
       size += messages_.CalculateSize(_repeated_messages_codec);
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      if (IsRetracted != false) {
+        size += 1 + 1;
+      }
+      if (RetractTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RetractTime);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -282,6 +356,12 @@ namespace ChatServer.Common.Protobuf {
       messages_.Add(other.messages_);
       if (other.Id != 0) {
         Id = other.Id;
+      }
+      if (other.IsRetracted != false) {
+        IsRetracted = other.IsRetracted;
+      }
+      if (other.RetractTime.Length != 0) {
+        RetractTime = other.RetractTime;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -312,6 +392,14 @@ namespace ChatServer.Common.Protobuf {
           }
           case 40: {
             Id = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            IsRetracted = input.ReadBool();
+            break;
+          }
+          case 58: {
+            RetractTime = input.ReadString();
             break;
           }
         }
@@ -547,6 +635,8 @@ namespace ChatServer.Common.Protobuf {
       time_ = other.time_;
       messages_ = other.messages_.Clone();
       id_ = other.id_;
+      isRetracted_ = other.isRetracted_;
+      retractTime_ = other.retractTime_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -609,6 +699,28 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "IsRetracted" field.</summary>
+    public const int IsRetractedFieldNumber = 6;
+    private bool isRetracted_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsRetracted {
+      get { return isRetracted_; }
+      set {
+        isRetracted_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "retractTime" field.</summary>
+    public const int RetractTimeFieldNumber = 7;
+    private string retractTime_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string RetractTime {
+      get { return retractTime_; }
+      set {
+        retractTime_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GroupChatMessage);
@@ -627,6 +739,8 @@ namespace ChatServer.Common.Protobuf {
       if (Time != other.Time) return false;
       if(!messages_.Equals(other.messages_)) return false;
       if (Id != other.Id) return false;
+      if (IsRetracted != other.IsRetracted) return false;
+      if (RetractTime != other.RetractTime) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -638,6 +752,8 @@ namespace ChatServer.Common.Protobuf {
       if (Time.Length != 0) hash ^= Time.GetHashCode();
       hash ^= messages_.GetHashCode();
       if (Id != 0) hash ^= Id.GetHashCode();
+      if (IsRetracted != false) hash ^= IsRetracted.GetHashCode();
+      if (RetractTime.Length != 0) hash ^= RetractTime.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -668,6 +784,14 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(40);
         output.WriteInt32(Id);
       }
+      if (IsRetracted != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsRetracted);
+      }
+      if (RetractTime.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(RetractTime);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -688,6 +812,12 @@ namespace ChatServer.Common.Protobuf {
       size += messages_.CalculateSize(_repeated_messages_codec);
       if (Id != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Id);
+      }
+      if (IsRetracted != false) {
+        size += 1 + 1;
+      }
+      if (RetractTime.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RetractTime);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -712,6 +842,12 @@ namespace ChatServer.Common.Protobuf {
       messages_.Add(other.messages_);
       if (other.Id != 0) {
         Id = other.Id;
+      }
+      if (other.IsRetracted != false) {
+        IsRetracted = other.IsRetracted;
+      }
+      if (other.RetractTime.Length != 0) {
+        RetractTime = other.RetractTime;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -742,6 +878,14 @@ namespace ChatServer.Common.Protobuf {
           }
           case 40: {
             Id = input.ReadInt32();
+            break;
+          }
+          case 48: {
+            IsRetracted = input.ReadBool();
+            break;
+          }
+          case 58: {
+            RetractTime = input.ReadString();
             break;
           }
         }
@@ -2810,6 +2954,1659 @@ namespace ChatServer.Common.Protobuf {
               Response = new global::ChatServer.Common.Protobuf.CommonResponse();
             }
             input.ReadMessage(Response);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// -- 删除消息体 -- //
+  /// </summary>
+  public sealed partial class ChatGroupDetailMessage : pb::IMessage<ChatGroupDetailMessage> {
+    private static readonly pb::MessageParser<ChatGroupDetailMessage> _parser = new pb::MessageParser<ChatGroupDetailMessage>(() => new ChatGroupDetailMessage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatGroupDetailMessage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[15]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDetailMessage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDetailMessage(ChatGroupDetailMessage other) : this() {
+      userId_ = other.userId_;
+      chatGroupId_ = other.chatGroupId_;
+      isDeleted_ = other.isDeleted_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDetailMessage Clone() {
+      return new ChatGroupDetailMessage(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatGroupId" field.</summary>
+    public const int ChatGroupIdFieldNumber = 2;
+    private int chatGroupId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatGroupId {
+      get { return chatGroupId_; }
+      set {
+        chatGroupId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isDeleted" field.</summary>
+    public const int IsDeletedFieldNumber = 3;
+    private bool isDeleted_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDeleted {
+      get { return isDeleted_; }
+      set {
+        isDeleted_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatGroupDetailMessage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatGroupDetailMessage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatGroupId != other.ChatGroupId) return false;
+      if (IsDeleted != other.IsDeleted) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatGroupId != 0) hash ^= ChatGroupId.GetHashCode();
+      if (IsDeleted != false) hash ^= IsDeleted.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatGroupId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatGroupId);
+      }
+      if (IsDeleted != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsDeleted);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatGroupId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatGroupId);
+      }
+      if (IsDeleted != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatGroupDetailMessage other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatGroupId != 0) {
+        ChatGroupId = other.ChatGroupId;
+      }
+      if (other.IsDeleted != false) {
+        IsDeleted = other.IsDeleted;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatGroupId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            IsDeleted = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatPrivateDetailMessage : pb::IMessage<ChatPrivateDetailMessage> {
+    private static readonly pb::MessageParser<ChatPrivateDetailMessage> _parser = new pb::MessageParser<ChatPrivateDetailMessage>(() => new ChatPrivateDetailMessage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatPrivateDetailMessage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[16]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDetailMessage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDetailMessage(ChatPrivateDetailMessage other) : this() {
+      userId_ = other.userId_;
+      chatPrivateId_ = other.chatPrivateId_;
+      isDeleted_ = other.isDeleted_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDetailMessage Clone() {
+      return new ChatPrivateDetailMessage(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatPrivateId" field.</summary>
+    public const int ChatPrivateIdFieldNumber = 2;
+    private int chatPrivateId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatPrivateId {
+      get { return chatPrivateId_; }
+      set {
+        chatPrivateId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isDeleted" field.</summary>
+    public const int IsDeletedFieldNumber = 3;
+    private bool isDeleted_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsDeleted {
+      get { return isDeleted_; }
+      set {
+        isDeleted_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatPrivateDetailMessage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatPrivateDetailMessage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatPrivateId != other.ChatPrivateId) return false;
+      if (IsDeleted != other.IsDeleted) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatPrivateId != 0) hash ^= ChatPrivateId.GetHashCode();
+      if (IsDeleted != false) hash ^= IsDeleted.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatPrivateId);
+      }
+      if (IsDeleted != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsDeleted);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatPrivateId);
+      }
+      if (IsDeleted != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatPrivateDetailMessage other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatPrivateId != 0) {
+        ChatPrivateId = other.ChatPrivateId;
+      }
+      if (other.IsDeleted != false) {
+        IsDeleted = other.IsDeleted;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatPrivateId = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            IsDeleted = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatGroupDeleteRequest : pb::IMessage<ChatGroupDeleteRequest> {
+    private static readonly pb::MessageParser<ChatGroupDeleteRequest> _parser = new pb::MessageParser<ChatGroupDeleteRequest>(() => new ChatGroupDeleteRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatGroupDeleteRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[17]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteRequest(ChatGroupDeleteRequest other) : this() {
+      userId_ = other.userId_;
+      chatGroupId_ = other.chatGroupId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteRequest Clone() {
+      return new ChatGroupDeleteRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatGroupId" field.</summary>
+    public const int ChatGroupIdFieldNumber = 2;
+    private int chatGroupId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatGroupId {
+      get { return chatGroupId_; }
+      set {
+        chatGroupId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatGroupDeleteRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatGroupDeleteRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatGroupId != other.ChatGroupId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatGroupId != 0) hash ^= ChatGroupId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatGroupId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatGroupId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatGroupDeleteRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatGroupId != 0) {
+        ChatGroupId = other.ChatGroupId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatGroupId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatGroupDeleteResponse : pb::IMessage<ChatGroupDeleteResponse> {
+    private static readonly pb::MessageParser<ChatGroupDeleteResponse> _parser = new pb::MessageParser<ChatGroupDeleteResponse>(() => new ChatGroupDeleteResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatGroupDeleteResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[18]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteResponse(ChatGroupDeleteResponse other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupDeleteResponse Clone() {
+      return new ChatGroupDeleteResponse(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatGroupDeleteResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatGroupDeleteResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatGroupDeleteResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatPrivateDeleteRequest : pb::IMessage<ChatPrivateDeleteRequest> {
+    private static readonly pb::MessageParser<ChatPrivateDeleteRequest> _parser = new pb::MessageParser<ChatPrivateDeleteRequest>(() => new ChatPrivateDeleteRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatPrivateDeleteRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteRequest(ChatPrivateDeleteRequest other) : this() {
+      userId_ = other.userId_;
+      chatPrivateId_ = other.chatPrivateId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteRequest Clone() {
+      return new ChatPrivateDeleteRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatPrivateId" field.</summary>
+    public const int ChatPrivateIdFieldNumber = 2;
+    private int chatPrivateId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatPrivateId {
+      get { return chatPrivateId_; }
+      set {
+        chatPrivateId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatPrivateDeleteRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatPrivateDeleteRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatPrivateId != other.ChatPrivateId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatPrivateId != 0) hash ^= ChatPrivateId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatPrivateDeleteRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatPrivateId != 0) {
+        ChatPrivateId = other.ChatPrivateId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatPrivateId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatPrivateDeleteResponse : pb::IMessage<ChatPrivateDeleteResponse> {
+    private static readonly pb::MessageParser<ChatPrivateDeleteResponse> _parser = new pb::MessageParser<ChatPrivateDeleteResponse>(() => new ChatPrivateDeleteResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatPrivateDeleteResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[20]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteResponse(ChatPrivateDeleteResponse other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateDeleteResponse Clone() {
+      return new ChatPrivateDeleteResponse(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatPrivateDeleteResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatPrivateDeleteResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatPrivateDeleteResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatPrivateRetractRequest : pb::IMessage<ChatPrivateRetractRequest> {
+    private static readonly pb::MessageParser<ChatPrivateRetractRequest> _parser = new pb::MessageParser<ChatPrivateRetractRequest>(() => new ChatPrivateRetractRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatPrivateRetractRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[21]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractRequest(ChatPrivateRetractRequest other) : this() {
+      userId_ = other.userId_;
+      chatPrivateId_ = other.chatPrivateId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractRequest Clone() {
+      return new ChatPrivateRetractRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatPrivateId" field.</summary>
+    public const int ChatPrivateIdFieldNumber = 2;
+    private int chatPrivateId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatPrivateId {
+      get { return chatPrivateId_; }
+      set {
+        chatPrivateId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatPrivateRetractRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatPrivateRetractRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatPrivateId != other.ChatPrivateId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatPrivateId != 0) hash ^= ChatPrivateId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatPrivateRetractRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatPrivateId != 0) {
+        ChatPrivateId = other.ChatPrivateId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatPrivateId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatPrivateRetractMessage : pb::IMessage<ChatPrivateRetractMessage> {
+    private static readonly pb::MessageParser<ChatPrivateRetractMessage> _parser = new pb::MessageParser<ChatPrivateRetractMessage>(() => new ChatPrivateRetractMessage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatPrivateRetractMessage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[22]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractMessage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractMessage(ChatPrivateRetractMessage other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      userId_ = other.userId_;
+      chatPrivateId_ = other.chatPrivateId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatPrivateRetractMessage Clone() {
+      return new ChatPrivateRetractMessage(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 2;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatPrivateId" field.</summary>
+    public const int ChatPrivateIdFieldNumber = 3;
+    private int chatPrivateId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatPrivateId {
+      get { return chatPrivateId_; }
+      set {
+        chatPrivateId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatPrivateRetractMessage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatPrivateRetractMessage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      if (UserId != other.UserId) return false;
+      if (ChatPrivateId != other.ChatPrivateId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatPrivateId != 0) hash ^= ChatPrivateId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatPrivateId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatPrivateId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatPrivateRetractMessage other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatPrivateId != 0) {
+        ChatPrivateId = other.ChatPrivateId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
+            break;
+          }
+          case 18: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 24: {
+            ChatPrivateId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatGroupRetractRequest : pb::IMessage<ChatGroupRetractRequest> {
+    private static readonly pb::MessageParser<ChatGroupRetractRequest> _parser = new pb::MessageParser<ChatGroupRetractRequest>(() => new ChatGroupRetractRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatGroupRetractRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[23]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractRequest(ChatGroupRetractRequest other) : this() {
+      userId_ = other.userId_;
+      chatGroupId_ = other.chatGroupId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractRequest Clone() {
+      return new ChatGroupRetractRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatGroupId" field.</summary>
+    public const int ChatGroupIdFieldNumber = 2;
+    private int chatGroupId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatGroupId {
+      get { return chatGroupId_; }
+      set {
+        chatGroupId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatGroupRetractRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatGroupRetractRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (ChatGroupId != other.ChatGroupId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatGroupId != 0) hash ^= ChatGroupId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (ChatGroupId != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatGroupId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatGroupRetractRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatGroupId != 0) {
+        ChatGroupId = other.ChatGroupId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            ChatGroupId = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ChatGroupRetractMessage : pb::IMessage<ChatGroupRetractMessage> {
+    private static readonly pb::MessageParser<ChatGroupRetractMessage> _parser = new pb::MessageParser<ChatGroupRetractMessage>(() => new ChatGroupRetractMessage());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ChatGroupRetractMessage> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[24]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractMessage() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractMessage(ChatGroupRetractMessage other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      userId_ = other.userId_;
+      chatGroupId_ = other.chatGroupId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ChatGroupRetractMessage Clone() {
+      return new ChatGroupRetractMessage(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 2;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "chatGroupId" field.</summary>
+    public const int ChatGroupIdFieldNumber = 3;
+    private int chatGroupId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int ChatGroupId {
+      get { return chatGroupId_; }
+      set {
+        chatGroupId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ChatGroupRetractMessage);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ChatGroupRetractMessage other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      if (UserId != other.UserId) return false;
+      if (ChatGroupId != other.ChatGroupId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (ChatGroupId != 0) hash ^= ChatGroupId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
+      if (ChatGroupId != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (ChatGroupId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ChatGroupId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ChatGroupRetractMessage other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.ChatGroupId != 0) {
+        ChatGroupId = other.ChatGroupId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
+            break;
+          }
+          case 18: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 24: {
+            ChatGroupId = input.ReadInt32();
             break;
           }
         }

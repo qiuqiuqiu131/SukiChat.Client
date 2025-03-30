@@ -19,6 +19,9 @@ public interface IFriendChatPackService
 
     Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage);
     Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages);
+
+    Task<bool> ChatPrivateDetailMessagesOperate(string userId,
+        IEnumerable<ChatPrivateDetailMessage> chatPrivateDetailMessages);
 }
 
 public class FriendChatPackService : BaseService, IFriendChatPackService
@@ -44,12 +47,28 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     /// <returns></returns>
     public async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
     {
+        #region 查询
+
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        var friendChat = await friendChatRepository.GetFirstOrDefaultAsync(
+        var chatDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+
+        var friendChatQuery = friendChatRepository.GetAll(
             predicate: d =>
                 (d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
-                (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId)),
-            orderBy: o => o.OrderByDescending(d => d.ChatId));
+                (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId)));
+
+        var chatDetailQuery = chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId));
+
+        var friendChatResultQuery = from chat in friendChatQuery
+            join detail in chatDetailQuery on chat.ChatId equals detail.ChatPrivateId into detailGroup
+            from detail in detailGroup.DefaultIfEmpty()
+            where detail == null || !detail.IsDeleted
+            orderby chat.ChatId descending
+            select chat;
+
+        var friendChat = await friendChatResultQuery.FirstOrDefaultAsync();
+
+        #endregion
 
         FriendChatDto friendChatDto = new FriendChatDto();
         friendChatDto.UserId = targetId;
@@ -65,9 +84,10 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         // 生成ChatData（单条聊天消息，数组，包含文字图片等）
         var chatData = mapper.Map<ChatData>(friendChat);
         chatData.IsUser = friendChat.UserFromId.Equals(userId);
-        _ = chatService.OperateChatMessage(userId, friendChat.UserFromId, chatData.ChatId, chatData.IsUser,
-            chatData.ChatMessages,
-            FileTarget.User);
+        if (!chatData.IsRetracted)
+            _ = chatService.OperateChatMessage(userId, friendChat.UserFromId, chatData.ChatId, chatData.IsUser,
+                chatData.ChatMessages,
+                FileTarget.User);
 
         friendChatDto.ChatMessages.Add(chatData);
         return friendChatDto;
@@ -111,14 +131,30 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     {
         if (userId == null) return new List<ChatData>();
 
+        #region 查询
+
         // 从数据库中获取聊天记录
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
-        var friendChat = await friendChatRepository.GetAll(
-                predicate: d =>
-                    ((d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
-                     (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) && d.ChatId < chatId,
-                orderBy: o => o.OrderByDescending(d => d.ChatId))
-            .Take(nextCount).ToListAsync();
+        var chatDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+
+        var chatDetailQuery =
+            chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId) && d.ChatPrivateId < chatId);
+
+        var friendChatQuery = friendChatRepository.GetAll(
+            predicate: d =>
+                ((d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
+                 (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) && d.ChatId < chatId);
+
+        var friendChatResultQuery = from chat in friendChatQuery
+            join detail in chatDetailQuery on chat.Id equals detail.ChatPrivateId into detailGroup
+            from detail in detailGroup.DefaultIfEmpty()
+            where detail == null || !detail.IsDeleted
+            orderby chat.ChatId descending
+            select chat;
+
+        var friendChat = await friendChatResultQuery.Take(nextCount).ToListAsync();
+
+        #endregion
 
         // 将ChatPrivate转换为ChatData
         IMapper mapper = _scopedProvider.Resolve<IMapper>();
@@ -128,9 +164,10 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         {
             var data = mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
-            _ = chatService.OperateChatMessage(userId, chatPrivate.UserFromId, data.ChatId, data.IsUser,
-                data.ChatMessages,
-                FileTarget.User).ConfigureAwait(false);
+            if (!data.IsRetracted)
+                _ = chatService.OperateChatMessage(userId, chatPrivate.UserFromId, data.ChatId, data.IsUser,
+                    data.ChatMessages,
+                    FileTarget.User).ConfigureAwait(false);
             chatDatas.Add(data);
         }
 
@@ -198,6 +235,25 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
                 disableTracking: false);
             if (relation2 != null && chatMessage.Id > relation2.LastChatId)
                 relation2.IsChatting = true;
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<bool> ChatPrivateDetailMessagesOperate(string userId,
+        IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
+    {
+        var chatPrivateDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+        foreach (var chatPrivateMessage in chatPrivateMessages)
+        {
+            var chatGroupDetail = _mapper.Map<ChatPrivateDetail>(chatPrivateMessage);
+            var result = chatPrivateDetailRepository.GetFirstOrDefault(predicate: d =>
+                d.UserId.Equals(chatGroupDetail.UserId) && d.ChatPrivateId.Equals(chatGroupDetail.ChatPrivateId));
+            if (result != null)
+                chatPrivateDetailRepository.Update(chatGroupDetail);
+            else
+                await chatPrivateDetailRepository.InsertAsync(chatGroupDetail);
         }
 
         await _unitOfWork.SaveChangesAsync();

@@ -7,6 +7,8 @@ using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.DataBase.Data;
+using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
@@ -40,6 +42,14 @@ internal class ChatMessageHandler : MessageHandlerBase
         var token3 = eventAggregator.GetEvent<ResponseEvent<GroupChatMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnGroupChatMessage));
         _subscriptionTokens.Add(token3);
+
+        var token4 = eventAggregator.GetEvent<ResponseEvent<ChatGroupRetractMessage>>()
+            .Subscribe(d => ExecuteInScope(d, OnChatGroupRetractMessage));
+        _subscriptionTokens.Add(token4);
+
+        var token5 = eventAggregator.GetEvent<ResponseEvent<ChatPrivateRetractMessage>>()
+            .Subscribe(d => ExecuteInScope(d, OnChatPrivateRetractMessage));
+        _subscriptionTokens.Add(token5);
     }
 
     /// <summary>
@@ -66,13 +76,18 @@ internal class ChatMessageHandler : MessageHandlerBase
             Time = DateTime.Parse(chatMessage.Time),
             IsWriting = false,
             IsUser = false,
+            IsRetracted = chatMessage.IsRetracted,
+            RetractedTime = string.IsNullOrWhiteSpace(chatMessage.RetractTime)
+                ? DateTime.MinValue
+                : DateTime.Parse(chatMessage.RetractTime),
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(chatMessage.Messages)
         };
         // 注入消息资源
-        await chatService.OperateChatMessage(_userManager.User.Id, chatMessage.UserFromId, chatData.ChatId,
-            chatData.IsUser,
-            chatData.ChatMessages,
-            FileTarget.User);
+        if (!chatData.IsRetracted)
+            await chatService.OperateChatMessage(_userManager.User.Id, chatMessage.UserFromId, chatData.ChatId,
+                chatData.IsUser,
+                chatData.ChatMessages,
+                FileTarget.User);
 
         // 更新消息Dto
         FriendChatDto friendChat =
@@ -181,6 +196,10 @@ internal class ChatMessageHandler : MessageHandlerBase
             Time = DateTime.Parse(message.Time),
             IsWriting = false,
             IsUser = false,
+            IsRetracted = message.IsRetracted,
+            RetractedTime = string.IsNullOrWhiteSpace(message.RetractTime)
+                ? DateTime.MinValue
+                : DateTime.Parse(message.RetractTime),
             ChatMessages = _mapper.Map<List<ChatMessageDto>>(message.Messages)
         };
 
@@ -190,9 +209,11 @@ internal class ChatMessageHandler : MessageHandlerBase
             chatData.Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
 
         // 注入消息资源
-        await chatService.OperateChatMessage(_userManager.User.Id, message.GroupId, chatData.ChatId, chatData.IsUser,
-            chatData.ChatMessages,
-            FileTarget.Group);
+        if (!chatData.IsRetracted)
+            await chatService.OperateChatMessage(_userManager.User.Id, message.GroupId, chatData.ChatId,
+                chatData.IsUser,
+                chatData.ChatMessages,
+                FileTarget.Group);
 
         // 更新消息Dto
         GroupChatDto groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
@@ -277,6 +298,84 @@ internal class ChatMessageHandler : MessageHandlerBase
         await Task.Delay(50);
 
         _semaphoreSlim.Release();
+    }
+
+    /// <summary>
+    /// 处理好友聊天消息撤回处理
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnChatPrivateRetractMessage(IScopedProvider scopedprovider, ChatPrivateRetractMessage message)
+    {
+        var unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+
+        string friendId = "";
+
+        var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
+        var chatPrivate =
+            await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(message.ChatPrivateId),
+                disableTracking: false);
+        if (chatPrivate != null)
+        {
+            chatPrivate.IsRetracted = true;
+            chatPrivate.RetractedTime = DateTime.Now;
+            friendId = _userManager.User.Id.Equals(message.UserId) ? chatPrivate.UserTargetId : chatPrivate.UserFromId;
+        }
+
+        await unitOfWork.SaveChangesAsync();
+
+        // 更新UI Dto
+        if (!string.IsNullOrWhiteSpace(friendId))
+        {
+            var friendChatDto = _userManager.FriendChats.FirstOrDefault(d => d.UserId.Equals(friendId));
+            if (friendChatDto != null)
+            {
+                var chatMess = friendChatDto.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(message.ChatPrivateId));
+                if (chatMess != null)
+                    chatMess.IsRetracted = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 处理群聊聊天消息撤回处理
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnChatGroupRetractMessage(IScopedProvider scopedprovider, ChatGroupRetractMessage message)
+    {
+        var unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+
+        string groupId = "";
+
+        var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
+        var chatGroup =
+            await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(message.ChatGroupId),
+                disableTracking: false);
+        if (chatGroup != null)
+        {
+            chatGroup.IsRetracted = true;
+            chatGroup.RetractedTime = DateTime.Now;
+            groupId = chatGroup.GroupId;
+        }
+
+        await unitOfWork.SaveChangesAsync();
+
+        // 更新UI Dto
+        if (!string.IsNullOrWhiteSpace(groupId))
+        {
+            var groupChatDto = _userManager.GroupChats.FirstOrDefault(d => d.GroupId.Equals(groupId));
+            if (groupChatDto != null)
+            {
+                var chatMess = groupChatDto.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(message.ChatGroupId));
+                if (chatMess != null)
+                    chatMess.IsRetracted = true;
+            }
+        }
     }
 
     // 辅助方法：判断是否应该显示时间（时间间隔超过5分钟）

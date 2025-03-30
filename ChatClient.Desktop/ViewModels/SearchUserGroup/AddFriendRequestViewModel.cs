@@ -62,7 +62,7 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
         set => SetProperty(ref _groups, value);
     }
 
-    public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
+    private INotificationMessageManager? notificationManager;
 
     public DelegateCommand SendFriendRequestCommand { get; }
     public DelegateCommand CancleCommand { get; }
@@ -92,10 +92,10 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
             await _friendService.AddFriend(_userManager.User!.Id, _userDto.Id, Remark ?? "", Group ?? "默认分组",
                 Message ?? "");
         if (state)
-            NotificationMessageManager.ShowMessage("好友请求已发送", NotificationType.Success, TimeSpan.FromSeconds(1.5));
+            notificationManager?.ShowMessage("好友请求已发送", NotificationType.Success, TimeSpan.FromSeconds(1.5));
         else
-            NotificationMessageManager.ShowMessage("好友请求失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
-        await Task.Delay(TimeSpan.FromSeconds(0.9));
+            notificationManager?.ShowMessage("好友请求失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
+
         RequestClose.Invoke();
     }
 
@@ -105,10 +105,12 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        notificationManager = null;
     }
 
     public void OnDialogOpened(IDialogParameters parameters)
     {
+        notificationManager = parameters.GetValue<INotificationMessageManager>("notificationManager");
         UserDto = parameters.GetValue<UserDto>("UserDto");
         Group = "默认分组";
         Message = "我是" + _userManager.User!.Name;

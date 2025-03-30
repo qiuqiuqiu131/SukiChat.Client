@@ -8,15 +8,14 @@
              x:DataType="userControls:CommonDialogViewModel"
              Width="300"
              x:Class="ChatClient.Desktop.Views.UserControls.CommonDialogView">
-    <Grid RowDefinitions="25,0.5,auto,auto">
+    <Grid RowDefinitions="25,auto,auto">
         <Button Name="PART_CloseButton" HorizontalAlignment="Right" Width="25" Height="25" Margin="10,0"
                 Classes="Basic Rounded WindowControlsButton Close"
                 Command="{Binding CancelCommand}">
             <PathIcon Data="{x:Static icons:Icons.WindowClose}" Width="10" Height="10" />
         </Button>
-        <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
-        <TextBlock Grid.Row="2" Height="30" Margin="18,15,18,10" FontSize="14.5" Text="{Binding Message}" />
-        <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
+        <TextBlock Grid.Row="1" Height="30" Margin="18,15,18,10" FontSize="14.5" Text="{Binding Message}" />
+        <StackPanel Grid.Row="2" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
             <Button Classes="Flat" Command="{Binding OkCommand}" Padding="15,5" FontSize="14">
                 <TextBlock Text="确定" FontSize="13.5" />
             </Button>

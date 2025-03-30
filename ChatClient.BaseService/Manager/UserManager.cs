@@ -272,9 +272,6 @@ internal class UserManager : IUserManager
                 friendGroup.Friends.Remove(friend);
                 await _userDtoManager.RemoveFriendRelationDto(friendId);
             }
-
-            if (friendGroup.Friends.Count == 0)
-                GroupFriends!.Remove(friendGroup);
         }
 
         // 删除聊天列表
@@ -301,9 +298,6 @@ internal class UserManager : IUserManager
                 groupGroup.Groups.Remove(group);
                 await _userDtoManager.RemoveGroupRelationDto(groupId);
             }
-
-            if (groupGroup.Groups.Count == 0)
-                GroupGroups!.Remove(groupGroup);
         }
 
         var groupChat = GroupChats!.FirstOrDefault(d => d.GroupId.Equals(groupId));

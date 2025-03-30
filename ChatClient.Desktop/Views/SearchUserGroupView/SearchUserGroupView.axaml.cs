@@ -32,7 +32,12 @@ public partial class SearchUserGroupView : UserControl
         RegionManager.SetRegionManager(TopLevel.GetTopLevel(this), _regionManager);
         RegionManager.UpdateRegions();
 
-        _regionManager.RegisterViewWithRegion(RegionNames.AddFriendRegion, nameof(SearchAllView));
+        INavigationParameters parameters = new NavigationParameters
+        {
+            { "searchText", SearchBox?.SearchText ?? string.Empty },
+            { "notificationManager", NotificationManager.Manager }
+        };
+        _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
     }
 
     private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -42,19 +47,28 @@ public partial class SearchUserGroupView : UserControl
             if (tabControl.SelectedIndex == 0)
             {
                 INavigationParameters parameters = new NavigationParameters
-                    { { "searchText", SearchBox?.SearchText ?? string.Empty } };
+                {
+                    { "searchText", SearchBox?.SearchText ?? string.Empty },
+                    { "notificationManager", NotificationManager.Manager }
+                };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
             }
             else if (tabControl.SelectedIndex == 1)
             {
                 INavigationParameters parameters = new NavigationParameters
-                    { { "searchText", SearchBox?.SearchText ?? string.Empty } };
+                {
+                    { "searchText", SearchBox?.SearchText ?? string.Empty },
+                    { "notificationManager", NotificationManager.Manager }
+                };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchFriendView), parameters);
             }
             else if (tabControl.SelectedIndex == 2)
             {
                 INavigationParameters parameters = new NavigationParameters
-                    { { "searchText", SearchBox?.SearchText ?? string.Empty } };
+                {
+                    { "searchText", SearchBox?.SearchText ?? string.Empty },
+                    { "notificationManager", NotificationManager.Manager }
+                };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchGroupView), parameters);
             }
         }

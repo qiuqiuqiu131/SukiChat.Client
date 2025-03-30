@@ -19,4 +19,8 @@ public class ChatPrivate
     [Required] public string Message { get; set; }
 
     [Required] public DateTime Time { get; set; }
+    
+    [Required] public bool IsRetracted { get; set; }
+
+    [Required] public DateTime RetractedTime { get; set; } = DateTime.MinValue;
 }

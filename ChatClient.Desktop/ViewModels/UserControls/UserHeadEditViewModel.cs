@@ -9,6 +9,7 @@ using ChatClient.Avalonia;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Views.UserControls;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using Prism.Commands;
@@ -115,8 +116,9 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
 
         if (handle == null) return;
 
-        filePath = await SystemFileDialog.OpenFileAsync(handle.Value, "选择图片",
-            "Image Files\0*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.webp\0");
+        var systemFileDialog = _containerProvider.Resolve<ISystemFileDialog>();
+        filePath = await systemFileDialog.OpenFileAsync(handle.Value, "选择图片", "",
+            ["Image Files", "*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tiff;*.webp"]);
 
         if (string.IsNullOrWhiteSpace(filePath)) return;
 

@@ -37,6 +37,22 @@ public class ChatData : BindableBase, IDisposable
         set => SetProperty(ref _isUser, value);
     }
 
+    private bool isRetracted;
+
+    public bool IsRetracted
+    {
+        get => isRetracted;
+        set => SetProperty(ref isRetracted, value);
+    }
+
+    private DateTime _retractedTime;
+
+    public DateTime RetractedTime
+    {
+        get => _retractedTime;
+        set => SetProperty(ref _retractedTime, value);
+    }
+
     private bool _isWriting;
 
     public bool IsWriting

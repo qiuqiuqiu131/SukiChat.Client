@@ -186,7 +186,9 @@ public partial class ScreenshotWindow : Window
         var handler = this.TryGetPlatformHandle()?.Handle;
         if (handler == null) throw new Exception();
 
-        var path = await SystemFileDialog.SaveFileAsync(handler.Value, "屏幕截图.png", "保存截图", ".png\0*.png*\0");
+        var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
+        var path = await systemFileDialog.SaveFileAsync(handler.Value, "屏幕截图.png", "保存截图", "",
+            ["图片", "*.png"]);
 
         if (!string.IsNullOrEmpty(path))
         {

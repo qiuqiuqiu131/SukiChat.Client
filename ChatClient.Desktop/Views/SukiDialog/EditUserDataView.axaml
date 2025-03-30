@@ -39,40 +39,20 @@
                     <circleImage:CircleImage HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              Image="{Binding UserDto.HeadImage}" Size="70" />
-                    <Button
-                        Width="22"
-                        Height="22"
-                        Padding="1.5"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Bottom"
-                        Classes="Void Normal"
-                        Command="{Binding EditHeadCommand}">
-                        <Button.Styles>
-                            <Style Selector="Button.Normal:pointerover">
-                                <Setter Property="Cursor" Value="Hand" />
-                            </Style>
-                        </Button.Styles>
-                        <Panel>
-                            <Ellipse
-                                Width="22"
-                                Height="22"
-                                Fill="White" />
-                            <Ellipse
-                                Name="OuterEllipse"
-                                Width="22"
-                                Height="22"
-                                StrokeThickness="1.5"
-                                Stroke="{DynamicResource SukiLowText}"
-                                Fill="{DynamicResource SukiPrimaryColor10}" />
-                            <avalonia:MaterialIcon
-                                Name="Icon"
-                                Width="15"
-                                Height="15"
-                                Foreground="{DynamicResource SukiLowText}"
-                                Kind="CircleEditOutline">
-                            </avalonia:MaterialIcon>
-                        </Panel>
-                    </Button>
+                    <Border CornerRadius="40" Width="70" Height="70"
+                            VerticalAlignment="Center"
+                            Cursor="Hand"
+                            Background="#44000000"
+                            HorizontalAlignment="Center">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="PointerPressed">
+                                <InvokeCommandAction Command="{Binding EditHeadCommand}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                        <avalonia:MaterialIcon Kind="EditCircleOutline" HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" Width="45" Height="45" Foreground="White"
+                                               Opacity="0.5" />
+                    </Border>
                 </Grid>
                 <formControls:FormTextBox Text="{Binding Name,Mode=TwoWay}" Height="35" Head="昵称"
                                           FontSize="14"

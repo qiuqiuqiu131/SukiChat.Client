@@ -126,6 +126,7 @@
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/SearchUserGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ShareView/ShareView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SukiDialog/CommonDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SukiDialog/EditUserDataView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SukiDialog/SukiDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

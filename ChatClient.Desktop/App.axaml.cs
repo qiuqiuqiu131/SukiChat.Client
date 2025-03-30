@@ -15,6 +15,7 @@ using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Desktop.ViewModels.SearchUserGroup;
 using ChatClient.Desktop.ViewModels.SearchUserGroup.Region;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
@@ -26,6 +27,7 @@ using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Desktop.Views.SearchUserGroupView.Region;
+using ChatClient.Desktop.Views.ShareView;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
@@ -160,6 +162,8 @@ public class App : PrismApplication
             .AddView<AcceptFriendView, AcceptFriendViewModel>(services)
             // 编辑用户信息
             .AddView<EditUserDataView, EditUserDataViewModel>(services)
+            // 分享
+            .AddView<ShareView,ShareViewModel>(services)
             // 编辑分组
             .AddView<AddGroupView, AddGroupViewModel>(services)
             .AddView<RenameGroupView, RenameGroupViewModel>(services)

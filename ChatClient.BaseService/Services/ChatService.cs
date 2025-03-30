@@ -11,6 +11,7 @@ using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
+using DryIoc.ImTools;
 using File.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,9 @@ public interface IChatService
     Task UpdateFileMess(string userId, FileMessDto fileMess, FileTarget target);
     Task<bool> ReadAllChatMessage(string userId, string targetId, int chatId, FileTarget fileTarget);
     Task AddChatDto(object obj);
+
+    Task<bool> DeleteChatMessage(string userId, int chatId, FileTarget fileTarget);
+    Task<bool> RetractChatMessage(string userId, int chatId, FileTarget fileTarget);
 }
 
 internal class ChatService : BaseService, IChatService
@@ -104,7 +108,7 @@ internal class ChatService : BaseService, IChatService
         var friendMessage = new FriendChatMessage
         {
             UserFromId = userId,
-            UserTargetId = targetId,
+            UserTargetId = targetId
         };
         friendMessage.Messages.AddRange(chatMessages);
 
@@ -188,7 +192,7 @@ internal class ChatService : BaseService, IChatService
         var groupChatMessage = new GroupChatMessage
         {
             UserFromId = userId,
-            GroupId = groupId,
+            GroupId = groupId
         };
         groupChatMessage.Messages.AddRange(chatMessages);
 
@@ -495,5 +499,119 @@ internal class ChatService : BaseService, IChatService
             userManager.GroupChats!.Add(groupChatDto);
             groupRelationDto.IsChatting = true;
         }
+    }
+
+    public async Task<bool> DeleteChatMessage(string userId, int chatId, FileTarget fileTarget)
+    {
+        if (fileTarget == FileTarget.User)
+        {
+            var request = new ChatPrivateDeleteRequest
+            {
+                ChatPrivateId = chatId,
+                UserId = userId
+            };
+
+            var result = await _messageHelper.SendMessageWithResponse<ChatPrivateDeleteResponse>(request);
+
+            if (result?.Response?.State ?? false)
+            {
+                try
+                {
+                    var repository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+                    var entity = await repository.GetFirstOrDefaultAsync(predicate: d =>
+                        d.UserId.Equals(userId) && d.ChatPrivateId.Equals(chatId), disableTracking: false);
+                    if (entity != null)
+                        entity.IsDeleted = true;
+                    else
+                    {
+                        var entityDetail = new ChatPrivateDetail
+                        {
+                            ChatPrivateId = chatId,
+                            UserId = userId,
+                            IsDeleted = true
+                        };
+                        await repository.InsertAsync(entityDetail);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
+            }
+
+            return result?.Response?.State ?? false;
+        }
+        else if (fileTarget == FileTarget.Group)
+        {
+            var request = new ChatGroupDeleteRequest
+            {
+                ChatGroupId = chatId,
+                UserId = userId
+            };
+
+            var result = await _messageHelper.SendMessageWithResponse<ChatGroupDeleteResponse>(request);
+
+            if (result?.Response?.State ?? false)
+            {
+                try
+                {
+                    var repository = _unitOfWork.GetRepository<ChatGroupDetail>();
+                    var entity = await repository.GetFirstOrDefaultAsync(predicate: d =>
+                        d.UserId.Equals(userId) && d.ChatGroupId.Equals(chatId), disableTracking: false);
+                    if (entity != null)
+                        entity.IsDeleted = true;
+                    else
+                    {
+                        var entityDetail = new ChatGroupDetail
+                        {
+                            ChatGroupId = chatId,
+                            UserId = userId,
+                            IsDeleted = true
+                        };
+                        await repository.InsertAsync(entityDetail);
+                    }
+
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    // ignore
+                }
+            }
+
+            return result?.Response?.State ?? false;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> RetractChatMessage(string userId, int chatId, FileTarget fileTarget)
+    {
+        if (fileTarget == FileTarget.User)
+        {
+            var request = new ChatPrivateRetractRequest
+            {
+                UserId = userId,
+                ChatPrivateId = chatId
+            };
+
+            var result = await _messageHelper.SendMessageWithResponse<ChatPrivateRetractMessage>(request);
+            return result?.Response?.State ?? false;
+        }
+        else if (fileTarget == FileTarget.Group)
+        {
+            var request = new ChatGroupRetractRequest
+            {
+                UserId = userId,
+                ChatGroupId = chatId
+            };
+
+            var result = await _messageHelper.SendMessageWithResponse<ChatGroupRetractMessage>(request);
+            return result?.Response?.State ?? false;
+        }
+
+        return false;
     }
 }

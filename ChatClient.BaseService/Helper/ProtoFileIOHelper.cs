@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ChatClient.BaseService.Helper;
 
-public class ProtoFileIOHelper : IFileIOHelper
+internal class ProtoFileIOHelper : IFileIOHelper
 {
     private readonly IResourcesClientPool _resourcesClientPool;
     private IFileIOHelper _fileIoHelperImplementation;

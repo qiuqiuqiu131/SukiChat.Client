@@ -40,7 +40,8 @@ public static class BaseServiceExtension
             .Register<IFileIOHelper, ProtoFileIOHelper>()
             .Register<IFileOperateHelper, FileOperateHelper>()
             .Register<ITaskbarFlashHelper, WindowTaskbarFlashHelper>()
-            .Register<ISystemScalingHelper, WindowScalingHelper>();
+            .Register<ISystemScalingHelper, WindowScalingHelper>()
+            .Register<ISystemFileDialog, WindowsFileDialog>();
 
         // 注册Service
         containerRegistry.Register<ILoginService, LoginService>()
