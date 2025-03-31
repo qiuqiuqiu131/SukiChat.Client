@@ -51,6 +51,18 @@
                     <TextBlock Grid.Row="1"
                                FontSize="14"
                                Opacity="0.8"
+                               IsVisible="{Binding ChatData.IsRetracted}"
+                               VerticalAlignment="Center"
+                               TextWrapping="NoWrap"
+                               TextTrimming="CharacterEllipsis">
+                        <Run Text="{Binding ChatData.Owner.NickName}" />
+                        <Run Text=" : " />
+                        <Run Text="撤回了一条消息" />
+                    </TextBlock>
+                    <TextBlock Grid.Row="1"
+                               FontSize="14"
+                               Opacity="0.8"
+                               IsVisible="{Binding !ChatData.IsRetracted}"
                                VerticalAlignment="Center"
                                TextWrapping="NoWrap"
                                TextTrimming="CharacterEllipsis">

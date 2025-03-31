@@ -71,7 +71,8 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" DockPanel.Dock="Bottom"
                     Margin="15,15,15,10">
             <Button Margin="0"
-                    Padding="20,6">
+                    Padding="20,6"
+                    Command="{Binding ShareGroupCommand}">
                 <TextBlock Text="分享至" FontSize="14" />
             </Button>
             <Button Classes="Flat"

@@ -48,13 +48,21 @@
                                VerticalAlignment="Center"
                                IsVisible="{Binding FriendRelation.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                Text="{Binding FriendRelation.UserDto.Name}" FontSize="14.5" />
+                    <TextBlock Grid.Row="1" FontSize="14"
+                               Opacity="0.8"
+                               IsVisible="{Binding ChatData.IsRetracted}"
+                               VerticalAlignment="Center"
+                               TextWrapping="NoWrap"
+                               TextTrimming="CharacterEllipsis"
+                               Text="对方撤回了一条消息" />
                     <TextBlock Grid.Row="1"
                                FontSize="14"
+                               IsVisible="{Binding !ChatData.IsRetracted}"
                                Opacity="0.8"
                                VerticalAlignment="Center"
                                TextWrapping="NoWrap"
                                TextTrimming="CharacterEllipsis"
-                               Text="{Binding ChatData.ChatMessages,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
+                               Text="{Binding ChatData,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
                 </Grid>
             </StackPanel>
         </DockPanel>

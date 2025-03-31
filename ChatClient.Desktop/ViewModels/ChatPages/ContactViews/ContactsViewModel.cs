@@ -161,6 +161,8 @@ public class ContactsViewModel : ChatPageBase
             if (result.Result != ButtonResult.OK) return;
 
             var groupName = result.Parameters.GetValue<string>("GroupName");
+            if (string.IsNullOrWhiteSpace(groupName)) return;
+
             if (type == 0)
             {
                 var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));
@@ -213,6 +215,7 @@ public class ContactsViewModel : ChatPageBase
             int type = obj is GroupFriendDto ? 0 : 1;
 
             var groupName = result.Parameters.GetValue<string>("GroupName");
+            if (string.IsNullOrWhiteSpace(groupName)) return;
             if (type == 0)
             {
                 var gf = GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName));

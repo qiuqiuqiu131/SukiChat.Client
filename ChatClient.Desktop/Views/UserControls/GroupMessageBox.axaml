@@ -83,16 +83,6 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                                 IsVisible="{Binding !IsEntered}"
                                 Margin="15,15,15,5" Spacing="10">
-                        <!-- <Button Margin="0" -->
-                        <!--         Padding="15,5" Click="ShareGroup"> -->
-                        <!--     <Interaction.Behaviors> -->
-                        <!--         <EventTriggerBehavior EventName="Click"> -->
-                        <!--             <ChangePropertyAction TargetObject="{Binding $parent[Popup]}" PropertyName="IsOpen" -->
-                        <!--                                   Value="False" /> -->
-                        <!--         </EventTriggerBehavior> -->
-                        <!--     </Interaction.Behaviors> -->
-                        <!--     <TextBlock Text="分享至" FontSize="13.5" /> -->
-                        <!-- </Button> -->
                         <Button Classes="Flat"
                                 Margin="0"
                                 Padding="15,5"

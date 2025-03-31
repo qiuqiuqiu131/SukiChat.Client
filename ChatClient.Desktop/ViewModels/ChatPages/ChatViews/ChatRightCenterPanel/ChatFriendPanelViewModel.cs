@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -51,6 +52,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
     public DelegateCommand<ChatData> DeleteMessageCommand { get; private set; }
     public DelegateCommand<ChatData> RetractMessageCommand { get; private set; }
+    public DelegateCommand<object> ShareMessageCommand { get; private set; }
     public DelegateCommand SearchMoreCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
@@ -75,10 +77,23 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
         DeleteMessageCommand = new DelegateCommand<ChatData>(DeleteMessage);
         RetractMessageCommand = new DelegateCommand<ChatData>(RetractMessage);
+        ShareMessageCommand = new DelegateCommand<object>(ShareMessage);
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         DeleteFriendCommand = new AsyncDelegateCommand(DeleteFriend);
+    }
+
+    /// <summary>
+    /// 转发消息
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ShareMessage(object obj)
+    {
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new ShareViewModel(d, new DialogParameters { { "ShareMess", obj } }, null))
+            .TryShow();
     }
 
     /// <summary>

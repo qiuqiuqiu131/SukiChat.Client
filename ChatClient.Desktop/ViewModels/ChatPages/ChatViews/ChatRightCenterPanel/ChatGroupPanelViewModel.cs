@@ -12,6 +12,7 @@ using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
@@ -58,6 +59,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
     public DelegateCommand SearchMoreCommand { get; private set; }
     public DelegateCommand<GroupChatData> RetractMessageCommand { get; private set; }
+    public DelegateCommand<object> ShareMessageCommand { get; private set; }
     public DelegateCommand<GroupChatData> DeleteMessageCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
@@ -83,10 +85,23 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
         RetractMessageCommand = new DelegateCommand<GroupChatData>(RetractMessage);
         DeleteMessageCommand = new DelegateCommand<GroupChatData>(DeleteMessage);
+        ShareMessageCommand = new DelegateCommand<object>(ShareMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         QuitGroupCommand = new DelegateCommand(QuitGroup);
         DeleteGroupCommand = new DelegateCommand(DeleteGroup);
+    }
+
+    /// <summary>
+    /// 转发消息
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void ShareMessage(object obj)
+    {
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new ShareViewModel(d, new DialogParameters { { "ShareMess", obj } }, null))
+            .TryShow();
     }
 
     /// <summary>

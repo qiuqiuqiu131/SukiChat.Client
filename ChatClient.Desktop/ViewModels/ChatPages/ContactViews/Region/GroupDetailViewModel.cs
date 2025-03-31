@@ -3,14 +3,18 @@ using System.Linq;
 using Avalonia.Collections;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Tool.Common;
+using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation.Regions;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
@@ -18,6 +22,7 @@ public class GroupDetailViewModel : ViewModelBase
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
+    private readonly ISukiDialogManager _dialogManager;
     private readonly IUserManager _userManager;
     private GroupRelationDto? _group;
 
@@ -31,19 +36,35 @@ public class GroupDetailViewModel : ViewModelBase
     public AvaloniaList<string>? GroupNames { get; private set; }
 
     public DelegateCommand SendMessageCommand { get; init; }
+    public DelegateCommand ShareGroupCommand { get; init; }
 
     public GroupDetailViewModel(IContainerProvider containerProvider, IEventAggregator eventAggregator,
+        ISukiDialogManager dialogManager,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
+        _dialogManager = dialogManager;
         _userManager = userManager;
 
         SendMessageCommand = new DelegateCommand(SendMessage);
+        ShareGroupCommand = new DelegateCommand(ShareGroup);
 
         GroupNames = new AvaloniaList<string>(_userManager.GroupGroups?.Select(d => d.GroupName).Order());
         if (_userManager.GroupGroups != null)
             _userManager.GroupGroups.CollectionChanged += GroupGroupsOnCollectionChanged;
+    }
+
+    private void ShareGroup()
+    {
+        if (Group == null) return;
+
+        _dialogManager.CreateDialog()
+            .WithViewModel(d => new ShareViewModel(d, new DialogParameters
+            {
+                { "ShareMess", new CardMessDto { IsUser = false, Id = Group.Id } }
+            }, null))
+            .TryShow();
     }
 
     private void GroupGroupsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

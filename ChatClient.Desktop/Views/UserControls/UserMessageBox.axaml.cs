@@ -4,6 +4,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ChatClient.BaseService.Manager;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Tool.Data;
@@ -62,10 +63,15 @@ public partial class UserMessageBox : UserControl
 
     private void ShareFriend(object? sender, RoutedEventArgs e)
     {
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        if (DataContext is UserDto { IsUser: false, IsFriend: true } userDto)
         {
-            Message = "功能暂未开放",
-            Type = NotificationType.Information
-        });
+            var dialogService = App.Current.Container.Resolve<ISukiDialogManager>();
+            dialogService.CreateDialog()
+                .WithViewModel(d => new ShareViewModel(d, new DialogParameters
+                {
+                    { "ShareMess", new CardMessDto { IsUser = true, Id = userDto.Id } }
+                }, null))
+                .TryShow();
+        }
     }
 }

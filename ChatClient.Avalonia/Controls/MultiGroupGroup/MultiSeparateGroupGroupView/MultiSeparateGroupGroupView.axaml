@@ -1,0 +1,31 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView"
+        xmlns:multiGroupGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup.MultiGroupGroupList"
+        xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="multiSeparateGroupView|MultiSeparateGroupGroupView">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ItemsControl Name="GroupList" Classes="Void">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="group:GroupGroupDto">
+                            <multiGroupGroupList:MultiGroupGroupList GroupContents="{Binding Groups}"
+                                                                     Header="{Binding GroupName}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

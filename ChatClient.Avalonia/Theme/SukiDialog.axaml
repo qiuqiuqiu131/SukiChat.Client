@@ -15,10 +15,8 @@
                         <Panel>
                             <Border IsVisible="{TemplateBinding ShowCardBackground}" CornerRadius="7"
                                     BoxShadow="3 3 5 #44000000"
-                                    ClipToBounds="True"
-                                    Background="{DynamicResource SukiCardBackground}">
-                                <Panel Background="{DynamicResource PopupGradientBrush}" Margin="0">
-                                </Panel>
+                                    ClipToBounds="True">
+                                <suki:SukiBackground />
                             </Border>
                             <ContentControl Content="{TemplateBinding ViewModel}"
                                             IsVisible="{TemplateBinding IsViewModelOnly}" />

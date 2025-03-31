@@ -52,6 +52,13 @@ public static class ChatMessageTool
                     }
 
                     break;
+                case ChatMessage.ContentOneofCase.CardMess:
+                    stringBuilder.Append((int)chatMessage.ContentCase);
+                    stringBuilder.Append(chatMessage.CardMess.IsUser ? "1" : "0");
+                    stringBuilder.Append("__");
+                    stringBuilder.Append(chatMessage.CardMess.Id);
+                    stringBuilder.Append("1\n\t3\n\t1\n\t");
+                    break;
             }
         }
 
@@ -86,7 +93,13 @@ public static class ChatMessageTool
                     stringBuilder.Append(fileMess.FileSize);
                     stringBuilder.Append("__");
                     stringBuilder.Append(fileMess.FileType);
-
+                    stringBuilder.Append("1\n\t3\n\t1\n\t");
+                    break;
+                case ChatMessage.ContentOneofCase.CardMess:
+                    stringBuilder.Append((int)chatMessage.Type);
+                    stringBuilder.Append(((CardMessDto)chatMessage.Content).IsUser ? "1" : "0");
+                    stringBuilder.Append("__");
+                    stringBuilder.Append(((CardMessDto)chatMessage.Content).Id);
                     stringBuilder.Append("1\n\t3\n\t1\n\t");
                     break;
             }
@@ -166,6 +179,18 @@ public static class ChatMessageTool
                     }
 
                     chatMessages.Add(new ChatMessage { SystemMessage = systemMessage });
+                    break;
+                case ChatMessage.ContentOneofCase.CardMess:
+                    string[] card_spliter = content.Split("__");
+                    var cardMess = new ChatMessage
+                    {
+                        CardMess = new CardMess
+                        {
+                            IsUser = card_spliter[0].Equals("1"),
+                            Id = card_spliter[1]
+                        }
+                    };
+                    chatMessages.Add(cardMess);
                     break;
             }
         }
@@ -250,6 +275,19 @@ public static class ChatMessageTool
                         Content = systemMessage,
                         Type = (ChatMessage.ContentOneofCase)type
                     });
+                    break;
+                case ChatMessage.ContentOneofCase.CardMess:
+                    string[] card_spliter = content.Split("__");
+                    var cardMess = new ChatMessageDto
+                    {
+                        Type = (ChatMessage.ContentOneofCase)type,
+                        Content = new CardMessDto
+                        {
+                            IsUser = card_spliter[0].Equals("1"),
+                            Id = card_spliter[1]
+                        }
+                    };
+                    chatMessages.Add(cardMess);
                     break;
             }
         }

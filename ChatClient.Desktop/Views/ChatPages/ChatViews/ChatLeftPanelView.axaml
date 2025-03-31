@@ -215,16 +215,38 @@
                                 Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
-                            <TextBlock
-                                Name="Chat_Mess_Txt"
-                                Grid.Column="0"
-                                Margin="0,0,20,0"
-                                VerticalAlignment="Center"
-                                FontSize="12"
-                                Foreground="{DynamicResource SukiText}"
-                                Opacity="0.6"
-                                Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
-                                TextTrimming="CharacterEllipsis" />
+                            <Panel
+                                IsVisible="{Binding LastChatMessages,Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <TextBlock
+                                    Margin="0,0,20,0"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding !LastChatMessages.IsRetracted}"
+                                    FontSize="12"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Opacity="0.6"
+                                    Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <Panel IsVisible="{Binding LastChatMessages.IsRetracted}">
+                                    <TextBlock
+                                        Margin="0,0,20,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        IsVisible="{Binding LastChatMessages.IsUser}"
+                                        Foreground="{DynamicResource SukiText}"
+                                        Opacity="0.6"
+                                        Text="你撤回了一条消息"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <TextBlock
+                                        Margin="0,0,20,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        IsVisible="{Binding !LastChatMessages.IsUser}"
+                                        Foreground="{DynamicResource SukiText}"
+                                        Opacity="0.6"
+                                        Text="对方撤回了一条消息"
+                                        TextTrimming="CharacterEllipsis" />
+                                </Panel>
+                            </Panel>
                             <Panel Grid.Column="1">
                                 <Panel
                                     IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">
@@ -318,21 +340,36 @@
                                 Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
-                            <Grid Grid.Column="0"
-                                  IsVisible="{Binding LastChatMessages, Converter={converter:NullValueConverter}}">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="12"
-                                    Foreground="{DynamicResource SukiText}"
-                                    IsVisible="{Binding !LastChatMessages.IsSystem}"
-                                    Opacity="0.6"
-                                    TextTrimming="CharacterEllipsis">
-                                    <Run Text="{Binding LastChatMessages.Owner.NickName}" />
-                                    <Run Text=":" />
-                                    <Run
-                                        Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
-                                </TextBlock>
+                            <Panel Grid.Column="0"
+                                   IsVisible="{Binding LastChatMessages, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Panel IsVisible="{Binding !LastChatMessages.IsSystem}">
+                                    <TextBlock
+                                        Margin="0,0,20,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SukiText}"
+                                        IsVisible="{Binding !LastChatMessages.IsRetracted}"
+                                        Opacity="0.6"
+                                        TextTrimming="CharacterEllipsis">
+                                        <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                        <Run Text=":" />
+                                        <Run
+                                            Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
+                                    </TextBlock>
+                                    <TextBlock
+                                        Margin="0,0,20,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="{DynamicResource SukiText}"
+                                        IsVisible="{Binding LastChatMessages.IsRetracted}"
+                                        Opacity="0.6"
+                                        TextTrimming="CharacterEllipsis">
+                                        <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                        <Run Text=":" />
+                                        <Run
+                                            Text="撤回一条消息" />
+                                    </TextBlock>
+                                </Panel>
                                 <TextBlock
                                     Margin="0,0,20,0"
                                     VerticalAlignment="Center"
@@ -344,7 +381,7 @@
                                     <Run
                                         Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
                                 </TextBlock>
-                            </Grid>
+                            </Panel>
                             <Panel Grid.Column="1">
                                 <Panel
                                     IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">

@@ -13,7 +13,8 @@ internal class ChatMessageContentResolver : IValueResolver<ChatMessage, ChatMess
             ChatMessage.ContentOneofCase.TextMess => context.Mapper.Map<TextMessDto>(source.TextMess),
             ChatMessage.ContentOneofCase.ImageMess => context.Mapper.Map<ImageMessDto>(source.ImageMess),
             ChatMessage.ContentOneofCase.FileMess => context.Mapper.Map<FileMessDto>(source.FileMess),
-            ChatMessage.ContentOneofCase.SystemMessage => context.Mapper.Map<SystemMessDto>(source.SystemMessage)
+            ChatMessage.ContentOneofCase.SystemMessage => context.Mapper.Map<SystemMessDto>(source.SystemMessage),
+            ChatMessage.ContentOneofCase.CardMess => context.Mapper.Map<CardMessDto>(source.CardMess)
         };
     }
 }

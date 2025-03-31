@@ -12,6 +12,7 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
@@ -78,5 +79,56 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
             Message = e.Message,
             Type = e.Type
         });
+    }
+
+    private async void ChatUI_OnMessageBoxShow(object? sender, MessageBoxShowEventArgs e)
+    {
+        if (sender is ChatUI chatUi)
+        {
+            if (e.CardMessDto.IsUser)
+            {
+                var userDtoManager = App.Current.Container.Resolve<IUserDtoManager>();
+                var userDto = await userDtoManager.GetUserDto(e.CardMessDto.Id);
+                if (userDto != null)
+                {
+                    var position = ((Control)e.PointerPressedEventArgs.Source).TranslatePoint(new Point(0, 0), chatUi);
+                    var width = chatUi.Bounds.Width;
+                    if (position.Value.X > width / 2)
+                        _eventAggregator.GetEvent<UserMessageBoxShowEvent>().Publish(
+                            new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs)
+                            {
+                                PlacementMode = PlacementMode.LeftEdgeAlignedTop
+                            });
+                    else
+                        _eventAggregator.GetEvent<UserMessageBoxShowEvent>().Publish(
+                            new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs)
+                            {
+                                PlacementMode = PlacementMode.RightEdgeAlignedTop
+                            });
+                }
+            }
+            else
+            {
+                var userDtoManager = App.Current.Container.Resolve<IUserDtoManager>();
+                var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, e.CardMessDto.Id);
+                if (groupDto != null)
+                {
+                    var position = ((Control)e.PointerPressedEventArgs.Source).TranslatePoint(new Point(0, 0), chatUi);
+                    var width = chatUi.Bounds.Width;
+                    if (position.Value.X > width / 2)
+                        _eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Publish(
+                            new GroupMessageBoxShowEventArgs(groupDto, e.PointerPressedEventArgs)
+                            {
+                                PlacementMode = PlacementMode.LeftEdgeAlignedTop
+                            });
+                    else
+                        _eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Publish(
+                            new GroupMessageBoxShowEventArgs(groupDto, e.PointerPressedEventArgs)
+                            {
+                                PlacementMode = PlacementMode.RightEdgeAlignedTop
+                            });
+                }
+            }
+        }
     }
 }

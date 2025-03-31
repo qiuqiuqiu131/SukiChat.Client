@@ -1,5 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using ChatClient.Tool.Data;
 
 namespace ChatClient.Avalonia.Controls.Chat.ChatUI;
 
@@ -23,8 +26,26 @@ public partial class ChatMessageView : UserControl
         set => SetValue(MessageProperty, value);
     }
 
+    #region MessageBoxEvent
+
+    public event EventHandler<MessageBoxShowEventArgs> MessageBoxShow;
+
+    public static readonly RoutedEvent<MessageBoxShowEventArgs> MessageBoxShowEvent =
+        RoutedEvent.Register<ChatMessageView, MessageBoxShowEventArgs>(nameof(MessageBoxShow),
+            RoutingStrategies.Bubble);
+
+    #endregion
+
     public ChatMessageView()
     {
         InitializeComponent();
+    }
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control && control.DataContext is CardMessDto cardMessDto)
+        {
+            RaiseEvent(new MessageBoxShowEventArgs(control, MessageBoxShowEvent, e, cardMessDto));
+        }
     }
 }

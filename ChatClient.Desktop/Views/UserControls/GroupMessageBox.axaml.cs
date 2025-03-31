@@ -4,13 +4,16 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using ChatClient.BaseService.Manager;
+using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.Views.SearchUserGroupView;
+using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.Views.UserControls;
 
@@ -50,10 +53,15 @@ public partial class GroupMessageBox : UserControl
 
     private void ShareGroup(object? sender, RoutedEventArgs e)
     {
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        if (DataContext is GroupDto { IsEntered: true } groupDto)
         {
-            Message = "功能暂未开放",
-            Type = NotificationType.Information
-        });
+            var dialogService = App.Current.Container.Resolve<ISukiDialogManager>();
+            dialogService.CreateDialog()
+                .WithViewModel(d => new ShareViewModel(d, new DialogParameters
+                {
+                    { "ShareMess", new CardMessDto { IsUser = false, Id = groupDto.Id } }
+                }, null))
+                .TryShow();
+        }
     }
 }

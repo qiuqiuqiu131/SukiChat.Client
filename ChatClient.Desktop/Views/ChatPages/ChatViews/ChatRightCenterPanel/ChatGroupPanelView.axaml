@@ -305,6 +305,8 @@
                                               Margin="0"
                                               HeadClick="ChatUI_OnHeadClick"
                                               Notification="ChatUI_OnNotification"
+                                              MessageBoxShow="ChatUI_OnMessageBoxShow"
+                                              ShareMessageCommand="{Binding ShareMessageCommand}"
                                               RetractMessageCommand="{Binding RetractMessageCommand}"
                                               DeleteMessageCommand="{Binding DeleteMessageCommand}"
                                               Messages="{Binding SelectedGroup.ChatMessages}"

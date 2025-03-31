@@ -39,7 +39,7 @@ public class CreateGroupViewModel : BindableBase
     public AvaloniaList<GroupFriendDto> GroupFriends { get; init; }
 
     public AsyncDelegateCommand OKCommand { get; set; }
-    public DelegateCommand CancleCommand { get; set; }
+    public DelegateCommand CancelCommand { get; set; }
     public DelegateCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
 
     public CreateGroupViewModel(ISukiDialog dialog, Action<IDialogResult>? requestClose)
@@ -52,7 +52,7 @@ public class CreateGroupViewModel : BindableBase
         RequestClose = requestClose;
 
         OKCommand = new AsyncDelegateCommand(CreateGroup, CanCreateGroup);
-        CancleCommand = new DelegateCommand(() =>
+        CancelCommand = new DelegateCommand(() =>
         {
             _dialog.Dismiss();
             RequestClose?.Invoke(new DialogResult(ButtonResult.Cancel));
@@ -60,10 +60,10 @@ public class CreateGroupViewModel : BindableBase
         SelectionChangedCommand = new DelegateCommand<SelectionChangedEventArgs>(SelectionChanged);
 
         GroupFriends = _userManager.GroupFriends!;
-        GroupFriends.CollectionChanged += (sender, args) => OKCommand.RaiseCanExecuteChanged();
+        SelectedFriends.CollectionChanged += (sender, args) => OKCommand.RaiseCanExecuteChanged();
     }
 
-    private bool CanCreateGroup() => GroupFriends.Count != 0;
+    private bool CanCreateGroup() => SelectedFriends.Count >= 2;
 
     /// <summary>
     /// 创建群聊

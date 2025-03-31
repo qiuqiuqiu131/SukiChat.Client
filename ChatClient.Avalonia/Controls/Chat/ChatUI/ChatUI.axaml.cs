@@ -115,6 +115,15 @@ public partial class ChatUI : UserControl
 
     #endregion
 
+    #region MessageBoxEvent
+
+    public event EventHandler<MessageBoxShowEventArgs> MessageBoxShow;
+
+    public static readonly RoutedEvent<MessageBoxShowEventArgs> MessageBoxShowEvent =
+        RoutedEvent.Register<ChatUI, MessageBoxShowEventArgs>(nameof(MessageBoxShow), RoutingStrategies.Bubble);
+
+    #endregion
+
     #region HeadClickEvent
 
     public event EventHandler<FriendHeadClickEventArgs> HeadClick;
@@ -257,6 +266,20 @@ public partial class ChatUI : UserControl
     {
         get => GetValue(RetractMessageCommandProperty);
         set => SetValue(RetractMessageCommandProperty, value);
+    }
+
+    #endregion
+
+    #region ShareMessageCommand
+
+    public static readonly StyledProperty<ICommand> ShareMessageCommandProperty =
+        AvaloniaProperty.Register<ChatUI, ICommand>(
+            "ShareMessageCommand");
+
+    public ICommand ShareMessageCommand
+    {
+        get => GetValue(ShareMessageCommandProperty);
+        set => SetValue(ShareMessageCommandProperty, value);
     }
 
     #endregion
@@ -705,6 +728,7 @@ public partial class ChatUI : UserControl
         {
             var comItem1 = new MenuItem
                 { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
+            comItem1.Click += (sender, args) => { ShareMessageCommand?.Execute(chatData.ChatMessages[0].Content); };
             contextMenu.Items.Add(comItem1);
         }
 
@@ -728,6 +752,13 @@ public partial class ChatUI : UserControl
         contextMenu.Items.Add(comItem4);
 
         return contextMenu;
+    }
+
+    private void ChatMessageView_OnMessageBoxShow(object? sender, MessageBoxShowEventArgs e)
+    {
+        e.PointerPressedEventArgs.Source = sender;
+        RaiseEvent(new MessageBoxShowEventArgs(sender, MessageBoxShowEvent, e.PointerPressedEventArgs,
+            e.CardMessDto));
     }
 }
 
@@ -765,5 +796,20 @@ public class NotificationMessageEventArgs : RoutedEventArgs
     {
         Message = message;
         Type = type;
+    }
+}
+
+public class MessageBoxShowEventArgs : RoutedEventArgs
+{
+    public CardMessDto CardMessDto { get; }
+
+    public PointerPressedEventArgs PointerPressedEventArgs { get; }
+
+    public MessageBoxShowEventArgs(object sender, RoutedEvent routedEvent, PointerPressedEventArgs pressArgs,
+        CardMessDto cardMessDto)
+        : base(routedEvent, sender)
+    {
+        CardMessDto = cardMessDto;
+        PointerPressedEventArgs = pressArgs;
     }
 }

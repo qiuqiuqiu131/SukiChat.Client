@@ -126,6 +126,15 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
+    #region MessageBoxEvent
+
+    public event EventHandler<MessageBoxShowEventArgs> MessageBoxShow;
+
+    public static readonly RoutedEvent<MessageBoxShowEventArgs> MessageBoxShowEvent =
+        RoutedEvent.Register<GroupChatUI, MessageBoxShowEventArgs>(nameof(MessageBoxShow), RoutingStrategies.Bubble);
+
+    #endregion
+
     #region SearchMoreCommand
 
     public static readonly StyledProperty<ICommand> SearchMoreCommandProperty =
@@ -246,6 +255,20 @@ public partial class GroupChatUI : UserControl
     {
         get => GetValue(RetractMessageCommandProperty);
         set => SetValue(RetractMessageCommandProperty, value);
+    }
+
+    #endregion
+
+    #region ShareMessageCommand
+
+    public static readonly StyledProperty<ICommand> ShareMessageCommandProperty =
+        AvaloniaProperty.Register<GroupChatUI, ICommand>(
+            "ShareMessageCommand");
+
+    public ICommand ShareMessageCommand
+    {
+        get => GetValue(ShareMessageCommandProperty);
+        set => SetValue(ShareMessageCommandProperty, value);
     }
 
     #endregion
@@ -695,6 +718,7 @@ public partial class GroupChatUI : UserControl
         {
             var comItem1 = new MenuItem
                 { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
+            comItem1.Click += (sender, args) => { ShareMessageCommand?.Execute(chatData.ChatMessages[0].Content); };
             contextMenu.Items.Add(comItem1);
         }
 
@@ -718,6 +742,13 @@ public partial class GroupChatUI : UserControl
         contextMenu.Items.Add(comItem4);
 
         return contextMenu;
+    }
+
+    private void GroupChatMessageView_OnMessageBoxShow(object? sender, MessageBoxShowEventArgs e)
+    {
+        e.PointerPressedEventArgs.Source = sender;
+        RaiseEvent(new MessageBoxShowEventArgs(sender, MessageBoxShowEvent, e.PointerPressedEventArgs,
+            e.CardMessDto));
     }
 }
 

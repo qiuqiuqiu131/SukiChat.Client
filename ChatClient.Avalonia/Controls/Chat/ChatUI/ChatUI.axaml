@@ -201,6 +201,7 @@
                                                                                 <DataTemplate>
                                                                                     <chatUi:ChatMessageView
                                                                                         IsLeft="True"
+                                                                                        MessageBoxShow="ChatMessageView_OnMessageBoxShow"
                                                                                         HorizontalAlignment="Left"
                                                                                         Message="{Binding Content}" />
                                                                                 </DataTemplate>
@@ -271,6 +272,7 @@
                                                                                     <chatUi:ChatMessageView
                                                                                         IsLeft="False"
                                                                                         HorizontalAlignment="Right"
+                                                                                        MessageBoxShow="ChatMessageView_OnMessageBoxShow"
                                                                                         Message="{Binding Content}" />
                                                                                 </DataTemplate>
                                                                             </ItemsControl.ItemTemplate>

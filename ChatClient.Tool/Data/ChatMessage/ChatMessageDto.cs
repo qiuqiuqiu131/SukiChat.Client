@@ -131,3 +131,10 @@ public class SystemMessBlockDto
     public string Text { get; set; }
     public bool Bold { get; set; }
 }
+
+public class CardMessDto
+{
+    public bool IsUser { get; set; }
+    public string Id { get; set; }
+    public object Content { get; set; }
+}

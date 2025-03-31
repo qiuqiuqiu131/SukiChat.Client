@@ -63,7 +63,7 @@
                     <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}">
                         <TextBlock Text="确定" FontSize="13.5" />
                     </Button>
-                    <Button Padding="15,5" Command="{Binding CancleCommand}">
+                    <Button Padding="15,5" Command="{Binding CancelCommand}">
                         <TextBlock Text="取消" FontSize="13.5" />
                     </Button>
                 </StackPanel>
@@ -104,7 +104,7 @@
                                     <Grid Height="44" Classes="Item" Background="Transparent"
                                           PointerPressed="InputElement_OnPointerPressed">
                                         <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" />
-                                        <DockPanel LastChildFill="True" Margin="5,0">
+                                        <DockPanel LastChildFill="True" Margin="5,2.5">
                                             <avalonia:MaterialIcon DockPanel.Dock="Right"
                                                                    Name="Icon"
                                                                    Margin="10,7"
@@ -126,11 +126,17 @@
                                                             Source="{Binding  UserDto.HeadImage}" />
                                                     </Panel>
                                                 </Grid>
-                                                <TextBlock Grid.Column="1"
-                                                           Margin="20,0"
-                                                           VerticalAlignment="Center"
-                                                           FontSize="14"
-                                                           Text="{Binding  UserDto.Name}" />
+                                                <Panel Grid.Column="1" Margin="20,0"
+                                                       VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                        FontSize="14"
+                                                        Text="{Binding  UserDto.Name}" />
+                                                    <TextBlock
+                                                        IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                        FontSize="14"
+                                                        Text="{Binding Remark}" />
+                                                </Panel>
                                             </Grid>
                                         </DockPanel>
                                     </Grid>

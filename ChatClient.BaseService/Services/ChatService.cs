@@ -32,6 +32,9 @@ public interface IChatService
 
     Task<bool> DeleteChatMessage(string userId, int chatId, FileTarget fileTarget);
     Task<bool> RetractChatMessage(string userId, int chatId, FileTarget fileTarget);
+
+    Task<bool> SendChatShareMessage(string userId, ChatMessageDto chatMessageDto, string senderMessage,
+        IEnumerable<object> relations);
 }
 
 internal class ChatService : BaseService, IChatService
@@ -472,6 +475,17 @@ internal class ChatService : BaseService, IChatService
                 var fileManager = _scopedProvider.Resolve<IFileManager>();
                 await fileManager.OperateFileMessDto(id, userId, messContent, fileTarget);
             }
+            else if (chatMessage.Type == ChatMessage.ContentOneofCase.CardMess)
+            {
+                var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+                if (chatMessage.Content is CardMessDto cardMessDto)
+                {
+                    if (cardMessDto.IsUser)
+                        cardMessDto.Content = await userDtoManager.GetUserDto(cardMessDto.Id);
+                    else
+                        cardMessDto.Content = await userDtoManager.GetGroupDto(userId, cardMessDto.Id);
+                }
+            }
         }
     }
 
@@ -613,5 +627,31 @@ internal class ChatService : BaseService, IChatService
         }
 
         return false;
+    }
+
+    public async Task<bool> SendChatShareMessage(string userId, ChatMessageDto chatMessageDto, string senderMessage,
+        IEnumerable<object> relations)
+    {
+        List<TargetInfo> targetInfos = [];
+        foreach (var relation in relations)
+        {
+            if (relation is FriendRelationDto friendRelationDto)
+                targetInfos.Add(new TargetInfo { Id = friendRelationDto.Id, IsUser = true });
+            else if (relation is GroupRelationDto groupRelationDto)
+                targetInfos.Add(new TargetInfo { Id = groupRelationDto.Id, IsUser = false });
+        }
+
+        var mess = _mapper.Map<ChatMessage>(chatMessageDto);
+
+        var request = new ChatShareMessageRequest
+        {
+            Messages = _mapper.Map<ChatMessage>(chatMessageDto),
+            SenderMessage = senderMessage,
+            UserId = userId
+        };
+        request.TargetIds.AddRange(targetInfos);
+
+        var result = await _messageHelper.SendMessageWithResponse<ChatShareMessageResponse>(request);
+        return result?.Response?.State ?? false;
     }
 }

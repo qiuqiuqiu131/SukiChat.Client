@@ -249,6 +249,7 @@
                                                                                         <DataTemplate>
                                                                                             <chatUI:GroupChatMessageView
                                                                                                 IsLeft="True"
+                                                                                                MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
                                                                                                 HorizontalAlignment="Left"
                                                                                                 Message="{Binding Content}" />
                                                                                         </DataTemplate>
@@ -330,6 +331,7 @@
                                                                                         <DataTemplate>
                                                                                             <chatUI:GroupChatMessageView
                                                                                                 IsLeft="False"
+                                                                                                MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
                                                                                                 HorizontalAlignment="Right"
                                                                                                 Message="{Binding Content}" />
                                                                                         </DataTemplate>

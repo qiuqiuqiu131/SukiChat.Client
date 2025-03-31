@@ -38,6 +38,8 @@
     <StyleInclude Source="../Controls/FreindGroup/SeparateGroupsView/SeparateGroupsView.axaml" />
     <StyleInclude Source="../Controls/MultiFriendGroup/MultiGroupList/MultiGroupList.axaml" />
     <StyleInclude Source="../Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" />
+    <StyleInclude Source="../Controls/MultiGroupGroup/MultiGroupGroupList/MultiGroupGroupList.axaml" />
+    <StyleInclude Source="../Controls/MultiGroupGroup/MultiSeparateGroupGroupView/MultiSeparateGroupGroupView.axaml" />
     <StyleInclude Source="../Controls/GroupGroup/GroupGroupList/GroupGroupList.axaml" />
     <StyleInclude Source="../Controls/GroupGroup/GroupSepatateGroupsView/GroupSeparateGroupsView.axaml" />
     <StyleInclude Source="../Controls/EditableTextBlock/EditableTextBlock.axaml" />

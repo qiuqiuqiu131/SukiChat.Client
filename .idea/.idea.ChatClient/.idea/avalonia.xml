@@ -24,6 +24,8 @@
         <entry key="ChatClient.Avalonia/Controls/GroupList/GroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiFriendGroup/MultiGroupList/MultiGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/MultiGroupGroup/MultiGroupGroupList/MultiGroupGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/MultiGroupGroup/MultiSeparateGroupGroupView/MultiSeparateGroupGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiGroupList/MultiGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MultiSeparateGroupView/MultiSeparateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/MyHead.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
