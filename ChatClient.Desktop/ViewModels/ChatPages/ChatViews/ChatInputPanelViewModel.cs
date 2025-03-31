@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Common;
@@ -179,9 +180,9 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
         {
             var window = desktop.MainWindow;
             var handle = window!.TryGetPlatformHandle()?.Handle;
-
+            
             if (handle == null) return;
-
+            
             var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
             filePath = await systemFileDialog.OpenFileAsync(handle.Value, "选择文件");
 

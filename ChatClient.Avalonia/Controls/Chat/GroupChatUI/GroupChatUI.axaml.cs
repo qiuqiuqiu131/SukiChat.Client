@@ -690,9 +690,13 @@ public partial class GroupChatUI : UserControl
             }
         }
 
-        var comItem1 = new MenuItem
-            { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
-        contextMenu.Items.Add(comItem1);
+        // 文件和复合消息暂不支持转发
+        if (chatData.ChatMessages[0].Content is not FileMessDto || chatData.ChatMessages.Count > 1)
+        {
+            var comItem1 = new MenuItem
+                { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
+            contextMenu.Items.Add(comItem1);
+        }
 
         var comItem2 = new MenuItem
             { Header = "引用", Icon = new MaterialIcon { Kind = MaterialIconKind.CommentQuoteOutline } };

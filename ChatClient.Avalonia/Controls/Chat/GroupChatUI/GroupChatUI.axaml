@@ -174,7 +174,7 @@
                                                                                Foreground="{DynamicResource SukiPrimaryColor}"
                                                                                Padding="0"
                                                                                Margin="0" />
-                                                                    <TextBlock Text="撤回一条消息" Opacity="0.7"
+                                                                    <TextBlock Text="撤回一条消息" Opacity="0.6"
                                                                                FontSize="12" Padding="0"
                                                                                Margin="0" />
                                                                 </StackPanel>
@@ -187,7 +187,7 @@
                                                                                Foreground="{DynamicResource SukiPrimaryColor}"
                                                                                Padding="0"
                                                                                Margin="0" />
-                                                                    <TextBlock Text="撤回一条消息" Opacity="0.7"
+                                                                    <TextBlock Text="撤回一条消息" Opacity="0.6"
                                                                                FontSize="12" Padding="0"
                                                                                Margin="0" />
                                                                 </StackPanel>

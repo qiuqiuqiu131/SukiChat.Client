@@ -13,7 +13,7 @@ namespace ChatClient.BaseService.Services;
 
 public interface IFriendChatPackService
 {
-    Task<FriendChatDto> GetFriendChatDto(string userId, string targetId);
+    Task<FriendChatDto?> GetFriendChatDto(string userId, string targetId);
     Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId);
     Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
 
@@ -45,17 +45,25 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     /// <param name="userId"></param>
     /// <param name="targetId"></param>
     /// <returns></returns>
-    public async Task<FriendChatDto> GetFriendChatDto(string userId, string targetId)
+    public async Task<FriendChatDto?> GetFriendChatDto(string userId, string targetId)
     {
         #region 查询
+
+        var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+        var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(
+            predicate: d => d.User1Id.Equals(userId) && d.User2Id.Equals(
+                targetId));
+
+        if (friendRelation == null) return null;
 
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
         var chatDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
 
         var friendChatQuery = friendChatRepository.GetAll(
             predicate: d =>
-                (d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
-                (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId)));
+                ((d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
+                 (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) &&
+                d.Time >= friendRelation.GroupTime);
 
         var chatDetailQuery = chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId));
 
@@ -108,7 +116,11 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
 
         // 获取好友的聊天记录
         foreach (var friendId in friendIds)
-            result.Add(await GetFriendChatDto(userId, friendId));
+        {
+            var friendChatDto = await GetFriendChatDto(userId, friendId);
+            if (friendChatDto == null) continue;
+            result.Add(friendChatDto);
+        }
 
         var ordered = result.OrderByDescending(d => d.LastChatMessages?.Time).ToList();
 
@@ -129,9 +141,16 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     public async Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId,
         int nextCount)
     {
-        if (userId == null) return new List<ChatData>();
+        if (userId == null) return [];
 
         #region 查询
+
+        var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
+        var friendRelation = await friendRelationRepository.GetFirstOrDefaultAsync(
+            predicate: d => d.User1Id.Equals(userId) && d.User2Id.Equals(
+                targetId));
+
+        if (friendRelation == null) return [];
 
         // 从数据库中获取聊天记录
         var friendChatRepository = _unitOfWork.GetRepository<ChatPrivate>();
@@ -143,7 +162,8 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         var friendChatQuery = friendChatRepository.GetAll(
             predicate: d =>
                 ((d.UserFromId.Equals(userId) && d.UserTargetId.Equals(targetId)) ||
-                 (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) && d.ChatId < chatId);
+                 (d.UserFromId.Equals(targetId) && d.UserTargetId.Equals(userId))) && d.ChatId < chatId &&
+                d.Time >= friendRelation.GroupTime);
 
         var friendChatResultQuery = from chat in friendChatQuery
             join detail in chatDetailQuery on chat.Id equals detail.ChatPrivateId into detailGroup
@@ -195,8 +215,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
 
             chatPrivateRepository.Update(chatPrivate);
             await _unitOfWork.SaveChangesAsync();
-            if (result != null)
-                chatPrivateRepository.ChangeEntityState(result, EntityState.Detached);
         }
         catch (Exception e)
         {

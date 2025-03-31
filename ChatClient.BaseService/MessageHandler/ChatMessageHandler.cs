@@ -3,7 +3,6 @@ using AutoMapper;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
-using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
@@ -59,8 +58,12 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     private async Task OnFriendChatMessage(IScopedProvider scopedprovider, FriendChatMessage chatMessage)
     {
+        var friendId = chatMessage.UserFromId.Equals(_userManager.User.Id)
+            ? chatMessage.UserTargetId
+            : chatMessage.UserFromId;
+
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
-        var friendRelationDto = await userDtoManager.GetFriendRelationDto(_userManager.User.Id, chatMessage.UserFromId);
+        var friendRelationDto = await userDtoManager.GetFriendRelationDto(_userManager.User.Id, friendId);
 
         var chatService = scopedprovider.Resolve<IChatService>();
         await chatService.AddChatDto(friendRelationDto);
@@ -75,7 +78,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             ChatId = chatMessage.Id,
             Time = DateTime.Parse(chatMessage.Time),
             IsWriting = false,
-            IsUser = false,
+            IsUser = chatMessage.UserFromId.Equals(_userManager.User.Id),
             IsRetracted = chatMessage.IsRetracted,
             RetractedTime = string.IsNullOrWhiteSpace(chatMessage.RetractTime)
                 ? DateTime.MinValue
@@ -84,14 +87,14 @@ internal class ChatMessageHandler : MessageHandlerBase
         };
         // 注入消息资源
         if (!chatData.IsRetracted)
-            await chatService.OperateChatMessage(_userManager.User.Id, chatMessage.UserFromId, chatData.ChatId,
+            await chatService.OperateChatMessage(_userManager.User.Id, friendId, chatData.ChatId,
                 chatData.IsUser,
                 chatData.ChatMessages,
                 FileTarget.User);
 
         // 更新消息Dto
         FriendChatDto friendChat =
-            _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(chatMessage.UserFromId));
+            _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
 
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
@@ -104,19 +107,19 @@ internal class ChatMessageHandler : MessageHandlerBase
                 if (chatData.Time - last.Time > TimeSpan.FromMinutes(3))
                     chatData.ShowTime = true;
                 friendChat.ChatMessages.Add(chatData);
-                if (!friendChat.IsSelected)
+                if (!friendChat.IsSelected && !chatData.IsUser)
                     friendChat.UnReadMessageCount++;
             }
             else if (friendChat != null)
             {
                 chatData.ShowTime = true;
                 friendChat.ChatMessages.Add(chatData);
-                if (!friendChat.IsSelected)
+                if (!friendChat.IsSelected && !chatData.IsUser)
                     friendChat.UnReadMessageCount++;
             }
         });
 
-        if (!friendRelationDto.CantDisturb)
+        if (!friendRelationDto.CantDisturb && !chatData.IsUser)
         {
             if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
             {
@@ -149,7 +152,7 @@ internal class ChatMessageHandler : MessageHandlerBase
 
         if (friendChat != null && friendChat.IsSelected)
         {
-            await chatService.ReadAllChatMessage(_userManager.User!.Id, chatMessage.UserTargetId, chatMessage.Id,
+            await chatService.ReadAllChatMessage(_userManager.User!.Id, friendId, chatMessage.Id,
                 FileTarget.User);
         }
     }
@@ -195,7 +198,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             ChatId = message.Id,
             Time = DateTime.Parse(message.Time),
             IsWriting = false,
-            IsUser = false,
+            IsUser = message.UserFromId.Equals(_userManager.User.Id),
             IsRetracted = message.IsRetracted,
             RetractedTime = string.IsNullOrWhiteSpace(message.RetractTime)
                 ? DateTime.MinValue
@@ -252,7 +255,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             }
 
             // 更新未读消息计数
-            if (!groupChat.IsSelected)
+            if (!groupChat.IsSelected && !chatData.IsUser)
             {
                 groupChat.UnReadMessageCount++;
             }
@@ -264,7 +267,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             }
         });
 
-        if (!groupRelationDto.CantDisturb && !chatData.IsSystem)
+        if (!groupRelationDto.CantDisturb && !chatData.IsSystem && !chatData.IsUser)
         {
             if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
             {

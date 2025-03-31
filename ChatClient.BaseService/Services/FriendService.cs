@@ -96,7 +96,7 @@ internal class FriendService : BaseService, IFriendService
         var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
         var dto = _mapper.Map<FriendRequestDto>(friendRequest);
         dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
-        userManager.FriendRequests.Insert(0, dto);
+        userManager.FriendRequests?.Insert(0, dto);
 
         return (true, result.Response.Message);
     }
@@ -122,29 +122,24 @@ internal class FriendService : BaseService, IFriendService
             return (false, message);
         }
 
-        var respository = _unitOfWork.GetRepository<FriendReceived>();
-        var friendReceived =
-            await respository.GetFirstOrDefaultAsync(predicate: x => x.RequestId.Equals(requestId),
-                disableTracking: false);
-        if (friendReceived != null)
+        try
         {
-            friendReceived.IsAccept = state;
-            friendReceived.IsSolved = true;
-            friendReceived.SolveTime = time;
+            var repository = _unitOfWork.GetRepository<FriendReceived>();
+            var friendReceived =
+                await repository.GetFirstOrDefaultAsync(predicate: x => x.RequestId.Equals(requestId),
+                    disableTracking: false);
+            if (friendReceived != null)
+            {
+                friendReceived.IsAccept = state;
+                friendReceived.IsSolved = true;
+                friendReceived.SolveTime = time;
+            }
+
+            await _unitOfWork.SaveChangesAsync();
         }
-
-        await _unitOfWork.SaveChangesAsync();
-
-        var userManager = _scopedProvider.Resolve<IUserManager>();
-        var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
-        var dto = userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId.Equals(friendReceived.RequestId));
-        if (dto != null)
+        catch (Exception e)
         {
-            dto.IsAccept = state;
-            dto.SolveTime = time;
-            dto.IsSolved = true;
-            dto.AcceptByUserId = userManager.User.Id;
-            dto.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(dto.GroupId, userManager.User.Id);
+            // ignored
         }
 
         return (true, result.Response.Message);

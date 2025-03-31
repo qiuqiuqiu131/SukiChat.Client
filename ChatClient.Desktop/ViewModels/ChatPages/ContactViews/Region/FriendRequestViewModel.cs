@@ -129,7 +129,8 @@ public class FriendRequestViewModel : ViewModelBase
             var group = result.Parameters.ContainsKey("Group") ? result.Parameters["Group"] as string : string.Empty;
 
             var _friendService = _containerProvider.Resolve<IFriendService>();
-            var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, true, remark, group);
+            var (state, message) =
+                await _friendService.ResponseFriendRequest(obj.RequestId, true, remark ?? "", group ?? "默认分组");
             if (state)
             {
                 obj.IsAccept = true;

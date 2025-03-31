@@ -41,12 +41,16 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
     {
         #region 查询
 
+        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        var relation = (GroupRelation?)await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(groupId) && d.UserId.Equals(userId));
+
         // 获取最后一条消息
         var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
         var chatDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
 
         var groupChatQuery = chatGroupRepository.GetAll(
-            predicate: d => d.GroupId.Equals(groupId));
+            predicate: d => d.GroupId.Equals(groupId) && d.Time >= relation.JoinTime);
 
         var chatDetailQuery = chatDetailRepository.GetAll(predicate: d => d.UserId.Equals(userId));
 
