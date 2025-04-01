@@ -51,14 +51,12 @@
                                                        VerticalAlignment="Center"
                                                        FontFamily="{TemplateBinding FontFamily}"
                                                        FontSize="{TemplateBinding FontSize}"
-                                                       FontWeight="{TemplateBinding FontWeight}"
                                                        Foreground="{DynamicResource SukiText}"
                                                        Text="day" />
                                             <TextBlock Grid.Column="2" Name="PART_MonthTextBlock"
                                                        Padding="0,0,0,0"
                                                        FontFamily="{TemplateBinding FontFamily}"
                                                        FontSize="{TemplateBinding FontSize}"
-                                                       FontWeight="{TemplateBinding FontWeight}"
                                                        Foreground="{DynamicResource SukiText}"
                                                        Text="month"
                                                        TextAlignment="Left" />
@@ -68,7 +66,6 @@
                                                        HorizontalAlignment="Center"
                                                        FontFamily="{TemplateBinding FontFamily}"
                                                        FontSize="{TemplateBinding FontSize}"
-                                                       FontWeight="{TemplateBinding FontWeight}"
                                                        Foreground="{DynamicResource SukiText}"
                                                        Text="year" />
                                             <Rectangle x:Name="PART_FirstSpacer"
@@ -85,14 +82,12 @@
                                                        FontFamily="{TemplateBinding FontFamily}"
                                                        FontSize="{TemplateBinding FontSize}"
                                                        HorizontalAlignment="Center"
-                                                       FontWeight="{TemplateBinding FontWeight}"
                                                        Foreground="{DynamicResource SukiText}"
                                                        Text="-" />
                                             <TextBlock Grid.Column="3"
                                                        HorizontalAlignment="Center"
                                                        FontFamily="{TemplateBinding FontFamily}"
                                                        FontSize="{TemplateBinding FontSize}"
-                                                       FontWeight="{TemplateBinding FontWeight}"
                                                        Foreground="{DynamicResource SukiText}"
                                                        Text="-" />
                                         </Grid>

@@ -5,7 +5,7 @@ namespace ChatClient.BaseService.Services;
 
 public interface IRegisterService
 {
-    Task<CommonResponse?> Register(string name, string password);
+    Task<RegisteResponse?> Register(string name, string password);
 }
 
 internal class RegisterService : BaseService, IRegisterService
@@ -18,7 +18,7 @@ internal class RegisterService : BaseService, IRegisterService
         _messageManager = messageManager;
     }
 
-    public async Task<CommonResponse?> Register(string name, string password)
+    public async Task<RegisteResponse?> Register(string name, string password)
     {
         var message = new RegisteRequest
         {
@@ -26,7 +26,7 @@ internal class RegisterService : BaseService, IRegisterService
             Password = password
         };
 
-        var response = await _messageManager.SendMessageWithResponse<CommonResponse>(message);
+        var response = await _messageManager.SendMessageWithResponse<RegisteResponse>(message);
 
         return response;
     }

@@ -163,7 +163,7 @@ public class App : PrismApplication
             // 编辑用户信息
             .AddView<EditUserDataView, EditUserDataViewModel>(services)
             // 分享
-            .AddView<ShareView,ShareViewModel>(services)
+            .AddView<ShareView, ShareViewModel>(services)
             // 编辑分组
             .AddView<AddGroupView, AddGroupViewModel>(services)
             .AddView<RenameGroupView, RenameGroupViewModel>(services)

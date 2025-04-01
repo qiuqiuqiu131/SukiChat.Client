@@ -79,6 +79,7 @@
                         Text="账号" />
                     <TextBox
                         MaxLength="10"
+                        ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
                         LetterSpacing="1.5"
                         FontSize="13.5"
                         Text="{Binding Id}"
@@ -92,6 +93,7 @@
                         MaxLength="16"
                         PasswordChar="*"
                         FontSize="13.5"
+                        ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
                         LetterSpacing="1"
                         Text="{Binding Password}"
                         Watermark="Password" />

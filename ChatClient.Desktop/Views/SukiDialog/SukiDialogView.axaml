@@ -16,15 +16,15 @@
                                VerticalAlignment="Top"
                                IsVisible="{Binding IsError}"
                                Margin="7,4,0,0" />
-        <TextBlock HorizontalAlignment="Center" FontSize="15"
+        <TextBlock HorizontalAlignment="Center" FontSize="14"
                    IsVisible="{Binding Title,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                    Text="{Binding Title}" Margin="10,7" />
         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
-        <TextBlock Grid.Row="2" Height="30" Margin="18,15,18,5" FontSize="14.5" Text="{Binding Message}" />
+        <TextBlock Grid.Row="2" Height="30" Margin="18,15,18,5" FontSize="13.5" Text="{Binding Message}" />
         <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
             <Button Classes="Flat" Command="{Binding SureCommand}"
                     IsVisible="{Binding ShowSureButton}"
-                    Padding="15,5" FontSize="14">
+                    Padding="15,5">
                 <TextBlock Text="确定" FontSize="13.5" />
             </Button>
             <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="15,5"

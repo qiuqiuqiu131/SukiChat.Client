@@ -1,18 +1,14 @@
-using System;
-using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Threading;
-using ChatClient.Desktop.ViewModels.Login;
-using SukiUI.Controls;
-using SukiUI.Dialogs;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.Login;
 
 public partial class RegisterWindowView : UserControl
 {
+    private readonly IRegionManager _regionManager;
+
     public RegisterWindowView()
     {
         InitializeComponent();

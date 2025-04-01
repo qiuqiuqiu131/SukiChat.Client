@@ -195,7 +195,15 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToRegisterView()
     {
-        _dialogService.Show(nameof(RegisterWindowView));
+        _dialogService.Show(nameof(RegisterWindowView), res =>
+        {
+            if (res.Result == ButtonResult.OK)
+            {
+                Id = res.Parameters["ID"] as string;
+                Password = null;
+                LoginData.Id = Id;
+            }
+        });
     }
 
     private void ToForgetView()
