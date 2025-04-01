@@ -54,12 +54,13 @@
             </suki:GlassCard>
         </Grid>
         <Grid Grid.Column="1">
+            <suki:GlassCard Opacity="0.3" />
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             Spacing="10"
-                            Margin="15">
+                            Margin="12,10,12,12">
                     <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}">
                         <TextBlock Text="确定" FontSize="13.5" />
                     </Button>

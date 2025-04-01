@@ -7,20 +7,18 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <Border Padding="5"
-                            ClipToBounds="True"
-                            MinWidth="250"
-                            Background="Transparent"
-                            CornerRadius="7">
-                        <Panel>
-                            <Border IsVisible="{TemplateBinding ShowCardBackground}" CornerRadius="7"
-                                    BoxShadow="3 3 5 #44000000"
-                                    ClipToBounds="True">
+                    <Border CornerRadius="7" BoxShadow="5 5 10 #66000000" Background="Transparent" MinWidth="250"
+                            Margin="10">
+                        <Border CornerRadius="7" ClipToBounds="True" Background="Transparent">
+                            <Panel>
                                 <suki:SukiBackground />
-                            </Border>
-                            <ContentControl Content="{TemplateBinding ViewModel}"
-                                            IsVisible="{TemplateBinding IsViewModelOnly}" />
-                        </Panel>
+                                <Border CornerRadius="7" ClipToBounds="True">
+                                    <ContentControl Content="{TemplateBinding ViewModel}"
+                                                    CornerRadius="7"
+                                                    IsVisible="{TemplateBinding IsViewModelOnly}" />
+                                </Border>
+                            </Panel>
+                        </Border>
                     </Border>
                 </Panel>
             </ControlTemplate>

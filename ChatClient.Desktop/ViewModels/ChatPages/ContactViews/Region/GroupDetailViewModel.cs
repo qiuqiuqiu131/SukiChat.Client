@@ -62,7 +62,8 @@ public class GroupDetailViewModel : ViewModelBase
         _dialogManager.CreateDialog()
             .WithViewModel(d => new ShareViewModel(d, new DialogParameters
             {
-                { "ShareMess", new CardMessDto { IsUser = false, Id = Group.Id } }
+                { "ShareMess", new CardMessDto { IsUser = false, Id = Group.Id } },
+                { "ShowMess", false }
             }, null))
             .TryShow();
     }

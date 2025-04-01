@@ -57,18 +57,87 @@
             </suki:GlassCard>
         </Grid>
         <Grid Grid.Column="1">
+            <suki:GlassCard Opacity="0.3" />
             <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Bottom"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Right"
-                            Spacing="10"
-                            Margin="15">
-                    <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}">
-                        <TextBlock Text="确定" FontSize="13.5" />
-                    </Button>
-                    <Button Padding="15,5" Command="{Binding CancelCommand}">
-                        <TextBlock Text="取消" FontSize="13.5" />
-                    </Button>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
+                    <StackPanel.DataTemplates>
+                        <DataTemplate DataType="data:TextMessDto">
+                            <TextBlock Text="{Binding Text}" HorizontalAlignment="Left" FontSize="13.5" Margin="13,5" />
+                        </DataTemplate>
+                        <DataTemplate DataType="data:ImageMessDto">
+                            <Image MaxWidth="200" MaxHeight="100" Source="{Binding ImageSource}"
+                                   HorizontalAlignment="Center" />
+                        </DataTemplate>
+                        <DataTemplate DataType="data:CardMessDto">
+                            <suki:GlassCard Padding="5" Margin="3.5" CornerRadius="5" HorizontalAlignment="Center">
+                                <Grid RowDefinitions="*,*,*" Margin="3.5,0">
+                                    <TextBlock Grid.Row="0" Text="{Binding Title}" FontSize="13" Margin="0,4" />
+                                    <Grid Grid.Row="1" Margin="0,0,0,3.5" ColumnDefinitions="160,40">
+                                        <TextBlock Margin="0,0,3.5,0"
+                                                   Opacity="0.6"
+                                                   TextWrapping="Wrap"
+                                                   LineSpacing="2"
+                                                   FontSize="11"
+                                                   Text="{Binding Detail}" />
+                                        <Image Grid.Column="1" Width="40" Height="40" Source="{Binding HeadImage}">
+                                            <Image.Clip>
+                                                <RectangleGeometry RadiusX="5" RadiusY="5" Rect="0,0,40,40" />
+                                            </Image.Clip>
+                                        </Image>
+                                    </Grid>
+                                    <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
+                                            BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
+                                    <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,3.5,0,1" Opacity="0.6"
+                                               FontSize="10.5" />
+                                </Grid>
+                            </suki:GlassCard>
+                        </DataTemplate>
+                    </StackPanel.DataTemplates>
+                    <suki:GlassCard IsVisible="{Binding ShowMess}"
+                                    CornerRadius="5" Padding="5" Margin="15,5,15,0"
+                                    Background="{DynamicResource SukiBorderBrush}">
+                        <ContentControl Content="{Binding ShareMess}" />
+                    </suki:GlassCard>
+                    <suki:GlassCard CornerRadius="5" Margin="15,5,15,0" BorderThickness="1"
+                                    Background="{DynamicResource SukiBorderBrush}"
+                                    Name="BaseCard"
+                                    Padding="0"
+                                    BorderBrush="{DynamicResource SukiBorderBrush}"
+                                    Height="24">
+                        <suki:GlassCard.Transitions>
+                            <Transitions>
+                                <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                            </Transitions>
+                        </suki:GlassCard.Transitions>
+                        <TextBox Classes="Trans" FontSize="12.6" Watermark="留言"
+                                 VerticalAlignment="Center"
+                                 Text="{Binding SenderMessage,Mode=TwoWay}"
+                                 Padding="0" Margin="0">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="GotFocus">
+                                    <ChangePropertyAction TargetObject="{Binding #BaseCard}"
+                                                          PropertyName="BorderBrush"
+                                                          Value="{DynamicResource SukiPrimaryColor75}" />
+                                </EventTriggerBehavior>
+                                <EventTriggerBehavior EventName="LostFocus">
+                                    <ChangePropertyAction TargetObject="{Binding #BaseCard}"
+                                                          PropertyName="BorderBrush"
+                                                          Value="{DynamicResource SukiBorderBrush}" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                        </TextBox>
+                    </suki:GlassCard>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Spacing="10"
+                                Margin="12,7,12,12">
+                        <Button Padding="15,5" Classes="Flat" Command="{Binding OKCommand}">
+                            <TextBlock Text="确定" FontSize="13.5" />
+                        </Button>
+                        <Button Padding="15,5" Command="{Binding CancelCommand}">
+                            <TextBlock Text="取消" FontSize="13.5" />
+                        </Button>
+                    </StackPanel>
                 </StackPanel>
                 <Grid RowDefinitions="Auto,*">
                     <Grid Grid.Row="0">
@@ -82,7 +151,7 @@
                     </Grid>
                     <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Hidden">
-                        <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedRelations}">
+                        <ItemsControl Margin="0,5" ItemsSource="{Binding SelectedRelations}">
                             <ItemsControl.DataTemplates>
                                 <DataTemplate DataType="data:FriendRelationDto">
                                     <Grid Height="44" Classes="Item" Background="Transparent"

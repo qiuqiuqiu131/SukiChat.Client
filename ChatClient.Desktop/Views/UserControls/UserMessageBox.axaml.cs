@@ -69,7 +69,8 @@ public partial class UserMessageBox : UserControl
             dialogService.CreateDialog()
                 .WithViewModel(d => new ShareViewModel(d, new DialogParameters
                 {
-                    { "ShareMess", new CardMessDto { IsUser = true, Id = userDto.Id } }
+                    { "ShareMess", new CardMessDto { IsUser = true, Id = userDto.Id } },
+                    { "ShowMess", false }
                 }, null))
                 .TryShow();
         }

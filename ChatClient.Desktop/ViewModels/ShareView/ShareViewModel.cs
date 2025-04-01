@@ -47,6 +47,14 @@ public class ShareViewModel : BindableBase
         set => SetProperty(ref _shareMess, value);
     }
 
+    private bool showMess = true;
+
+    public bool ShowMess
+    {
+        get => showMess;
+        set => SetProperty(ref showMess, value);
+    }
+
     private string _senderMessage = string.Empty;
 
     public string SenderMessage
@@ -75,6 +83,8 @@ public class ShareViewModel : BindableBase
         _userManager = App.Current.Container.Resolve<IUserManager>();
 
         ShareMess = parameters.GetValue<object>("ShareMess");
+        if (parameters.ContainsKey("ShowMess"))
+            ShowMess = parameters.GetValue<bool>("ShowMess");
 
         OKCommand = new AsyncDelegateCommand(ShareMessage, CanShareMessage);
         CancelCommand = new DelegateCommand(() =>

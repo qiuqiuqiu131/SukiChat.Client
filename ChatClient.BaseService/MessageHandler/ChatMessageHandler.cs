@@ -22,6 +22,7 @@ internal class ChatMessageHandler : MessageHandlerBase
     private readonly IMapper _mapper;
 
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+    private readonly SemaphoreSlim _semaphoreSlim2 = new(1, 1);
 
     public ChatMessageHandler(IContainerProvider containerProvider, IMapper mapper) : base(containerProvider)
     {
@@ -58,6 +59,8 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     private async Task OnFriendChatMessage(IScopedProvider scopedprovider, FriendChatMessage chatMessage)
     {
+        await _semaphoreSlim2.WaitAsync();
+
         var friendId = chatMessage.UserFromId.Equals(_userManager.User.Id)
             ? chatMessage.UserTargetId
             : chatMessage.UserFromId;
@@ -155,6 +158,9 @@ internal class ChatMessageHandler : MessageHandlerBase
             await chatService.ReadAllChatMessage(_userManager.User!.Id, friendId, chatMessage.Id,
                 FileTarget.User);
         }
+
+        await Task.Delay(50);
+        _semaphoreSlim2.Release();
     }
 
     /// <summary>

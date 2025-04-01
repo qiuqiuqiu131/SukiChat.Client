@@ -9,7 +9,7 @@
                     <Border Name="PART_DialogBackground"
                             HorizontalAlignment="Stretch" IsVisible="False"
                             VerticalAlignment="Stretch"
-                            Background="#66000000"
+                            Background="#60000000"
                             Opacity="0" />
                     <Border Background="Transparent" IsVisible="{TemplateBinding IsDialogOpen}" Height="30"
                             VerticalAlignment="Top" Name="TitleBar">
@@ -29,7 +29,7 @@
                                         <CircularEaseOut />
                                     </ThicknessTransition.Easing>
                                 </ThicknessTransition>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
                                 <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25">
                                     <TransformOperationsTransition.Easing>
                                         <CircularEaseOut />

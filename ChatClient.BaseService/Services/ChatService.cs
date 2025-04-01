@@ -480,6 +480,7 @@ internal class ChatService : BaseService, IChatService
                 var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
                 if (chatMessage.Content is CardMessDto cardMessDto)
                 {
+                    cardMessDto.IsSelf = isUser;
                     if (cardMessDto.IsUser)
                         cardMessDto.Content = await userDtoManager.GetUserDto(cardMessDto.Id);
                     else

@@ -59,7 +59,8 @@ public partial class GroupMessageBox : UserControl
             dialogService.CreateDialog()
                 .WithViewModel(d => new ShareViewModel(d, new DialogParameters
                 {
-                    { "ShareMess", new CardMessDto { IsUser = false, Id = groupDto.Id } }
+                    { "ShareMess", new CardMessDto { IsUser = false, Id = groupDto.Id } },
+                    { "ShowMess", false }
                 }, null))
                 .TryShow();
         }

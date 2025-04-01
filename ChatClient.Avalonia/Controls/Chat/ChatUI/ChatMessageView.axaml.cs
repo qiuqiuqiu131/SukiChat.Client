@@ -43,7 +43,8 @@ public partial class ChatMessageView : UserControl
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is Control control && control.DataContext is CardMessDto cardMessDto)
+        if (sender is Control control && control.DataContext is CardMessDto cardMessDto &&
+            e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
         {
             RaiseEvent(new MessageBoxShowEventArgs(control, MessageBoxShowEvent, e, cardMessDto));
         }

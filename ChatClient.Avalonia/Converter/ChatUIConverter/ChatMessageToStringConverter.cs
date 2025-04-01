@@ -40,10 +40,7 @@ public class ChatMessageToStringConverter : MarkupExtension, IValueConverter
 
                         break;
                     case ChatMessage.ContentOneofCase.CardMess:
-                        if (((CardMessDto)chatMessage.Content).IsUser)
-                            sb.Append("[推荐你添加好友]");
-                        else
-                            sb.Append("[邀请你加入群聊]");
+                        sb.Append($"[{((CardMessDto)chatMessage.Content).Title}]");
                         break;
                 }
             }

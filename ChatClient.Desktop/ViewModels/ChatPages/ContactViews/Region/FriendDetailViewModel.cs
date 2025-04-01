@@ -60,7 +60,8 @@ public class FriendDetailViewModel : ViewModelBase, IDestructible
         _dialogManager.CreateDialog()
             .WithViewModel(d => new ShareViewModel(d, new DialogParameters
             {
-                { "ShareMess", new CardMessDto { IsUser = true, Id = Friend.Id } }
+                { "ShareMess", new CardMessDto { IsUser = true, Id = Friend.Id } },
+                { "ShowMess", false }
             }, null))
             .TryShow();
     }

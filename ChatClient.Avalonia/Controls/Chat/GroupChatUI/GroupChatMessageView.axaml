@@ -184,52 +184,26 @@
             </Border>
         </DataTemplate>
         <DataTemplate DataType="data:CardMessDto">
-            <Panel Background="Transparent" PointerPressed="InputElement_OnPointerPressed">
-                <Panel.DataTemplates>
-                    <DataTemplate DataType="data:UserDto">
-                        <Grid RowDefinitions="*,*,*" Margin="5,0">
-                            <TextBlock Grid.Row="0" Text="推荐你添加好友" Margin="0,4" />
-                            <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
-                                <TextBlock Margin="0,0,5,0"
-                                           Opacity="0.6"
-                                           TextWrapping="Wrap"
-                                           LineSpacing="2"
-                                           FontSize="13"
-                                           Text="{Binding Name,StringFormat='向你推荐好友&quot;{0}&quot;,点击查看具体信息'}" />
-                                <Image Grid.Column="1" Width="50" Height="50" Source="{Binding HeadImage}">
-                                    <Image.Clip>
-                                        <RectangleGeometry RadiusX="7" RadiusY="7" Rect="0,0,50,50" />
-                                    </Image.Clip>
-                                </Image>
-                            </Grid>
-                            <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
-                                    BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
-                            <TextBlock Grid.Row="2" Text="个人名片" Margin="0,5,0,2" Opacity="0.6" FontSize="12" />
-                        </Grid>
-                    </DataTemplate>
-                    <DataTemplate DataType="group:GroupDto">
-                        <Grid RowDefinitions="30,*,20" Margin="5,0">
-                            <TextBlock Grid.Row="0" Text="邀请你加入群聊" Margin="0,4" />
-                            <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
-                                <TextBlock Margin="0,0,5,0"
-                                           Opacity="0.6"
-                                           TextWrapping="Wrap"
-                                           LineSpacing="2"
-                                           FontSize="13"
-                                           Text="{Binding Name,StringFormat='邀请你加入群聊&quot;{0}&quot;,点击查看具体信息'}" />
-                                <Image Grid.Column="1" Width="50" Height="50" Source="{Binding HeadImage}">
-                                    <Image.Clip>
-                                        <RectangleGeometry RadiusX="7" RadiusY="7" Rect="0,0,50,50" />
-                                    </Image.Clip>
-                                </Image>
-                            </Grid>
-                            <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
-                                    BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
-                            <TextBlock Grid.Row="2" Text="邀请入群" Margin="0,5,0,2" FontSize="12" Opacity="0.6" />
-                        </Grid>
-                    </DataTemplate>
-                </Panel.DataTemplates>
-                <ContentControl Content="{Binding Content}" />
+            <Panel Background="Transparent" Margin="3" PointerPressed="InputElement_OnPointerPressed">
+                <Grid RowDefinitions="*,*,*" Margin="5,0">
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="0,4" />
+                    <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
+                        <TextBlock Margin="0,0,5,0"
+                                   Opacity="0.6"
+                                   TextWrapping="Wrap"
+                                   LineSpacing="2"
+                                   FontSize="12"
+                                   Text="{Binding Detail}" />
+                        <Image Grid.Column="1" Width="50" Height="50" Source="{Binding HeadImage}">
+                            <Image.Clip>
+                                <RectangleGeometry RadiusX="7" RadiusY="7" Rect="0,0,50,50" />
+                            </Image.Clip>
+                        </Image>
+                    </Grid>
+                    <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
+                            BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
+                    <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,5,0,2" Opacity="0.6" FontSize="11.5" />
+                </Grid>
             </Panel>
         </DataTemplate>
     </UserControl.DataTemplates>

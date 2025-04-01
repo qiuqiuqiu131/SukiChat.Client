@@ -1,5 +1,6 @@
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
@@ -137,4 +138,17 @@ public class CardMessDto
     public bool IsUser { get; set; }
     public string Id { get; set; }
     public object Content { get; set; }
+
+    public bool IsSelf { get; set; }
+
+    public string SelfName => IsSelf ? "对方" : "你";
+
+    public string Title => IsUser ? $"向{SelfName}推荐好友" : $"邀请{SelfName}加入群聊";
+
+    public string Detail =>
+        IsUser ? $"{Title} \"{((UserDto)Content).Name}\",点击查看具体信息" : $"{Title} \"{((GroupDto)Content).Name}\",点击查看具体信息";
+
+    public string Bottom => IsUser ? "好友推荐" : "邀请入群";
+
+    public Bitmap HeadImage => IsUser ? ((UserDto)Content).HeadImage : ((GroupDto)Content).HeadImage;
 }

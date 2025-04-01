@@ -11,12 +11,14 @@ using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using Material.Icons;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using SukiUI.Dialogs;
@@ -54,16 +56,19 @@ public class ContactsViewModel : ChatPageBase
 
     private readonly IContainerProvider _containerProvider;
     private readonly ISukiDialogManager _sukiDialogManager;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
     private readonly IDialogService _dialogService;
 
     public ContactsViewModel(IContainerProvider containerProvider,
         ISukiDialogManager sukiDialogManager,
+        IEventAggregator eventAggregator,
         IUserManager userManager)
         : base("通讯录", MaterialIconKind.ContactPhone, 1)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;
+        _eventAggregator = eventAggregator;
         _userManager = userManager;
         _dialogService = containerProvider.Resolve<IDialogService>();
 
@@ -161,7 +166,17 @@ public class ContactsViewModel : ChatPageBase
             if (result.Result != ButtonResult.OK) return;
 
             var groupName = result.Parameters.GetValue<string>("GroupName");
-            if (string.IsNullOrWhiteSpace(groupName)) return;
+            if (string.IsNullOrWhiteSpace(groupName) || groupName.Equals(origionName)) return;
+
+            if (type == 0 && GroupFriends.FirstOrDefault(d => d.GroupName.Equals(groupName)) != null ||
+                type == 1 && GroupGroups.FirstOrDefault(d => d.GroupName.Equals(groupName)) != null)
+            {
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "分组已存在"
+                });
+                return;
+            }
 
             if (type == 0)
             {
