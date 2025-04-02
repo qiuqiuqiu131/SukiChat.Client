@@ -239,6 +239,7 @@
                                        HeadClick="ChatUI_OnHeadClick"
                                        Notification="ChatUI_OnNotification"
                                        MessageBoxShow="ChatUI_OnMessageBoxShow"
+                                       ContextMenuShow="ChatUI_OnContextMenuShow"
                                        ShareMessageCommand="{Binding ShareMessageCommand}"
                                        DeleteMessageCommand="{Binding DeleteMessageCommand}"
                                        RetractMessageCommand="{Binding RetractMessageCommand}"

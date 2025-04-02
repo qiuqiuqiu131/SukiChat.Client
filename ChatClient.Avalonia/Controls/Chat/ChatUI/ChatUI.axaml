@@ -2,8 +2,6 @@
     x:Class="ChatClient.Avalonia.Controls.Chat.ChatUI.ChatUI"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:chatUI="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
-    xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"

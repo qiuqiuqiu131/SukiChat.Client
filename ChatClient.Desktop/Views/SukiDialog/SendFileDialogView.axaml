@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d"
+             Width="300" Height="380"
+             x:DataType="userControls:SendFileDialogViewModel"
+             x:Class="ChatClient.Desktop.Views.SukiDialog.SendFileDialogView">
+    <Grid RowDefinitions="30,*,Auto" VerticalAlignment="Stretch">
+        <TextBlock Text="{Binding SendTargetName,StringFormat='发送给 {0}'}"
+                   FontSize="13"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center" />
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding Messages}">
+                <ItemsControl.DataTemplates>
+                    <DataTemplate DataType="data:FileMessDto">
+                        <Grid ColumnDefinitions="50,*" Margin="10,3">
+                            <Border Width="38"
+                                    VerticalAlignment="Center"
+                                    Height="42"
+                                    Margin="10,5"
+                                    Cursor="Hand"
+                                    Background="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
+                                    CornerRadius="5">
+                                <Interaction.Behaviors>
+                                    <behaviors:OpenFileInExplorerBehavior
+                                        FilePath="{Binding TargetFilePath}" />
+                                </Interaction.Behaviors>
+                                <avalonia:MaterialIcon
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Margin="2,0,0,0"
+                                    Foreground="White"
+                                    Height="33"
+                                    Width="33"
+                                    Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
+                            </Border>
+                            <Grid Grid.Column="1" RowDefinitions="*,*" VerticalAlignment="Center" Margin="5,0,10,0">
+                                <TextBlock Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
+                                           TextWrapping="NoWrap"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Grid.Row="1"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
+                                           FontSize="12" Opacity="0.6" />
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+        <StackPanel Grid.Row="2" Spacing="10" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
+            <Button Classes="Flat" Command="{Binding OkCommand}" Padding="13,3.5">
+                <TextBlock Text="{Binding Messages.Count,StringFormat='发送({0})'}" FontSize="13.5" />
+            </Button>
+            <Button Background="{DynamicResource SukiGlassCardBackground}" Padding="13,3.5"
+                    Command="{Binding CancelCommand}">
+                <TextBlock Text="取消" FontSize="13.5" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

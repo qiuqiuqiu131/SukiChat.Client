@@ -2,15 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform.Storage;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.UserControls;
+using ChatClient.Tool.Events;
+using Prism.Events;
+using Prism.Ioc;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
@@ -25,12 +30,34 @@ public partial class ChatInputPanelView : UserControl
         set => SetValue(InputMessagesProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand> SendFileCommandProperty =
+        AvaloniaProperty.Register<ChatInputPanelView, ICommand>(
+            "SendFileCommand");
+
+    public ICommand SendFileCommand
+    {
+        get => GetValue(SendFileCommandProperty);
+        set => SetValue(SendFileCommandProperty, value);
+    }
+
     private ItemCollection _itemCollection;
+    private readonly IEventAggregator eventAggregator;
 
     public ChatInputPanelView()
     {
         InitializeComponent();
         _itemCollection = InputItems.Items;
+        ScrollViewer.AddHandler(DragDrop.DropEvent, DropEventHandler);
+
+        eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+        eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
+        {
+            foreach (var item in _itemCollection)
+            {
+                if (item is TextBox textBox)
+                    textBox.ContextFlyout?.Hide();
+            }
+        });
     }
 
     /// <summary>
@@ -53,7 +80,8 @@ public partial class ChatInputPanelView : UserControl
                         textBox.TextChanged -= ControlOnTextChanged;
                         textBox.GotFocus -= ControlOnGotFocus;
                         textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
-                        textBox.KeyDown -= ControlOnKeyDown;
+                        textBox.PointerPressed -= ControlOnPointerPressed;
+                        textBox.RemoveHandler(KeyDownEvent, ControlOnKeyDown);
                     }
 
                 _itemCollection.Clear();
@@ -73,8 +101,9 @@ public partial class ChatInputPanelView : UserControl
                             control.DataContext = text;
                             control.TextChanged += ControlOnTextChanged;
                             control.PastingFromClipboard += ControlOnPastingFromClipboard;
+                            control.PointerPressed += ControlOnPointerPressed;
                             control.GotFocus += ControlOnGotFocus;
-                            control.KeyDown += ControlOnKeyDown;
+                            control.AddHandler(KeyDownEvent, ControlOnKeyDown, RoutingStrategies.Tunnel);
 
                             _itemCollection.Add(control);
                         }
@@ -112,7 +141,8 @@ public partial class ChatInputPanelView : UserControl
                 control.TextChanged += ControlOnTextChanged;
                 control.GotFocus += ControlOnGotFocus;
                 control.PastingFromClipboard += ControlOnPastingFromClipboard;
-                control.KeyDown += ControlOnKeyDown;
+                control.PointerPressed += ControlOnPointerPressed;
+                control.AddHandler(KeyDownEvent, ControlOnKeyDown, RoutingStrategies.Tunnel);
 
                 _itemCollection.Add(control);
             }
@@ -138,7 +168,8 @@ public partial class ChatInputPanelView : UserControl
                     textBox.TextChanged -= ControlOnTextChanged;
                     textBox.GotFocus -= ControlOnGotFocus;
                     textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
-                    textBox.KeyDown -= ControlOnKeyDown;
+                    textBox.PointerPressed -= ControlOnPointerPressed;
+                    textBox.RemoveHandler(KeyDownEvent, ControlOnKeyDown);
                 }
 
                 removeItems.Add(control);
@@ -150,9 +181,75 @@ public partial class ChatInputPanelView : UserControl
             if (InputMessages.Count == 0)
                 InputMessages.Add(string.Empty);
         }
+        else if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            _itemCollection.Clear();
+            InputMessages.Add(string.Empty);
+        }
     }
 
     #region TextBoxEvent
+
+    private async void DropEventHandler(object? sender, DragEventArgs e)
+    {
+        if (e.Data.Contains(DataFormats.Files))
+        {
+            var storageItems = e.Data.GetFiles();
+            if (storageItems != null)
+            {
+                var imageFiles = storageItems.Where(item => item is IStorageFile file &&
+                                                            (file.Name.EndsWith(".png",
+                                                                 StringComparison.OrdinalIgnoreCase) ||
+                                                             file.Name.EndsWith(".jpg",
+                                                                 StringComparison.OrdinalIgnoreCase) ||
+                                                             file.Name.EndsWith(".jpeg",
+                                                                 StringComparison.OrdinalIgnoreCase) ||
+                                                             file.Name.EndsWith(".bmp",
+                                                                 StringComparison.OrdinalIgnoreCase)))
+                    .Cast<IStorageFile>();
+                if (imageFiles.Count() != 0)
+                    foreach (var imageFile in imageFiles)
+                    {
+                        Bitmap bitmap;
+                        using (var stream = await imageFile.OpenReadAsync())
+                            bitmap = new Bitmap(stream);
+                        if (InputMessages.Last() is string str && string.IsNullOrEmpty(str))
+                        {
+                            var index = InputMessages.Count - 1;
+                            InputMessages?.Add(bitmap);
+                            InputMessages?.RemoveAt(index);
+                        }
+                        else
+                            InputMessages?.Add(bitmap);
+                    }
+                else
+                {
+                    if (storageItems.Count() >= 2)
+                    {
+                        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+                        eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                        {
+                            Message = "暂不支持多文件发送",
+                            Type = NotificationType.Warning
+                        });
+                    }
+                    else if (storageItems.Count() == 1)
+                    {
+                        var file = storageItems.FirstOrDefault();
+                        if (file != null)
+                        {
+                            SendFileCommand?.Execute(file.Path.LocalPath);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private void ControlOnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        e.Handled = true;
+    }
 
     /// <summary>
     /// 接受输入框的键盘事件
@@ -196,6 +293,30 @@ public partial class ChatInputPanelView : UserControl
 
                 e.Handled = true;
             }
+            else if (e.Key == Key.Back)
+            {
+                if (string.IsNullOrEmpty(textBox.Text))
+                {
+                    // 获取索引
+                    var index = _itemCollection.IndexOf(textBox);
+                    if (index != 0)
+                    {
+                        var previousItem = _itemCollection[index - 1];
+                        if (previousItem is Image image)
+                        {
+                            InputMessages.Remove(image.DataContext);
+                        }
+                        else if (previousItem is TextBox preTextBox)
+                        {
+                            InputMessages.RemoveAt(index);
+                            preTextBox.Focus();
+                            preTextBox.CaretIndex = preTextBox.Text?.Length ?? 0;
+                        }
+                    }
+
+                    e.Handled = true;
+                }
+            }
         }
     }
 
@@ -207,18 +328,62 @@ public partial class ChatInputPanelView : UserControl
     /// <exception cref="NotImplementedException"></exception>
     private async void ControlOnPastingFromClipboard(object? sender, RoutedEventArgs e)
     {
-        // if (sender is TextBox textBox)
-        // {
-        //     var clipboard = TopLevel.GetTopLevel(textBox)?.Clipboard;
-        //     if (clipboard != null)
-        //     {
-        //         var datas = await clipboard.GetFormatsAsync();
-        //         foreach (var data in datas)
-        //         {
-        //             var obj = await clipboard.GetDataAsync(data);
-        //         }
-        //     }
-        // }
+        if (sender is TextBox textBox)
+        {
+            var clipboard = TopLevel.GetTopLevel(textBox)?.Clipboard;
+            if (clipboard != null)
+            {
+                var files = await clipboard.GetDataAsync(DataFormats.Files);
+                if (files is IEnumerable<IStorageItem> storageItems)
+                {
+                    var imageFiles = storageItems.Where(item => item is IStorageFile file &&
+                                                                (file.Name.EndsWith(".png",
+                                                                     StringComparison.OrdinalIgnoreCase) ||
+                                                                 file.Name.EndsWith(".jpg",
+                                                                     StringComparison.OrdinalIgnoreCase) ||
+                                                                 file.Name.EndsWith(".jpeg",
+                                                                     StringComparison.OrdinalIgnoreCase) ||
+                                                                 file.Name.EndsWith(".bmp",
+                                                                     StringComparison.OrdinalIgnoreCase)))
+                        .Cast<IStorageFile>();
+                    if (imageFiles.Count() != 0)
+                        foreach (var imageFile in imageFiles)
+                        {
+                            Bitmap bitmap;
+                            using (var stream = await imageFile.OpenReadAsync())
+                                bitmap = new Bitmap(stream);
+                            if (InputMessages.Last() is string str && string.IsNullOrEmpty(str))
+                            {
+                                var index = InputMessages.Count - 1;
+                                InputMessages?.Add(bitmap);
+                                InputMessages?.RemoveAt(index);
+                            }
+                            else
+                                InputMessages?.Add(bitmap);
+                        }
+                    else
+                    {
+                        if (storageItems.Count() >= 2)
+                        {
+                            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+                            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                            {
+                                Message = "暂不支持多文件发送",
+                                Type = NotificationType.Warning
+                            });
+                        }
+                        else if (storageItems.Count() == 1)
+                        {
+                            var file = storageItems.FirstOrDefault();
+                            if (file != null)
+                            {
+                                SendFileCommand?.Execute(file.Path.LocalPath);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

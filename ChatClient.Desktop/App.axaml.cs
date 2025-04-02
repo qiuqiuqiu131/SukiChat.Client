@@ -12,6 +12,8 @@ using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
+using ChatClient.Desktop.ViewModels.LocalSearchUserGroupView;
+using ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region;
 using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Desktop.ViewModels.SearchUserGroup;
 using ChatClient.Desktop.ViewModels.SearchUserGroup.Region;
@@ -24,10 +26,13 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
+using ChatClient.Desktop.Views.LocalSearchUserGroupView;
+using ChatClient.Desktop.Views.LocalSearchUserGroupView.Region;
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Desktop.Views.ShareView;
+using ChatClient.Desktop.Views.SukiDialog;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
@@ -106,12 +111,18 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<SearchFriendView, SearchFriendViewModel>();
         containerRegistry.RegisterForNavigation<SearchGroupView, SearchGroupViewModel>();
         containerRegistry.RegisterForNavigation<SearchAllView, SearchAllViewModel>();
+        // 本地搜索
+        containerRegistry.RegisterForNavigation<LocalSearchAllView, LocalSearchAllViewModel>();
+        containerRegistry.RegisterForNavigation<LocalSearchUserView, LocalSearchUserViewModel>();
+        containerRegistry.RegisterForNavigation<LocalSearchGroupView, LocalSearchGroupViewModel>();
 
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
         containerRegistry.RegisterDialog<RegisterWindowView, RegisterWindowViewModel>();
         // 搜索用户和群
         containerRegistry.RegisterDialog<SearchUserGroupView, SearchUserGroupViewModel>();
+        // 本地搜索
+        containerRegistry.RegisterDialog<LocalSearchUserGroupView, LocalSearchUserGroupViewModel>();
         // 添加关系
         containerRegistry.RegisterDialog<AddFriendRequestView, AddFriendRequestViewModel>();
         containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
@@ -174,7 +185,9 @@ public class App : PrismApplication
             .AddView<CommonDialogView, CommonDialogViewModel>(services)
             .AddView<WarningDialogView, WarningDialogViewModel>(services)
             // 通用Dialog
-            .AddView<SukiDialogView, SukiDialogViewModel>(services);
+            .AddView<SukiDialogView, SukiDialogViewModel>(services)
+            // 发送文件dialog
+            .AddView<SendFileDialogView, SendFileDialogViewModel>(services);
     }
 
     public override void OnFrameworkInitializationCompleted()

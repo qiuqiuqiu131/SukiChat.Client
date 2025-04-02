@@ -21,6 +21,7 @@ public class FileExtensionToIconConverter : MarkupExtension, IValueConverter
                 return "FileWord";
             case ".xls":
             case ".xlsx":
+            case ".csv":
                 return "FileExcel";
             case ".ppt":
             case ".pptx":

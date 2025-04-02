@@ -1,0 +1,175 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:searchData="clr-namespace:ChatClient.Tool.Data.SearchData;assembly=ChatClient.Tool"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="searchData:AllSearchDto"
+             x:Class="ChatClient.Desktop.Views.UserControls.LeftSearchView">
+    <UserControl.Styles>
+        <Style Selector="suki|GlassCard.search">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="suki|GlassCard.search:pointerover">
+            <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+        </Style>
+    </UserControl.Styles>
+    <UserControl.Resources>
+        <converter:IntEqualityConverter x:Key="IntEqualityConverter" Value="0" />
+        <converter:IntEqualityConverter x:Key="IntNotEqualityConverter" Equal="False" Value="0" />
+    </UserControl.Resources>
+    <Panel>
+        <TextBlock Text="暂未找到相关信息" FontSize="13" Opacity="0.6" Margin="10,20" HorizontalAlignment="Center">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="FriendSearchDtos.Count" Converter="{StaticResource IntEqualityConverter}" />
+                    <Binding Path="GroupSearchDtos.Count" Converter="{StaticResource IntEqualityConverter}" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+        <StackPanel Orientation="Vertical" Margin="5,10">
+            <StackPanel.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                    <Binding Path="FriendSearchDtos.Count" Converter="{StaticResource IntNotEqualityConverter}" />
+                    <Binding Path="GroupSearchDtos.Count" Converter="{StaticResource IntNotEqualityConverter}" />
+                </MultiBinding>
+            </StackPanel.IsVisible>
+            <StackPanel Orientation="Vertical"
+                        IsVisible="{Binding FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                <Panel Margin="5,7">
+                    <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="13"
+                               Cursor="Hand"
+                               Foreground="{DynamicResource SukiPrimaryColor75}">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="PointerPressed">
+                                <InvokeCommandAction
+                                    Command="{Binding $parent[userControls:LeftSearchView].SearchMore}"
+                                    CommandParameter="联系人" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </TextBlock>
+                </Panel>
+                <ItemsControl ItemsSource="{Binding FriendSearchDtos}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <suki:GlassCard Classes="search" CornerRadius="5" Padding="0" IsInteractive="True"
+                                            Margin="0">
+                                <Grid ColumnDefinitions="42,*" Margin="6">
+                                    <Grid Width="42" Height="42">
+                                        <circleImage:CircleImage Size="42"
+                                                                 Image="{Binding FriendRelationDto.UserDto.HeadImage}" />
+                                    </Grid>
+                                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="12,3,0,3">
+                                        <Grid>
+                                            <TextBlock
+                                                IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Foreground="{DynamicResource SukiText}">
+                                                <Run Text="{Binding FriendRelationDto.Remark}" />
+                                                <Run Text=" (" />
+                                                <Run Text="{Binding FriendRelationDto.UserDto.Name}" />
+                                                <Run Text=")" />
+                                            </TextBlock>
+                                            <TextBlock
+                                                IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Text="{Binding FriendRelationDto.UserDto.Name}"
+                                                Foreground="{DynamicResource SukiText}" />
+                                        </Grid>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                    Margin="0,3,15,0"
+                                                    Grid.Row="1">
+                                            <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </suki:GlassCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="0,10"
+                    IsVisible="{Binding GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}" />
+
+            <StackPanel Orientation="Vertical"
+                        IsVisible="{Binding GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                <Panel Margin="5,7">
+                    <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="13"
+                               Cursor="Hand"
+                               Foreground="{DynamicResource SukiPrimaryColor75}">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="PointerPressed">
+                                <InvokeCommandAction
+                                    Command="{Binding $parent[userControls:LeftSearchView].SearchMore}"
+                                    CommandParameter="群聊" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                    </TextBlock>
+                </Panel>
+                <ItemsControl ItemsSource="{Binding GroupSearchDtos}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <suki:GlassCard Classes="search" CornerRadius="5" Padding="0" IsInteractive="True"
+                                            Margin="0">
+                                <Grid ColumnDefinitions="42,*" Margin="6">
+                                    <Grid Width="42" Height="42">
+                                        <circleImage:CircleImage Size="42"
+                                                                 Image="{Binding GroupRelationDto.GroupDto.HeadImage}" />
+                                    </Grid>
+                                    <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="12,3,0,3">
+                                        <Grid>
+                                            <TextBlock
+                                                IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Foreground="{DynamicResource SukiText}">
+                                                <Run Text="{Binding GroupRelationDto.Remark}" />
+                                                <Run Text=" (" />
+                                                <Run Text="{Binding GroupRelationDto.GroupDto.Name}" />
+                                                <Run Text=")" />
+                                            </TextBlock>
+                                            <TextBlock
+                                                IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                TextTrimming="CharacterEllipsis"
+                                                Text="{Binding GroupRelationDto.GroupDto.Name}"
+                                                Foreground="{DynamicResource SukiText}" />
+                                        </Grid>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                    Margin="0,3,15,0"
+                                                    Grid.Row="1">
+                                            <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </suki:GlassCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</UserControl>

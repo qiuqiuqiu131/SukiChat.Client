@@ -72,6 +72,11 @@ public partial class ChatLeftPanelView : UserControl
 
         eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
         eventAggregator.GetEvent<SendMessageToViewEvent>().Subscribe(SendMessageToView);
+        eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
+        {
+            _activeContextMenu?.Close();
+            _activeContextMenu = null;
+        });
 
         // 初始化共享菜单
         _friendContextMenu = CreateFriendContextMenu();
@@ -110,6 +115,8 @@ public partial class ChatLeftPanelView : UserControl
             }
         }
     }
+
+    #region MainView
 
     #region ChatUI_Init_And_Changed
 
@@ -286,7 +293,7 @@ public partial class ChatLeftPanelView : UserControl
         }
     }
 
-    // 当未读消息数量发生变化时触发
+// 当未读消息数量发生变化时触发
     private void ItemOnOnUnReadMessageCountChanged()
     {
         // 重新计算所有未读消息数量
@@ -301,7 +308,7 @@ public partial class ChatLeftPanelView : UserControl
         eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Publish(("聊天", count));
     }
 
-    // 排序
+// 排序
     private void SortItemControl(object item)
     {
         Dispatcher.UIThread.Invoke(() =>
@@ -350,7 +357,7 @@ public partial class ChatLeftPanelView : UserControl
         });
     }
 
-    // 判断项目是否置顶
+// 判断项目是否置顶
     private bool IsItemTop(object item)
     {
         return item switch
@@ -402,7 +409,7 @@ public partial class ChatLeftPanelView : UserControl
         return left;
     }
 
-    // 获取项目的最后消息时间
+// 获取项目的最后消息时间
     private DateTime GetItemTime(object item)
     {
         return item switch
@@ -413,7 +420,7 @@ public partial class ChatLeftPanelView : UserControl
         };
     }
 
-    // 用于调试或修正可能的不一致问题
+// 用于调试或修正可能的不一致问题
     private void RecalculateTopItemsCount()
     {
         int count = 0;
@@ -435,7 +442,7 @@ public partial class ChatLeftPanelView : UserControl
 
     #region InitFriendMenu
 
-    // 创建好友菜单
+// 创建好友菜单
     private ContextMenu CreateFriendContextMenu()
     {
         // 从资源中获取模板并创建菜单
@@ -446,7 +453,7 @@ public partial class ChatLeftPanelView : UserControl
         return (content as ContextMenu)!;
     }
 
-    // 事件处理方法使用附加属性而非闭包
+// 事件处理方法使用附加属性而非闭包
     private void OnFriendTopMenuItemClick(object? sender, RoutedEventArgs e)
     {
         if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
@@ -502,7 +509,7 @@ public partial class ChatLeftPanelView : UserControl
         _friendContextMenu.Close();
     }
 
-    // 清理DataContext引用
+// 清理DataContext引用
     private void OnContextMenuClosed(object? sender, RoutedEventArgs e)
     {
         if (sender is ContextMenu menu)
@@ -515,7 +522,7 @@ public partial class ChatLeftPanelView : UserControl
 
     #region InitGroupMenu
 
-    // 创建群组菜单
+// 创建群组菜单
     private ContextMenu CreateGroupContextMenu()
     {
         var template = this.FindResource("GroupMenu") as DataTemplate;
@@ -525,7 +532,7 @@ public partial class ChatLeftPanelView : UserControl
         return (content as ContextMenu)!;
     }
 
-    // 群组菜单项事件处理方法
+// 群组菜单项事件处理方法
     private void OnGroupTopMenuItemClick(object? sender, RoutedEventArgs e)
     {
         if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
@@ -668,4 +675,23 @@ public partial class ChatLeftPanelView : UserControl
     }
 
     #endregion
+
+    #endregion
+
+    private void SearchScrollViewer_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        e.Handled = true;
+    }
+
+    private void Return()
+    {
+        TopLevel.GetTopLevel(this)?.FocusManager?.ClearFocus();
+        SearchBox.IsFocus = false;
+        SearchBox.SearchText = null;
+    }
+
+    private void SearchItem_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        Return();
+    }
 }

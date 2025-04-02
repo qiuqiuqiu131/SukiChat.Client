@@ -11,5 +11,7 @@ public static class RegionNames
 
     public static string AddFriendRegion = "AddFriendRegion";
 
+    public static string LocalSearchRegion = "LocalSearchRegion";
+
     public static string RegisterRegion = "RegisterRegion";
 }

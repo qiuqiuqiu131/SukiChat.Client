@@ -14,6 +14,8 @@
     xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+    xmlns:contactViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
@@ -50,13 +52,19 @@
                             Background="{DynamicResource SukiBorderBrush}">
                         <avalonia:MaterialIcon Kind="Plus" HorizontalAlignment="Center" />
                     </Button>
-                    <searchBox:SearchBox WaterMask="搜索" SearchText="{Binding SearchText}" />
+                    <searchBox:SearchBox Name="SearchBox" WaterMask="搜索" SearchText="{Binding SearchText,Mode=TwoWay}" />
                 </DockPanel>
             </suki:GlassCard>
 
             <!-- 好友列表 -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
                           Margin="0,0,0,0">
+                <ScrollViewer.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding ElementName="SearchBox" Path="!IsFocus" />
+                        <Binding Path="SearchText" Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    </MultiBinding>
+                </ScrollViewer.IsVisible>
                 <StackPanel x:Name="LeftPanel" Orientation="Vertical"
                             content:StackPanelExtensions.AnimatedScroll="True">
                     <Button Classes="Chat"
@@ -187,6 +195,66 @@
                             </Panel>
                         </TabItem>
                     </TabControl>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- 搜索 -->
+            <ScrollViewer
+                Grid.Row="1"
+                PointerPressed="SearchScrollViewer_OnPointerPressed"
+                Background="Transparent"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding ElementName="SearchBox" Path="IsFocus" />
+                        <Binding Path="SearchText" Converter="{x:Static StringConverters.IsNotNullOrEmpty}" />
+                    </MultiBinding>
+                </ScrollViewer.IsVisible>
+                <StackPanel Orientation="Vertical" content:StackPanelExtensions.AnimatedScroll="True">
+                    <Panel>
+                        <TextBlock HorizontalAlignment="Left" Text="本地搜索" Opacity="0.6"
+                                   IsVisible="{Binding AllSearchDto, Converter={x:Static ObjectConverters.IsNull}}"
+                                   FontSize="12.5" Margin="15,10,0,5" />
+                        <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <userControls:LeftSearchView DataContext="{Binding AllSearchDto}"
+                                                         SearchMore="{Binding ((vm:ContactsViewModel)DataContext).SearchMoreCommand,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=contactViews:ContactsView}}" />
+                        </Panel>
+                    </Panel>
+                    <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="5,10" />
+                    <suki:GlassCard IsInteractive="True"
+                                    Classes="search"
+                                    CornerRadius="5"
+                                    PointerPressed="SearchItem_PointerPressed"
+                                    Padding="0"
+                                    Margin="5">
+                        <suki:GlassCard.Styles>
+                            <Style Selector="suki|GlassCard.search">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Style>
+                            <Style Selector="suki|GlassCard.search:pointerover">
+                                <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                            </Style>
+                        </suki:GlassCard.Styles>
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="PointerPressed">
+                                <InvokeCommandAction Command="{Binding AddNewFriendCommand}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                        <Grid ColumnDefinitions="42,*" Margin="6">
+                            <Panel Width="42" Height="42">
+                                <Ellipse Width="42" Height="42" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                         Fill="{DynamicResource SukiPrimaryColor75}" />
+                                <PathIcon Data="{x:Static content:Icons.Search}" Width="20" Height="20" Opacity="0.7"
+                                          VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            </Panel>
+                            <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,0">
+                                <TextBlock Grid.Row="0" Text="进入全网搜索" />
+                                <TextBlock Grid.Row="1" Text="查找群聊、用户等" FontSize="12.5" Opacity="0.6" />
+                            </Grid>
+                        </Grid>
+                    </suki:GlassCard>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

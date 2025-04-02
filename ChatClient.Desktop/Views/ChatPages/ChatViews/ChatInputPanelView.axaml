@@ -44,6 +44,9 @@
     <chatViews:ChatInputPanelView.InputMessages>
         <Binding Path="InputMessages" Mode="TwoWay" />
     </chatViews:ChatInputPanelView.InputMessages>
+    <chatViews:ChatInputPanelView.SendFileCommand>
+        <Binding Path="SendFileWithPathCommand" Mode="OneWay" />
+    </chatViews:ChatInputPanelView.SendFileCommand>
     <Grid RowDefinitions="35,*">
         <Grid.Styles>
             <Style Selector="Button.Basic">
@@ -132,14 +135,15 @@
         <ScrollViewer Grid.Row="1"
                       Name="ScrollViewer"
                       Margin="10,3"
+                      DragDrop.AllowDrop="True"
                       HorizontalScrollBarVisibility="Disabled"
                       KeyDown="ScrollViewer_OnKeyDown"
+                      PointerPressed="InputItems_OnPointerPressed"
+                      Cursor="Ibeam"
                       VerticalScrollBarVisibility="Hidden">
             <ItemsControl Background="Transparent"
                           suki:ItemsControlExtensions.AnimatedScroll="True"
-                          Name="InputItems"
-                          Cursor="Ibeam"
-                          PointerPressed="InputItems_OnPointerPressed">
+                          Name="InputItems">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" Spacing="8" />

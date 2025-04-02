@@ -2,19 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:prism="http://prismlibrary.com/"
-             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
-             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
-             xmlns:searchUserGroup="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup"
              xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+             xmlns:regions="http://prismlibrary.com/"
+             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:localSearchUserGroupView="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="650" Height="750"
              MinHeight="750"
              MinWidth="650"
-             x:DataType="searchUserGroup:SearchUserGroupViewModel"
-             x:Class="ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView">
+             x:DataType="localSearchUserGroupView:LocalSearchUserGroupViewModel"
+             x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.LocalSearchUserGroupView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
@@ -104,22 +104,25 @@
                         <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
                     </Button>
                 </StackPanel>
-                <TextBlock Text="搜索用户/群聊" VerticalAlignment="Bottom" Margin="0,8,0,0"
+                <TextBlock Text="本地搜索" VerticalAlignment="Bottom" Margin="0,8,0,0"
                            HorizontalAlignment="Center"
                            FontSize="13.5" />
             </Grid>
             <DockPanel LastChildFill="True">
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
-                    <searchBox:SearchBox Name="SearchBox" TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
+                    <searchBox:SearchBox Name="SearchBox" SearchText="{Binding SearchText,Mode=TwoWay}"
+                                         TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
                                          Margin="20,10" />
-                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                                x:Name="Tabs"
+                                SelectedIndex="{Binding SearchIndex}">
                         <TabItem Header="全部" FontSize="13" Margin="12,0" />
                         <TabItem Header="用户" FontSize="13" Margin="12,0" />
                         <TabItem Header="群聊" FontSize="13" Margin="12,0" />
                     </TabControl>
                     <Border Margin="3,5,3,0" Background="{DynamicResource SukiMediumBorderBrush}" Height="2" />
                 </StackPanel>
-                <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.AddFriendRegion}"
+                <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.LocalSearchRegion}"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch" />
             </DockPanel>

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using ChatClient.BaseService.Services;
@@ -8,9 +10,12 @@ using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
+using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
+using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.Data.SearchData;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
@@ -22,11 +27,6 @@ using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
 using SukiUI.Dialogs;
-using FriendDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendDetailView;
-using FriendRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.FriendRequestView;
-using GroupDetailView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupDetailView;
-using GroupRequestView = ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupRequestView;
-using SearchUserGroupView = ChatClient.Desktop.Views.SearchUserGroupView.SearchUserGroupView;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
@@ -40,6 +40,17 @@ public class ContactsViewModel : ChatPageBase
         set => SetProperty(ref searchText, value);
     }
 
+    private AllSearchDto? _allSearchDto;
+
+    public AllSearchDto? AllSearchDto
+    {
+        get => _allSearchDto;
+        set => SetProperty(ref _allSearchDto, value);
+    }
+
+    private Subject<string> searchSubject = new();
+    private IDisposable searchDisposable;
+
     public AvaloniaList<GroupFriendDto> GroupFriends => _userManager.GroupFriends!;
     public AvaloniaList<GroupGroupDto> GroupGroups => _userManager.GroupGroups!;
 
@@ -51,24 +62,28 @@ public class ContactsViewModel : ChatPageBase
     public DelegateCommand CreateGroupCommand { get; init; }
     public DelegateCommand AddNewFriendCommand { get; init; }
     public AsyncDelegateCommand<object> AddGroupCommand { get; init; }
+    public DelegateCommand<string> SearchMoreCommand { get; init; }
     public AsyncDelegateCommand<object> RenameGroupCommand { get; init; }
     public AsyncDelegateCommand<object> DeleteGroupCommand { get; init; }
 
     private readonly IContainerProvider _containerProvider;
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IEventAggregator _eventAggregator;
+    private readonly ILocalSearchService _localSearchService;
     private readonly IUserManager _userManager;
     private readonly IDialogService _dialogService;
 
     public ContactsViewModel(IContainerProvider containerProvider,
         ISukiDialogManager sukiDialogManager,
         IEventAggregator eventAggregator,
+        ILocalSearchService localSearchService,
         IUserManager userManager)
         : base("通讯录", MaterialIconKind.ContactPhone, 1)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;
         _eventAggregator = eventAggregator;
+        _localSearchService = localSearchService;
         _userManager = userManager;
         _dialogService = containerProvider.Resolve<IDialogService>();
 
@@ -80,12 +95,30 @@ public class ContactsViewModel : ChatPageBase
         AddGroupCommand = new AsyncDelegateCommand<object>(AddGroup);
         RenameGroupCommand = new AsyncDelegateCommand<object>(RenameGroup);
         DeleteGroupCommand = new AsyncDelegateCommand<object>(DeleteGroup);
+        SearchMoreCommand = new DelegateCommand<string>(SearchMore);
 
         User.OnUnreadMessageCountChanged += () =>
         {
             UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
         };
         UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
+
+        searchDisposable = searchSubject
+            .Throttle(TimeSpan.FromMilliseconds(500))
+            .DistinctUntilChanged()
+            .Subscribe(SearchAll);
+    }
+
+    private async void SearchAll(string searchText)
+    {
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            AllSearchDto = null;
+        }
+        else
+        {
+            AllSearchDto = await _localSearchService.SearchAllAsync(_userManager.User.Id, searchText);
+        }
     }
 
     #region CommandMethod
@@ -299,6 +332,12 @@ public class ContactsViewModel : ChatPageBase
     private void CreateGroup()
     {
         _dialogService.ShowDialog(nameof(CreateGroupView));
+    }
+
+    private void SearchMore(string obj)
+    {
+        _dialogService.Show(nameof(LocalSearchUserGroupView),
+            new DialogParameters { { "SearchText", searchText }, { "SearchType", obj } }, null);
     }
 
     private void SelectedChanged(object? obj)

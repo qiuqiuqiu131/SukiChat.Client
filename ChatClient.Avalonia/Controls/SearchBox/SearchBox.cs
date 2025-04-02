@@ -8,6 +8,15 @@ namespace ChatClient.Avalonia.Controls.SearchBox;
 
 public class SearchBox : UserControl
 {
+    public static readonly StyledProperty<bool> IsFocusProperty = AvaloniaProperty.Register<SearchBox, bool>(
+        nameof(IsFocus));
+
+    public bool IsFocus
+    {
+        get => GetValue(IsFocusProperty);
+        set => SetValue(IsFocusProperty, value);
+    }
+
     public static readonly StyledProperty<string> WaterMaskProperty = AvaloniaProperty.Register<SearchBox, string>(
         nameof(WaterMask));
 
@@ -58,10 +67,12 @@ public class SearchBox : UserControl
     {
         base.OnGotFocus(e);
         _textBox.Focus();
+        IsFocus = true;
     }
 
     protected override void OnLostFocus(RoutedEventArgs e)
     {
         base.OnLostFocus(e);
+        IsFocus = false;
     }
 }

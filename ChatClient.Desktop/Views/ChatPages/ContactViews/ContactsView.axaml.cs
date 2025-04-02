@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using ChatClient.Avalonia.Controls.GroupList;
 using ChatClient.Desktop.Tool;
@@ -109,5 +110,22 @@ public partial class ContactsView : UserControl, IDestructible
     {
         token1.Dispose();
         token2.Dispose();
+    }
+
+    private void SearchScrollViewer_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        e.Handled = true;
+    }
+
+    private void Return()
+    {
+        TopLevel.GetTopLevel(this)?.FocusManager?.ClearFocus();
+        SearchBox.IsFocus = false;
+        SearchBox.SearchText = null;
+    }
+
+    private void SearchItem_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        Return();
     }
 }

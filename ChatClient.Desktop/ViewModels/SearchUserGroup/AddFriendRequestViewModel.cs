@@ -8,9 +8,11 @@ using Avalonia.Notification;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 using SukiUI.Toasts;
@@ -20,6 +22,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 public class AddFriendRequestViewModel : BindableBase, IDialogAware
 {
     private readonly IContainerProvider _containerProvider;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
 
     private UserDto _userDto;
@@ -70,9 +73,11 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
     private bool isSended = false;
 
     public AddFriendRequestViewModel(IContainerProvider containerProvider,
+        IEventAggregator eventAggregator,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
+        _eventAggregator = eventAggregator;
         _userManager = userManager;
 
         Groups = _userManager.GroupFriends!.Select(d => d.GroupName).Order().ToList();
@@ -91,10 +96,22 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
         var (state, message) =
             await _friendService.AddFriend(_userManager.User!.Id, _userDto.Id, Remark ?? "", Group ?? "默认分组",
                 Message ?? "");
-        if (state)
-            notificationManager?.ShowMessage("好友请求已发送", NotificationType.Success, TimeSpan.FromSeconds(1.5));
+        if (notificationManager != null)
+        {
+            if (state)
+                notificationManager?.ShowMessage("好友请求已发送", NotificationType.Success, TimeSpan.FromSeconds(2.5));
+            else
+                notificationManager?.ShowMessage("好友请求失败", NotificationType.Error, TimeSpan.FromSeconds(2.5));
+        }
         else
-            notificationManager?.ShowMessage("好友请求失败", NotificationType.Error, TimeSpan.FromSeconds(1.5));
+        {
+            if (state)
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                    { Message = "好友请求已发送", Type = NotificationType.Success });
+            else
+                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                    { Message = "好友请求失败", Type = NotificationType.Error });
+        }
 
         RequestClose.Invoke();
     }

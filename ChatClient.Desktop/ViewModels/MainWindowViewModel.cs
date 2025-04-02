@@ -302,7 +302,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         var token4 = _eventAggregator.GetEvent<NotificationEvent>().Subscribe(d =>
         {
-            NotificationMessageManager.ShowMessage(d.Message, d.Type, TimeSpan.FromSeconds(1.5));
+            NotificationMessageManager.ShowMessage(d.Message, d.Type, TimeSpan.FromSeconds(2.5));
         });
         tokens.Add(token4);
 

@@ -13,6 +13,7 @@ using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
@@ -269,6 +270,19 @@ public partial class GroupChatUI : UserControl
     {
         get => GetValue(ShareMessageCommandProperty);
         set => SetValue(ShareMessageCommandProperty, value);
+    }
+
+    #endregion
+
+    #region ContextMenuShow
+
+    public static readonly RoutedEvent<RoutedEventArgs> ContextMenuShowEvent =
+        RoutedEvent.Register<GroupChatUI, RoutedEventArgs>(nameof(ContextMenuShow), RoutingStrategies.Bubble);
+
+    public event EventHandler<RoutedEventArgs> ContextMenuShow
+    {
+        add => AddHandler(NotificationEvent, value);
+        remove => RemoveHandler(NotificationEvent, value);
     }
 
     #endregion
@@ -556,6 +570,8 @@ public partial class GroupChatUI : UserControl
                 _contextMenu = null;
             }
 
+            RaiseEvent(new RoutedEventArgs(ContextMenuShowEvent, this));
+
             _contextMenu = CreateMenu(chatData);
             _contextMenu.Placement = PlacementMode.Pointer;
             // 获取鼠标位置
@@ -569,7 +585,7 @@ public partial class GroupChatUI : UserControl
         }
     }
 
-    private ContextMenu? CreateMenu(GroupChatData chatData)
+    private ContextMenu CreateMenu(GroupChatData chatData)
     {
         ContextMenu contextMenu = new ContextMenu();
 
@@ -592,12 +608,15 @@ public partial class GroupChatUI : UserControl
             {
                 var item1 = new MenuItem
                     { Header = "复制", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
-                item1.Click += (s, e) =>
+                item1.Click += async (s, e) =>
                 {
                     var topLevel = TopLevel.GetTopLevel(this);
+                    var file = await topLevel?.StorageProvider.TryGetFileFromPathAsync(imageMessDto.ActualPath);
+                    if (file == null) return;
                     var dataObject = new DataObject();
-                    dataObject.Set(DataFormats.Files, imageMessDto.ImageSource);
+                    dataObject.Set(DataFormats.Files, new List<IStorageItem> { file });
                     topLevel?.Clipboard?.SetDataObjectAsync(dataObject);
+
                     RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "图片已复制到剪贴板",
                         NotificationType.Information));
                 };
@@ -749,6 +768,15 @@ public partial class GroupChatUI : UserControl
         e.PointerPressedEventArgs.Source = sender;
         RaiseEvent(new MessageBoxShowEventArgs(sender, MessageBoxShowEvent, e.PointerPressedEventArgs,
             e.CardMessDto));
+    }
+
+    public void CloseMenu()
+    {
+        if (_contextMenu != null)
+        {
+            _contextMenu.Close();
+            _contextMenu = null;
+        }
     }
 }
 

@@ -28,7 +28,6 @@ public class SearchUserGroupViewModel : ViewModelBase, IDialogAware
 
     public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
 
-    public ThemeStyle CurrentThemeStyle { get; }
 
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
@@ -36,15 +35,12 @@ public class SearchUserGroupViewModel : ViewModelBase, IDialogAware
     public DelegateCommand CancleCommand { get; init; }
 
     public SearchUserGroupViewModel(IContainerProvider containerProvider,
-        IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _userManager = userManager;
 
         CancleCommand = new DelegateCommand(() => RequestClose.Invoke());
-
-        CurrentThemeStyle = themeStyle.CurrentThemeStyle;
     }
 
     #region DialogAware

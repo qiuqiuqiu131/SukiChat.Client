@@ -22,6 +22,7 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
     private readonly IEventAggregator _eventAggregator;
     private readonly IUserManager _userManager;
     private readonly SubscriptionToken? token;
+    private readonly SubscriptionToken? token2;
 
     public ChatFriendPanelView(IEventAggregator eventAggregator, IUserManager userManager,
         IUserDtoManager userDtoManager)
@@ -32,6 +33,10 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
 
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
             .Subscribe(() => { Dispatcher.UIThread.Invoke(() => { return OverlaySplitView.IsPaneOpen = false; }); });
+        token2 = eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
+        {
+            Dispatcher.UIThread.Invoke(() => { ChatUI.CloseMenu(); });
+        });
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -130,5 +135,10 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
                 }
             }
         }
+    }
+
+    private void ChatUI_OnContextMenuShow(object? sender, RoutedEventArgs e)
+    {
+        _eventAggregator.GetEvent<NewMenuShow>().Publish();
     }
 }

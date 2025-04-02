@@ -25,6 +25,8 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
     private readonly IUserDtoManager _userDtoManager;
 
     private readonly SubscriptionToken? token;
+    private readonly SubscriptionToken? token2;
+
 
     public ChatGroupPanelView(IEventAggregator eventAggregator, IUserManager userManager,
         IUserDtoManager userDtoManager)
@@ -35,6 +37,10 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
         InitializeComponent();
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
             .Subscribe(() => { Dispatcher.UIThread.Invoke(() => { OverlaySplitView.IsPaneOpen = false; }); });
+        token2 = eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
+        {
+            Dispatcher.UIThread.Invoke(() => { ChatUI.CloseMenu(); });
+        });
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -57,6 +63,7 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
     public void Destroy()
     {
         token?.Dispose();
+        token2?.Dispose();
     }
 
     private async void ChatUI_OnHeadClick(object? sender, GroupHeadClickEventArgs e)
@@ -144,5 +151,10 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
                 }
             }
         }
+    }
+
+    private void ChatUI_OnContextMenuShow(object? sender, RoutedEventArgs e)
+    {
+        _eventAggregator.GetEvent<NewMenuShow>().Publish();
     }
 }

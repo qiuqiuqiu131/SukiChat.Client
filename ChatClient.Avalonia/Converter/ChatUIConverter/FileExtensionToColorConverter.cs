@@ -27,6 +27,7 @@ public class FileExtensionToColorConverter : MarkupExtension, IValueConverter
                 return new SolidColorBrush(Colors.RoyalBlue);
             case ".xls":
             case ".xlsx":
+            case ".csv":
                 return new SolidColorBrush(Colors.Green);
             case ".ppt":
             case ".pptx":

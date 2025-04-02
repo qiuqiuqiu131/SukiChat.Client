@@ -10,6 +10,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.HelperInterface;
@@ -17,7 +18,9 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Ioc;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
@@ -33,6 +36,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
     public DelegateCommand SendMessageCommand { get; init; }
     public DelegateCommand SelectFileAndSendCommand { get; init; }
+    public DelegateCommand<string> SendFileWithPathCommand { get; init; }
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
 
@@ -53,6 +57,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
         SendMessageCommand = new DelegateCommand(SendMessages, CanSendMessages);
         SelectFileAndSendCommand = new DelegateCommand(SelectFileAndSend);
+        SendFileWithPathCommand = new DelegateCommand<string>(SendFileWithPath);
         ScreenShotCommand = new DelegateCommand(ScreenShot);
         ClearInputMessages = new DelegateCommand(ClearInput);
     }
@@ -129,78 +134,94 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
     #region SendMessages
 
+    // 选择图片并发送
+    private async Task SendImageMessage(string filePath)
+    {
+        Bitmap? bitmap;
+        using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            bitmap = new Bitmap(stream);
+
+        var imageMess = new ImageMessDto
+        {
+            FilePath = filePath,
+            FileSize = (int)new FileInfo(filePath).Length,
+            ImageSource = bitmap
+        };
+
+        var fileMess = new FileMessDto
+        {
+            FileName = filePath,
+            FileSize = (int)new FileInfo(filePath).Length,
+            FileType = new FileInfo(filePath).Extension,
+            TargetFilePath = filePath
+        };
+
+        var sukiDialog = App.Current.Container.Resolve<ISukiDialogManager>();
+        sukiDialog.CreateDialog()
+            .WithViewModel(d => new SendFileDialogViewModel(d,
+                new DialogParameters { { "Mess", new List<object> { fileMess } } }, d =>
+                {
+                    if (d.Result != ButtonResult.OK) return;
+                    sendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
+                })).TryShow();
+    }
+
+    // 选择文件并发送
+    private async Task SendFileMessage(string filePath)
+    {
+        FileInfo fileInfo = new FileInfo(filePath);
+        var fileMess = new FileMessDto
+        {
+            FileName = filePath,
+            FileSize = (int)fileInfo.Length,
+            FileType = fileInfo.Extension,
+            TargetFilePath = filePath,
+            IsSuccess = true,
+            IsUser = true
+        };
+
+        var sukiDialog = App.Current.Container.Resolve<ISukiDialogManager>();
+        sukiDialog.CreateDialog()
+            .WithViewModel(d => new SendFileDialogViewModel(d,
+                new DialogParameters { { "Mess", new List<object> { fileMess } } },
+                async d =>
+                {
+                    if (d.Result != ButtonResult.OK) return;
+
+                    var (result, target) = await sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
+                    if (result)
+                    {
+                        fileMess.IsExit = true;
+                        var chatService = App.Current.Container.Resolve<IChatService>();
+                        var _userManager = App.Current.Container.Resolve<IUserManager>();
+                        await chatService.UpdateFileMess(_userManager.User.Id, fileMess, target);
+                    }
+                })).TryShow();
+    }
+
     /// <summary>
     /// 选择文件并发送(单条消息)
     /// </summary>
     public async void SelectFileAndSend()
     {
-        // 选择图片并发送
-        async Task SendImageMessage(string filePath)
-        {
-            Bitmap? bitmap;
-            using (FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-                bitmap = new Bitmap(stream);
-
-            var imageMess = new ImageMessDto
-            {
-                FilePath = filePath,
-                FileSize = (int)new FileInfo(filePath).Length,
-                ImageSource = bitmap
-            };
-
-            await sendChatMessage(ChatMessage.ContentOneofCase.ImageMess, imageMess);
-        }
-
-        // 选择文件并发送
-        async Task SendFileMessage(string filePath)
-        {
-            FileInfo fileInfo = new FileInfo(filePath);
-            var fileMess = new FileMessDto
-            {
-                FileName = filePath,
-                FileSize = (int)fileInfo.Length,
-                FileType = fileInfo.Extension,
-                TargetFilePath = filePath,
-                IsSuccess = true,
-                IsUser = true
-            };
-            var (result, target) = await sendChatMessage(ChatMessage.ContentOneofCase.FileMess, fileMess);
-            if (result)
-            {
-                fileMess.IsExit = true;
-                var chatService = App.Current.Container.Resolve<IChatService>();
-                var _userManager = App.Current.Container.Resolve<IUserManager>();
-                await chatService.UpdateFileMess(_userManager.User.Id, fileMess, target);
-            }
-        }
-
         // 获取文件地址
         string filePath = "";
         if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var window = desktop.MainWindow;
             var handle = window!.TryGetPlatformHandle()?.Handle;
-            
+
             if (handle == null) return;
-            
+
             var systemFileDialog = App.Current.Container.Resolve<ISystemFileDialog>();
             filePath = await systemFileDialog.OpenFileAsync(handle.Value, "选择文件");
-
-            // var files = await window.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            // {
-            //     AllowMultiple = false,
-            //     Title = "选择文件",
-            //     FileTypeFilter =
-            //     [
-            //         new FilePickerFileType("All Files (*.*)")
-            //         {
-            //             Patterns = new[] { "*.*" }
-            //         }
-            //     ]
-            // });
-            // filePath = files[0].Path.AbsolutePath;
         }
 
+        SendFileWithPath(filePath);
+    }
+
+    public async void SendFileWithPath(string filePath)
+    {
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
         if (FileExtensionTool.IsImage(filePath))

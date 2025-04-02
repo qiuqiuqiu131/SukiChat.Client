@@ -33,6 +33,7 @@ public class SearchFriendViewModel : BindableBase, INavigationAware, IDestructib
     private SubscriptionToken token;
 
     private Subject<string> searchFriendSubject = new();
+
     private IDisposable searchFriendDisposable;
 
     private IEnumerable<UserDto>? _userDtos;
