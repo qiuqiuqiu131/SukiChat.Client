@@ -78,7 +78,7 @@ public class ContactsViewModel : ChatPageBase
         IEventAggregator eventAggregator,
         ILocalSearchService localSearchService,
         IUserManager userManager)
-        : base("通讯录", MaterialIconKind.ContactPhone, 1)
+        : base("通讯录", MaterialIconKind.Account, 1)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;
@@ -338,6 +338,7 @@ public class ContactsViewModel : ChatPageBase
     {
         _dialogService.Show(nameof(LocalSearchUserGroupView),
             new DialogParameters { { "SearchText", searchText }, { "SearchType", obj } }, null);
+        SearchText = null;
     }
 
     private void SelectedChanged(object? obj)
@@ -367,6 +368,7 @@ public class ContactsViewModel : ChatPageBase
     public override void OnNavigatedFrom()
     {
         _userManager.CurrentContactState = ContactState.None;
+        SearchText = null;
         ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
     }
 }

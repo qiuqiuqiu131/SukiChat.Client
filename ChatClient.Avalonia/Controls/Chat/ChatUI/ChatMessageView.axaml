@@ -162,8 +162,8 @@
                                     Background="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
                                     CornerRadius="5">
                                 <Interaction.Behaviors>
-                                    <behaviors:OpenFileInExplorerBehavior
-                                        FilePath="{Binding TargetFilePath}" />
+                                    <behaviors:OpenFileInExplorerBehavior IsEnabled="{Binding IsSuccess}"
+                                                                          FilePath="{Binding TargetFilePath}" />
                                 </Interaction.Behaviors>
                                 <avalonia:MaterialIcon
                                     VerticalAlignment="Center"
@@ -176,8 +176,13 @@
                             </Border>
                             <Border Width="38" Height="42" CornerRadius="5"
                                     Cursor="Hand"
-                                    IsVisible="{Binding !IsSuccess}"
                                     Background="#66000000">
+                                <Border.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!IsSuccess" />
+                                        <Binding Path="IsExit" />
+                                    </MultiBinding>
+                                </Border.IsVisible>
                                 <Interaction.Behaviors>
                                     <EventTriggerBehavior EventName="PointerPressed">
                                         <InvokeCommandAction

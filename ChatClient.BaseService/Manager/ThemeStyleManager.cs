@@ -3,6 +3,7 @@ using Avalonia.Collections;
 using Avalonia.Styling;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Tools;
 using SukiUI;
 using SukiUI.Enums;
 using SukiUI.Models;
@@ -44,6 +45,8 @@ internal class ThemeStyleManager : IThemeStyle
 
         CurrentThemeStyle.ThemeStyleChanged += delegate { Save(); };
         CurrentThemeStyle.LightThemeChanged += ChangeBaseTheme;
+
+        ThemeStyleTool.CurrentSukiBackgroundStyle = CurrentThemeStyle.BackgroundStyle;
 
         _sukiTheme = SukiTheme.GetInstance();
         ColorThemes = _sukiTheme.ColorThemes;

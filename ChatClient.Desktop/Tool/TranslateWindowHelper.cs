@@ -84,6 +84,7 @@ public static class TranslateWindowHelper
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow?.Activate();
+            desktop.MainWindow?.FocusManager.ClearFocus();
         }
     }
 }

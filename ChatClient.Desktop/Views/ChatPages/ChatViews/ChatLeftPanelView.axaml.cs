@@ -13,14 +13,16 @@ using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
-using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Material.Icons.Avalonia;
+using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
@@ -95,25 +97,28 @@ public partial class ChatLeftPanelView : UserControl
         var chatService = App.Current.Container.Resolve<IChatService>();
         await chatService.AddChatDto(obj);
 
-        foreach (var item in _itemCollection)
+        Dispatcher.UIThread.Post(() =>
         {
-            var radioButton = item as RadioButton;
-            if (radioButton == null) return;
-            var dataContext = radioButton.DataContext;
-            if (dataContext is FriendChatDto friendChat && friendChat.FriendRelatoinDto == obj)
+            foreach (var item in _itemCollection)
             {
-                radioButton.IsChecked = true;
-                radioButton.Command.Execute(friendChat);
-                return;
-            }
+                var radioButton = item as RadioButton;
+                if (radioButton == null) return;
+                var dataContext = radioButton.DataContext;
+                if (dataContext is FriendChatDto friendChat && friendChat.FriendRelatoinDto == obj)
+                {
+                    radioButton.IsChecked = true;
+                    radioButton.Command?.Execute(friendChat);
+                    return;
+                }
 
-            if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
-            {
-                radioButton.IsChecked = true;
-                radioButton.Command.Execute(groupChat);
-                return;
+                if (dataContext is GroupChatDto groupChat && groupChat.GroupRelationDto == obj)
+                {
+                    radioButton.IsChecked = true;
+                    radioButton.Command?.Execute(groupChat);
+                    return;
+                }
             }
-        }
+        });
     }
 
     #region MainView
@@ -497,13 +502,19 @@ public partial class ChatLeftPanelView : UserControl
         // 处理从列表移除
         if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
         {
-            friendRelation.IsChatting = false;
-            var dto = FriendItemsSource.FirstOrDefault(d => d.FriendRelatoinDto == friendRelation);
-            if (dto != null)
-                FriendItemsSource.Remove(dto);
+            var sukiDialogMananger = App.Current.Container.Resolve<ISukiDialogManager>();
+            sukiDialogMananger.CreateDialog()
+                .WithViewModel(d => new CommonDialogViewModel(d, "确定要从聊天列表中移除吗?", d =>
+                {
+                    if (d.Result != ButtonResult.OK) return;
+                    friendRelation.IsChatting = false;
+                    var dto = FriendItemsSource.FirstOrDefault(d => d.FriendRelatoinDto == friendRelation);
+                    if (dto != null)
+                        FriendItemsSource.Remove(dto);
 
-            // 重新计算置顶项数量
-            RecalculateTopItemsCount();
+                    // 重新计算置顶项数量
+                    RecalculateTopItemsCount();
+                })).TryShow();
         }
 
         _friendContextMenu.Close();
@@ -576,13 +587,19 @@ public partial class ChatLeftPanelView : UserControl
         // 处理从列表移除
         if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
         {
-            groupRelation.IsChatting = false;
-            var dto = GroupItemsSource.FirstOrDefault(d => d.GroupRelationDto == groupRelation);
-            if (dto != null)
-                GroupItemsSource.Remove(dto);
+            var sukiDialogMananger = App.Current.Container.Resolve<ISukiDialogManager>();
+            sukiDialogMananger.CreateDialog()
+                .WithViewModel(d => new CommonDialogViewModel(d, "确定要从聊天列表中移除吗?", d =>
+                {
+                    if (d.Result != ButtonResult.OK) return;
+                    groupRelation.IsChatting = false;
+                    var dto = GroupItemsSource.FirstOrDefault(d => d.GroupRelationDto == groupRelation);
+                    if (dto != null)
+                        GroupItemsSource.Remove(dto);
 
-            // 重新计算置顶项数量
-            RecalculateTopItemsCount();
+                    // 重新计算置顶项数量
+                    RecalculateTopItemsCount();
+                })).TryShow();
         }
 
         _groupContextMenu.Close();
@@ -683,15 +700,8 @@ public partial class ChatLeftPanelView : UserControl
         e.Handled = true;
     }
 
-    private void Return()
+    private void LeftSearchView_OnCardClick(object? sender, RoutedEventArgs e)
     {
-        TopLevel.GetTopLevel(this)?.FocusManager?.ClearFocus();
-        SearchBox.IsFocus = false;
         SearchBox.SearchText = null;
-    }
-
-    private void SearchItem_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        Return();
     }
 }

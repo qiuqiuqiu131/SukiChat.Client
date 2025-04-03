@@ -8,7 +8,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
-using Microsoft.EntityFrameworkCore;
 using Prism.Commands;
 using Prism.Events;
 using SukiUI.Controls;

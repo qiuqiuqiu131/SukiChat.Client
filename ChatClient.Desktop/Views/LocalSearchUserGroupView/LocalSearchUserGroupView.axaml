@@ -9,6 +9,7 @@
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:localSearchUserGroupView="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="650" Height="750"
              MinHeight="750"
@@ -19,6 +20,25 @@
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
             <Setter Property="Width" Value="4"></Setter>
+        </Style>
+
+        <Style Selector="suki|GlassCard.search">
+            <Setter Property="Background" Value="Transparent" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="suki|GlassCard.search:pointerover">
+            <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+        <Style Selector="Border.icon avalonia|MaterialIcon#Icon">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="Border.icon:pointerover avalonia|MaterialIcon#Icon">
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor50}" />
         </Style>
     </UserControl.Styles>
     <Panel>

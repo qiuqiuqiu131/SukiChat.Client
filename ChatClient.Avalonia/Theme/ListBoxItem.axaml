@@ -18,7 +18,6 @@
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
-                                <BrushTransition Property="Background" Duration="0:0:0.25" Easing="SineEaseInOut" />
                                 <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="SineEaseInOut" />
                                 <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
                                                         Easing="SineEaseInOut" />
@@ -37,7 +36,6 @@
                                       ContentTemplate="{TemplateBinding ContentTemplate}">
                         <ContentPresenter.Transitions>
                             <Transitions>
-                                <BrushTransition Property="BorderBrush" Duration="0:0:0.20" Easing="SineEaseInOut" />
                                 <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
                                                         Easing="SineEaseInOut" />
                             </Transitions>
@@ -52,10 +50,10 @@
             <Style Selector="^ /template/ Border">
                 <Setter Property="Opacity" Value="0.15" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="8" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="8" />
             </Style>
         </Style>
         <Style Selector="^:selected">
@@ -86,7 +84,6 @@
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
-                                <BrushTransition Property="Background" Duration="0:0:0.25" Easing="SineEaseInOut" />
                                 <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="SineEaseInOut" />
                                 <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
                                                         Easing="SineEaseInOut" />
@@ -134,10 +131,10 @@
             <Style Selector="^ /template/ Border#Back">
                 <Setter Property="Opacity" Value="0.4" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="8" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="CornerRadius" Value="5" />
+                <Setter Property="CornerRadius" Value="8" />
             </Style>
         </Style>
         <Style Selector="^:selected">

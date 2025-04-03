@@ -3,8 +3,89 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.LocalSearchUserGroupView.Region"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:LocalSearchUserViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.Region.LocalSearchUserView">
-    Welcome to Avalonia!
+    <Panel Margin="13,10,13,20">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+            <ItemsControl ItemsSource="{Binding FriendSearchDtos}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <suki:GlassCard Classes="search" CornerRadius="7" Padding="0" IsInteractive="True"
+                                        Margin="0">
+                            <Interaction.Behaviors>
+                                <PointerPressedTrigger>
+                                    <InvokeCommandAction
+                                        Command="{Binding ((region:LocalSearchUserViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
+                                        CommandParameter="{Binding FriendRelationDto}">
+                                    </InvokeCommandAction>
+                                </PointerPressedTrigger>
+                            </Interaction.Behaviors>
+                            <Grid ColumnDefinitions="42,*,25" Margin="10,6">
+                                <Grid Width="42" Height="42">
+                                    <circleImage:CircleImage Size="42"
+                                                             Image="{Binding FriendRelationDto.UserDto.HeadImage}" />
+                                </Grid>
+                                <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="12,3,0,3">
+                                    <Grid>
+                                        <TextBlock
+                                            IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            TextTrimming="CharacterEllipsis"
+                                            Foreground="{DynamicResource SukiText}">
+                                            <Run Text="{Binding FriendRelationDto.Remark}" />
+                                            <Run Text=" (" />
+                                            <Run Text="{Binding FriendRelationDto.UserDto.Name}" />
+                                            <Run Text=")" />
+                                        </TextBlock>
+                                        <TextBlock
+                                            IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            TextTrimming="CharacterEllipsis"
+                                            Text="{Binding FriendRelationDto.UserDto.Name}"
+                                            Foreground="{DynamicResource SukiText}" />
+                                    </Grid>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                Margin="0,3,15,0"
+                                                Grid.Row="1">
+                                        <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                    </StackPanel>
+                                    <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Background="Transparent" Margin="3" Classes="icon"
+                                            PointerPressed="IconBorder_OnPointerPressed">
+                                        <Interaction.Behaviors>
+                                            <PointerPressedTrigger>
+                                                <InvokeCommandAction
+                                                    Command="{Binding ((region:LocalSearchUserViewModel)DataContext).MoveToRelationCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
+                                                    CommandParameter="{Binding FriendRelationDto}">
+                                                </InvokeCommandAction>
+                                            </PointerPressedTrigger>
+                                        </Interaction.Behaviors>
+                                        <avalonia:MaterialIcon Name="Icon" Classes="icon"
+                                                               Kind="AccountOutline"
+                                                               Height="19" Width="19"
+                                                               Margin="3" />
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </suki:GlassCard>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Panel>
 </UserControl>

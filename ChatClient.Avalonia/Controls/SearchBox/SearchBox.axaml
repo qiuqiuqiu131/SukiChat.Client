@@ -2,7 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox"
         xmlns:suki="https://github.com/kikipoulet/SukiUI"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors">
     <Design.PreviewWith>
         <searchBox:SearchBox Width="200" Margin="20" />
     </Design.PreviewWith>
@@ -100,13 +101,14 @@
                                     <EventTriggerBehavior EventName="GotFocus">
                                         <ChangePropertyAction TargetObject="{Binding #BaseCard}"
                                                               PropertyName="BorderBrush"
-                                                              Value="{DynamicResource SukiPrimaryColor75}" />
+                                                              Value="{DynamicResource SukiPrimaryColor}" />
                                     </EventTriggerBehavior>
                                     <EventTriggerBehavior EventName="LostFocus">
                                         <ChangePropertyAction TargetObject="{Binding #BaseCard}"
                                                               PropertyName="BorderBrush"
                                                               Value="{DynamicResource SukiBorderBrush}" />
                                     </EventTriggerBehavior>
+                                    <behaviors:DisableAutoFocusBehavior />
                                 </Interaction.Behaviors>
                             </TextBox>
                         </DockPanel>

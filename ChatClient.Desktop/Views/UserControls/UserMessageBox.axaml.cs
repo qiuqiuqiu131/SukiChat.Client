@@ -37,7 +37,10 @@ public partial class UserMessageBox : UserControl
         {
             var relation = await _userDtoManager.GetFriendRelationDto(_userManager.User!.Id, userDto.Id);
             if (relation != null)
+            {
+                _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
                 _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(relation);
+            }
         }
     }
 

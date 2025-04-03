@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Avalonia.Notification;
+using ChatClient.BaseService.Services;
 using ChatClient.DataBase.Data;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
@@ -23,9 +24,11 @@ namespace ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region;
 public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
+    private readonly ILocalSearchService _localSearchService;
     private readonly IUserManager _userManager;
 
     private INotificationMessageManager? _notificationManager;
+    private IRegionManager? _regionManager;
 
     private SubscriptionToken token;
 
@@ -44,14 +47,18 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
     public bool IsEmpty => FriendSearchDtos?.Any() != true;
 
     public DelegateCommand<FriendRelationDto> SendMessageCommand { get; }
+    public DelegateCommand<FriendRelationDto> MoveToRelationCommand { get; }
 
     public LocalSearchUserViewModel(IContainerProvider containerProvider,
+        ILocalSearchService localSearchService,
         IEventAggregator eventAggregator)
     {
         _containerProvider = containerProvider;
+        _localSearchService = localSearchService;
         _userManager = containerProvider.Resolve<IUserManager>();
 
         SendMessageCommand = new DelegateCommand<FriendRelationDto>(SendMessage);
+        MoveToRelationCommand = new DelegateCommand<FriendRelationDto>(MoveToRelation);
 
         token = eventAggregator.GetEvent<LocalSearchEvent>().Subscribe(OnSearchContentChanged);
 
@@ -61,6 +68,14 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
             .Subscribe(SearchFriend);
     }
 
+    private void MoveToRelation(FriendRelationDto obj)
+    {
+        var eventAggregator = _containerProvider.Resolve<IEventAggregator>();
+        TranslateWindowHelper.ActivateMainWindow();
+        eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "通讯录" });
+        eventAggregator.GetEvent<MoveToRelationEvent>().Publish(obj);
+    }
+
     /// <summary>
     /// 导航到聊天页面
     /// </summary>
@@ -68,15 +83,19 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
     private async void SendMessage(FriendRelationDto obj)
     {
         var eventAggregator = _containerProvider.Resolve<IEventAggregator>();
-        eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(obj);
         TranslateWindowHelper.ActivateMainWindow();
+        eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
+        eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(obj);
     }
 
     private void OnSearchContentChanged(string searchText) => searchFriendSubject.OnNext(searchText);
 
     private async void SearchFriend(string searchText)
     {
-        // TODO:查找好友
+        if (string.IsNullOrWhiteSpace(searchText))
+            FriendSearchDtos = null;
+        else
+            FriendSearchDtos = await _localSearchService.SearchFriendAsync(_userManager.User.Id, searchText);
     }
 
     #region INavigationAware
@@ -87,6 +106,7 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
         if (!string.IsNullOrWhiteSpace(searchText))
             searchFriendSubject.OnNext(searchText);
         _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
+        _regionManager = navigationContext.Parameters["regionManager"] as IRegionManager;
     }
 
     public bool IsNavigationTarget(NavigationContext navigationContext) => true;

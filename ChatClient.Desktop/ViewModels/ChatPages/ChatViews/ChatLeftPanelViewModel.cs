@@ -1,6 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading.Tasks;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.SearchUserGroupView;
@@ -82,6 +83,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
     {
         _dialogService.Show(nameof(LocalSearchUserGroupView),
             new DialogParameters { { "SearchText", _searchText }, { "SearchType", obj } }, null);
+        SearchText = null;
     }
 
     private async void SearchAll(string searchText)
@@ -96,7 +98,7 @@ public class ChatLeftPanelViewModel : ViewModelBase
         }
     }
 
-    private void AddNewFriend()
+    private async void AddNewFriend()
     {
         _dialogService.Show(nameof(SearchUserGroupView));
     }

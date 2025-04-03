@@ -112,7 +112,7 @@
                                          PointerPressed="InputElement_OnPointerPressed" />
             </suki:SukiSideMenu.LeftBottomContent>
             <suki:SukiSideMenu.FooterContent>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" Spacing="15" Orientation="Horizontal">
                     <StackPanel.Styles>
                         <Style Selector="Button">
                             <Setter Property="Width" Value="40" />
@@ -121,26 +121,52 @@
                         <Style Selector="Button avalonia|MaterialIcon">
                             <Setter Property="Width" Value="25" />
                             <Setter Property="Height" Value="25" />
-                            <Setter Property="Transitions">
-                                <Transitions>
-                                    <DoubleTransition Property="Width" Duration="0.1" />
-                                    <DoubleTransition Property="Height" Duration="0.1" />
-                                </Transitions>
-                            </Setter>
                         </Style>
 
                         <Style Selector="Button:pointerover avalonia|MaterialIcon">
-                            <Setter Property="Width" Value="28" />
-                            <Setter Property="Height" Value="28" />
+                            <Style.Animations>
+                                <Animation Duration="0:0:0.35" IterationCount="1" FillMode="None">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="TranslateTransform.Y" Value="0" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="25%">
+                                        <Setter Property="TranslateTransform.Y" Value="-5" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="70%">
+                                        <Setter Property="TranslateTransform.Y" Value="0" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="85%">
+                                        <Setter Property="TranslateTransform.Y" Value="-2.5" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="TranslateTransform.Y" Value="0" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
                         </Style>
+
+                        <Style Selector="Button:pointer"></Style>
                     </StackPanel.Styles>
                     <Button Classes="Basic"
                             Command="{Binding ExitCommnad}"
-                            ToolTip.ShowDelay="500"
-                            RenderTransformOrigin="50%,50%">
-                        <avalonia:MaterialIcon Kind="ExitToApp" />
+                            ToolTip.ShowDelay="500">
+                        <avalonia:MaterialIcon Kind="ExitToApp" VerticalAlignment="Center" HorizontalAlignment="Center" />
                         <ToolTip.Tip>
                             <TextBlock Text="退出登录" FontSize="12" />
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Classes="Basic" ToolTip.ShowDelay="500">
+                        <avalonia:MaterialIcon Kind="SettingsOutline" VerticalAlignment="Center"
+                                               HorizontalAlignment="Center" />
+                        <ToolTip.Tip>
+                            <TextBlock Text="设置" FontSize="12" />
+                        </ToolTip.Tip>
+                    </Button>
+                    <Button Classes="Basic" ToolTip.ShowDelay="500">
+                        <avalonia:MaterialIcon Kind="AboutOutline" VerticalAlignment="Center"
+                                               HorizontalAlignment="Center" />
+                        <ToolTip.Tip>
+                            <TextBlock Text="关于" FontSize="12" />
                         </ToolTip.Tip>
                     </Button>
                 </StackPanel>

@@ -15,6 +15,8 @@ public interface ILocalSearchService
     public Task<List<FriendSearchDto>> SearchFriendAsync(string userId, string searchWord, int limit = int.MaxValue);
 
     public Task<List<GroupSearchDto>> SearchGroupAsync(string userId, string searchWord, int limit = int.MaxValue);
+
+    public Task<List<FileMessDto>> SearchFileAsync(string userId, string searchWord, int limit = int.MaxValue);
 }
 
 public class LocalSearchService : BaseService, ILocalSearchService
@@ -120,5 +122,10 @@ public class LocalSearchService : BaseService, ILocalSearchService
         }
 
         return result;
+    }
+
+    public async Task<List<FileMessDto>> SearchFileAsync(string userId, string searchWord, int limit = Int32.MaxValue)
+    {
+        return null;
     }
 }

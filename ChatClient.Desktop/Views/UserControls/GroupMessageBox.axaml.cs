@@ -37,7 +37,10 @@ public partial class GroupMessageBox : UserControl
         {
             var relation = await _userDtoManager.GetGroupRelationDto(_userManager.User!.Id, groupDto.Id);
             if (relation != null)
+            {
+                _eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
                 _eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(relation);
+            }
         }
     }
 

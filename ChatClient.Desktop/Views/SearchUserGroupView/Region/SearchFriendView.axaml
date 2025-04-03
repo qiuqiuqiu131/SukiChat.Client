@@ -9,35 +9,46 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:SearchFriendViewModel"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.Region.SearchFriendView">
-    <Grid Margin="20,10,20,20">
+    <UserControl.Styles>
+        <Style Selector="suki|GlassCard.search">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="suki|GlassCard.search:pointerover">
+            <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
+        </Style>
+    </UserControl.Styles>
+    <Grid Margin="13,10,13,20">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Opacity="0.6"
                     IsVisible="{Binding IsEmpty}">
             <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
             <TextBlock Text="输入关键词搜索" FontSize="15" />
         </StackPanel>
-        <ScrollViewer IsVisible="{Binding !IsEmpty}">
+        <ScrollViewer IsVisible="{Binding !IsEmpty}" VerticalScrollBarVisibility="Hidden"
+                      HorizontalScrollBarVisibility="Disabled">
             <ItemsControl ItemsSource="{Binding UserDtos}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" Spacing="3" />
+                        <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <suki:GlassCard IsInteractive="True" Margin="1" Height="55" CornerRadius="7" Padding=" 14,3">
+                        <suki:GlassCard Classes="search" IsInteractive="True" Margin="0" CornerRadius="7"
+                                        Padding=" 0">
                             <DockPanel VerticalAlignment="Center" LastChildFill="False">
-                                <StackPanel Orientation="Horizontal">
-                                    <circleImage:CircleImage Image="{Binding HeadImage}" Size="40"
+                                <Grid ColumnDefinitions="42,*" Margin="10,6">
+                                    <circleImage:CircleImage Image="{Binding HeadImage}" Size="42"
                                                              DockPanel.Dock="Left" />
-                                    <Grid RowDefinitions="1.3*,*" Margin="10,0">
-                                        <TextBlock Text="{Binding Name}" FontSize="14.5" VerticalAlignment="Center" />
+                                    <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
+                                        <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" />
                                         <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
                                                    VerticalAlignment="Center"
                                                    Opacity="0.6" />
                                     </Grid>
-                                </StackPanel>
-                                <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                </Grid>
+                                <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       Margin="15,0">
                                     <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}" Opacity="0.6" />
                                     <Panel IsVisible="{Binding !IsUser}">
                                         <Button Padding="12,4" Margin="0"

@@ -1,21 +1,16 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using ChatClient.Avalonia.Controls.GroupList;
-using ChatClient.Desktop.Tool;
-using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
-using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
-using ChatClient.Tool.UIEntity;
 using Material.Icons;
 using Material.Icons.Avalonia;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
-using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
 
@@ -26,6 +21,7 @@ public partial class ContactsView : UserControl, IDestructible
 
     private SubscriptionToken token1;
     private SubscriptionToken token2;
+    private SubscriptionToken token3;
 
     public ContactsView()
     {
@@ -34,6 +30,23 @@ public partial class ContactsView : UserControl, IDestructible
         var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
         token1 = eventAggregator.GetEvent<FriendRelationSelectEvent>().Subscribe(SelectFriendRelationEvent);
         token2 = eventAggregator.GetEvent<GroupRelationSelectEvent>().Subscribe(SelectGroupRelationEvent);
+        token3 = eventAggregator.GetEvent<MoveToRelationEvent>().Subscribe(MoveToRelation);
+    }
+
+    private async void MoveToRelation(object obj)
+    {
+        if (obj is FriendRelationDto friendRelationDto)
+        {
+            TabControl.SelectedIndex = 0;
+            await Task.Delay(50);
+            SelectFriendRelationEvent(friendRelationDto);
+        }
+        else if (obj is GroupRelationDto groupRelationDto)
+        {
+            TabControl.SelectedIndex = 1;
+            await Task.Delay(50);
+            SelectGroupRelationEvent(groupRelationDto);
+        }
     }
 
     private void SelectGroupRelationEvent(GroupRelationDto obj) =>
@@ -110,6 +123,7 @@ public partial class ContactsView : UserControl, IDestructible
     {
         token1.Dispose();
         token2.Dispose();
+        token3.Dispose();
     }
 
     private void SearchScrollViewer_OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -117,15 +131,8 @@ public partial class ContactsView : UserControl, IDestructible
         e.Handled = true;
     }
 
-    private void Return()
+    private void LeftSearchView_OnCardClick(object? sender, RoutedEventArgs e)
     {
-        TopLevel.GetTopLevel(this)?.FocusManager?.ClearFocus();
-        SearchBox.IsFocus = false;
         SearchBox.SearchText = null;
-    }
-
-    private void SearchItem_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        Return();
     }
 }

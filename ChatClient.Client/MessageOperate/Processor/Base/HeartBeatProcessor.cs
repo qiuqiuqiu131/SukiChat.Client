@@ -7,14 +7,15 @@ using Prism.Ioc;
 
 namespace ChatClient.MessageOperate.Processor.Base;
 
-public class HeartBeatProcessor(IContainerProvider container) 
+public class HeartBeatProcessor(IContainerProvider container)
     : ProcessorBase<HeartBeat>(container)
 {
     protected override async Task OnProcess(HeartBeat message)
     {
-        if(_client.Channel != null && _client.Channel.Active)
+        var _client = _container.Resolve<ISocketClient>();
+        if (_client.Channel != null && _client.Channel.Active)
         {
-           await _client.Channel.WriteAndFlushProtobufAsync(message);
+            await _client.Channel.WriteAndFlushProtobufAsync(message);
         }
     }
 }

@@ -148,7 +148,7 @@
                         </Grid>
                     </Button>
                     <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" />
-                    <TabControl TabIndex="0" Margin="0,10,0,0">
+                    <TabControl x:Name="TabControl" TabIndex="0" Margin="0,10,0,0">
                         <TabControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20" />
@@ -218,6 +218,7 @@
                                    FontSize="12.5" Margin="15,10,0,5" />
                         <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
                             <userControls:LeftSearchView DataContext="{Binding AllSearchDto}"
+                                                         CardClick="LeftSearchView_OnCardClick"
                                                          SearchMore="{Binding ((vm:ContactsViewModel)DataContext).SearchMoreCommand,
                                                     RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=contactViews:ContactsView}}" />
                         </Panel>
@@ -226,7 +227,7 @@
                     <suki:GlassCard IsInteractive="True"
                                     Classes="search"
                                     CornerRadius="5"
-                                    PointerPressed="SearchItem_PointerPressed"
+                                    PointerPressed="LeftSearchView_OnCardClick"
                                     Padding="0"
                                     Margin="5">
                         <suki:GlassCard.Styles>
@@ -234,7 +235,7 @@
                                 <Setter Property="Background" Value="Transparent" />
                             </Style>
                             <Style Selector="suki|GlassCard.search:pointerover">
-                                <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                                <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
                             </Style>
                         </suki:GlassCard.Styles>
                         <Interaction.Behaviors>
@@ -242,10 +243,10 @@
                                 <InvokeCommandAction Command="{Binding AddNewFriendCommand}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>
-                        <Grid ColumnDefinitions="42,*" Margin="6">
+                        <Grid ColumnDefinitions="42,*" Margin="10,6">
                             <Panel Width="42" Height="42">
                                 <Ellipse Width="42" Height="42" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                         Fill="{DynamicResource SukiPrimaryColor75}" />
+                                         Fill="{DynamicResource SukiPrimaryColor50}" />
                                 <PathIcon Data="{x:Static content:Icons.Search}" Width="20" Height="20" Opacity="0.7"
                                           VerticalAlignment="Center" HorizontalAlignment="Center" />
                             </Panel>

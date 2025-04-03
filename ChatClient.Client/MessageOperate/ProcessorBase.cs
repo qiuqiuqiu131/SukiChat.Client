@@ -12,14 +12,12 @@ public class ProcessorBase<T> : IProcessor<T>
     where T : IMessage
 {
     protected readonly IContainerProvider _container;
-    protected readonly ISocketClient _client;
-    
+
     public ProcessorBase(IContainerProvider container)
     {
         _container = container;
-        _client = _container.Resolve<ISocketClient>();
     }
-    
+
     public async Task Process(T message)
     {
         var eventAggregator = _container.Resolve<IEventAggregator>();
@@ -31,5 +29,4 @@ public class ProcessorBase<T> : IProcessor<T>
     {
         return Task.CompletedTask;
     }
-    
 }

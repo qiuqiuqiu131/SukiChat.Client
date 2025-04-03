@@ -1,17 +1,18 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-                    xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI">
+                    xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
+                    xmlns:tools="clr-namespace:ChatClient.Tool.Tools;assembly=ChatClient.Tool">
     <ControlTheme TargetType="suki:SukiDialog" x:Key="SukiDialogTheme">
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <Border CornerRadius="7" BoxShadow="5 5 10 #66000000" Background="Transparent" MinWidth="250"
+                    <Border CornerRadius="7" BoxShadow="5 5 10 #44000000" Background="Transparent" MinWidth="250"
                             Margin="10">
                         <Border CornerRadius="7" ClipToBounds="True" Background="Transparent">
                             <Panel>
-                                <suki:SukiBackground />
+                                <suki:SukiBackground Style="{x:Static tools:ThemeStyleTool.CurrentSukiBackgroundStyle}" />
                                 <Border CornerRadius="7" ClipToBounds="True">
                                     <ContentControl Content="{TemplateBinding ViewModel}"
                                                     CornerRadius="7"

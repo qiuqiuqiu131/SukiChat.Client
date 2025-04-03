@@ -7,15 +7,28 @@
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="searchData:AllSearchDto"
              x:Class="ChatClient.Desktop.Views.UserControls.LeftSearchView">
     <UserControl.Styles>
         <Style Selector="suki|GlassCard.search">
             <Setter Property="Background" Value="Transparent" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
         </Style>
         <Style Selector="suki|GlassCard.search:pointerover">
-            <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+            <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+        <Style Selector="Border.icon avalonia|MaterialIcon#Icon">
+            <Setter Property="Foreground" Value="Gray" />
+        </Style>
+        <Style Selector="Border.icon:pointerover avalonia|MaterialIcon#Icon">
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor50}" />
         </Style>
     </UserControl.Styles>
     <UserControl.Resources>
@@ -40,9 +53,9 @@
             </StackPanel.IsVisible>
             <StackPanel Orientation="Vertical"
                         IsVisible="{Binding FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
-                <Panel Margin="5,7">
+                <Panel Margin="7,8">
                     <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
-                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="13"
+                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
                                Cursor="Hand"
                                Foreground="{DynamicResource SukiPrimaryColor75}">
                         <Interaction.Behaviors>
@@ -63,8 +76,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <suki:GlassCard Classes="search" CornerRadius="5" Padding="0" IsInteractive="True"
+                                            PointerPressed="FriendCard_OnPointerPressed"
                                             Margin="0">
-                                <Grid ColumnDefinitions="42,*" Margin="6">
+                                <Grid ColumnDefinitions="42,*,25" Margin="10,6">
                                     <Grid Width="42" Height="42">
                                         <circleImage:CircleImage Size="42"
                                                                  Image="{Binding FriendRelationDto.UserDto.HeadImage}" />
@@ -96,6 +110,15 @@
                                             <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
                                         </StackPanel>
                                     </Grid>
+                                    <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Background="Transparent" Margin="3" Classes="icon"
+                                            PointerPressed="TranslateToFriendCard_OnPointerPressed">
+                                        <avalonia:MaterialIcon Name="Icon" Classes="icon"
+                                                               Kind="AccountOutline"
+                                                               Height="19" Width="19"
+                                                               Margin="3" />
+                                    </Border>
                                 </Grid>
                             </suki:GlassCard>
                         </DataTemplate>
@@ -103,14 +126,20 @@
                 </ItemsControl>
             </StackPanel>
 
-            <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="0,10"
-                    IsVisible="{Binding GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}" />
+            <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="0,10">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="GroupSearchDtos.Count" Converter="{StaticResource IntNotEqualityConverter}" />
+                        <Binding Path="FriendSearchDtos.Count" Converter="{StaticResource IntNotEqualityConverter}" />
+                    </MultiBinding>
+                </Border.IsVisible>
+            </Border>
 
             <StackPanel Orientation="Vertical"
                         IsVisible="{Binding GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
-                <Panel Margin="5,7">
+                <Panel Margin="7,8">
                     <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
-                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="13"
+                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
                                Cursor="Hand"
                                Foreground="{DynamicResource SukiPrimaryColor75}">
                         <Interaction.Behaviors>
@@ -131,8 +160,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <suki:GlassCard Classes="search" CornerRadius="5" Padding="0" IsInteractive="True"
+                                            PointerPressed="GroupCard_OnPointerPressed"
                                             Margin="0">
-                                <Grid ColumnDefinitions="42,*" Margin="6">
+                                <Grid ColumnDefinitions="42,*,25" Margin="10,6">
                                     <Grid Width="42" Height="42">
                                         <circleImage:CircleImage Size="42"
                                                                  Image="{Binding GroupRelationDto.GroupDto.HeadImage}" />
@@ -164,6 +194,15 @@
                                             <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
                                         </StackPanel>
                                     </Grid>
+                                    <Border Grid.Column="2" Name="IconBorder" Background="Transparent"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center" Classes="icon" Margin="3"
+                                            PointerPressed="TranslateToGroupCard_OnPointerPressed">
+                                        <avalonia:MaterialIcon Name="Icon"
+                                                               Kind="MessageOutline"
+                                                               Height="17" Width="17"
+                                                               Margin="4" />
+                                    </Border>
                                 </Grid>
                             </suki:GlassCard>
                         </DataTemplate>

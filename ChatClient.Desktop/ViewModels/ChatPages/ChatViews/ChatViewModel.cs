@@ -331,4 +331,10 @@ public class ChatViewModel : ChatPageBase
     }
 
     #endregion
+
+
+    public override void OnNavigatedFrom()
+    {
+        ChatLeftPanelViewModel.SearchText = null;
+    }
 }

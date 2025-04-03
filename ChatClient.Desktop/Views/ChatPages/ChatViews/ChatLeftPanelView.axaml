@@ -530,6 +530,7 @@
                                FontSize="12.5" Margin="15,10,0,5" />
                     <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
                         <userControls:LeftSearchView DataContext="{Binding AllSearchDto}"
+                                                     CardClick="LeftSearchView_OnCardClick"
                                                      SearchMore="{Binding ((vm:ChatLeftPanelViewModel)DataContext).SearchMoreCommand,
                                                     RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=chatViews:ChatLeftPanelView}}" />
                     </Panel>
@@ -537,7 +538,7 @@
                 <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="5,10" />
                 <suki:GlassCard IsInteractive="True"
                                 Classes="search"
-                                PointerPressed="SearchItem_PointerPressed"
+                                PointerPressed="LeftSearchView_OnCardClick"
                                 CornerRadius="5"
                                 Padding="0"
                                 Margin="5">
@@ -546,7 +547,7 @@
                             <Setter Property="Background" Value="Transparent" />
                         </Style>
                         <Style Selector="suki|GlassCard.search:pointerover">
-                            <Setter Property="Background" Value="{DynamicResource SukiBorderBrush}" />
+                            <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
                         </Style>
                     </suki:GlassCard.Styles>
                     <Interaction.Behaviors>
@@ -554,10 +555,10 @@
                             <InvokeCommandAction Command="{Binding AddNewFriendCommand}" />
                         </EventTriggerBehavior>
                     </Interaction.Behaviors>
-                    <Grid ColumnDefinitions="42,*" Margin="6">
+                    <Grid ColumnDefinitions="42,*" Margin="10,6">
                         <Panel Width="42" Height="42">
                             <Ellipse Width="42" Height="42" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                     Fill="{DynamicResource SukiPrimaryColor75}" />
+                                     Fill="{DynamicResource SukiPrimaryColor50}" />
                             <PathIcon Data="{x:Static suki:Icons.Search}" Width="20" Height="20" Opacity="0.7"
                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
                         </Panel>

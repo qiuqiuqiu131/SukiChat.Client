@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
@@ -11,6 +12,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Events;
@@ -130,62 +132,65 @@ public partial class ChatInputPanelView : UserControl
     // 当输入消息集合发生变化时调用
     private void InputMessagesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        // 后台添加消息
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            if (e.NewItems[0] is string text)
+            // 后台添加消息
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                var control = (TextBox)DataTemplates[0].Build(text)!;
-                control.DataContext = text;
-
-                control.TextChanged += ControlOnTextChanged;
-                control.GotFocus += ControlOnGotFocus;
-                control.PastingFromClipboard += ControlOnPastingFromClipboard;
-                control.PointerPressed += ControlOnPointerPressed;
-                control.AddHandler(KeyDownEvent, ControlOnKeyDown, RoutingStrategies.Tunnel);
-
-                _itemCollection.Add(control);
-            }
-            else if (e.NewItems[0] is Bitmap bitmap)
-            {
-                var control = (Image)DataTemplates[1].Build(bitmap)!;
-                control.DataContext = bitmap;
-
-                _itemCollection.Add(control);
-                InputMessages.Add(string.Empty);
-            }
-
-            ScrollViewer.ScrollToEnd();
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            List<object> removeItems = new();
-            for (int i = 0; i < e.OldItems.Count; i++)
-            {
-                var control = _itemCollection[i + e.OldStartingIndex];
-                if (control is TextBox textBox)
+                if (e.NewItems[0] is string text)
                 {
-                    textBox.TextChanged -= ControlOnTextChanged;
-                    textBox.GotFocus -= ControlOnGotFocus;
-                    textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
-                    textBox.PointerPressed -= ControlOnPointerPressed;
-                    textBox.RemoveHandler(KeyDownEvent, ControlOnKeyDown);
+                    var control = (TextBox)DataTemplates[0].Build(text)!;
+                    control.DataContext = text;
+
+                    control.TextChanged += ControlOnTextChanged;
+                    control.GotFocus += ControlOnGotFocus;
+                    control.PastingFromClipboard += ControlOnPastingFromClipboard;
+                    control.PointerPressed += ControlOnPointerPressed;
+                    control.AddHandler(KeyDownEvent, ControlOnKeyDown, RoutingStrategies.Tunnel);
+
+                    _itemCollection.Add(control);
+                }
+                else if (e.NewItems[0] is Bitmap bitmap)
+                {
+                    var control = (Image)DataTemplates[1].Build(bitmap)!;
+                    control.DataContext = bitmap;
+
+                    _itemCollection.Add(control);
+                    InputMessages.Add(string.Empty);
                 }
 
-                removeItems.Add(control);
+                ScrollViewer.ScrollToEnd();
             }
+            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                List<object> removeItems = new();
+                for (int i = 0; i < e.OldItems.Count; i++)
+                {
+                    var control = _itemCollection[i + e.OldStartingIndex];
+                    if (control is TextBox textBox)
+                    {
+                        textBox.TextChanged -= ControlOnTextChanged;
+                        textBox.GotFocus -= ControlOnGotFocus;
+                        textBox.PastingFromClipboard -= ControlOnPastingFromClipboard;
+                        textBox.PointerPressed -= ControlOnPointerPressed;
+                        textBox.RemoveHandler(KeyDownEvent, ControlOnKeyDown);
+                    }
 
-            foreach (var item in removeItems)
-                _itemCollection.Remove(item);
+                    removeItems.Add(control);
+                }
 
-            if (InputMessages.Count == 0)
+                foreach (var item in removeItems)
+                    _itemCollection.Remove(item);
+
+                if (InputMessages.Count == 0)
+                    InputMessages.Add(string.Empty);
+            }
+            else if (e.Action == NotifyCollectionChangedAction.Reset)
+            {
+                _itemCollection.Clear();
                 InputMessages.Add(string.Empty);
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Reset)
-        {
-            _itemCollection.Clear();
-            InputMessages.Add(string.Empty);
-        }
+            }
+        });
     }
 
     #region TextBoxEvent

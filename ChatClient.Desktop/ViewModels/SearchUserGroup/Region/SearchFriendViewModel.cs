@@ -86,6 +86,7 @@ public class SearchFriendViewModel : BindableBase, INavigationAware, IDestructib
         if (relation == null) return;
 
         var eventAggregator = _containerProvider.Resolve<IEventAggregator>();
+        eventAggregator.GetEvent<ChangePageEvent>().Publish(new ChatPageChangedContext { PageName = "聊天" });
         eventAggregator.GetEvent<SendMessageToViewEvent>().Publish(relation);
         TranslateWindowHelper.ActivateMainWindow();
     }

@@ -3,8 +3,234 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.LocalSearchUserGroupView.Region"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:LocalSearchAllViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.Region.LocalSearchAllView">
+    <UserControl.Resources>
+        <converter:IntEqualityConverter x:Key="IntEqualityConverter" Value="0" />
+        <converter:IntEqualityConverter x:Key="IntNotEqualityConverter" Equal="False" Value="0" />
+    </UserControl.Resources>
+    <Panel Margin="13,0" IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
+        <TextBlock Text="暂未找到相关信息" FontSize="13" Opacity="0.6" Margin="10,20" HorizontalAlignment="Center">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="AllSearchDto.FriendSearchDtos.Count"
+                             Converter="{StaticResource IntEqualityConverter}" />
+                    <Binding Path="AllSearchDto.GroupSearchDtos.Count"
+                             Converter="{StaticResource IntEqualityConverter}" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Vertical" Margin="5,10">
+                <StackPanel.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="AllSearchDto.FriendSearchDtos.Count"
+                                 Converter="{StaticResource IntNotEqualityConverter}" />
+                        <Binding Path="AllSearchDto.GroupSearchDtos.Count"
+                                 Converter="{StaticResource IntNotEqualityConverter}" />
+                    </MultiBinding>
+                </StackPanel.IsVisible>
+                <StackPanel Orientation="Vertical"
+                            IsVisible="{Binding AllSearchDto.FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                    <Panel Margin="7,8">
+                        <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                                   Cursor="Hand"
+                                   Foreground="{DynamicResource SukiPrimaryColor75}">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="PointerPressed">
+                                    <InvokeCommandAction
+                                        Command="{Binding $parent[region:LocalSearchAllViewModel].SearchMoreCommand}"
+                                        CommandParameter="联系人" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                        </TextBlock>
+                    </Panel>
+                    <ItemsControl ItemsSource="{Binding AllSearchDto.FriendSearchDtos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <suki:GlassCard Classes="search" CornerRadius="7" Padding="0" IsInteractive="True"
+                                                Margin="0">
+                                    <Interaction.Behaviors>
+                                        <EventTriggerBehavior EventName="PointerPressed">
+                                            <InvokeCommandAction
+                                                Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                CommandParameter="{Binding FriendRelationDto}">
+                                            </InvokeCommandAction>
+                                        </EventTriggerBehavior>
+                                    </Interaction.Behaviors>
+                                    <Grid ColumnDefinitions="42,*,25" Margin="10,6">
+                                        <Grid Width="42" Height="42">
+                                            <circleImage:CircleImage Size="42"
+                                                                     Image="{Binding FriendRelationDto.UserDto.HeadImage}" />
+                                        </Grid>
+                                        <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="12,3,0,3">
+                                            <Grid>
+                                                <TextBlock
+                                                    IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource SukiText}">
+                                                    <Run Text="{Binding FriendRelationDto.Remark}" />
+                                                    <Run Text=" (" />
+                                                    <Run Text="{Binding FriendRelationDto.UserDto.Name}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock
+                                                    IsVisible="{Binding FriendRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Text="{Binding FriendRelationDto.UserDto.Name}"
+                                                    Foreground="{DynamicResource SukiText}" />
+                                            </Grid>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                        Margin="0,3,15,0"
+                                                        Grid.Row="1">
+                                                <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Background="Transparent" Margin="3" Classes="icon"
+                                                PointerPressed="IconBorder_OnPointerPressed">
+                                            <Interaction.Behaviors>
+                                                <PointerPressedTrigger>
+                                                    <InvokeCommandAction
+                                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
+                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                        CommandParameter="{Binding FriendRelationDto}">
+                                                    </InvokeCommandAction>
+                                                </PointerPressedTrigger>
+                                            </Interaction.Behaviors>
+                                            <avalonia:MaterialIcon Name="Icon" Classes="icon"
+                                                                   Kind="AccountOutline"
+                                                                   Height="19" Width="19"
+                                                                   Margin="3" />
+                                        </Border>
+                                    </Grid>
+                                </suki:GlassCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
 
+                <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="0,10">
+                    <Border.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="AllSearchDto.GroupSearchDtos.Count"
+                                     Converter="{StaticResource IntNotEqualityConverter}" />
+                            <Binding Path="AllSearchDto.FriendSearchDtos.Count"
+                                     Converter="{StaticResource IntNotEqualityConverter}" />
+                        </MultiBinding>
+                    </Border.IsVisible>
+                </Border>
+
+                <StackPanel Orientation="Vertical"
+                            IsVisible="{Binding AllSearchDto.GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                    <Panel Margin="7,8">
+                        <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                                   Cursor="Hand"
+                                   Foreground="{DynamicResource SukiPrimaryColor75}">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="PointerPressed">
+                                    <InvokeCommandAction
+                                        Command="{Binding $parent[region:LocalSearchAllViewModel].SearchMoreCommand}"
+                                        CommandParameter="群聊" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                        </TextBlock>
+                    </Panel>
+                    <ItemsControl ItemsSource="{Binding AllSearchDto.GroupSearchDtos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <suki:GlassCard Classes="search" CornerRadius="7" Padding="0" IsInteractive="True"
+                                                Margin="0">
+                                    <Interaction.Behaviors>
+                                        <EventTriggerBehavior EventName="PointerPressed">
+                                            <InvokeCommandAction
+                                                Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                CommandParameter="{Binding GroupRelationDto}">
+                                            </InvokeCommandAction>
+                                        </EventTriggerBehavior>
+                                    </Interaction.Behaviors>
+                                    <Grid ColumnDefinitions="42,*,25" Margin="10,6">
+                                        <Grid Width="42" Height="42">
+                                            <circleImage:CircleImage Size="42"
+                                                                     Image="{Binding GroupRelationDto.GroupDto.HeadImage}" />
+                                        </Grid>
+                                        <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="12,3,0,3">
+                                            <Grid>
+                                                <TextBlock
+                                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Foreground="{DynamicResource SukiText}">
+                                                    <Run Text="{Binding GroupRelationDto.Remark}" />
+                                                    <Run Text=" (" />
+                                                    <Run Text="{Binding GroupRelationDto.GroupDto.Name}" />
+                                                    <Run Text=")" />
+                                                </TextBlock>
+                                                <TextBlock
+                                                    IsVisible="{Binding GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    TextTrimming="CharacterEllipsis"
+                                                    Text="{Binding GroupRelationDto.GroupDto.Name}"
+                                                    Foreground="{DynamicResource SukiText}" />
+                                            </Grid>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                        Margin="0,3,15,0"
+                                                        Grid.Row="1">
+                                                <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                            </StackPanel>
+                                        </Grid>
+                                        <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Background="Transparent" Margin="3" Classes="icon"
+                                                PointerPressed="IconBorder_OnPointerPressed">
+                                            <Interaction.Behaviors>
+                                                <PointerPressedTrigger>
+                                                    <InvokeCommandAction
+                                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
+                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                        CommandParameter="{Binding GroupRelationDto}">
+                                                    </InvokeCommandAction>
+                                                </PointerPressedTrigger>
+                                            </Interaction.Behaviors>
+                                            <avalonia:MaterialIcon Name="Icon" Classes="icon"
+                                                                   Kind="MessageOutline"
+                                                                   Height="19" Width="19"
+                                                                   Margin="3" />
+                                        </Border>
+                                    </Grid>
+                                </suki:GlassCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Panel>
 </UserControl>
