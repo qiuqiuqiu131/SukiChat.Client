@@ -20,7 +20,7 @@ public interface IUserManager
     ContactState CurrentContactState { get; set; }
 
     // 登录用户信息
-    UserDto? User { get; }
+    UserDetailDto? User { get; }
     AvaloniaList<FriendReceiveDto>? FriendReceives { get; }
     AvaloniaList<FriendRequestDto>? FriendRequests { get; }
     AvaloniaList<FriendDeleteDto>? FriendDeletes { get; }

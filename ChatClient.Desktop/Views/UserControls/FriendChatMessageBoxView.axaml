@@ -7,7 +7,7 @@
              xmlns:content="https://github.com/kikipoulet/SukiUI"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="400" Height="140"
+             Width="380" Height="130"
              Background="Transparent"
              x:DataType="userControls:FriendChatMessageBoxViewModel"
              x:Class="ChatClient.Desktop.Views.UserControls.FriendChatMessageBoxView">
@@ -25,9 +25,9 @@
             BoxShadow="4 4 10 #44000000">
         <DockPanel LastChildFill="True">
             <Grid VerticalAlignment="Top" DockPanel.Dock="Top">
-                <StackPanel Orientation="Horizontal" Spacing="13" Margin="5,0" VerticalAlignment="Center">
-                    <Image Source="/Assets/Icon.ico" Width="15" Height="15" VerticalAlignment="Center" />
-                    <TextBlock Text="好友消息" FontSize="13" VerticalAlignment="Center" Margin="0,0,0,2" />
+                <StackPanel Orientation="Horizontal" Spacing="13" Margin="8,0" VerticalAlignment="Center">
+                    <Image Source="/Assets/Icon.ico" Width="17" Height="17" VerticalAlignment="Center" />
+                    <TextBlock Text="好友消息" FontSize="13.5" VerticalAlignment="Center" Margin="0,0,0,2" />
                 </StackPanel>
                 <Button Name="PART_CloseButton"
                         HorizontalAlignment="Right"
@@ -38,7 +38,7 @@
                 </Button>
             </Grid>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                <circleImage:CircleImage Margin="10,0" Image="{Binding FriendRelation.UserDto.HeadImage}" Size="45" />
+                <circleImage:CircleImage Margin="10,0" Image="{Binding FriendRelation.UserDto.HeadImage}" Size="50" />
                 <Grid RowDefinitions="*,*" Margin="10,0,0,0">
                     <TextBlock Grid.Row="0"
                                VerticalAlignment="Center"
@@ -62,7 +62,7 @@
                                VerticalAlignment="Center"
                                TextWrapping="NoWrap"
                                TextTrimming="CharacterEllipsis"
-                               Text="{Binding ChatData,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
+                               Text="{Binding ChatData.ChatMessages,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
                 </Grid>
             </StackPanel>
         </DockPanel>

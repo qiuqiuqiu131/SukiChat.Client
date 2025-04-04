@@ -6,6 +6,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
@@ -149,6 +150,9 @@ public partial class MainWindowView : SukiWindow, IDisposable
         WindowState = WindowState.Minimized;
         Hide();
         _userManager.WindowState = MainWindowState.Close;
+
+        TranslateWindowHelper.CloseAllDialog();
+
         // 显示trayIcon
         // Close();
     }
@@ -166,6 +170,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
             Icon = Icon,
             ToolTipText = "Suki Chat",
             IsVisible = true,
+            Command = new DelegateCommand(ShowWindow),
             Menu = new NativeMenu
             {
                 Items =
@@ -237,7 +242,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        ShowUserMessageBox(new UserMessageBoxShowArgs(_userManager.User!, e) { BottomCheck = false });
+        ShowUserMessageBox(new UserMessageBoxShowArgs(_userManager.User.UserDto!, e) { BottomCheck = false });
     }
 
     #region Dispose

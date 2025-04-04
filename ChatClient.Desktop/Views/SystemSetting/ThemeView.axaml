@@ -1,0 +1,197 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
+             xmlns:chatPages1="clr-namespace:ChatClient.Desktop.Views.SystemSetting"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="systemSetting:ThemeViewModel"
+             x:Class="ChatClient.Desktop.Views.SystemSetting.ThemeView">
+    <UserControl.Resources>
+        <converter:EqualityConverter x:Key="EqualityConverter" />
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical" Margin="20,10" Spacing="15">
+        <!-- 白天黑夜 -->
+        <StackPanel Orientation="Vertical" Spacing="10">
+            <TextBlock Text="主题样式" Margin="15,0" FontSize="15" />
+            <Border Height="1.5" Background="{DynamicResource SukiBorderBrush}" />
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+                <RadioButton
+                    Width="180"
+                    Height="160"
+                    Padding="0"
+                    Classes="GigaChips"
+                    GroupName="RadioBaseTheme"
+                    IsChecked="{Binding ThemeStyle.IsLight}">
+                    <Border
+                        Margin="-50"
+                        Background="#fafafa"
+                        CornerRadius="{DynamicResource MediumCornerRadius}">
+                        <Grid>
+                            <TextBlock
+                                Margin="58,42,42,42"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                FontWeight="DemiBold"
+                                Foreground="#555555"
+                                Text="白天" />
+                        </Grid>
+                    </Border>
+                </RadioButton>
+
+                <RadioButton
+                    Width="180"
+                    Height="160"
+                    Classes="GigaChips"
+                    GroupName="RadioBaseTheme"
+                    IsChecked="{Binding !ThemeStyle.IsLight}">
+                    <Border
+                        Margin="-50"
+                        Background="#222222"
+                        CornerRadius="{DynamicResource MediumCornerRadius}">
+                        <Grid>
+                            <TextBlock
+                                Margin="58,42,42,42"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                FontWeight="DemiBold"
+                                Foreground="#fafafa"
+                                Text="黑夜" />
+                        </Grid>
+                    </Border>
+                </RadioButton>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- 颜色 -->
+        <StackPanel Orientation="Vertical" Spacing="10">
+            <TextBlock Text="主题颜色" Margin="15,0" FontSize="15" />
+            <Border Height="1.5" Background="{DynamicResource SukiBorderBrush}" />
+            <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding AvailableColors}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="10" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Styles>
+                    <Style Selector="RadioButton.h">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="CornerRadius"
+                                Value="{DynamicResource MediumCornerRadius}" />
+                        <Setter Property="Margin" Value="0" />
+                        <Setter Property="Template">
+                            <ControlTemplate>
+                                <suki:GlassCard
+                                    Name="BigBorder"
+                                    Margin="4"
+                                    Padding="15,15,15,15"
+                                    ClipToBounds="True"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    IsInteractive="True">
+                                    <ContentPresenter
+                                        Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        RecognizesAccessKey="True" />
+                                </suki:GlassCard>
+                            </ControlTemplate>
+                        </Setter>
+                    </Style>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="suki:SukiColorTheme">
+                        <RadioButton
+                            Width="50"
+                            Height="50"
+                            Padding="3"
+                            BorderThickness="5"
+                            Classes="h"
+                            Command="{Binding ((systemSetting:ThemeViewModel)DataContext).SwitchToColorThemeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type chatPages1:ThemeView}}}"
+                            CommandParameter="{Binding}"
+                            CornerRadius="50"
+                            GroupName="RadioColorTheme">
+                            <RadioButton.IsChecked>
+                                <MultiBinding Converter="{StaticResource EqualityConverter}">
+                                    <Binding
+                                        Path="((systemSetting:ThemeViewModel)DataContext).SelectedColorTheme"
+                                        RelativeSource="{RelativeSource AncestorType={x:Type chatPages1:ThemeView}}" />
+                                    <Binding />
+                                </MultiBinding>
+                            </RadioButton.IsChecked>
+                            <RadioButton.Styles>
+                                <Style Selector="RadioButton.h Border">
+                                    <Setter Property="Transitions">
+                                        <Transitions>
+                                            <CornerRadiusTransition Property="CornerRadius"
+                                                                    Duration="0.3" />
+                                        </Transitions>
+                                    </Setter>
+                                </Style>
+                                <Style Selector="RadioButton.h avalonia|MaterialIcon">
+                                    <Setter Property="IsVisible" Value="False" />
+                                </Style>
+                                <Style Selector="RadioButton.h:pointerover Border">
+                                    <Setter Property="CornerRadius" Value="10" />
+                                </Style>
+                                <Style Selector="RadioButton.h:checked Border">
+                                    <Setter Property="CornerRadius" Value="10" />
+                                </Style>
+                                <Style Selector="RadioButton.h:checked avalonia|MaterialIcon">
+                                    <Setter Property="IsVisible" Value="True" />
+                                </Style>
+                            </RadioButton.Styles>
+                            <Border
+                                Margin="-30"
+                                Background="{Binding PrimaryBrush}"
+                                CornerRadius="50">
+                                <avalonia:MaterialIcon
+                                    Width="20"
+                                    Height="20"
+                                    Margin="-5"
+                                    Foreground="{DynamicResource SukiStrongBackground}"
+                                    Kind="CheckBold" />
+                            </Border>
+                        </RadioButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <!-- ~1~ 样式 @1@ -->
+        <!-- <StackPanel> -->
+        <!--     <TextBlock Text="背景" Margin="15,0" FontSize="15" /> -->
+        <!--     <Border Height="1.5" Background="{DynamicResource SukiBorderBrush}" /> -->
+        <!--     <ListBox ItemsSource="{Binding AvailableBackgroundStyles}" -->
+        <!--              SelectedItem="{Binding ThemeStyle.BackgroundStyle}"> -->
+        <!--         <ListBox.ItemsPanel> -->
+        <!--             <ItemsPanelTemplate> -->
+        <!--                 <WrapPanel Orientation="Horizontal" /> -->
+        <!--             </ItemsPanelTemplate> -->
+        <!--         </ListBox.ItemsPanel> -->
+        <!--         <ItemsControl.ItemTemplate> -->
+        <!--             <DataTemplate> -->
+        <!--                 <Border CornerRadius="7" ClipToBounds="True" Width="140" Height="100" Margin="10,5"> -->
+        <!--                     <Panel> -->
+        <!--                         <suki:SukiBackground Style="{Binding}" -->
+        <!--                                              AnimationEnabled="False" -->
+        <!--                                              Margin="0" -->
+        <!--                                              TransitionsEnabled="False" /> -->
+        <!--                     </Panel> -->
+        <!--                 </Border> -->
+        <!--             </DataTemplate> -->
+        <!--         </ItemsControl.ItemTemplate> -->
+        <!--     </ListBox> -->
+        <!-- </StackPanel> -->
+    </StackPanel>
+</UserControl>

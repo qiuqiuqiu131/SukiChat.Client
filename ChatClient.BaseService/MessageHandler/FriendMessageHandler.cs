@@ -36,8 +36,8 @@ internal class FriendMessageHandler : MessageHandlerBase
             .Subscribe(d => ExecuteInScope(d, OnNewFriendMessage));
         _subscriptionTokens.Add(token3);
 
-        var token4 = eventAggregator.GetEvent<ResponseEvent<UpdateUserData>>()
-            .Subscribe(d => ExecuteInScope(d, OnUpdateUserData));
+        var token4 = eventAggregator.GetEvent<ResponseEvent<UpdateUserDataResponse>>()
+            .Subscribe(d => ExecuteInScope(d, OnUpdateUserDataResponse));
         _subscriptionTokens.Add(token4);
     }
 
@@ -157,8 +157,10 @@ internal class FriendMessageHandler : MessageHandlerBase
     /// <param name="message"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    private async Task OnUpdateUserData(IScopedProvider scopedprovider, UpdateUserData message)
+    private async Task OnUpdateUserDataResponse(IScopedProvider scopedprovider, UpdateUserDataResponse message)
     {
+        if (message is not { Response: { State: true } }) return;
+
         var userService = scopedprovider.Resolve<IUserService>();
         var dto = await userService.GetUserDto(message.UserId);
 

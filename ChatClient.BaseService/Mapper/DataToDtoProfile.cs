@@ -15,10 +15,22 @@ internal class DataToDtoProfile : Profile
     {
         #region UserDto + User
 
-        CreateMap<UserDto, User>()
-            .ForMember(u => u.isMale, opt => opt.MapFrom(ud => ud.Sex == Sex.Male ? true : false));
         CreateMap<User, UserDto>()
             .ForMember(ud => ud.Sex, opt => opt.MapFrom(u => u.isMale ? Sex.Male : Sex.Female));
+
+        #endregion
+
+        #region UserDetailDto + User
+
+        CreateMap<UserDetailDto, User>()
+            .ForMember(um => um.RegisteTime, opt => opt.MapFrom(u => u.UserDto.RegisteTime))
+            .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.UserDto.Introduction ?? string.Empty))
+            .ForMember(um => um.Birthday,
+                opt => opt.MapFrom(u => u.UserDto.Birth))
+            .ForMember(um => um.isMale, opt => opt.MapFrom(u => u.UserDto.Sex == Sex.Male))
+            .ForMember(um => um.Name, opt => opt.MapFrom(u => u.UserDto.Name))
+            .ForMember(um => um.HeadCount, opt => opt.MapFrom(u => u.UserDto.HeadCount))
+            .ForMember(um => um.HeadIndex, opt => opt.MapFrom(u => u.UserDto.HeadIndex));
 
         #endregion
 

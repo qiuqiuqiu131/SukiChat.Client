@@ -14,4 +14,6 @@ public static class RegionNames
     public static string LocalSearchRegion = "LocalSearchRegion";
 
     public static string RegisterRegion = "RegisterRegion";
+
+    public static string SystemSettingRegion = "SystemSettingRegion";
 }

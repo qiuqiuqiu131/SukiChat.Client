@@ -209,8 +209,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
     private void ToForgetView()
     {
         var cornerDialogManager = _containerProvider.Resolve<ICornerDialogService>();
-        cornerDialogManager.Show(nameof(FriendChatMessageBoxView), new DialogParameters { }, null);
-        NotificationManager.ShowMessage("请联系管理员重置密码", NotificationType.Information, TimeSpan.FromSeconds(1.5));
+        NotificationManager.ShowMessage("功能未开放", NotificationType.Information, TimeSpan.FromSeconds(1.5));
     }
 
     #region Dispose

@@ -13,7 +13,7 @@ namespace ChatClient.BaseService.Services.PackService;
 
 public interface IUserLoginService
 {
-    public Task<UserData> GetUserFullData(string userId);
+    public Task<UserData> GetUserFullData(string userId, string password);
 }
 
 internal class UserLoginService : BaseService, IUserLoginService
@@ -43,7 +43,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 2、获取用户离线消息，并处理离线消息
     /// 3、从数据库中读取信息，构建UserData
     /// </summary>
-    public async Task<UserData> GetUserFullData(string userId)
+    public async Task<UserData> GetUserFullData(string userId, string password)
     {
         DateTime start = DateTime.Now;
 
@@ -57,7 +57,7 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("Operate OutLine Message Cost Time:" + (operate_end - operate_start));
 
         DateTime get_start = DateTime.Now;
-        var user = await LoadUserDate(userId);
+        var user = await LoadUserDate(userId, password);
         DateTime end = DateTime.Now;
         Console.WriteLine("Load Date From Db Cost Time:" + (end - get_start));
         Console.WriteLine("User Init Cost Time:" + (end - start));
@@ -73,13 +73,22 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    private async Task<UserData> LoadUserDate(string userId)
+    private async Task<UserData> LoadUserDate(string userId, string password)
     {
         var user = new UserData();
-        user.UserDetail = await _userDtoManager.GetUserDto(userId);
-        if (user.UserDetail == null)
+
+        // 获取具体信息
+        var userService = _scopedProvider.Resolve<IUserService>();
+        var userDetail = await userService.GetUserDetailDto(userId, password);
+        if (userDetail == null)
+            throw new NullReferenceException("找不到UserDetail");
+
+        // 添加基本信息
+        userDetail.UserDto = await _userDtoManager.GetUserDto(userId);
+        user.UserDetail = userDetail;
+        if (user.UserDetail.UserDto == null)
             throw new NullReferenceException("UserDetail is null");
-        user.UserDetail.IsUser = true;
+        user.UserDetail.UserDto.IsUser = true;
 
         List<Task> tasks =
         [

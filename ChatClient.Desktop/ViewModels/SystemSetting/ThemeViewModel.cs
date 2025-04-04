@@ -1,17 +1,18 @@
 using System;
 using System.Linq;
 using Avalonia.Collections;
-using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Prism.Commands;
+using Prism.Mvvm;
+using Prism.Navigation.Regions;
 using SukiUI.Enums;
 using SukiUI.Models;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages;
+namespace ChatClient.Desktop.ViewModels.SystemSetting;
 
-public class ThemeViewModel : ChatPageBase
+public class ThemeViewModel : BindableBase, IRegionMemberLifetime
 {
     public IAvaloniaReadOnlyList<SukiColorTheme> AvailableColors { get; }
     public IAvaloniaReadOnlyList<SukiBackgroundStyle> AvailableBackgroundStyles { get; }
@@ -36,7 +37,7 @@ public class ThemeViewModel : ChatPageBase
 
     private readonly IThemeStyle _themeStyleManager;
 
-    public ThemeViewModel(IThemeStyle themeStyleManager) : base("主题", MaterialIconKind.Abacus, 3)
+    public ThemeViewModel(IThemeStyle themeStyleManager)
     {
         this._themeStyleManager = themeStyleManager;
 
@@ -66,4 +67,6 @@ public class ThemeViewModel : ChatPageBase
         };
         _themeStyleManager.ChangeColorTheme(targetColor);
     }
+
+    public bool KeepAlive { get; } = false;
 }

@@ -93,6 +93,9 @@ public class EditUserDataViewModel : BindableBase
 
     private void Save()
     {
+        if (string.IsNullOrWhiteSpace(Name))
+            return;
+
         UserDto.Name = Name;
         UserDto.Sex = Sex;
         UserDto.Birth = DateTime;

@@ -56,7 +56,7 @@ public class ChatViewModel : ChatPageBase
 
     #endregion
 
-    public UserDto? User => _userManager.User;
+    public UserDto? User => _userManager.User.UserDto;
     public AvaloniaList<FriendChatDto> Friends => _userManager.FriendChats!;
     public AvaloniaList<GroupChatDto> Groups => _userManager.GroupChats!;
 

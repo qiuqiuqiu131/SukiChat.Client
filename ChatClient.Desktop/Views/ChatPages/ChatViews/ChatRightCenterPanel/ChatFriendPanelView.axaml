@@ -132,10 +132,10 @@
                 <Panel ClipToBounds="True">
                     <suki:SukiBackground Name="PART_Background"
                                          Margin="-150"
-                                         AnimationEnabled="{Binding ThemeStyle.AnimationsEnabled}"
+                                         AnimationEnabled="True"
                                          Style="{Binding ThemeStyle.BackgroundStyle}"
                                          TransitionTime="1"
-                                         TransitionsEnabled="{Binding ThemeStyle.TransitionsEnabled}"
+                                         TransitionsEnabled="True"
                                          ForceSoftwareRendering="True" />
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
                         <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="20">

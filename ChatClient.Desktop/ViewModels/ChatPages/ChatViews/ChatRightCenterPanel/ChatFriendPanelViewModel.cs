@@ -45,7 +45,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         set => SetProperty(ref selectedFriend, value);
     }
 
-    public UserDto User => _userManager.User!;
+    public UserDto User => _userManager.User.UserDto!;
 
 
     #region Command

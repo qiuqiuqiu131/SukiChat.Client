@@ -135,7 +135,7 @@ public class AddGroupRequestViewModel : BindableBase, IDialogAware
     {
         notificationManager = parameters.GetValue<INotificationMessageManager>("notificationManager");
         GroupDto = parameters.GetValue<GroupDto>("GroupDto");
-        Message = "我是" + _userManager.User!.Name;
+        Message = "我是" + _userManager.User!.UserDto.Name;
         Group = "默认分组";
     }
 

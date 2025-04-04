@@ -119,7 +119,7 @@
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="RadioButton.IsTop">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
             <Style Selector="^ /template/ Border">
                 <Setter Property="Opacity" Value="0.3" />
             </Style>
@@ -434,13 +434,6 @@
         <Binding Path="ChatViewModel.Groups" />
     </chatViews:ChatLeftPanelView.GroupItemsSource>
     <Grid Margin="0" RowDefinitions="70,*">
-        <suki:GlassCard
-            Grid.Row="0"
-            Grid.RowSpan="2"
-            Margin="0"
-            Padding="0"
-            CornerRadius="0"
-            Opacity="0.5" />
         <!--  顶部  -->
         <suki:GlassCard
             Grid.Row="0"
@@ -467,6 +460,13 @@
                 <searchBox:SearchBox Name="SearchBox" SearchText="{Binding SearchText,Mode=TwoWay}" WaterMask="搜索" />
             </DockPanel>
         </suki:GlassCard>
+
+        <suki:GlassCard
+            Grid.Row="1"
+            Margin="0"
+            Padding="0"
+            CornerRadius="0"
+            Opacity="0.5" />
         <!--  好友列表  -->
         <ScrollViewer
             Grid.Row="1"

@@ -130,7 +130,7 @@ public class AddFriendRequestViewModel : BindableBase, IDialogAware
         notificationManager = parameters.GetValue<INotificationMessageManager>("notificationManager");
         UserDto = parameters.GetValue<UserDto>("UserDto");
         Group = "默认分组";
-        Message = "我是" + _userManager.User!.Name;
+        Message = "我是" + _userManager.User!.UserDto.Name;
     }
 
     public DialogCloseListener RequestClose { get; }

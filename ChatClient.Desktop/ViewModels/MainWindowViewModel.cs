@@ -9,7 +9,6 @@ using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
@@ -21,6 +20,7 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
+using SystemSettingView = ChatClient.Desktop.Views.SystemSetting.SystemSettingView;
 
 namespace ChatClient.Desktop.ViewModels;
 
@@ -98,6 +98,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
     public INotificationMessageManager NotificationMessageManager { get; init; } = new NotificationMessageManager();
 
     public AsyncDelegateCommand ExitCommnad { get; init; }
+    public DelegateCommand ShowSystemSettingCommand { get; init; }
 
     public MainWindowViewModel(IEnumerable<ChatPageBase> chatPages,
         IThemeStyle themeStyle,
@@ -117,14 +118,20 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         ChatPages = new AvaloniaList<ChatPageBase>(chatPages.OrderBy(x => x.Index).ThenBy(x => x.DisplayName));
 
-        User = userManager.User!;
+        User = userManager.User?.UserDto!;
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
 
         ExitCommnad = new AsyncDelegateCommand(TryExit);
+        ShowSystemSettingCommand = new DelegateCommand(ShowSystemSetting);
 
         RegisterEvent();
         RegisterDtoEvent();
+    }
+
+    private void ShowSystemSetting()
+    {
+        _dialogService.Show(nameof(SystemSettingView));
     }
 
     #region RelationDtoUpdate

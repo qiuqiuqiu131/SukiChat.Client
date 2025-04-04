@@ -1,0 +1,128 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:regions="http://prismlibrary.com/"
+             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
+             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             mc:Ignorable="d"
+             x:DataType="systemSetting:SystemSettingViewModel"
+             Width="750" Height="750"
+             x:Class="ChatClient.Desktop.Views.SystemSetting.SystemSettingView">
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="4"></Setter>
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <suki:GlassCard BorderThickness="0" Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Margin="{TemplateBinding Margin}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                          Margin="0,0,0,0"
+                                          Padding="{TemplateBinding Padding}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Background="Transparent"
+                                          Height="{TemplateBinding Height}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}">
+                            <ContentPresenter.Transitions>
+                                <Transitions>
+                                    <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.25"
+                                                            Easing="SineEaseInOut" />
+                                </Transitions>
+                            </ContentPresenter.Transitions>
+                        </ContentPresenter>
+                    </suki:GlassCard>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:selected">
+                <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <Grid ColumnDefinitions="200,*">
+        <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor5}" />
+        <ListBox SelectedIndex="0" x:Name="ListBox" SelectionChanged="ListBox_OnSelectionChanged" Grid.Column="0"
+                 Margin="3,20" ItemsSource="{Binding SettingBars}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Spacing="10" Margin="3,0" Orientation="Horizontal">
+                        <avalonia:MaterialIcon Kind="{Binding Icon}" Foreground="{DynamicResource SukiText}" />
+                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" Spacing="3" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+        <Grid Grid.Column="1" RowDefinitions="30,40,*">
+            <suki:GlassCard Grid.Row="0" CornerRadius="0" Grid.RowSpan="3" Opacity="0.5" />
+            <Border VerticalAlignment="Top"
+                    Background="Transparent"
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch">
+                <Interaction.Behaviors>
+                    <behaviors:WindowDragBehavior />
+                </Interaction.Behaviors>
+                <DockPanel LastChildFill="False">
+                    <StackPanel VerticalAlignment="Center"
+                                DockPanel.Dock="Right"
+                                Margin="5,0"
+                                Orientation="Horizontal"
+                                Spacing="4">
+                        <StackPanel.Styles>
+                            <Style Selector="PathIcon">
+                                <Setter Property="Height" Value="8" />
+                                <Setter Property="Width" Value="8" />
+                            </Style>
+                        </StackPanel.Styles>
+                        <Button Name="PART_MinimizeButton"
+                                VerticalContentAlignment="Bottom"
+                                Classes="Basic Rounded WindowControlsButton">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="Click">
+                                    <ChangePropertyAction
+                                        TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                        PropertyName="WindowState"
+                                        Value="{x:Static WindowState.Minimized}" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                            <PathIcon Margin="0,0,0,6"
+                                      VerticalAlignment="Bottom"
+                                      Data="{x:Static suki:Icons.WindowMinimize}" />
+                        </Button>
+                        <Button Name="PART_CloseButton"
+                                Classes="Basic Rounded WindowControlsButton Close" Command="{Binding CancelCommand }">
+                            <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+            <Border Grid.Row="1" BorderThickness="0,0,0,1.5" BorderBrush="{DynamicResource SukiBorderBrush}">
+                <TextBlock FontSize="17" Margin="25,0" VerticalAlignment="Center"
+                           Text="{Binding ((data:SettingBarDto)SelectedItem).Name,ElementName=ListBox}" />
+            </Border>
+            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible"
+                          Margin="0,20">
+                <ContentControl x:Name="RegionContent" Margin="8,0,0,0"
+                                regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.SystemSettingRegion}" />
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

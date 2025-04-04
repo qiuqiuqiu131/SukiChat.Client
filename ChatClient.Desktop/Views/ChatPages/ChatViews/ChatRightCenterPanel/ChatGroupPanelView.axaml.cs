@@ -69,7 +69,7 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
     private async void ChatUI_OnHeadClick(object? sender, GroupHeadClickEventArgs e)
     {
         var userDto = e.User.IsUser
-            ? _userManager.User
+            ? _userManager.User.UserDto
             : (await _userDtoManager.GetUserDto(e.User.Owner.UserId));
         _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
             .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));

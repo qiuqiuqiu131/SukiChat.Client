@@ -14,6 +14,8 @@ namespace ChatClient.Desktop.Views.UserControls;
 
 public partial class UserHeadEditView : UserControl
 {
+    private bool isLoaded = false;
+
     public UserHeadEditView()
     {
         InitializeComponent();
@@ -42,6 +44,10 @@ public partial class UserHeadEditView : UserControl
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
+        if (isLoaded) return;
+
+        isLoaded = true;
+
         // 初始化Picture
         var group = new TransformGroup();
         group.Children.Add(_scaleTransform);

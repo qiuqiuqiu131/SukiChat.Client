@@ -13,9 +13,21 @@ namespace ChatClient.Desktop.Views;
 
 public partial class SukiDialogWindow : SukiWindow, IDialogWindow
 {
+    public static readonly StyledProperty<IThemeStyle> ThemeStyleProperty =
+        AvaloniaProperty.Register<SukiDialogWindow, IThemeStyle>(
+            "ThemeStyle");
+
+    public IThemeStyle ThemeStyle
+    {
+        get => GetValue(ThemeStyleProperty);
+        set => SetValue(ThemeStyleProperty, value);
+    }
+
     public SukiDialogWindow(IThemeStyle themeStyle)
     {
         InitializeComponent();
+
+        ThemeStyle = themeStyle;
 
         CanMaximize = false;
         CanMinimize = false;
@@ -26,11 +38,8 @@ public partial class SukiDialogWindow : SukiWindow, IDialogWindow
         SizeToContent = SizeToContent.WidthAndHeight;
         TitleBarAnimationEnabled = false;
 
-        // Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
-
-        BackgroundAnimationEnabled = themeStyle.CurrentThemeStyle.AnimationsEnabled;
-        BackgroundStyle = themeStyle.CurrentThemeStyle.BackgroundStyle;
-        BackgroundTransitionsEnabled = themeStyle.CurrentThemeStyle.TransitionsEnabled;
+        BackgroundAnimationEnabled = true;
+        BackgroundTransitionsEnabled = true;
         WindowStartupLocation = WindowStartupLocation.CenterOwner;
     }
 

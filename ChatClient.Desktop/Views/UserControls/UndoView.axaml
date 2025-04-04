@@ -1,0 +1,15 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Desktop.Views.UserControls.UndoView">
+    <Grid>
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <avalonia:MaterialIcon Kind="CircleOffOutline" Width="80" Height="80"
+                                   Foreground="{DynamicResource SukiPrimaryColor}" Opacity="0.1" />
+            <TextBlock Text="功能开发中..." FontSize="16" Opacity="0.6" HorizontalAlignment="Center" Margin="10" />
+        </StackPanel>
+    </Grid>
+</UserControl>

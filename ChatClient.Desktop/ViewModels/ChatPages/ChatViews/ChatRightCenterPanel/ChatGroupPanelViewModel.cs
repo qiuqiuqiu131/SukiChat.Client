@@ -53,7 +53,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         set => SetProperty(ref selectedGroup, value);
     }
 
-    public UserDto User => _userManager.User!;
+    public UserDto User => _userManager.User?.UserDto!;
 
     #region Command
 

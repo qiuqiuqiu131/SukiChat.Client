@@ -24,7 +24,7 @@ internal class UserManager : IUserManager
     public UserData? UserData { get; private set; }
 
     // 信息属性
-    public UserDto? User => UserData?.UserDetail;
+    public UserDetailDto? User => UserData?.UserDetail;
     public AvaloniaList<FriendReceiveDto>? FriendReceives => UserData?.FriendReceives;
     public AvaloniaList<FriendRequestDto>? FriendRequests => UserData?.FriendRequests;
     public AvaloniaList<FriendDeleteDto>? FriendDeletes => UserData?.FriendDeletes;
@@ -72,7 +72,7 @@ internal class UserManager : IUserManager
         try
         {
             var _userService = _containerProvider.Resolve<IUserLoginService>();
-            UserData = await _userService.GetUserFullData(id);
+            UserData = await _userService.GetUserFullData(id, password);
             if (_userService is IDisposable disposable)
                 disposable.Dispose();
         }
@@ -128,15 +128,15 @@ internal class UserManager : IUserManager
     {
         if (bitmap == null || User == null) return false;
 
-        var fileName = $"head_{User.HeadIndex}.png";
+        var fileName = $"head_{User.UserDto.HeadCount}.png";
         byte[] bytes = bitmap.BitmapToByteArray();
         var _fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
         var result = await _fileOperateHelper.UploadFile(User.Id, "HeadImage", fileName, bytes, FileTarget.User);
         if (!result) return false;
 
-        User.HeadCount++;
-        User.HeadIndex = User.HeadCount - 1;
-        User.HeadImage = bitmap;
+        User.UserDto.HeadCount++;
+        User.UserDto.HeadIndex = User.UserDto.HeadCount - 1;
+        User.UserDto.HeadImage = bitmap;
 
         await SaveUser();
         return true;

@@ -82,8 +82,8 @@
                         ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
                         LetterSpacing="1.5"
                         FontSize="13.5"
-                        Text="{Binding Id}"
-                        Watermark="ID" />
+                        Watermark="输入账号"
+                        Text="{Binding Id}" />
                     <TextBlock
                         FontWeight="SemiBold"
                         Margin="8,5,0,3"
@@ -96,7 +96,7 @@
                         ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
                         LetterSpacing="1"
                         Text="{Binding Password}"
-                        Watermark="Password" />
+                        Watermark="输入密码" />
                     <CheckBox Margin="5,5,5,0" IsChecked="{Binding LoginData.RememberPassword}">
                         <TextBlock
                             FontSize="12"

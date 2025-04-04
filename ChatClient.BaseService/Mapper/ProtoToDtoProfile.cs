@@ -17,14 +17,6 @@ internal class ProtoToDtoProfile : Profile
         #region UserDto + UserMessage
 
         CreateMap<UserDto, UserMessage>()
-            .ForMember(um => um.LastReadFriendMessageTime,
-                opt => opt.MapFrom(u => u.LastReadFriendMessageTime.ToString()))
-            .ForMember(um => um.LastReadGroupMessageTime,
-                opt => opt.MapFrom(u => u.LastReadGroupMessageTime.ToString()))
-            .ForMember(um => um.LastDeleteFriendMessageTime,
-                opt => opt.MapFrom(u => u.LastDeleteFriendMessageTime.ToString()))
-            .ForMember(um => um.LastDeleteGroupMessageTime,
-                opt => opt.MapFrom(u => u.LastDeleteGroupMessageTime.ToString()))
             .ForMember(um => um.RegisterTime, opt => opt.MapFrom(u => u.RegisteTime.ToString()))
             .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.Introduction ?? string.Empty))
             .ForMember(um => um.Birth, opt => opt.MapFrom(u => u.Birth == null ? string.Empty : u.Birth.ToString()))
@@ -36,7 +28,31 @@ internal class ProtoToDtoProfile : Profile
                 opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Introduction) ? null : um.Introduction))
             .ForMember(u => u.Birth,
                 opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateOnly?)null : DateOnly.Parse(um.Birth)))
-            .ForMember(u => u.Sex, opt => opt.MapFrom(um => um.IsMale ? Sex.Male : Sex.Female))
+            .ForMember(u => u.Sex, opt => opt.MapFrom(um => um.IsMale ? Sex.Male : Sex.Female));
+
+        #endregion
+
+        #region UserDetailDto + UserDetailMessage
+
+        CreateMap<UserDetailDto, UserDetailMessage>()
+            .ForMember(um => um.LastReadFriendMessageTime,
+                opt => opt.MapFrom(u => u.LastReadFriendMessageTime.ToString()))
+            .ForMember(um => um.LastReadGroupMessageTime,
+                opt => opt.MapFrom(u => u.LastReadGroupMessageTime.ToString()))
+            .ForMember(um => um.LastDeleteFriendMessageTime,
+                opt => opt.MapFrom(u => u.LastDeleteFriendMessageTime.ToString()))
+            .ForMember(um => um.LastDeleteGroupMessageTime,
+                opt => opt.MapFrom(u => u.LastDeleteGroupMessageTime.ToString()))
+            .ForMember(um => um.RegisterTime, opt => opt.MapFrom(u => u.UserDto.RegisteTime.ToString()))
+            .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.UserDto.Introduction ?? string.Empty))
+            .ForMember(um => um.Birth,
+                opt => opt.MapFrom(u => u.UserDto.Birth == null ? string.Empty : u.UserDto.Birth.ToString()))
+            .ForMember(um => um.IsMale, opt => opt.MapFrom(u => u.UserDto.Sex == Sex.Male))
+            .ForMember(um => um.Name, opt => opt.MapFrom(u => u.UserDto.Name))
+            .ForMember(um => um.HeadCount, opt => opt.MapFrom(u => u.UserDto.HeadCount))
+            .ForMember(um => um.HeadIndex, opt => opt.MapFrom(u => u.UserDto.HeadIndex));
+
+        CreateMap<UserDetailMessage, UserDetailDto>()
             .ForMember(u => u.LastReadFriendMessageTime,
                 opt => opt.MapFrom(um => DateTime.Parse(um.LastReadFriendMessageTime)))
             .ForMember(u => u.LastReadGroupMessageTime,

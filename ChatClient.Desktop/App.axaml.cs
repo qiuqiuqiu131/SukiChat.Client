@@ -18,6 +18,7 @@ using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Desktop.ViewModels.SearchUserGroup;
 using ChatClient.Desktop.ViewModels.SearchUserGroup.Region;
 using ChatClient.Desktop.ViewModels.ShareView;
+using ChatClient.Desktop.ViewModels.SystemSetting;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
@@ -33,6 +34,7 @@ using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Desktop.Views.ShareView;
 using ChatClient.Desktop.Views.SukiDialog;
+using ChatClient.Desktop.Views.SystemSetting;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
@@ -45,6 +47,7 @@ using Prism.Modularity;
 using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using EditUserDataView = ChatClient.Desktop.Views.SukiDialog.EditUserDataView;
+using SystemSettingView = ChatClient.Desktop.Views.SystemSetting.SystemSettingView;
 
 namespace ChatClient.Desktop;
 
@@ -115,6 +118,9 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<LocalSearchAllView, LocalSearchAllViewModel>();
         containerRegistry.RegisterForNavigation<LocalSearchUserView, LocalSearchUserViewModel>();
         containerRegistry.RegisterForNavigation<LocalSearchGroupView, LocalSearchGroupViewModel>();
+        // 设置
+        containerRegistry.RegisterForNavigation<ThemeView, ThemeViewModel>();
+        containerRegistry.RegisterForNavigation<UndoView>();
 
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
@@ -123,6 +129,8 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<SearchUserGroupView, SearchUserGroupViewModel>();
         // 本地搜索
         containerRegistry.RegisterDialog<LocalSearchUserGroupView, LocalSearchUserGroupViewModel>();
+        // 设置
+        containerRegistry.RegisterDialog<SystemSettingView, SystemSettingViewModel>();
         // 添加关系
         containerRegistry.RegisterDialog<AddFriendRequestView, AddFriendRequestViewModel>();
         containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
@@ -168,7 +176,6 @@ public class App : PrismApplication
         return new SukiChatViews()
             .AddView<ChatView, ChatViewModel>(services)
             .AddView<ContactsView, ContactsViewModel>(services)
-            .AddView<ThemeView, ThemeViewModel>(services)
             // 同意添加好友
             .AddView<AcceptFriendView, AcceptFriendViewModel>(services)
             // 编辑用户信息

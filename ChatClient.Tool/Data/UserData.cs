@@ -6,7 +6,7 @@ namespace ChatClient.Tool.Data;
 
 public class UserData : IDisposable
 {
-    public UserDto? UserDetail { get; set; }
+    public UserDetailDto? UserDetail { get; set; }
 
     /// <summary>
     /// 接受到的好友请求

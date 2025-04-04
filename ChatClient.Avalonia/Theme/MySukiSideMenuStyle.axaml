@@ -86,7 +86,7 @@
                                           IsVisible="{TemplateBinding IsMenuExpanded}">
                                         <ContentPresenter Content="{TemplateBinding HeaderContent}" />
                                     </Grid>
-                                    <ContentControl Margin="0,0,0,12"
+                                    <ContentControl Margin="0,0,0,17"
                                                     Content="{TemplateBinding FooterContent}"
                                                     DockPanel.Dock="Bottom"
                                                     IsVisible="{TemplateBinding IsMenuExpanded}" />

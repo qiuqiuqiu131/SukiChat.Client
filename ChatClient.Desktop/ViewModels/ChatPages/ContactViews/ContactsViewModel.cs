@@ -54,7 +54,7 @@ public class ContactsViewModel : ChatPageBase
     public AvaloniaList<GroupFriendDto> GroupFriends => _userManager.GroupFriends!;
     public AvaloniaList<GroupGroupDto> GroupGroups => _userManager.GroupGroups!;
 
-    public UserDto User => _userManager.User!;
+    public UserDetailDto User => _userManager.User!;
 
     public DelegateCommand<object?> SelectedChangedCommand { get; set; }
     public DelegateCommand ToFriendRequestViewCommand { get; init; }
@@ -78,7 +78,7 @@ public class ContactsViewModel : ChatPageBase
         IEventAggregator eventAggregator,
         ILocalSearchService localSearchService,
         IUserManager userManager)
-        : base("通讯录", MaterialIconKind.Account, 1)
+        : base("通讯录", MaterialIconKind.AccountSupervisor, 1)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;

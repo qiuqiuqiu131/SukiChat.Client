@@ -13,7 +13,7 @@ public interface ILoginService
     Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
     Task<CommonResponse?> Logout(string? userId);
     Task<string?> GetPassword(string id);
-    Task LoginSuccess(UserDto user);
+    Task LoginSuccess(UserDetailDto user);
 }
 
 internal class LoginService : BaseService, ILoginService
@@ -50,12 +50,12 @@ internal class LoginService : BaseService, ILoginService
         return response;
     }
 
-    public async Task LoginSuccess(UserDto user)
+    public async Task LoginSuccess(UserDetailDto user)
     {
         // 如果登录成功，获取用户的信息并添加或更新到数据库
         // 同时如果选择记住密码，添加登录历史
         await AddUser(user);
-        await AddLoginHistory(user);
+        await AddLoginHistory(user.UserDto, user.Password);
     }
 
     public async Task<CommonResponse?> Logout(string? userId)
@@ -80,7 +80,7 @@ internal class LoginService : BaseService, ILoginService
     /// 将从服务器获取的用户信息添加到数据库
     /// </summary>
     /// <param name="user"></param>
-    private async Task AddUser(UserDto user)
+    private async Task AddUser(UserDetailDto user)
     {
         User userData = _mapper.Map<User>(user);
 
@@ -107,12 +107,12 @@ internal class LoginService : BaseService, ILoginService
     /// 登录成功后添加登录历史
     /// </summary>
     /// <param name="user"></param>
-    private async Task AddLoginHistory(UserDto user)
+    private async Task AddLoginHistory(UserDto user, string password)
     {
         LoginHistory loginHistory = new LoginHistory
         {
             Id = user.Id,
-            Password = user.Password,
+            Password = password,
             LastLoginTime = DateTime.Now
         };
 

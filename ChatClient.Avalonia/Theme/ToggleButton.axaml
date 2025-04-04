@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style Selector="ToggleButton.Chat">
-        <Setter Property="Background" Value="{DynamicResource SukiGlassCardBackground}" />
+        <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1.5" />
         <Setter Property="CornerRadius" Value="0" />
@@ -14,7 +14,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Background="{TemplateBinding Background}" Opacity="0.15"
+                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
@@ -45,7 +45,7 @@
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Opacity" Value="0.3" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />
@@ -57,7 +57,7 @@
             <Setter Property="BorderBrush" Value="Transparent" />
             <Setter Property="TextBlock.Foreground" Value="{DynamicResource SukiText}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Opacity" Value="0.3" />
             </Style>
             <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
                 <Setter Property="Background" Value="Transparent" />

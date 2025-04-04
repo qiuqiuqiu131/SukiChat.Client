@@ -64,7 +64,7 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
     private void ChatUI_OnHeadClick(object? sender, FriendHeadClickEventArgs e)
     {
         var userDto = e.User.IsUser
-            ? _userManager.User
+            ? _userManager.User.UserDto
             : ((ChatFriendPanelViewModel)DataContext!).SelectedFriend.FriendRelatoinDto.UserDto;
         _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
             .Publish(new UserMessageBoxShowArgs(userDto, e.PointerPressedEventArgs));

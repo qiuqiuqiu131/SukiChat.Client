@@ -87,4 +87,18 @@ public static class TranslateWindowHelper
             desktop.MainWindow?.FocusManager.ClearFocus();
         }
     }
+
+    public static void CloseAllDialog()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            foreach (var window in desktop.Windows)
+            {
+                if (window is SukiDialogWindow dialogWindow)
+                {
+                    dialogWindow.Close();
+                }
+            }
+        }
+    }
 }

@@ -1,6 +1,10 @@
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Styling;
+using Avalonia.Threading;
 using ChatClient.Tool.Tools;
 using Prism.Mvvm;
+using SukiUI.Controls;
 using SukiUI.Enums;
 using Action = System.Action;
 
@@ -22,30 +26,6 @@ public class ThemeStyle : BindableBase
                 ThemeStyleChanged?.Invoke(("背景", value.ToString()));
                 ThemeStyleTool.CurrentSukiBackgroundStyle = _backgroundStyle;
             }
-        }
-    }
-
-    private bool _animationsEnabled = true;
-
-    public bool AnimationsEnabled
-    {
-        get => _animationsEnabled;
-        set
-        {
-            if (SetProperty(ref _animationsEnabled, value))
-                ThemeStyleChanged?.Invoke(("背景动画", value ? "打开" : "关闭"));
-        }
-    }
-
-    private bool _transitionsEnabled = true;
-
-    public bool TransitionsEnabled
-    {
-        get => _transitionsEnabled;
-        set
-        {
-            if (SetProperty(ref _transitionsEnabled, value))
-                ThemeStyleChanged?.Invoke(("背景过渡动画", value ? "打开" : "关闭"));
         }
     }
 

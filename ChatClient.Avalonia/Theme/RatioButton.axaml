@@ -1,7 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="RadioButton.Chat">
-        <Setter Property="Background" Value="{DynamicResource SukiGlassCardBackground}" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1.5" />
         <Setter Property="CornerRadius" Value="0" />
@@ -13,7 +13,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <Border Background="{TemplateBinding Background}" Opacity="0.15"
+                    <Border Background="{TemplateBinding Background}" Opacity="0.3"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
                             <Transitions>
@@ -48,7 +48,7 @@
         <Style Selector="^:pointerover">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Opacity" Value="0.3" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
                 <Setter Property="CornerRadius" Value="8" />
             </Style>
@@ -59,7 +59,7 @@
         <Style Selector="^:checked">
             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.15" />
+                <Setter Property="Opacity" Value="0.3" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
                 <Setter Property="CornerRadius" Value="13" />
             </Style>

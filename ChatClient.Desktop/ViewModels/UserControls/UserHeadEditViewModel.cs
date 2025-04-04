@@ -74,24 +74,24 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
     {
         _userManager = userManager;
         _containerProvider = containerProvider;
-        CurrentHead = userManager.User!.HeadImage;
+        CurrentHead = userManager.User!.UserDto.HeadImage;
 
         AddHeadCommnad = new DelegateCommand(AddHead);
         SaveHeadCommand = new DelegateCommand(SaveHead);
         SelectedHeadChangedCommand = new DelegateCommand(SelectedHeadChanged);
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
 
-        if (_userManager.User?.HeadCount != 0)
+        if (_userManager.User?.UserDto.HeadCount != 0)
         {
             var userService = _containerProvider.Resolve<IUserService>();
-            userService.GetHeadImages(userManager.User).ContinueWith(list =>
+            userService.GetHeadImages(userManager.User.UserDto).ContinueWith(list =>
             {
                 _headImages = list.Result;
                 var bitmaps = list.Result.Values.ToList();
                 bitmaps.Reverse();
                 HeadList = new ObservableCollection<Bitmap>(bitmaps);
 
-                SelectedItem = _headImages[userManager.User.HeadIndex];
+                SelectedItem = _headImages[userManager.User.UserDto.HeadIndex];
             });
         }
         else
@@ -144,12 +144,13 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         if (imageResize.Scale == 1 && imageResize.MoveX == 0 && imageResize.MoveY == 0)
         {
             IsBusy = false;
-            _userManager.User.HeadImage = SelectedItem;
-            _userManager.User.HeadIndex = _headImages.FirstOrDefault(x => x.Value == SelectedItem).Key;
-            _userManager.SaveUser();
+            _userManager.User.UserDto.HeadImage = SelectedItem;
+            _userManager.User.UserDto.HeadIndex = _headImages.FirstOrDefault(x => x.Value == SelectedItem).Key;
+            await _userManager.SaveUser();
 
             foreach (var value in _headImages.Values)
-                value.Dispose();
+                if (value != SelectedItem)
+                    value.Dispose();
             _headImages.Clear();
 
             RequestClose.Invoke();
@@ -164,7 +165,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         if (result)
         {
             HeadList.Insert(0, bitmap);
-            _headImages.Add(_userManager.User.HeadIndex, bitmap);
+            _headImages.Add(_userManager.User.UserDto.HeadIndex, bitmap);
             SelectedItem = bitmap;
             ImageChanged?.Invoke(bitmap);
 
