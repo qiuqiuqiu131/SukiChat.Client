@@ -152,9 +152,6 @@ public partial class MainWindowView : SukiWindow, IDisposable
         _userManager.WindowState = MainWindowState.Close;
 
         TranslateWindowHelper.CloseAllDialog();
-
-        // 显示trayIcon
-        // Close();
     }
 
     #region Tray Icon

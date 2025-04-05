@@ -383,8 +383,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.NewFriendMessagesOperate(userId, newFriendMessages);
-        if (friendPackService is IDisposable disposable)
-            disposable.Dispose();
 
         newFriendMessages.Clear();
     }
@@ -400,8 +398,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var friendPackService = _scopedProvider.Resolve<IFriendPackService>();
         await friendPackService.FriendDeleteMessagesOperate(userId, friendDeleteMessages);
-        if (friendPackService is IDisposable disposable)
-            disposable.Dispose();
 
         friendDeleteMessages.Clear();
     }
@@ -418,8 +414,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var friendChatService = _scopedProvider.Resolve<IFriendChatPackService>();
         await friendChatService.FriendChatMessagesOperate(friendChatMessages);
-        if (friendChatService is IDisposable disposable)
-            disposable.Dispose();
 
         friendChatMessages.Clear();
     }
@@ -435,8 +429,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.EnterGroupMessagesOperate(useId, enterGroupMessages);
-        if (groupPackService is IDisposable disposable)
-            disposable.Dispose();
 
         enterGroupMessages.Clear();
     }
@@ -452,8 +444,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var groupChatService = _scopedProvider.Resolve<IGroupChatPackService>();
         await groupChatService.GroupChatMessagesOperate(userId, groupChatMessages);
-        if (groupChatService is IDisposable disposable)
-            disposable.Dispose();
 
         groupChatMessages.Clear();
     }
@@ -469,8 +459,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var groupPackService = _scopedProvider.Resolve<IGroupPackService>();
         await groupPackService.GroupDeleteMessagesOperate(userId, friendDeleteMessages);
-        if (groupPackService is IDisposable disposable)
-            disposable.Dispose();
 
         friendDeleteMessages.Clear();
     }
@@ -530,8 +518,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var groupChatPackService = _scopedProvider.Resolve<IGroupChatPackService>();
         await groupChatPackService.ChatGroupDetailMessagesOperate(userId, chatGroupDetailMessages);
-        if (groupChatPackService is IDisposable disposable)
-            disposable.Dispose();
 
         chatGroupDetailMessages.Clear();
     }
@@ -543,8 +529,6 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         var friendChatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
         await friendChatPackService.ChatPrivateDetailMessagesOperate(userId, chatPrivateDetailMessages);
-        if (friendChatPackService is IDisposable disposable)
-            disposable.Dispose();
 
         chatPrivateDetailMessages.Clear();
     }

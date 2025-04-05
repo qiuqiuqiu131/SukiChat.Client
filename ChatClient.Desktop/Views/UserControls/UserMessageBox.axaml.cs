@@ -59,7 +59,7 @@ public partial class UserMessageBox : UserControl
         {
             var dialogService = App.Current.Container.Resolve<ISukiDialogManager>();
             dialogService.CreateDialog()
-                .WithViewModel(d => new EditUserDataViewModel(d, userDto))
+                .WithViewModel(d => new EditUserDataViewModel(d, new DialogParameters { { "UserDto", userDto } }))
                 .TryShow();
         }
     }

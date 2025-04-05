@@ -37,7 +37,7 @@ namespace ChatClient.MessageOperate
         {
             this.container = container;
 
-            semaphore = new SemaphoreSlim(100);
+            semaphore = new SemaphoreSlim(1);
         }
 
         /// <summary>
@@ -69,27 +69,24 @@ namespace ChatClient.MessageOperate
         /// <summary>
         /// 控制消息队列的执行
         /// </summary>
-        private void ProcessQueue()
+        private async void ProcessQueue()
         {
             foreach (var unit in queue.GetConsumingEnumerable())
             {
-                semaphore.Wait();
+                await semaphore.WaitAsync();
 
-                Task.Run(async () =>
+                try
                 {
-                    try
-                    {
-                        await OperateMessageUnit(unit);
-                    }
-                    catch (Exception ex)
-                    {
-                        //logger.Error(ex.Message);
-                    }
-                    finally
-                    {
-                        semaphore.Release();
-                    }
-                });
+                    await OperateMessageUnit(unit);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             }
         }
 
@@ -108,27 +105,20 @@ namespace ChatClient.MessageOperate
             using (var scope = container.CreateScope())
             {
                 // 获取处理器实例，一个Protobuf消息对应多个处理器
-                try
+                var processors = (IEnumerable<object>)scope.Resolve(processorsType)!;
+
+                // 获取处理方法
+                MethodInfo? processMethod = processorType.GetMethod("Process");
+
+                // 触发处理方法
+                foreach (var processor in processors)
                 {
-                    var processors = (IEnumerable<object>)scope.Resolve(processorsType)!;
-
-                    // 获取处理方法
-                    MethodInfo? processMethod = processorType.GetMethod("Process");
-
-                    // 触发处理方法
-                    foreach (var processor in processors)
+                    // 调用处理器
+                    if (processMethod != null)
                     {
-                        // 调用处理器
-                        if (processMethod != null)
-                        {
-                            var task = (Task)processMethod.Invoke(processor, [obj])!;
-                            await task;
-                        }
+                        var task = (Task)processMethod.Invoke(processor, [obj])!;
+                        await task;
                     }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
                 }
             }
         }

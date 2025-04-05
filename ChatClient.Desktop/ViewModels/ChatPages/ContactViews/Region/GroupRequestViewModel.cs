@@ -11,12 +11,13 @@ using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
-public class GroupRequestViewModel : ViewModelBase
+public class GroupRequestViewModel : ViewModelBase, IRegionMemberLifetime
 {
     public AvaloniaList<GroupReceivedDto> GroupReceivedDtos { get; init; }
     public AvaloniaList<GroupRequestDto> GroupRequestDtos { get; init; }
@@ -138,4 +139,6 @@ public class GroupRequestViewModel : ViewModelBase
             .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", AcceptRequestCallback))
             .TryShow();
     }
+
+    public bool KeepAlive => false;
 }

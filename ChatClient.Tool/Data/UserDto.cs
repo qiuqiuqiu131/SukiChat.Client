@@ -97,7 +97,12 @@ namespace ChatClient.Tool.Data
         public Bitmap HeadImage
         {
             get => headImage;
-            set => SetProperty(ref headImage, value);
+            set
+            {
+                if (SetProperty(ref headImage, value))
+                {
+                }
+            }
         }
 
         private Bitmap headImage;

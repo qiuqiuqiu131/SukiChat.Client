@@ -19,6 +19,15 @@ public class EditableTextBlock : UserControl
         set => SetValue(TextProperty, value);
     }
 
+    public static readonly StyledProperty<int> MaxLengthProperty = AvaloniaProperty.Register<EditableTextBlock, int>(
+        "MaxLength", defaultValue: 50);
+
+    public int MaxLength
+    {
+        get => GetValue(MaxLengthProperty);
+        set => SetValue(MaxLengthProperty, value);
+    }
+
     public static readonly StyledProperty<string> DefaultTextProperty =
         AvaloniaProperty.Register<EditableTextBlock, string>(
             nameof(DefaultText));
@@ -27,6 +36,16 @@ public class EditableTextBlock : UserControl
     {
         get => GetValue(DefaultTextProperty);
         set => SetValue(DefaultTextProperty, value);
+    }
+
+    public static readonly StyledProperty<double> DefaultTextWidthProperty =
+        AvaloniaProperty.Register<EditableTextBlock, double>(
+            "DefaultTextWidth", defaultValue: 150);
+
+    public double DefaultTextWidth
+    {
+        get => GetValue(DefaultTextWidthProperty);
+        set => SetValue(DefaultTextWidthProperty, value);
     }
 
     public static readonly StyledProperty<bool> IsEditingProperty = AvaloniaProperty.Register<EditableTextBlock, bool>(

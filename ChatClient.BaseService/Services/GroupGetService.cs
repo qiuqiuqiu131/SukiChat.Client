@@ -65,7 +65,7 @@ public class GroupGetService : BaseService, IGroupGetService
             await groupRepository.InsertAsync(group);
         await _unitOfWork.SaveChangesAsync();
 
-        groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex);
+        Task.Run(async () => groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex));
 
         return groupDto;
     }

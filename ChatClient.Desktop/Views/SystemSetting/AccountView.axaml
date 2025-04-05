@@ -1,0 +1,171 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="700"
+             x:DataType="systemSetting:AccountViewModel"
+             x:Class="ChatClient.Desktop.Views.SystemSetting.AccountView">
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Title">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="FontSize" Value="14.5" />
+            <Setter Property="DockPanel.Dock" Value="Left" />
+        </Style>
+        <Style Selector="SelectableTextBlock.BasicMess">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Border.Icon:pointerover avalonia|MaterialIcon">
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+        </Style>
+    </UserControl.Styles>
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Margin="20,5"
+                Spacing="35">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <Panel Margin="15,0">
+                <TextBlock Text="基本信息"
+                           VerticalAlignment="Center"
+                           FontSize="15" />
+                <Border Background="Transparent"
+                        VerticalAlignment="Bottom"
+                        Classes="Icon"
+                        HorizontalAlignment="Right" Margin="5,0,0,0"
+                        ToolTip.ShowDelay="500">
+                    <ToolTip.Tip>
+                        <TextBlock Text="编辑信息" FontSize="12.5" />
+                    </ToolTip.Tip>
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="PointerPressed">
+                            <InvokeCommandAction Command="{Binding EditUserDataCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                    <avalonia:MaterialIcon Width="18" Height="18" Opacity="0.8"
+                                           Kind="PencilBoxMultipleOutline" />
+                </Border>
+            </Panel>
+            <Border Height="1.5" Margin="5,10" Background="{DynamicResource SukiBorderBrush}" />
+            <Border CornerRadius="10" BorderThickness="1.5"
+                    BorderBrush="{DynamicResource SukiBorderBrush}"
+                    Background="{DynamicResource SukiPrimaryColor3}"
+                    Margin="40,0"
+                    Padding="25,10">
+                <StackPanel HorizontalAlignment="Stretch" Orientation="Vertical" Spacing="10">
+                    <DockPanel LastChildFill="True" Height="30">
+                        <TextBlock Text="ID" Classes="Title" DockPanel.Dock="Left" />
+                        <SelectableTextBlock Text="{Binding UserDetailDto.Id}"
+                                             Classes="BasicMess" />
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="30" DockPanel.Dock="Left">
+                        <TextBlock Text="昵称" Classes="Title" />
+                        <SelectableTextBlock Text="{Binding UserDetailDto.UserDto.Name}"
+                                             Classes="BasicMess" />
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="30">
+                        <TextBlock Text="个签" Classes="Title" DockPanel.Dock="Left" />
+                        <Panel>
+                            <SelectableTextBlock
+                                IsVisible="{Binding UserDetailDto.UserDto.Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                Text="{Binding UserDetailDto.UserDto.Introduction}"
+                                TextTrimming="CharacterEllipsis"
+                                TextWrapping="NoWrap"
+                                MaxWidth="220"
+                                Classes="BasicMess" />
+                            <TextBlock Text="未设置个性签名" Opacity="0.6" VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       IsVisible="{Binding UserDetailDto.UserDto.Introduction,Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                        </Panel>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="30">
+                        <TextBlock Text="性别" Classes="Title" DockPanel.Dock="Left" />
+                        <SelectableTextBlock
+                            Classes="BasicMess" HorizontalAlignment="Right"
+                            Text="{Binding UserDetailDto.UserDto.Sex,Converter={converter:SexConverter}}" />
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="30">
+                        <TextBlock Text="生日" Classes="Title" DockPanel.Dock="Left" />
+                        <Panel>
+                            <SelectableTextBlock
+                                Classes="BasicMess"
+                                IsVisible="{Binding UserDetailDto.UserDto.Birth,Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Text="{Binding UserDetailDto.UserDto.Birth,Converter={converter:DateOfYMDConverter}}" />
+                            <TextBlock Text="未设置生日" Opacity="0.6" VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"
+                                       IsVisible="{Binding UserDetailDto.UserDto.Birth,Converter={x:Static ObjectConverters.IsNull}}" />
+                        </Panel>
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <Panel Margin="15,0">
+                <TextBlock Text="账号安全"
+                           VerticalAlignment="Center"
+                           FontSize="15" />
+            </Panel>
+            <Border Height="1.5" Margin="5,10" Background="{DynamicResource SukiBorderBrush}" />
+            <Border CornerRadius="10" BorderThickness="1.5"
+                    BorderBrush="{DynamicResource SukiBorderBrush}"
+                    Background="{DynamicResource SukiPrimaryColor3}"
+                    Margin="40,0"
+                    Padding="25,10">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10">
+                    <DockPanel LastChildFill="True" Height="35">
+                        <TextBlock Text="密码" Classes="Title" DockPanel.Dock="Left" />
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <TextBox PasswordChar="*" IsReadOnly="True"
+                                     Padding="6,7,12,7"
+                                     LetterSpacing="1.5"
+                                     TextAlignment="Center"
+                                     Margin="0" MinHeight="0"
+                                     Height="42"
+                                     Text="{Binding UserDetailDto.Password}"
+                                     VerticalAlignment="Center" />
+                            <Border Padding="2" Background="Transparent" Margin="0,0,-10,0" Classes="Icon"
+                                    ToolTip.ShowDelay="400">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="PointerPressed">
+                                        <InvokeCommandAction Command="{Binding EditPasswordCommand}" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <ToolTip.Tip>
+                                    <TextBlock Text="更改密码" FontSize="12.5" />
+                                </ToolTip.Tip>
+                                <avalonia:MaterialIcon Width="19" Height="19" Kind="PencilOutline" Opacity="0.8" />
+                            </Border>
+                        </StackPanel>
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="35">
+                        <TextBlock Text="手机" Classes="Title" DockPanel.Dock="Left" />
+                        <editableTextBlock:EditableTextBlock DefaultText="添加手机号"
+                                                             DefaultTextWidth="220"
+                                                             MaxLength="20"
+                                                             HorizontalContentAlignment="Right"
+                                                             Padding="10,7"
+                                                             HorizontalAlignment="Right"
+                                                             Text="{Binding UserDetailDto.PhoneNumber,Mode=TwoWay}"
+                                                             VerticalAlignment="Center" />
+                    </DockPanel>
+                    <DockPanel LastChildFill="True" Height="35">
+                        <TextBlock Text="邮箱" Classes="Title" DockPanel.Dock="Left" />
+                        <editableTextBlock:EditableTextBlock DefaultText="添加邮箱"
+                                                             MaxLength="30"
+                                                             DefaultTextWidth="220"
+                                                             HorizontalAlignment="Right"
+                                                             Padding="10,7"
+                                                             Text="{Binding UserDetailDto.EmailNumber,Mode=TwoWay}"
+                                                             VerticalAlignment="Center" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+            <TextBlock Margin="43,5" FontSize="12" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填" Opacity="0.5"></TextBlock>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

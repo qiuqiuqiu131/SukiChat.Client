@@ -74,7 +74,33 @@ public class UserDetailDto : BindableBase, IDisposable
         }
     }
 
+    private string? phoneNumber;
+
+    public string? PhoneNumber
+    {
+        get => phoneNumber;
+        set
+        {
+            if (SetProperty(ref phoneNumber, value))
+                OnUserDataChanged?.Invoke();
+        }
+    }
+
+    private string? emailNumber;
+
+    public string? EmailNumber
+    {
+        get => emailNumber;
+        set
+        {
+            if (SetProperty(ref emailNumber, value))
+                OnUserDataChanged?.Invoke();
+        }
+    }
+
     public event Action OnUnreadMessageCountChanged;
+
+    public event Action OnUserDataChanged;
 
     public void Dispose()
     {

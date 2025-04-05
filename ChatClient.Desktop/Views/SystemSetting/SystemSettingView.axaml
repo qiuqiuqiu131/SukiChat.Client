@@ -10,6 +10,7 @@
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
              xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
              mc:Ignorable="d"
              x:DataType="systemSetting:SystemSettingViewModel"
              Width="750" Height="750"
@@ -53,76 +54,89 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <Grid ColumnDefinitions="200,*">
-        <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor5}" />
-        <ListBox SelectedIndex="0" x:Name="ListBox" SelectionChanged="ListBox_OnSelectionChanged" Grid.Column="0"
-                 Margin="3,20" ItemsSource="{Binding SettingBars}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Spacing="10" Margin="3,0" Orientation="Horizontal">
-                        <avalonia:MaterialIcon Kind="{Binding Icon}" Foreground="{DynamicResource SukiText}" />
-                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" Spacing="3" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
-        <Grid Grid.Column="1" RowDefinitions="30,40,*">
-            <suki:GlassCard Grid.Row="0" CornerRadius="0" Grid.RowSpan="3" Opacity="0.5" />
-            <Border VerticalAlignment="Top"
-                    Background="Transparent"
-                    Grid.Row="0"
-                    HorizontalAlignment="Stretch">
+    <Panel>
+        <Grid ColumnDefinitions="200,*">
+            <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor5}" />
+            <ListBox x:Name="ListBox" Grid.Column="0"
+                     Margin="3,20" ItemsSource="{Binding SettingBars}">
                 <Interaction.Behaviors>
-                    <behaviors:WindowDragBehavior />
+                    <EventTriggerBehavior EventName="SelectionChanged">
+                        <InvokeCommandAction Command="{Binding SelectionChangedCommand }"
+                                             CommandParameter="{Binding SelectedItem,ElementName=ListBox}" />
+                    </EventTriggerBehavior>
                 </Interaction.Behaviors>
-                <DockPanel LastChildFill="False">
-                    <StackPanel VerticalAlignment="Center"
-                                DockPanel.Dock="Right"
-                                Margin="5,0"
-                                Orientation="Horizontal"
-                                Spacing="4">
-                        <StackPanel.Styles>
-                            <Style Selector="PathIcon">
-                                <Setter Property="Height" Value="8" />
-                                <Setter Property="Width" Value="8" />
-                            </Style>
-                        </StackPanel.Styles>
-                        <Button Name="PART_MinimizeButton"
-                                VerticalContentAlignment="Bottom"
-                                Classes="Basic Rounded WindowControlsButton">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="Click">
-                                    <ChangePropertyAction
-                                        TargetObject="{Binding $parent[suki:SukiWindow]}"
-                                        PropertyName="WindowState"
-                                        Value="{x:Static WindowState.Minimized}" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <PathIcon Margin="0,0,0,6"
-                                      VerticalAlignment="Bottom"
-                                      Data="{x:Static suki:Icons.WindowMinimize}" />
-                        </Button>
-                        <Button Name="PART_CloseButton"
-                                Classes="Basic Rounded WindowControlsButton Close" Command="{Binding CancelCommand }">
-                            <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
-                        </Button>
-                    </StackPanel>
-                </DockPanel>
-            </Border>
-            <Border Grid.Row="1" BorderThickness="0,0,0,1.5" BorderBrush="{DynamicResource SukiBorderBrush}">
-                <TextBlock FontSize="17" Margin="25,0" VerticalAlignment="Center"
-                           Text="{Binding ((data:SettingBarDto)SelectedItem).Name,ElementName=ListBox}" />
-            </Border>
-            <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible"
-                          Margin="0,20">
-                <ContentControl x:Name="RegionContent" Margin="8,0,0,0"
-                                regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.SystemSettingRegion}" />
-            </ScrollViewer>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Spacing="10" Margin="3,0" Orientation="Horizontal">
+                            <avalonia:MaterialIcon Kind="{Binding Icon}" Foreground="{DynamicResource SukiText}" />
+                            <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" Spacing="5" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Grid Grid.Column="1" RowDefinitions="30,40,*">
+                <suki:GlassCard Grid.Row="0" CornerRadius="0" Grid.RowSpan="3" Opacity="0.5" />
+                <Border VerticalAlignment="Top"
+                        Background="Transparent"
+                        Grid.Row="0"
+                        HorizontalAlignment="Stretch">
+                    <Interaction.Behaviors>
+                        <behaviors:WindowDragBehavior />
+                    </Interaction.Behaviors>
+                    <DockPanel LastChildFill="False">
+                        <StackPanel VerticalAlignment="Center"
+                                    DockPanel.Dock="Right"
+                                    Margin="5,0"
+                                    Orientation="Horizontal"
+                                    Spacing="4">
+                            <StackPanel.Styles>
+                                <Style Selector="PathIcon">
+                                    <Setter Property="Height" Value="8" />
+                                    <Setter Property="Width" Value="8" />
+                                </Style>
+                            </StackPanel.Styles>
+                            <Button Name="PART_MinimizeButton"
+                                    VerticalContentAlignment="Bottom"
+                                    Classes="Basic Rounded WindowControlsButton">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction
+                                            TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                            PropertyName="WindowState"
+                                            Value="{x:Static WindowState.Minimized}" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <PathIcon Margin="0,0,0,6"
+                                          VerticalAlignment="Bottom"
+                                          Data="{x:Static suki:Icons.WindowMinimize}" />
+                            </Button>
+                            <Button Name="PART_CloseButton"
+                                    Classes="Basic Rounded WindowControlsButton Close"
+                                    Command="{Binding CancelCommand }">
+                                <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                            </Button>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+                <Border Grid.Row="1" BorderThickness="0,0,0,1.5" BorderBrush="{DynamicResource SukiBorderBrush}">
+                    <TextBlock FontSize="17" Margin="25,0" VerticalAlignment="Center"
+                               Text="{Binding ((data:SettingBarDto)SelectedItem).Name,ElementName=ListBox}" />
+                </Border>
+                <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Visible"
+                              Margin="0,20">
+                    <ContentControl x:Name="RegionContent" Margin="8,0,0,0"
+                                    regions:RegionManager.RegionManager="{Binding RegionManager}"
+                                    regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.SystemSettingRegion}" />
+                </ScrollViewer>
+            </Grid>
         </Grid>
-    </Grid>
+        <suki:SukiDialogHost Manager="{Binding DialogManager}" />
+        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" />
+    </Panel>
 </UserControl>

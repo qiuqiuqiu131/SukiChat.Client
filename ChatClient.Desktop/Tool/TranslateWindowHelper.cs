@@ -92,13 +92,8 @@ public static class TranslateWindowHelper
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            foreach (var window in desktop.Windows)
-            {
-                if (window is SukiDialogWindow dialogWindow)
-                {
-                    dialogWindow.Close();
-                }
-            }
+            var dialogs = desktop.Windows.Where(d => d is SukiDialogWindow).ToList();
+            dialogs.ForEach(d => d.Close());
         }
     }
 }

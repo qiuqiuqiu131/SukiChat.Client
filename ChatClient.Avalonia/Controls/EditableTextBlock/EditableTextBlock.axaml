@@ -4,6 +4,8 @@
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
     <Style Selector="editableTextBlock|EditableTextBlock">
         <Setter Property="FontSize" Value="14" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="8,4" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
@@ -28,14 +30,15 @@
                                    Text="{Binding $parent[editableTextBlock:EditableTextBlock].Text}" />
                     </Grid>
                     <TextBox Name="PART_TextBox"
-                             Padding="8,4"
-                             Width="150"
+                             Padding="{TemplateBinding Padding}"
+                             Width="{TemplateBinding DefaultTextWidth}"
                              Opacity="0.9"
                              MinHeight="0"
+                             Margin="{TemplateBinding Margin}"
                              ContextFlyout="{x:Null}"
+                             MaxLength="{TemplateBinding MaxLength}"
                              Classes="Editable"
                              Watermark="{Binding $parent[editableTextBlock:EditableTextBlock].DefaultText}"
-                             Margin="0"
                              FontSize="{TemplateBinding FontSize}"
                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                              VerticalAlignment="Center"

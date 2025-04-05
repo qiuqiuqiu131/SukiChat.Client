@@ -112,7 +112,7 @@
                                          PointerPressed="InputElement_OnPointerPressed" />
             </suki:SukiSideMenu.LeftBottomContent>
             <suki:SukiSideMenu.FooterContent>
-                <StackPanel HorizontalAlignment="Center" Spacing="15" Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" Spacing="12.5" Orientation="Horizontal">
                     <StackPanel.Styles>
                         <Style Selector="Button">
                             <Setter Property="Width" Value="40" />
@@ -125,12 +125,12 @@
 
                         <Style Selector="Button:pointerover avalonia|MaterialIcon">
                             <Style.Animations>
-                                <Animation Duration="0:0:0.2" IterationCount="1" FillMode="None">
+                                <Animation Duration="0:0:0.25" IterationCount="1" FillMode="None">
                                     <KeyFrame Cue="0%">
                                         <Setter Property="TranslateTransform.Y" Value="0" />
                                     </KeyFrame>
                                     <KeyFrame Cue="50%">
-                                        <Setter Property="TranslateTransform.Y" Value="-3.5" />
+                                        <Setter Property="TranslateTransform.Y" Value="-5" />
                                     </KeyFrame>
                                     <KeyFrame Cue="100%">
                                         <Setter Property="TranslateTransform.Y" Value="0" />
@@ -142,26 +142,28 @@
                         <Style Selector="Button:pointer"></Style>
                     </StackPanel.Styles>
                     <Button Classes="Basic"
+                            Cursor="Hand"
                             Command="{Binding ExitCommnad}"
                             ToolTip.ShowDelay="500">
                         <avalonia:MaterialIcon Kind="ExitToApp" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        <ToolTip.Tip>
-                            <TextBlock Text="退出登录" FontSize="12" />
-                        </ToolTip.Tip>
+                        <!-- <ToolTip.Tip> -->
+                        <!--     <TextBlock Text="退出登录" FontSize="12" /> -->
+                        <!-- </ToolTip.Tip> -->
                     </Button>
-                    <Button Classes="Basic" ToolTip.ShowDelay="500" Command="{Binding ShowSystemSettingCommand}">
+                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500"
+                            Command="{Binding ShowSystemSettingCommand}">
                         <avalonia:MaterialIcon Kind="SettingsOutline" VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
-                        <ToolTip.Tip>
-                            <TextBlock Text="设置" FontSize="12" />
-                        </ToolTip.Tip>
+                        <!-- <ToolTip.Tip> -->
+                        <!--     <TextBlock Text="设置" FontSize="12" /> -->
+                        <!-- </ToolTip.Tip> -->
                     </Button>
-                    <Button Classes="Basic" ToolTip.ShowDelay="500">
+                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500">
                         <avalonia:MaterialIcon Kind="AboutOutline" VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
-                        <ToolTip.Tip>
-                            <TextBlock Text="关于" FontSize="12" />
-                        </ToolTip.Tip>
+                        <!-- <ToolTip.Tip> -->
+                        <!--     <TextBlock Text="关于" FontSize="12" /> -->
+                        <!-- </ToolTip.Tip> -->
                     </Button>
                 </StackPanel>
             </suki:SukiSideMenu.FooterContent>

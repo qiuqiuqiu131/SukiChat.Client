@@ -1,4 +1,5 @@
 using ChatClient.Tool.ManagerInterface;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatClient.BaseService.Manager;
 
@@ -6,10 +7,10 @@ internal class AppDataManager : IAppDataManager
 {
     private readonly string _appDataFolder;
 
-    public AppDataManager()
+    public AppDataManager(IConfigurationRoot configurationRoot)
     {
         var floaderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        _appDataFolder = Path.Combine(floaderPath, "QiuQiuQiu", "ChatApp");
+        _appDataFolder = Path.Combine(floaderPath, "QiuQiuQiu", configurationRoot["BaseFolder"] ?? "ChatApp");
 
         // Create the folder if it doesn't exist
         if (!Directory.Exists(_appDataFolder))

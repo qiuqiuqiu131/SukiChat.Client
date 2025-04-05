@@ -73,8 +73,6 @@ internal class UserManager : IUserManager
         {
             var _userService = _containerProvider.Resolve<IUserLoginService>();
             UserData = await _userService.GetUserFullData(id, password);
-            if (_userService is IDisposable disposable)
-                disposable.Dispose();
         }
         catch (Exception e)
         {

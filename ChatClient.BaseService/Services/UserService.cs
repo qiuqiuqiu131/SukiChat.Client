@@ -20,6 +20,8 @@ public interface IUserService
 
     public Task<UserDto?> GetUserDto(string id);
 
+    public Task<Bitmap> GetHeadImage(UserDto User);
+
     public Task<UserDetailDto?> GetUserDetailDto(string id, string password);
 
     public Task<bool> SaveUser(UserDetailDto User);
@@ -47,7 +49,7 @@ internal class UserService : BaseService, IUserService
     /// 获取用户头像
     /// </summary>
     /// <returns></returns>
-    private async Task<Bitmap> GetHeadImage(UserDto User)
+    public async Task<Bitmap> GetHeadImage(UserDto User)
     {
         if (User.HeadCount == 0)
         {
@@ -168,7 +170,7 @@ internal class UserService : BaseService, IUserService
             // ignore
         }
 
-        user.HeadImage = await GetHeadImage(user);
+        Task.Run(async () => user.HeadImage = await GetHeadImage(user));
 
         return user;
     }

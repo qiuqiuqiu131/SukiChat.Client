@@ -161,7 +161,7 @@ public class GroupList : UserControl
 
     private void InitItems(AvaloniaList<FriendRelationDto> value)
     {
-        var list = value.OrderBy(d => d.UserDto.Name);
+        var list = value.OrderBy(d => d.UserDto?.Name ?? "");
         foreach (var item in list)
         {
             var listItem = new ListBoxItem();

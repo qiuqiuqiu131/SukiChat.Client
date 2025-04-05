@@ -89,10 +89,6 @@ internal class UserDtoManager : IUserDtoManager
             var userService = _containerProvider.Resolve<IUserService>();
             var user = await userService.GetUserDto(id);
 
-            // 销毁服务
-            if (userService is IDisposable disposable)
-                disposable.Dispose();
-
             // 如果获取到用户信息，添加到缓存中
             if (user != null)
             {
@@ -125,10 +121,6 @@ internal class UserDtoManager : IUserDtoManager
 
             var friendService = _containerProvider.Resolve<IFriendService>();
             var friend = await friendService.GetFriendRelationDto(userId, friendId);
-
-            // 销毁服务
-            if (friendService is IDisposable disposable)
-                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (friend != null)
@@ -197,10 +189,6 @@ internal class UserDtoManager : IUserDtoManager
                 _groupDtos.TryAdd(groupId, group);
             }
 
-            // 销毁服务
-            if (groupService is IDisposable disposable)
-                disposable.Dispose();
-
             return group;
         }
         finally
@@ -224,10 +212,6 @@ internal class UserDtoManager : IUserDtoManager
 
             var groupService = _containerProvider.Resolve<IGroupGetService>();
             var groupRelation = await groupService.GetGroupRelationDto(userId, groupId);
-
-            // 销毁服务
-            if (groupService is IDisposable disposable)
-                disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (groupRelation != null)
@@ -271,10 +255,6 @@ internal class UserDtoManager : IUserDtoManager
 
             var groupService = _containerProvider.Resolve<IGroupGetService>();
             var groupMember = await groupService.GetGroupMemberDto(groupId, memberId);
-
-            // // 销毁服务
-            // if (groupService is IDisposable disposable)
-            //     disposable.Dispose();
 
             // 如果获取到用户信息，添加到缓存中
             if (groupMember != null)

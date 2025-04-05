@@ -54,6 +54,7 @@ public static class BaseServiceExtension
             .Register<IGroupService, GroupService>()
             .Register<IUserGroupService, UserGroupService>()
             .Register<ISearchService, SearchService>()
+            .Register<IPasswordService, PasswordService>()
             .Register<ILocalSearchService, LocalSearchService>();
 
         // 注册PackService

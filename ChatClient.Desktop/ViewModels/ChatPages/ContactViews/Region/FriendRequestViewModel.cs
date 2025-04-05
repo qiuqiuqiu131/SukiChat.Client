@@ -12,12 +12,13 @@ using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
-public class FriendRequestViewModel : ViewModelBase
+public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
 {
     public AvaloniaList<FriendReceiveDto> FriendReceivedDtos { get; init; }
     public AvaloniaList<FriendRequestDto> FriendRequestDtos { get; init; }
@@ -158,4 +159,6 @@ public class FriendRequestViewModel : ViewModelBase
             .WithViewModel(d => new AcceptFriendViewModel(d, AcceptRequestCallback, obj.UserDto))
             .TryShow();
     }
+
+    public bool KeepAlive => false;
 }

@@ -120,6 +120,7 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<LocalSearchGroupView, LocalSearchGroupViewModel>();
         // 设置
         containerRegistry.RegisterForNavigation<ThemeView, ThemeViewModel>();
+        containerRegistry.RegisterForNavigation<AccountView, AccountViewModel>();
         containerRegistry.RegisterForNavigation<UndoView>();
 
         // 注册DialogView
@@ -193,6 +194,8 @@ public class App : PrismApplication
             .AddView<WarningDialogView, WarningDialogViewModel>(services)
             // 通用Dialog
             .AddView<SukiDialogView, SukiDialogViewModel>(services)
+            // 编辑密码
+            .AddView<EditPasswordView, EditPasswordViewModel>(services)
             // 发送文件dialog
             .AddView<SendFileDialogView, SendFileDialogViewModel>(services);
     }

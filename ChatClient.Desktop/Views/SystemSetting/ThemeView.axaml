@@ -5,7 +5,6 @@
              xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
              xmlns:chatPages1="clr-namespace:ChatClient.Desktop.Views.SystemSetting"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -14,7 +13,7 @@
     <UserControl.Resources>
         <converter:EqualityConverter x:Key="EqualityConverter" />
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical" Margin="20,10" Spacing="15">
+    <StackPanel Orientation="Vertical" Margin="20,10" Spacing="30">
         <!-- 白天黑夜 -->
         <StackPanel Orientation="Vertical" Spacing="10">
             <TextBlock Text="主题样式" Margin="15,0" FontSize="15" />

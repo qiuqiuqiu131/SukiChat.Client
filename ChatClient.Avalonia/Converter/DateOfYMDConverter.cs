@@ -18,6 +18,11 @@ public class DateOfYMDConverter : MarkupExtension, IValueConverter
             return time.ToString("yyyy年M月d日");
         }
 
+        if (value is DateOnly date)
+        {
+            return date.ToString("yyyy年M月d日");
+        }
+
         return null;
     }
 

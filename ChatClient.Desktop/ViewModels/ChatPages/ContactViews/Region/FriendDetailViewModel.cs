@@ -16,7 +16,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
-public class FriendDetailViewModel : ViewModelBase, IDestructible
+public class FriendDetailViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
@@ -134,4 +134,6 @@ public class FriendDetailViewModel : ViewModelBase, IDestructible
         if (_userManager.GroupFriends != null)
             _userManager.GroupFriends.CollectionChanged -= GroupFriendsOnCollectionChanged;
     }
+
+    public bool KeepAlive => false;
 }

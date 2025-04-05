@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.UIEntity;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Data;
@@ -66,21 +68,26 @@ public class EditUserDataViewModel : BindableBase
 
     #endregion
 
+    private INotificationMessageManager? _notificationMessageManager;
+
     public IEnumerable<Sex> SexEnum { get; set; } = Enum.GetValues<Sex>();
 
     public DelegateCommand EditHeadCommand { get; init; }
     public DelegateCommand CancelCommand { get; init; }
     public DelegateCommand SaveCommand { get; init; }
 
-    public EditUserDataViewModel(ISukiDialog dialog, UserDto userDto)
+    public EditUserDataViewModel(ISukiDialog dialog, IDialogParameters parameters)
     {
         _dialog = dialog;
         _eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
         _userManager = App.Current.Container.Resolve<IUserManager>();
         _dialogService = App.Current.Container.Resolve<IDialogService>();
 
+        if (parameters.ContainsKey("NotificationManager"))
+            _notificationMessageManager =
+                parameters.GetValue<INotificationMessageManager>("NotificationManager");
+        UserDto = parameters.GetValue<UserDto>("UserDto");
 
-        UserDto = userDto;
         Name = UserDto.Name;
         Introduction = UserDto.Introduction ?? "";
         Sex = UserDto.Sex;
@@ -102,13 +109,17 @@ public class EditUserDataViewModel : BindableBase
         UserDto.Introduction = Introduction;
         _userManager.SaveUser();
 
-        _dialog.Dismiss();
+        if (_notificationMessageManager != null)
+            _notificationMessageManager.ShowMessage("用户信息更改成功", NotificationType.Success, TimeSpan.FromSeconds(2));
+        else
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "用户信息更改成功",
+                Type = NotificationType.Success
+            });
 
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-        {
-            Message = "用户信息更改成功",
-            Type = NotificationType.Success
-        });
+        UserDto = null;
+        _dialog.Dismiss();
     }
 
     private void EditHead()

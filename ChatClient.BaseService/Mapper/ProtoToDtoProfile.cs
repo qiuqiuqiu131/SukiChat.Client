@@ -50,7 +50,9 @@ internal class ProtoToDtoProfile : Profile
             .ForMember(um => um.IsMale, opt => opt.MapFrom(u => u.UserDto.Sex == Sex.Male))
             .ForMember(um => um.Name, opt => opt.MapFrom(u => u.UserDto.Name))
             .ForMember(um => um.HeadCount, opt => opt.MapFrom(u => u.UserDto.HeadCount))
-            .ForMember(um => um.HeadIndex, opt => opt.MapFrom(u => u.UserDto.HeadIndex));
+            .ForMember(um => um.HeadIndex, opt => opt.MapFrom(u => u.UserDto.HeadIndex))
+            .ForMember(um => um.EmailNumber, opt => opt.MapFrom(u => u.EmailNumber ?? string.Empty))
+            .ForMember(um => um.PhoneNumber, opt => opt.MapFrom(u => u.PhoneNumber ?? string.Empty));
 
         CreateMap<UserDetailMessage, UserDetailDto>()
             .ForMember(u => u.LastReadFriendMessageTime,
@@ -60,7 +62,11 @@ internal class ProtoToDtoProfile : Profile
             .ForMember(u => u.LastDeleteFriendMessageTime,
                 opt => opt.MapFrom(um => DateTime.Parse(um.LastDeleteFriendMessageTime)))
             .ForMember(u => u.LastDeleteGroupMessageTime,
-                opt => opt.MapFrom(um => DateTime.Parse(um.LastDeleteGroupMessageTime)));
+                opt => opt.MapFrom(um => DateTime.Parse(um.LastDeleteGroupMessageTime)))
+            .ForMember(u => u.EmailNumber,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.EmailNumber) ? null : um.EmailNumber))
+            .ForMember(u => u.PhoneNumber,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.PhoneNumber) ? null : um.PhoneNumber));
 
         #endregion
 

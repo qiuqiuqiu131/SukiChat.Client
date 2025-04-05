@@ -18,7 +18,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 
-public class GroupDetailViewModel : ViewModelBase
+public class GroupDetailViewModel : ViewModelBase, IRegionMemberLifetime
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
@@ -158,4 +158,6 @@ public class GroupDetailViewModel : ViewModelBase
         var groupService = _containerProvider.Resolve<IGroupService>();
         await groupService.UpdateGroup(_userManager.User.Id, Group.GroupDto);
     }
+
+    public bool KeepAlive => false;
 }

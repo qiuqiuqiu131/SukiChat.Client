@@ -21,7 +21,7 @@ public class ProcessorBase<T> : IProcessor<T>
     public async Task Process(T message)
     {
         var eventAggregator = _container.Resolve<IEventAggregator>();
-        eventAggregator.GetEvent<ResponseEvent<T>>().Publish(message);
+        _ = Task.Run(() => { eventAggregator.GetEvent<ResponseEvent<T>>().Publish(message); });
         await OnProcess(message);
     }
 
