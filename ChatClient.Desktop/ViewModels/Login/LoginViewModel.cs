@@ -208,8 +208,17 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToForgetView()
     {
-        var cornerDialogManager = _containerProvider.Resolve<ICornerDialogService>();
-        NotificationManager.ShowMessage("功能未开放", NotificationType.Information, TimeSpan.FromSeconds(1.5));
+        // var cornerDialogManager = _containerProvider.Resolve<ICornerDialogService>();
+        // NotificationManager.ShowMessage("功能未开放", NotificationType.Information, TimeSpan.FromSeconds(1.5));
+        _dialogService.Show(nameof(ForgetPasswordView), res =>
+        {
+            if (res.Result == ButtonResult.OK)
+            {
+                Id = res.Parameters["ID"] as string;
+                Password = null;
+                LoginData.Id = Id;
+            }
+        });
     }
 
     #region Dispose

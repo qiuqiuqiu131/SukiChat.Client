@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
+using Avalonia.Notification;
 using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
@@ -125,6 +128,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
     public DelegateCommand CancelCommand { get; init; }
 
     public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();
+    public INotificationMessageManager NotificationManager { get; set; } = new NotificationMessageManager();
 
     private readonly IContainerProvider _containerProvider;
 
@@ -147,9 +151,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
         };
     }
 
-    private bool CanRegister() => (NameErrors?.Count ?? 0) == 0
-                                  && (PasswordErrors?.Count ?? 0) == 0
-                                  && (RePasswordErrors?.Count ?? 0) == 0
+    private bool CanRegister() => !HasErrors
                                   && !string.IsNullOrWhiteSpace(Name)
                                   && !string.IsNullOrWhiteSpace(Password)
                                   && !string.IsNullOrWhiteSpace(RePassword);
@@ -177,10 +179,9 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
         }
         else
         {
-            DialogManager.CreateDialog()
-                .WithViewModel(d =>
-                    new SukiDialogViewModel(d, NotificationType.Information, "注册失败", "请检查网络连接", () => { }))
-                .TryShow();
+            NotificationManager.ShowMessage("注册失败", NotificationType.Error, TimeSpan.FromSeconds(2));
+            Password = null;
+            RePassword = null;
         }
     }
 

@@ -82,9 +82,20 @@ public class UserDetailDto : BindableBase, IDisposable
         set
         {
             if (SetProperty(ref phoneNumber, value))
-                OnUserDataChanged?.Invoke();
+                OnPhoneNumberChanged?.Invoke();
         }
     }
+
+    public string? PhoneNumberWithoutEvent
+    {
+        get => phoneNumber;
+        set
+        {
+            SetProperty(ref phoneNumber, value);
+            RaisePropertyChanged(nameof(PhoneNumber));
+        }
+    }
+
 
     private string? emailNumber;
 
@@ -94,13 +105,24 @@ public class UserDetailDto : BindableBase, IDisposable
         set
         {
             if (SetProperty(ref emailNumber, value))
-                OnUserDataChanged?.Invoke();
+                OnEmailNumberChanged?.Invoke();
+        }
+    }
+
+    public string? EmailNumberWithoutEvent
+    {
+        get => emailNumber;
+        set
+        {
+            SetProperty(ref emailNumber, value);
+            RaisePropertyChanged(nameof(EmailNumber));
         }
     }
 
     public event Action OnUnreadMessageCountChanged;
 
-    public event Action OnUserDataChanged;
+    public event Action OnPhoneNumberChanged;
+    public event Action OnEmailNumberChanged;
 
     public void Dispose()
     {

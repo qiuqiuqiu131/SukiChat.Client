@@ -1,8 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
+using ChatClient.Tool.Common;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -12,7 +17,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.UserControls;
 
-public class EditPasswordViewModel : BindableBase
+public class EditPasswordViewModel : ValidateBindableBase
 {
     private readonly ISukiDialog _sukiDialog;
     private readonly Action<IDialogResult>? _requestClose;
@@ -35,27 +40,43 @@ public class EditPasswordViewModel : BindableBase
 
     private string? newPassword;
 
+    [PasswordValidation(MinClass = 2, MinLength = 8)]
+    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
     public string? NewPassword
     {
         get => newPassword;
         set
         {
             if (SetProperty(ref newPassword, value))
+            {
+                ValidateProperty(nameof(NewPassword), value);
                 ConfirmCommand.RaiseCanExecuteChanged();
+            }
         }
     }
 
+    private List<string>? NewPasswordErrors => (List<string>?)GetErrors(nameof(NewPassword));
+    public string? NewPasswordError => NewPasswordErrors?.FirstOrDefault();
+
     private string? confirmPassword;
 
+    [PasswordValidation(MinClass = 2, MinLength = 8)]
+    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
     public string? ConfirmPassword
     {
         get => confirmPassword;
         set
         {
             if (SetProperty(ref confirmPassword, value))
+            {
+                ValidateProperty(nameof(ConfirmPassword), value);
                 ConfirmCommand.RaiseCanExecuteChanged();
+            }
         }
     }
+
+    private List<string>? ConfirmPasswordErrors => (List<string>?)GetErrors(nameof(ConfirmPassword));
+    public string? ConfirmPasswordError => ConfirmPasswordErrors?.FirstOrDefault();
 
     public DelegateCommand CancelCommand { get; }
     public DelegateCommand ConfirmCommand { get; }
@@ -76,26 +97,33 @@ public class EditPasswordViewModel : BindableBase
             sukiDialog.Dismiss();
         });
         ConfirmCommand = new DelegateCommand(Confirm, CanConfirm);
+
+        ErrorsChanged += (_, _) =>
+        {
+            ConfirmCommand.RaiseCanExecuteChanged();
+            RaisePropertyChanged(nameof(NewPasswordError));
+            RaisePropertyChanged(nameof(ConfirmPasswordError));
+        };
     }
 
     private bool CanConfirm() => !string.IsNullOrWhiteSpace(confirmPassword) &&
                                  !string.IsNullOrWhiteSpace(origionalPassword) &&
-                                 !string.IsNullOrWhiteSpace(newPassword);
+                                 !string.IsNullOrWhiteSpace(newPassword) && !HasErrors;
 
     private async void Confirm()
     {
         if (!confirmPassword!.Equals(newPassword))
         {
             NotificationManager.ShowMessage("两次输入的密码不一致", NotificationType.Error, TimeSpan.FromSeconds(2));
-            ConfirmPassword = string.Empty;
+            ConfirmPassword = null;
             return;
         }
 
         if (confirmPassword!.Equals(origionalPassword))
         {
             NotificationManager.ShowMessage("新密码和原密码相同", NotificationType.Warning, TimeSpan.FromSeconds(2));
-            ConfirmPassword = string.Empty;
-            NewPassword = string.Empty;
+            ConfirmPassword = null;
+            NewPassword = null;
             return;
         }
 
@@ -105,9 +133,9 @@ public class EditPasswordViewModel : BindableBase
         if (!result.Item1)
         {
             NotificationManager.ShowMessage(result.Item2, NotificationType.Error, TimeSpan.FromSeconds(2.5));
-            ConfirmPassword = string.Empty;
-            NewPassword = string.Empty;
-            OrigionalPassword = string.Empty;
+            ConfirmPassword = null;
+            NewPassword = null;
+            OrigionalPassword = null;
             return;
         }
 

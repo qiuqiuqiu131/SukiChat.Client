@@ -116,6 +116,7 @@
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchAllView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchUserView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/ForgetPasswordView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/LoginDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/LoginView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/LoginWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

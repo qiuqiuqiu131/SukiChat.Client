@@ -18,6 +18,7 @@
         </Style>
         <Style Selector="SelectableTextBlock.BasicMess">
             <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Opacity" Value="0.85" />
             <Setter Property="TextAlignment" Value="Right" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
@@ -119,7 +120,8 @@
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" Spacing="10">
                     <DockPanel LastChildFill="True" Height="35">
                         <TextBlock Text="密码" Classes="Title" DockPanel.Dock="Left" />
-                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal"
+                                    Opacity="0.85">
                             <TextBox PasswordChar="*" IsReadOnly="True"
                                      Padding="6,7,12,7"
                                      LetterSpacing="1.5"
@@ -149,6 +151,7 @@
                                                              MaxLength="20"
                                                              HorizontalContentAlignment="Right"
                                                              Padding="10,7"
+                                                             Opacity="0.85"
                                                              HorizontalAlignment="Right"
                                                              Text="{Binding UserDetailDto.PhoneNumber,Mode=TwoWay}"
                                                              VerticalAlignment="Center" />
@@ -157,6 +160,7 @@
                         <TextBlock Text="邮箱" Classes="Title" DockPanel.Dock="Left" />
                         <editableTextBlock:EditableTextBlock DefaultText="添加邮箱"
                                                              MaxLength="30"
+                                                             Opacity="0.85"
                                                              DefaultTextWidth="220"
                                                              HorizontalAlignment="Right"
                                                              Padding="10,7"

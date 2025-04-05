@@ -15,7 +15,7 @@
                  Width="1050"
                  Height="680"
                  MinHeight="500"
-                 MinWidth="800"
+                 MinWidth="900"
                  Icon="/Assets/Icon.ico"
                  TitleBarAnimationEnabled="False"
                  Padding="15,5"

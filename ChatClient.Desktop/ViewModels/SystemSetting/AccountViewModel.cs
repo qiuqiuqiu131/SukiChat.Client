@@ -1,10 +1,15 @@
+using System;
+using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.BaseService.Services;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.SukiDialog;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
@@ -14,6 +19,7 @@ namespace ChatClient.Desktop.ViewModels.SystemSetting;
 public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
 {
     private readonly IUserManager _userManager;
+    private readonly IContainerProvider _containerProvider;
     private UserDetailDto _userDetailDto;
 
     public UserDetailDto UserDetailDto
@@ -22,15 +28,19 @@ public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLif
         set => SetProperty(ref _userDetailDto, value);
     }
 
+    private string? origionPhoneNumber;
+    private string? origionEmailNumber;
+
     private ISukiDialogManager? sukiDialogManager;
     private INotificationMessageManager? notificationMessageManager;
 
     public DelegateCommand EditUserDataCommand { get; init; }
     public DelegateCommand EditPasswordCommand { get; init; }
 
-    public AccountViewModel(IUserManager userManager)
+    public AccountViewModel(IUserManager userManager, IContainerProvider containerProvider)
     {
         _userManager = userManager;
+        _containerProvider = containerProvider;
         UserDetailDto = userManager.User;
 
         EditUserDataCommand = new DelegateCommand(EditUserData);
@@ -59,9 +69,42 @@ public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLif
             .TryShow();
     }
 
-    private void UserDetailDtoOnOnUserDataChanged()
+    // 邮箱变化时调用
+    private async void UserDetailDtoOnOnEmailNumberChanged()
     {
-        _userManager.SaveUser();
+        var passwordService = _containerProvider.Resolve<IPasswordService>();
+        var result = await passwordService.UpdateEmailAsync(_userDetailDto.Id, _userDetailDto.Password,
+            _userDetailDto.EmailNumber);
+        if (!result.Item1)
+        {
+            _userDetailDto.EmailNumberWithoutEvent = origionEmailNumber;
+            notificationMessageManager?.ShowMessage(result.Item2, NotificationType.Error, TimeSpan.FromSeconds(2));
+        }
+        else
+        {
+            notificationMessageManager?.ShowMessage("邮箱修改成功", NotificationType.Success,
+                TimeSpan.FromSeconds(2));
+            origionEmailNumber = _userDetailDto.EmailNumber;
+        }
+    }
+
+    // 手机号变化时调用
+    private async void UserDetailDtoOnOnPhoneNumberChanged()
+    {
+        var passwordService = _containerProvider.Resolve<IPasswordService>();
+        var result = await passwordService.UpdatePhoneNumberAsync(_userDetailDto.Id, _userDetailDto.Password,
+            _userDetailDto.PhoneNumber);
+        if (!result.Item1)
+        {
+            _userDetailDto.PhoneNumberWithoutEvent = origionPhoneNumber;
+            notificationMessageManager?.ShowMessage(result.Item2, NotificationType.Error, TimeSpan.FromSeconds(2));
+        }
+        else
+        {
+            notificationMessageManager?.ShowMessage("手机号修改成功", NotificationType.Success,
+                TimeSpan.FromSeconds(2));
+            origionPhoneNumber = _userDetailDto.PhoneNumber;
+        }
     }
 
     #region INavigationAware
@@ -72,14 +115,19 @@ public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLif
         notificationMessageManager =
             navigationContext.Parameters.GetValue<INotificationMessageManager>("NotificationManager");
 
-        UserDetailDto.OnUserDataChanged += UserDetailDtoOnOnUserDataChanged;
+        UserDetailDto.OnPhoneNumberChanged += UserDetailDtoOnOnPhoneNumberChanged;
+        UserDetailDto.OnEmailNumberChanged += UserDetailDtoOnOnEmailNumberChanged;
+
+        origionEmailNumber = UserDetailDto.EmailNumber;
+        origionPhoneNumber = UserDetailDto.PhoneNumber;
     }
 
     public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        UserDetailDto.OnUserDataChanged -= UserDetailDtoOnOnUserDataChanged;
+        UserDetailDto.OnEmailNumberChanged -= UserDetailDtoOnOnEmailNumberChanged;
+        UserDetailDto.OnPhoneNumberChanged -= UserDetailDtoOnOnPhoneNumberChanged;
     }
 
     #endregion

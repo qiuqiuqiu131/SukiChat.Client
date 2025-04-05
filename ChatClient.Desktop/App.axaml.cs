@@ -126,6 +126,7 @@ public class App : PrismApplication
         // 注册DialogView
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
         containerRegistry.RegisterDialog<RegisterWindowView, RegisterWindowViewModel>();
+        containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
         // 搜索用户和群
         containerRegistry.RegisterDialog<SearchUserGroupView, SearchUserGroupViewModel>();
         // 本地搜索

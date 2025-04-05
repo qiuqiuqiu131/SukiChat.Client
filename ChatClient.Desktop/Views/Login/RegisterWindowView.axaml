@@ -8,6 +8,7 @@
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.Login"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
+    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     Width="340"
     Height="460"
     x:DataType="vm:RegisterWindowViewModel"
@@ -56,6 +57,7 @@
                         <Style Selector="TextBlock.error">
                             <Setter Property="Foreground" Value="Red" />
                             <Setter Property="FontSize" Value="12.5" />
+                            <Setter Property="Opacity" Value="0.8" />
                             <Setter Property="Margin" Value="12,-2,0,0" />
                             <Setter Property="VerticalAlignment" Value="Center" />
                         </Style>
@@ -98,6 +100,7 @@
             </DockPanel>
         </suki:BusyArea>
 
-        <suki:SukiDialogHost Grid.RowSpan="2" Manager="{Binding DialogManager}" />
+        <suki:SukiDialogHost Grid.Row="0" Grid.RowSpan="2" Manager="{Binding DialogManager}" />
+        <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2" Manager="{Binding NotificationManager}" />
     </Grid>
 </UserControl>
