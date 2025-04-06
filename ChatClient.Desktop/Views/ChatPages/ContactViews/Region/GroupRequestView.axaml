@@ -208,11 +208,11 @@
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBlock Text="消息：" FontSize="12" Opacity="0.6" />
                                 <TextBlock Text="已被群主解散" FontSize="12" Opacity="0.6" Margin="0"
-                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=0}}" />
+                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=2}}" />
                                 <TextBlock Text="你被移除群聊" FontSize="12" Opacity="0.6" Margin="0"
                                            IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=1}}" />
                                 <TextBlock Text="你退出了群聊" FontSize="12" Opacity="0.6" Margin="0"
-                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=2}}" />
+                                           IsVisible="{Binding DeleteMethod,Converter={converter:IntEqualityConverter Value=0}}" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>

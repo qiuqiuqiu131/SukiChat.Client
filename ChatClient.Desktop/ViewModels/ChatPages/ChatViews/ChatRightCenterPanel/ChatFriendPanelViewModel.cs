@@ -6,15 +6,18 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
+using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -32,6 +35,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     private readonly IEventAggregator _eventAggregator;
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
+
+    public IRegionManager RegionManager { get; }
 
     public ThemeStyle ThemeStyle { get; set; }
 
@@ -56,11 +61,11 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     public DelegateCommand SearchMoreCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
-    public AsyncDelegateCommand DeleteFriendCommand { get; private set; }
 
     #endregion
 
     public ChatFriendPanelViewModel(IContainerProvider containerProvider,
+        IRegionManager regionManager,
         IEventAggregator eventAggregator,
         ISukiDialogManager sukiDialogManager,
         IThemeStyle themeStyle,
@@ -70,6 +75,9 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         _eventAggregator = eventAggregator;
         _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
+
+        RegionManager = regionManager.CreateRegionManager();
+        RegionManager.RegisterViewWithRegion(RegionNames.ChatSideRegion, typeof(FriendSideView));
 
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
@@ -81,7 +89,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
-        DeleteFriendCommand = new AsyncDelegateCommand(DeleteFriend);
     }
 
     /// <summary>
@@ -193,31 +200,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
 
         _sukiDialogManager.CreateDialog()
             .WithViewModel(d => new CommonDialogViewModel(d, "确定删除此聊天消息吗？", DeleteMessageCallback))
-            .TryShow();
-    }
-
-    /// <summary>
-    /// 删除好友
-    /// </summary>
-    private async Task DeleteFriend()
-    {
-        if (SelectedFriend == null) return;
-
-        async void DeleteFriendCallback(IDialogResult result)
-        {
-            if (result.Result != ButtonResult.OK) return;
-            var friendService = _containerProvider.Resolve<IFriendService>();
-            await friendService.DeleteFriend(_userManager.User!.Id, SelectedFriend.UserId);
-
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = $"您已删除好友 {SelectedFriend.FriendRelatoinDto?.UserDto?.Name ?? string.Empty}",
-                Type = NotificationType.Success
-            });
-        }
-
-        _sukiDialogManager.CreateDialog()
-            .WithViewModel(d => new CommonDialogViewModel(d, "确定删除好友吗？", DeleteFriendCallback))
             .TryShow();
     }
 
@@ -471,6 +453,15 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         ChatInputPanelViewModel.UpdateChatMessages(SelectedFriend.InputMessages);
         if (SelectedFriend is { FriendRelatoinDto: not null })
             SelectedFriend.FriendRelatoinDto.OnFriendRelationChanged += Friend_OnFriendRelationChanged;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            // 初始化侧边栏
+            RegionManager.RequestNavigate(RegionNames.ChatSideRegion, nameof(FriendSideView), new NavigationParameters
+            {
+                { "SelectedFriend", SelectedFriend?.FriendRelatoinDto }
+            });
+        });
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
@@ -498,7 +489,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         SelectedFriend = null;
     }
 
-    public bool KeepAlive => false;
+    public bool KeepAlive => true;
 
     #endregion
 }

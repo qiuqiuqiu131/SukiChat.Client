@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="sideRegion:GroupSideMemberViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion.GroupSideMemberView">
+    <UserControl.Styles>
+        <Style Selector="suki|GlassCard.search">
+            <Setter Property="Background" Value="Transparent" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="suki|GlassCard.search:pointerover">
+            <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
+            <Style Selector="^ Border#IconBorder">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+    <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="15">
+        <StackPanel HorizontalAlignment="Left" Background="Transparent" Orientation="Horizontal" Spacing="5">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="PointerPressed">
+                    <InvokeCommandAction Command="{Binding ReturnCommand}" />
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+            <PathIcon Data="{x:Static suki:Icons.ChevronLeft}" Width="12" Height="12" />
+            <TextBlock Text="群聊成员" />
+        </StackPanel>
+
+        <searchBox:SearchBox WaterMask="搜索" />
+
+        <ItemsControl ItemsSource="{Binding SelectedGroup.GroupDto.GroupMembers}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <suki:GlassCard Classes="search" PointerPressed="InputElement_OnPointerPressed"
+                                    IsInteractive="True" CornerRadius="7" Padding="12,0" Height="50">
+                        <DockPanel LastChildFill="True">
+                            <Border Padding="5,2,3,2" Margin="10,0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    CornerRadius="3"
+                                    DockPanel.Dock="Right"
+                                    Opacity="0.5"
+                                    Background="{DynamicResource SukiPrimaryColor50}"
+                                    IsVisible="{Binding Status,Converter={converter:IntEqualityConverter Value=0}}">
+                                <TextBlock Text="群主" FontSize="12"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </Border>
+                            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <circleImage:CircleImage Size="35" Image="{Binding HeadImage}" />
+                                <TextBlock Text="{Binding NickName}" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </DockPanel>
+                    </suki:GlassCard>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

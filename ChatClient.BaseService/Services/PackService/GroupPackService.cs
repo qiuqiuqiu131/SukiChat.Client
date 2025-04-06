@@ -112,7 +112,7 @@ public class GroupPackService : BaseService, IGroupPackService
         var groupDeleteRepository = _unitOfWork.GetRepository<GroupDelete>();
         var groupDeletes = await groupDeleteRepository.GetAllAsync(
             predicate: d =>
-                (d.OperateUserId.Equals(userId) || d.MemberId.Equals(userId)) && d.DeleteTime > lastDeleteTime,
+                d.MemberId.Equals(userId) && d.DeleteTime > lastDeleteTime,
             orderBy: d => d.OrderByDescending(g => g.DeleteTime));
 
         if (groupDeletes == null) return null;

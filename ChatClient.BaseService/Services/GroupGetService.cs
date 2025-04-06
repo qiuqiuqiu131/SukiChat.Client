@@ -6,6 +6,7 @@ using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public interface IGroupGetService
 {
     Task<List<string>> GetGroupIds(string userId);
     Task<List<string>> GetGroupChatIds(string userId);
-    Task<GroupDto?> GetGroupDto(string userId, string groupId);
+    Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadHead = false);
     Task<List<string>?> GetGroupMemberIds(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
     Task<List<string>> GetGroupsOfUserManager(string userId);
@@ -49,7 +50,7 @@ public class GroupGetService : BaseService, IGroupGetService
             .Select(d => d.GroupId).ToListAsync();
     }
 
-    public async Task<GroupDto?> GetGroupDto(string userId, string groupId)
+    public async Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadHead = false)
     {
         var groupRequest = new GroupMessageRequest { GroupId = groupId, UserId = userId };
         var groupMessage = await _messageHelper.SendMessageWithResponse<GroupMessage>(groupRequest);
@@ -65,7 +66,11 @@ public class GroupGetService : BaseService, IGroupGetService
             await groupRepository.InsertAsync(group);
         await _unitOfWork.SaveChangesAsync();
 
-        Task.Run(async () => groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex));
+        if (!loadHead)
+            _ = Task.Run(async () =>
+                groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead));
+        else
+            groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead);
 
         return groupDto;
     }
@@ -130,10 +135,20 @@ public class GroupGetService : BaseService, IGroupGetService
         return dto;
     }
 
-    private Task<Bitmap> GetHeadImage(int headIndex)
+    // 获取头像
+    private async Task<Bitmap> GetHeadImage(int headIndex, string groupId, bool isCustom = false)
     {
         var imageManager = _scopedProvider.Resolve<IImageManager>();
-        return imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
+        if (!isCustom)
+            return await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
+        else
+        {
+            imageManager.RemoveFromCache(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group);
+            var image = await imageManager.GetFile(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group)!;
+            if (image == null)
+                return await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
+            return image;
+        }
     }
 
     public Task<Dictionary<int, Bitmap>> GetHeadImages()

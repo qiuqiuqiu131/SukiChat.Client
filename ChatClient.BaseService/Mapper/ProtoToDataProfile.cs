@@ -115,7 +115,8 @@ public class ProtoToDataProfile : Profile
 
         CreateMap<GroupDeleteMessage, GroupDelete>()
             .ForMember(gd => gd.DeleteTime, opt => opt.MapFrom(gdm => DateTime.Parse(gdm.Time)))
-            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(gdm => gdm.Method));
+            .ForMember(gd => gd.DeleteMethod, opt => opt.MapFrom(gdm => gdm.Method))
+            .ForMember(gd => gd.OperateUserId, opt => opt.MapFrom(gdm => gdm.OperateId));
 
         // 添加QuitGroupMessage到GroupDelete的映射
         CreateMap<QuitGroupMessage, GroupDelete>()

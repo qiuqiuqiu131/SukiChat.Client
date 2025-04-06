@@ -6,7 +6,7 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="300"
+             Width="330"
              x:DataType="group:GroupDto"
              x:Class="ChatClient.Desktop.Views.UserControls.GroupMessageBox">
     <Border Background="{DynamicResource SukiCardBackground}"
@@ -52,51 +52,58 @@
                                          Opacity="0.6" />
                 </StackPanel>
 
-                <Grid>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                                IsVisible="{Binding IsEntered}"
-                                Spacing="10"
-                                Margin="15,15,15,5">
-                        <Button Margin="0"
-                                Padding="15,5" Click="ShareGroup">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="Click">
-                                    <ChangePropertyAction TargetObject="{Binding $parent[Popup]}" PropertyName="IsOpen"
-                                                          Value="False" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <TextBlock Text="分享至" FontSize="13.5" />
-                        </Button>
-                        <Button Classes="Flat"
-                                Margin="0"
-                                Padding="15,5"
-                                Click="SendMessageToView">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="Click">
-                                    <ChangePropertyAction TargetObject="{Binding $parent[Popup]}" PropertyName="IsOpen"
-                                                          Value="False" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <TextBlock Text="发消息" FontSize="13.5" />
-                        </Button>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                                IsVisible="{Binding !IsEntered}"
-                                Margin="15,15,15,5" Spacing="10">
-                        <Button Classes="Flat"
-                                Margin="0"
-                                Padding="15,5"
-                                Click="AddGroup">
-                            <Interaction.Behaviors>
-                                <EventTriggerBehavior EventName="Click">
-                                    <ChangePropertyAction TargetObject="{Binding $parent[Popup]}" PropertyName="IsOpen"
-                                                          Value="False" />
-                                </EventTriggerBehavior>
-                            </Interaction.Behaviors>
-                            <TextBlock Text="加群聊" FontSize="13.5" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
+                <Panel>
+                    <TextBlock Text="群聊已被解散" HorizontalAlignment="Center" Margin="0,25,0,15" Opacity="0.6"
+                               IsVisible="{Binding IsDisband}" />
+                    <Panel IsVisible="{Binding !IsDisband}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                    IsVisible="{Binding IsEntered}"
+                                    Spacing="10"
+                                    Margin="15,15,15,5">
+                            <Button Margin="0"
+                                    Padding="15,5" Click="ShareGroup">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction TargetObject="{Binding $parent[Popup]}"
+                                                              PropertyName="IsOpen"
+                                                              Value="False" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <TextBlock Text="分享至" FontSize="13.5" />
+                            </Button>
+                            <Button Classes="Flat"
+                                    Margin="0"
+                                    Padding="15,5"
+                                    Click="SendMessageToView">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction TargetObject="{Binding $parent[Popup]}"
+                                                              PropertyName="IsOpen"
+                                                              Value="False" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <TextBlock Text="发消息" FontSize="13.5" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                    IsVisible="{Binding !IsEntered}"
+                                    Margin="15,15,15,5" Spacing="10">
+                            <Button Classes="Flat"
+                                    Margin="0"
+                                    Padding="15,5"
+                                    Click="AddGroup">
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="Click">
+                                        <ChangePropertyAction TargetObject="{Binding $parent[Popup]}"
+                                                              PropertyName="IsOpen"
+                                                              Value="False" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <TextBlock Text="加群聊" FontSize="13.5" />
+                            </Button>
+                        </StackPanel>
+                    </Panel>
+                </Panel>
             </StackPanel>
         </Panel>
     </Border>

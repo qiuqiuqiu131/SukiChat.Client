@@ -8,6 +8,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using SukiUI.Toasts;
 
@@ -49,7 +50,8 @@ internal class GroupMessageHandler : MessageHandlerBase
     {
         // 重新向服务器请求GroupDto，并更新数据库
         var groupService = scopedprovider.Resolve<IGroupGetService>();
-        var dto = await groupService.GetGroupDto(_userManager.User!.Id, message.GroupId);
+        var dto = await groupService.GetGroupDto(_userManager.User!.Id, message.GroupId, true);
+
         if (dto == null) return;
 
         // 更新userDtoManager中保存的GroupDto

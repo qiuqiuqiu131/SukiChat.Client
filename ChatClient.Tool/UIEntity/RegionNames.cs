@@ -9,6 +9,8 @@ public static class RegionNames
 
     public static string ChatRightRegion = "ChatRightRegion";
 
+    public static string ChatSideRegion = "ChatSideRegion";
+
     public static string AddFriendRegion = "AddFriendRegion";
 
     public static string LocalSearchRegion = "LocalSearchRegion";

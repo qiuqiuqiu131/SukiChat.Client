@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="sideRegion:FriendSideViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion.FriendSideView">
+    <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="20">
+        <suki:GlassCard CornerRadius="6" Padding="10" Margin="0">
+            <DockPanel LastChildFill="True">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <circleImage:CircleImage Size="38"
+                                             Image="{Binding SelectedFriend.UserDto.HeadImage}" />
+                    <Grid RowDefinitions="1.1*,*">
+                        <TextBlock TextTrimming="CharacterEllipsis"
+                                   Grid.Row="0"
+                                   FontSize="14"
+                                   Text="{Binding SelectedFriend.UserDto.Name}" />
+                        <Border Grid.Row="1"
+                                Margin="0,2"
+                                HorizontalAlignment="Left"
+                                CornerRadius="3"
+                                Background="{DynamicResource SukiBorderBrush}"
+                                Padding="6,0">
+                            <SelectableTextBlock
+                                FontSize="11"
+                                Opacity="0.6"
+                                Text="{Binding SelectedFriend.UserDto.Id}" />
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+        </suki:GlassCard>
+
+        <StackPanel Orientation="Vertical" Margin="0,-3">
+            <TextBlock Text="好友备注" Margin="15,0" FontSize="13.5" Opacity="0.75"
+                       HorizontalAlignment="Left" />
+            <TextBox CornerRadius="6"
+                     Padding="8,4"
+                     Watermark="设置备注"
+                     suki:TextBoxExtensions.AddDeleteButton="True"
+                     FontSize="13.5"
+                     LetterSpacing="0.5"
+                     Text="{Binding SelectedFriend.Remark,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                <Interaction.Behaviors>
+                    <behaviors:TextBoxLostFocusBehavior />
+                </Interaction.Behaviors>
+            </TextBox>
+        </StackPanel>
+
+        <suki:GlassCard Padding="15,5,10,5" Margin="0" CornerRadius="6">
+            <StackPanel Orientation="Vertical" Spacing="10" HorizontalAlignment="Stretch">
+                <DockPanel HorizontalAlignment="Stretch">
+                    <TextBlock Text="设为置顶" FontSize="13.5" DockPanel.Dock="Left"
+                               VerticalAlignment="Center" />
+                    <ToggleSwitch VerticalAlignment="Center"
+                                  Margin="0"
+                                  HorizontalAlignment="Right"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  IsChecked="{Binding SelectedFriend.IsTop}"
+                                  DockPanel.Dock="Right">
+                        <ToggleButton.RenderTransform>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                        </ToggleButton.RenderTransform>
+                    </ToggleSwitch>
+                </DockPanel>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <TextBlock Text="消息免打扰" FontSize="13.5" DockPanel.Dock="Left"
+                               VerticalAlignment="Center" />
+                    <ToggleSwitch VerticalAlignment="Center"
+                                  HorizontalAlignment="Right"
+                                  Margin="0"
+                                  RenderTransformOrigin="0.5,0.5"
+                                  IsChecked="{Binding SelectedFriend.CantDisturb}"
+                                  DockPanel.Dock="Right">
+                        <ToggleButton.RenderTransform>
+                            <ScaleTransform ScaleX="0.9" ScaleY="0.9" />
+                        </ToggleButton.RenderTransform>
+                    </ToggleSwitch>
+                </DockPanel>
+            </StackPanel>
+        </suki:GlassCard>
+
+        <Button Classes="Outlined Accent" CornerRadius="6" Content="删除好友"
+                Command="{Binding DeleteCommand}"
+                Margin="5,15,5,40" />
+    </StackPanel>
+</UserControl>

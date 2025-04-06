@@ -18,7 +18,11 @@ public class GroupDto : BindableBase, IDisposable
         get => name;
         set
         {
-            if (SetProperty(ref name, value))
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                Name = name;
+            }
+            else if (SetProperty(ref name, value))
             {
                 OnGroupChanged?.Invoke();
             }
@@ -52,27 +56,15 @@ public class GroupDto : BindableBase, IDisposable
     public AvaloniaList<GroupMemberDto> GroupMembers
     {
         get => groupMembers;
-        set
-        {
-            if (SetProperty(ref groupMembers, value))
-                RaisePropertyChanged(nameof(GroupClipMembers));
-        }
+        set => SetProperty(ref groupMembers, value);
     }
-
-    public List<GroupMemberDto> GroupClipMembers => [..GroupMembers.Take(16)];
 
     private AvaloniaList<GroupMemberDto> groupMembers = new();
 
     public int HeadIndex
     {
         get => headIndex;
-        set
-        {
-            if (SetProperty(ref headIndex, value))
-            {
-                OnGroupChanged?.Invoke();
-            }
-        }
+        set => SetProperty(ref headIndex, value);
     }
 
     private int headIndex;
@@ -83,6 +75,14 @@ public class GroupDto : BindableBase, IDisposable
     {
         get => isDisband;
         set => SetProperty(ref isDisband, value);
+    }
+
+    private bool isCustomHead;
+
+    public bool IsCustomHead
+    {
+        get => isCustomHead;
+        set => SetProperty(ref isCustomHead, value);
     }
 
     public Bitmap HeadImage
@@ -111,17 +111,16 @@ public class GroupDto : BindableBase, IDisposable
 
     public event Action OnGroupChanged;
 
-    public GroupDto()
-    {
-        GroupMembers.CollectionChanged += (_, _) => { RaisePropertyChanged(nameof(GroupClipMembers)); };
-    }
-
     public void CopyFrom(GroupDto dto)
     {
         Name = dto.Name;
         Description = dto.Description;
         CreateTime = dto.CreateTime;
-        headIndex = dto.headIndex;
+        HeadIndex = dto.headIndex;
+        IsDisband = dto.IsDisband;
+        IsCustomHead = dto.IsCustomHead;
+        IsEntered = dto.IsEntered;
+        Remark = dto.Remark;
         HeadImage = dto.HeadImage;
     }
 

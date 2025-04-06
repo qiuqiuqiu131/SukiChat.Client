@@ -35,11 +35,11 @@
                 </Button>
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="15" Spacing="15">
-                <Grid Width="70" Height="70" HorizontalAlignment="Center" Margin="20,0,20,15">
+                <Grid Width="85" Height="85" HorizontalAlignment="Center" Margin="20,0,20,15">
                     <circleImage:CircleImage HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
-                                             Image="{Binding UserDto.HeadImage}" Size="70" />
-                    <Border CornerRadius="40" Width="70" Height="70"
+                                             Image="{Binding UserDto.HeadImage}" Size="85" />
+                    <Border CornerRadius="45" Width="85" Height="85"
                             VerticalAlignment="Center"
                             Cursor="Hand"
                             Background="#44000000"

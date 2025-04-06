@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
+             xmlns:sukiDialog="clr-namespace:ChatClient.Desktop.Views.SukiDialog"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Width="550" Height="550"
+             x:DataType="userControls:RemoveGroupMemberViewModel"
+             x:Class="ChatClient.Desktop.Views.SukiDialog.RemoveGroupMemberView">
+    <sukiDialog:RemoveGroupMemberView.SelectedMembers>
+        <Binding Path="SelectedMembers" />
+    </sukiDialog:RemoveGroupMemberView.SelectedMembers>
+    <Grid ColumnDefinitions="*,1.1*">
+        <Grid Grid.Column="0" RowDefinitions="50,*">
+            <suki:GlassCard Padding="8"
+                            Margin="0"
+                            Grid.Row="0"
+                            CornerRadius="7,0,0,0">
+                <searchBox:SearchBox HorizontalAlignment="Stretch"
+                                     WaterMask="搜索"
+                                     VerticalAlignment="Bottom" />
+            </suki:GlassCard>
+            <suki:GlassCard Padding="0" Margin="0" CornerRadius="0,0,0,7" Grid.Row="1">
+                <Grid>
+                    <DockPanel LastChildFill="True">
+                        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource SukiBorderBrush}"
+                                DockPanel.Dock="Top">
+                            <TextBlock Text="选择成员移除" VerticalAlignment="Center" FontSize="14" Margin="20,10" />
+                        </Border>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                            <ListBox x:Name="MemberListBox" ItemsSource="{Binding GroupMembers}"
+                                     SelectionMode="Multiple,Toggle"
+                                     Classes="Void MultiSelect"
+                                     SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="42">
+                                            <Grid Margin="3,3" ColumnDefinitions="36,*">
+                                                <circleImage:CircleImage Size="36"
+                                                                         Image="{Binding HeadImage}" />
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="10,0"
+                                                           VerticalAlignment="Center"
+                                                           Foreground="{DynamicResource SukiText}"
+                                                           Text="{Binding  NickName}" />
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                    </DockPanel>
+                </Grid>
+            </suki:GlassCard>
+        </Grid>
+        <Grid Grid.Column="1">
+            <suki:GlassCard Opacity="0.3" />
+            <DockPanel LastChildFill="True">
+                <StackPanel DockPanel.Dock="Bottom"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            Spacing="10"
+                            Margin="12,10,12,12">
+                    <Button Padding="15,5" Classes="Flat" Command="{Binding ConfirmCommand}">
+                        <TextBlock Text="确定" FontSize="13.5" />
+                    </Button>
+                    <Button Padding="15,5" Command="{Binding CancelCommand}">
+                        <TextBlock Text="取消" FontSize="13.5" />
+                    </Button>
+                </StackPanel>
+                <Grid RowDefinitions="Auto,*">
+                    <Grid Grid.Row="0">
+                        <DockPanel LastChildFill="True" Margin="10">
+                            <TextBlock DockPanel.Dock="Right" FontSize="11"
+                                       IsVisible="{Binding SelectedMembers.Count}"
+                                       Opacity="0.75"
+                                       Text="{Binding SelectedMembers.Count,StringFormat=已选择 {0} 个成员}" />
+                            <TextBlock FontSize="13.5" Text="移除成员" />
+                        </DockPanel>
+                    </Grid>
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Hidden">
+                        <ItemsControl Margin="0,5" ItemsSource="{Binding SelectedMembers}">
+                            <ItemsControl.Styles>
+                                <Style Selector="Grid.Item Border#Back">
+                                    <Setter Property="Opacity" Value="0" />
+                                </Style>
+                                <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
+                                    <Setter Property="Opacity" Value="0.3" />
+                                </Style>
+                                <Style Selector="Grid.Item:pointerover Border#Back">
+                                    <Setter Property="Opacity" Value="0.6" />
+                                </Style>
+                                <Style Selector="Grid.Item avalonia|MaterialIcon#Icon">
+                                    <Setter Property="Opacity" Value="0.7" />
+                                </Style>
+                            </ItemsControl.Styles>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="44" Classes="Item" Background="Transparent"
+                                          PointerPressed="InputElement_OnPointerPressed">
+                                        <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" />
+                                        <DockPanel LastChildFill="True" Margin="5,2.5">
+                                            <avalonia:MaterialIcon DockPanel.Dock="Right"
+                                                                   Name="Icon"
+                                                                   Margin="10,7"
+                                                                   Kind="CancelCircle"
+                                                                   Width="15"
+                                                                   Height="15" />
+                                            <Grid Margin="15,7" ColumnDefinitions="36,*">
+                                                <Grid Width="36" Height="36">
+                                                    <Panel Width="36" Height="36">
+                                                        <Panel.Clip>
+                                                            <EllipseGeometry
+                                                                Center="18,18"
+                                                                RadiusX="18"
+                                                                RadiusY="18" />
+                                                        </Panel.Clip>
+                                                        <Image
+                                                            Width="36"
+                                                            Height="36"
+                                                            Source="{Binding  HeadImage}" />
+                                                    </Panel>
+                                                </Grid>
+                                                <Panel Grid.Column="1" Margin="20,0"
+                                                       VerticalAlignment="Center">
+                                                    <TextBlock
+                                                        IsVisible="{Binding NickName,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                        FontSize="14"
+                                                        Text="{Binding NickName}" />
+                                                </Panel>
+                                            </Grid>
+                                        </DockPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

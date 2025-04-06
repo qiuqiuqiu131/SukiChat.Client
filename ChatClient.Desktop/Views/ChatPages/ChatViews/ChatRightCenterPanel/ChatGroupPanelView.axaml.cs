@@ -83,16 +83,6 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
                 e) { PlacementMode = PlacementMode.BottomEdgeAlignedLeft });
     }
 
-    private async void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        if (sender is Border { DataContext: GroupMemberDto groupMemberDto })
-        {
-            var userDto = await _userDtoManager.GetUserDto(groupMemberDto.UserId);
-            _eventAggregator.GetEvent<UserMessageBoxShowEvent>()
-                .Publish(new UserMessageBoxShowArgs(userDto, e));
-        }
-    }
-
     private void ChatUI_OnNotification(object? sender, NotificationMessageEventArgs e)
     {
         _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs

@@ -48,12 +48,15 @@ namespace ChatServer.Common.Protobuf {
             "cklkGAIgASgJEg4KBnN0YXR1cxgDIAEoCRIQCghncm91cGluZxgEIAEoCRIQ",
             "Cghqb2luVGltZRgFIAEoCRIQCghOaWNrTmFtZRgGIAEoCRIOCgZSZW1hcmsY",
             "ByABKAkSEwoLY2FudERpc3R1cmIYCCABKAgSDQoFaXNUb3AYCSABKAgSEgoK",
-            "bGFzdENoYXRJZBgKIAEoBRISCgppc0NoYXR0aW5nGAsgASgIInIKGVVwZGF0",
+            "bGFzdENoYXRJZBgKIAEoBRISCgppc0NoYXR0aW5nGAsgASgIIl8KGVVwZGF0",
             "ZUdyb3VwTWVzc2FnZVJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3Vw",
-            "SWQYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCRIR",
-            "CgloZWFkSW5kZXgYBSABKAUiYwoSVXBkYXRlR3JvdXBNZXNzYWdlEjwKCHJl",
-            "c3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29t",
-            "bW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCWIGcHJvdG8z"));
+            "SWQYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtkZXNjcmlwdGlvbhgEIAEoCSI4",
+            "ChVSZXNldEhlYWRJbWFnZVJlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dy",
+            "b3VwSWQYAiABKAkiVgoWUmVzZXRIZWFkSW1hZ2VSZXNwb25zZRI8CghyZXNw",
+            "b25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1v",
+            "blJlc3BvbnNlImMKElVwZGF0ZUdyb3VwTWVzc2FnZRI8CghyZXNwb25zZRgB",
+            "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
+            "bnNlEg8KB2dyb3VwSWQYAiABKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -66,7 +69,9 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIdsRequest), global::ChatServer.Common.Protobuf.GroupMemberIdsRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIds), global::ChatServer.Common.Protobuf.GroupMemberIds.Parser, new[]{ "GroupId", "MemberIds" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.EnterGroupMessage), global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser, new[]{ "GroupId", "UserId", "Status", "Grouping", "JoinTime", "NickName", "Remark", "CantDisturb", "IsTop", "LastChatId", "IsChatting" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupMessageRequest), global::ChatServer.Common.Protobuf.UpdateGroupMessageRequest.Parser, new[]{ "UserId", "GroupId", "Name", "Description", "HeadIndex" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupMessageRequest), global::ChatServer.Common.Protobuf.UpdateGroupMessageRequest.Parser, new[]{ "UserId", "GroupId", "Name", "Description" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ResetHeadImageRequest), global::ChatServer.Common.Protobuf.ResetHeadImageRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ResetHeadImageResponse), global::ChatServer.Common.Protobuf.ResetHeadImageResponse.Parser, new[]{ "Response" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.UpdateGroupMessage), global::ChatServer.Common.Protobuf.UpdateGroupMessage.Parser, new[]{ "Response", "GroupId" }, null, null, null, null)
           }));
     }
@@ -2130,7 +2135,6 @@ namespace ChatServer.Common.Protobuf {
       groupId_ = other.groupId_;
       name_ = other.name_;
       description_ = other.description_;
-      headIndex_ = other.headIndex_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2183,17 +2187,6 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
-    /// <summary>Field number for the "headIndex" field.</summary>
-    public const int HeadIndexFieldNumber = 5;
-    private int headIndex_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int HeadIndex {
-      get { return headIndex_; }
-      set {
-        headIndex_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as UpdateGroupMessageRequest);
@@ -2211,7 +2204,6 @@ namespace ChatServer.Common.Protobuf {
       if (GroupId != other.GroupId) return false;
       if (Name != other.Name) return false;
       if (Description != other.Description) return false;
-      if (HeadIndex != other.HeadIndex) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2222,7 +2214,6 @@ namespace ChatServer.Common.Protobuf {
       if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
       if (Name.Length != 0) hash ^= Name.GetHashCode();
       if (Description.Length != 0) hash ^= Description.GetHashCode();
-      if (HeadIndex != 0) hash ^= HeadIndex.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2252,10 +2243,6 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(34);
         output.WriteString(Description);
       }
-      if (HeadIndex != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(HeadIndex);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2275,9 +2262,6 @@ namespace ChatServer.Common.Protobuf {
       }
       if (Description.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Description);
-      }
-      if (HeadIndex != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HeadIndex);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2301,9 +2285,6 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.Description.Length != 0) {
         Description = other.Description;
-      }
-      if (other.HeadIndex != 0) {
-        HeadIndex = other.HeadIndex;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2332,8 +2313,299 @@ namespace ChatServer.Common.Protobuf {
             Description = input.ReadString();
             break;
           }
-          case 40: {
-            HeadIndex = input.ReadInt32();
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  /// 重置群头像请求
+  /// </summary>
+  public sealed partial class ResetHeadImageRequest : pb::IMessage<ResetHeadImageRequest> {
+    private static readonly pb::MessageParser<ResetHeadImageRequest> _parser = new pb::MessageParser<ResetHeadImageRequest>(() => new ResetHeadImageRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ResetHeadImageRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[10]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageRequest(ResetHeadImageRequest other) : this() {
+      userId_ = other.userId_;
+      groupId_ = other.groupId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageRequest Clone() {
+      return new ResetHeadImageRequest(this);
+    }
+
+    /// <summary>Field number for the "userId" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 2;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ResetHeadImageRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ResetHeadImageRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (GroupId != other.GroupId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(GroupId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ResetHeadImageRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            GroupId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class ResetHeadImageResponse : pb::IMessage<ResetHeadImageResponse> {
+    private static readonly pb::MessageParser<ResetHeadImageResponse> _parser = new pb::MessageParser<ResetHeadImageResponse>(() => new ResetHeadImageResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ResetHeadImageResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[11]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageResponse(ResetHeadImageResponse other) : this() {
+      response_ = other.response_ != null ? other.response_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ResetHeadImageResponse Clone() {
+      return new ResetHeadImageResponse(this);
+    }
+
+    /// <summary>Field number for the "response" field.</summary>
+    public const int ResponseFieldNumber = 1;
+    private global::ChatServer.Common.Protobuf.CommonResponse response_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CommonResponse Response {
+      get { return response_; }
+      set {
+        response_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ResetHeadImageResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ResetHeadImageResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Response, other.Response)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (response_ != null) hash ^= Response.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (response_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Response);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (response_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Response);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ResetHeadImageResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.response_ != null) {
+        if (response_ == null) {
+          Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+        }
+        Response.MergeFrom(other.Response);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (response_ == null) {
+              Response = new global::ChatServer.Common.Protobuf.CommonResponse();
+            }
+            input.ReadMessage(Response);
             break;
           }
         }
@@ -2353,7 +2625,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[10]; }
+      get { return global::ChatServer.Common.Protobuf.ChatGroupProtocolReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

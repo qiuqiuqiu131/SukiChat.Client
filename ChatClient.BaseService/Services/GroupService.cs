@@ -1,10 +1,13 @@
 using AutoMapper;
+using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;
@@ -23,6 +26,8 @@ public interface IGroupService
     Task<(bool, string)> QuitGroupRequest(string userId, string groupId);
     Task<(bool, string)> RemoveMemberRequest(string userId, string groupId, string memberId);
     Task<(bool, string)> DisbandGroupRequest(string userId, string groupId);
+
+    Task<(bool, string)> EditGroupHead(string userId, string groupId, Bitmap bitmap);
 }
 
 public class GroupService : BaseService, IGroupService
@@ -163,8 +168,7 @@ public class GroupService : BaseService, IGroupService
             UserId = userId,
             GroupId = groupDto.Id,
             Name = groupDto.Name,
-            Description = groupDto.Description ?? string.Empty,
-            HeadIndex = groupDto.HeadIndex
+            Description = groupDto.Description ?? string.Empty
         };
 
         await _messageHelper.SendMessage(request);
@@ -288,5 +292,23 @@ public class GroupService : BaseService, IGroupService
 
         var response = await _messageHelper.SendMessageWithResponse<RemoveMemberMessage>(request);
         return (response is { Response: { State: true } }, response?.Response?.Message ?? string.Empty);
+    }
+
+    public async Task<(bool, string)> EditGroupHead(string userId, string groupId, Bitmap bitmap)
+    {
+        var fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
+        var result1 = await fileOperateHelper.UploadFile(groupId, "HeadImage", $"{groupId}.png",
+            bitmap.BitmapToByteArray(),
+            FileTarget.Group);
+
+        if (!result1) return (false, "上传头像失败");
+
+        var request = new ResetHeadImageRequest
+        {
+            UserId = userId,
+            GroupId = groupId
+        };
+        var result2 = await _messageHelper.SendMessageWithResponse<ResetHeadImageResponse>(request);
+        return (result2?.Response.State ?? false, result2?.Response.Message ?? "");
     }
 }

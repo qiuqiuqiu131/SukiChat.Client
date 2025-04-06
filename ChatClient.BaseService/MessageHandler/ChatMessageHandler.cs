@@ -20,13 +20,16 @@ namespace ChatClient.BaseService.MessageHandler;
 internal class ChatMessageHandler : MessageHandlerBase
 {
     private readonly IMapper _mapper;
+    private readonly IUserDtoManager _userDtoManager;
 
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
     private readonly SemaphoreSlim _semaphoreSlim2 = new(1, 1);
 
-    public ChatMessageHandler(IContainerProvider containerProvider, IMapper mapper) : base(containerProvider)
+    public ChatMessageHandler(IContainerProvider containerProvider, IMapper mapper, IUserDtoManager userDtoManager) :
+        base(containerProvider)
     {
         _mapper = mapper;
+        _userDtoManager = userDtoManager;
     }
 
     protected override void OnRegisterEvent(IEventAggregator eventAggregator)
@@ -65,8 +68,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             ? chatMessage.UserTargetId
             : chatMessage.UserFromId;
 
-        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
-        var friendRelationDto = await userDtoManager.GetFriendRelationDto(_userManager.User.Id, friendId);
+        var friendRelationDto = await _userDtoManager.GetFriendRelationDto(_userManager.User.Id, friendId);
 
         var chatService = scopedprovider.Resolve<IChatService>();
         await chatService.AddChatDto(friendRelationDto);
@@ -159,7 +161,6 @@ internal class ChatMessageHandler : MessageHandlerBase
                 FileTarget.User);
         }
 
-        await Task.Delay(50);
         _semaphoreSlim2.Release();
     }
 
@@ -188,8 +189,7 @@ internal class ChatMessageHandler : MessageHandlerBase
     {
         await _semaphoreSlim.WaitAsync();
 
-        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
-        var groupRelationDto = await userDtoManager.GetGroupRelationDto(_userManager.User.Id, message.GroupId);
+        var groupRelationDto = await _userDtoManager.GetGroupRelationDto(_userManager.User.Id, message.GroupId);
 
         var chatService = scopedprovider.Resolve<IChatService>();
         await chatService.AddChatDto(groupRelationDto);
@@ -215,7 +215,7 @@ internal class ChatMessageHandler : MessageHandlerBase
         if (message.UserFromId.Equals("System"))
             chatData.IsSystem = true;
         else
-            chatData.Owner = await userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
+            chatData.Owner = await _userDtoManager.GetGroupMemberDto(message.GroupId, message.UserFromId);
 
         // 注入消息资源
         if (!chatData.IsRetracted)
@@ -303,8 +303,6 @@ internal class ChatMessageHandler : MessageHandlerBase
                 });
             }
         }
-
-        await Task.Delay(50);
 
         _semaphoreSlim.Release();
     }

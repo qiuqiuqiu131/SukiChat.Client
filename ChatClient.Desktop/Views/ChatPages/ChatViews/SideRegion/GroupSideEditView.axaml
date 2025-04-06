@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="sideRegion:GroupSideEditViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion.GroupSideEditView">
+    <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="20">
+        <StackPanel HorizontalAlignment="Left" Background="Transparent" Orientation="Horizontal" Spacing="5">
+            <Interaction.Behaviors>
+                <EventTriggerBehavior EventName="PointerPressed">
+                    <InvokeCommandAction Command="{Binding ReturnCommand}" />
+                </EventTriggerBehavior>
+            </Interaction.Behaviors>
+            <PathIcon Data="{x:Static suki:Icons.ChevronLeft}" Width="12" Height="12" />
+            <TextBlock Text="群资料设置" />
+        </StackPanel>
+
+        <Border Width="90" Height="90" Background="Transparent" Classes="head">
+            <Border.Styles>
+                <Style Selector="Border.head Panel#Mask">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+                <Style Selector="Border.head:pointerover Panel#Mask">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+            </Border.Styles>
+            <Panel>
+                <circleImage:CircleImage Size="90" Image="{Binding SelectedGroup.GroupDto.HeadImage}" />
+                <Panel Name="Mask" Background="Transparent">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="PointerPressed">
+                            <InvokeCommandAction Command="{Binding EditHeadCommand}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                    <Ellipse Width="90" Height="90" Fill="Black" Opacity="0.3" />
+                    <avalonia:MaterialIcon Kind="EditCircleOutline" HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" Width="48" Height="48" Foreground="White"
+                                           Opacity="0.5" />
+                </Panel>
+            </Panel>
+        </Border>
+
+        <StackPanel Orientation="Vertical" Margin="0,-3">
+            <TextBlock Text="群名" Margin="15,0" FontSize="13.5" Opacity="0.75"
+                       HorizontalAlignment="Left" />
+            <TextBox CornerRadius="6"
+                     Padding="8,4"
+                     Watermark="设置群名"
+                     suki:TextBoxExtensions.AddDeleteButton="True"
+                     FontSize="13.5"
+                     LetterSpacing="0.5"
+                     Text="{Binding SelectedGroup.GroupDto.Name,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                <Interaction.Behaviors>
+                    <behaviors:TextBoxLostFocusBehavior />
+                </Interaction.Behaviors>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Margin="0,-3">
+            <TextBlock Text="群介绍" Margin="15,0" FontSize="13.5" Opacity="0.75"
+                       HorizontalAlignment="Left" />
+            <TextBox CornerRadius="6"
+                     Padding="8,4"
+                     Watermark="设置群介绍"
+                     suki:TextBoxExtensions.AddDeleteButton="True"
+                     FontSize="13.5"
+                     LetterSpacing="0.5"
+                     Text="{Binding SelectedGroup.GroupDto.Description,Mode=TwoWay,UpdateSourceTrigger=LostFocus}">
+                <Interaction.Behaviors>
+                    <behaviors:TextBoxLostFocusBehavior />
+                </Interaction.Behaviors>
+            </TextBox>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

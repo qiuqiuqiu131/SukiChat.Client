@@ -9,6 +9,7 @@ using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
@@ -24,6 +25,7 @@ using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
@@ -110,6 +112,11 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<ChatEmptyView>();
         containerRegistry.RegisterForNavigation<ChatFriendPanelView, ChatFriendPanelViewModel>();
         containerRegistry.RegisterForNavigation<ChatGroupPanelView, ChatGroupPanelViewModel>();
+        // 聊天侧边栏
+        containerRegistry.RegisterForNavigation<FriendSideView, FriendSideViewModel>();
+        containerRegistry.RegisterForNavigation<GroupSideView, GroupSideViewModel>();
+        containerRegistry.RegisterForNavigation<GroupSideEditView, GroupSideEditViewModel>();
+        containerRegistry.RegisterForNavigation<GroupSideMemberView, GroupSideMemberViewModel>();
         // 搜索用户和群
         containerRegistry.RegisterForNavigation<SearchFriendView, SearchFriendViewModel>();
         containerRegistry.RegisterForNavigation<SearchGroupView, SearchGroupViewModel>();
@@ -192,6 +199,10 @@ public class App : PrismApplication
             .AddView<DeleteGroupView, DeleteGroupViewModel>(services)
             // 创建群聊
             .AddView<CreateGroupView, CreateGroupViewModel>(services)
+            // 移除群成员
+            .AddView<RemoveGroupMemberView, RemoveGroupMemberViewModel>(services)
+            // 群聊头像编辑
+            .AddView<EditGroupHeadView, EditGroupHeadViewModel>(services)
             // 通用Dialog
             .AddView<CommonDialogView, CommonDialogViewModel>(services)
             .AddView<WarningDialogView, WarningDialogViewModel>(services)

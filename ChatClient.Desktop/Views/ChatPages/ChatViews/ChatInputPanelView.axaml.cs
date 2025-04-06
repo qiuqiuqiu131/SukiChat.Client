@@ -415,6 +415,7 @@ public partial class ChatInputPanelView : UserControl
     /// <exception cref="NotImplementedException"></exception>
     private void ControlOnTextChanged(object? sender, TextChangedEventArgs e)
     {
+        if (InputMessages == null) return;
         if (sender is TextBox textBox)
         {
             // 更新后台输入消息

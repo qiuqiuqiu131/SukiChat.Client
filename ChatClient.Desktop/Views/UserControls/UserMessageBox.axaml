@@ -9,7 +9,7 @@
              x:DataType="data:UserDto"
              Foreground="{DynamicResource SukiText}"
              Background="Transparent"
-             Width="300"
+             Width="330"
              x:Class="ChatClient.Desktop.Views.UserControls.UserMessageBox">
     <Border Background="{DynamicResource SukiCardBackground}" CornerRadius="7" Margin="8"
             BoxShadow="4 4 7 #33000000">

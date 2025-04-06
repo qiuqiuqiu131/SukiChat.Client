@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using ChatClient.Avalonia;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
@@ -14,6 +15,7 @@ using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
@@ -23,6 +25,7 @@ using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
+using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -40,6 +43,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     private readonly IEventAggregator _eventAggregator;
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
+
+    public IRegionManager RegionManager { get; set; }
 
     public ThemeStyle ThemeStyle { get; set; }
 
@@ -63,13 +68,12 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
     public DelegateCommand<GroupChatData> DeleteMessageCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
-    public DelegateCommand QuitGroupCommand { get; private set; }
-    public DelegateCommand DeleteGroupCommand { get; private set; }
 
     #endregion
 
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
+        IRegionManager regionManager,
         ISukiDialogManager sukiDialogManager,
         IUserManager userManager,
         IThemeStyle themeStyle)
@@ -80,6 +84,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         _userManager = userManager;
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
+        RegionManager = regionManager.CreateRegionManager();
+
         ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
 
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
@@ -88,8 +94,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         ShareMessageCommand = new DelegateCommand<object>(ShareMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
-        QuitGroupCommand = new DelegateCommand(QuitGroup);
-        DeleteGroupCommand = new DelegateCommand(DeleteGroup);
     }
 
     /// <summary>
@@ -189,57 +193,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
 
         _sukiDialogManager.CreateDialog()
             .WithViewModel(d => new CommonDialogViewModel(d, "确定删除此聊天消息吗？", DeleteMessageCallback))
-            .TryShow();
-    }
-
-    /// <summary>
-    /// 请求解散群聊
-    /// </summary>
-    private void DeleteGroup()
-    {
-        if (SelectedGroup == null) return;
-
-        async void DeleteGroupCallback(IDialogResult result)
-        {
-            var groupService = _containerProvider.Resolve<IGroupService>();
-            var res = await groupService.DisbandGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
-            if (res.Item1)
-            {
-                _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-                {
-                    Message = $"您已解散群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
-                    Type = NotificationType.Success
-                });
-            }
-        }
-
-        _sukiDialogManager.CreateDialog()
-            .WithViewModel(d => new CommonDialogViewModel(d, "确定解散此群聊吗？", DeleteGroupCallback))
-            .TryShow();
-    }
-
-    /// <summary>
-    /// 请求退出群聊
-    /// </summary>
-    private void QuitGroup()
-    {
-        if (SelectedGroup == null) return;
-
-        async void QuitGroupCallback(IDialogResult result)
-        {
-            if (result.Result != ButtonResult.OK) return;
-            var groupService = _containerProvider.Resolve<IGroupService>();
-            await groupService.QuitGroupRequest(_userManager.User?.Id!, SelectedGroup.GroupId!);
-
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = $"您已退出群聊 {SelectedGroup.GroupRelationDto?.GroupDto?.Name ?? string.Empty}",
-                Type = NotificationType.Success
-            });
-        }
-
-        _sukiDialogManager.CreateDialog()
-            .WithViewModel(d => new CommonDialogViewModel(d, "确定退出此群聊吗？", QuitGroupCallback))
             .TryShow();
     }
 
@@ -498,6 +451,15 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
             if (SelectedGroup.GroupRelationDto.GroupDto != null)
                 SelectedGroup.GroupRelationDto!.GroupDto.OnGroupChanged += GroupDtoOnOnGroupChanged;
         }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            RegionManager.RequestNavigate(RegionNames.ChatSideRegion,
+                nameof(GroupSideView), new NavigationParameters
+                {
+                    { "SelectedGroup", SelectedGroup.GroupRelationDto }
+                });
+        });
     }
 
     public override void OnNavigatedFrom(NavigationContext navigationContext)
@@ -524,7 +486,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         ChatInputPanelViewModel?.Dispose();
     }
 
-    public bool KeepAlive => false;
+    public bool KeepAlive => true;
 
     #endregion
 }

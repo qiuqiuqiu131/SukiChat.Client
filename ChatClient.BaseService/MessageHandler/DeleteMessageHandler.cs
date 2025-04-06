@@ -140,33 +140,36 @@ public class DeleteMessageHandler : MessageHandlerBase
         IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
         var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
 
-        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId))).Grouping;
+        var groupRelation = await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
+            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId));
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
 
-        if (message.MemberId.Equals(_userManager.User.Id))
-            await _userManager.DeleteGroup(message.GroupId, groupName);
+        // 如果接受者为被移除对象，则删除群聊
+        if (message.MemberId.Equals(_userManager.User.Id) && groupRelation != null)
+        {
+            await _userManager.DeleteGroup(message.GroupId, groupRelation.Grouping);
 
-        // 添加解散群聊消息
-        var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
-        var deleteDto = _mapper.Map<GroupDeleteDto>(message);
-        _ = Task.Run(async () =>
-        {
-            deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
-            deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
-        });
-        _userManager.GroupDeletes?.Add(deleteDto);
-        if (_userManager is not
-                { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null } &&
-            message.MemberId.Equals(_userManager.User!.Id))
-            _userManager.User!.UnreadGroupMessageCount++;
-        else
-        {
-            _userManager.User.LastReadGroupMessageTime = DateTime.Now;
-            _userManager.User.UnreadGroupMessageCount = 0;
-            _userManager.SaveUser();
+            // 添加解散群聊消息
+            var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+            var deleteDto = _mapper.Map<GroupDeleteDto>(message);
+            _ = Task.Run(async () =>
+            {
+                deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
+                deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
+            });
+            _userManager.GroupDeletes?.Add(deleteDto);
+            if (_userManager is not
+                    { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null } &&
+                message.MemberId.Equals(_userManager.User!.Id))
+                _userManager.User!.UnreadGroupMessageCount++;
+            else
+            {
+                _userManager.User.LastReadGroupMessageTime = DateTime.Now;
+                _userManager.User.UnreadGroupMessageCount = 0;
+                await _userManager.SaveUser();
+            }
         }
     }
 

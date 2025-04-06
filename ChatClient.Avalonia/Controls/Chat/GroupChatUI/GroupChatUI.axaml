@@ -210,13 +210,25 @@
                                                                         Size="35"
                                                                         PointerPressed="Head_OnPointerPressed" />
                                                                     <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                        <TextBlock DockPanel.Dock="Top"
+                                                                        <StackPanel Orientation="Horizontal"
                                                                             HorizontalAlignment="Left"
-                                                                            Text="{Binding Owner.NickName}"
-                                                                            FontSize="12"
-                                                                            Padding="0"
                                                                             Margin="0,0,0,3"
-                                                                            Opacity="0.7" />
+                                                                            DockPanel.Dock="Top">
+                                                                            <TextBlock Text="{Binding Owner.NickName}"
+                                                                                FontSize="12"
+                                                                                Padding="0"
+                                                                                VerticalAlignment="Center"
+                                                                                Opacity="0.7" />
+                                                                            <Border Padding="3,1,1,1" Margin="4,0"
+                                                                                CornerRadius="3"
+                                                                                Opacity="0.5"
+                                                                                Background="{DynamicResource SukiPrimaryColor50}"
+                                                                                IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
+                                                                                <TextBlock Text="群主" FontSize="12"
+                                                                                    VerticalAlignment="Center"
+                                                                                    HorizontalAlignment="Center" />
+                                                                            </Border>
+                                                                        </StackPanel>
                                                                         <StackPanel Orientation="Horizontal"
                                                                             HorizontalAlignment="Left">
                                                                             <suki:GlassCard Classes="Friend"
@@ -275,13 +287,25 @@
                                                                         Size="35"
                                                                         PointerPressed="Head_OnPointerPressed" />
                                                                     <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                        <TextBlock DockPanel.Dock="Top"
+                                                                        <StackPanel Orientation="Horizontal"
                                                                             HorizontalAlignment="Right"
-                                                                            Text="{Binding Owner.NickName}"
-                                                                            FontSize="12"
-                                                                            Padding="0"
                                                                             Margin="0,0,0,3"
-                                                                            Opacity="0.7" />
+                                                                            DockPanel.Dock="Top">
+                                                                            <Border Padding="3,1,1,1" Margin="4,0"
+                                                                                CornerRadius="3"
+                                                                                Opacity="0.5"
+                                                                                Background="{DynamicResource SukiPrimaryColor50}"
+                                                                                IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
+                                                                                <TextBlock Text="群主" FontSize="12"
+                                                                                    VerticalAlignment="Center"
+                                                                                    HorizontalAlignment="Center" />
+                                                                            </Border>
+                                                                            <TextBlock Text="{Binding Owner.NickName}"
+                                                                                FontSize="12"
+                                                                                VerticalAlignment="Center"
+                                                                                Padding="0"
+                                                                                Opacity="0.7" />
+                                                                        </StackPanel>
                                                                         <StackPanel Orientation="Horizontal"
                                                                             HorizontalAlignment="Right">
                                                                             <Grid VerticalAlignment="Bottom" Width="20"
