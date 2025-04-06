@@ -10,21 +10,8 @@ namespace ChatClient.Desktop.Views.SystemSetting;
 
 public partial class SystemSettingView : UserControl
 {
-    private bool isLoaded = false;
-
     public SystemSettingView()
     {
         InitializeComponent();
-    }
-
-    protected override void OnLoaded(RoutedEventArgs e)
-    {
-        base.OnLoaded(e);
-
-        if (isLoaded) return;
-
-        isLoaded = true;
-
-        ListBox.SelectedIndex = 0;
     }
 }

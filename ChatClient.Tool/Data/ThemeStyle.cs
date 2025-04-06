@@ -40,6 +40,7 @@ public class ThemeStyle : BindableBase
             {
                 ThemeStyleChanged?.Invoke(("主题", value ? "浅色" : "深色"));
                 LightThemeChanged?.Invoke(value);
+                Console.WriteLine("LightThemeChanged");
             }
         }
     }

@@ -34,7 +34,13 @@ internal class ThemeStyleManager : IThemeStyle
             using (var reader = new StreamReader(_themeStyleFile.OpenRead()))
             {
                 var json = reader.ReadToEnd();
-                CurrentThemeStyle = JsonSerializer.Deserialize<ThemeStyle>(json) ?? new ThemeStyle();
+                if (!string.IsNullOrWhiteSpace(json))
+                    CurrentThemeStyle = JsonSerializer.Deserialize<ThemeStyle>(json) ?? new ThemeStyle();
+                else
+                {
+                    CurrentThemeStyle = new ThemeStyle();
+                    Save();
+                }
             }
         }
         else
@@ -56,11 +62,9 @@ internal class ThemeStyleManager : IThemeStyle
         _sukiTheme.ChangeColorTheme(CurrentThemeStyle.SukiColor);
     }
 
-    public void ChangeBaseTheme(bool isLight)
+    private void ChangeBaseTheme(bool isLight)
     {
-        CurrentThemeStyle.IsLight = isLight;
         _sukiTheme.ChangeBaseTheme(isLight ? ThemeVariant.Light : ThemeVariant.Dark);
-        Save();
     }
 
     public void ChangeColorTheme(SukiColor sukiColor)

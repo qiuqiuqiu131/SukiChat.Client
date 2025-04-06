@@ -58,6 +58,7 @@
         <Grid ColumnDefinitions="200,*">
             <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor5}" />
             <ListBox x:Name="ListBox" Grid.Column="0"
+                     SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                      Margin="3,20" ItemsSource="{Binding SettingBars}">
                 <Interaction.Behaviors>
                     <EventTriggerBehavior EventName="SelectionChanged">

@@ -164,6 +164,8 @@ public class App : PrismApplication
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
 
         regionManager.RegisterViewWithRegion(RegionNames.ContactsRegion, typeof(ChatEmptyView));
+
+        regionManager.RegisterViewWithRegion(RegionNames.SystemSettingRegion, nameof(ThemeView));
     }
 
 

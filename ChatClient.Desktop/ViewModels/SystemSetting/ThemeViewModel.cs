@@ -25,6 +25,20 @@ public class ThemeViewModel : BindableBase, IRegionMemberLifetime
         set => SetProperty(ref _themeStyle, value);
     }
 
+    private bool _isLight;
+
+    public bool IsLight
+    {
+        get => _isLight;
+        set
+        {
+            if (SetProperty(ref _isLight, value))
+            {
+                ThemeStyle.IsLight = value;
+            }
+        }
+    }
+
     private SukiColorTheme _selectedColorTheme;
 
     public SukiColorTheme SelectedColorTheme
@@ -44,8 +58,9 @@ public class ThemeViewModel : BindableBase, IRegionMemberLifetime
         AvailableBackgroundStyles = new AvaloniaList<SukiBackgroundStyle>(Enum.GetValues<SukiBackgroundStyle>());
         AvailableColors = _themeStyleManager.ColorThemes;
 
-        _themeStyle = themeStyleManager.CurrentThemeStyle;
-        _selectedColorTheme =
+        ThemeStyle = themeStyleManager.CurrentThemeStyle;
+        IsLight = ThemeStyle.IsLight;
+        SelectedColorTheme =
             AvailableColors.FirstOrDefault(d => d.DisplayName.Equals(ThemeStyle.SukiColor.ToString()))!;
 
         SwitchToColorThemeCommand = new DelegateCommand<SukiColorTheme>(SwitchToColorTheme);

@@ -27,8 +27,9 @@
                     Height="160"
                     Padding="0"
                     Classes="GigaChips"
+                    Name="Light"
                     GroupName="RadioBaseTheme"
-                    IsChecked="{Binding ThemeStyle.IsLight}">
+                    IsChecked="{Binding IsLight}">
                     <Border
                         Margin="-50"
                         Background="#fafafa"
@@ -50,7 +51,7 @@
                     Height="160"
                     Classes="GigaChips"
                     GroupName="RadioBaseTheme"
-                    IsChecked="{Binding !ThemeStyle.IsLight}">
+                    IsChecked="{Binding !IsLight}">
                     <Border
                         Margin="-50"
                         Background="#222222"

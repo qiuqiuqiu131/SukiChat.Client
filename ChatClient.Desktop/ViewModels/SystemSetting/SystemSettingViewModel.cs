@@ -27,6 +27,18 @@ public class SystemSettingViewModel : BindableBase, IDialogAware
     public IRegionManager RegionManager { get; }
     public INotificationMessageManager NotificationMessageManager { get; set; } = new NotificationMessageManager();
 
+    private int selectedIndex = 0;
+
+    public int SelectedIndex
+    {
+        get => selectedIndex;
+        set
+        {
+            if (SetProperty(ref selectedIndex, value))
+                SelectionChangedCommand.Execute(SettingBars[value]);
+        }
+    }
+
     public DelegateCommand CancelCommand { get; }
     public DelegateCommand<SettingBarDto> SelectionChangedCommand { get; }
 
