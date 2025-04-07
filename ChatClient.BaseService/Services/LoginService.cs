@@ -10,7 +10,7 @@ namespace ChatClient.BaseService.Services;
 
 public interface ILoginService
 {
-    Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
+    Task<LoginResponse?> Login(string id, string password, bool isRemember = false);
     Task<CommonResponse?> Logout(string? userId);
     Task<string?> GetPassword(string id);
     Task LoginSuccess(UserDetailDto user);
@@ -38,7 +38,7 @@ internal class LoginService : BaseService, ILoginService
     /// <param name="id"></param>
     /// <param name="password"></param>
     /// <returns></returns>
-    public async Task<CommonResponse?> Login(string id, string password, bool isRemember = false)
+    public async Task<LoginResponse?> Login(string id, string password, bool isRemember = false)
     {
         var message = new LoginRequest
         {
@@ -46,7 +46,7 @@ internal class LoginService : BaseService, ILoginService
             Password = password
         };
 
-        var response = await _messageManager.SendMessageWithResponse<CommonResponse>(message);
+        var response = await _messageManager.SendMessageWithResponse<LoginResponse>(message);
         return response;
     }
 

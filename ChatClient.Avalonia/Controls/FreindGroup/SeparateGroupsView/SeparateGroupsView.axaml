@@ -6,8 +6,8 @@
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
     <Styles.Resources>
-        <DataTemplate x:Key="Menu">
-            <ContextMenu Placement="Pointer" x:DataType="data:GroupFriendDto">
+        <DataTemplate x:Key="Menu" DataType="data:GroupFriendDto">
+            <ContextMenu Placement="Pointer">
                 <MenuItem Header="添加分组" CommandParameter="{Binding}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="Add" />

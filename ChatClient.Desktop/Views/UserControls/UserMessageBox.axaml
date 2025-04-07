@@ -49,10 +49,10 @@
                                          IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          FontSize="14"
                                          Opacity="0.85" />
-                    <SelectableTextBlock Text="暂未设置备注"
-                                         IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                         FontSize="14"
-                                         Opacity="0.6" />
+                    <TextBlock Text="暂未设置备注"
+                               IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                               FontSize="14"
+                               Opacity="0.6" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal"

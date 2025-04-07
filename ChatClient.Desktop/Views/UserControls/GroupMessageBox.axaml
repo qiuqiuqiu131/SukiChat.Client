@@ -34,10 +34,10 @@
                                          IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          FontSize="14"
                                          Opacity="0.85" />
-                    <SelectableTextBlock Text="暂未设置备注"
-                                         IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                         FontSize="14"
-                                         Opacity="0.6" />
+                    <TextBlock Text="暂未设置备注"
+                               IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                               FontSize="14"
+                               Opacity="0.6" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal">
@@ -46,10 +46,10 @@
                                          FontSize="14"
                                          IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          Opacity="0.85" />
-                    <SelectableTextBlock Text="在群里，发现更多~"
-                                         FontSize="14"
-                                         IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                         Opacity="0.6" />
+                    <TextBlock Text="在群里，发现更多~"
+                               FontSize="14"
+                               IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                               Opacity="0.6" />
                 </StackPanel>
 
                 <Panel>

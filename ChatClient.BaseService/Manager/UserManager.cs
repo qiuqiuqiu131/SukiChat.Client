@@ -66,7 +66,7 @@ internal class UserManager : IUserManager
         var loginService = _containerProvider.Resolve<ILoginService>();
         var response = await loginService.Login(id, password, isRemember);
 
-        if (!(response is { State: true })) return response;
+        if (!(response is { Response: { State: true } })) return response?.Response;
 
         // 调用userService获取用户完整数据
         try
@@ -90,7 +90,7 @@ internal class UserManager : IUserManager
         IsLogin = true;
         // 登录成功后，程序启用全双工通信，开始监听消息。接收到消息后，由eventaggregator发布消息。 
         RegisterEvent(_eventAggregator);
-        return response;
+        return response.Response;
     }
 
     /// <summary>

@@ -119,6 +119,14 @@ public class UserDetailDto : BindableBase, IDisposable
         }
     }
 
+    private bool isFirstLogin;
+
+    public bool IsFirstLogin
+    {
+        get => isFirstLogin;
+        set => SetProperty(ref isFirstLogin, value);
+    }
+
     public event Action OnUnreadMessageCountChanged;
 
     public event Action OnPhoneNumberChanged;

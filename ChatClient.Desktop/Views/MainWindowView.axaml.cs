@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -7,11 +8,15 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
+using Prism.Dialogs;
 using Prism.Events;
+using Prism.Ioc;
 using SukiUI.Controls;
+using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.Views;
 
@@ -19,6 +24,8 @@ public partial class MainWindowView : SukiWindow, IDisposable
 {
     private readonly IUserManager _userManager;
     private TrayIcon? _trayIcon;
+
+    private List<SubscriptionToken> _subscriptionTokens = [];
 
     public MainWindowView(IEventAggregator eventAggregator, IUserManager userManager)
     {
@@ -41,9 +48,9 @@ public partial class MainWindowView : SukiWindow, IDisposable
             }
         });
 
-        eventAggregator.GetEvent<UserMessageBoxShowEvent>().Subscribe(ShowUserMessageBox);
-        eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Subscribe(ShowGroupMessageBox);
-        eventAggregator.GetEvent<ShowWindowEvent>().Subscribe(ShowWindow);
+        _subscriptionTokens.Add(eventAggregator.GetEvent<UserMessageBoxShowEvent>().Subscribe(ShowUserMessageBox));
+        _subscriptionTokens.Add(eventAggregator.GetEvent<GroupMessageBoxShowEvent>().Subscribe(ShowGroupMessageBox));
+        _subscriptionTokens.Add(eventAggregator.GetEvent<ShowWindowEvent>().Subscribe(ShowWindow));
     }
 
     #region Message Box
@@ -133,10 +140,21 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
     #endregion
 
-    protected override void OnOpened(EventArgs e)
+    protected override async void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
         ShowTrayIcon();
+
+        if (_userManager.User?.IsFirstLogin ?? false)
+        {
+            // 如果是首次登录
+            await Task.Delay(500);
+            var dialogManager = App.Current.Container.Resolve<ISukiDialogManager>();
+            dialogManager.CreateDialog()
+                .WithViewModel(d =>
+                    new EditUserDataViewModel(d, new DialogParameters { { "UserDto", _userManager.User.UserDto } }))
+                .TryShow();
+        }
     }
 
     protected override void OnClosed(EventArgs e)
@@ -262,7 +280,12 @@ public partial class MainWindowView : SukiWindow, IDisposable
             if (disposing)
             {
                 if (DataContext is IDisposable disposable)
+                {
                     disposable.Dispose();
+                    foreach (var token in _subscriptionTokens)
+                        token.Dispose();
+                }
+
                 HideTrayIcon();
             }
 

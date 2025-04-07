@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
@@ -165,9 +166,11 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
 
         if (result is { Response: { State: true } })
         {
+            ClipBoardHelper.AddText(result.Id);
             DialogManager.CreateDialog()
                 .WithViewModel(d =>
-                    new SukiDialogViewModel(d, NotificationType.Information, "注册成功", $"您的账号ID为 \"{result.Id}\"",
+                    new SukiDialogViewModel(d, NotificationType.Information, "注册成功",
+                        $"账号ID：\"{result.Id}\"",
                         () =>
                         {
                             RequestClose.Invoke(new DialogResult(ButtonResult.OK)
@@ -176,6 +179,8 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
                             });
                         }))
                 .TryShow();
+            await Task.Delay(800);
+            NotificationManager.ShowMessage("已复制到剪切板", NotificationType.Success, TimeSpan.FromSeconds(2));
         }
         else
         {

@@ -30,6 +30,7 @@
     <StyleInclude Source="BusyArea.axaml" />
     <StyleInclude Source="DatePicker.axaml" />
     <StyleInclude Source="ProgressBar.axaml" />
+    <StyleInclude Source="SelectableTextBlock.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormTextBox/FormTextBoxStyle.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormDatePicker/FormDatePicker.axaml" />
     <StyleInclude Source="../Controls/FormControls/FormComboBox/FormComboBoxStyle.axaml" />

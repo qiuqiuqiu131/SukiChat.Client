@@ -93,7 +93,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
 
-    public ISukiDialogManager SukiDialogManager { get; init; }
+    public ISukiDialogManager SukiDialogManager { get; private set; }
 
     public INotificationMessageManager NotificationMessageManager { get; init; } = new NotificationMessageManager();
 
@@ -160,6 +160,32 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         GroupFriends.CollectionChanged += OnCollectionChanged;
         GroupGroups.CollectionChanged += OnCollectionChanged;
+    }
+
+    private void UnRegisterDtoEvent()
+    {
+        GroupFriends.CollectionChanged -= OnCollectionChanged;
+        GroupGroups.CollectionChanged -= OnCollectionChanged;
+
+        foreach (var groupFriendDto in GroupFriends)
+        {
+            groupFriendDto.Friends.CollectionChanged -= OnRelationCollectionChanged;
+            foreach (var friend in groupFriendDto.Friends)
+            {
+                friend.OnFriendRelationChanged -= FriendRelationDtoOnOnFriendRelationChanged;
+                friend.OnGroupingChanged -= FriendRelationDtoOnOnGroupingChanged;
+            }
+        }
+
+        foreach (var groupGroupDto in GroupGroups)
+        {
+            groupGroupDto.Groups.CollectionChanged -= OnRelationCollectionChanged;
+            foreach (var group in groupGroupDto.Groups)
+            {
+                group.OnGroupRelationChanged -= GroupRelationDtoOnOnGroupRelationChanged;
+                group.OnGroupingChanged -= GroupRelationDtoOnOnGroupingChanged;
+            }
+        }
     }
 
     private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -403,10 +429,12 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             if (disposing)
             {
                 // 释放托管资源
-                UnRegisterEvent();
                 try
                 {
+                    UnRegisterDtoEvent();
+                    UnRegisterEvent();
                     ChatPages?.Clear();
+                    SukiDialogManager = null;
                 }
                 catch (Exception e)
                 {

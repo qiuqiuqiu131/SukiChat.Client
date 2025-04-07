@@ -12,7 +12,8 @@
                             Margin="10">
                         <Border CornerRadius="7" ClipToBounds="True" Background="Transparent">
                             <Panel>
-                                <suki:SukiBackground Style="{x:Static tools:ThemeStyleTool.CurrentSukiBackgroundStyle}" />
+                                <suki:SukiBackground Style="{x:Static tools:ThemeStyleTool.CurrentSukiBackgroundStyle}"
+                                                     Margin="-100" MinHeight="250" MinWidth="300" />
                                 <Border CornerRadius="7" ClipToBounds="True">
                                     <ContentControl Content="{TemplateBinding ViewModel}"
                                                     CornerRadius="7"

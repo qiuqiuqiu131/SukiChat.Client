@@ -6,7 +6,7 @@
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:colorTheme="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
              x:DataType="userControls:SukiDialogViewModel"
              x:Class="ChatClient.Desktop.Views.UserControls.SukiDialogView">
     <Grid RowDefinitions="25,0.5,auto,auto">
@@ -16,11 +16,12 @@
                                VerticalAlignment="Top"
                                IsVisible="{Binding IsError}"
                                Margin="7,4,0,0" />
-        <TextBlock HorizontalAlignment="Center" FontSize="14"
+        <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="14"
                    IsVisible="{Binding Title,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                    Text="{Binding Title}" Margin="10,7" />
         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
-        <TextBlock Grid.Row="2" Height="30" Margin="18,15,18,5" FontSize="13.5" Text="{Binding Message}" />
+        <TextBlock Grid.Row="2" Margin="18,15,18,5" FontSize="13.5"
+                   LineSpacing="0.5" Text="{Binding Message}" />
         <StackPanel Grid.Row="3" Spacing="15" HorizontalAlignment="Right" Orientation="Horizontal" Margin="15,0,15,13">
             <Button Classes="Flat" Command="{Binding SureCommand}"
                     IsVisible="{Binding ShowSureButton}"

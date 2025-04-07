@@ -451,13 +451,13 @@ internal class ChatService : BaseService, IChatService
                     FileTarget.Group => "Groups",
                     FileTarget.User => "Users"
                 };
-                var actualPath = Path.Combine(basePath, id, "ChatFile", messContent.FilePath);
+                var actualPath = Path.Combine(basePath, isUser ? userId : id, "ChatFile", messContent.FilePath);
                 messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
 
                 // 获取文件
                 string filename = messContent.FilePath;
                 var content = await _imageManager.GetChatFile(
-                    id, "ChatFile", filename, fileTarget);
+                    isUser ? userId : id, "ChatFile", filename, fileTarget);
                 if (content != null)
                     messContent.ImageSource = content;
                 else

@@ -35,10 +35,10 @@
                     <DataTemplate DataType="{x:Type x:String}">
                         <Button Classes="Basic Emoji"
                                 CommandParameter="{Binding}"
-                                Padding="3"
-                                Margin="2"
+                                Padding="0"
+                                Margin="3"
                                 Click="SelectEmoji">
-                            <TextBlock Text="{Binding}" FontSize="15" />
+                            <TextBlock Text="{Binding}" FontSize="16" />
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

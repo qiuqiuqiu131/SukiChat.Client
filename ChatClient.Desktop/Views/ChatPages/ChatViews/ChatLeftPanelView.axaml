@@ -135,23 +135,23 @@
         <Style Selector="RadioButton.IsTop">
             <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
             <Style Selector="^ /template/ Border">
-                <Setter Property="Opacity" Value="0.3" />
+                <Setter Property="Opacity" Value="0.5" />
             </Style>
             <Style Selector="^:pointerover">
                 <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor25}" />
                 <Style Selector="^ /template/ Border">
-                    <Setter Property="Opacity" Value="0.3" />
+                    <Setter Property="Opacity" Value="0.5" />
                     <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
-                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="CornerRadius" Value="8" />
                 </Style>
                 <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                    <Setter Property="CornerRadius" Value="5" />
+                    <Setter Property="CornerRadius" Value="8" />
                 </Style>
             </Style>
             <Style Selector="^:checked">
                 <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
                 <Style Selector="^ /template/ Border">
-                    <Setter Property="Opacity" Value="0.3" />
+                    <Setter Property="Opacity" Value="0.5" />
                     <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
                     <Setter Property="CornerRadius" Value="13" />
                 </Style>

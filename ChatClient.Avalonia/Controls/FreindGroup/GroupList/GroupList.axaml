@@ -25,8 +25,9 @@
                              Classes="Void Chat">
                         <Interaction.Behaviors>
                             <EventTriggerBehavior EventName="SelectionChanged">
-                                <InvokeCommandAction Command="{TemplateBinding SelectionChangedCommand}"
-                                                     CommandParameter="{Binding $parent[ListBox].SelectedItem.DataContext}" />
+                                <InvokeCommandAction
+                                    Command="{Binding SelectionChangedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=groupList:GroupList}}"
+                                    CommandParameter="{Binding $parent[ListBox].SelectedItem.DataContext}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>
                         <ListBox.ItemsPanel>

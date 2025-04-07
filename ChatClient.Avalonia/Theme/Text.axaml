@@ -61,10 +61,6 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="FontSize" Value="14" />
     </Style>
-    <Style Selector="SelectableTextBlock">
-        <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
 
     <Style Selector="TextBox.Trans">
         <Setter Property="VerticalContentAlignment" Value="Center" />
