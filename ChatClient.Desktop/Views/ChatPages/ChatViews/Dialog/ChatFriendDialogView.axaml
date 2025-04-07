@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:regions="http://prismlibrary.com/"
+             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Dialog"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="dialog:ChatFriendDialogViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog.ChatFriendDialogView">
+    <Panel>
+        <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ChatRightRegion}"
+                        regions:RegionManager.RegionManager="{Binding RegionManager}" />
+        <Border VerticalAlignment="Top" Height="30" Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <StackPanel Grid.Row="0" VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="5,0"
+                        Orientation="Horizontal"
+                        Spacing="4">
+                <StackPanel.Styles>
+                    <Style Selector="PathIcon">
+                        <Setter Property="Height" Value="8" />
+                        <Setter Property="Width" Value="8" />
+                    </Style>
+                </StackPanel.Styles>
+                <Button Name="PART_MinimizeButton"
+                        VerticalContentAlignment="Bottom"
+                        Classes="Basic Rounded WindowControlsButton">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ChangePropertyAction
+                                TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                PropertyName="WindowState"
+                                Value="{x:Static WindowState.Minimized}" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                    <PathIcon Margin="0,0,0,6"
+                              VerticalAlignment="Bottom"
+                              Data="{x:Static suki:Icons.WindowMinimize}" />
+                </Button>
+                <Button Name="PART_MaximizeButton"
+                        Classes="Basic Rounded WindowControlsButton">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ChangePropertyAction
+                                TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                PropertyName="WindowState"
+                                Value="{x:Static WindowState.Maximized}" />
+                            <ChangePropertyAction TargetObject="{Binding ElementName=PART_MaximizeButton}"
+                                                  PropertyName="IsVisible"
+                                                  Value="False" />
+                            <ChangePropertyAction
+                                TargetObject="{Binding ElementName=PART_NormalButton}"
+                                PropertyName="IsVisible"
+                                Value="True" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                    <PathIcon x:Name="MaximizeIcon"
+                              Data="{x:Static suki:Icons.WindowMaximize}" />
+                </Button>
+                <Button Name="PART_NormalButton"
+                        IsVisible="False"
+                        Classes="Basic Rounded WindowControlsButton">
+                    <Interaction.Behaviors>
+                        <EventTriggerBehavior EventName="Click">
+                            <ChangePropertyAction
+                                TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                PropertyName="WindowState"
+                                Value="{x:Static WindowState.Normal}" />
+                            <ChangePropertyAction
+                                TargetObject="{Binding ElementName=PART_NormalButton}"
+                                PropertyName="IsVisible"
+                                Value="False" />
+                            <ChangePropertyAction
+                                TargetObject="{Binding ElementName=PART_MaximizeButton}"
+                                PropertyName="IsVisible"
+                                Value="True" />
+                        </EventTriggerBehavior>
+                    </Interaction.Behaviors>
+                    <PathIcon x:Name="NormalIcon"
+                              Data="{x:Static suki:Icons.WindowRestore}" />
+                </Button>
+                <Button Name="PART_CloseButton" Command="{Binding CloseCommand }"
+                        Classes="Basic Rounded WindowControlsButton Close">
+                    <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                </Button>
+            </StackPanel>
+        </Border>
+    </Panel>
+</UserControl>

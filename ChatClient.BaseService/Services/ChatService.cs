@@ -456,7 +456,7 @@ internal class ChatService : BaseService, IChatService
 
                 // 获取文件
                 string filename = messContent.FilePath;
-                var content = await _imageManager.GetFile(
+                var content = await _imageManager.GetChatFile(
                     id, "ChatFile", filename, fileTarget);
                 if (content != null)
                     messContent.ImageSource = content;

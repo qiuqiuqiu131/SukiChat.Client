@@ -18,9 +18,7 @@ public interface IUserService
 
     public Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User);
 
-    public Task<UserDto?> GetUserDto(string id);
-
-    public Task<Bitmap> GetHeadImage(UserDto User);
+    public Task<UserDto?> GetUserDto(string id, bool isUpdate = false);
 
     public Task<UserDetailDto?> GetUserDetailDto(string id, string password);
 
@@ -49,15 +47,19 @@ internal class UserService : BaseService, IUserService
     /// 获取用户头像
     /// </summary>
     /// <returns></returns>
-    public async Task<Bitmap> GetHeadImage(UserDto User)
+    public async Task<Bitmap> GetHeadImage(UserDto User, bool isUpdate = false)
     {
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
         if (User.HeadCount == 0)
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
+            Bitmap bitmap = await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                "DefaultHead.png"));
             return bitmap;
         }
 
-        var imageManager = _scopedProvider.Resolve<IImageManager>();
+        if (isUpdate)
+            imageManager.RemoveFromCache(User.Id, "HeadImage", $"head_{User.HeadIndex}.png", FileTarget.User);
+
         // 获取头像
         Bitmap? file =
             await imageManager.GetFile(User.Id, "HeadImage", $"head_{User.HeadIndex}.png", FileTarget.User);
@@ -65,7 +67,8 @@ internal class UserService : BaseService, IUserService
             return file;
         else
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
+            Bitmap bitmap = await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                "DefaultHead.png"));
             return bitmap;
         }
     }
@@ -123,7 +126,7 @@ internal class UserService : BaseService, IUserService
     /// </summary>
     /// <param name="id"></param>
     /// <returns></returns>
-    public async Task<UserDto?> GetUserDto(string id)
+    public async Task<UserDto?> GetUserDto(string id, bool isUpdated)
     {
         GetUserRequest request = new GetUserRequest() { Id = id };
         var response = await _messageHelper.SendMessageWithResponse<GetUserResponse>(request);
@@ -170,7 +173,10 @@ internal class UserService : BaseService, IUserService
             // ignore
         }
 
-        Task.Run(async () => user.HeadImage = await GetHeadImage(user));
+        if (!isUpdated)
+            Task.Run(async () => user.HeadImage = await GetHeadImage(user));
+        else
+            user.HeadImage = await GetHeadImage(user, isUpdated);
 
         return user;
     }

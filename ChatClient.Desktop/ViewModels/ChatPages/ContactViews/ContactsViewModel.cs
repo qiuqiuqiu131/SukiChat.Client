@@ -37,7 +37,11 @@ public class ContactsViewModel : ChatPageBase
     public string? SearchText
     {
         get => searchText;
-        set => SetProperty(ref searchText, value);
+        set
+        {
+            if (SetProperty(ref searchText, value))
+                searchSubject.OnNext(value);
+        }
     }
 
     private AllSearchDto? _allSearchDto;

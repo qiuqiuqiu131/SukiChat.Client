@@ -134,9 +134,12 @@ internal class UserManager : IUserManager
 
         User.UserDto.HeadCount++;
         User.UserDto.HeadIndex = User.UserDto.HeadCount - 1;
-        User.UserDto.HeadImage = bitmap;
+        var _imageManager = _containerProvider.Resolve<IImageManager>();
+        var headImage = await _imageManager.GetFile(User.Id, "HeadImage", fileName, FileTarget.User);
+        User.UserDto.HeadImage = headImage;
 
         await SaveUser();
+
         return true;
     }
 

@@ -14,10 +14,12 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using Prism.Events;
+using Prism.Navigation.Regions;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
+[RegionMemberLifetime(KeepAlive = true)]
 public partial class GroupRequestView : UserControl
 {
     private readonly IEventAggregator _eventAggregator;

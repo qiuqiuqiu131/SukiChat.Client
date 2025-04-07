@@ -29,7 +29,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
+public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
@@ -61,6 +61,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
     public DelegateCommand SearchMoreCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
+    public DelegateCommand VoiceCallCommand { get; private set; }
+    public DelegateCommand VideoCallCommand { get; private set; }
 
     #endregion
 
@@ -89,7 +91,36 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
+        VoiceCallCommand = new DelegateCommand(VoiceCall);
+        VideoCallCommand = new DelegateCommand(VideoCall);
     }
+
+    /// <summary>
+    /// 视频通话
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    private void VideoCall()
+    {
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = "功能开发中...",
+            Type = NotificationType.Information
+        });
+    }
+
+    /// <summary>
+    /// 语音通话
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    private void VoiceCall()
+    {
+        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = "功能开发中...",
+            Type = NotificationType.Information
+        });
+    }
+
 
     /// <summary>
     /// 转发消息
@@ -488,8 +519,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible, IRegionMem
         ChatInputPanelViewModel?.Dispose();
         SelectedFriend = null;
     }
-
-    public bool KeepAlive => true;
 
     #endregion
 }

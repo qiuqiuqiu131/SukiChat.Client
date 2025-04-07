@@ -47,9 +47,6 @@ internal class UserLoginService : BaseService, IUserLoginService
     {
         DateTime start = DateTime.Now;
 
-        // 开启线程，用于提前加载用户和群聊Dto
-        await _userDtoManager.InitDtos(userId);
-
         DateTime operate_start = DateTime.Now;
         // 获取用户离线消息，处理消息后会更新数据库的
         await OperateOutlineMessage(userId);
@@ -286,6 +283,9 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("Get Outline Message Cost Time:" + (end - start));
 
         if (outlineResponse == null) return;
+
+        // 开启线程，用于提前加载用户和群聊Dto
+        await _userDtoManager.InitDtos(userId);
 
         // 暂存用户分组信息
         _userGroupMessages = outlineResponse.UserGroups;

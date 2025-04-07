@@ -1,14 +1,18 @@
 <suki:SukiWindow xmlns="https://github.com/avaloniaui"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:suki="https://github.com/kikipoulet/SukiUI"
-                 Opacity="0"
-                 x:Class="ChatClient.Desktop.Views.SukiDialogWindow"
+                 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                 x:Class="ChatClient.Desktop.Views.SukiChatDialogWindow"
                  TitleBarAnimationEnabled="False"
-                 Theme="{StaticResource MySukiWindowTheme}"
                  WindowStartupLocation="CenterOwner"
+                 MinWidth="550" Width="630"
+                 Theme="{StaticResource MySukiWindowTheme}"
+                 MinHeight="710" Height="710"
                  BackgroundStyle="{Binding $self.ThemeStyle.CurrentThemeStyle.BackgroundStyle}"
                  Icon="/Assets/Icon.ico"
-                 Title="Suki Chat">
+                 Title="聊天">
     <suki:SukiWindow.Transitions>
         <Transitions>
             <DoubleTransition Property="Opacity" Duration="0:0:0.4" Easing="CubicEaseOut" />

@@ -595,6 +595,7 @@ public partial class ChatUI : UserControl
             else
                 _contextMenu.PlacementAnchor = PopupAnchor.TopLeft;
 
+            _contextMenu.Closed += MenuClosed;
             _contextMenu.Open(this);
         }
     }
@@ -772,6 +773,16 @@ public partial class ChatUI : UserControl
         contextMenu.Items.Add(comItem4);
 
         return contextMenu;
+    }
+
+    private void MenuClosed(object sender, RoutedEventArgs args)
+    {
+        if (sender is ContextMenu contextMenu)
+        {
+            contextMenu.DataContext = null;
+            contextMenu.Items.Clear();
+            contextMenu.Closed -= MenuClosed;
+        }
     }
 
     private void ChatMessageView_OnMessageBoxShow(object? sender, MessageBoxShowEventArgs e)

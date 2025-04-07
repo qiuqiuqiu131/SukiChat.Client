@@ -32,14 +32,13 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type x:String}">
                         <Button Classes="Basic Emoji"
                                 CommandParameter="{Binding}"
                                 Padding="3"
                                 Margin="2"
-                                Click="SelectEmoji"
-                                FontSize="30">
-                            <TextBlock Text="{Binding}" />
+                                Click="SelectEmoji">
+                            <TextBlock Text="{Binding}" FontSize="15" />
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

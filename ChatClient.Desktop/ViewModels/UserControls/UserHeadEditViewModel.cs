@@ -91,7 +91,8 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
                 bitmaps.Reverse();
                 HeadList = new ObservableCollection<Bitmap>(bitmaps);
 
-                SelectedItem = _headImages[userManager.User.UserDto.HeadIndex];
+                if (_headImages.TryGetValue(userManager.User.UserDto.HeadIndex, out var image))
+                    SelectedItem = image;
             });
         }
         else

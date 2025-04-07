@@ -37,7 +37,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
-public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemberLifetime
+public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
@@ -485,8 +485,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible, IRegionMemb
         SelectedGroup = null;
         ChatInputPanelViewModel?.Dispose();
     }
-
-    public bool KeepAlive => true;
 
     #endregion
 }

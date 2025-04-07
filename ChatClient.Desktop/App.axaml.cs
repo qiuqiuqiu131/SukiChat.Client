@@ -9,6 +9,7 @@ using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Dialog;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
@@ -25,6 +26,7 @@ using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
+using ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
@@ -131,9 +133,13 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<UndoView>();
 
         // 注册DialogView
+        containerRegistry.RegisterDialogWindow<SukiChatDialogWindow>(nameof(SukiChatDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
         containerRegistry.RegisterDialog<RegisterWindowView, RegisterWindowViewModel>();
         containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
+        // 聊天窗口
+        containerRegistry.RegisterDialog<ChatFriendDialogView, ChatFriendDialogViewModel>();
+        containerRegistry.RegisterDialog<ChatGroupDialogView, ChatGroupDialogViewModel>();
         // 搜索用户和群
         containerRegistry.RegisterDialog<SearchUserGroupView, SearchUserGroupViewModel>();
         // 本地搜索

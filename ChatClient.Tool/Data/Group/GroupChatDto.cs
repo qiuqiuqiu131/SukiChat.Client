@@ -6,7 +6,7 @@ namespace ChatClient.Tool.Data.Group;
 
 public class GroupChatDto : BindableBase, IDisposable
 {
-    public string? GroupId { get; set; }
+    public string GroupId { get; set; }
 
     private GroupRelationDto? _groupRelationDto;
 

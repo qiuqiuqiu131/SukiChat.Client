@@ -162,8 +162,7 @@ internal class FriendMessageHandler : MessageHandlerBase
         if (message is not { Response: { State: true } } || _userManager.User.Id.Equals(message.UserId)) return;
 
         var userService = scopedprovider.Resolve<IUserService>();
-        var dto = await userService.GetUserDto(message.UserId);
-        dto.HeadImage = await userService.GetHeadImage(dto);
+        var dto = await userService.GetUserDto(message.UserId, true);
 
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         var userDto = await userDtoManager.GetUserDto(message.UserId);

@@ -95,9 +95,15 @@
         <!-- 左侧按钮 -->
         <StackPanel VerticalAlignment="Center"
                     Orientation="Horizontal"
-                    Spacing="5"
+                    Spacing="6"
                     Margin="12.5,3,0,0">
-            <Button Classes="Basic" x:Name="EmojiButton" Click="SelectEmojis">
+            <Button Classes="Basic" x:Name="EmojiButton" Click="SelectEmojis"
+                    HorizontalAlignment="Center"
+                    ToolTip.ShowDelay="400"
+                    ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                <ToolTip.Tip>
+                    <TextBlock Text="表情" FontSize="12" />
+                </ToolTip.Tip>
                 <avalonia:MaterialIcon Kind="EmoticonHappyOutline" Width="22" Height="22" />
             </Button>
             <Popup IsOpen="False" Name="EmojiView"
@@ -106,10 +112,21 @@
                    PlacementTarget="EmojiButton">
                 <userControls:EmojiPickerView EmojiSelected="EmojiPickerView_OnEmojiSelected" />
             </Popup>
-            <Button Classes="Basic" Command="{Binding SelectFileAndSendCommand}">
+            <Button Classes="Basic" Command="{Binding SelectFileAndSendCommand}" ToolTip.ShowDelay="400"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,2.5,0"
+                    ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                <ToolTip.Tip>
+                    <TextBlock Text="文件" FontSize="12" />
+                </ToolTip.Tip>
                 <avalonia:MaterialIcon Kind="FolderOutline" Width="22" Height="22" />
             </Button>
-            <Button Classes="Basic" Command="{Binding ScreenShotCommand}">
+            <Button Classes="Basic" Command="{Binding ScreenShotCommand}" ToolTip.ShowDelay="400"
+                    HorizontalAlignment="Center"
+                    ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                <ToolTip.Tip>
+                    <TextBlock Text="截图" FontSize="12" />
+                </ToolTip.Tip>
                 <avalonia:MaterialIcon Kind="ContentCut" Width="21" Height="21"
                                        RenderTransformOrigin="50%,50%">
                     <avalonia:MaterialIcon.RenderTransform>
@@ -119,6 +136,14 @@
                         </TransformGroup>
                     </avalonia:MaterialIcon.RenderTransform>
                 </avalonia:MaterialIcon>
+            </Button>
+            <Button Classes="Basic" Command="{Binding SendVoiceMessageCommand}" ToolTip.ShowDelay="400"
+                    HorizontalAlignment="Center"
+                    ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                <ToolTip.Tip>
+                    <TextBlock Text="录音" FontSize="12" />
+                </ToolTip.Tip>
+                <avalonia:MaterialIcon Kind="MicrophoneOutline" Width="22" Height="22" />
             </Button>
         </StackPanel>
         <!-- 右侧按钮 -->

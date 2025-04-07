@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using ChatClient.BaseService.Services;
@@ -13,12 +14,14 @@ using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
 
@@ -39,6 +42,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     public DelegateCommand<string> SendFileWithPathCommand { get; init; }
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
+    public DelegateCommand SendVoiceMessageCommand { get; init; }
 
     private Func<ChatMessage.ContentOneofCase, object, Task<(bool, FileTarget)>> sendChatMessage;
     private Func<IEnumerable<object>, Task<(bool, FileTarget)>> sendChatMessages;
@@ -60,6 +64,18 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
         SendFileWithPathCommand = new DelegateCommand<string>(SendFileWithPath);
         ScreenShotCommand = new DelegateCommand(ScreenShot);
         ClearInputMessages = new DelegateCommand(ClearInput);
+        SendVoiceMessageCommand = new DelegateCommand(SendVoiceMessage);
+    }
+
+    // 发送语音消息
+    private void SendVoiceMessage()
+    {
+        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+        eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        {
+            Message = "功能开发中...",
+            Type = NotificationType.Information
+        });
     }
 
     public void UpdateChatMessages(AvaloniaList<object> chatList)

@@ -61,6 +61,13 @@
                         <avalonia:MaterialIcon Kind="BellOffOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Click="OnFriendOpenDialogClick"
+                    Header="打开独立窗口">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="CheckboxMultipleBlankOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator Margin="5" />
                 <MenuItem Click="OnFriendClearMenuItemClick" Header="删除聊天">
                     <MenuItem.Icon>
@@ -106,6 +113,13 @@
                     IsVisible="{Binding !CantDisturb}">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="BellOffOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Click="OnGroupOpenDialogClick"
+                    Header="打开独立窗口">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="CheckboxMultipleBlankOutline" />
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator Margin="5" />
@@ -433,6 +447,12 @@
     <chatViews:ChatLeftPanelView.GroupItemsSource>
         <Binding Path="ChatViewModel.Groups" />
     </chatViews:ChatLeftPanelView.GroupItemsSource>
+    <chatViews:ChatLeftPanelView.OpenFriendChatDialog>
+        <Binding Path="FriendOpenDialogCommand" />
+    </chatViews:ChatLeftPanelView.OpenFriendChatDialog>
+    <chatViews:ChatLeftPanelView.OpenGroupChatDialog>
+        <Binding Path="GroupOpenDialogCommand" />
+    </chatViews:ChatLeftPanelView.OpenGroupChatDialog>
     <Grid Margin="0" RowDefinitions="70,*">
         <!--  顶部  -->
         <suki:GlassCard

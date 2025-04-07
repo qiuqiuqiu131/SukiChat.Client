@@ -15,7 +15,7 @@ public class DateOfYMDConverter : MarkupExtension, IValueConverter
     {
         if (value is DateTime time)
         {
-            return time.ToString("yyyy年M月d日");
+            return time.ToString("yyyy年M月d日 HH:mm");
         }
 
         if (value is DateOnly date)

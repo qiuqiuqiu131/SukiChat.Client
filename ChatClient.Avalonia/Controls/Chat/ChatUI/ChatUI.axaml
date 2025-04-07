@@ -296,12 +296,14 @@
                                 Classes="Basic Visible"
                                 RenderTransformOrigin="0.5,1"
                                 Click="Button_OnClick">
-                            <suki:GlassCard Background="{DynamicResource SukiPrimaryColor}"
+                            <suki:GlassCard Background="{DynamicResource SukiPrimaryColor50}"
+                                            IsInteractive="True"
                                             Margin="0"
-                                            Padding="10,5"
+                                            Padding="8,4,4,4"
                                             CornerRadius="7">
                                 <TextBlock
                                     FontSize="12"
+                                    Opacity="0.7"
                                     Text="{Binding $parent[chatUi:ChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}">
                                 </TextBlock>
                             </suki:GlassCard>

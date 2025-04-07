@@ -59,11 +59,17 @@ internal class UserDtoManager : IUserDtoManager
             groupIds = await groupService.GetGroupIds(userId);
         }
 
-        foreach (var id in userIds)
-            _ = GetUserDto(id);
+        _ = Task.Run(async () =>
+        {
+            foreach (var id in userIds)
+                await GetUserDto(id);
+        });
 
-        foreach (var id in groupIds)
-            _ = GetGroupDto(userId, id);
+        _ = Task.Run(async () =>
+        {
+            foreach (var id in groupIds)
+                await GetGroupDto(userId, id);
+        });
     }
 
     /// <summary>

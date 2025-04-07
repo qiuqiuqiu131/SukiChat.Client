@@ -56,6 +56,8 @@ public class ChatLeftPanelViewModel : ViewModelBase
     public DelegateCommand<string> SearchMoreCommand { get; init; }
     public AsyncDelegateCommand<FriendChatDto> FriendSelectionChangedCommand { get; init; }
     public AsyncDelegateCommand<GroupChatDto> GroupSelectionChangedCommand { get; init; }
+    public AsyncDelegateCommand<FriendChatDto> FriendOpenDialogCommand { get; init; }
+    public AsyncDelegateCommand<GroupChatDto> GroupOpenDialogCommand { get; init; }
 
     public ChatLeftPanelViewModel(ChatViewModel chatViewModel, IContainerProvider containerProvider)
     {
@@ -72,6 +74,8 @@ public class ChatLeftPanelViewModel : ViewModelBase
         CreateGroupCommand = new DelegateCommand(CreateGroup);
         AddNewFriendCommand = new DelegateCommand(AddNewFriend);
         SearchMoreCommand = new DelegateCommand<string>(SearchMore);
+        FriendOpenDialogCommand = new AsyncDelegateCommand<FriendChatDto>(ChatViewModel.FriendOpenDialog);
+        GroupOpenDialogCommand = new AsyncDelegateCommand<GroupChatDto>(ChatViewModel.GroupOpenDialog);
 
         searchDisposable = searchSubject
             .Throttle(TimeSpan.FromMilliseconds(500))

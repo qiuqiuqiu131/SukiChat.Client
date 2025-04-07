@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
@@ -46,6 +47,26 @@ public partial class ChatLeftPanelView : UserControl
     {
         get => GetValue(GroupItemsSourceProperty);
         set => SetValue(GroupItemsSourceProperty, value);
+    }
+
+    public static readonly StyledProperty<ICommand> OpenFriendChatDialogProperty =
+        AvaloniaProperty.Register<ChatLeftPanelView, ICommand>(
+            "OpenFriendChatDialog");
+
+    public ICommand OpenFriendChatDialog
+    {
+        get => GetValue(OpenFriendChatDialogProperty);
+        set => SetValue(OpenFriendChatDialogProperty, value);
+    }
+
+    public static readonly StyledProperty<ICommand> OpenGroupChatDialogProperty =
+        AvaloniaProperty.Register<ChatLeftPanelView, ICommand>(
+            "OpenGroupChatDialog");
+
+    public ICommand OpenGroupChatDialog
+    {
+        get => GetValue(OpenGroupChatDialogProperty);
+        set => SetValue(OpenGroupChatDialogProperty, value);
     }
 
     #endregion
@@ -520,6 +541,18 @@ public partial class ChatLeftPanelView : UserControl
         _friendContextMenu.Close();
     }
 
+    private void OnFriendOpenDialogClick(object? sender, RoutedEventArgs e)
+    {
+        if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
+        {
+            var friendChatDto = FriendItemsSource.FirstOrDefault(d => d.UserId.Equals(friendRelation.Id));
+            if (friendChatDto != null)
+                OpenFriendChatDialog?.Execute(friendChatDto);
+        }
+
+        _friendContextMenu.Close();
+    }
+
 // 清理DataContext引用
     private void OnContextMenuClosed(object? sender, RoutedEventArgs e)
     {
@@ -605,6 +638,18 @@ public partial class ChatLeftPanelView : UserControl
         _groupContextMenu.Close();
     }
 
+    private void OnGroupOpenDialogClick(object? sender, RoutedEventArgs e)
+    {
+        if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
+        {
+            var groupChatDto = GroupItemsSource.FirstOrDefault(d => d.GroupId.Equals(groupRelation.Id));
+            if (groupChatDto != null)
+                OpenGroupChatDialog?.Execute(groupChatDto);
+        }
+
+        _groupContextMenu.Close();
+    }
+
     #endregion
 
     #region Menu
@@ -685,6 +730,7 @@ public partial class ChatLeftPanelView : UserControl
                 selectedMenu.PlacementAnchor = PopupAnchor.TopRight;
                 selectedMenu.Placement = PlacementMode.Pointer;
                 selectedMenu.PlacementTarget = radioButton;
+
                 selectedMenu.Open(radioButton);
                 e.Handled = true;
             }

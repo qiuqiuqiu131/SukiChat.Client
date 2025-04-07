@@ -13,10 +13,12 @@ using ChatClient.Avalonia.Controls.CircleImage;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using Prism.Events;
+using Prism.Navigation.Regions;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 
+[RegionMemberLifetime(KeepAlive = true)]
 public partial class FriendRequestView : UserControl
 {
     private readonly IEventAggregator _eventAggregator;

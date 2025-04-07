@@ -8,8 +8,6 @@
              xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
              xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
              xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
-             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -33,6 +31,7 @@
                 <StackPanel Margin="0,0,10,5"
                             VerticalAlignment="Bottom"
                             Orientation="Horizontal"
+                            Spacing="6"
                             DockPanel.Dock="Right">
                     <StackPanel.Styles>
                         <Style Selector="Button.Basic">
@@ -54,6 +53,22 @@
                             </Style>
                         </Style>
                     </StackPanel.Styles>
+                    <Button Classes="Basic" Command="{Binding VoiceCallCommand }" ToolTip.ShowDelay="400"
+                            ToolTip.VerticalOffset="-4"
+                            ToolTip.Placement="Bottom">
+                        <ToolTip.Tip>
+                            <TextBlock Text="语音通话" FontSize="12" />
+                        </ToolTip.Tip>
+                        <avalonia:MaterialIcon Kind="PhoneOutline" Width="23" Height="23" />
+                    </Button>
+                    <Button Classes="Basic" Command="{Binding VideoCallCommand}" ToolTip.ShowDelay="400"
+                            ToolTip.VerticalOffset="-4"
+                            ToolTip.Placement="Bottom">
+                        <ToolTip.Tip>
+                            <TextBlock Text="语音通话" FontSize="12" />
+                        </ToolTip.Tip>
+                        <avalonia:MaterialIcon Kind="VideoOutline" Width="23" Height="23" />
+                    </Button>
                     <Button Classes="Basic" Click="ShowRightView">
                         <avalonia:MaterialIcon Kind="DotsHorizontal" Width="23" Height="23" />
                     </Button>

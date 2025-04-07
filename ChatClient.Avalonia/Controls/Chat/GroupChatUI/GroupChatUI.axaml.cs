@@ -581,7 +581,18 @@ public partial class GroupChatUI : UserControl
             else
                 _contextMenu.PlacementAnchor = PopupAnchor.TopLeft;
 
+            _contextMenu.Closed += MenuClosed;
             _contextMenu.Open(this);
+        }
+    }
+
+    private void MenuClosed(object sender, RoutedEventArgs args)
+    {
+        if (sender is ContextMenu contextMenu)
+        {
+            contextMenu.DataContext = null;
+            contextMenu.Items.Clear();
+            contextMenu.Closed -= MenuClosed;
         }
     }
 
