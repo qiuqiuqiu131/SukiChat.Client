@@ -27,10 +27,11 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                            IsVisible="{Binding IsEntered}">
-                    <TextBlock Text="备注" Width="90" FontSize="14" VerticalAlignment="Center" />
+                <DockPanel LastChildFill="True"
+                           IsVisible="{Binding IsEntered}">
+                    <TextBlock Text="备注" Width="90" FontSize="14" DockPanel.Dock="Left" VerticalAlignment="Center" />
                     <SelectableTextBlock Text="{Binding Remark}"
+                                         TextTrimming="CharacterEllipsis"
                                          IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          FontSize="14"
                                          Opacity="0.85" />
@@ -38,19 +39,20 @@
                                IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                FontSize="14"
                                Opacity="0.6" />
-                </StackPanel>
+                </DockPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="群介绍" Width="90" FontSize="14" />
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="群介绍" Width="90" DockPanel.Dock="Left" FontSize="14" />
                     <SelectableTextBlock Text="{Binding Description}"
                                          FontSize="14"
+                                         TextTrimming="CharacterEllipsis"
                                          IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          Opacity="0.85" />
                     <TextBlock Text="在群里，发现更多~"
                                FontSize="14"
                                IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                Opacity="0.6" />
-                </StackPanel>
+                </DockPanel>
 
                 <Panel>
                     <TextBlock Text="群聊已被解散" HorizontalAlignment="Center" Margin="0,25,0,15" Opacity="0.6"

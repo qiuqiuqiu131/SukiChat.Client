@@ -42,36 +42,42 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal"
-                            IsVisible="{Binding IsFriend}">
-                    <TextBlock Text="备注" Width="90" FontSize="14" VerticalAlignment="Center" />
-                    <SelectableTextBlock Text="{Binding Remark}"
-                                         IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                         FontSize="14"
-                                         Opacity="0.85" />
-                    <TextBlock Text="暂未设置备注"
-                               IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                               FontSize="14"
-                               Opacity="0.6" />
-                </StackPanel>
+                <DockPanel LastChildFill="True"
+                           IsVisible="{Binding IsFriend}">
+                    <TextBlock Text="备注" DockPanel.Dock="Left" Width="90" FontSize="14" VerticalAlignment="Center" />
+                    <Panel>
+                        <SelectableTextBlock Text="{Binding Remark}"
+                                             TextTrimming="CharacterEllipsis"
+                                             IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                             FontSize="14"
+                                             Opacity="0.85" />
+                        <TextBlock Text="暂未设置备注"
+                                   IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                   FontSize="14"
+                                   Opacity="0.6" />
+                    </Panel>
+                </DockPanel>
 
-                <StackPanel Orientation="Horizontal"
-                            IsVisible="{Binding Birth,Converter={x:Static ObjectConverters.IsNotNull}}">
-                    <TextBlock Text="生日" Width="90" FontSize="14" VerticalAlignment="Center" />
+                <DockPanel LastChildFill="True"
+                           IsVisible="{Binding Birth,Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock Text="生日" DockPanel.Dock="Left" Width="90" FontSize="14" VerticalAlignment="Center" />
                     <SelectableTextBlock Text="{Binding Birth,StringFormat={}{0:yyyy-MM-dd}}"
                                          FontSize="14"
                                          Opacity="0.85" />
-                </StackPanel>
+                </DockPanel>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="个签" Width="90" FontSize="14" VerticalAlignment="Center" />
-                    <SelectableTextBlock Text="{Binding Introduction}"
-                                         IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                         FontSize="14"
-                                         Opacity="0.85" />
-                    <TextBlock Text="暂未设置个性签名" Opacity="0.6" FontSize="14"
-                               IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNullOrEmpty}}" />
-                </StackPanel>
+                <DockPanel LastChildFill="True">
+                    <TextBlock Text="个签" Width="90" FontSize="14" DockPanel.Dock="Left" VerticalAlignment="Center" />
+                    <Panel>
+                        <SelectableTextBlock Text="{Binding Introduction}"
+                                             IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                             FontSize="14"
+                                             TextTrimming="CharacterEllipsis"
+                                             Opacity="0.85" />
+                        <TextBlock Text="暂未设置个性签名" Opacity="0.6" FontSize="14"
+                                   IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+                    </Panel>
+                </DockPanel>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
                             IsVisible="{Binding IsUser}"

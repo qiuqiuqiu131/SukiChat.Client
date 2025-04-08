@@ -50,7 +50,7 @@ public partial class LocalSearchUserGroupView : UserControl
             {
                 { "searchText", SearchBox?.SearchText ?? string.Empty },
                 { "notificationManager", NotificationManager.Manager },
-                { "regionManager", _regionManager }
+                { "localSearchUserGroupViewModel", DataContext }
             };
             _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchAllView), parameters);
         }
@@ -58,9 +58,7 @@ public partial class LocalSearchUserGroupView : UserControl
         {
             INavigationParameters parameters = new NavigationParameters
             {
-                { "searchText", SearchBox?.SearchText ?? string.Empty },
-                { "notificationManager", NotificationManager.Manager },
-                { "regionManager", _regionManager }
+                { "searchText", SearchBox?.SearchText ?? string.Empty }
             };
             _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchUserView), parameters);
         }
@@ -68,9 +66,7 @@ public partial class LocalSearchUserGroupView : UserControl
         {
             INavigationParameters parameters = new NavigationParameters
             {
-                { "searchText", SearchBox?.SearchText ?? string.Empty },
-                { "notificationManager", NotificationManager.Manager },
-                { "regionManager", _regionManager }
+                { "searchText", SearchBox?.SearchText ?? string.Empty }
             };
             _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchGroupView), parameters);
         }

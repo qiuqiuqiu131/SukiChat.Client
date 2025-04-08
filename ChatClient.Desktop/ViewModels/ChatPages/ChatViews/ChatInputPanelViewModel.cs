@@ -240,6 +240,18 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     {
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
+        var fileInfo = new FileInfo(filePath);
+        if (fileInfo.Length > 5 * 1024 * 1024)
+        {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "发送文件不能超过5MB",
+                Type = NotificationType.Error
+            });
+            return;
+        }
+
         if (FileExtensionTool.IsImage(filePath))
             await SendImageMessage(filePath);
         else

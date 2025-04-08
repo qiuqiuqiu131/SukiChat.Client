@@ -379,6 +379,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         }
 
         TranslateWindowHelper.CloseAllDialog();
+        SukiDialogManager.DismissDialog();
         SukiDialogManager.CreateDialog()
             .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
             .TryShow();

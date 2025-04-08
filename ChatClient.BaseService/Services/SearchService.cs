@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.Tool.Data;
@@ -10,7 +11,7 @@ public interface ISearchService
 {
     Task<List<UserDto>> SearchUserAsync(string userId, string content);
     Task<List<GroupDto>> SearchGroupAsync(string userId, string content);
-    Task<List<object>> SearchAllAsync(string userId, string content);
+    Task<(List<UserDto>, List<GroupDto>)> SearchAllAsync(string userId, string content);
 }
 
 public class SearchService : BaseService, ISearchService
@@ -101,11 +102,11 @@ public class SearchService : BaseService, ISearchService
         return [];
     }
 
-    public async Task<List<object>> SearchAllAsync(string userId, string content)
+    public async Task<(List<UserDto>, List<GroupDto>)> SearchAllAsync(string userId, string content)
     {
-        List<object> result = new();
-        result.AddRange(await SearchGroupAsync(userId, content));
-        result.AddRange(await SearchUserAsync(userId, content));
-        return result;
+        var item1 = SearchUserAsync(userId, content);
+        var item2 = SearchGroupAsync(userId, content);
+        await Task.WhenAll(item1, item2);
+        return (item1.Result, item2.Result);
     }
 }

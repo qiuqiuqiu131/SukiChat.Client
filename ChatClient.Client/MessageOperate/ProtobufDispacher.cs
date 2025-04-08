@@ -37,7 +37,7 @@ namespace ChatClient.MessageOperate
         {
             this.container = container;
 
-            semaphore = new SemaphoreSlim(1);
+            semaphore = new SemaphoreSlim(1, 1);
         }
 
         /// <summary>
@@ -73,20 +73,23 @@ namespace ChatClient.MessageOperate
         {
             foreach (var unit in queue.GetConsumingEnumerable())
             {
-                await semaphore.WaitAsync();
+                Task.Run(async () =>
+                {
+                    await semaphore.WaitAsync();
 
-                try
-                {
-                    await OperateMessageUnit(unit);
-                }
-                catch (Exception ex)
-                {
-                    Console.Error.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    semaphore.Release();
-                }
+                    try
+                    {
+                        await OperateMessageUnit(unit);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Error.WriteLine(ex.Message);
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                });
             }
         }
 

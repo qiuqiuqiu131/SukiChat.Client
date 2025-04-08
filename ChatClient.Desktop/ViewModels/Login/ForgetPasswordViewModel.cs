@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
 using ChatClient.Avalonia.Validation;
@@ -138,15 +139,27 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
+    private bool isBusy;
+
+    public bool IsBusy
+    {
+        get => isBusy;
+        set
+        {
+            if (SetProperty(ref isBusy, value))
+                ConfirmCommand.RaiseCanExecuteChanged();
+        }
+    }
+
     public DelegateCommand CancelCommand { get; }
-    public DelegateCommand ConfirmCommand { get; init; }
+    public AsyncDelegateCommand ConfirmCommand { get; init; }
 
     public ForgetPasswordViewModel(IContainerProvider containerProvider)
     {
         _containerProvider = containerProvider;
 
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
-        ConfirmCommand = new DelegateCommand(Confirm, CanConfirm);
+        ConfirmCommand = new AsyncDelegateCommand(Confirm, CanConfirm);
 
         ErrorsChanged += (_, _) =>
         {
@@ -159,9 +172,10 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
     private bool CanConfirm() => !string.IsNullOrWhiteSpace(FirstAccount) &&
                                  !string.IsNullOrWhiteSpace(SecondAccount) &&
                                  !string.IsNullOrWhiteSpace(NewPassword) &&
-                                 !string.IsNullOrWhiteSpace(ConfirmPassword) && !HasErrors;
+                                 !string.IsNullOrWhiteSpace(ConfirmPassword) &&
+                                 !HasErrors && !isBusy;
 
-    private async void Confirm()
+    private async Task Confirm()
     {
         if (!newPassword.Equals(confirmPassword))
         {
@@ -203,7 +217,9 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
                 break;
         }
 
+        IsBusy = true;
         var (success, message) = await passwordService.ForgetPasswordAsync(id, phoneNumber, emailNumber, newPassword);
+        IsBusy = false;
         if (success)
         {
             DialogManager.CreateDialog()

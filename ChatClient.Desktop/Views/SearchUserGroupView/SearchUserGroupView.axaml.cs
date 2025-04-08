@@ -35,7 +35,8 @@ public partial class SearchUserGroupView : UserControl
         INavigationParameters parameters = new NavigationParameters
         {
             { "searchText", SearchBox?.SearchText ?? string.Empty },
-            { "notificationManager", NotificationManager.Manager }
+            { "notificationManager", NotificationManager.Manager },
+            { "searchUserGroupViewModel", DataContext }
         };
         _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
     }
@@ -49,7 +50,8 @@ public partial class SearchUserGroupView : UserControl
                 INavigationParameters parameters = new NavigationParameters
                 {
                     { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager }
+                    { "notificationManager", NotificationManager.Manager },
+                    { "searchUserGroupViewModel", DataContext }
                 };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
             }
@@ -58,7 +60,7 @@ public partial class SearchUserGroupView : UserControl
                 INavigationParameters parameters = new NavigationParameters
                 {
                     { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager }
+                    { "notificationManager", NotificationManager.Manager },
                 };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchFriendView), parameters);
             }
@@ -67,7 +69,7 @@ public partial class SearchUserGroupView : UserControl
                 INavigationParameters parameters = new NavigationParameters
                 {
                     { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager }
+                    { "notificationManager", NotificationManager.Manager },
                 };
                 _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchGroupView), parameters);
             }

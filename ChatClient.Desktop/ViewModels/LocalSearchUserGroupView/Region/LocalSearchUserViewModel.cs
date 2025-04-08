@@ -27,9 +27,6 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
     private readonly ILocalSearchService _localSearchService;
     private readonly IUserManager _userManager;
 
-    private INotificationMessageManager? _notificationManager;
-    private IRegionManager? _regionManager;
-
     private SubscriptionToken token;
 
     private Subject<string> searchFriendSubject = new();
@@ -103,17 +100,13 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
     public void OnNavigatedTo(NavigationContext navigationContext)
     {
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
-        if (!string.IsNullOrWhiteSpace(searchText))
-            searchFriendSubject.OnNext(searchText);
-        _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
-        _regionManager = navigationContext.Parameters["regionManager"] as IRegionManager;
+        searchFriendSubject.OnNext(searchText);
     }
 
     public bool IsNavigationTarget(NavigationContext navigationContext) => true;
 
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        _notificationManager = null;
     }
 
     public void Destroy()

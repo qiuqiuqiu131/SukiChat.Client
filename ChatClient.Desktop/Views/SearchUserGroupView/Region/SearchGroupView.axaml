@@ -17,12 +17,12 @@
             <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
         </Style>
     </UserControl.Styles>
-    <Grid Margin="13,10,13,20">
+    <Grid Margin="13,15,13,20">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Opacity="0.6"
                     IsVisible="{Binding IsEmpty}">
             <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
-            <TextBlock Text="输入关键词搜索" FontSize="15" />
+            <TextBlock Text="暂未找到相关信息" FontSize="15" />
         </StackPanel>
         <ScrollViewer IsVisible="{Binding !IsEmpty}" VerticalScrollBarVisibility="Hidden"
                       HorizontalScrollBarVisibility="Disabled">

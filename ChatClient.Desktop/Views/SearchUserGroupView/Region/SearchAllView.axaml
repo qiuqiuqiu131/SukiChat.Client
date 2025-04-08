@@ -8,6 +8,8 @@
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
              xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup.Region"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.SearchUserGroupView.Region"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:SearchAllViewModel"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.Region.SearchAllView">
@@ -19,88 +21,154 @@
             <Setter Property="Background" Value="{DynamicResource GlassBorderBrush}" />
         </Style>
     </UserControl.Styles>
-    <UserControl.DataTemplates>
-        <DataTemplate x:DataType="data:UserDto">
-            <suki:GlassCard Classes="search" IsInteractive="True" Margin="0" CornerRadius="7" Padding=" 0">
-                <DockPanel VerticalAlignment="Center" LastChildFill="False">
-                    <Grid ColumnDefinitions="42,*" Margin="10,6">
-                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="42"
-                                                 DockPanel.Dock="Left" />
-                        <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
-                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" />
-                            <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
-                                       VerticalAlignment="Center"
-                                       Opacity="0.6" />
-                        </Grid>
-                    </Grid>
-                    <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0">
-                        <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}" Opacity="0.6" />
-                        <Panel IsVisible="{Binding !IsUser}">
-                            <Button Padding="12,4" Margin="0"
-                                    IsVisible="{Binding !IsFriend}"
-                                    CommandParameter="{Binding}"
-                                    Command="{Binding ((region:SearchAllViewModel)DataContext).AddFriendRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="添加" FontSize="12.5" />
-                            </Button>
-                            <Button FontSize="12" Padding="12,4" Margin="0"
-                                    IsVisible="{Binding IsFriend}"
-                                    CommandParameter="{Binding}"
-                                    Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="发消息" FontSize="12.5" />
-                            </Button>
-                        </Panel>
-                    </Panel>
-                </DockPanel>
-            </suki:GlassCard>
-        </DataTemplate>
-        <DataTemplate x:DataType="group:GroupDto">
-            <suki:GlassCard Classes="search" IsInteractive="True" Margin="0" CornerRadius="7"
-                            Padding=" 0">
-                <DockPanel VerticalAlignment="Center" LastChildFill="False">
-                    <Grid ColumnDefinitions="42,*" Margin="10,6">
-                        <circleImage:CircleImage Image="{Binding HeadImage}" Size="42"
-                                                 DockPanel.Dock="Left" />
-                        <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
-                            <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" />
-                            <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
-                                       VerticalAlignment="Center"
-                                       Opacity="0.6" />
-                        </Grid>
-                    </Grid>
-                    <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="15,0">
-                        <Button Padding="12,4" Margin="0"
-                                IsVisible="{Binding !IsEntered}"
-                                CommandParameter="{Binding}"
-                                Command="{Binding ((region:SearchAllViewModel)DataContext).AddGroupRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                            <TextBlock Text="添加" FontSize="12.5" />
-                        </Button>
-                        <Button FontSize="12" Padding="12,4" Margin="0"
-                                IsVisible="{Binding IsEntered}"
-                                CommandParameter="{Binding}"
-                                Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                            <TextBlock Text="发消息" FontSize="12.5" />
-                        </Button>
-                    </Panel>
-                </DockPanel>
-            </suki:GlassCard>
-        </DataTemplate>
-    </UserControl.DataTemplates>
-    <Grid Margin="13,10,13,20">
+    <UserControl.Resources>
+        <converter:IntEqualityConverter x:Key="IntEqualityConverter" Value="0" />
+        <converter:IntEqualityConverter x:Key="IntNotEqualityConverter" Equal="False" Value="0" />
+    </UserControl.Resources>
+    <Panel Margin="13,0">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Opacity="0.6"
                     IsVisible="{Binding IsEmpty}">
             <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
-            <TextBlock Text="输入关键词搜索" FontSize="15" />
+            <TextBlock Text="暂未找到相关信息" FontSize="15" />
         </StackPanel>
-        <ScrollViewer IsVisible="{Binding !IsEmpty}" VerticalScrollBarVisibility="Hidden"
-                      HorizontalScrollBarVisibility="Disabled">
-            <ItemsControl ItemsSource="{Binding AllDtos}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" Spacing="3" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Orientation="Vertical" Margin="5,10" IsVisible="{Binding !IsEmpty}">
+                <StackPanel Orientation="Vertical"
+                            IsVisible="{Binding UserDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                    <Panel Margin="7,8">
+                        <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                                   Cursor="Hand"
+                                   Foreground="{DynamicResource SukiPrimaryColor75}">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="PointerPressed">
+                                    <InvokeCommandAction
+                                        Command="{Binding ((region:SearchAllViewModel)DataContext).SearchMoreCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=region1:SearchAllView}}"
+                                        CommandParameter="联系人" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                        </TextBlock>
+                    </Panel>
+                    <ItemsControl ItemsSource="{Binding UserDtos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="data:UserDto">
+                                <suki:GlassCard Classes="search" IsInteractive="True" Margin="0" CornerRadius="7"
+                                                Padding=" 0">
+                                    <DockPanel VerticalAlignment="Center" LastChildFill="False">
+                                        <Grid ColumnDefinitions="42,*" Margin="10,6">
+                                            <circleImage:CircleImage Image="{Binding HeadImage}" Size="42"
+                                                                     DockPanel.Dock="Left" />
+                                            <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
+                                                <TextBlock Text="{Binding Name}" FontSize="14"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
+                                                           VerticalAlignment="Center"
+                                                           Opacity="0.6" />
+                                            </Grid>
+                                        </Grid>
+                                        <Panel DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                               VerticalAlignment="Center" Margin="15,0">
+                                            <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}"
+                                                       Opacity="0.6" />
+                                            <Panel IsVisible="{Binding !IsUser}">
+                                                <Button Padding="12,4" Margin="0"
+                                                        IsVisible="{Binding !IsFriend}"
+                                                        CommandParameter="{Binding}"
+                                                        Command="{Binding ((region:SearchAllViewModel)DataContext).AddFriendRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                                    <TextBlock Text="添加" FontSize="12.5" />
+                                                </Button>
+                                                <Button FontSize="12" Padding="12,4" Margin="0"
+                                                        IsVisible="{Binding IsFriend}"
+                                                        CommandParameter="{Binding}"
+                                                        Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                                    <TextBlock Text="发消息" FontSize="12.5" />
+                                                </Button>
+                                            </Panel>
+                                        </Panel>
+                                    </DockPanel>
+                                </suki:GlassCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="0,10">
+                    <Border.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.And}">
+                            <Binding Path="UserDtos.Count"
+                                     Converter="{StaticResource IntNotEqualityConverter}" />
+                            <Binding Path="GroupDtos.Count"
+                                     Converter="{StaticResource IntNotEqualityConverter}" />
+                        </MultiBinding>
+                    </Border.IsVisible>
+                </Border>
+
+                <StackPanel Orientation="Vertical"
+                            IsVisible="{Binding GroupDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
+                    <Panel Margin="7,8">
+                        <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                                   Cursor="Hand"
+                                   Foreground="{DynamicResource SukiPrimaryColor75}">
+                            <Interaction.Behaviors>
+                                <EventTriggerBehavior EventName="PointerPressed">
+                                    <InvokeCommandAction
+                                        Command="{Binding ((region:SearchAllViewModel)DataContext).SearchMoreCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=region1:SearchAllView}}"
+                                        CommandParameter="群聊" />
+                                </EventTriggerBehavior>
+                            </Interaction.Behaviors>
+                        </TextBlock>
+                    </Panel>
+                    <ItemsControl ItemsSource="{Binding GroupDtos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="group:GroupDto">
+                                <suki:GlassCard Classes="search" IsInteractive="True" Margin="0" CornerRadius="7"
+                                                Padding=" 0">
+                                    <DockPanel VerticalAlignment="Center" LastChildFill="False">
+                                        <Grid ColumnDefinitions="42,*" Margin="10,6">
+                                            <circleImage:CircleImage Image="{Binding HeadImage}" Size="42"
+                                                                     DockPanel.Dock="Left" />
+                                            <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
+                                                <TextBlock Text="{Binding Name}" FontSize="14"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
+                                                           VerticalAlignment="Center"
+                                                           Opacity="0.6" />
+                                            </Grid>
+                                        </Grid>
+                                        <Panel DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                               VerticalAlignment="Center" Margin="15,0">
+                                            <Button Padding="12,4" Margin="0"
+                                                    IsVisible="{Binding !IsEntered}"
+                                                    CommandParameter="{Binding}"
+                                                    Command="{Binding ((region:SearchAllViewModel)DataContext).AddGroupRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                                <TextBlock Text="添加" FontSize="12.5" />
+                                            </Button>
+                                            <Button FontSize="12" Padding="12,4" Margin="0"
+                                                    IsVisible="{Binding IsEntered}"
+                                                    CommandParameter="{Binding}"
+                                                    Command="{Binding ((region:SearchAllViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
+                                                <TextBlock Text="发消息" FontSize="12.5" />
+                                            </Button>
+                                        </Panel>
+                                    </DockPanel>
+                                </suki:GlassCard>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
         </ScrollViewer>
-    </Grid>
+    </Panel>
 </UserControl>

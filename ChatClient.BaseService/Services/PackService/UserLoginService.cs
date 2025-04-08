@@ -338,7 +338,6 @@ internal class UserLoginService : BaseService, IUserLoginService
         using (var scope = _scopedProvider.CreateScope())
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-
             var requestRespository = unitOfWork.GetRepository<FriendRequest>();
             foreach (var request in requests)
             {
@@ -370,6 +369,8 @@ internal class UserLoginService : BaseService, IUserLoginService
 
             await unitOfWork.SaveChangesAsync();
         }
+
+        friendRequestMessages.Clear();
     }
 
     /// <summary>

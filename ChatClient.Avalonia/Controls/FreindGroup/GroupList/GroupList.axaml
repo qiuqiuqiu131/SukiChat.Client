@@ -38,12 +38,13 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate DataType="data:FriendRelationDto">
                                 <Grid Height="55" ClipToBounds="False">
-                                    <Grid ColumnDefinitions="42,*" Margin="6,7">
-                                        <Grid Width="42" Height="42">
+                                    <Grid ColumnDefinitions="42,*" HorizontalAlignment="Stretch" Margin="6,7">
+                                        <Grid Grid.Column="0" Width="42" Height="42">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding UserDto.HeadImage}" />
                                         </Grid>
-                                        <Grid Grid.Column="1" RowDefinitions="1.2*,1*" Margin="10,0,0,0">
+                                        <Grid Grid.Column="1" RowDefinitions="1.2*,1*" HorizontalAlignment="Left"
+                                              Margin="10,0,0,0">
                                             <Grid>
                                                 <TextBlock
                                                     IsVisible="{Binding Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -64,44 +65,47 @@
                                                     Text="{Binding UserDto.Name}"
                                                     Foreground="{DynamicResource SukiText}" />
                                             </Grid>
-                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
-                                                        Margin="0,3,15,0"
-                                                        Grid.Row="1">
-                                                <TextBlock Text="[" Opacity="0.6"
-                                                           Foreground="{DynamicResource SukiText}" FontSize="11.5"
-                                                           Margin="0"
-                                                           FontWeight="Normal"
-                                                           Padding="0" />
-                                                <Ellipse IsVisible="{Binding UserDto.IsOnline}"
-                                                         Fill="LimeGreen"
-                                                         Width="10"
-                                                         Height="10"
-                                                         VerticalAlignment="Center"
-                                                         Margin="0,0,0,3" />
-                                                <Ellipse IsVisible="{Binding !UserDto.IsOnline}"
-                                                         Fill="Red"
-                                                         Width="10"
-                                                         Height="10"
-                                                         VerticalAlignment="Center"
-                                                         Margin="0,0,0,3" />
-                                                <TextBlock
-                                                    Text="{Binding UserDto.IsOnline,Converter={converter:OnlineConverter}}"
-                                                    Opacity="0.6"
-                                                    Foreground="{DynamicResource SukiText}"
-                                                    FontSize="12"
-                                                    FontWeight="Normal"
-                                                    Margin="2,0,2,3"
-                                                    Padding="0" />
-                                                <TextBlock Text="]" Opacity="0.6" FontSize="11.5" Margin="0"
-                                                           Foreground="{DynamicResource SukiText}"
-                                                           FontWeight="Normal"
-                                                           Padding="0" />
+                                            <DockPanel Grid.Row="1" LastChildFill="True" Margin="0,3,15,0">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+                                                            DockPanel.Dock="Left"
+                                                            HorizontalAlignment="Left">
+                                                    <TextBlock Text="[" Opacity="0.6"
+                                                               Foreground="{DynamicResource SukiText}" FontSize="11.5"
+                                                               Margin="0"
+                                                               FontWeight="Normal"
+                                                               Padding="0" />
+                                                    <Ellipse IsVisible="{Binding UserDto.IsOnline}"
+                                                             Fill="LimeGreen"
+                                                             Width="10"
+                                                             Height="10"
+                                                             VerticalAlignment="Center"
+                                                             Margin="0,0,0,3" />
+                                                    <Ellipse IsVisible="{Binding !UserDto.IsOnline}"
+                                                             Fill="Red"
+                                                             Width="10"
+                                                             Height="10"
+                                                             VerticalAlignment="Center"
+                                                             Margin="0,0,0,3" />
+                                                    <TextBlock
+                                                        Text="{Binding UserDto.IsOnline,Converter={converter:OnlineConverter}}"
+                                                        Opacity="0.6"
+                                                        Foreground="{DynamicResource SukiText}"
+                                                        FontSize="12"
+                                                        FontWeight="Normal"
+                                                        Margin="2,0,2,3"
+                                                        Padding="0" />
+                                                    <TextBlock Text="]" Opacity="0.6" FontSize="11.5" Margin="0"
+                                                               Foreground="{DynamicResource SukiText}"
+                                                               FontWeight="Normal"
+                                                               Padding="0" />
+                                                </StackPanel>
                                                 <TextBlock FontSize="11.5" Opacity="0.6" Margin="0,0,15,0"
                                                            Text="{Binding UserDto.Introduction}"
                                                            FontWeight="Normal"
+                                                           HorizontalAlignment="Left"
                                                            Foreground="{DynamicResource SukiText}"
                                                            TextTrimming="CharacterEllipsis" />
-                                            </StackPanel>
+                                            </DockPanel>
                                         </Grid>
                                     </Grid>
                                 </Grid>

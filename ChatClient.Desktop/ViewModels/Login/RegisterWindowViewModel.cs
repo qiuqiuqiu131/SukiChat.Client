@@ -125,7 +125,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
-    public DelegateCommand RegisterCommand { get; init; }
+    public AsyncDelegateCommand RegisterCommand { get; init; }
     public DelegateCommand CancelCommand { get; init; }
 
     public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();
@@ -140,7 +140,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
 
         IsConnected = connection.IsConnected;
 
-        RegisterCommand = new DelegateCommand(Register, CanRegister);
+        RegisterCommand = new AsyncDelegateCommand(Register, CanRegister);
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
 
         ErrorsChanged += delegate
@@ -157,7 +157,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
                                   && !string.IsNullOrWhiteSpace(Password)
                                   && !string.IsNullOrWhiteSpace(RePassword);
 
-    private async void Register()
+    private async Task Register()
     {
         IsBusy = true;
         var _registerService = _containerProvider.Resolve<IRegisterService>();
@@ -179,8 +179,8 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
                             });
                         }))
                 .TryShow();
-            await Task.Delay(800);
-            NotificationManager.ShowMessage("已复制到剪切板", NotificationType.Success, TimeSpan.FromSeconds(2));
+            await Task.Delay(500);
+            NotificationManager.ShowMessage("ID已复制到剪切板", NotificationType.Success, TimeSpan.FromSeconds(2));
         }
         else
         {

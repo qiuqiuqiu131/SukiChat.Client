@@ -16,26 +16,15 @@
         <converter:IntEqualityConverter x:Key="IntNotEqualityConverter" Equal="False" Value="0" />
     </UserControl.Resources>
     <Panel Margin="13,0" IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
-        <TextBlock Text="暂未找到相关信息" FontSize="13" Opacity="0.6" Margin="10,20" HorizontalAlignment="Center">
-            <TextBlock.IsVisible>
-                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                    <Binding Path="AllSearchDto.FriendSearchDtos.Count"
-                             Converter="{StaticResource IntEqualityConverter}" />
-                    <Binding Path="AllSearchDto.GroupSearchDtos.Count"
-                             Converter="{StaticResource IntEqualityConverter}" />
-                </MultiBinding>
-            </TextBlock.IsVisible>
-        </TextBlock>
-        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Opacity="0.6"
+                    IsVisible="{Binding IsEmpty}">
+            <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
+            <TextBlock Text="暂未找到相关信息" FontSize="15" />
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled"
+                      IsVisible="{Binding !IsEmpty}">
             <StackPanel Orientation="Vertical" Margin="5,10">
-                <StackPanel.IsVisible>
-                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Path="AllSearchDto.FriendSearchDtos.Count"
-                                 Converter="{StaticResource IntNotEqualityConverter}" />
-                        <Binding Path="AllSearchDto.GroupSearchDtos.Count"
-                                 Converter="{StaticResource IntNotEqualityConverter}" />
-                    </MultiBinding>
-                </StackPanel.IsVisible>
                 <StackPanel Orientation="Vertical"
                             IsVisible="{Binding AllSearchDto.FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
                     <Panel Margin="7,8">
@@ -46,7 +35,7 @@
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="PointerPressed">
                                     <InvokeCommandAction
-                                        Command="{Binding $parent[region:LocalSearchAllViewModel].SearchMoreCommand}"
+                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SearchMoreCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=region1:LocalSearchAllView}}"
                                         CommandParameter="联系人" />
                                 </EventTriggerBehavior>
                             </Interaction.Behaviors>
@@ -149,7 +138,7 @@
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="PointerPressed">
                                     <InvokeCommandAction
-                                        Command="{Binding $parent[region:LocalSearchAllViewModel].SearchMoreCommand}"
+                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SearchMoreCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=region1:LocalSearchAllView}}"
                                         CommandParameter="群聊" />
                                 </EventTriggerBehavior>
                             </Interaction.Behaviors>

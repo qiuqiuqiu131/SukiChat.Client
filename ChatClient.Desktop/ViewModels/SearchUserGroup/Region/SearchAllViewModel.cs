@@ -9,10 +9,12 @@ using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.SearchUserGroupView;
+using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.UIEntity;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -30,31 +32,50 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     private readonly IUserManager _userManager;
 
     private INotificationMessageManager? _notificationManager;
+    private SearchUserGroupViewModel? _searchUserGroupViewModel;
 
     private SubscriptionToken token;
 
     private Subject<string> searchFriendSubject = new();
     private IDisposable searchFriendDisposable;
 
-    private IEnumerable<object>? _allDtos;
+    private string? currentSearchText = string.Empty;
 
-    public IEnumerable<object>? AllDtos
+    private List<UserDto>? _userDtos;
+
+    public List<UserDto>? UserDtos
     {
-        get => _allDtos;
+        get => _userDtos;
         set
         {
-            if (SetProperty(ref _allDtos, value))
+            if (SetProperty(ref _userDtos, value))
             {
                 RaisePropertyChanged(nameof(IsEmpty));
             }
         }
     }
 
-    public bool IsEmpty => AllDtos?.Any() != true;
+    private List<GroupDto>? _groupDtos;
+
+    public List<GroupDto>? GroupDtos
+    {
+        get => _groupDtos;
+        set
+        {
+            if (SetProperty(ref _groupDtos, value))
+            {
+                RaisePropertyChanged(nameof(IsEmpty));
+            }
+        }
+    }
+
+    public bool IsEmpty => !(_userDtos?.Any() ?? false) && !(_groupDtos?.Any() ?? false);
 
     public DelegateCommand<UserDto> AddFriendRequestCommand { get; }
     public DelegateCommand<GroupDto> AddGroupRequestCommand { get; }
     public DelegateCommand<object> SendMessageCommand { get; }
+
+    public DelegateCommand<string> SearchMoreCommand { get; }
 
     public SearchAllViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
@@ -68,6 +89,7 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
         AddFriendRequestCommand = new DelegateCommand<UserDto>(AddFriendRequest);
         AddGroupRequestCommand = new DelegateCommand<GroupDto>(AddGroupRequest);
         SendMessageCommand = new DelegateCommand<object>(SendMessage);
+        SearchMoreCommand = new DelegateCommand<string>(SearchMore);
 
         token = eventAggregator.GetEvent<SearchNewDtoEvent>().Subscribe(OnSearchContentChanged);
 
@@ -75,6 +97,16 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
             .Throttle(TimeSpan.FromMilliseconds(500))
             .DistinctUntilChanged()
             .Subscribe(SearchAll);
+    }
+
+    private void SearchMore(string obj)
+    {
+        if (_searchUserGroupViewModel == null) return;
+
+        if (obj == "联系人")
+            _searchUserGroupViewModel.SelectedIndex = 1;
+        else if (obj == "群聊")
+            _searchUserGroupViewModel.SelectedIndex = 2;
     }
 
     /// <summary>
@@ -119,7 +151,7 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     }
 
     /// <summary>
-    /// 添加好友请求View
+    /// 添加群聊请求View
     /// </summary>
     /// <param name="obj"></param>
     /// <exception cref="NotImplementedException"></exception>
@@ -132,22 +164,26 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
         }, e => { });
     }
 
-    private void OnSearchContentChanged(string searchText) => searchFriendSubject.OnNext(searchText);
+    private void OnSearchContentChanged(string searchText)
+    {
+        currentSearchText = searchText;
+        searchFriendSubject.OnNext(searchText);
+    }
 
     private async void SearchAll(string searchText)
     {
         if (string.IsNullOrWhiteSpace(searchText))
         {
-            AllDtos = null;
+            UserDtos = null;
+            GroupDtos = null;
             return;
         }
 
         var searchService = _containerProvider.Resolve<ISearchService>();
         var result = await searchService.SearchAllAsync(_userManager.User!.Id, searchText);
 
-        if (result.Count == 0) return;
-
-        AllDtos = result;
+        UserDtos = result.Item1;
+        GroupDtos = result.Item2;
     }
 
     #region Navigation
@@ -157,14 +193,17 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     public void OnNavigatedTo(NavigationContext navigationContext)
     {
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
-        if (!string.IsNullOrWhiteSpace(searchText))
-            searchFriendSubject.OnNext(searchText);
+        searchFriendSubject.OnNext(searchText);
+
         _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
+        _searchUserGroupViewModel =
+            navigationContext.Parameters["searchUserGroupViewModel"] as SearchUserGroupViewModel;
     }
 
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
         _notificationManager = null;
+        _searchUserGroupViewModel = null;
     }
 
     #endregion

@@ -67,6 +67,8 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
     public event Action<Bitmap> ImageChanged;
     public Control? View;
 
+    private bool isNewHead = false;
+
     private readonly IUserManager _userManager;
     private readonly IContainerProvider _containerProvider;
 
@@ -105,6 +107,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
     private void SelectedHeadChanged()
     {
         ImageChanged?.Invoke(SelectedItem);
+        isNewHead = false;
     }
 
     private async void AddHead()
@@ -133,6 +136,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
 
         // 读取选中图片，显示出来
         ImageChanged?.Invoke(bitmap);
+        isNewHead = true;
     }
 
     private async void SaveHead()
@@ -142,7 +146,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         if (view == null) return;
 
         var imageResize = view.GetImageResize();
-        if (imageResize.Scale == 1 && imageResize.MoveX == 0 && imageResize.MoveY == 0)
+        if (!isNewHead && imageResize.Scale == 1 && imageResize.MoveX == 0 && imageResize.MoveY == 0)
         {
             IsBusy = false;
             _userManager.User.UserDto.HeadImage = SelectedItem;

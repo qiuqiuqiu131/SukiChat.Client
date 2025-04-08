@@ -10,8 +10,15 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:LocalSearchGroupViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.Region.LocalSearchGroupView">
-    <Panel Margin="13,10,13,20">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+    <Panel Margin="13,15,13,20">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Opacity="0.6"
+                    IsVisible="{Binding IsEmpty}">
+            <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
+            <TextBlock Text="暂未找到相关信息" FontSize="15" />
+        </StackPanel>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden"
+                      IsVisible="{Binding !IsEmpty}">
             <ItemsControl ItemsSource="{Binding GroupSearchDtos}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -25,8 +32,8 @@
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="PointerPressed">
                                     <InvokeCommandAction
-                                        Command="{Binding ((region:LocalSearchGroupViewModel)DataContext).SendMessageCommand 
-                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchGroupView}}"
+                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
                                         CommandParameter="{Binding GroupRelationDto}">
                                     </InvokeCommandAction>
                                 </EventTriggerBehavior>
@@ -70,8 +77,8 @@
                                     <Interaction.Behaviors>
                                         <PointerPressedTrigger>
                                             <InvokeCommandAction
-                                                Command="{Binding ((region:LocalSearchGroupViewModel)DataContext).MoveToRelationCommand 
-                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchGroupView}}"
+                                                Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
+                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
                                                 CommandParameter="{Binding GroupRelationDto}">
                                             </InvokeCommandAction>
                                         </PointerPressedTrigger>

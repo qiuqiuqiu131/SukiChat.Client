@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
@@ -27,8 +28,8 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
     public bool IsRequestEmpty =>
         FriendReceivedDtos.Count == 0 && FriendRequestDtos.Count == 0 && FriendDeleteDtos.Count == 0;
 
-    public DelegateCommand<FriendReceiveDto> AcceptCommand { get; init; }
-    public DelegateCommand<FriendReceiveDto> RejectCommand { get; init; }
+    public AsyncDelegateCommand<FriendReceiveDto> AcceptCommand { get; init; }
+    public AsyncDelegateCommand<FriendReceiveDto> RejectCommand { get; init; }
     public DelegateCommand ClearAllCommand { get; init; }
 
     private bool isOperate = false;
@@ -53,8 +54,8 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
         FriendRequestDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
         FriendDeleteDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
 
-        AcceptCommand = new DelegateCommand<FriendReceiveDto>(AcceptRequest);
-        RejectCommand = new DelegateCommand<FriendReceiveDto>(RejectRequest);
+        AcceptCommand = new AsyncDelegateCommand<FriendReceiveDto>(AcceptRequest);
+        RejectCommand = new AsyncDelegateCommand<FriendReceiveDto>(RejectRequest);
         ClearAllCommand = new DelegateCommand(ClearAll);
     }
 
@@ -86,7 +87,7 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
             .TryShow();
     }
 
-    private void RejectRequest(FriendReceiveDto obj)
+    private async Task RejectRequest(FriendReceiveDto obj)
     {
         if (isOperate) return;
 
@@ -117,7 +118,7 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
             .TryShow();
     }
 
-    private void AcceptRequest(FriendReceiveDto obj)
+    private async Task AcceptRequest(FriendReceiveDto obj)
     {
         if (isOperate) return;
 

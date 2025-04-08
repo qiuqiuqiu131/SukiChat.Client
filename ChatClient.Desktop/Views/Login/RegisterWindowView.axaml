@@ -26,7 +26,7 @@
                 <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
             </Button>
         </Panel>
-        <suki:BusyArea Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <suki:BusyArea Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" IsBusy="{Binding IsBusy}">
             <DockPanel LastChildFill="True" Margin="30,10,30,20">
                 <DockPanel DockPanel.Dock="Bottom" Margin="5">
                     <Button Width="180" Classes="Flat" Padding="8" Command="{Binding RegisterCommand}">

@@ -67,8 +67,8 @@ public class LocalSearchService : BaseService, ILocalSearchService
         var friendQuery = (from fr in friendRelations
             join u in users on fr.User2Id equals u.Id into temp
             from u in temp.DefaultIfEmpty()
-            where (fr.Remark != null && fr.Remark.Contains(searchWord))
-                  || (u != null && u.Name.Contains(searchWord))
+            where (fr.Remark != null && fr.Remark.ToLower().Contains(searchWord.ToLower()))
+                  || (u != null && u.Name.ToLower().Contains(searchWord.ToLower()))
                   || (searchWord.Length > 3 && fr.User2Id.Contains(searchWord))
             orderby fr.User2Id
             select fr.User2Id).Distinct().Take(limit);
@@ -102,8 +102,8 @@ public class LocalSearchService : BaseService, ILocalSearchService
         var groupQuery = (from gr in groupRelations
             join g in groups on gr.GroupId equals g.Id into temp
             from g in temp.DefaultIfEmpty()
-            where (gr.Remark != null && gr.Remark.Contains(searchWord))
-                  || (g != null && g.Name.Contains(searchWord))
+            where (gr.Remark != null && gr.Remark.ToLower().Contains(searchWord.ToLower()))
+                  || (g != null && g.Name.ToLower().Contains(searchWord.ToLower()))
                   || (searchWord.Length > 3 && gr.GroupId.Contains(searchWord))
             orderby gr.GroupId
             select gr.GroupId).Distinct().Take(limit);

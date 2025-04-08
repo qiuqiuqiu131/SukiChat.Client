@@ -28,8 +28,9 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
     private readonly ILocalSearchService _localSearchService;
     private readonly IUserManager _userManager;
 
+    private LocalSearchUserGroupViewModel? _localSearchUserGroupViewModel;
+
     private INotificationMessageManager? _notificationManager;
-    private IRegionManager? _regionManager;
 
     private SubscriptionToken token;
 
@@ -47,7 +48,8 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
         set => SetProperty(ref _allSearchDto, value);
     }
 
-    public bool IsEmpty => AllSearchDto != null;
+    public bool IsEmpty => AllSearchDto == null || AllSearchDto.FriendSearchDtos.Count == 0
+        && AllSearchDto.GroupSearchDtos.Count == 0;
 
     public DelegateCommand<object> SendMessageCommand { get; }
     public DelegateCommand<string> SearchMoreCommand { get; }
@@ -92,16 +94,12 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
 
     private void SearchMore(string obj)
     {
-        INavigationParameters parameters = new NavigationParameters
-        {
-            { "searchText", currentSearchText ?? string.Empty },
-            { "notificationManager", _notificationManager },
-            { "regionManager", _regionManager }
-        };
+        if (_localSearchUserGroupViewModel == null) return;
+
         if (obj == "联系人")
-            _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchUserView), parameters);
+            _localSearchUserGroupViewModel.SearchIndex = 1;
         else if (obj == "群聊")
-            _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchGroupView), parameters);
+            _localSearchUserGroupViewModel.SearchIndex = 2;
     }
 
     /// <summary>
@@ -135,10 +133,11 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
     public void OnNavigatedTo(NavigationContext navigationContext)
     {
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
-        if (!string.IsNullOrWhiteSpace(searchText))
-            searchAllSubject.OnNext(searchText);
+        searchAllSubject.OnNext(searchText);
+
         _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
-        _regionManager = navigationContext.Parameters["regionManager"] as IRegionManager;
+        _localSearchUserGroupViewModel =
+            navigationContext.Parameters["localSearchUserGroupViewModel"] as LocalSearchUserGroupViewModel;
     }
 
     public bool IsNavigationTarget(NavigationContext navigationContext) => true;
@@ -146,12 +145,13 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
         _notificationManager = null;
+        _localSearchUserGroupViewModel = null;
     }
 
     public void Destroy()
     {
         token.Dispose();
-        searchAllSubject.Dispose();
+        searchAllDisposable.Dispose();
     }
 
     #endregion

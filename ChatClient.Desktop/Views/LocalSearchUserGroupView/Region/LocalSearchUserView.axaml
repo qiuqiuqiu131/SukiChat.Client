@@ -10,8 +10,15 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:LocalSearchUserViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.Region.LocalSearchUserView">
-    <Panel Margin="13,10,13,20">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+    <Panel Margin="13,15,13,20">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Opacity="0.6"
+                    IsVisible="{Binding IsEmpty}">
+            <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
+            <TextBlock Text="暂未找到相关信息" FontSize="15" />
+        </StackPanel>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" IsVisible="{Binding !IsEmpty}"
+                      VerticalScrollBarVisibility="Hidden">
             <ItemsControl ItemsSource="{Binding FriendSearchDtos}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -23,13 +30,13 @@
                         <suki:GlassCard Classes="search" CornerRadius="7" Padding="0" IsInteractive="True"
                                         Margin="0">
                             <Interaction.Behaviors>
-                                <PointerPressedTrigger>
+                                <EventTriggerBehavior EventName="PointerPressed">
                                     <InvokeCommandAction
-                                        Command="{Binding ((region:LocalSearchUserViewModel)DataContext).SendMessageCommand 
-                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
+                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
                                         CommandParameter="{Binding FriendRelationDto}">
                                     </InvokeCommandAction>
-                                </PointerPressedTrigger>
+                                </EventTriggerBehavior>
                             </Interaction.Behaviors>
                             <Grid ColumnDefinitions="42,*,25" Margin="10,6">
                                 <Grid Width="42" Height="42">
@@ -62,25 +69,25 @@
                                                 Grid.Row="1">
                                         <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
                                     </StackPanel>
-                                    <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
-                                            HorizontalAlignment="Center"
-                                            Background="Transparent" Margin="3" Classes="icon"
-                                            PointerPressed="IconBorder_OnPointerPressed">
-                                        <Interaction.Behaviors>
-                                            <PointerPressedTrigger>
-                                                <InvokeCommandAction
-                                                    Command="{Binding ((region:LocalSearchUserViewModel)DataContext).MoveToRelationCommand 
-                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
-                                                    CommandParameter="{Binding FriendRelationDto}">
-                                                </InvokeCommandAction>
-                                            </PointerPressedTrigger>
-                                        </Interaction.Behaviors>
-                                        <avalonia:MaterialIcon Name="Icon" Classes="icon"
-                                                               Kind="AccountOutline"
-                                                               Height="19" Width="19"
-                                                               Margin="3" />
-                                    </Border>
                                 </Grid>
+                                <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Background="Transparent" Margin="3" Classes="icon"
+                                        PointerPressed="IconBorder_OnPointerPressed">
+                                    <Interaction.Behaviors>
+                                        <PointerPressedTrigger>
+                                            <InvokeCommandAction
+                                                Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
+                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                CommandParameter="{Binding FriendRelationDto}">
+                                            </InvokeCommandAction>
+                                        </PointerPressedTrigger>
+                                    </Interaction.Behaviors>
+                                    <avalonia:MaterialIcon Name="Icon" Classes="icon"
+                                                           Kind="AccountOutline"
+                                                           Height="19" Width="19"
+                                                           Margin="3" />
+                                </Border>
                             </Grid>
                         </suki:GlassCard>
                     </DataTemplate>

@@ -43,7 +43,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
             else
             {
                 BackgroundBorder.Opacity = 0;
-                await Task.Delay(400);
+                await Task.Delay(300);
                 BackgroundBorder.IsVisible = false;
             }
         });
@@ -147,6 +147,7 @@ public partial class MainWindowView : SukiWindow, IDisposable
 
         if (_userManager.User?.IsFirstLogin ?? false)
         {
+            _userManager.User.IsFirstLogin = false;
             // 如果是首次登录
             await Task.Delay(500);
             var dialogManager = App.Current.Container.Resolve<ISukiDialogManager>();

@@ -26,6 +26,14 @@ public class SearchUserGroupViewModel : ViewModelBase, IDialogAware
         set => SetProperty(ref group, value);
     }
 
+    private int selectedIndex = 0;
+
+    public int SelectedIndex
+    {
+        get => selectedIndex;
+        set => SetProperty(ref selectedIndex, value);
+    }
+
     public INotificationMessageManager NotificationMessageManager { get; } = new NotificationMessageManager();
 
 

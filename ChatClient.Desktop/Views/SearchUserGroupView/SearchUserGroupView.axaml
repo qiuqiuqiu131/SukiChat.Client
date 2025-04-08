@@ -112,7 +112,8 @@
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
                     <searchBox:SearchBox Name="SearchBox" TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
                                          Margin="20,10" />
-                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged">
+                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                                SelectedIndex="{Binding SelectedIndex}">
                         <TabItem Header="全部" FontSize="13" Margin="12,0" />
                         <TabItem Header="用户" FontSize="13" Margin="12,0" />
                         <TabItem Header="群聊" FontSize="13" Margin="12,0" />

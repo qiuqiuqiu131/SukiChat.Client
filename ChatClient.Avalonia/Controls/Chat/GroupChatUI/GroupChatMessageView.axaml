@@ -14,6 +14,7 @@
         <DataTemplate DataType="data:TextMessDto">
             <SelectableTextBlock Text="{Binding Text}"
                                  FontSize="14"
+                                 ContextMenu="{x:Null}"
                                  Opacity="0.85"
                                  HorizontalAlignment="Center"
                                  ContextFlyout="{x:Null}"

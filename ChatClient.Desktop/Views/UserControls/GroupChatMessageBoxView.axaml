@@ -37,9 +37,11 @@
                     <PathIcon Data="{x:Static content:Icons.WindowClose}" Height="8" Width="8" />
                 </Button>
             </Grid>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
-                <circleImage:CircleImage Margin="10,0" Image="{Binding GroupRelation.GroupDto.HeadImage}" Size="45" />
-                <Grid RowDefinitions="*,*" Margin="10,0,0,0">
+            <DockPanel LastChildFill="True" VerticalAlignment="Center" Margin="10,0,20,0">
+                <circleImage:CircleImage DockPanel.Dock="Left"
+                                         Margin="10,0"
+                                         Image="{Binding GroupRelation.GroupDto.HeadImage}" Size="45" />
+                <Grid RowDefinitions="*,*" Margin="10,0,15,0">
                     <TextBlock Grid.Row="0"
                                VerticalAlignment="Center"
                                IsVisible="{Binding GroupRelation.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -72,7 +74,7 @@
                             Text="{Binding ChatData.ChatMessages,Mode=OneWay,Converter={converter:ChatMessageToStringConverter}}" />
                     </TextBlock>
                 </Grid>
-            </StackPanel>
+            </DockPanel>
         </DockPanel>
     </Border>
 </UserControl>

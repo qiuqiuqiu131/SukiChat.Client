@@ -130,8 +130,8 @@ public class SearchGroupViewModel : BindableBase, INavigationAware, IDestructibl
     public void OnNavigatedTo(NavigationContext navigationContext)
     {
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
-        if (!string.IsNullOrWhiteSpace(searchText))
-            searchFriendSubject.OnNext(searchText);
+        searchFriendSubject.OnNext(searchText);
+
         _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
     }
 

@@ -233,7 +233,7 @@
                             <Panel
                                 IsVisible="{Binding LastChatMessages,Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <TextBlock
-                                    Margin="0,0,20,0"
+                                    Margin="0,0,15,0"
                                     VerticalAlignment="Center"
                                     IsVisible="{Binding !LastChatMessages.IsRetracted}"
                                     FontSize="12"
@@ -243,7 +243,7 @@
                                     TextTrimming="CharacterEllipsis" />
                                 <Panel IsVisible="{Binding LastChatMessages.IsRetracted}">
                                     <TextBlock
-                                        Margin="0,0,20,0"
+                                        Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
                                         IsVisible="{Binding LastChatMessages.IsUser}"
@@ -252,7 +252,7 @@
                                         Text="你撤回了一条消息"
                                         TextTrimming="CharacterEllipsis" />
                                     <TextBlock
-                                        Margin="0,0,20,0"
+                                        Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
                                         IsVisible="{Binding !LastChatMessages.IsUser}"
@@ -359,7 +359,7 @@
                                    IsVisible="{Binding LastChatMessages, Converter={x:Static ObjectConverters.IsNotNull}}">
                                 <Panel IsVisible="{Binding !LastChatMessages.IsSystem}">
                                     <TextBlock
-                                        Margin="0,0,20,0"
+                                        Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
                                         Foreground="{DynamicResource SukiText}"
@@ -372,7 +372,7 @@
                                             Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
                                     </TextBlock>
                                     <TextBlock
-                                        Margin="0,0,20,0"
+                                        Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
                                         Foreground="{DynamicResource SukiText}"
@@ -386,7 +386,7 @@
                                     </TextBlock>
                                 </Panel>
                                 <TextBlock
-                                    Margin="0,0,20,0"
+                                    Margin="0,0,15,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
                                     Foreground="{DynamicResource SukiText}"

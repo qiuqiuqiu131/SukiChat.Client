@@ -38,7 +38,7 @@
                             <DataTemplate DataType="group:GroupRelationDto">
                                 <Grid Height="55">
                                     <Grid Margin="6,7" ColumnDefinitions="42,*">
-                                        <Grid Width="42" Height="42">
+                                        <Grid Grid.Column="0" Width="42" Height="42">
                                             <circleImage:CircleImage Size="42"
                                                                      Image="{Binding GroupDto.HeadImage}" />
                                         </Grid>
@@ -63,18 +63,18 @@
                                                     Text="{Binding GroupDto.Name}"
                                                     Foreground="{DynamicResource SukiText}" />
                                             </Grid>
-                                            <TextBlock Grid.Row="1"
-                                                       VerticalAlignment="Center"
-                                                       FontSize="11.5"
-                                                       IsVisible="{Binding GroupDto.Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                                                       Opacity="0.6"
-                                                       Margin="0,3,15,0"
-                                                       LetterSpacing="0.5"
-                                                       TextTrimming="CharacterEllipsis"
-                                                       Foreground="{DynamicResource SukiText}">
-                                                <Run Text="[简介]:" FontWeight="Normal" />
-                                                <Run Text="{Binding GroupDto.Description}" FontWeight="Normal" />
-                                            </TextBlock>
+                                            <DockPanel Grid.Row="1" Margin="0,3,15,0" LastChildFill="True">
+                                                <TextBlock VerticalAlignment="Center"
+                                                           FontSize="11.5"
+                                                           IsVisible="{Binding GroupDto.Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                           Opacity="0.6"
+                                                           LetterSpacing="0.5"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           Foreground="{DynamicResource SukiText}">
+                                                    <Run Text="[简介]:" FontWeight="Normal" />
+                                                    <Run Text="{Binding GroupDto.Description}" FontWeight="Normal" />
+                                                </TextBlock>
+                                            </DockPanel>
                                         </Grid>
                                     </Grid>
                                 </Grid>
