@@ -67,12 +67,12 @@
                 </DockPanel>
 
                 <DockPanel LastChildFill="True">
-                    <TextBlock Text="个签" Width="90" FontSize="14" DockPanel.Dock="Left" VerticalAlignment="Center" />
-                    <Panel>
+                    <TextBlock Text="个签" Width="90" FontSize="14" DockPanel.Dock="Left" VerticalAlignment="Top" />
+                    <Panel VerticalAlignment="Top">
                         <SelectableTextBlock Text="{Binding Introduction}"
                                              IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                              FontSize="14"
-                                             TextTrimming="CharacterEllipsis"
+                                             TextWrapping="Wrap"
                                              Opacity="0.85" />
                         <TextBlock Text="暂未设置个性签名" Opacity="0.6" FontSize="14"
                                    IsVisible="{Binding Introduction,Converter={x:Static StringConverters.IsNullOrEmpty}}" />

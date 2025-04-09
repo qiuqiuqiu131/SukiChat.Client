@@ -1,0 +1,188 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
+             xmlns:desktop="clr-namespace:ChatClient.Desktop"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
+             xmlns:input1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="input1:ChatInputPanelViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Input.ChatInputPanelView">
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="x:String">
+            <TextBox
+                CornerRadius="0"
+                Padding="0"
+                Text="{Binding }"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                TextWrapping="Wrap"
+                Background="Transparent"
+                VerticalContentAlignment="Top"
+                Margin="0"
+                MinHeight="0"
+                AcceptsReturn="False"
+                AcceptsTab="True"
+                FontSize="14"
+                Classes="Trans"
+                LetterSpacing="1" />
+        </DataTemplate>
+        <DataTemplate DataType="Bitmap">
+            <Image Source="{Binding}"
+                   Margin="3,0"
+                   HorizontalAlignment="Left">
+                <Interaction.Behaviors>
+                    <behaviors:ImageSizeAdjustBehavior MaxWidth="300" MaxHeight="200" MinWidth="60" MinHeight="60" />
+                </Interaction.Behaviors>
+            </Image>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <input:ChatInputPanelView.InputMessages>
+        <Binding Path="InputMessages" Mode="TwoWay" />
+    </input:ChatInputPanelView.InputMessages>
+    <input:ChatInputPanelView.SendFileCommand>
+        <Binding Path="SendFileWithPathCommand" Mode="OneWay" />
+    </input:ChatInputPanelView.SendFileCommand>
+    <Panel>
+        <Grid RowDefinitions="35,*" IsVisible="{Binding !AudioRecorderIsOpen}">
+            <Grid.Styles>
+                <Style Selector="Button.Basic">
+                    <Setter Property="Padding" Value="5" />
+                    <Style Selector="^ avalonia|MaterialIcon">
+                        <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+                    </Style>
+                    <Style Selector="^:pointerover">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style Selector="^ avalonia|MaterialIcon">
+                            <Style.Animations>
+                                <Animation Duration="0:0:0.5" IterationCount="1" FillMode="Forward">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="30%">
+                                        <Setter Property="ScaleTransform.ScaleX" Value="1.1" />
+                                        <Setter Property="ScaleTransform.ScaleY" Value="1.1" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="70%">
+                                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="85%">
+                                        <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                                        <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+                        </Style>
+                    </Style>
+                    <Style Selector="^:pressed /template/ Border">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style Selector="^ avalonia|MaterialIcon">
+                            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+                        </Style>
+                    </Style>
+                </Style>
+            </Grid.Styles>
+            <!-- 左侧按钮 -->
+            <StackPanel VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="6"
+                        Margin="12.5,3,0,0">
+                <Button Classes="Basic" x:Name="EmojiButton" Click="SelectEmojis"
+                        HorizontalAlignment="Center"
+                        ToolTip.ShowDelay="400"
+                        ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                    <ToolTip.Tip>
+                        <TextBlock Text="表情" FontSize="12" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="EmoticonHappyOutline" Width="22" Height="22" />
+                </Button>
+                <Popup IsOpen="False" Name="EmojiView"
+                       Placement="TopEdgeAlignedLeft"
+                       IsLightDismissEnabled="True"
+                       PlacementTarget="EmojiButton">
+                    <userControls:EmojiPickerView EmojiSelected="EmojiPickerView_OnEmojiSelected" />
+                </Popup>
+                <Button Classes="Basic" Command="{Binding SelectFileAndSendCommand}" ToolTip.ShowDelay="400"
+                        HorizontalAlignment="Center"
+                        Margin="-2,0,1.5,0"
+                        ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                    <ToolTip.Tip>
+                        <TextBlock Text="文件" FontSize="12" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="FolderOutline" Width="22" Height="22" />
+                </Button>
+                <Button Classes="Basic" Command="{Binding ScreenShotCommand}" ToolTip.ShowDelay="400"
+                        HorizontalAlignment="Center"
+                        ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                    <ToolTip.Tip>
+                        <TextBlock Text="截图" FontSize="12" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="ContentCut" Width="21" Height="21"
+                                           RenderTransformOrigin="50%,50%">
+                        <avalonia:MaterialIcon.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform Angle="-90" />
+                                <ScaleTransform ScaleX="1" ScaleY="1" />
+                            </TransformGroup>
+                        </avalonia:MaterialIcon.RenderTransform>
+                    </avalonia:MaterialIcon>
+                </Button>
+                <Button Classes="Basic" Command="{Binding SendVoiceMessageCommand}" ToolTip.ShowDelay="400"
+                        HorizontalAlignment="Center"
+                        ToolTip.Placement="Top" ToolTip.VerticalOffset="2">
+                    <ToolTip.Tip>
+                        <TextBlock Text="录音" FontSize="12" />
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon Kind="MicrophoneOutline" Width="22" Height="22" />
+                </Button>
+            </StackPanel>
+            <!-- 右侧按钮 -->
+            <StackPanel Grid.Row="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Spacing="5"
+                        Margin="0,3,12.5,0">
+                <Button Classes="Basic" Command="{Binding ClearInputMessages}">
+                    <avalonia:MaterialIcon Kind="TrashCanOutline" Width="22" Height="22" />
+                </Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="1"
+                          Name="ScrollViewer"
+                          Margin="10,3"
+                          DragDrop.AllowDrop="True"
+                          HorizontalScrollBarVisibility="Disabled"
+                          KeyDown="ScrollViewer_OnKeyDown"
+                          PointerPressed="InputItems_OnPointerPressed"
+                          Cursor="Ibeam"
+                          VerticalScrollBarVisibility="Hidden">
+                <ItemsControl Background="Transparent"
+                              suki:ItemsControlExtensions.AnimatedScroll="True"
+                              Name="InputItems">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" Spacing="8" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <input:AudioRecorderView
+            IsVisible="{Binding ((input1:ChatInputPanelViewModel)DataContext).AudioRecorderIsOpen
+                ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=input:ChatInputPanelView}}"
+            DataContext="{Binding AudioRecorderViewModel}" />
+    </Panel>
+</UserControl>

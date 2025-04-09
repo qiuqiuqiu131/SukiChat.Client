@@ -225,6 +225,23 @@
                 </Grid>
             </Panel>
         </DataTemplate>
+        <DataTemplate DataType="data:VoiceMessDto">
+            <Border Background="Transparent" Cursor="Hand">
+                <Interaction.Behaviors>
+                    <behaviors:VoicePlayBehavior VoiceMess="{Binding}" />
+                    <behaviors:VoiceDurationSizeBehavior MinWidth="70" MaxWidth="150" Duration="{Binding Duration}" />
+                </Interaction.Behaviors>
+                <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,1.5,0,0">
+                    <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="PlayCircleOutline"
+                                           Foreground="{DynamicResource SukiPrimaryColor}" Width="20"
+                                           Height="20" />
+                    <TextBlock DockPanel.Dock="Right"
+                               HorizontalAlignment="Right"
+                               FontSize="13"
+                               Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
+                </DockPanel>
+            </Border>
+        </DataTemplate>
     </UserControl.DataTemplates>
     <UserControl.Styles>
         <Style Selector="ProgressBar:horizontal /template/ suki|GlassCard#PART_RootBorder">

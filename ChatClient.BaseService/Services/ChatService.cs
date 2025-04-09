@@ -5,14 +5,13 @@ using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
+using ChatClient.Media.Audio;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
-using DryIoc.ImTools;
-using File.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
@@ -43,12 +42,14 @@ internal class ChatService : BaseService, IChatService
     private readonly IMapper _mapper;
     private readonly IAppDataManager _appDataManager;
     private readonly IMessageHelper _messageHelper;
+    private readonly IFileOperateHelper _fileOperateHelper;
     private readonly IImageManager _imageManager;
 
     public ChatService(IContainerProvider containerProvider,
         IMapper mapper,
         IAppDataManager appDataManager,
         IMessageHelper messageHelper,
+        IFileOperateHelper fileOperateHelper,
         IImageManager imageManager) : base(
         containerProvider)
     {
@@ -56,6 +57,7 @@ internal class ChatService : BaseService, IChatService
         _mapper = mapper;
         _appDataManager = appDataManager;
         _messageHelper = messageHelper;
+        _fileOperateHelper = fileOperateHelper;
         _imageManager = imageManager;
     }
 
@@ -84,6 +86,18 @@ internal class ChatService : BaseService, IChatService
                 chatMessage.ImageMess.FilePath = message;
                 if (mess.Content is ImageMessDto imageMessDto)
                     imageMessDto.ActualPath =
+                        _appDataManager.GetFilePath(Path.Combine("Users", userId, "ChatFile", message));
+            }
+            else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.VoiceMess)
+            {
+                var (state, message) = await UploadChatVoice(userId, ((VoiceMessDto)mess.Content).AudioData,
+                    FileTarget.User, ((VoiceMessDto)mess.Content).FilePath);
+
+                // 清空AudioData
+                if (!state) return (false, message);
+                chatMessage.VoiceMess.FilePath = message;
+                if (mess.Content is VoiceMessDto voiceMessDto)
+                    voiceMessDto.ActualPath =
                         _appDataManager.GetFilePath(Path.Combine("Users", userId, "ChatFile", message));
             }
             else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
@@ -172,6 +186,18 @@ internal class ChatService : BaseService, IChatService
                 chatMessage.ImageMess.FilePath = message;
                 if (mess.Content is ImageMessDto imageMessDto)
                     imageMessDto.ActualPath =
+                        _appDataManager.GetFilePath(Path.Combine("Groups", groupId, "ChatFile", message));
+            }
+            else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.VoiceMess)
+            {
+                var (state, message) = await UploadChatVoice(groupId, ((VoiceMessDto)mess.Content).AudioData,
+                    FileTarget.Group, ((VoiceMessDto)mess.Content).FilePath);
+
+                // 清空AudioData
+                if (!state) return (false, message);
+                chatMessage.VoiceMess.FilePath = message;
+                if (mess.Content is VoiceMessDto voiceMessDto)
+                    voiceMessDto.ActualPath =
                         _appDataManager.GetFilePath(Path.Combine("Groups", groupId, "ChatFile", message));
             }
             else if (chatMessage.ContentCase == ChatMessage.ContentOneofCase.FileMess)
@@ -273,6 +299,30 @@ internal class ChatService : BaseService, IChatService
         if (result)
             return (true, fileName);
         return (false, "Failed to upload image");
+    }
+
+    /// <summary>
+    /// 上传聊天语音，不会直接调用，而是在发送消息时调用
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="voice"></param>
+    /// <param name="fileTarget"></param>
+    /// <param name="filename"></param>
+    /// <returns></returns>
+    private async Task<(bool, string)> UploadChatVoice(string id, byte[] voice, FileTarget fileTarget,
+        string? filename = null)
+    {
+        var _fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
+
+        var fileName =
+            $"{DateTime.Now:yyyyMMddHHmmss}_{(string.IsNullOrWhiteSpace(filename) ? "语音" : Path.GetFileName(filename))}.mp3";
+        var result =
+            await _fileOperateHelper.UploadFile(id, "ChatFile", fileName, voice,
+                fileTarget);
+
+        if (result)
+            return (true, fileName);
+        return (false, "Failed to upload voice");
     }
 
     /// <summary>
@@ -464,6 +514,39 @@ internal class ChatService : BaseService, IChatService
                 {
                     messContent.Failed = true;
                     messContent.ImageSource = null;
+                }
+            }
+            else if (chatMessage.Type == ChatMessage.ContentOneofCase.VoiceMess)
+            {
+                var messContent = (VoiceMessDto)chatMessage.Content;
+                var basePath = fileTarget switch
+                {
+                    FileTarget.Group => "Groups",
+                    FileTarget.User => "Users"
+                };
+                var actualPath = Path.Combine(basePath, isUser ? userId : id, "ChatFile", messContent.FilePath);
+                messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
+
+                var bytes = await _fileOperateHelper.GetFile(isUser ? userId : id, "ChatFile", messContent.FilePath,
+                    fileTarget);
+                if (bytes == null)
+                    messContent.Failed = true;
+                else
+                {
+                    messContent.AudioData = bytes;
+                    using (var audioPlayer = new AudioPlayer())
+                    {
+                        try
+                        {
+                            audioPlayer.LoadFromMemory(messContent.AudioData);
+                            messContent.Duration = audioPlayer.TotalTime;
+                        }
+                        catch (Exception e)
+                        {
+                            messContent.Failed = true;
+                            messContent.AudioData = null;
+                        }
+                    }
                 }
             }
             else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)

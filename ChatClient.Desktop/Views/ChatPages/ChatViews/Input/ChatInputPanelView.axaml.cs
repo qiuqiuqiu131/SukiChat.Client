@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
@@ -14,12 +13,13 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Events;
 using Prism.Events;
 using Prism.Ioc;
 
-namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
+namespace ChatClient.Desktop.Views.ChatPages.ChatViews.Input;
 
 public partial class ChatInputPanelView : UserControl
 {

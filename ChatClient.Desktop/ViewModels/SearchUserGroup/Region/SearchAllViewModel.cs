@@ -173,11 +173,7 @@ public class SearchAllViewModel : BindableBase, INavigationAware, IDestructible
     private async void SearchAll(string searchText)
     {
         if (string.IsNullOrWhiteSpace(searchText))
-        {
-            UserDtos = null;
-            GroupDtos = null;
-            return;
-        }
+            searchText = "机器人";
 
         var searchService = _containerProvider.Resolve<ISearchService>();
         var result = await searchService.SearchAllAsync(_userManager.User!.Id, searchText);

@@ -53,6 +53,33 @@ public class ImageMessDto : BindableBase, IDisposable
     }
 }
 
+public class VoiceMessDto : BindableBase, IDisposable
+{
+    public string? FilePath { get; set; }
+    public long FileSize { get; set; }
+
+    public byte[]? AudioData { get; set; }
+
+    public TimeSpan Duration { get; set; }
+
+    public string? ActualPath { get; set; }
+
+    private bool failed = false;
+
+    public bool Failed
+    {
+        get => failed;
+        set => SetProperty(ref failed, value);
+    }
+
+    public void Dispose()
+    {
+        if (AudioData != null)
+            Array.Clear(AudioData);
+        AudioData = null;
+    }
+}
+
 public class FileMessDto : BindableBase
 {
     public bool IsUser { get; set; }

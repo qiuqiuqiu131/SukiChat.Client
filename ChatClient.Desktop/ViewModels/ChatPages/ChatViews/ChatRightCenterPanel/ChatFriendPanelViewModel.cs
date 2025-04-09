@@ -8,6 +8,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
@@ -50,6 +51,14 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         set => SetProperty(ref selectedFriend, value);
     }
 
+    private bool sendMessageButtonVisible;
+
+    public bool SendMessageButtonVisible
+    {
+        get => sendMessageButtonVisible;
+        set => SetProperty(ref sendMessageButtonVisible, value);
+    }
+
     public UserDto User => _userManager.User.UserDto!;
 
 
@@ -83,7 +92,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
 
         ThemeStyle = themeStyle.CurrentThemeStyle;
 
-        ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, InputMessageChanged);
+        ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, InputMessageChanged,
+            SendChatMessageVisible: b => SendMessageButtonVisible = b);
 
         DeleteMessageCommand = new DelegateCommand<ChatData>(DeleteMessage);
         RetractMessageCommand = new DelegateCommand<ChatData>(RetractMessage);

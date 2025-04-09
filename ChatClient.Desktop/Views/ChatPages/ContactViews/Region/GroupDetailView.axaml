@@ -129,10 +129,12 @@
                           ItemsSource="{Binding GroupNames}"
                           SelectedValue="{Binding Group.Grouping}" />
             </DockPanel>
-            <DockPanel Height="40">
+            <DockPanel MinHeight="40" Margin="0,8">
                 <avalonia:MaterialIcon Kind="NoteTextOutline" Width="20" Height="20" Margin="0,0,8,0"
+                                       DockPanel.Dock="Left"
+                                       VerticalAlignment="Top"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="群介绍" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
+                <TextBlock Text="群介绍" VerticalAlignment="Top" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     IsVisible="{Binding Group.IsOwner}"
                     Text="{Binding Group.GroupDto.Description,Mode=TwoWay}"
@@ -142,11 +144,11 @@
                     VerticalAlignment="Center" />
                 <TextBlock DockPanel.Dock="Right"
                            IsVisible="{Binding !Group.IsOwner}"
-                           Text="{Binding Group.GroupDto.Description,Converter={converter:DefaultTextConverter DefaultText=暂无介绍}}"
+                           Text="{Binding Group.GroupDto.Description,Converter={converter:DefaultTextConverter DefaultText=在群里，发现更多~}}"
                            Padding="10,3"
                            VerticalAlignment="Center"
                            MinHeight="0"
-                           TextTrimming="CharacterEllipsis"
+                           TextWrapping="Wrap"
                            MaxWidth="200"
                            HorizontalAlignment="Right"
                            Margin="0" />

@@ -158,7 +158,7 @@
                         <!--     <TextBlock Text="设置" FontSize="12" /> -->
                         <!-- </ToolTip.Tip> -->
                     </Button>
-                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500">
+                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500" Command="{Binding ShowAboutCommand}">
                         <avalonia:MaterialIcon Kind="AboutOutline" VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
                         <!-- <ToolTip.Tip> -->

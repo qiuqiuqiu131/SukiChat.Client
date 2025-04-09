@@ -42,10 +42,10 @@
                 </DockPanel>
 
                 <DockPanel LastChildFill="True">
-                    <TextBlock Text="群介绍" Width="90" DockPanel.Dock="Left" FontSize="14" />
+                    <TextBlock Text="群介绍" Width="90" DockPanel.Dock="Left" VerticalAlignment="Top" FontSize="14" />
                     <SelectableTextBlock Text="{Binding Description}"
                                          FontSize="14"
-                                         TextTrimming="CharacterEllipsis"
+                                         TextWrapping="Wrap"
                                          IsVisible="{Binding Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                          Opacity="0.85" />
                     <TextBlock Text="在群里，发现更多~"

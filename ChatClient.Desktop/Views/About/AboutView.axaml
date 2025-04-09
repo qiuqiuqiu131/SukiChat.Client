@@ -1,0 +1,101 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:about="clr-namespace:ChatClient.Desktop.ViewModels.About"
+             xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="320" d:DesignHeight="420"
+             x:DataType="about:AboutViewModel"
+             Width="320" Height="420"
+             x:Class="ChatClient.Desktop.Views.About.AboutView">
+    <Grid RowDefinitions="25,*">
+        <Border VerticalAlignment="Top"
+                Background="Transparent"
+                Grid.Row="0"
+                HorizontalAlignment="Stretch">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <DockPanel LastChildFill="False">
+                <StackPanel VerticalAlignment="Center"
+                            DockPanel.Dock="Right"
+                            Margin="5,0"
+                            Orientation="Horizontal"
+                            Spacing="4">
+                    <StackPanel.Styles>
+                        <Style Selector="PathIcon">
+                            <Setter Property="Height" Value="8" />
+                            <Setter Property="Width" Value="8" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button Name="PART_MinimizeButton"
+                            VerticalContentAlignment="Bottom"
+                            Classes="Basic Rounded WindowControlsButton">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ChangePropertyAction
+                                    TargetObject="{Binding $parent[suki:SukiWindow]}"
+                                    PropertyName="WindowState"
+                                    Value="{x:Static WindowState.Minimized}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                        <PathIcon Margin="0,0,0,6"
+                                  VerticalAlignment="Bottom"
+                                  Data="{x:Static suki:Icons.WindowMinimize}" />
+                    </Button>
+                    <Button Name="PART_CloseButton"
+                            Classes="Basic Rounded WindowControlsButton Close"
+                            Command="{Binding CancelCommand }">
+                        <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        <TextBlock Grid.Row="0" Text="关于" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="13" />
+        <DockPanel LastChildFill="True" Grid.Row="1" Margin="35,30,35,20">
+            <StackPanel Orientation="Vertical" Margin="5,0" Spacing="10" DockPanel.Dock="Bottom">
+                <Border Height="1" Background="{DynamicResource SukiBorderBrush}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Width="65" Text="开发者:" FontSize="12" />
+                    <TextBlock Text="丘丘丘" FontSize="12" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="版本号：" Width="65" FontSize="12" />
+                    <TextBlock Text="{Binding Version}" FontSize="12" />
+                </StackPanel>
+                <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left">
+                    <TextBlock Grid.Column="0" Text="项目地址："
+                               Width="65" FontSize="12" />
+                    <controls:ClickableTextBlock Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center"
+                                                 FontSize="12.5"
+                                                 FontWeight="Medium"
+                                                 Cursor="Hand"
+                                                 TextDecorations="Underline"
+                                                 Url="https://github.com/qiuqiuqiu131/ChatClient"
+                                                 Foreground="{DynamicResource SukiPrimaryColor}">
+                        https://github.com/qiuqiuqiu131/ChatClient
+                    </controls:ClickableTextBlock>
+                </Grid>
+            </StackPanel>
+            <ScrollViewer>
+                <StackPanel HorizontalAlignment="Stretch" Spacing="10"
+                            Orientation="Vertical">
+                    <avalonia:MaterialIcon Kind="ChartDonutVariant" Foreground="{DynamicResource SukiPrimaryColor}"
+                                           HorizontalAlignment="Center" Width="70" Height="70" />
+                    <TextBlock Text="Suki Chat" FontSize="16"
+                               Margin="0,5,0,10"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="这是一款由avalonia开发的聊天软件" TextWrapping="Wrap" FontSize="13"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="   Suki Chat内置了聊天机器人，如果有什么问题，尽管提问它们。"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap" FontSize="12.5">
+                    </TextBlock>
+                </StackPanel>
+            </ScrollViewer>
+        </DockPanel>
+    </Grid>
+</UserControl>

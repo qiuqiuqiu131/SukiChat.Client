@@ -14,7 +14,8 @@ internal class ChatMessageContentResolver : IValueResolver<ChatMessage, ChatMess
             ChatMessage.ContentOneofCase.ImageMess => context.Mapper.Map<ImageMessDto>(source.ImageMess),
             ChatMessage.ContentOneofCase.FileMess => context.Mapper.Map<FileMessDto>(source.FileMess),
             ChatMessage.ContentOneofCase.SystemMessage => context.Mapper.Map<SystemMessDto>(source.SystemMessage),
-            ChatMessage.ContentOneofCase.CardMess => context.Mapper.Map<CardMessDto>(source.CardMess)
+            ChatMessage.ContentOneofCase.CardMess => context.Mapper.Map<CardMessDto>(source.CardMess),
+            ChatMessage.ContentOneofCase.VoiceMess => context.Mapper.Map<VoiceMessDto>(source.VoiceMess),
         };
     }
 }

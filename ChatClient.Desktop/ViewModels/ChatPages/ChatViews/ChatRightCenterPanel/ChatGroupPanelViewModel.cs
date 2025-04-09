@@ -13,6 +13,7 @@ using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
@@ -58,6 +59,14 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         set => SetProperty(ref selectedGroup, value);
     }
 
+    private bool sendMessageButtonVisible;
+
+    public bool SendMessageButtonVisible
+    {
+        get => sendMessageButtonVisible;
+        set => SetProperty(ref sendMessageButtonVisible, value);
+    }
+
     public UserDto User => _userManager.User?.UserDto!;
 
     #region Command
@@ -86,7 +95,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 
         RegionManager = regionManager.CreateRegionManager();
 
-        ChatInputPanelViewModel = new ChatInputPanelViewModel(SendChatMessage, SendChatMessages);
+        ChatInputPanelViewModel =
+            new ChatInputPanelViewModel(SendChatMessage, SendChatMessages, null, d => SendMessageButtonVisible = d);
 
         SearchMoreCommand = new DelegateCommand(SearchMoreGroupChatMessage);
         RetractMessageCommand = new DelegateCommand<GroupChatData>(RetractMessage);

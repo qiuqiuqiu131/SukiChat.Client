@@ -23,6 +23,7 @@ using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.SystemSetting;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
+using ChatClient.Desktop.Views.About;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
@@ -151,6 +152,8 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
         // 头像编辑
         containerRegistry.RegisterDialog<UserHeadEditView, UserHeadEditViewModel>();
+        // 关于
+        containerRegistry.RegisterDialog<AboutView>();
 
         // 注册边角对话框
         containerRegistry.Register<ICornerDialogWindow, CornerWindow>();

@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views.About;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
@@ -99,6 +100,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     public AsyncDelegateCommand ExitCommnad { get; init; }
     public DelegateCommand ShowSystemSettingCommand { get; init; }
+    public DelegateCommand ShowAboutCommand { get; init; }
 
     public MainWindowViewModel(IEnumerable<ChatPageBase> chatPages,
         IThemeStyle themeStyle,
@@ -124,9 +126,15 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         ExitCommnad = new AsyncDelegateCommand(TryExit);
         ShowSystemSettingCommand = new DelegateCommand(ShowSystemSetting);
+        ShowAboutCommand = new DelegateCommand(ShowAbout);
 
         RegisterEvent();
         RegisterDtoEvent();
+    }
+
+    private void ShowAbout()
+    {
+        _dialogService.Show(nameof(AboutView));
     }
 
     private void ShowSystemSetting()

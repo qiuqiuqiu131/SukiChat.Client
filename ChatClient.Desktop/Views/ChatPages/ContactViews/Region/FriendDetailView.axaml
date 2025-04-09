@@ -132,18 +132,19 @@
                           ItemsSource="{Binding GroupNames}"
                           SelectedValue="{Binding Friend.Grouping}" />
             </DockPanel>
-            <DockPanel Height="40" IsVisible="{Binding Friend.UserDto.Introduction}">
+            <DockPanel MinHeight="40" Margin="0,8">
                 <avalonia:MaterialIcon Kind="PencilOutline" Width="20" Height="20" Margin="0,0,8,0"
+                                       DockPanel.Dock="Left"
+                                       VerticalAlignment="Top"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="个性签名" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
+                <TextBlock Text="个性签名" VerticalAlignment="Top" Margin="0,3" DockPanel.Dock="Left" />
                 <TextBlock DockPanel.Dock="Right"
                            IsVisible="{Binding Friend.UserDto.Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                            Text="{Binding Friend.UserDto.Introduction}"
                            Padding="0,3"
                            MinHeight="0"
                            VerticalAlignment="Center"
-                           TextTrimming="CharacterEllipsis"
-                           TextAlignment="Right"
+                           TextWrapping="Wrap"
                            MaxWidth="200"
                            HorizontalAlignment="Right"
                            Margin="0" />
@@ -153,7 +154,6 @@
                            Padding="0,3"
                            Opacity="0.6"
                            MinHeight="0"
-                           TextAlignment="Right"
                            VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis"
                            HorizontalAlignment="Right"

@@ -10,6 +10,7 @@
              xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatFriendPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatFriendPanelView">
@@ -199,7 +200,7 @@
                             <Border BorderThickness="0"
                                     Opacity="{DynamicResource GlassOpacity}"
                                     Background="{DynamicResource SukiGlassCardBackground}" />
-                            <chatViews:ChatInputPanelView
+                            <input:ChatInputPanelView
                                 DataContext="{Binding ChatInputPanelViewModel }" />
                         </Grid>
                     </Grid>
@@ -210,6 +211,7 @@
                                 Opacity="{DynamicResource GlassOpacity}"
                                 Background="{DynamicResource SukiGlassCardBackground}" />
                         <Button
+                            IsVisible="{Binding SendMessageButtonVisible}"
                             Content="发送"
                             Classes="Flat"
                             CornerRadius="6"

@@ -8,10 +8,10 @@ using Avalonia.Collections;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
-using Avalonia.Platform.Storage;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Media.Audio;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -25,7 +25,7 @@ using Prism.Events;
 using Prism.Ioc;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
+namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 
 public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 {
@@ -35,6 +35,22 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     {
         get => _inputMessages;
         set => SetProperty(ref _inputMessages, value);
+    }
+
+    private bool audioRecorderIsOpen;
+
+    public bool AudioRecorderIsOpen
+    {
+        get => audioRecorderIsOpen;
+        set => SetProperty(ref audioRecorderIsOpen, value);
+    }
+
+    private AudioRecorderViewModel audioRecorderViewModel;
+
+    public AudioRecorderViewModel AudioRecorderViewModel
+    {
+        get => audioRecorderViewModel;
+        private set => SetProperty(ref audioRecorderViewModel, value);
     }
 
     public DelegateCommand SendMessageCommand { get; init; }
@@ -47,17 +63,22 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     private Func<ChatMessage.ContentOneofCase, object, Task<(bool, FileTarget)>> sendChatMessage;
     private Func<IEnumerable<object>, Task<(bool, FileTarget)>> sendChatMessages;
     private Action<bool>? inputMessageChanged;
+    private Action<bool> sendChatMessageVisible;
 
     private bool isWriting;
 
     public ChatInputPanelViewModel(
         Func<ChatMessage.ContentOneofCase, object, Task<(bool, FileTarget)>> SendChatMessage,
         Func<IEnumerable<object>, Task<(bool, FileTarget)>> SendChatMessages,
-        Action<bool>? InputMessageChanged = null)
+        Action<bool>? InputMessageChanged = null,
+        Action<bool> SendChatMessageVisible = null)
     {
         sendChatMessages = SendChatMessages;
         sendChatMessage = SendChatMessage;
         inputMessageChanged = InputMessageChanged;
+        sendChatMessageVisible = SendChatMessageVisible;
+
+        AudioRecorderViewModel = new AudioRecorderViewModel(this);
 
         SendMessageCommand = new DelegateCommand(SendMessages, CanSendMessages);
         SelectFileAndSendCommand = new DelegateCommand(SelectFileAndSend);
@@ -70,12 +91,14 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     // 发送语音消息
     private void SendVoiceMessage()
     {
-        var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
-        eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-        {
-            Message = "功能开发中...",
-            Type = NotificationType.Information
-        });
+        AudioRecorderIsOpen = true;
+        sendChatMessageVisible?.Invoke(false);
+    }
+
+    public void ReturnFromAudioRecorder()
+    {
+        AudioRecorderIsOpen = false;
+        sendChatMessageVisible?.Invoke(true);
     }
 
     public void UpdateChatMessages(AvaloniaList<object> chatList)
@@ -149,6 +172,22 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     }
 
     #region SendMessages
+
+    public async Task SendVoiceMessage(byte[] voiceData)
+    {
+        AudioPlayer audioPlayer = new AudioPlayer();
+        audioPlayer.LoadFromMemory(voiceData);
+        var voiceMess = new VoiceMessDto
+        {
+            FilePath = "",
+            AudioData = voiceData,
+            FileSize = voiceData.Length,
+            Duration = audioPlayer.TotalTime
+        };
+        audioPlayer.Dispose();
+
+        await sendChatMessage(ChatMessage.ContentOneofCase.VoiceMess, voiceMess);
+    }
 
     // 选择图片并发送
     private async Task SendImageMessage(string filePath)
@@ -247,7 +286,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
             eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
             {
                 Message = "发送文件不能超过5MB",
-                Type = NotificationType.Error
+                Type = NotificationType.Warning
             });
             return;
         }
@@ -279,6 +318,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
         sendChatMessages = null;
         sendChatMessage = null;
         inputMessageChanged = null;
+        AudioRecorderViewModel?.Dispose();
 
         InputMessages = null;
     }

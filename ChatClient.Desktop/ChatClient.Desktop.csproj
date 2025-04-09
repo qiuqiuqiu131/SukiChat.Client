@@ -41,6 +41,7 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+        <PackageReference Include="NAudio.Lame" Version="2.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -128,6 +129,10 @@
         </Compile>
         <Compile Update="Views\SystemSetting\SystemSettingView.axaml.cs">
             <DependentUpon>SystemSettingView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPages\ChatViews\Input\ChatInputPanelView.axaml.cs">
+            <DependentUpon>ChatInputPanelView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

@@ -35,7 +35,7 @@
         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
         <ScrollViewer Grid.Row="2" Padding="8,0,0,0" VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Disabled">
-            <StackPanel suki:StackPanelExtensions.AnimatedScroll="True" Margin="15" Orientation="Vertical"
+            <StackPanel Margin="15" Orientation="Vertical"
                         Spacing="12">
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,5">
                     <circleImage:CircleImage Image="{Binding GroupDto.HeadImage}" Size="40"

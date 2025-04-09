@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:input="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
+             xmlns:input1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
+             xmlns:global="clr-namespace:"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:controls1="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="global:AudioRecorderViewModel"
+             x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Input.AudioRecorderView">
+
+    <input1:AudioRecorderView.AudioRecorder>
+        <Binding Path="AudioRecorder" />
+    </input1:AudioRecorderView.AudioRecorder>
+
+    <Grid RowDefinitions="30,*">
+        <!-- 返回按钮 -->
+        <Button Grid.Row="0" Command="{Binding CancelRecordingCommand}"
+                Padding="5"
+                Margin="8,5,0,0"
+                Classes="Void"
+                HorizontalAlignment="Left" VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <PathIcon Data="{x:Static suki:Icons.ChevronLeft}" Width="12.5" Height="12.5" />
+                <TextBlock Text="返回" FontSize="12.5" Margin="0" Padding="0" VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
+
+        <DockPanel Grid.Row="1" LastChildFill="True" HorizontalAlignment="Center">
+            <Panel DockPanel.Dock="Bottom" VerticalAlignment="Center">
+                <!-- 录音控制按钮 -->
+                <Button Command="{Binding StartRecordingCommand}"
+                        IsVisible="{Binding !IsRecording}"
+                        Width="50" Height="50"
+                        Margin="0"
+                        Classes="Recorder"
+                        Padding="0"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource SukiPrimaryColor}"
+                        CornerRadius="30">
+                    <Button.Styles>
+                        <Style Selector="Button.Recorder:pointerover /template/ Border">
+                            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
+                        </Style>
+                    </Button.Styles>
+                    <PathIcon HorizontalAlignment="Center" VerticalAlignment="Center"
+                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"
+                              Foreground="White" Width="24" Height="24" />
+                </Button>
+
+                <Button Command="{Binding StopRecordingCommand}"
+                        IsVisible="{Binding IsRecording}"
+                        Width="50" Height="50"
+                        Padding="0"
+                        Margin="0"
+                        Classes="Recorder"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource SukiAccentColor}"
+                        CornerRadius="30">
+                    <Button.Styles>
+                        <Style Selector="Button.Recorder:pointerover /template/ Border">
+                            <Setter Property="BorderBrush" Value="{DynamicResource SukiAccentColor50}" />
+                        </Style>
+                    </Button.Styles>
+                    <PathIcon VerticalAlignment="Center" HorizontalAlignment="Center"
+                              Data="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM8 8h8v8H8z"
+                              Foreground="White" Width="24" Height="24" />
+                </Button>
+            </Panel>
+            <Panel>
+                <!-- 音频可视化区域和录音状态 -->
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            IsVisible="{Binding IsRecording}"
+                            VerticalAlignment="Top"
+                            Spacing="10">
+                    <!-- 录音时间显示 -->
+                    <TextBlock Text="{Binding RecordingTime}"
+                               FontSize="13"
+                               Foreground="#666"
+                               VerticalAlignment="Center"
+                               MinWidth="40"
+                               TextAlignment="Center" />
+                    <!-- 音频可视化 -->
+                    <controls1:AudioLevelVisualizer x:Name="AudioLevelVisualizer"
+                                                    Height="70"
+                                                    IndicatorColor="{DynamicResource SukiPrimaryColor}"
+                                                    Width="250"
+                                                    BarCount="13"
+                                                    VerticalAlignment="Center" />
+                </StackPanel>
+                <!-- 准备录音提示 -->
+                <TextBlock Text="点击按钮开始录音"
+                           FontSize="14"
+                           Foreground="#999"
+                           Margin="0,30"
+                           VerticalAlignment="Center"
+                           IsVisible="{Binding !IsRecording}" />
+            </Panel>
+        </DockPanel>
+    </Grid>
+</UserControl>

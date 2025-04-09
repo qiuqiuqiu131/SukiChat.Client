@@ -127,6 +127,9 @@ internal class ProtoToDtoProfile : Profile
                     case ChatMessage.ContentOneofCase.CardMess:
                         dest.CardMess = context.Mapper.Map<CardMess>((CardMessDto)src.Content);
                         break;
+                    case ChatMessage.ContentOneofCase.VoiceMess:
+                        dest.VoiceMess = context.Mapper.Map<VoiceMess>((VoiceMessDto)src.Content);
+                        break;
                 }
             });
 
@@ -135,6 +138,7 @@ internal class ProtoToDtoProfile : Profile
         CreateMap<FileMess, FileMessDto>().ReverseMap();
         CreateMap<SystemMessage, SystemMessDto>().ReverseMap();
         CreateMap<CardMess, CardMessDto>().ReverseMap();
+        CreateMap<VoiceMess, VoiceMessDto>().ReverseMap();
         CreateMap<SystemMessBlockDto, SystemMessageBlock>().ReverseMap();
 
         CreateMap<DeleteFriendMessage, FriendDeleteDto>()

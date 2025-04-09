@@ -48,4 +48,11 @@
         <UpToDateCheckInput Remove="Controls\GroupChatUI\GroupChatUI.axaml"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Update="Controls\AudioLevelVisualizer.axaml.cs">
+            <DependentUpon>AudioLevelVisualizer.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
 </Project>
