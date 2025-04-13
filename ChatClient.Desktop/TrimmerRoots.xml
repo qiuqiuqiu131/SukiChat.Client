@@ -28,4 +28,5 @@
 	<assembly fullname="ChatClient.Desktop" preserve="All"/>
 	<assembly fullname="ChatServer.Common" preserve="All"/>
 	<assembly fullname="ChatClient.Tool" preserve="All" />
+	<assembly fullname="ChatClient.Media" preserve="All" />
 </linker>

@@ -1,5 +1,6 @@
 using ChatClient.BaseService.Helper;
 using ChatClient.DataBase.UnitOfWork;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;

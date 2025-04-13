@@ -40,7 +40,7 @@
                         <avalonia:MaterialIcon Kind="ArrowCollapseUp" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Click="OnFriendCopyIdClick" Header="复制群ID">
+                <MenuItem Click="OnFriendCopyIdClick" Header="复制ID">
                     <MenuItem.Icon>
                         <avalonia:MaterialIcon Kind="ContentCopy" />
                     </MenuItem.Icon>

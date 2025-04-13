@@ -42,10 +42,23 @@ public class VoicePlayBehavior : Behavior<Control>
         if (VoiceMess != null && VoiceMess.AudioData != null &&
             e.GetCurrentPoint(sender as Control).Properties.IsLeftButtonPressed)
         {
-            using (var audioPlayer = new AudioPlayer())
+            if (VoiceMess.IsPlaying)
             {
-                audioPlayer.LoadFromMemory(VoiceMess.AudioData);
-                await audioPlayer.PlayToEndAsync();
+                VoiceMess.AudioPlayer?.Stop();
+                VoiceMess.IsPlaying = false;
+                VoiceMess.AudioPlayer = null;
+            }
+            else if (VoiceMess.AudioData != null)
+            {
+                using (var audioPlayer = new AudioPlayer())
+                {
+                    VoiceMess.IsPlaying = true;
+                    VoiceMess.AudioPlayer = audioPlayer;
+                    audioPlayer.LoadFromMemory(VoiceMess.AudioData);
+                    await audioPlayer.PlayToEndAsync();
+                    VoiceMess.IsPlaying = false;
+                    VoiceMess.AudioPlayer = null;
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
 using Avalonia.Media.Imaging;
-using ChatClient.BaseService.Helper;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 

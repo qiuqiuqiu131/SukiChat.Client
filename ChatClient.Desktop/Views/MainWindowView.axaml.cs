@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Media.CallManager;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
@@ -259,6 +260,13 @@ public partial class MainWindowView : SukiWindow, IDisposable
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         ShowUserMessageBox(new UserMessageBoxShowArgs(_userManager.User.UserDto!, e) { BottomCheck = false });
+    }
+
+    protected override async void OnClosing(WindowClosingEventArgs e)
+    {
+        base.OnClosing(e);
+        var callManager = App.Current.Container.Resolve<ICallManager>();
+        await callManager.RemoveCall();
     }
 
     #region Dispose

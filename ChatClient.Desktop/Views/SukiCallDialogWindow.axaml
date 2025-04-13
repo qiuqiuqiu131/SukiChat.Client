@@ -1,0 +1,15 @@
+<suki:SukiWindow xmlns="https://github.com/avaloniaui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:suki="https://github.com/kikipoulet/SukiUI"
+                 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+                 x:Class="ChatClient.Desktop.Views.SukiCallDialogWindow"
+                 Title="SukiCallDialogWindow"
+                 CanResize="True"
+                 CanMaximize="False"
+                 IsTitleBarVisible="False"
+                 TitleBarAnimationEnabled="False"
+                 WindowStartupLocation="CenterOwner"
+                 Width="400" Height="500" MinWidth="400" MinHeight="450">
+</suki:SukiWindow>

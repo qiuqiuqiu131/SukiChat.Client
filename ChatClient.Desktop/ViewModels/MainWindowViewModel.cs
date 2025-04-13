@@ -9,7 +9,11 @@ using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.About;
+using ChatClient.Desktop.Views.CallView;
+using ChatClient.Media.CallManager;
+using ChatClient.Media.CallOperator;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
@@ -354,6 +358,32 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 page.UnReadMessageCount = d.Item2;
         });
         tokens.Add(token5);
+
+        var token6 = _eventAggregator.GetEvent<ResponseEvent<CallRequest>>().Subscribe(async d =>
+        {
+            var callManager = _containerProvider.Resolve<ICallManager>();
+            var callOperator = await callManager.GetCallRequest(d);
+
+            if (callOperator == null)
+                return;
+
+            ChatCallHelper.CloseOtherCallDialog();
+
+            var dialogService = _containerProvider.Resolve<IDialogService>();
+            var parameter = new DialogParameters
+            {
+                { "callOperator", callOperator },
+                { "request", d }
+            };
+            Dispatcher.UIThread.Post(() =>
+            {
+                if (callOperator is TelephoneCallOperator)
+                    dialogService.Show(nameof(CallView), parameter, null, nameof(SukiCallDialogWindow));
+                else if (callOperator is VideoCallOperator)
+                    dialogService.Show(nameof(VideoCallView), parameter, null, nameof(SukiCallDialogWindow));
+            });
+        });
+        tokens.Add(token6);
 
         IsConnected.ConnecttedChanged += ConnectionChanged;
     }

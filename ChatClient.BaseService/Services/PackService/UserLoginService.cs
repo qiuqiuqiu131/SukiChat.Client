@@ -6,6 +6,7 @@ using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 

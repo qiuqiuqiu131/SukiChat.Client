@@ -3,6 +3,7 @@ using Avalonia.Media.Imaging;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.Media.CallManager;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
@@ -113,6 +114,9 @@ internal class UserManager : IUserManager
 
         var imageManager = _containerProvider.Resolve<IImageManager>();
         imageManager.ClearCache();
+
+        var callManager = _containerProvider.Resolve<ICallManager>();
+        await callManager.RemoveCall();
 
         return response;
     }

@@ -8,10 +8,14 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
+using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.Views;
+using ChatClient.Desktop.Views.CallView;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
+using ChatClient.Media.CallManager;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -51,7 +55,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         set => SetProperty(ref selectedFriend, value);
     }
 
-    private bool sendMessageButtonVisible;
+    private bool sendMessageButtonVisible = true;
 
     public bool SendMessageButtonVisible
     {
@@ -70,7 +74,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     public DelegateCommand SearchMoreCommand { get; private set; }
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
-    public DelegateCommand VoiceCallCommand { get; private set; }
+    public AsyncDelegateCommand VoiceCallCommand { get; private set; }
     public DelegateCommand VideoCallCommand { get; private set; }
 
     #endregion
@@ -101,7 +105,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         SearchMoreCommand = new DelegateCommand(SearchMoreFriendChatMessage);
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
-        VoiceCallCommand = new DelegateCommand(VoiceCall);
+        VoiceCallCommand = new AsyncDelegateCommand(VoiceCall);
         VideoCallCommand = new DelegateCommand(VideoCall);
     }
 
@@ -109,26 +113,58 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     /// 视频通话
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    private void VideoCall()
+    private async void VideoCall()
     {
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        // {
+        //     Message = "功能开发中...",
+        //     Type = NotificationType.Information
+        // });
+
+        var exist = ChatCallHelper.OpenCallDialog(SelectedFriend!.UserId);
+        if (exist) return;
+
+        // 关闭其他通话窗口
+        ChatCallHelper.CloseOtherCallDialog();
+
+        var callManager = _containerProvider.Resolve<ICallManager>();
+        var callOperator = await callManager.StartCall(CallType.Video);
+
+        var dialogService = _containerProvider.Resolve<IDialogService>();
+        dialogService.Show(nameof(VideoCallView), new DialogParameters
         {
-            Message = "功能开发中...",
-            Type = NotificationType.Information
-        });
+            { "callOperator", callOperator },
+            { "sender", SelectedFriend.FriendRelatoinDto }
+        }, null, nameof(SukiCallDialogWindow));
     }
 
     /// <summary>
     /// 语音通话
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    private void VoiceCall()
+    private async Task VoiceCall()
     {
-        _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+        // {
+        //     Message = "功能开发中...",
+        //     Type = NotificationType.Information
+        // });
+
+        var exist = ChatCallHelper.OpenCallDialog(SelectedFriend!.UserId);
+        if (exist) return;
+
+        // 关闭其他通话窗口
+        ChatCallHelper.CloseOtherCallDialog();
+
+        var callManager = _containerProvider.Resolve<ICallManager>();
+        var callOperator = await callManager.StartCall(CallType.Telephone);
+
+        var dialogService = _containerProvider.Resolve<IDialogService>();
+        dialogService.Show(nameof(CallView), new DialogParameters
         {
-            Message = "功能开发中...",
-            Type = NotificationType.Information
-        });
+            { "callOperator", callOperator },
+            { "sender", SelectedFriend.FriendRelatoinDto }
+        }, null, nameof(SukiCallDialogWindow));
     }
 
 

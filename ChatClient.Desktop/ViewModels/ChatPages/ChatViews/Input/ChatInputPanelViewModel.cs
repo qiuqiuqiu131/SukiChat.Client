@@ -175,6 +175,17 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
     public async Task SendVoiceMessage(byte[] voiceData)
     {
+        if (voiceData.Length > 5 * 1024 * 1024)
+        {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "发送语音不能超过5MB",
+                Type = NotificationType.Warning
+            });
+            return;
+        }
+
         AudioPlayer audioPlayer = new AudioPlayer();
         audioPlayer.LoadFromMemory(voiceData);
         var voiceMess = new VoiceMessDto

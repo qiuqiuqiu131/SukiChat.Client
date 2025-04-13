@@ -40,7 +40,7 @@
                 </Button>
             </StackPanel>
         </Panel>
-        <suki:BusyArea Grid.Row="1" IsBusy="{Binding IsBusy}" BusyText="登录中...">
+        <suki:BusyArea Grid.Row="1" IsBusy="{Binding IsBusy}" BusyText="登录中">
             <DockPanel LastChildFill="True">
                 <StackPanel
                     DockPanel.Dock="Bottom"

@@ -1,0 +1,319 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:callViewModel="clr-namespace:ChatClient.Desktop.ViewModels.CallViewModel"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:callView="clr-namespace:ChatClient.Desktop.Views.CallView"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
+             x:DataType="callViewModel:VideoCallViewModel"
+             x:Class="ChatClient.Desktop.Views.CallView.VideoCallView">
+    <Panel>
+        <Panel Background="{DynamicResource SukiGlassCardBackground}">
+            <Image HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="UniformToFill"
+                   Source="{Binding UserTarget.UserDto.HeadImage}" Opacity="0.7">
+                <Image.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                        <Binding Path="State" Converter="{callView:CallViewStateConverter State=InCall,IsEquals=False}" />
+                        <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
+                    </MultiBinding>
+                </Image.IsVisible>
+                <Image.Effect>
+                    <BlurEffect Radius="20" />
+                </Image.Effect>
+            </Image>
+
+            <Border Background="#999">
+                <Border.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="State" Converter="{callView:CallViewStateConverter State=InCall}" />
+                        <Binding Path="!IsRemoteMainVideo" Mode="OneWay" />
+                    </MultiBinding>
+                </Border.IsVisible>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="5">
+                    <avalonia:MaterialIcon Kind="VideoOffOutline" Height="35" Width="35" Foreground="White" />
+                    <TextBlock Text="摄像头未开启" HorizontalAlignment="Center" Foreground="White" />
+                </StackPanel>
+            </Border>
+
+            <Image Source="{Binding MainVideoFrame}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                   Stretch="UniformToFill">
+                <Image.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="State" Converter="{callView:CallViewStateConverter State=InCall}" />
+                        <Binding Path="IsMainVideoOpened" />
+                    </MultiBinding>
+                </Image.IsVisible>
+            </Image>
+
+            <DockPanel Margin="10" LastChildFill="True">
+                <Panel DockPanel.Dock="Bottom" Height="70">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                        <ToggleButton Background="Transparent" Classes="Void Microphone" Padding="0"
+                                      CornerRadius="15"
+                                      Command="{Binding SwitchAudioCommand}"
+                                      CommandParameter="{Binding $self.IsChecked}"
+                                      VerticalAlignment="Center">
+                            <ToggleButton.Styles>
+                                <Style Selector="ToggleButton.Microphone">
+                                    <Style Selector="^ Border#Background">
+                                        <Setter Property="Opacity" Value="0.65" />
+                                    </Style>
+                                    <Style Selector="^ avalonia|MaterialIcon#Icon">
+                                        <Setter Property="Kind" Value="Microphone" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Microphone:checked">
+                                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                    <Style Selector="^ avalonia|MaterialIcon#Icon">
+                                        <Setter Property="Kind" Value="MicrophoneOff" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Microphone:pressed">
+                                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Microphone:pointerover">
+                                    <Style Selector="^ Border#Background">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Style>
+                                </Style>
+                            </ToggleButton.Styles>
+                            <Panel Height="30" Width="30">
+                                <Border Name="Background" CornerRadius="15"
+                                        Background="Gray" />
+                                <avalonia:MaterialIcon Name="Icon" Foreground="White" Width="16"
+                                                       Height="16" />
+                            </Panel>
+                        </ToggleButton>
+                        <Button Classes="Basic" Padding="0" Height="40" Width="40"
+                                VerticalAlignment="Center"
+                                Command="{Binding AcceptCommand}"
+                                BorderThickness="1"
+                                Margin="0" CornerRadius="20" Background="Green">
+                            <Button.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="State" Converter="{callView:CallViewStateConverter State=Calling}" />
+                                    <Binding Path="!IsSender" />
+                                </MultiBinding>
+                            </Button.IsVisible>
+                            <Button.Styles>
+                                <Style Selector="Button.Basic:pointerover /template/ Border">
+                                    <Setter Property="BorderBrush" Value="Green" />
+                                </Style>
+                            </Button.Styles>
+                            <avalonia:MaterialIcon HorizontalAlignment="Center" Height="22" Foreground="White"
+                                                   Width="22"
+                                                   VerticalAlignment="Center"
+                                                   Kind="Phone" />
+                        </Button>
+                        <Button Classes="Basic" Padding="0" Height="38" Width="38"
+                                VerticalAlignment="Center"
+                                Command="{Binding HangUpCommand}"
+                                BorderThickness="1"
+                                Margin="0" CornerRadius="20" Background="Red">
+                            <Button.Styles>
+                                <Style Selector="Button.Basic:pointerover /template/ Border">
+                                    <Setter Property="BorderBrush" Value="Red" />
+                                </Style>
+                            </Button.Styles>
+                            <avalonia:MaterialIcon HorizontalAlignment="Center" Height="22" Foreground="White"
+                                                   Width="22"
+                                                   VerticalAlignment="Center"
+                                                   Kind="PhoneHangup" />
+                        </Button>
+                        <ToggleButton Background="Transparent"
+                                      Name="VideoButton"
+                                      Classes="Void Video" Padding="0"
+                                      CornerRadius="15"
+                                      IsChecked="True"
+                                      Command="{Binding SwitchVideoCommand}"
+                                      CommandParameter="{Binding $self.IsChecked}"
+                                      VerticalAlignment="Center">
+                            <ToggleButton.Styles>
+                                <Style Selector="ToggleButton.Video">
+                                    <Style Selector="^ Border#Background1">
+                                        <Setter Property="Opacity" Value="0.65" />
+                                    </Style>
+                                    <Style Selector="^ avalonia|MaterialIcon#Icon1">
+                                        <Setter Property="Kind" Value="Video" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Video:checked">
+                                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                    <Style Selector="^ avalonia|MaterialIcon#Icon1">
+                                        <Setter Property="Kind" Value="VideoOff" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Video:pressed">
+                                    <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                                        <Setter Property="Background" Value="Transparent" />
+                                    </Style>
+                                </Style>
+
+                                <Style Selector="ToggleButton.Video:pointerover">
+                                    <Style Selector="^ Border#Background1">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </Style>
+                                </Style>
+                            </ToggleButton.Styles>
+                            <Panel Height="30" Width="30">
+                                <Border Name="Background1" CornerRadius="15"
+                                        Background="Gray" />
+                                <avalonia:MaterialIcon Name="Icon1" Foreground="White" Width="16"
+                                                       Height="16" />
+                            </Panel>
+                        </ToggleButton>
+                    </StackPanel>
+                </Panel>
+                <StackPanel HorizontalAlignment="Center" Orientation="Vertical" VerticalAlignment="Center" Spacing="10">
+                    <StackPanel.IsVisible>
+                        <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                            <Binding Path="State"
+                                     Converter="{callView:CallViewStateConverter State=InCall,IsEquals=False}" />
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsMainVideoOpened" />
+                                <Binding Path="IsRemoteMainVideo" />
+                            </MultiBinding>
+                        </MultiBinding>
+                    </StackPanel.IsVisible>
+                    <circleImage:CircleImage Size="80" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                             Image="{Binding UserTarget.UserDto.HeadImage}" />
+                    <Panel Margin="0">
+                        <Border CornerRadius="5" Margin="0" Padding="0"
+                                Opacity="0.3"
+                                Background="{DynamicResource SukiGlassCardBackground}" />
+                        <TextBlock Text="{Binding Message}" Margin="2,0" HorizontalAlignment="Center"
+                                   FontSize="12" />
+                    </Panel>
+                </StackPanel>
+            </DockPanel>
+
+            <Canvas Margin="5,30,5,80"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Name="Container"
+                    IsVisible="{Binding State,Converter={callView:CallViewStateConverter State=InCall}}">
+                <Border CornerRadius="5" ClipToBounds="True"
+                        BoxShadow="3 3 10 0 #000"
+                        Width="100" Height="130"
+                        Canvas.Left="5" Canvas.Top="5"
+                        Margin="0"
+                        Background="#999">
+                    <Interaction.Behaviors>
+                        <behaviors:DragClickBehavior DragContainer="{Binding ElementName=Container}"
+                                                     EnableDrag="True"
+                                                     Command="{Binding SwitchMainVideoCommand}" />
+                    </Interaction.Behaviors>
+                    <Panel>
+                        <Image Source="{Binding SubVideoFrame}"
+                               IsVisible="{Binding IsSubVideoOpened}"
+                               Stretch="UniformToFill" />
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="2">
+                            <StackPanel.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="!IsSubVideoOpened" />
+                                    <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
+                                </MultiBinding>
+                            </StackPanel.IsVisible>
+                            <avalonia:MaterialIcon Kind="VideoOffOutline" Foreground="White" Width="20" Height="20"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center" />
+                            <TextBlock Text="摄像头未开启" FontSize="10.5" HorizontalAlignment="Center" Foreground="White" />
+                        </StackPanel>
+                        <Border>
+                            <Border.IsVisible>
+                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                    <Binding Path="!IsSubVideoOpened" />
+                                    <Binding Path="!IsRemoteMainVideo" Mode="OneWay" />
+                                </MultiBinding>
+                            </Border.IsVisible>
+                            <Panel>
+                                <Image Opacity="0.7" Source="{Binding UserTarget.UserDto.HeadImage}"
+                                       Stretch="UniformToFill"
+                                       Margin="-10">
+                                    <Image.Effect>
+                                        <BlurEffect Radius="5" />
+                                    </Image.Effect>
+                                </Image>
+                                <StackPanel VerticalAlignment="Center" Orientation="Vertical"
+                                            HorizontalAlignment="Center">
+                                    <circleImage:CircleImage Image="{Binding UserTarget.UserDto.HeadImage}" Size="50"
+                                                             HorizontalAlignment="Center" />
+                                </StackPanel>
+                            </Panel>
+                        </Border>
+                    </Panel>
+                </Border>
+            </Canvas>
+        </Panel>
+
+        <!-- 顶部栏 -->
+        <Border VerticalAlignment="Top" Height="30" Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <Panel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Spacing="2">
+                    <TextBlock Text="{Binding NickName}" />
+                    <avalonia:MaterialIcon Kind="MicrophoneOff" Foreground="{DynamicResource SukiPrimaryColor}"
+                                           Width="20" Height="20">
+                        <avalonia:MaterialIcon.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="!IsRemoteAudioOpened" />
+                                <Binding Path="State" Converter="{callView:CallViewStateConverter State=InCall}" />
+                            </MultiBinding>
+                        </avalonia:MaterialIcon.IsVisible>
+                    </avalonia:MaterialIcon>
+                </StackPanel>
+
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="5,0"
+                            Orientation="Horizontal"
+                            Spacing="4">
+                    <StackPanel.Styles>
+                        <Style Selector="PathIcon">
+                            <Setter Property="Height" Value="9" />
+                            <Setter Property="Width" Value="9" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button Name="PART_MinimizeButton"
+                            VerticalContentAlignment="Bottom"
+                            Classes="Basic Rounded WindowControlsButton">
+                        <Interaction.Behaviors>
+                            <EventTriggerBehavior EventName="Click">
+                                <ChangePropertyAction
+                                    TargetObject="{Binding $parent[Window]}"
+                                    PropertyName="WindowState"
+                                    Value="{x:Static WindowState.Minimized}" />
+                            </EventTriggerBehavior>
+                        </Interaction.Behaviors>
+                        <PathIcon Margin="0,0,0,6"
+                                  VerticalAlignment="Bottom"
+                                  Data="{x:Static suki:Icons.WindowMinimize}" />
+                    </Button>
+                    <Button Name="PART_CloseButton"
+                            Classes="Basic Rounded WindowControlsButton Close"
+                            Command="{Binding HangUpCommand}">
+                        <PathIcon Data="{x:Static suki:Icons.WindowClose}" />
+                    </Button>
+                </StackPanel>
+            </Panel>
+        </Border>
+    </Panel>
+</UserControl>

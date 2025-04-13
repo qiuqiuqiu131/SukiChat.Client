@@ -98,9 +98,7 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         try
         {
             var recordedData = AudioRecorder.StopRecording();
-            using (var stream = new FileStream("D:\\recordedAudio.wav", FileMode.Create, FileAccess.Write))
-                stream.Write(recordedData, 0, recordedData.Length);
-
+            
             ChatInputPanelViewModel?.SendVoiceMessage(recordedData);
 
             _recordingStopwatch.Stop();

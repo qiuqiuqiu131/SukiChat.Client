@@ -19,6 +19,7 @@
                                LastChildFill="True">
                         <TextBlock Margin="3"
                                    DockPanel.Dock="Bottom"
+                                   IsHitTestVisible="False"
                                    FontWeight="{DynamicResource DefaultDemiBold}"
                                    IsVisible="{TemplateBinding BusyText,
                                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"

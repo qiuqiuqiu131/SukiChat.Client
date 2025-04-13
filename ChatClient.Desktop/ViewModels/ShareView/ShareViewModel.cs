@@ -63,6 +63,18 @@ public class ShareViewModel : BindableBase
         set => SetProperty(ref _senderMessage, value);
     }
 
+    private bool isSending = false;
+
+    public bool IsSending
+    {
+        get => isSending;
+        set
+        {
+            if (SetProperty(ref isSending, value))
+                OKCommand.RaiseCanExecuteChanged();
+        }
+    }
+
     public AvaloniaList<object> SelectedRelations { get; private set; } = new();
 
     public AsyncDelegateCommand OKCommand { get; set; }
@@ -111,7 +123,7 @@ public class ShareViewModel : BindableBase
         }
     }
 
-    private bool CanShareMessage() => SelectedRelations.Count != 0;
+    private bool CanShareMessage() => SelectedRelations.Count != 0 && !IsSending;
 
     private async Task ShareMessage()
     {
@@ -121,9 +133,12 @@ public class ShareViewModel : BindableBase
             CardMessDto _ => ChatMessage.ContentOneofCase.CardMess,
             FileMessDto _ => ChatMessage.ContentOneofCase.FileMess,
             ImageMessDto _ => ChatMessage.ContentOneofCase.ImageMess,
+            VoiceMessDto _ => ChatMessage.ContentOneofCase.VoiceMess,
             _ => ChatMessage.ContentOneofCase.None
         };
         if (type == ChatMessage.ContentOneofCase.None) return;
+
+        IsSending = true;
 
         // 发送消息
         var chatService = App.Current.Container.Resolve<IChatService>();
@@ -144,6 +159,8 @@ public class ShareViewModel : BindableBase
                 Message = type == ChatMessage.ContentOneofCase.CardMess ? "分享失败" : "转发失败",
                 Type = NotificationType.Error
             });
+
+        IsSending = false;
 
         _requestClose?.Invoke(new DialogResult(ButtonResult.OK));
         _sukiDialog.Dismiss();

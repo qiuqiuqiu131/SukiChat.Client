@@ -1,4 +1,5 @@
 using ChatClient.BaseService.Helper;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;

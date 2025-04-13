@@ -18,7 +18,9 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using ChatClient.Media.Audio;
 using ChatClient.Tool.Data;
+using ChatServer.Common.Protobuf;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -679,6 +681,52 @@ public partial class ChatUI : UserControl
                 item4.Click += (sender, args) => { FileRestoreCommand.Execute(imageMessDto); };
                 contextMenu.Items.Add(item4);
             }
+            else if (chatData.ChatMessages[0].Content is VoiceMessDto voiceMessDto && !voiceMessDto.Failed)
+            {
+                var item1 = new MenuItem
+                    { Header = "播放", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
+                item1.Click += async (s, e) =>
+                {
+                    if (voiceMessDto.IsPlaying)
+                    {
+                        voiceMessDto.AudioPlayer?.Stop();
+                        voiceMessDto.IsPlaying = false;
+                        voiceMessDto.AudioPlayer = null;
+                    }
+                    else if (voiceMessDto.AudioData != null)
+                    {
+                        using (var audioPlayer = new AudioPlayer())
+                        {
+                            voiceMessDto.IsPlaying = true;
+                            voiceMessDto.AudioPlayer = audioPlayer;
+                            audioPlayer.LoadFromMemory(voiceMessDto.AudioData);
+                            await audioPlayer.PlayToEndAsync();
+                            voiceMessDto.IsPlaying = false;
+                            voiceMessDto.AudioPlayer = null;
+                        }
+                    }
+                };
+                contextMenu.Items.Add(item1);
+
+                var item2 = new MenuItem
+                    { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
+                item2.Click += (s, e) =>
+                {
+                    if (System.IO.File.Exists(voiceMessDto.ActualPath))
+                    {
+                        var argument = $"/select,\"{voiceMessDto.ActualPath}\"";
+                        Process.Start(new ProcessStartInfo("explorer.exe", argument)
+                        {
+                            UseShellExecute = true,
+                            WindowStyle = ProcessWindowStyle.Normal
+                        });
+                    }
+                    else
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "语音不存在",
+                            NotificationType.Information));
+                };
+                contextMenu.Items.Add(item2);
+            }
             else if (chatData.ChatMessages[0].Content is FileMessDto fileMessDto)
             {
                 if (fileMessDto.IsSuccess)
@@ -745,7 +793,10 @@ public partial class ChatUI : UserControl
         }
 
         // 文件和复合消息暂不支持转发
-        if (chatData.ChatMessages[0].Content is not FileMessDto || chatData.ChatMessages.Count > 1)
+        if (chatData.ChatMessages.Count == 1 &&
+            (chatData.ChatMessages[0].Content is not FileMessDto ||
+             chatData.ChatMessages[0].Content is ImageMessDto imageMess && !imageMess.Failed ||
+             chatData.ChatMessages[0].Content is VoiceMessDto voiceMess && !voiceMess.Failed))
         {
             var comItem1 = new MenuItem
                 { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };

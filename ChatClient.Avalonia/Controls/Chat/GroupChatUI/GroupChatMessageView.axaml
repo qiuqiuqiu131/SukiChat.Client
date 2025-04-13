@@ -8,6 +8,7 @@
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+             xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
@@ -205,6 +206,43 @@
                     <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,5,0,2" Opacity="0.6" FontSize="11.5" />
                 </Grid>
             </Panel>
+        </DataTemplate>
+        <DataTemplate DataType="data:VoiceMessDto">
+            <Border Background="Transparent" Classes.Voice="{Binding !Failed}">
+                <Border.Styles>
+                    <Style Selector="Border.Voice">
+                        <Setter Property="Cursor" Value="Hand" />
+                    </Style>
+                </Border.Styles>
+                <Interaction.Behaviors>
+                    <behaviors:VoicePlayBehavior IsEnabled="{Binding !Failed}" VoiceMess="{Binding}" />
+                </Interaction.Behaviors>
+                <Panel>
+                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                               Margin="0,1.5,2,0">
+                        <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="PlayCircleOutline"
+                                               IsVisible="{Binding !IsPlaying}"
+                                               Foreground="{DynamicResource SukiPrimaryColor}" Width="20"
+                                               Height="20" />
+                        <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="StopCircleOutline"
+                                               IsVisible="{Binding IsPlaying}"
+                                               Foreground="{DynamicResource SukiAccentColor}" Width="20" Height="20" />
+                        <TextBlock DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right"
+                                   IsVisible="{Binding !Failed}"
+                                   FontSize="12.5"
+                                   Opacity="0.8"
+                                   Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
+                        <voiceWaveIcon:VoiceWaveIcon Duration="{Binding Duration}"
+                                                     Foreground="{DynamicResource SukiText}"
+                                                     Opacity="0.8"
+                                                     IsVisible="{Binding !Failed}"
+                                                     IsPlaying="{Binding IsPlaying}" />
+                        <TextBlock Margin="5,1.5,5,0" Text="语音已过期" Opacity="0.6" FontSize="12.5"
+                                   IsVisible="{Binding Failed}" />
+                    </DockPanel>
+                </Panel>
+            </Border>
         </DataTemplate>
     </UserControl.DataTemplates>
     <UserControl.Styles>

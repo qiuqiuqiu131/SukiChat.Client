@@ -6,6 +6,7 @@ using ChatClient.Client;
 using ChatClient.DataBase;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels;
+using ChatClient.Desktop.ViewModels.CallViewModel;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
@@ -24,6 +25,7 @@ using ChatClient.Desktop.ViewModels.SystemSetting;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.About;
+using ChatClient.Desktop.Views.CallView;
 using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
@@ -41,6 +43,7 @@ using ChatClient.Desktop.Views.ShareView;
 using ChatClient.Desktop.Views.SukiDialog;
 using ChatClient.Desktop.Views.SystemSetting;
 using ChatClient.Desktop.Views.UserControls;
+using ChatClient.Media;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.HelperInterface;
@@ -74,6 +77,7 @@ public class App : PrismApplication
     {
         moduleCatalog.AddModule<ClientModule>();
         moduleCatalog.AddModule<ResourcesModule>();
+        moduleCatalog.AddModule<MediaModule>();
     }
 
     /// <summary>
@@ -134,8 +138,10 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<UndoView>();
 
         // 注册DialogView
+        containerRegistry.RegisterDialogWindow<SukiCallDialogWindow>(nameof(SukiCallDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiChatDialogWindow>(nameof(SukiChatDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
+
         containerRegistry.RegisterDialog<RegisterWindowView, RegisterWindowViewModel>();
         containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
         // 聊天窗口
@@ -152,6 +158,9 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<AddGroupRequestView, AddGroupRequestViewModel>();
         // 头像编辑
         containerRegistry.RegisterDialog<UserHeadEditView, UserHeadEditViewModel>();
+        // 通话
+        containerRegistry.RegisterDialog<CallView, CallViewModel>();
+        containerRegistry.RegisterDialog<VideoCallView, VideoCallViewModel>();
         // 关于
         containerRegistry.RegisterDialog<AboutView>();
 

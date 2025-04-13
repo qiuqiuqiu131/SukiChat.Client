@@ -11,6 +11,8 @@
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
              xmlns:multiSeparateGroupGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView;assembly=ChatClient.Avalonia"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
              x:DataType="shareView:ShareViewModel"
              Width="550" Height="550"
@@ -90,6 +92,28 @@
                                     <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,3.5,0,1" Opacity="0.6"
                                                FontSize="10.5" />
                                 </Grid>
+                            </suki:GlassCard>
+                        </DataTemplate>
+                        <DataTemplate DataType="data:VoiceMessDto">
+                            <suki:GlassCard Padding="5" Margin="5,3.5" CornerRadius="5" HorizontalAlignment="Center">
+                                <Panel>
+                                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                               Margin="0,1.5,2,0">
+                                        <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="PlayCircleOutline"
+                                                               Foreground="{DynamicResource SukiPrimaryColor}"
+                                                               Width="20"
+                                                               Height="20" />
+                                        <TextBlock DockPanel.Dock="Right"
+                                                   HorizontalAlignment="Right"
+                                                   FontSize="12.5"
+                                                   Opacity="0.8"
+                                                   Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
+                                        <voiceWaveIcon:VoiceWaveIcon Duration="{Binding Duration}"
+                                                                     Foreground="{DynamicResource SukiText}"
+                                                                     Opacity="0.8"
+                                                                     IsPlaying="{Binding IsPlaying}" />
+                                    </DockPanel>
+                                </Panel>
                             </suki:GlassCard>
                         </DataTemplate>
                     </StackPanel.DataTemplates>

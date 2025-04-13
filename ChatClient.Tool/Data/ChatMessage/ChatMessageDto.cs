@@ -1,4 +1,5 @@
 using Avalonia.Media.Imaging;
+using ChatClient.Media.Audio;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;
@@ -60,9 +61,19 @@ public class VoiceMessDto : BindableBase, IDisposable
 
     public byte[]? AudioData { get; set; }
 
+    public AudioPlayer? AudioPlayer { get; set; }
+
     public TimeSpan Duration { get; set; }
 
     public string? ActualPath { get; set; }
+
+    private bool isPlaying = false;
+
+    public bool IsPlaying
+    {
+        get => isPlaying;
+        set => SetProperty(ref isPlaying, value);
+    }
 
     private bool failed = false;
 

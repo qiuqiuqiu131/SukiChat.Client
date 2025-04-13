@@ -183,6 +183,12 @@
                                                                                 <Setter Property="Background"
                                                                                     Value="{DynamicResource SukiGlassCardBackground}" />
                                                                             </Style>
+                                                                            <Style
+                                                                                Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
+                                                                                <Setter Property="Opacity" Value="1" />
+                                                                                <Setter Property="Background"
+                                                                                    Value="{DynamicResource SukiLightBorderBrush}" />
+                                                                            </Style>
                                                                         </suki:GlassCard.Styles>
                                                                         <ItemsControl
                                                                             ItemsSource="{Binding ChatMessages}"
@@ -249,9 +255,15 @@
                                                                         <suki:GlassCard.Styles>
                                                                             <Style
                                                                                 Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
-                                                                                <Setter Property="Opacity" Value="1" />
+                                                                                <Setter Property="Opacity" Value="0.7" />
                                                                                 <Setter Property="Background"
                                                                                     Value="{DynamicResource SukiPrimaryColor25}" />
+                                                                            </Style>
+                                                                            <Style
+                                                                                Selector="suki|GlassCard.Owner:pointerover /template/ Border#PART_BorderCard">
+                                                                                <Setter Property="Opacity" Value="0.6" />
+                                                                                <Setter Property="Background"
+                                                                                    Value="{DynamicResource SukiPrimaryColor50}" />
                                                                             </Style>
                                                                         </suki:GlassCard.Styles>
                                                                         <ItemsControl

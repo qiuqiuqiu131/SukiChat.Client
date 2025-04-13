@@ -3,6 +3,7 @@ using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;

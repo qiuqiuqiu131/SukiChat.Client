@@ -35,7 +35,7 @@
                 <!-- 录音控制按钮 -->
                 <Button Command="{Binding StartRecordingCommand}"
                         IsVisible="{Binding !IsRecording}"
-                        Width="50" Height="50"
+                        Width="55" Height="55"
                         Margin="0"
                         Classes="Recorder"
                         Padding="0"
@@ -54,7 +54,7 @@
 
                 <Button Command="{Binding StopRecordingCommand}"
                         IsVisible="{Binding IsRecording}"
-                        Width="50" Height="50"
+                        Width="55" Height="55"
                         Padding="0"
                         Margin="0"
                         Classes="Recorder"

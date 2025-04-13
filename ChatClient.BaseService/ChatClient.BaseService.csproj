@@ -10,6 +10,7 @@
         <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
         <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj"/>
         <ProjectReference Include="..\ChatClient.DataBase\ChatClient.DataBase.csproj"/>
+        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj"/>
         <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj"/>
     </ItemGroup>
 

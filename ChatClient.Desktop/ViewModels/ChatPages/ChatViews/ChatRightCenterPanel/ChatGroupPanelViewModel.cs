@@ -59,7 +59,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         set => SetProperty(ref selectedGroup, value);
     }
 
-    private bool sendMessageButtonVisible;
+    private bool sendMessageButtonVisible = true;
 
     public bool SendMessageButtonVisible
     {

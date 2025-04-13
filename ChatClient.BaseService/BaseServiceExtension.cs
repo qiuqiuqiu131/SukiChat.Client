@@ -69,6 +69,7 @@ public static class BaseServiceExtension
             .Register<IMessageHandler, FriendLogInOutMessageHandler>()
             .Register<IMessageHandler, GroupMessageHandler>()
             .Register<IMessageHandler, GroupRelationMessageHandler>()
-            .Register<IMessageHandler, DeleteMessageHandler>();
+            .Register<IMessageHandler, DeleteMessageHandler>()
+            .Register<IMessageHandler, CallMessageHandler>();
     }
 }

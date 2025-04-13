@@ -42,6 +42,9 @@ public class ChatMessageToStringConverter : MarkupExtension, IValueConverter
                     case ChatMessage.ContentOneofCase.CardMess:
                         sb.Append($"[{((CardMessDto)chatMessage.Content).Title}]");
                         break;
+                    case ChatMessage.ContentOneofCase.VoiceMess:
+                        sb.Append("[语音]");
+                        break;
                 }
             }
 
