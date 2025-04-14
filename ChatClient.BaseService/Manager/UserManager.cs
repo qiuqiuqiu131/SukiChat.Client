@@ -171,6 +171,8 @@ internal class UserManager : IUserManager
         var dto = await _userDtoManager.GetFriendRelationDto(User.Id, friendId);
         if (dto.UserDto == null)
             dto.UserDto = await _userDtoManager.GetUserDto(friendId);
+        dto.UserDto.IsOnline = true;
+
         if (dto != null)
         {
             var groupFriend = GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));

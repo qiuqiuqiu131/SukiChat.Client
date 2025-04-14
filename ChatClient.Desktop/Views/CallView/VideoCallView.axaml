@@ -8,6 +8,7 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:callView="clr-namespace:ChatClient.Desktop.Views.CallView"
+             xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:DataType="callViewModel:VideoCallViewModel"
              x:Class="ChatClient.Desktop.Views.CallView.VideoCallView">
@@ -188,6 +189,11 @@
                                 <Binding Path="!IsMainVideoOpened" />
                                 <Binding Path="IsRemoteMainVideo" />
                             </MultiBinding>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <Binding Path="IsMainVideoOpened" />
+                                <Binding Path="MainVideoFrame" Converter="{x:Static ObjectConverters.IsNull}" />
+                                <Binding Path="IsRemoteMainVideo" />
+                            </MultiBinding>
                         </MultiBinding>
                     </StackPanel.IsVisible>
                     <circleImage:CircleImage Size="80" VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -224,9 +230,16 @@
                                Stretch="UniformToFill" />
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="2">
                             <StackPanel.IsVisible>
-                                <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                    <Binding Path="!IsSubVideoOpened" />
-                                    <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
+                                <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!IsSubVideoOpened" />
+                                        <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
+                                    </MultiBinding>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="IsSubVideoOpened" />
+                                        <Binding Path="SubVideoFrame" Converter="{x:Static ObjectConverters.IsNull}" />
+                                        <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
+                                    </MultiBinding>
                                 </MultiBinding>
                             </StackPanel.IsVisible>
                             <avalonia:MaterialIcon Kind="VideoOffOutline" Foreground="White" Width="20" Height="20"
@@ -315,5 +328,7 @@
                 </StackPanel>
             </Panel>
         </Border>
+
+        <controls:NotificationMessageContainer Manager="{Binding NotificationMessageManager}" />
     </Panel>
 </UserControl>

@@ -66,54 +66,13 @@ public static class ChatMessageTool
                     stringBuilder.Append(chatMessage.CardMess.Id);
                     stringBuilder.Append("1\n\t3\n\t1\n\t");
                     break;
-            }
-        }
-
-        return stringBuilder.ToString();
-    }
-
-    public static string EncruptChatMessageDto(List<ChatMessageDto> chatMessages)
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        foreach (var chatMessage in chatMessages)
-        {
-            switch (chatMessage.Type)
-            {
-                case ChatMessage.ContentOneofCase.None: break;
-                case ChatMessage.ContentOneofCase.TextMess:
-                    stringBuilder.Append((int)chatMessage.Type);
-                    stringBuilder.Append(((TextMessDto)chatMessage.Content).Text);
-                    stringBuilder.Append("1\n\t3\n\t1\n\t");
-                    break;
-                case ChatMessage.ContentOneofCase.ImageMess:
-                    stringBuilder.Append((int)chatMessage.Type);
-                    stringBuilder.Append(((ImageMessDto)chatMessage.Content).FilePath);
+                case ChatMessage.ContentOneofCase.CallMess:
+                    stringBuilder.Append((int)chatMessage.ContentCase);
+                    stringBuilder.Append(chatMessage.CallMess.Failed ? "1" : "0");
                     stringBuilder.Append("_____");
-                    stringBuilder.Append(((ImageMessDto)chatMessage.Content).FileSize);
-                    stringBuilder.Append("1\n\t3\n\t1\n\t");
-                    break;
-                case ChatMessage.ContentOneofCase.VoiceMess:
-                    stringBuilder.Append((int)chatMessage.Type);
-                    stringBuilder.Append(((VoiceMessDto)chatMessage.Content).FilePath);
+                    stringBuilder.Append(chatMessage.CallMess.IsTelephone ? "1" : "0");
                     stringBuilder.Append("_____");
-                    stringBuilder.Append(((VoiceMessDto)chatMessage.Content).FileSize);
-                    stringBuilder.Append("1\n\t3\n\t1\n\t");
-                    break;
-                case ChatMessage.ContentOneofCase.FileMess:
-                    var fileMess = (FileMessDto)chatMessage.Content;
-                    stringBuilder.Append((int)chatMessage.Type);
-                    stringBuilder.Append(fileMess.FileName);
-                    stringBuilder.Append("_____");
-                    stringBuilder.Append(fileMess.FileSize);
-                    stringBuilder.Append("_____");
-                    stringBuilder.Append(fileMess.FileType);
-                    stringBuilder.Append("1\n\t3\n\t1\n\t");
-                    break;
-                case ChatMessage.ContentOneofCase.CardMess:
-                    stringBuilder.Append((int)chatMessage.Type);
-                    stringBuilder.Append(((CardMessDto)chatMessage.Content).IsUser ? "1" : "0");
-                    stringBuilder.Append("_____");
-                    stringBuilder.Append(((CardMessDto)chatMessage.Content).Id);
+                    stringBuilder.Append(chatMessage.CallMess.CallTime.ToString());
                     stringBuilder.Append("1\n\t3\n\t1\n\t");
                     break;
             }
@@ -217,6 +176,19 @@ public static class ChatMessageTool
                         }
                     };
                     chatMessages.Add(cardMess);
+                    break;
+                case ChatMessage.ContentOneofCase.CallMess:
+                    string[] call_spliter = content.Split("_____");
+                    var callMess = new ChatMessage
+                    {
+                        CallMess = new CallMess
+                        {
+                            Failed = call_spliter[0].Equals("1"),
+                            IsTelephone = call_spliter[1].Equals("1"),
+                            CallTime = int.Parse(call_spliter[2])
+                        }
+                    };
+                    chatMessages.Add(callMess);
                     break;
             }
         }
@@ -327,6 +299,20 @@ public static class ChatMessageTool
                         }
                     };
                     chatMessages.Add(cardMess);
+                    break;
+                case ChatMessage.ContentOneofCase.CallMess:
+                    string[] call_spliter = content.Split("_____");
+                    var callMess = new ChatMessageDto
+                    {
+                        Type = (ChatMessage.ContentOneofCase)type,
+                        Content = new CallMessDto
+                        {
+                            Failed = call_spliter[0].Equals("1"),
+                            IsTelephone = call_spliter[1].Equals("1"),
+                            CallTime = int.Parse(call_spliter[2])
+                        }
+                    };
+                    chatMessages.Add(callMess);
                     break;
             }
         }

@@ -23,6 +23,17 @@
                                  Padding="2"
                                  TextWrapping="Wrap" />
         </DataTemplate>
+        <DataTemplate DataType="data:CallMessDto">
+            <Border Background="Transparent" Margin="1,1,0,0" Padding="2" Opacity="0.85"
+                    PointerPressed="CallMess_PointerPressed">
+                <DockPanel LastChildFill="True">
+                    <avalonia:MaterialIcon DockPanel.Dock="{Binding Dock}" Kind="{Binding IconKind}" Height="19"
+                                           Width="19" Margin="0"
+                                           VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding Message}" Margin="3,0" Padding="0" FontSize="14" IsHitTestVisible="False" />
+                </DockPanel>
+            </Border>
+        </DataTemplate>
         <DataTemplate DataType="data:ImageMessDto">
             <Panel>
                 <Panel
@@ -206,7 +217,7 @@
         <DataTemplate DataType="data:CardMessDto">
             <Panel Background="Transparent" Margin="3" PointerPressed="InputElement_OnPointerPressed">
                 <Grid RowDefinitions="*,*,*" Margin="5,0">
-                    <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="0,4" />
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" Opacity="0.85" Margin="0,4" />
                     <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
                         <TextBlock Margin="0,0,5,0"
                                    Opacity="0.6"

@@ -45,6 +45,13 @@ public class ChatMessageToStringConverter : MarkupExtension, IValueConverter
                     case ChatMessage.ContentOneofCase.VoiceMess:
                         sb.Append("[语音]");
                         break;
+                    case ChatMessage.ContentOneofCase.CallMess:
+                        CallMessDto callMessDto = (CallMessDto)chatMessage.Content;
+                        sb.Append("[");
+                        sb.Append(callMessDto.IsTelephone ? "语音" : "视频");
+                        sb.Append("通话] ");
+                        sb.Append(((CallMessDto)chatMessage.Content).Message);
+                        break;
                 }
             }
 

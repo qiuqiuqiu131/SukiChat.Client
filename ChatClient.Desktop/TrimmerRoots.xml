@@ -19,6 +19,13 @@
 	<assembly fullname="DotNetty.Common" preserve="All" />
 	<assembly fullname="DotNetty.Handlers" preserve="All" />
 	<assembly fullname="DotNetty.Transport" preserve="All" />
+
+	<assembly fullname="AForge" preserve="All"/>
+	<assembly fullname="AForge.Video" preserve="All"/>
+	<assembly fullname="AForge.Video.DirectShow" preserve="All"/>
+
+	
+	<assembly fullname="SIPSorcery.Windows" preserve="All"/>
 	
 	<assembly fullname="ChatClient.DataBase" preserve="All"/>
 	<assembly fullname="ChatClient.Avalonia" preserve="All"/>

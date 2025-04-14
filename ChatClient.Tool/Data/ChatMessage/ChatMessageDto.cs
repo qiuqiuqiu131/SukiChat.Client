@@ -1,9 +1,11 @@
+using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using ChatClient.Media.Audio;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
+using Material.Icons;
 
 namespace ChatClient.Tool.Data;
 
@@ -204,4 +206,42 @@ public class CardMessDto
             return IsUser ? ((UserDto)Content).HeadImage : ((GroupDto)Content).HeadImage;
         }
     }
+}
+
+public class CallMessDto
+{
+    public bool IsUser { get; set; }
+    public bool Failed { get; set; }
+    public bool IsTelephone { get; set; }
+    public int CallTime { get; set; }
+
+    public string targetId;
+
+    public string Message
+    {
+        get
+        {
+            if (Failed)
+                if (IsUser)
+                    return "已取消，点击重播";
+                else
+                    return "对方已取消，点击重播";
+            int minutes = CallTime / 60;
+            int seconds = CallTime % 60;
+            return $"通话时长 {minutes:D2}:{seconds:D2}";
+        }
+    }
+
+    public MaterialIconKind IconKind
+    {
+        get
+        {
+            if (IsTelephone)
+                return MaterialIconKind.PhoneHangupOutline;
+            else
+                return MaterialIconKind.VideoOutline;
+        }
+    }
+
+    public Dock Dock => IsUser ? Dock.Right : Dock.Left;
 }

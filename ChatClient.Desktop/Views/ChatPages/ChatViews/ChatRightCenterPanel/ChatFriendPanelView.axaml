@@ -184,6 +184,7 @@
                                        ContextMenuShow="ChatUI_OnContextMenuShow"
                                        ShareMessageCommand="{Binding ShareMessageCommand}"
                                        DeleteMessageCommand="{Binding DeleteMessageCommand}"
+                                       ReCallCommand="{Binding ReCallCommand}"
                                        RetractMessageCommand="{Binding RetractMessageCommand}"
                                        Messages="{Binding SelectedFriend.ChatMessages}"
                                        FileMessageClickCommand="{Binding FileMessageClickCommand}"

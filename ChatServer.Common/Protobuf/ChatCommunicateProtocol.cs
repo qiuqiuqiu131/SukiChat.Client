@@ -41,7 +41,7 @@ namespace ChatServer.Common.Protobuf {
             "IAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3Bv",
             "bnNlEgoKAmlkGAIgASgFEgwKBHRpbWUYAyABKAkiUwoURnJpZW5kV3JpdGlu",
             "Z01lc3NhZ2USEgoKdXNlckZyb21JZBgBIAEoCRIUCgx1c2VyVGFyZ2V0SWQY",
-            "AiABKAkSEQoJaXNXcml0aW5nGAMgASgIIoIDCgtDaGF0TWVzc2FnZRI4Cgh0",
+            "AiABKAkSEQoJaXNXcml0aW5nGAMgASgIIrwDCgtDaGF0TWVzc2FnZRI4Cgh0",
             "ZXh0TWVzcxgBIAEoCzIkLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlRl",
             "eHRNZXNzSAASOgoJaW1hZ2VNZXNzGAIgASgLMiUuQ2hhdFNlcnZlci5Db21t",
             "b24uUHJvdG9idWYuSW1hZ2VNZXNzSAASOAoIZmlsZU1lc3MYAyABKAsyJC5D",
@@ -49,50 +49,53 @@ namespace ChatServer.Common.Protobuf {
             "bU1lc3NhZ2UYBCABKAsyKS5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5T",
             "eXN0ZW1NZXNzYWdlSAASOAoIY2FyZE1lc3MYBSABKAsyJC5DaGF0U2VydmVy",
             "LkNvbW1vbi5Qcm90b2J1Zi5DYXJkTWVzc0gAEjoKCXZvaWNlTWVzcxgGIAEo",
-            "CzIlLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlZvaWNlTWVzc0gAQgkK",
-            "B2NvbnRlbnQiGAoIVGV4dE1lc3MSDAoEdGV4dBgBIAEoCSIvCglJbWFnZU1l",
-            "c3MSEAoIZmlsZVBhdGgYASABKAkSEAoIZmlsZVNpemUYAiABKAUiLwoJVm9p",
-            "Y2VNZXNzEhAKCGZpbGVQYXRoGAEgASgJEhAKCGZpbGVTaXplGAIgASgFIkAK",
-            "CEZpbGVNZXNzEhAKCGZpbGVOYW1lGAEgASgJEhAKCGZpbGVTaXplGAIgASgF",
-            "EhAKCGZpbGVUeXBlGAMgASgJIiYKCENhcmRNZXNzEg4KBmlzVXNlchgBIAEo",
-            "CBIKCgJpZBgCIAEoCSJPCg1TeXN0ZW1NZXNzYWdlEj4KBmJsb2NrcxgBIAMo",
-            "CzIuLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlN5c3RlbU1lc3NhZ2VC",
-            "bG9jayIwChJTeXN0ZW1NZXNzYWdlQmxvY2sSDAoEdGV4dBgBIAEoCRIMCgRi",
-            "b2xkGAIgASgIIlUKHVVwZGF0ZUZyaWVuZExhc3RDaGF0SWRSZXF1ZXN0Eg4K",
-            "BnVzZXJJZBgBIAEoCRIQCghmcmllbmRJZBgCIAEoCRISCgpsYXN0Q2hhdElk",
-            "GAMgASgFIlMKHFVwZGF0ZUdyb3VwTGFzdENoYXRJZFJlcXVlc3QSDgoGdXNl",
-            "cklkGAEgASgJEg8KB2dyb3VwSWQYAiABKAkSEgoKbGFzdENoYXRJZBgDIAEo",
-            "BSJeCh5VcGRhdGVGcmllbmRMYXN0Q2hhdElkUmVzcG9uc2USPAoIcmVzcG9u",
+            "CzIlLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLlZvaWNlTWVzc0gAEjgK",
+            "CENhbGxNZXNzGAcgASgLMiQuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYu",
+            "Q2FsbE1lc3NIAEIJCgdjb250ZW50IhgKCFRleHRNZXNzEgwKBHRleHQYASAB",
+            "KAkiLwoJSW1hZ2VNZXNzEhAKCGZpbGVQYXRoGAEgASgJEhAKCGZpbGVTaXpl",
+            "GAIgASgFIi8KCVZvaWNlTWVzcxIQCghmaWxlUGF0aBgBIAEoCRIQCghmaWxl",
+            "U2l6ZRgCIAEoBSJBCghDYWxsTWVzcxIOCgZmYWlsZWQYASABKAgSEwoLaXNU",
+            "ZWxlcGhvbmUYAiABKAgSEAoIY2FsbFRpbWUYAyABKAUiQAoIRmlsZU1lc3MS",
+            "EAoIZmlsZU5hbWUYASABKAkSEAoIZmlsZVNpemUYAiABKAUSEAoIZmlsZVR5",
+            "cGUYAyABKAkiJgoIQ2FyZE1lc3MSDgoGaXNVc2VyGAEgASgIEgoKAmlkGAIg",
+            "ASgJIk8KDVN5c3RlbU1lc3NhZ2USPgoGYmxvY2tzGAEgAygLMi4uQ2hhdFNl",
+            "cnZlci5Db21tb24uUHJvdG9idWYuU3lzdGVtTWVzc2FnZUJsb2NrIjAKElN5",
+            "c3RlbU1lc3NhZ2VCbG9jaxIMCgR0ZXh0GAEgASgJEgwKBGJvbGQYAiABKAgi",
+            "VQodVXBkYXRlRnJpZW5kTGFzdENoYXRJZFJlcXVlc3QSDgoGdXNlcklkGAEg",
+            "ASgJEhAKCGZyaWVuZElkGAIgASgJEhIKCmxhc3RDaGF0SWQYAyABKAUiUwoc",
+            "VXBkYXRlR3JvdXBMYXN0Q2hhdElkUmVxdWVzdBIOCgZ1c2VySWQYASABKAkS",
+            "DwoHZ3JvdXBJZBgCIAEoCRISCgpsYXN0Q2hhdElkGAMgASgFIl4KHlVwZGF0",
+            "ZUZyaWVuZExhc3RDaGF0SWRSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIq",
+            "LkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlIl0K",
+            "HVVwZGF0ZUdyb3VwTGFzdENoYXRJZFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEg",
+            "ASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9u",
+            "c2UiUAoWQ2hhdEdyb3VwRGV0YWlsTWVzc2FnZRIOCgZ1c2VySWQYASABKAkS",
+            "EwoLY2hhdEdyb3VwSWQYAiABKAUSEQoJaXNEZWxldGVkGAMgASgIIlQKGENo",
+            "YXRQcml2YXRlRGV0YWlsTWVzc2FnZRIOCgZ1c2VySWQYASABKAkSFQoNY2hh",
+            "dFByaXZhdGVJZBgCIAEoBRIRCglpc0RlbGV0ZWQYAyABKAgiPQoWQ2hhdEdy",
+            "b3VwRGVsZXRlUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSEwoLY2hhdEdyb3Vw",
+            "SWQYAiABKAUiVwoXQ2hhdEdyb3VwRGVsZXRlUmVzcG9uc2USPAoIcmVzcG9u",
             "c2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25S",
-            "ZXNwb25zZSJdCh1VcGRhdGVHcm91cExhc3RDaGF0SWRSZXNwb25zZRI8Cghy",
-            "ZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNv",
-            "bW1vblJlc3BvbnNlIlAKFkNoYXRHcm91cERldGFpbE1lc3NhZ2USDgoGdXNl",
-            "cklkGAEgASgJEhMKC2NoYXRHcm91cElkGAIgASgFEhEKCWlzRGVsZXRlZBgD",
-            "IAEoCCJUChhDaGF0UHJpdmF0ZURldGFpbE1lc3NhZ2USDgoGdXNlcklkGAEg",
-            "ASgJEhUKDWNoYXRQcml2YXRlSWQYAiABKAUSEQoJaXNEZWxldGVkGAMgASgI",
-            "Ij0KFkNoYXRHcm91cERlbGV0ZVJlcXVlc3QSDgoGdXNlcklkGAEgASgJEhMK",
-            "C2NoYXRHcm91cElkGAIgASgFIlcKF0NoYXRHcm91cERlbGV0ZVJlc3BvbnNl",
-            "EjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9i",
-            "dWYuQ29tbW9uUmVzcG9uc2UiQQoYQ2hhdFByaXZhdGVEZWxldGVSZXF1ZXN0",
-            "Eg4KBnVzZXJJZBgBIAEoCRIVCg1jaGF0UHJpdmF0ZUlkGAIgASgFIlkKGUNo",
-            "YXRQcml2YXRlRGVsZXRlUmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5D",
-            "aGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21tb25SZXNwb25zZSJCChlD",
-            "aGF0UHJpdmF0ZVJldHJhY3RSZXF1ZXN0Eg4KBnVzZXJJZBgBIAEoCRIVCg1j",
-            "aGF0UHJpdmF0ZUlkGAIgASgFIoABChlDaGF0UHJpdmF0ZVJldHJhY3RNZXNz",
-            "YWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21tb24uUHJv",
-            "dG9idWYuQ29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIgASgJEhUKDWNoYXRQ",
-            "cml2YXRlSWQYAyABKAUiPgoXQ2hhdEdyb3VwUmV0cmFjdFJlcXVlc3QSDgoG",
-            "dXNlcklkGAEgASgJEhMKC2NoYXRHcm91cElkGAIgASgFInwKF0NoYXRHcm91",
-            "cFJldHJhY3RNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZl",
-            "ci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDgoGdXNlcklkGAIg",
-            "ASgJEhMKC2NoYXRHcm91cElkGAMgASgFIrYBChdDaGF0U2hhcmVNZXNzYWdl",
-            "UmVxdWVzdBIOCgZ1c2VySWQYASABKAkSOQoJdGFyZ2V0SWRzGAIgAygLMiYu",
-            "Q2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuVGFyZ2V0SW5mbxI5CghtZXNz",
-            "YWdlcxgDIAEoCzInLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVmLkNoYXRN",
-            "ZXNzYWdlEhUKDXNlbmRlck1lc3NhZ2UYBCABKAkiWAoYQ2hhdFNoYXJlTWVz",
-            "c2FnZVJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5D",
-            "b21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiKAoKVGFyZ2V0SW5mbxIO",
-            "CgZpc1VzZXIYASABKAgSCgoCaWQYAiABKAliBnByb3RvMw=="));
+            "ZXNwb25zZSJBChhDaGF0UHJpdmF0ZURlbGV0ZVJlcXVlc3QSDgoGdXNlcklk",
+            "GAEgASgJEhUKDWNoYXRQcml2YXRlSWQYAiABKAUiWQoZQ2hhdFByaXZhdGVE",
+            "ZWxldGVSZXNwb25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIu",
+            "Q29tbW9uLlByb3RvYnVmLkNvbW1vblJlc3BvbnNlIkIKGUNoYXRQcml2YXRl",
+            "UmV0cmFjdFJlcXVlc3QSDgoGdXNlcklkGAEgASgJEhUKDWNoYXRQcml2YXRl",
+            "SWQYAiABKAUigAEKGUNoYXRQcml2YXRlUmV0cmFjdE1lc3NhZ2USPAoIcmVz",
+            "cG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1Zi5Db21t",
+            "b25SZXNwb25zZRIOCgZ1c2VySWQYAiABKAkSFQoNY2hhdFByaXZhdGVJZBgD",
+            "IAEoBSI+ChdDaGF0R3JvdXBSZXRyYWN0UmVxdWVzdBIOCgZ1c2VySWQYASAB",
+            "KAkSEwoLY2hhdEdyb3VwSWQYAiABKAUifAoXQ2hhdEdyb3VwUmV0cmFjdE1l",
+            "c3NhZ2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Q",
+            "cm90b2J1Zi5Db21tb25SZXNwb25zZRIOCgZ1c2VySWQYAiABKAkSEwoLY2hh",
+            "dEdyb3VwSWQYAyABKAUitgEKF0NoYXRTaGFyZU1lc3NhZ2VSZXF1ZXN0Eg4K",
+            "BnVzZXJJZBgBIAEoCRI5Cgl0YXJnZXRJZHMYAiADKAsyJi5DaGF0U2VydmVy",
+            "LkNvbW1vbi5Qcm90b2J1Zi5UYXJnZXRJbmZvEjkKCG1lc3NhZ2VzGAMgASgL",
+            "MicuQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ2hhdE1lc3NhZ2USFQoN",
+            "c2VuZGVyTWVzc2FnZRgEIAEoCSJYChhDaGF0U2hhcmVNZXNzYWdlUmVzcG9u",
+            "c2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90",
+            "b2J1Zi5Db21tb25SZXNwb25zZSIoCgpUYXJnZXRJbmZvEg4KBmlzVXNlchgB",
+            "IAEoCBIKCgJpZBgCIAEoCWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -101,10 +104,11 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessage), global::ChatServer.Common.Protobuf.GroupChatMessage.Parser, new[]{ "UserFromId", "GroupId", "Time", "Messages", "Id", "IsRetracted", "RetractTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupChatMessageResponse), global::ChatServer.Common.Protobuf.GroupChatMessageResponse.Parser, new[]{ "Response", "Id", "Time" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FriendWritingMessage), global::ChatServer.Common.Protobuf.FriendWritingMessage.Parser, new[]{ "UserFromId", "UserTargetId", "IsWriting" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatMessage), global::ChatServer.Common.Protobuf.ChatMessage.Parser, new[]{ "TextMess", "ImageMess", "FileMess", "SystemMessage", "CardMess", "VoiceMess" }, new[]{ "Content" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ChatMessage), global::ChatServer.Common.Protobuf.ChatMessage.Parser, new[]{ "TextMess", "ImageMess", "FileMess", "SystemMessage", "CardMess", "VoiceMess", "CallMess" }, new[]{ "Content" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.TextMess), global::ChatServer.Common.Protobuf.TextMess.Parser, new[]{ "Text" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.ImageMess), global::ChatServer.Common.Protobuf.ImageMess.Parser, new[]{ "FilePath", "FileSize" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.VoiceMess), global::ChatServer.Common.Protobuf.VoiceMess.Parser, new[]{ "FilePath", "FileSize" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CallMess), global::ChatServer.Common.Protobuf.CallMess.Parser, new[]{ "Failed", "IsTelephone", "CallTime" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.FileMess), global::ChatServer.Common.Protobuf.FileMess.Parser, new[]{ "FileName", "FileSize", "FileType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.CardMess), global::ChatServer.Common.Protobuf.CardMess.Parser, new[]{ "IsUser", "Id" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.SystemMessage), global::ChatServer.Common.Protobuf.SystemMessage.Parser, new[]{ "Blocks" }, null, null, null, null),
@@ -1339,6 +1343,9 @@ namespace ChatServer.Common.Protobuf {
         case ContentOneofCase.VoiceMess:
           VoiceMess = other.VoiceMess.Clone();
           break;
+        case ContentOneofCase.CallMess:
+          CallMess = other.CallMess.Clone();
+          break;
       }
 
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1415,6 +1422,17 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "CallMess" field.</summary>
+    public const int CallMessFieldNumber = 7;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::ChatServer.Common.Protobuf.CallMess CallMess {
+      get { return contentCase_ == ContentOneofCase.CallMess ? (global::ChatServer.Common.Protobuf.CallMess) content_ : null; }
+      set {
+        content_ = value;
+        contentCase_ = value == null ? ContentOneofCase.None : ContentOneofCase.CallMess;
+      }
+    }
+
     private object content_;
     /// <summary>Enum of possible cases for the "content" oneof.</summary>
     public enum ContentOneofCase {
@@ -1425,6 +1443,7 @@ namespace ChatServer.Common.Protobuf {
       SystemMessage = 4,
       CardMess = 5,
       VoiceMess = 6,
+      CallMess = 7,
     }
     private ContentOneofCase contentCase_ = ContentOneofCase.None;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -1457,6 +1476,7 @@ namespace ChatServer.Common.Protobuf {
       if (!object.Equals(SystemMessage, other.SystemMessage)) return false;
       if (!object.Equals(CardMess, other.CardMess)) return false;
       if (!object.Equals(VoiceMess, other.VoiceMess)) return false;
+      if (!object.Equals(CallMess, other.CallMess)) return false;
       if (ContentCase != other.ContentCase) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -1470,6 +1490,7 @@ namespace ChatServer.Common.Protobuf {
       if (contentCase_ == ContentOneofCase.SystemMessage) hash ^= SystemMessage.GetHashCode();
       if (contentCase_ == ContentOneofCase.CardMess) hash ^= CardMess.GetHashCode();
       if (contentCase_ == ContentOneofCase.VoiceMess) hash ^= VoiceMess.GetHashCode();
+      if (contentCase_ == ContentOneofCase.CallMess) hash ^= CallMess.GetHashCode();
       hash ^= (int) contentCase_;
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -1508,6 +1529,10 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(50);
         output.WriteMessage(VoiceMess);
       }
+      if (contentCase_ == ContentOneofCase.CallMess) {
+        output.WriteRawTag(58);
+        output.WriteMessage(CallMess);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1533,6 +1558,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (contentCase_ == ContentOneofCase.VoiceMess) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(VoiceMess);
+      }
+      if (contentCase_ == ContentOneofCase.CallMess) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CallMess);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1581,6 +1609,12 @@ namespace ChatServer.Common.Protobuf {
             VoiceMess = new global::ChatServer.Common.Protobuf.VoiceMess();
           }
           VoiceMess.MergeFrom(other.VoiceMess);
+          break;
+        case ContentOneofCase.CallMess:
+          if (CallMess == null) {
+            CallMess = new global::ChatServer.Common.Protobuf.CallMess();
+          }
+          CallMess.MergeFrom(other.CallMess);
           break;
       }
 
@@ -1647,6 +1681,15 @@ namespace ChatServer.Common.Protobuf {
             }
             input.ReadMessage(subBuilder);
             VoiceMess = subBuilder;
+            break;
+          }
+          case 58: {
+            global::ChatServer.Common.Protobuf.CallMess subBuilder = new global::ChatServer.Common.Protobuf.CallMess();
+            if (contentCase_ == ContentOneofCase.CallMess) {
+              subBuilder.MergeFrom(CallMess);
+            }
+            input.ReadMessage(subBuilder);
+            CallMess = subBuilder;
             break;
           }
         }
@@ -2108,6 +2151,203 @@ namespace ChatServer.Common.Protobuf {
   }
 
   /// <summary>
+  /// 通话消息
+  /// </summary>
+  public sealed partial class CallMess : pb::IMessage<CallMess> {
+    private static readonly pb::MessageParser<CallMess> _parser = new pb::MessageParser<CallMess>(() => new CallMess());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<CallMess> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[9]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CallMess() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CallMess(CallMess other) : this() {
+      failed_ = other.failed_;
+      isTelephone_ = other.isTelephone_;
+      callTime_ = other.callTime_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public CallMess Clone() {
+      return new CallMess(this);
+    }
+
+    /// <summary>Field number for the "failed" field.</summary>
+    public const int FailedFieldNumber = 1;
+    private bool failed_;
+    /// <summary>
+    /// 是否接通
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Failed {
+      get { return failed_; }
+      set {
+        failed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isTelephone" field.</summary>
+    public const int IsTelephoneFieldNumber = 2;
+    private bool isTelephone_;
+    /// <summary>
+    /// 是否是语音电话
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool IsTelephone {
+      get { return isTelephone_; }
+      set {
+        isTelephone_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "callTime" field.</summary>
+    public const int CallTimeFieldNumber = 3;
+    private int callTime_;
+    /// <summary>
+    /// 通话时长,单位：秒
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CallTime {
+      get { return callTime_; }
+      set {
+        callTime_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as CallMess);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(CallMess other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Failed != other.Failed) return false;
+      if (IsTelephone != other.IsTelephone) return false;
+      if (CallTime != other.CallTime) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Failed != false) hash ^= Failed.GetHashCode();
+      if (IsTelephone != false) hash ^= IsTelephone.GetHashCode();
+      if (CallTime != 0) hash ^= CallTime.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (Failed != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(Failed);
+      }
+      if (IsTelephone != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(IsTelephone);
+      }
+      if (CallTime != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(CallTime);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (Failed != false) {
+        size += 1 + 1;
+      }
+      if (IsTelephone != false) {
+        size += 1 + 1;
+      }
+      if (CallTime != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CallTime);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(CallMess other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Failed != false) {
+        Failed = other.Failed;
+      }
+      if (other.IsTelephone != false) {
+        IsTelephone = other.IsTelephone;
+      }
+      if (other.CallTime != 0) {
+        CallTime = other.CallTime;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Failed = input.ReadBool();
+            break;
+          }
+          case 16: {
+            IsTelephone = input.ReadBool();
+            break;
+          }
+          case 24: {
+            CallTime = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
   /// 文件消息
   /// </summary>
   public sealed partial class FileMess : pb::IMessage<FileMess> {
@@ -2118,7 +2358,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[9]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[10]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2306,7 +2546,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[10]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[11]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2466,7 +2706,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[11]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[12]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2587,7 +2827,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[12]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[13]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2744,7 +2984,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[13]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[14]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2929,7 +3169,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[14]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[15]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3114,7 +3354,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[15]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[16]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3249,7 +3489,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[16]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[17]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3387,7 +3627,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[17]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[18]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3572,7 +3812,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[18]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[19]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3757,7 +3997,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[19]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3914,7 +4154,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[20]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4049,7 +4289,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[21]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[22]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4206,7 +4446,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[22]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4341,7 +4581,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[23]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4498,7 +4738,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[24]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4689,7 +4929,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[25]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[26]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4846,7 +5086,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[26]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5040,7 +5280,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[27]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5251,7 +5491,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[28]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5386,7 +5626,7 @@ namespace ChatServer.Common.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[29]; }
+      get { return global::ChatServer.Common.Protobuf.ChatCommunicateProtocolReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

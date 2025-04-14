@@ -1,16 +1,19 @@
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using SIPSorcery.Media;
 using SIPSorcery.Net;
 using SIPSorcery.Windows;
 
 namespace ChatClient.Media.CallOperator;
 
-public class TelephoneCallOperator(IMessageHelper messageHelper, IUserManager userManager)
-    : CallOperatorBase(messageHelper, userManager)
+public class TelephoneCallOperator(
+    IMessageHelper messageHelper,
+    IUserManager userManager,
+    IConfigurationRoot configurationRoot)
+    : CallOperatorBase(messageHelper, userManager, configurationRoot)
 {
-    private bool isAudioOpen = true;
     private WindowsAudioEndPoint? _audioEndPoint;
 
     public event EventHandler<RTCIceConnectionState> OnIceConntectionStateChanged;
@@ -24,15 +27,7 @@ public class TelephoneCallOperator(IMessageHelper messageHelper, IUserManager us
         if (_audioEndPoint == null) return;
 
         if (isOpen)
-        {
-            if (isAudioOpen)
-                await _audioEndPoint.ResumeAudio();
-            else
-            {
-                isAudioOpen = true;
                 await _audioEndPoint.StartAudio();
-            }
-        }
         else
             await _audioEndPoint.PauseAudio();
     }

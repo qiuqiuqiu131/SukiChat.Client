@@ -205,6 +205,7 @@
                                                                                 <DataTemplate>
                                                                                     <chatUi:ChatMessageView
                                                                                         IsLeft="True"
+                                                                                        CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
                                                                                         MessageBoxShow="ChatMessageView_OnMessageBoxShow"
                                                                                         HorizontalAlignment="Left"
                                                                                         Message="{Binding Content}" />
@@ -281,6 +282,7 @@
                                                                                 <DataTemplate>
                                                                                     <chatUi:ChatMessageView
                                                                                         IsLeft="False"
+                                                                                        CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
                                                                                         HorizontalAlignment="Right"
                                                                                         MessageBoxShow="ChatMessageView_OnMessageBoxShow"
                                                                                         Message="{Binding Content}" />

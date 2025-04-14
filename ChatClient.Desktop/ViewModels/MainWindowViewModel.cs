@@ -20,6 +20,7 @@ using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Org.BouncyCastle.Asn1.X509;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -385,6 +386,18 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         });
         tokens.Add(token6);
 
+        var token7 = _eventAggregator.GetEvent<CallOver>().Subscribe(d =>
+        {
+            Task.Run(async () =>
+            {
+                var chatService = _containerProvider.Resolve<IChatService>();
+                var chatMessageDto = new ChatMessageDto { Content = d, Type = ChatMessage.ContentOneofCase.CallMess };
+                var (state, chatId) =
+                    await chatService.SendChatMessage(_userManager.User.Id, d.targetId, [chatMessageDto]);
+            });
+        });
+        tokens.Add(token7);
+
         IsConnected.ConnecttedChanged += ConnectionChanged;
     }
 
@@ -441,9 +454,9 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
     /// </summary>
     private async Task Exit()
     {
+        TranslateWindowHelper.TranslateToLoginWindow();
         // 退出登录
         await _userManager.Logout();
-        _ = Task.Run(() => { TranslateWindowHelper.TranslateToLoginWindow(); });
     }
 
     #endregion
@@ -477,6 +490,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine("Dispose error: " + e);
                 }
             }
 

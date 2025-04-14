@@ -9,7 +9,7 @@
 
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="BorderThickness" Value="1.5" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="13.5" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="Template">
@@ -27,12 +27,14 @@
                                                   Margin="5,2.5,5,0"
                                                   HorizontalAlignment="Center"
                                                   VerticalAlignment="Center"
+                                                  Opacity="0.9"
                                                   Content="{TemplateBinding Icon}"
                                                   DockPanel.Dock="Left" />
                                 <TextBlock Name="PART_InputGestureText"
                                            VerticalAlignment="Center"
                                            Margin="15,6,5,5"
                                            FontSize="13"
+                                           Opacity="0.9"
                                            DockPanel.Dock="Right"
                                            HorizontalAlignment="Right"
                                            Text="{TemplateBinding InputGesture,
@@ -47,6 +49,7 @@
                                             <TextBlock LetterSpacing="0.5"
                                                        FontSize="{Binding $parent[MenuItem].FontSize}"
                                                        VerticalAlignment="Center"
+                                                       Opacity="0.9"
                                                        Text="{Binding}" />
                                         </DataTemplate>
                                     </ContentPresenter.DataTemplates>

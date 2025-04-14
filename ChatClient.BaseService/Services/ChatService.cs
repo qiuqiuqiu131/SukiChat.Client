@@ -570,6 +570,13 @@ internal class ChatService : BaseService, IChatService
                         cardMessDto.Content = await userDtoManager.GetGroupDto(userId, cardMessDto.Id);
                 }
             }
+            else if (chatMessage.Type == ChatMessage.ContentOneofCase.CallMess)
+            {
+                if (chatMessage.Content is CallMessDto callMessDto)
+                {
+                    callMessDto.IsUser = isUser;
+                }
+            }
         }
     }
 

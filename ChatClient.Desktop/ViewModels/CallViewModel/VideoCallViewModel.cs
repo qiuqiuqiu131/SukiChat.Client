@@ -4,7 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
+using Avalonia.Notification;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
@@ -46,6 +48,8 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
     private CancellationTokenSource? _cancellationTokenSource;
 
     private FriendRelationDto? userTarget;
+
+    public NotificationMessageManager NotificationMessageManager { get; set; } = new NotificationMessageManager();
 
     public FriendRelationDto? UserTarget
     {
@@ -176,6 +180,10 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         set => SetProperty(ref state, value);
     }
 
+    private bool isFailed = true;
+
+    private DateTime? callStartTime;
+
     public AsyncDelegateCommand HangUpCommand { get; set; }
     public AsyncDelegateCommand AcceptCommand { get; set; }
     public AsyncDelegateCommand<bool> SwitchAudioCommand { get; set; }
@@ -209,7 +217,12 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
     private async Task OnSwitchVideo(bool isClose)
     {
-        IsLocalVideoOpened = !isClose;
+        if (_videoCallOperator != null)
+        {
+            var result = await _videoCallOperator.ChangeVideoState(!isClose);
+            if (!result.Item1)
+                NotificationMessageManager.ShowMessage(result.Item2, NotificationType.Warning, TimeSpan.FromSeconds(2));
+        }
 
         // 发送视频状态改变的消息
         var stateChanged = new VideoStateChanged
@@ -220,14 +233,18 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         };
         await _messageHelper.SendMessage(stateChanged);
 
-        if (_videoCallOperator != null)
-        {
-            await _videoCallOperator.ChangeVideoState(!isClose);
-        }
+        IsLocalVideoOpened = !isClose;
+
+        //await Task.Delay(TimeSpan.FromSeconds(2));
     }
 
     private async Task OnSwitchAudio(bool isClose)
     {
+        if (_videoCallOperator != null)
+        {
+            await _videoCallOperator.ChangeAudioState(!isClose);
+        }
+
         // 发送音频状态改变的消息
         var stateChanged = new AudioStateChanged
         {
@@ -237,10 +254,7 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         };
         await _messageHelper.SendMessage(stateChanged);
 
-        if (_videoCallOperator != null)
-        {
-            await _videoCallOperator.ChangeAudioState(!isClose);
-        }
+        //await Task.Delay(TimeSpan.FromSeconds(1));
     }
 
     private async Task OnAccept()
@@ -495,9 +509,14 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
                 Message = "对方拒绝通话请求";
 
                 StopRing();
+                HangUpRing();
 
                 _cancellationTokenSource?.Dispose();
                 _cancellationTokenSource = null;
+
+                var callManager = _containerProvider.Resolve<ICallManager>();
+
+                await callManager.RemoveCall();
             }
         }
         catch (CallException e)
@@ -518,6 +537,9 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
             {
                 Message = "对方离线中";
             }
+
+            var callManager = _containerProvider.Resolve<ICallManager>();
+            await callManager.RemoveCall();
         }
     }
 
@@ -547,12 +569,33 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
             else if (State != CallViewState.Calling && State != CallViewState.Over)
             {
                 State = CallViewState.Over;
-                Message = "通话结束";
+                if (callStartTime == null)
+                    Message = "通话结束";
+                else
+                {
+                    var minute = (int)(DateTime.Now - callStartTime)!.Value.TotalMinutes;
+                    var second = (int)(DateTime.Now - callStartTime)!.Value.TotalSeconds % 60;
+                    Message = $"通话结束 {minute:D2}:{second:D2}";
+                }
+
+                HangUpRing();
             }
 
-            HangUpRing();
+            if (IsSender)
+            {
+                _eventAggregator.GetEvent<CallOver>().Publish(new CallMessDto
+                {
+                    targetId = peerId,
+                    IsUser = true,
+                    CallTime = callStartTime == null ? 0 : (int)(DateTime.Now - callStartTime)!.Value.TotalSeconds,
+                    IsTelephone = false,
+                    Failed = isFailed
+                });
+            }
         }
     }
+
+    private CancellationTokenSource? checkingCancellationTokenSource;
 
     private async void IceConnectionStateChanged(object? sender, RTCIceConnectionState e)
     {
@@ -561,6 +604,13 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
             Message = "视频通话中...";
 
             State = CallViewState.InCall;
+
+            checkingCancellationTokenSource?.CancelAsync();
+            checkingCancellationTokenSource = null;
+
+            callStartTime = DateTime.Now;
+
+            isFailed = false;
         }
         else if (e == RTCIceConnectionState.failed)
         {
@@ -570,6 +620,28 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
             var callManager = _containerProvider.Resolve<ICallManager>();
             await callManager.RemoveCall();
+        }
+        else if (e == RTCIceConnectionState.checking)
+        {
+            checkingCancellationTokenSource?.CancelAsync();
+            if (State == CallViewState.InCall)
+                return;
+
+            checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+            // 添加超时处理逻辑
+            Task.Delay(TimeSpan.FromSeconds(5), checkingCancellationTokenSource.Token).ContinueWith(async t =>
+            {
+                if (t.IsCanceled)
+                    return; // 如果任务被取消（即连接成功或主动取消），就不执行后续操作
+
+                // 如果到这里，说明超时了且任务未被取消
+                Message = "视频通话连接失败";
+                State = CallViewState.Over;
+
+                var callManager = _containerProvider.Resolve<ICallManager>();
+                await callManager.RemoveCall();
+            });
         }
     }
 

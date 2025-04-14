@@ -1,6 +1,7 @@
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using SIPSorcery.Media;
 using SIPSorcery.Net;
 using SIPSorcery.Windows;
@@ -8,13 +9,15 @@ using SIPSorceryMedia.Encoders;
 
 namespace ChatClient.Media.CallOperator;
 
-public class VideoCallOperator(IMessageHelper messageHelper, IUserManager userManager)
-    : CallOperatorBase(messageHelper, userManager)
+public class VideoCallOperator(
+    IMessageHelper messageHelper,
+    IUserManager userManager,
+    IConfigurationRoot configurationRoot)
+    : CallOperatorBase(messageHelper, userManager, configurationRoot)
 {
     private bool isCameraOpen;
     private WindowsCameraEndPoint? _cameraEndPoint;
 
-    private bool isAudioOpen;
     private WindowsAudioEndPoint? _audioEndPoint;
 
     // -- 事件 -- //
@@ -30,37 +33,80 @@ public class VideoCallOperator(IMessageHelper messageHelper, IUserManager userMa
     /// 更改视频播放状态
     /// </summary>
     /// <param name="isOpen"></param>
-    public async Task ChangeVideoState(bool isOpen)
+    public async Task<(bool, string)> ChangeVideoState(bool isOpen)
     {
-        if (_cameraEndPoint == null)
+        try
         {
-            Console.WriteLine("摄像头未初始化");
-            return;
-        }
-
-        if (isOpen)
-        {
-            if (isCameraOpen)
+            if (_cameraEndPoint == null)
             {
-                await _cameraEndPoint.ResumeVideo();
+                Console.WriteLine("摄像头未初始化");
+                return (false, "摄像头未初始化");
             }
-            else
+
+            if (isOpen)
             {
-                isCameraOpen = true;
-                bool initialized = await _cameraEndPoint.InitialiseVideoSourceDevice();
-                if (initialized)
+                if (isCameraOpen)
                 {
-                    await _cameraEndPoint.StartVideo();
+                    // 如果摄像头已经打开，只需恢复视频流
+                    await _cameraEndPoint.ResumeVideo();
+                    return (true, "摄像头已打开");
                 }
                 else
                 {
-                    Console.WriteLine("摄像头初始化失败");
-                    isCameraOpen = false;
+                    // 检查系统中是否存在可用的摄像头设备
+                    var devices = WindowsCameraEndPoint.GetVideoCaptureDevices();
+                    if (devices.Count == 0)
+                    {
+                        Console.WriteLine("系统中未检测到摄像头设备");
+                        return (false, "系统中未检测到摄像头设备");
+                    }
+
+                    // 初始化摄像头设备
+                    try
+                    {
+                        bool initialized = await _cameraEndPoint.InitialiseVideoSourceDevice();
+                        if (initialized)
+                        {
+                            try
+                            {
+                                await _cameraEndPoint.StartVideo();
+                                isCameraOpen = true;
+                                return (true, "摄像头已打开");
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"摄像头启动失败: {ex.Message}");
+                                // 如果启动失败，确保清理资源
+                                await _cameraEndPoint.CloseVideo();
+                                return (false, "摄像头启动失败");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("摄像头初始化失败");
+                            return (false, "摄像头初始化失败");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"摄像头初始化过程中发生异常: {ex.Message}");
+                        return (false, "摄像头初始化过程中发生异常");
+                    }
                 }
             }
+            else
+            {
+                // 关闭摄像头
+                await _cameraEndPoint.PauseVideo();
+
+                return (true, "");
+            }
         }
-        else
-            await _cameraEndPoint.PauseVideo();
+        catch (Exception ex)
+        {
+            Console.WriteLine($"更改视频状态时发生异常: {ex.Message}");
+            return (false, "更改视频状态时发生异常");
+        }
     }
 
     /// <summary>
@@ -72,15 +118,7 @@ public class VideoCallOperator(IMessageHelper messageHelper, IUserManager userMa
         if (_audioEndPoint == null) return;
 
         if (isOpen)
-        {
-            if (isAudioOpen)
-                await _audioEndPoint.ResumeAudio();
-            else
-            {
-                isAudioOpen = true;
-                await _audioEndPoint.StartAudio();
-            }
-        }
+            await _audioEndPoint.ResumeAudio();
         else
             await _audioEndPoint.PauseAudio();
     }

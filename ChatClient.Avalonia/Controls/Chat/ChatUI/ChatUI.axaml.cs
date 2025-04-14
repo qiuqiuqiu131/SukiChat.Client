@@ -302,6 +302,19 @@ public partial class ChatUI : UserControl
 
     #endregion
 
+    #region ReCallCommand
+
+    public static readonly StyledProperty<ICommand> ReCallCommandProperty = AvaloniaProperty.Register<ChatUI, ICommand>(
+        "ReCallCommand");
+
+    public ICommand ReCallCommand
+    {
+        get => GetValue(ReCallCommandProperty);
+        set => SetValue(ReCallCommandProperty, value);
+    }
+
+    #endregion
+
     #endregion
 
     #region ValueChanged
@@ -794,9 +807,9 @@ public partial class ChatUI : UserControl
 
         // 文件和复合消息暂不支持转发
         if (chatData.ChatMessages.Count == 1 &&
-            (chatData.ChatMessages[0].Content is not FileMessDto ||
-             chatData.ChatMessages[0].Content is ImageMessDto imageMess && !imageMess.Failed ||
-             chatData.ChatMessages[0].Content is VoiceMessDto voiceMess && !voiceMess.Failed))
+            (chatData.ChatMessages[0].Content is ImageMessDto imageMess && !imageMess.Failed ||
+             chatData.ChatMessages[0].Content is VoiceMessDto voiceMess && !voiceMess.Failed ||
+             chatData.ChatMessages[0].Content is TextMessDto))
         {
             var comItem1 = new MenuItem
                 { Header = "转发", Icon = new MaterialIcon { Kind = MaterialIconKind.Forwardburger } };
@@ -804,18 +817,21 @@ public partial class ChatUI : UserControl
             contextMenu.Items.Add(comItem1);
         }
 
-        var comItem2 = new MenuItem
-            { Header = "引用", Icon = new MaterialIcon { Kind = MaterialIconKind.CommentQuoteOutline } };
-        contextMenu.Items.Add(comItem2);
-
-        contextMenu.Items.Add(new Separator());
-
-        if (DateTime.Now - chatData.Time < TimeSpan.FromMinutes(2) && chatData.IsUser)
+        if (chatData.ChatMessages[0].Content is not CallMessDto)
         {
-            var comItem3 = new MenuItem
-                { Header = "撤回", Icon = new MaterialIcon { Kind = MaterialIconKind.UndoVariant } };
-            comItem3.Click += (sender, args) => { RetractMessageCommand?.Execute(chatData); };
-            contextMenu.Items.Add(comItem3);
+            var comItem2 = new MenuItem
+                { Header = "引用", Icon = new MaterialIcon { Kind = MaterialIconKind.CommentQuoteOutline } };
+            contextMenu.Items.Add(comItem2);
+
+            contextMenu.Items.Add(new Separator());
+
+            if (DateTime.Now - chatData.Time < TimeSpan.FromMinutes(2) && chatData.IsUser)
+            {
+                var comItem3 = new MenuItem
+                    { Header = "撤回", Icon = new MaterialIcon { Kind = MaterialIconKind.UndoVariant } };
+                comItem3.Click += (sender, args) => { RetractMessageCommand?.Execute(chatData); };
+                contextMenu.Items.Add(comItem3);
+            }
         }
 
         var comItem4 = new MenuItem

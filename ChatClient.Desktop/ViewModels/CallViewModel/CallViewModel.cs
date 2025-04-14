@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.Media.Audio;
@@ -39,6 +40,8 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     private AudioPlayer? _audioPlayer;
 
     private bool isAudioOver;
+
+    public NotificationMessageManager NotificationMessageManager { get; set; } = new NotificationMessageManager();
 
     private FriendRelationDto? userTarget;
 
@@ -89,6 +92,10 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         set => SetProperty(ref isRemoteAudioOpened, value);
     }
 
+    private bool isFailed = true;
+
+    private DateTime? callStartTime;
+
     public AsyncDelegateCommand HangUpCommand { get; set; }
     public AsyncDelegateCommand AcceptCommand { get; set; }
     public AsyncDelegateCommand<bool> SwitchAudioCommand { get; set; }
@@ -112,6 +119,9 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
     private async Task OnSwitchAudio(bool isClose)
     {
+        if (_telephoneCallOperator != null)
+            await _telephoneCallOperator.ChangeAudioState(!isClose);
+
         // 发送远端音频状态
         var audioState = new AudioStateChanged
         {
@@ -120,11 +130,6 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             TargetId = UserTarget!.Id
         };
         await _messageHelper.SendMessage(audioState);
-
-        if (_telephoneCallOperator != null)
-        {
-            await _telephoneCallOperator.ChangeAudioState(!isClose);
-        }
     }
 
     private async Task OnAccept()
@@ -283,6 +288,10 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
                 _cancellationTokenSource = null;
 
                 StopRing();
+                HangUpRing();
+
+                var callManager = _containerProvider.Resolve<ICallManager>();
+                await callManager.RemoveCall();
             }
         }
         catch (CallException e)
@@ -303,6 +312,9 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             {
                 Message = "对方离线中";
             }
+
+            var callManager = _containerProvider.Resolve<ICallManager>();
+            await callManager.RemoveCall();
         }
     }
 
@@ -332,12 +344,33 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             else if (State != CallViewState.Calling && State != CallViewState.Over)
             {
                 State = CallViewState.Over;
-                Message = "通话结束";
+                if (callStartTime == null)
+                    Message = "通话结束";
+                else
+                {
+                    var minute = (int)(DateTime.Now - callStartTime)!.Value.TotalMinutes;
+                    var second = (int)(DateTime.Now - callStartTime)!.Value.TotalSeconds % 60;
+                    Message = $"通话结束 {minute:D2}:{second:D2}";
+                }
+
+                HangUpRing();
             }
 
-            HangUpRing();
+            if (IsSender)
+            {
+                _eventAggregator.GetEvent<CallOver>().Publish(new CallMessDto
+                {
+                    targetId = peerId,
+                    IsUser = true,
+                    CallTime = callStartTime == null ? 0 : (int)(DateTime.Now - callStartTime)!.Value.TotalSeconds,
+                    IsTelephone = true,
+                    Failed = isFailed
+                });
+            }
         }
     }
+
+    private CancellationTokenSource? checkingCancellationTokenSource;
 
     private async void IceConnectionStateChanged(object? sender, RTCIceConnectionState e)
     {
@@ -346,6 +379,12 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             Message = "语音通话中...";
 
             State = CallViewState.InCall;
+
+            checkingCancellationTokenSource?.CancelAsync();
+            checkingCancellationTokenSource = null;
+
+            callStartTime = DateTime.Now;
+            isFailed = false;
         }
         else if (e == RTCIceConnectionState.failed)
         {
@@ -355,6 +394,28 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
             var callManager = _containerProvider.Resolve<ICallManager>();
             await callManager.RemoveCall();
+        }
+        else if (e == RTCIceConnectionState.checking)
+        {
+            checkingCancellationTokenSource?.CancelAsync();
+            if (State == CallViewState.InCall)
+                return;
+
+            checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+
+            // 添加超时处理逻辑
+            Task.Delay(TimeSpan.FromSeconds(5), checkingCancellationTokenSource.Token).ContinueWith(async t =>
+            {
+                if (t.IsCanceled)
+                    return; // 如果任务被取消（即连接成功或主动取消），就不执行后续操作
+
+                // 如果到这里，说明超时了且任务未被取消
+                Message = "语音通话连接失败";
+                State = CallViewState.Over;
+
+                var callManager = _containerProvider.Resolve<ICallManager>();
+                await callManager.RemoveCall();
+            });
         }
     }
 

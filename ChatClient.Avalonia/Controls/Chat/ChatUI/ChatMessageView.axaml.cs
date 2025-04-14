@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -26,6 +27,16 @@ public partial class ChatMessageView : UserControl
         set => SetValue(MessageProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand> CallMessageCommandProperty =
+        AvaloniaProperty.Register<ChatMessageView, ICommand>(
+            "CallMessageCommand");
+
+    public ICommand CallMessageCommand
+    {
+        get => GetValue(CallMessageCommandProperty);
+        set => SetValue(CallMessageCommandProperty, value);
+    }
+
     #region MessageBoxEvent
 
     public event EventHandler<MessageBoxShowEventArgs> MessageBoxShow;
@@ -47,6 +58,15 @@ public partial class ChatMessageView : UserControl
             e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
         {
             RaiseEvent(new MessageBoxShowEventArgs(control, MessageBoxShowEvent, e, cardMessDto));
+        }
+    }
+
+    private void CallMess_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (sender is Control control && control.DataContext is CallMessDto callMessDto &&
+            e.GetCurrentPoint(control).Properties.IsLeftButtonPressed)
+        {
+            CallMessageCommand?.Execute(callMessDto);
         }
     }
 }

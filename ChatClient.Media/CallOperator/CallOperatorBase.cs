@@ -1,6 +1,7 @@
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using SIPSorcery.Net;
 
 namespace ChatClient.Media.CallOperator;
@@ -8,6 +9,7 @@ namespace ChatClient.Media.CallOperator;
 public abstract class CallOperatorBase : ICallSession, ICallOperator
 {
     protected readonly IMessageHelper _messageHelper;
+    private readonly IConfigurationRoot _configurationRoot;
 
     protected RTCPeerConnection? _peerConnection;
 
@@ -23,9 +25,11 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     // 通话状态发生变化
     public event EventHandler<CallStatus> OnCallStatusChanged;
 
-    public CallOperatorBase(IMessageHelper messageHelper, IUserManager userManager)
+    public CallOperatorBase(IMessageHelper messageHelper, IUserManager userManager,
+        IConfigurationRoot configurationRoot)
     {
         _messageHelper = messageHelper;
+        _configurationRoot = configurationRoot;
         _userId = userManager.User!.Id;
     }
 
@@ -241,20 +245,20 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
 
     #endregion
 
-    protected RTCConfiguration RtcConfiguration => new()
+    protected RTCConfiguration RtcConfiguration
     {
-        iceServers =
-        [
-            new RTCIceServer { urls = "stun:stun.l.google.com:19302" },
-            new RTCIceServer { urls = "stun:stun1.l.google.com:19302" },
-            new RTCIceServer { urls = "stun:stun2.l.google.com:19302" },
-            new RTCIceServer { urls = "stun:stun3.l.google.com:19302" },
-            new RTCIceServer { urls = "stun:stun.stunprotocol.org:3478" }
-        ],
-        bundlePolicy = RTCBundlePolicy.balanced,
-        iceTransportPolicy = RTCIceTransportPolicy.all,
-        X_GatherTimeoutMs = 3000,
-    };
+        get
+        {
+            var configuration = new RTCConfiguration
+            {
+                iceServers = _configurationRoot.GetSection("IceServers")!.Get<List<string>>()
+                    .Select(d => new RTCIceServer { urls = d }).ToList(),
+                bundlePolicy = RTCBundlePolicy.balanced,
+                iceTransportPolicy = RTCIceTransportPolicy.all
+            };
+            return configuration;
+        }
+    }
 
     protected abstract Task<RTCPeerConnection> CreatePeerConnection();
 

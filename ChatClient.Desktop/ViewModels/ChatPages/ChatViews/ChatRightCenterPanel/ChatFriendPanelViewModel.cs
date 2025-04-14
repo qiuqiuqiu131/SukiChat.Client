@@ -41,6 +41,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
 
+    private SubscriptionToken? _token;
+
     public IRegionManager RegionManager { get; }
 
     public ThemeStyle ThemeStyle { get; set; }
@@ -75,7 +77,8 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     public AsyncDelegateCommand<FileMessDto> FileMessageClickCommand { get; private set; }
     public AsyncDelegateCommand<object> FileRestoreCommand { get; private set; }
     public AsyncDelegateCommand VoiceCallCommand { get; private set; }
-    public DelegateCommand VideoCallCommand { get; private set; }
+    public AsyncDelegateCommand VideoCallCommand { get; private set; }
+    public AsyncDelegateCommand<CallMessDto> ReCallCommand { get; private set; }
 
     #endregion
 
@@ -106,14 +109,23 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         FileRestoreCommand = new AsyncDelegateCommand<object>(FileRestoreDownload);
         FileMessageClickCommand = new AsyncDelegateCommand<FileMessDto>(FileDownload);
         VoiceCallCommand = new AsyncDelegateCommand(VoiceCall);
-        VideoCallCommand = new DelegateCommand(VideoCall);
+        VideoCallCommand = new AsyncDelegateCommand(VideoCall);
+        ReCallCommand = new AsyncDelegateCommand<CallMessDto>(ReCall);
+    }
+
+    private async Task ReCall(CallMessDto obj)
+    {
+        if (obj.IsTelephone)
+            await VoiceCall();
+        else
+            await VideoCall();
     }
 
     /// <summary>
     /// 视频通话
     /// </summary>
     /// <exception cref="NotImplementedException"></exception>
-    private async void VideoCall()
+    private async Task VideoCall()
     {
         // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
         // {
