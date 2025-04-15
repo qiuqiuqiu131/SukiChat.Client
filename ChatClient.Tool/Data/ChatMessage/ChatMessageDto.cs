@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;

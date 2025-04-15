@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
 
 namespace ChatClient.Avalonia.Behaviors;

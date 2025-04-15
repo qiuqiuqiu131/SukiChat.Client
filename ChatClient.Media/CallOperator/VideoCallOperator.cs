@@ -12,8 +12,9 @@ namespace ChatClient.Media.CallOperator;
 public class VideoCallOperator(
     IMessageHelper messageHelper,
     IUserManager userManager,
-    IConfigurationRoot configurationRoot)
-    : CallOperatorBase(messageHelper, userManager, configurationRoot)
+    IConfigurationRoot configurationRoot,
+    IStunServerManager stunServerManager)
+    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot)
 {
     private bool isCameraOpen;
     private WindowsCameraEndPoint? _cameraEndPoint;
@@ -128,7 +129,8 @@ public class VideoCallOperator(
     /// </summary>
     protected override async Task<RTCPeerConnection> CreatePeerConnection()
     {
-        var peerConnection = new RTCPeerConnection(RtcConfiguration);
+        var config = await GetRtcConfiguration();
+        var peerConnection = new RTCPeerConnection(config);
 
         // 添加媒体轨道
         // IVideoSource videoEndPoint = _currentVideoSource == VideoSourceType.Camera ? _cameraEndPoint : _screenEndPoint;
@@ -185,8 +187,12 @@ public class VideoCallOperator(
         // 监听ICE候选生成
         peerConnection.onicecandidate += (candidate) =>
         {
+            // Console.WriteLine($"候选类型: {candidate.type}, 地址: {candidate.address}:{candidate.port}");
             if (candidate != null)
             {
+                // 过滤掉本地候选
+                if (candidate.type == RTCIceCandidateType.host || candidate.type == RTCIceCandidateType.prflx) return;
+
                 // 将ICE候选发送给对方
                 var iceMessage = new SignalingMessage
                 {

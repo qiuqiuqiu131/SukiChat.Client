@@ -163,7 +163,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
         }
         else
         {
-            string title = result == null ? "网络错误" : "登录失败,请检查账号密码";
+            string title = result == null ? "网络错误" : result.Message;
             NotificationManager.ShowMessage(title, NotificationType.Error, TimeSpan.FromSeconds(1.5));
             Password = null;
         }

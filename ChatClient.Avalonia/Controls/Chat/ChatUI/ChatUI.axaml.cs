@@ -18,7 +18,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
 using ChatServer.Common.Protobuf;
 using Material.Icons;

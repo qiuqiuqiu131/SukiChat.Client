@@ -1,3 +1,4 @@
+using System.Net;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
@@ -9,6 +10,7 @@ namespace ChatClient.Media.CallOperator;
 public abstract class CallOperatorBase : ICallSession, ICallOperator
 {
     protected readonly IMessageHelper _messageHelper;
+    private readonly IStunServerManager _stunServerManager;
     private readonly IConfigurationRoot _configurationRoot;
 
     protected RTCPeerConnection? _peerConnection;
@@ -26,10 +28,11 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     public event EventHandler<CallStatus> OnCallStatusChanged;
 
     public CallOperatorBase(IMessageHelper messageHelper, IUserManager userManager,
-        IConfigurationRoot configurationRoot)
+        IStunServerManager stunServerManager, IConfigurationRoot configurationRoot)
     {
         _messageHelper = messageHelper;
         _configurationRoot = configurationRoot;
+        _stunServerManager = stunServerManager;
         _userId = userManager.User!.Id;
     }
 
@@ -75,6 +78,12 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
         if (!callResponse.Accept)
             return false;
 
+        SendOffer(peerId);
+        return true;
+    }
+
+    private async void SendOffer(string peerId)
+    {
         // 对方接受通话请求
         // 创建PeerConnection
         _peerConnection = await CreatePeerConnection();
@@ -92,7 +101,6 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
         };
 
         await _messageHelper.SendMessage(offerSignalMessage);
-        return true;
     }
 
     public void ReceiveCall(string callerId)
@@ -217,6 +225,8 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
 
     public async Task HandleIceCandidate(string from, IceCandidate iceCandidate)
     {
+        Console.WriteLine($"接收到ICE候选:{iceCandidate.Candidate}");
+
         var candidate = new RTCIceCandidateInit
         {
             candidate = iceCandidate.Candidate,
@@ -245,20 +255,31 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
 
     #endregion
 
-    protected RTCConfiguration RtcConfiguration
+    protected async Task<RTCConfiguration> GetRtcConfiguration()
     {
-        get
+        var urls = await _stunServerManager.GetStunServersUrl();
+        var TransportRelay = _configurationRoot.GetSection("TransportRelay").Get<bool?>() ?? false;
+        var GatherTime = _configurationRoot.GetSection("GatherTime").Get<int?>() ?? 2000;
+        var configuration = new RTCConfiguration
         {
-            var configuration = new RTCConfiguration
-            {
-                iceServers = _configurationRoot.GetSection("IceServers")!.Get<List<string>>()
-                    .Select(d => new RTCIceServer { urls = d }).ToList(),
-                bundlePolicy = RTCBundlePolicy.balanced,
-                iceTransportPolicy = RTCIceTransportPolicy.all
-            };
-            return configuration;
-        }
+            iceServers = urls.Select(d => new RTCIceServer { urls = d }).ToList(),
+            bundlePolicy = RTCBundlePolicy.balanced,
+            iceTransportPolicy = TransportRelay ? RTCIceTransportPolicy.relay : RTCIceTransportPolicy.all,
+            X_GatherTimeoutMs = GatherTime
+        };
+
+        // 添加TURN服务器
+        var turnServer = new RTCIceServer
+        {
+            urls = _configurationRoot["TurnServer:Url"] ?? "turn:120.26.166.13:3478",
+            username = _configurationRoot["TurnServer:Username"] ?? "qiuqiuqiu",
+            credential = _configurationRoot["TurnServer:Credential"] ?? "hongqiuyang13157"
+        };
+        configuration.iceServers.Add(turnServer);
+
+        return configuration;
     }
+
 
     protected abstract Task<RTCPeerConnection> CreatePeerConnection();
 

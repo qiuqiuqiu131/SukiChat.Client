@@ -1,7 +1,7 @@
 ﻿using NAudio.Lame;
 using NAudio.Wave;
 
-namespace ChatClient.Media.Audio;
+namespace ChatClient.Tool.Audio;
 
 public class MemoryAudioRecorder : IDisposable
 {
@@ -52,7 +52,7 @@ public class MemoryAudioRecorder : IDisposable
             };
 
             // 使用LAME编码器将音频编码为MP3格式
-            mp3Writer = new LameMP3FileWriter(new IgnoreDisposeStream(mp3Stream),
+            mp3Writer = new LameMP3FileWriter(mp3Stream,
                 waveIn.WaveFormat,
                 preset);
 
@@ -156,39 +156,6 @@ public class MemoryAudioRecorder : IDisposable
     {
         StopRecording();
         mp3Stream?.Dispose();
-    }
-
-    // 这个包装类防止WaveFileWriter关闭我们的MemoryStream
-    private class IgnoreDisposeStream : Stream
-    {
-        private readonly Stream source;
-
-        public IgnoreDisposeStream(Stream source)
-        {
-            this.source = source;
-        }
-
-        public override bool CanRead => source.CanRead;
-        public override bool CanSeek => source.CanSeek;
-        public override bool CanWrite => source.CanWrite;
-        public override long Length => source.Length;
-
-        public override long Position
-        {
-            get => source.Position;
-            set => source.Position = value;
-        }
-
-        public override void Flush() => source.Flush();
-        public override int Read(byte[] buffer, int offset, int count) => source.Read(buffer, offset, count);
-        public override long Seek(long offset, SeekOrigin origin) => source.Seek(offset, origin);
-        public override void SetLength(long value) => source.SetLength(value);
-        public override void Write(byte[] buffer, int offset, int count) => source.Write(buffer, offset, count);
-
-        protected override void Dispose(bool disposing)
-        {
-            // 不关闭底层流
-        }
     }
 }
 

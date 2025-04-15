@@ -2,6 +2,7 @@ using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.CallView;
 using Prism.Dialogs;
@@ -12,38 +13,46 @@ public static class ChatCallHelper
 {
     public static bool OpenCallDialog(string peerId)
     {
-        if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        var result = Dispatcher.UIThread.Invoke(() =>
         {
-            var callDialog = desktop.Windows
-                .FirstOrDefault(d =>
-                    d is SukiCallDialogWindow callWindow && callWindow.peerId.Equals(peerId));
-            if (callDialog != null)
+            if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                callDialog.Activate();
-                return true;
+                var callDialog = desktop.Windows
+                    .FirstOrDefault(d =>
+                        d is SukiCallDialogWindow callWindow && callWindow.peerId.Equals(peerId));
+                if (callDialog != null)
+                {
+                    callDialog.Activate();
+                    return true;
+                }
+
+                return false;
             }
 
             return false;
-        }
+        });
 
-        return false;
+        return result;
     }
 
     public static void CloseOtherCallDialog()
     {
-        if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            var callDialog = desktop.Windows
-                .Where(d =>
-                    d is SukiCallDialogWindow).ToList();
-
-            foreach (var dialog in callDialog)
+            if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                if (dialog.Content is Control { DataContext: IDialogAware dialogAware })
-                    dialogAware.RequestClose.Invoke();
-                else
-                    dialog.Close();
+                var callDialog = desktop.Windows
+                    .Where(d =>
+                        d is SukiCallDialogWindow).ToList();
+
+                foreach (var dialog in callDialog)
+                {
+                    if (dialog.Content is Control { DataContext: IDialogAware dialogAware })
+                        dialogAware.RequestClose.Invoke();
+                    else
+                        dialog.Close();
+                }
             }
-        }
+        });
     }
 }

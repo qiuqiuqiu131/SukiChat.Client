@@ -23,8 +23,11 @@
 	<assembly fullname="AForge" preserve="All"/>
 	<assembly fullname="AForge.Video" preserve="All"/>
 	<assembly fullname="AForge.Video.DirectShow" preserve="All"/>
-
 	
+	<assembly fullname="NAudio.Lame" preserve="All"/>
+	<assembly fullname="netstandard" preserve="All" />
+
+	<assembly fullname="SIPSorcery" preserve="All"/>
 	<assembly fullname="SIPSorcery.Windows" preserve="All"/>
 	
 	<assembly fullname="ChatClient.DataBase" preserve="All"/>

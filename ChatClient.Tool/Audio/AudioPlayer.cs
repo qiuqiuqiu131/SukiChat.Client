@@ -1,6 +1,6 @@
 using NAudio.Wave;
 
-namespace ChatClient.Media.Audio;
+namespace ChatClient.Tool.Audio;
 
 public class AudioPlayer : IDisposable
 {
@@ -68,7 +68,7 @@ public class AudioPlayer : IDisposable
         }
         catch (Exception ex)
         {
-            throw new AudioPlayerException("无法加载音频文件", ex);
+            // throw new AudioPlayerException("无法加载音频文件", ex);
         }
     }
 

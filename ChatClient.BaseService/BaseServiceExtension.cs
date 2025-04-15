@@ -33,6 +33,7 @@ public static class BaseServiceExtension
         containerRegistry.RegisterSingleton<IUserManager, UserManager>()
             .RegisterSingleton<IImageManager, ImageManager>()
             .RegisterSingleton<IFileManager, FileManager>()
+            .RegisterSingleton<IStunServerManager, StunServerManager>()
             .RegisterSingleton<IUserDtoManager, UserDtoManager>();
 
         // 注册Helper

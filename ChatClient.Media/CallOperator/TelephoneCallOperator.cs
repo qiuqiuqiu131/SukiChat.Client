@@ -11,8 +11,9 @@ namespace ChatClient.Media.CallOperator;
 public class TelephoneCallOperator(
     IMessageHelper messageHelper,
     IUserManager userManager,
-    IConfigurationRoot configurationRoot)
-    : CallOperatorBase(messageHelper, userManager, configurationRoot)
+    IConfigurationRoot configurationRoot,
+    IStunServerManager stunServerManager)
+    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot)
 {
     private WindowsAudioEndPoint? _audioEndPoint;
 
@@ -27,7 +28,7 @@ public class TelephoneCallOperator(
         if (_audioEndPoint == null) return;
 
         if (isOpen)
-                await _audioEndPoint.StartAudio();
+            await _audioEndPoint.StartAudio();
         else
             await _audioEndPoint.PauseAudio();
     }
@@ -35,9 +36,10 @@ public class TelephoneCallOperator(
     /// <summary>
     /// 创建PeerConnection
     /// </summary>
-    protected async override Task<RTCPeerConnection> CreatePeerConnection()
+    protected override async Task<RTCPeerConnection> CreatePeerConnection()
     {
-        var peerConnection = new RTCPeerConnection(RtcConfiguration);
+        var config = await GetRtcConfiguration();
+        var peerConnection = new RTCPeerConnection(config);
 
         // 添加媒体轨道
         _audioEndPoint = new WindowsAudioEndPoint(new AudioEncoder());
@@ -61,8 +63,13 @@ public class TelephoneCallOperator(
         // 监听ICE候选生成
         peerConnection.onicecandidate += (candidate) =>
         {
+            Console.WriteLine(
+                $"生成ICE候选: {candidate}");
             if (candidate != null)
             {
+                // 过滤掉本地候选
+                if (candidate.type == RTCIceCandidateType.host || candidate.type == RTCIceCandidateType.prflx) return;
+
                 // 将ICE候选发送给对方
                 var iceMessage = new SignalingMessage
                 {

@@ -11,7 +11,7 @@ using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;

@@ -20,8 +20,8 @@ public class AboutViewModel : BindableBase, IDialogAware
 
     public AboutViewModel()
     {
-        var fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
-        Version = fileVersion.FileVersion;
+        //var fileVersion = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
+        Version = "1.0.0";
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
     }
 

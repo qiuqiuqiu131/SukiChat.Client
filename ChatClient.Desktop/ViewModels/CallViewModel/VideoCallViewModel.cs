@@ -12,14 +12,15 @@ using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.Tool;
 using ChatClient.Media;
-using ChatClient.Media.Audio;
 using ChatClient.Media.CallManager;
 using ChatClient.Media.CallOperator;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -202,7 +203,7 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         _containerProvider = containerProvider;
 
         HangUpCommand = new AsyncDelegateCommand(OnHangUp);
-        AcceptCommand = new AsyncDelegateCommand(OnAccept);
+        AcceptCommand = new AsyncDelegateCommand(OnAccept, CanAccept);
         SwitchAudioCommand = new AsyncDelegateCommand<bool>(OnSwitchAudio);
         SwitchVideoCommand = new AsyncDelegateCommand<bool>(OnSwitchVideo);
         SwitchMainVideoCommand = new DelegateCommand(SwitchMainVideo);
@@ -241,9 +242,7 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
     private async Task OnSwitchAudio(bool isClose)
     {
         if (_videoCallOperator != null)
-        {
             await _videoCallOperator.ChangeAudioState(!isClose);
-        }
 
         // 发送音频状态改变的消息
         var stateChanged = new AudioStateChanged
@@ -257,10 +256,20 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         //await Task.Delay(TimeSpan.FromSeconds(1));
     }
 
+    private bool accepted;
+
+    private bool CanAccept() => !accepted;
+
     private async Task OnAccept()
     {
+        accepted = true;
+        AcceptCommand.RaiseCanExecuteChanged();
         if (_videoCallOperator != null)
             await _videoCallOperator.AcceptCall(UserTarget!.Id);
+
+        Message = "正在建立通话连接...";
+        StopRing();
+        State = CallViewState.Connecting;
     }
 
     private async Task OnHangUp()
@@ -518,6 +527,12 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
                 await callManager.RemoveCall();
             }
+            else
+            {
+                Message = "正在建立通话连接...";
+                StopRing();
+                State = CallViewState.Connecting;
+            }
         }
         catch (CallException e)
         {
@@ -614,34 +629,43 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         }
         else if (e == RTCIceConnectionState.failed)
         {
-            Message = "视频通话连接失败";
-
-            State = CallViewState.Over;
-
-            var callManager = _containerProvider.Resolve<ICallManager>();
-            await callManager.RemoveCall();
-        }
-        else if (e == RTCIceConnectionState.checking)
-        {
-            checkingCancellationTokenSource?.CancelAsync();
-            if (State == CallViewState.InCall)
-                return;
-
-            checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-
-            // 添加超时处理逻辑
-            Task.Delay(TimeSpan.FromSeconds(5), checkingCancellationTokenSource.Token).ContinueWith(async t =>
+            if (state == CallViewState.Calling)
             {
-                if (t.IsCanceled)
-                    return; // 如果任务被取消（即连接成功或主动取消），就不执行后续操作
-
-                // 如果到这里，说明超时了且任务未被取消
                 Message = "视频通话连接失败";
+
                 State = CallViewState.Over;
 
                 var callManager = _containerProvider.Resolve<ICallManager>();
                 await callManager.RemoveCall();
-            });
+            }
+        }
+        else if (e == RTCIceConnectionState.checking)
+        {
+            checkingCancellationTokenSource?.CancelAsync();
+            checkingCancellationTokenSource = null;
+
+            if (State == CallViewState.InCall)
+                return;
+
+            var outConnectTime =
+                int.Parse(_containerProvider.Resolve<IConfigurationRoot>()["OutConnectTime"] ?? "5000");
+
+            checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(outConnectTime));
+
+            // 添加超时处理逻辑
+            Task.Delay(TimeSpan.FromSeconds(outConnectTime), checkingCancellationTokenSource.Token).ContinueWith(
+                async t =>
+                {
+                    if (t.IsCanceled)
+                        return; // 如果任务被取消（即连接成功或主动取消），就不执行后续操作
+
+                    // 如果到这里，说明超时了且任务未被取消
+                    Message = "视频通话连接失败";
+                    State = CallViewState.Over;
+
+                    var callManager = _containerProvider.Resolve<ICallManager>();
+                    await callManager.RemoveCall();
+                });
         }
     }
 

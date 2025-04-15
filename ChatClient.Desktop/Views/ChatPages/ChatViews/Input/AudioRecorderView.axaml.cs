@@ -2,7 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.Input;
 

@@ -6,6 +6,7 @@ using ChatClient.Client;
 using ChatClient.DataBase;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels;
+using ChatClient.Desktop.ViewModels.About;
 using ChatClient.Desktop.ViewModels.CallViewModel;
 using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
@@ -47,14 +48,19 @@ using ChatClient.Media;
 using ChatClient.Resources;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
+using DnsClient.Internal;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Prism.DryIoc;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Navigation.Regions;
+using SIPSorcery;
 using SukiUI.Dialogs;
 using EditUserDataView = ChatClient.Desktop.Views.SukiDialog.EditUserDataView;
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 using SystemSettingView = ChatClient.Desktop.Views.SystemSetting.SystemSettingView;
 
 namespace ChatClient.Desktop;
@@ -87,9 +93,19 @@ public class App : PrismApplication
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         // 注册配置文件
-        IConfigurationBuilder configurationBuilder =
-            new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+        IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.webrtc.json", optional: false, reloadOnChange: true);
         containerRegistry.RegisterInstance(configurationBuilder.Build());
+
+        ILoggerFactory loggerFactory = LoggerFactory.Create(build =>
+        {
+            build.AddConsole()
+                .AddConfiguration(configurationBuilder.Build());
+        });
+        containerRegistry.RegisterInstance(loggerFactory);
+
+        LogFactory.Set(loggerFactory);
 
         // 注册数据库
         containerRegistry.RegisterDataBase();
@@ -162,7 +178,7 @@ public class App : PrismApplication
         containerRegistry.RegisterDialog<CallView, CallViewModel>();
         containerRegistry.RegisterDialog<VideoCallView, VideoCallViewModel>();
         // 关于
-        containerRegistry.RegisterDialog<AboutView>();
+        containerRegistry.RegisterDialog<AboutView, AboutViewModel>();
 
         // 注册边角对话框
         containerRegistry.Register<ICornerDialogWindow, CornerWindow>();
@@ -183,6 +199,14 @@ public class App : PrismApplication
     /// </summary>
     protected override void OnInitialized()
     {
+        var configuration = Container.Resolve<IConfigurationRoot>();
+
+        if (configuration.GetSection("SIPSorceryDebug")?.Get<bool>() ?? false)
+        {
+            ILoggerFactory loggerFactory = Container.Resolve<ILoggerFactory>();
+            LogFactory.Set(loggerFactory);
+        }
+
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
         regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, typeof(LoginView));
 
@@ -191,6 +215,9 @@ public class App : PrismApplication
         regionManager.RegisterViewWithRegion(RegionNames.ContactsRegion, typeof(ChatEmptyView));
 
         regionManager.RegisterViewWithRegion(RegionNames.SystemSettingRegion, nameof(ThemeView));
+
+        IStunServerManager stunServerManager = Container.Resolve<IStunServerManager>();
+        stunServerManager.GetStunServersUrl();
     }
 
 

@@ -3,10 +3,11 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
-using Avalonia.Threading;
+using ChatClient.Desktop;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using Prism.Commands;
+using Prism.Ioc;
 using Prism.Mvvm;
 
 public class AudioRecorderViewModel : BindableBase, IDisposable
@@ -81,7 +82,6 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         catch (Exception ex)
         {
             Debug.WriteLine($"开始录音失败: {ex.Message}");
-            // 可以考虑在这里添加用户通知
         }
     }
 
@@ -98,7 +98,7 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         try
         {
             var recordedData = AudioRecorder.StopRecording();
-            
+
             ChatInputPanelViewModel?.SendVoiceMessage(recordedData);
 
             _recordingStopwatch.Stop();

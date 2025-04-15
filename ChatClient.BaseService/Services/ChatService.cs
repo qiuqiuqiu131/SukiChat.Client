@@ -5,7 +5,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Media.Audio;
+using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
