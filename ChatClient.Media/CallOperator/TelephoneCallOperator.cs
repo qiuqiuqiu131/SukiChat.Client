@@ -18,6 +18,7 @@ public class TelephoneCallOperator(
     private WindowsAudioEndPoint? _audioEndPoint;
 
     public event EventHandler<RTCIceConnectionState> OnIceConntectionStateChanged;
+    public event Action OnDisconnected;
 
     /// <summary>
     /// 更改音频播放状态
@@ -101,7 +102,8 @@ public class TelephoneCallOperator(
                 state == RTCPeerConnectionState.failed ||
                 state == RTCPeerConnectionState.closed)
             {
-                await CleanupCall();
+                OnDisconnected?.Invoke();
+                //await CleanupCall();
             }
             else if (state == RTCPeerConnectionState.connected)
             {

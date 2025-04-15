@@ -30,6 +30,8 @@ public class VideoCallOperator(
 
     public event EventHandler<RTCIceConnectionState> OnIceConntectionStateChanged;
 
+    public event Action OnDisconnected;
+
     /// <summary>
     /// 更改视频播放状态
     /// </summary>
@@ -224,7 +226,8 @@ public class VideoCallOperator(
                 state == RTCPeerConnectionState.failed ||
                 state == RTCPeerConnectionState.closed)
             {
-                await CleanupCall();
+                OnDisconnected?.Invoke();
+                // await CleanupCall();
             }
             else if (state == RTCPeerConnectionState.connected)
             {

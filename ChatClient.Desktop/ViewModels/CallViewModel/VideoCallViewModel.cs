@@ -524,7 +524,6 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
                 _cancellationTokenSource = null;
 
                 var callManager = _containerProvider.Resolve<ICallManager>();
-
                 await callManager.RemoveCall();
             }
             else
@@ -572,10 +571,10 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         }
         else if (e == CallStatus.Ended)
         {
+            ClearCall();
+
             var callManager = _containerProvider.Resolve<ICallManager>();
             callManager.RemoveCall();
-
-            ClearCall();
 
             if (State == CallViewState.Calling && !IsSender)
             {
@@ -624,7 +623,6 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
             checkingCancellationTokenSource = null;
 
             callStartTime = DateTime.Now;
-
             isFailed = false;
         }
         else if (e == RTCIceConnectionState.failed)
@@ -643,7 +641,6 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         {
             checkingCancellationTokenSource?.CancelAsync();
             checkingCancellationTokenSource = null;
-
             if (State == CallViewState.InCall)
                 return;
 
@@ -671,6 +668,9 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
     private void ClearCall()
     {
+        StopRing();
+        OnDisconnected();
+
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
 
@@ -681,8 +681,6 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         _videoCallOperator.OnVideoFrameReceived -= OnVideoFrameReceived;
         _videoCallOperator.OnLocalVideoFrameReceived -= OnLocalVideoFrameReceived;
         _videoCallOperator = null;
-
-        OnDisconnected();
     }
 
     public DialogCloseListener RequestClose { get; }

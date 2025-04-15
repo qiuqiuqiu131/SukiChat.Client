@@ -255,6 +255,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         var callOperator = parameters.GetValue<CallOperatorBase>("callOperator");
         _telephoneCallOperator = callOperator as TelephoneCallOperator;
         _telephoneCallOperator.OnCallStatusChanged += CallStatusChanged;
+        _telephoneCallOperator.OnDisconnected += CallDisconnected;
         _telephoneCallOperator.OnIceConntectionStateChanged += IceConnectionStateChanged;
 
         if (parameters.ContainsKey("request"))
@@ -334,6 +335,12 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         }
     }
 
+    private async void CallDisconnected()
+    {
+        var callManager = _containerProvider.Resolve<ICallManager>();
+        await callManager.RemoveCall();
+    }
+
     private void CallStatusChanged(object? sender, CallStatus e)
     {
         if (e == CallStatus.InCall)
@@ -348,10 +355,10 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         }
         else if (e == CallStatus.Ended)
         {
+            ClearCall();
+
             var callManager = _containerProvider.Resolve<ICallManager>();
             callManager.RemoveCall();
-
-            ClearCall();
 
             if (State == CallViewState.Calling && !IsSender)
             {
@@ -446,6 +453,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     private void ClearCall()
     {
         StopRing();
+        OnDisConnected();
 
         _cancellationTokenSource?.Dispose();
         _cancellationTokenSource = null;
@@ -455,8 +463,6 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         _telephoneCallOperator.OnCallStatusChanged -= CallStatusChanged;
         _telephoneCallOperator.OnIceConntectionStateChanged -= IceConnectionStateChanged;
         _telephoneCallOperator = null;
-
-        OnDisConnected();
     }
 
     public DialogCloseListener RequestClose { get; }
