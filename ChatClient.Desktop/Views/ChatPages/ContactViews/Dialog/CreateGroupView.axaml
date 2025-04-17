@@ -44,7 +44,7 @@
                         </Border>
                         <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
                             <multiSeparateGroupView:MultiSeparateGroupView
-                                Margin="10,5"
+                                Margin="10,5,10,100"
                                 x:Name="MultiSeparateGroupView"
                                 SelectionChangedCommand="{Binding SelectionChangedCommand}"
                                 GroupFriends="{Binding GroupFriends}" />
@@ -80,7 +80,7 @@
                     </Grid>
                     <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Hidden">
-                        <ItemsControl Margin="0,5" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
+                        <ItemsControl Margin="0,5,0,100" Grid.Row="1" ItemsSource="{Binding SelectedFriends}">
                             <ItemsControl.Styles>
                                 <Style Selector="Grid.Item Border#Back">
                                     <Setter Property="Opacity" Value="0" />

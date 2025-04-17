@@ -486,11 +486,10 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                     UnRegisterDtoEvent();
                     UnRegisterEvent();
                     ChatPages?.Clear();
-                    SukiDialogManager = null;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Dispose error: " + e);
+                    // Console.WriteLine("Dispose error: " + e);
                 }
             }
 

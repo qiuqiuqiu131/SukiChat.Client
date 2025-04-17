@@ -68,7 +68,7 @@
                 </Interaction.Behaviors>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Spacing="10" Margin="3,0" Orientation="Horizontal">
+                        <StackPanel Spacing="20" Margin="3,0" Orientation="Horizontal">
                             <avalonia:MaterialIcon Kind="{Binding Icon}" Foreground="{DynamicResource SukiText}" />
                             <TextBlock Text="{Binding Name}" Foreground="{DynamicResource SukiText}" />
                         </StackPanel>

@@ -501,13 +501,14 @@ internal class ChatService : BaseService, IChatService
                     FileTarget.Group => "Groups",
                     FileTarget.User => "Users"
                 };
-                var actualPath = Path.Combine(basePath, isUser ? userId : id, "ChatFile", messContent.FilePath);
+                var actualPath = Path.Combine(basePath, fileTarget == FileTarget.Group ? id : (isUser ? userId : id),
+                    "ChatFile", messContent.FilePath);
                 messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
 
                 // 获取文件
                 string filename = messContent.FilePath;
                 var content = await _imageManager.GetChatFile(
-                    isUser ? userId : id, "ChatFile", filename, fileTarget);
+                    fileTarget == FileTarget.Group ? id : (isUser ? userId : id), "ChatFile", filename, fileTarget);
                 if (content != null)
                     messContent.ImageSource = content;
                 else
@@ -524,10 +525,12 @@ internal class ChatService : BaseService, IChatService
                     FileTarget.Group => "Groups",
                     FileTarget.User => "Users"
                 };
-                var actualPath = Path.Combine(basePath, isUser ? userId : id, "ChatFile", messContent.FilePath);
+                var actualPath = Path.Combine(basePath, fileTarget == FileTarget.Group ? id : (isUser ? userId : id),
+                    "ChatFile", messContent.FilePath);
                 messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
 
-                var bytes = await _fileOperateHelper.GetFile(isUser ? userId : id, "ChatFile", messContent.FilePath,
+                var bytes = await _fileOperateHelper.GetFile(
+                    fileTarget == FileTarget.Group ? id : (isUser ? userId : id), "ChatFile", messContent.FilePath,
                     fileTarget);
                 if (bytes == null)
                     messContent.Failed = true;

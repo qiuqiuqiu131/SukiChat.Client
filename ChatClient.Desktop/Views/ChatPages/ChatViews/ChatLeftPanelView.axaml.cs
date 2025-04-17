@@ -18,6 +18,7 @@ using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Material.Icons.Avalonia;
 using Prism.Dialogs;
@@ -749,5 +750,24 @@ public partial class ChatLeftPanelView : UserControl
     private void LeftSearchView_OnCardClick(object? sender, RoutedEventArgs e)
     {
         SearchBox.SearchText = null;
+    }
+
+    private void OnDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Control control)
+        {
+            var userSetting = App.Current.Container.Resolve<IUserSetting>();
+            if (!userSetting.DoubleClickOpenExtendChatView) return;
+
+            if (control.DataContext is FriendChatDto friendChatDto)
+            {
+                OpenFriendChatDialog?.Execute(friendChatDto);
+            }
+
+            if (control.DataContext is GroupChatDto groupChatDto)
+            {
+                OpenGroupChatDialog?.Execute(groupChatDto);
+            }
+        }
     }
 }

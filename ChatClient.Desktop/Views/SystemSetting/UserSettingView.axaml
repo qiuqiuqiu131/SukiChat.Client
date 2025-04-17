@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="700"
+             x:DataType="systemSetting:UserSettingViewModel"
+             x:Class="ChatClient.Desktop.Views.SystemSetting.UserSettingView">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Margin="20,5"
+                Spacing="35">
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+            <Panel Margin="15,0">
+                <TextBlock Text="聊天设置"
+                           VerticalAlignment="Center"
+                           FontSize="15" />
+            </Panel>
+            <Border Height="1.5" Margin="5,10" Background="{DynamicResource SukiBorderBrush}" />
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Spacing="20" Width="370">
+                <DockPanel LastChildFill="False">
+                    <TextBlock Text="当无法建立通话时，勾选此设置，会提供服务器中转" FontSize="11" Opacity="0.7"
+                               VerticalAlignment="Center"
+                               DockPanel.Dock="Bottom"
+                               Margin="0,-5,0,0" />
+                    <TextBlock Text="通话中转" DockPanel.Dock="Left" VerticalAlignment="Center" />
+                    <ToggleSwitch IsChecked="{Binding UseTurnServer}" DockPanel.Dock="Right" />
+                </DockPanel>
+                <DockPanel LastChildFill="False">
+                    <TextBlock Text="双击打开独立聊天窗口" DockPanel.Dock="Left" VerticalAlignment="Center" />
+                    <ToggleSwitch IsChecked="{Binding DoubleClickOpenExtendChatView}" DockPanel.Dock="Right" />
+                </DockPanel>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

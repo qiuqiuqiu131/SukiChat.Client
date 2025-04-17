@@ -45,7 +45,11 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
     public AllSearchDto? AllSearchDto
     {
         get => _allSearchDto;
-        set => SetProperty(ref _allSearchDto, value);
+        set
+        {
+            if(SetProperty(ref _allSearchDto, value))
+                RaisePropertyChanged(nameof(IsEmpty));
+        }
     }
 
     public bool IsEmpty => AllSearchDto == null || AllSearchDto.FriendSearchDtos.Count == 0

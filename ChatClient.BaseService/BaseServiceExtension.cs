@@ -27,6 +27,7 @@ public static class BaseServiceExtension
         containerRegistry.RegisterSingleton<IAppDataManager, AppDataManager>()
             .RegisterSingleton<IConnection, ConnectionManager>()
             .RegisterSingleton<IThemeStyle, ThemeStyleManager>()
+            .RegisterSingleton<IUserSetting, UserSettingsManager>()
             .Register<ILoginData, LoginDataManager>();
 
         // 注册UserManager

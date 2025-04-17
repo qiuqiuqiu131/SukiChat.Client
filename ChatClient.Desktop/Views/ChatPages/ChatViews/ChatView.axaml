@@ -12,19 +12,23 @@
     d:DesignWidth="800"
     x:DataType="vm:ChatViewModel"
     mc:Ignorable="d">
-    <Grid>
+    <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="200" MaxWidth="300" Width="250" />
+            <ColumnDefinition MinWidth="160" MaxWidth="330" Width="260" />
             <ColumnDefinition Width="1.2" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition MinWidth="300" Width="*" />
         </Grid.ColumnDefinitions>
 
         <chatViews:ChatLeftPanelView Grid.Column="0"
                                      DataContext="{Binding  ChatLeftPanelViewModel}" />
 
-        <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
+        <GridSplitter Grid.Column="1"
+                      Background="{DynamicResource SukiBorderBrush}" />
 
         <ContentControl Grid.Column="2"
+                        x:Name="ContentControl"
+                        MinWidth="300"
+                        prism:RegionManager.RegionManager="{Binding RegionManager}"
                         prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ChatRightRegion}" />
     </Grid>
 </UserControl>

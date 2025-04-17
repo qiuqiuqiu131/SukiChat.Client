@@ -20,8 +20,4 @@
         </Reference>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Factory\"/>
-    </ItemGroup>
-
 </Project>

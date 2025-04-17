@@ -26,6 +26,7 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
@@ -77,9 +78,12 @@ public class ContactsViewModel : ChatPageBase
     private readonly IUserManager _userManager;
     private readonly IDialogService _dialogService;
 
+    public IRegionManager RegionManager { get; }
+
     public ContactsViewModel(IContainerProvider containerProvider,
         ISukiDialogManager sukiDialogManager,
         IEventAggregator eventAggregator,
+        IRegionManager regionManager,
         ILocalSearchService localSearchService,
         IUserManager userManager)
         : base("通讯录", MaterialIconKind.AccountSupervisor, 1)
@@ -90,6 +94,8 @@ public class ContactsViewModel : ChatPageBase
         _localSearchService = localSearchService;
         _userManager = userManager;
         _dialogService = containerProvider.Resolve<IDialogService>();
+
+        RegionManager = regionManager.CreateRegionManager();
 
         ToFriendRequestViewCommand = new DelegateCommand(ToFriendRequestView);
         ToGroupRequestViewCommand = new DelegateCommand(ToGroupRequestView);
@@ -316,7 +322,7 @@ public class ContactsViewModel : ChatPageBase
         _userManager.User!.LastReadGroupMessageTime = DateTime.Now;
         _userManager.User.UnreadGroupMessageCount = 0;
         _userManager.SaveUser();
-        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupRequestView));
+        RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupRequestView));
     }
 
     private void ToFriendRequestView()
@@ -325,7 +331,7 @@ public class ContactsViewModel : ChatPageBase
         _userManager.User!.LastReadFriendMessageTime = DateTime.Now;
         _userManager.User.UnreadFriendMessageCount = 0;
         _userManager.SaveUser();
-        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendRequestView));
+        RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendRequestView));
     }
 
     private void AddNewFriend()
@@ -353,7 +359,7 @@ public class ContactsViewModel : ChatPageBase
         {
             INavigationParameters parameters = new NavigationParameters();
             parameters.Add("dto", friendRelationDto);
-            ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
+            RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(FriendDetailView), parameters);
 
             _userManager.CurrentContactState = ContactState.None;
         }
@@ -361,7 +367,7 @@ public class ContactsViewModel : ChatPageBase
         {
             INavigationParameters parameters = new NavigationParameters();
             parameters.Add("dto", groupRelationDto);
-            ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
+            RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(GroupDetailView), parameters);
 
             _userManager.CurrentContactState = ContactState.None;
         }
@@ -373,6 +379,6 @@ public class ContactsViewModel : ChatPageBase
     {
         _userManager.CurrentContactState = ContactState.None;
         SearchText = null;
-        ChatRegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
+        RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
     }
 }

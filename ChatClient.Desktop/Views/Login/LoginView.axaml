@@ -66,8 +66,8 @@
                     Orientation="Vertical"
                     Spacing="5">
                     <avalonia:MaterialIcon
-                        Width="40"
-                        Height="40"
+                        Width="48"
+                        Height="48"
                         Margin="0,10,0,15"
                         HorizontalAlignment="Center"
                         Foreground="{DynamicResource SukiPrimaryColor}"

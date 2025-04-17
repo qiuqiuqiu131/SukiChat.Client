@@ -196,11 +196,11 @@
                                                         <!-- 消息内容 -->
                                                         <Panel IsVisible="{Binding !IsRetracted}">
                                                             <!-- Left -->
-                                                            <Grid Margin="0,7"
+                                                            <Grid Margin="0,7,20,7"
                                                                   RenderTransformOrigin="0%,100%"
                                                                   Classes="FadeIn"
                                                                   IsVisible="{Binding !IsUser}">
-                                                                <DockPanel Margin="0,0,50,0">
+                                                                <Grid ColumnDefinitions="Auto,*">
                                                                     <!-- Head -->
                                                                     <circleImage:CircleImage
                                                                         DockPanel.Dock="Left"
@@ -209,11 +209,14 @@
                                                                         Image="{Binding Owner.HeadImage}"
                                                                         Size="35"
                                                                         PointerPressed="Head_OnPointerPressed" />
-                                                                    <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                        <StackPanel Orientation="Horizontal"
+                                                                    <Grid Grid.Column="1"
+                                                                          RowDefinitions="Auto,*"
+                                                                          HorizontalAlignment="Left"
+                                                                          Margin="0,-5,0,0">
+                                                                        <StackPanel Grid.Row="0"
+                                                                            Orientation="Horizontal"
                                                                             HorizontalAlignment="Left"
-                                                                            Margin="0,0,0,3"
-                                                                            DockPanel.Dock="Top">
+                                                                            Margin="0,0,0,3">
                                                                             <TextBlock Text="{Binding Owner.NickName}"
                                                                                 FontSize="12"
                                                                                 Padding="0"
@@ -229,75 +232,76 @@
                                                                                     HorizontalAlignment="Center" />
                                                                             </Border>
                                                                         </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Left">
-                                                                            <suki:GlassCard Classes="Friend"
-                                                                                CornerRadius="6"
-                                                                                MaxWidth="360"
-                                                                                PointerPressed="InputElement_OnPointerPressed"
-                                                                                Padding="5">
-                                                                                <suki:GlassCard.Styles>
-                                                                                    <Style
-                                                                                        Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
-                                                                                        <Setter Property="Opacity"
-                                                                                            Value="0.7" />
-                                                                                        <Setter Property="Background"
-                                                                                            Value="{DynamicResource SukiGlassCardBackground}" />
-                                                                                    </Style>
-                                                                                    <Style
-                                                                                        Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
-                                                                                        <Setter Property="Opacity"
-                                                                                            Value="1" />
-                                                                                        <Setter Property="Background"
-                                                                                            Value="{DynamicResource SukiLightBorderBrush}" />
-                                                                                    </Style>
-                                                                                </suki:GlassCard.Styles>
-                                                                                <ItemsControl
-                                                                                    ItemsSource="{Binding ChatMessages}"
-                                                                                    Padding="0"
-                                                                                    HorizontalAlignment="Center"
-                                                                                    Margin="0">
-                                                                                    <ItemsControl.ItemsPanel>
-                                                                                        <ItemsPanelTemplate>
-                                                                                            <StackPanel
-                                                                                                Orientation="Vertical"
-                                                                                                Spacing="5" />
-                                                                                        </ItemsPanelTemplate>
-                                                                                    </ItemsControl.ItemsPanel>
-                                                                                    <ItemsControl.ItemTemplate>
-                                                                                        <DataTemplate>
-                                                                                            <chatUI:GroupChatMessageView
-                                                                                                IsLeft="True"
-                                                                                                MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
-                                                                                                HorizontalAlignment="Left"
-                                                                                                Message="{Binding Content}" />
-                                                                                        </DataTemplate>
-                                                                                    </ItemsControl.ItemTemplate>
-                                                                                </ItemsControl>
-                                                                            </suki:GlassCard>
-                                                                        </StackPanel>
-                                                                    </DockPanel>
-                                                                </DockPanel>
+                                                                        <suki:GlassCard Classes="Friend"
+                                                                            Grid.Row="1"
+                                                                            HorizontalAlignment="Left"
+                                                                            CornerRadius="6"
+                                                                            MaxWidth="450"
+                                                                            PointerPressed="InputElement_OnPointerPressed"
+                                                                            Padding="5">
+                                                                            <suki:GlassCard.Styles>
+                                                                                <Style
+                                                                                    Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
+                                                                                    <Setter Property="Opacity"
+                                                                                        Value="0.7" />
+                                                                                    <Setter Property="Background"
+                                                                                        Value="{DynamicResource SukiGlassCardBackground}" />
+                                                                                </Style>
+                                                                                <Style
+                                                                                    Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
+                                                                                    <Setter Property="Opacity"
+                                                                                        Value="1" />
+                                                                                    <Setter Property="Background"
+                                                                                        Value="{DynamicResource SukiLightBorderBrush}" />
+                                                                                </Style>
+                                                                            </suki:GlassCard.Styles>
+                                                                            <ItemsControl
+                                                                                ItemsSource="{Binding ChatMessages}"
+                                                                                Padding="0"
+                                                                                HorizontalAlignment="Center"
+                                                                                Margin="0">
+                                                                                <ItemsControl.ItemsPanel>
+                                                                                    <ItemsPanelTemplate>
+                                                                                        <StackPanel
+                                                                                            Orientation="Vertical"
+                                                                                            Spacing="5" />
+                                                                                    </ItemsPanelTemplate>
+                                                                                </ItemsControl.ItemsPanel>
+                                                                                <ItemsControl.ItemTemplate>
+                                                                                    <DataTemplate>
+                                                                                        <chatUI:GroupChatMessageView
+                                                                                            IsLeft="True"
+                                                                                            MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
+                                                                                            HorizontalAlignment="Left"
+                                                                                            Message="{Binding Content}" />
+                                                                                    </DataTemplate>
+                                                                                </ItemsControl.ItemTemplate>
+                                                                            </ItemsControl>
+                                                                        </suki:GlassCard>
+                                                                    </Grid>
+                                                                </Grid>
                                                             </Grid>
                                                             <!-- Right -->
-                                                            <Grid Margin="0,7"
+                                                            <Grid Margin="20,7,0,7"
                                                                   RenderTransformOrigin="100%,100%"
                                                                   IsVisible="{Binding IsUser}"
                                                                   Classes="FadeIn">
-                                                                <DockPanel Margin="50,0,0,0">
+                                                                <Grid ColumnDefinitions="*,Auto"
+                                                                      HorizontalAlignment="Right">
                                                                     <!-- Head -->
-                                                                    <circleImage:CircleImage
+                                                                    <circleImage:CircleImage Grid.Column="1"
                                                                         Margin="8,0,16,0"
                                                                         VerticalAlignment="Top"
                                                                         DockPanel.Dock="Right"
                                                                         Image="{Binding $parent[groupChatUi:GroupChatUI].UserImageSource}"
                                                                         Size="35"
                                                                         PointerPressed="Head_OnPointerPressed" />
-                                                                    <DockPanel LastChildFill="True" Margin="0,-5,0,0">
-                                                                        <StackPanel Orientation="Horizontal"
+                                                                    <Grid Grid.Column="0" RowDefinitions="Auto,*"
+                                                                          Margin="0,-5,0,0">
+                                                                        <StackPanel Grid.Row="0"
+                                                                            Orientation="Horizontal"
                                                                             HorizontalAlignment="Right"
-                                                                            Margin="0,0,0,3"
-                                                                            DockPanel.Dock="Top">
+                                                                            Margin="0,0,0,3">
                                                                             <Border Padding="3,1,1,1" Margin="4,0"
                                                                                 CornerRadius="3"
                                                                                 Opacity="0.5"
@@ -313,9 +317,11 @@
                                                                                 Padding="0"
                                                                                 Opacity="0.7" />
                                                                         </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            HorizontalAlignment="Right">
-                                                                            <Grid VerticalAlignment="Bottom" Width="20"
+                                                                        <Grid Grid.Row="1"
+                                                                              ColumnDefinitions="Auto,*"
+                                                                              HorizontalAlignment="Right">
+                                                                            <Grid Grid.Column="0"
+                                                                                VerticalAlignment="Bottom" Width="20"
                                                                                 Height="20"
                                                                                 Margin="5">
                                                                                 <suki:Loading LoadingStyle="Simple"
@@ -332,9 +338,10 @@
                                                                                     Height="20"
                                                                                     Foreground="Red" />
                                                                             </Grid>
-                                                                            <suki:GlassCard Classes="Owner"
+                                                                            <suki:GlassCard Grid.Column="1"
+                                                                                Classes="Owner"
                                                                                 CornerRadius="6"
-                                                                                MaxWidth="350"
+                                                                                MaxWidth="450"
                                                                                 PointerPressed="InputElement_OnPointerPressed"
                                                                                 Padding="5">
                                                                                 <suki:GlassCard.Styles>
@@ -376,9 +383,9 @@
                                                                                     </ItemsControl.ItemTemplate>
                                                                                 </ItemsControl>
                                                                             </suki:GlassCard>
-                                                                        </StackPanel>
-                                                                    </DockPanel>
-                                                                </DockPanel>
+                                                                        </Grid>
+                                                                    </Grid>
+                                                                </Grid>
                                                             </Grid>
                                                         </Panel>
                                                     </Panel>

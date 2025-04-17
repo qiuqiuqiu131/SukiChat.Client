@@ -249,7 +249,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 
         var appDataManager = _containerProvider.Resolve<IAppDataManager>();
         var filePath = appDataManager
-            .GetFileInfo(Path.Combine("Groups", fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
+            .GetFileInfo(Path.Combine("Groups", SelectedGroup.GroupId,
                 "ChatFile", fileMess.FileName)).FullName;
 
         if (string.IsNullOrWhiteSpace(filePath)) return;
@@ -262,7 +262,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 
         // 开始下载文件
         var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
-        var path = Path.Combine("Groups", fileMess.IsUser ? _userManager.User.Id : SelectedGroup!.GroupId, "ChatFile");
+        var path = Path.Combine("Groups", SelectedGroup!.GroupId, "ChatFile");
         var result =
             await fileIOHelper.DownloadLargeFileAsync(path, fileMess.FileName, filePath, progress);
 
@@ -319,7 +319,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
             // 开始下载文件
             var fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
             var result =
-                await fileOperateHelper.SaveAsFile(fileMess.IsUser ? _userManager.User.Id : SelectedGroup.GroupId,
+                await fileOperateHelper.SaveAsFile(SelectedGroup.GroupId,
                     "ChatFile", fileMess.FileName, filePath,
                     FileTarget.Group);
 

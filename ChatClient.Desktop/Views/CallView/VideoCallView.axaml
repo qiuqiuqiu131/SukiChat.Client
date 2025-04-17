@@ -225,9 +225,6 @@
                                                      Command="{Binding SwitchMainVideoCommand}" />
                     </Interaction.Behaviors>
                     <Panel>
-                        <Image Source="{Binding SubVideoFrame}"
-                               IsVisible="{Binding IsSubVideoOpened}"
-                               Stretch="UniformToFill" />
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="2">
                             <StackPanel.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.Or}">
@@ -250,7 +247,6 @@
                         <Border>
                             <Border.IsVisible>
                                 <MultiBinding Converter="{x:Static BoolConverters.And}">
-                                    <Binding Path="!IsSubVideoOpened" />
                                     <Binding Path="!IsRemoteMainVideo" Mode="OneWay" />
                                 </MultiBinding>
                             </Border.IsVisible>
@@ -269,6 +265,9 @@
                                 </StackPanel>
                             </Panel>
                         </Border>
+                        <Image Source="{Binding SubVideoFrame}"
+                               IsVisible="{Binding IsSubVideoOpened}"
+                               Stretch="UniformToFill" />
                     </Panel>
                 </Border>
             </Canvas>

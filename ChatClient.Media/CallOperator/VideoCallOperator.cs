@@ -13,8 +13,9 @@ public class VideoCallOperator(
     IMessageHelper messageHelper,
     IUserManager userManager,
     IConfigurationRoot configurationRoot,
+    IUserSetting userSetting,
     IStunServerManager stunServerManager)
-    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot)
+    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot, userSetting)
 {
     private bool isCameraOpen;
     private WindowsCameraEndPoint? _cameraEndPoint;

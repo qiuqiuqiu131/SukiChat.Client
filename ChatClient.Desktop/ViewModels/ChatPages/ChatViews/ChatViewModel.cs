@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.Desktop.Tool;
@@ -21,6 +22,7 @@ using Material.Icons;
 using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
@@ -29,6 +31,8 @@ public class ChatViewModel : ChatPageBase
     private readonly IContainerProvider _containerProvider;
     private readonly IDialogService _dialogService;
     private readonly IUserManager _userManager;
+
+    public IRegionManager RegionManager { get; }
 
     #region PanelViewModels
 
@@ -70,6 +74,7 @@ public class ChatViewModel : ChatPageBase
     public AvaloniaList<GroupChatDto> Groups => _userManager.GroupChats!;
 
     public ChatViewModel(IContainerProvider containerProvider,
+        IRegionManager regionManager,
         IDialogService dialogService,
         IUserManager userManager) : base("聊天", MaterialIconKind.Chat, 0)
     {
@@ -77,8 +82,16 @@ public class ChatViewModel : ChatPageBase
         _dialogService = dialogService;
         _userManager = userManager;
 
+        RegionManager = regionManager.CreateRegionManager();
+
         // 生成面板VM
         ChatLeftPanelViewModel = new ChatLeftPanelViewModel(this, containerProvider);
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            RegionManager.AddToRegion(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView));
+            RegionManager.AddToRegion(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView));
+        });
     }
 
     #region LoadDto
@@ -330,7 +343,7 @@ public class ChatViewModel : ChatPageBase
             SelectedFriend = null;
             _selectedGroupId = null;
             _selectedFriendId = null;
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
@@ -344,7 +357,7 @@ public class ChatViewModel : ChatPageBase
             _selectedFriendId = friendChatDto.UserId;
             SelectedGroup = null;
             SelectedFriend = null;
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
@@ -363,7 +376,7 @@ public class ChatViewModel : ChatPageBase
         _selectedGroupId = null;
 
         var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
-        ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
+        RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
             param);
 
         await Task.Run(() => { ClearSelected(previousSelectedFriend, previousSelectedGroup); });
@@ -383,7 +396,7 @@ public class ChatViewModel : ChatPageBase
             if (SelectedFriend == friendChatDto)
             {
                 SelectedFriend = null;
-                ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+                RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             }
 
             await LoadFriendChatDto(friendChatDto);
@@ -401,7 +414,7 @@ public class ChatViewModel : ChatPageBase
             SelectedFriend = friendChatDto;
             friendChatDto.IsSelected = true;
             var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
                 param);
         }
         else
@@ -429,7 +442,7 @@ public class ChatViewModel : ChatPageBase
             SelectedFriend = null;
             _selectedFriendId = null;
             _selectedGroupId = null;
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
@@ -441,7 +454,7 @@ public class ChatViewModel : ChatPageBase
             _selectedGroupId = groupChatDto.GroupId;
             SelectedGroup = null;
             SelectedFriend = null;
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
@@ -460,7 +473,7 @@ public class ChatViewModel : ChatPageBase
         _selectedGroupId = SelectedGroup.GroupId;
 
         var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
-        ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
+        RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
             param);
 
         await Task.Run(() => { ClearSelected(previousSelectedFriend, previousSelectedGroup); });
@@ -480,7 +493,7 @@ public class ChatViewModel : ChatPageBase
             if (SelectedGroup == groupChatDto)
             {
                 SelectedGroup = null;
-                ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
+                RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             }
 
             await LoadGroupChatDto(groupChatDto);
@@ -497,7 +510,7 @@ public class ChatViewModel : ChatPageBase
             SelectedGroup = groupChatDto;
             groupChatDto.IsSelected = true;
             var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
-            ChatRegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
+            RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
                 param);
         }
         else

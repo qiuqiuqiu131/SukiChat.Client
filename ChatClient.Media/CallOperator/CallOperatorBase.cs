@@ -12,6 +12,7 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     protected readonly IMessageHelper _messageHelper;
     private readonly IStunServerManager _stunServerManager;
     private readonly IConfigurationRoot _configurationRoot;
+    private readonly IUserSetting _userSetting;
 
     protected RTCPeerConnection? _peerConnection;
 
@@ -28,10 +29,11 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     public event EventHandler<CallStatus> OnCallStatusChanged;
 
     public CallOperatorBase(IMessageHelper messageHelper, IUserManager userManager,
-        IStunServerManager stunServerManager, IConfigurationRoot configurationRoot)
+        IStunServerManager stunServerManager, IConfigurationRoot configurationRoot, IUserSetting userSetting)
     {
         _messageHelper = messageHelper;
         _configurationRoot = configurationRoot;
+        _userSetting = userSetting;
         _stunServerManager = stunServerManager;
         _userId = userManager.User!.Id;
     }
@@ -258,7 +260,7 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     protected async Task<RTCConfiguration> GetRtcConfiguration()
     {
         var urls = await _stunServerManager.GetStunServersUrl();
-        var TransportRelay = _configurationRoot.GetSection("TransportRelay").Get<bool?>() ?? false;
+        var TransportRelay = _userSetting.UseTurnServer;
         var GatherTime = _configurationRoot.GetSection("GatherTime").Get<int?>() ?? 2000;
         var configuration = new RTCConfiguration
         {

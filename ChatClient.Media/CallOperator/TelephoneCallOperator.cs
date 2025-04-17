@@ -12,8 +12,9 @@ public class TelephoneCallOperator(
     IMessageHelper messageHelper,
     IUserManager userManager,
     IConfigurationRoot configurationRoot,
-    IStunServerManager stunServerManager)
-    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot)
+    IStunServerManager stunServerManager,
+    IUserSetting userSetting)
+    : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot, userSetting)
 {
     private WindowsAudioEndPoint? _audioEndPoint;
 

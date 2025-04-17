@@ -38,7 +38,11 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
     public IEnumerable<FriendSearchDto>? FriendSearchDtos
     {
         get => _friendSearchDtos;
-        set => SetProperty(ref _friendSearchDtos, value);
+        set
+        {
+            if(SetProperty(ref _friendSearchDtos, value))
+                RaisePropertyChanged(nameof(IsEmpty));
+        }
     }
 
     public bool IsEmpty => FriendSearchDtos?.Any() != true;

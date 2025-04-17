@@ -20,12 +20,11 @@
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
     mc:Ignorable="d">
-    <Grid>
+    <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition
-                MinWidth="200" MaxWidth="300" Width="250" />
+            <ColumnDefinition MinWidth="160" MaxWidth="330" Width="260" />
             <ColumnDefinition Width="1.2" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition MinWidth="300" Width="*" />
         </Grid.ColumnDefinitions>
 
         <!-- 左侧面板 -->
@@ -268,6 +267,9 @@
         <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
         <ContentControl Grid.Column="2"
+                        MinWidth="300"
+                        x:Name="ContentControl"
+                        regions:RegionManager.RegionManager="{Binding RegionManager}"
                         regions:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.ContactsRegion}" />
     </Grid>
 </UserControl>

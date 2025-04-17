@@ -260,20 +260,7 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <Grid>
-                        <Border IsVisible="{TemplateBinding IsLeft}"
-                                Padding="0"
-                                HorizontalAlignment="Left">
-                            <ContentControl
-                                HorizontalAlignment="Left"
-                                Content="{TemplateBinding Message}" />
-                        </Border>
-                        <Border IsVisible="{Binding !$parent[chatUi1:GroupChatMessageView].IsLeft}"
-                                Padding="0"
-                                HorizontalAlignment="Right">
-                            <ContentControl
-                                HorizontalAlignment="Right"
-                                Content="{TemplateBinding Message}" />
-                        </Border>
+                        <ContentControl Content="{TemplateBinding Message}" />
                     </Grid>
                 </ControlTemplate>
             </Setter>

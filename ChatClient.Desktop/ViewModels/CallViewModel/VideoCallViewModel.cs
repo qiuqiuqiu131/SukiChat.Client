@@ -557,6 +557,8 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         }
     }
 
+    private bool isSended = false;
+
     private void CallStatusChanged(object? sender, CallStatus e)
     {
         if (e == CallStatus.InCall)
@@ -595,8 +597,9 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
                 HangUpRing();
             }
 
-            if (IsSender)
+            if (IsSender && !isSended)
             {
+                isSended = true;
                 _eventAggregator.GetEvent<CallOver>().Publish(new CallMessDto
                 {
                     targetId = peerId,

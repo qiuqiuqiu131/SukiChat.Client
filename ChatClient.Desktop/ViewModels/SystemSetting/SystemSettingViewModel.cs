@@ -20,7 +20,8 @@ public class SystemSettingViewModel : BindableBase, IDialogAware
     public IAvaloniaReadOnlyList<SettingBarDto> SettingBars { get; } = new AvaloniaList<SettingBarDto>
     {
         new() { Name = "个性化", Icon = MaterialIconKind.Settings, NavigationTarget = nameof(ThemeView) },
-        new() { Name = "账号与安全", Icon = MaterialIconKind.Safe, NavigationTarget = nameof(AccountView) }
+        new() { Name = "账号与安全", Icon = MaterialIconKind.Safe, NavigationTarget = nameof(AccountView) },
+        new() { Name = "通用设置", Icon = MaterialIconKind.BellCogOutline, NavigationTarget = nameof(UserSettingView) }
     };
 
     public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();

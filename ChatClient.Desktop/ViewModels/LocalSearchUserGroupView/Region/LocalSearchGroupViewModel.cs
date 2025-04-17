@@ -37,7 +37,11 @@ public class LocalSearchGroupViewModel : BindableBase, INavigationAware, IDestru
     public IEnumerable<GroupSearchDto>? GroupSearchDtos
     {
         get => _GroupSearchDtos;
-        set => SetProperty(ref _GroupSearchDtos, value);
+        set
+        {
+            if(SetProperty(ref _GroupSearchDtos, value))
+                RaisePropertyChanged(nameof(IsEmpty));
+        }
     }
 
     public bool IsEmpty => GroupSearchDtos?.Any() != true;

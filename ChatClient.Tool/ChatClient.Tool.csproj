@@ -31,8 +31,4 @@
         </Reference>
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="File\"/>
-    </ItemGroup>
-
 </Project>
