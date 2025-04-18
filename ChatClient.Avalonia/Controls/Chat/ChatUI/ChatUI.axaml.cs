@@ -329,41 +329,45 @@ public partial class ChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.Invoke(async () =>
-        {
-            // 最大可偏移量
-            double maxOffsetY = MaxOffsetY;
-            // 当前偏移量
-            double OffsetYOrigion = ChatScroll.Offset.Y;
+        // 最大可偏移量
+        double maxOffsetY = MaxOffsetY;
+        // 当前偏移量
+        double OffsetYOrigion = ChatScroll.Offset.Y;
 
-            if (e.Action == NotifyCollectionChangedAction.Add)
+        if (e.Action == NotifyCollectionChangedAction.Add)
+        {
+            if (isMovingToBottom // 正在移动到底部
+                || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
+                || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
             {
-                if (isMovingToBottom // 正在移动到底部
-                    || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                    || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
+                Dispatcher.UIThread.Post(() =>
                 {
                     // 等待渲染完成
-                    UpdateLayout();
-                    await Task.Delay(50);
                     ScrollToBottom();
-                }
-                else if (e.NewStartingIndex == 0)
+                }, DispatcherPriority.Background);
+            }
+            else if (e.NewStartingIndex == 0)
+            {
+                Dispatcher.UIThread.Invoke(async () =>
                 {
                     lockScroll = true;
                     lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
                     await Task.Delay(150);
                     lockScroll = false;
                     lockBottomDistance = 0;
-                }
-                else
+                });
+            }
+            else
+            {
+                Dispatcher.UIThread.Post(() =>
                 {
                     //-- 新消息提醒 --//
                     HaveUnReadMessage = true;
                     int addCount = e.NewItems?.Count ?? 0;
                     UnReadMessageCount += addCount;
-                }
+                }, DispatcherPriority.Background);
             }
-        });
+        }
     }
 
     #endregion
@@ -449,14 +453,19 @@ public partial class ChatUI : UserControl
     /// <summary>
     /// 当ChatUI绑定的ItemsSource发生变化时调用，当聊天对象发生变化时调用，将聊天框滚到最底部
     /// </summary>
-    private async void OnItemsSourceChanged()
+    private void OnItemsSourceChanged()
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
+        Dispatcher.UIThread.Invoke(() =>
         {
-            ChatScroll.UpdateLayout();
+            if (ChatScroll != null)
+                ChatScroll.Opacity = 0;
+        });
+        Dispatcher.UIThread.Post(() =>
+        {
+            ChatScroll.Opacity = 1;
             ChatScroll.ScrollToEnd();
             CurrentPosY = ChatScroll.Offset.Y;
-        }, DispatcherPriority.Render);
+        }, DispatcherPriority.Background);
     }
 
     #region ScrollAnim
@@ -572,7 +581,7 @@ public partial class ChatUI : UserControl
 
     #endregion
 
-    // 左侧好友头像点击
+// 左侧好友头像点击
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(sender as Control).Properties.IsLeftButtonPressed)
@@ -587,7 +596,7 @@ public partial class ChatUI : UserControl
         }
     }
 
-    // 消息被点击
+// 消息被点击
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (sender is Control control && control.DataContext is ChatData chatData &&

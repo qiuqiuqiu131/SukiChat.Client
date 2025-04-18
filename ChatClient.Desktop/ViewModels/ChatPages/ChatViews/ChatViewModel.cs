@@ -86,12 +86,6 @@ public class ChatViewModel : ChatPageBase
 
         // 生成面板VM
         ChatLeftPanelViewModel = new ChatLeftPanelViewModel(this, containerProvider);
-
-        Dispatcher.UIThread.Post(() =>
-        {
-            RegionManager.AddToRegion(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView));
-            RegionManager.AddToRegion(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView));
-        });
     }
 
     #region LoadDto

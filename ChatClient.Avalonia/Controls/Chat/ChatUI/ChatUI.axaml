@@ -47,6 +47,7 @@
                         <!-- 消息列表 -->
                         <ScrollViewer
                             Name="ChatScrollViewer"
+                            Opacity="0"
                             HorizontalScrollBarVisibility="Disabled"
                             VerticalScrollBarVisibility="Visible">
                             <StackPanel Orientation="Vertical" Name="Content" Background="#00000000">

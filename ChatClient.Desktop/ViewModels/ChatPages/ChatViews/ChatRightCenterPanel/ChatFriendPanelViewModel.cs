@@ -299,28 +299,52 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     {
         if (SelectedFriend == null) return;
 
-        var chatMessages = SelectedFriend.ChatMessages;
-
+        // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
-        var chatDatas =
-            await chatPackService.GetFriendChatDataAsync(_userManager.User?.Id, SelectedFriend.UserId,
-                SelectedFriend.ChatMessages[0].ChatId,
-                10);
 
+        int nextCount = 10;
+        var chatDatas =
+            await chatPackService.GetFriendChatDataAsync(User?.Id, SelectedFriend.UserId,
+                SelectedFriend.ChatMessages[0].ChatId,
+                nextCount);
+
+        if (chatDatas.Count != nextCount)
+            SelectedFriend.HasMoreMessage = false;
+        else
+            SelectedFriend.HasMoreMessage = true;
+
+        float value = nextCount;
         foreach (var chatData in chatDatas)
         {
-            chatMessages.Insert(0, chatData);
-            var duration = chatMessages[1].Time - chatData.Time;
-            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(3);
+            if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
+                value -= 2f;
+            else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
+                value -= 2f;
+            else
+                value -= 1;
+
+            if (value <= 0) break;
+
+            SelectedFriend.ChatMessages.Insert(0, chatData);
+            var duration = SelectedFriend.ChatMessages[1].Time - chatData.Time;
+            if (duration > TimeSpan.FromMinutes(3))
+                SelectedFriend.ChatMessages[1].ShowTime = true;
+            else
+                SelectedFriend.ChatMessages[1].ShowTime = false;
         }
 
         // 将最后一条消息的时间显示出来
-        if (chatMessages.Count > 0)
-            chatMessages[0].ShowTime = true;
+        if (SelectedFriend.ChatMessages.Count > 0)
+        {
+            SelectedFriend.ChatMessages[0].ShowTime = true;
 
-        // 如果加载的消息不足15条，则说明没有更多消息了
-        if (chatDatas.Count() != 10)
-            SelectedFriend.HasMoreMessage = false;
+            SelectedFriend.UnReadMessageCount = 0;
+
+            var maxChatId = SelectedFriend.ChatMessages.Max(d => d.ChatId);
+
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, SelectedFriend.UserId, maxChatId, FileTarget.User);
+        }
     }
 
     #region DownloadFile
@@ -456,7 +480,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     }
 
     #endregion
-
 
     #region SendChatMessage
 

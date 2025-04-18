@@ -213,28 +213,53 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     {
         if (SelectedGroup == null) return;
 
-        var chatMessages = SelectedGroup.ChatMessages;
+        // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
+        var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
 
-        var chatPackService = _containerProvider.Resolve<IGroupChatPackService>();
+        int nextCount = 10;
         var chatDatas =
-            await chatPackService.GetGroupChatDataAsync(_userManager.User?.Id, SelectedGroup.GroupId,
+            await groupPackService.GetGroupChatDataAsync(User?.Id, SelectedGroup.GroupId,
                 SelectedGroup.ChatMessages[0].ChatId,
-                10);
+                nextCount);
 
+        if (chatDatas.Count != nextCount)
+            SelectedGroup.HasMoreMessage = false;
+        else
+            SelectedGroup.HasMoreMessage = true;
+
+        float value = nextCount;
         foreach (var chatData in chatDatas)
         {
-            chatMessages.Insert(0, chatData);
-            var duration = chatMessages[1].Time - chatData.Time;
-            chatMessages[1].ShowTime = duration > TimeSpan.FromMinutes(3);
+            if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.ImageMess))
+                value -= 2f;
+            else if (chatData.ChatMessages.Exists(d => d.Type == ChatMessage.ContentOneofCase.FileMess))
+                value -= 2f;
+            else
+                value -= 1;
+
+            if (value <= 0) break;
+
+            SelectedGroup.ChatMessages.Insert(0, chatData);
+            var duration = SelectedGroup.ChatMessages[1].Time - chatData.Time;
+            if (duration > TimeSpan.FromMinutes(3))
+                SelectedGroup.ChatMessages[1].ShowTime = true;
+            else
+                SelectedGroup.ChatMessages[1].ShowTime = false;
         }
 
         // 将最后一条消息的时间显示出来
-        if (chatMessages.Count > 0)
-            chatMessages[0].ShowTime = true;
+        if (SelectedGroup.ChatMessages.Count > 0)
+        {
+            SelectedGroup.ChatMessages[0].ShowTime = true;
 
-        // 如果加载的消息不足15条，则说明没有更多消息了
-        if (chatDatas.Count() != 10)
-            SelectedGroup.HasMoreMessage = false;
+            SelectedGroup.UnReadMessageCount = 0;
+
+            var maxChatId = SelectedGroup.ChatMessages.Max(d => d.ChatId);
+
+            var chatService = _containerProvider.Resolve<IChatService>();
+            _ = chatService.ReadAllChatMessage(User!.Id, SelectedGroup.GroupRelationDto!.Id, maxChatId,
+                FileTarget.Group);
+        }
     }
 
     #region DownloadFile
