@@ -214,6 +214,9 @@ internal class UserManager : IUserManager
         if (dto.GroupDto == null)
             dto.GroupDto = await _userDtoManager.GetGroupDto(User.Id, groupId);
 
+        if (dto?.GroupDto != null)
+            dto.GroupDto.IsEntered = true;
+
         if (dto != null)
         {
             var groupGroup = GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));

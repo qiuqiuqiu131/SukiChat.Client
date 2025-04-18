@@ -166,7 +166,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     {
         if (InputMessages == null
             || InputMessages.Count == 0
-            || InputMessages.Count == 1 && InputMessages[0] is string str && string.IsNullOrEmpty(str))
+            || InputMessages.Count == 1 && InputMessages[0] is string str && string.IsNullOrWhiteSpace(str))
             return false;
         return true;
     }

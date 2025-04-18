@@ -118,6 +118,14 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
         set => SetProperty(ref isRemoteAudioOpened, value);
     }
 
+    private bool isLocalAudioClosed;
+
+    public bool IsLocalAudioClosed
+    {
+        get => isLocalAudioClosed;
+        set => SetProperty(ref isLocalAudioClosed, value);
+    }
+
     private bool isRemoteVideoOpened = false;
 
     private bool IsRemoteVideoOpened

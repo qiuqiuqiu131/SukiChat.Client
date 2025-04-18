@@ -165,7 +165,6 @@
                           Margin="10,3"
                           DragDrop.AllowDrop="True"
                           HorizontalScrollBarVisibility="Disabled"
-                          KeyDown="ScrollViewer_OnKeyDown"
                           PointerPressed="InputItems_OnPointerPressed"
                           Cursor="Ibeam"
                           VerticalScrollBarVisibility="Hidden">

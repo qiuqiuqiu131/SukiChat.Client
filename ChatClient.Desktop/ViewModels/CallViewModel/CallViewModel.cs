@@ -91,6 +91,14 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         set => SetProperty(ref isRemoteAudioOpened, value);
     }
 
+    private bool isLocalAudioClosed;
+
+    public bool IsLocalAudioClosed
+    {
+        get => isLocalAudioClosed;
+        set => SetProperty(ref isLocalAudioClosed, value);
+    }
+
     private bool isFailed = true;
 
     private DateTime? callStartTime;

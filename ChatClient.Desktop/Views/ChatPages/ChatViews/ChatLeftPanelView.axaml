@@ -501,7 +501,7 @@
                 </MultiBinding>
             </ScrollViewer.IsVisible>
             <ItemsControl
-                Margin="0,0,0,40"
+                Margin="0,0,0,100"
                 x:Name="Items"
                 suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>

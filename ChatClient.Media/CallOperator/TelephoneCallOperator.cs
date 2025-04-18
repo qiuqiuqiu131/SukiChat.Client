@@ -21,16 +21,20 @@ public class TelephoneCallOperator(
     public event EventHandler<RTCIceConnectionState> OnIceConntectionStateChanged;
     public event Action OnDisconnected;
 
+    private bool _isOpen = true;
+
     /// <summary>
     /// 更改音频播放状态
     /// </summary>
     /// <param name="isOpen"></param>
     public async Task ChangeAudioState(bool isOpen)
     {
+        _isOpen = isOpen;
+
         if (_audioEndPoint == null) return;
 
         if (isOpen)
-            await _audioEndPoint.StartAudio();
+            await _audioEndPoint.ResumeAudio();
         else
             await _audioEndPoint.PauseAudio();
     }
@@ -110,7 +114,9 @@ public class TelephoneCallOperator(
             {
                 // 监听远端音频流
                 await _audioEndPoint.StartAudioSink();
-                await _audioEndPoint.StartAudio();
+
+                if (_isOpen)
+                    await _audioEndPoint.StartAudio();
             }
         };
 

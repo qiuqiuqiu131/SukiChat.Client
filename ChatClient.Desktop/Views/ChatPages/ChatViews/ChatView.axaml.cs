@@ -1,6 +1,7 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
@@ -26,7 +27,7 @@ public partial class ChatView : UserControl
             Root.ColumnDefinitions[1].Width = new GridLength(0, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].Width = new GridLength(0, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].MinWidth = 0;
-            ContentControl.IsVisible = false;
+            ContentControl.Opacity = 0;
 
             return;
         }
@@ -38,7 +39,7 @@ public partial class ChatView : UserControl
             Root.ColumnDefinitions[1].Width = new GridLength(1.2, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
             Root.ColumnDefinitions[2].MinWidth = 300;
-            ContentControl.IsVisible = true;
+            ContentControl.Opacity = 1;
 
             return;
         }
@@ -59,21 +60,22 @@ public partial class ChatView : UserControl
         }
     }
 
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    protected override void OnLoaded(RoutedEventArgs e)
     {
-        base.OnAttachedToVisualTree(e);
-        var width = Bounds.Width;
+        base.OnLoaded(e);
 
+        var width = Bounds.Width;
         if (width < 100) return;
 
-        if (ContentControl.Bounds.Width <= 302 && !isLeftMovable)
+        if (ContentControl.Bounds.Width <= 302)
         {
             isLeftMovable = true;
 
             Root.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
             Root.ColumnDefinitions[0].MaxWidth = 270;
         }
-        else if (ContentControl.Bounds.Width > 310 && isLeftMovable)
+
+        if (ContentControl.Bounds.Width > 310)
         {
             isLeftMovable = false;
 
@@ -81,7 +83,7 @@ public partial class ChatView : UserControl
             Root.ColumnDefinitions[0].MaxWidth = 330;
         }
 
-        if (width < 450 && !isHide)
+        if (width < 450)
         {
             isHide = true;
 
@@ -89,12 +91,9 @@ public partial class ChatView : UserControl
             Root.ColumnDefinitions[1].Width = new GridLength(0, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].Width = new GridLength(0, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].MinWidth = 0;
-            ContentControl.IsVisible = false;
-
-            return;
+            ContentControl.Opacity = 0;
         }
-
-        if (width >= 460 && isHide)
+        else if (width >= 460)
         {
             isHide = false;
 
@@ -102,9 +101,7 @@ public partial class ChatView : UserControl
             Root.ColumnDefinitions[1].Width = new GridLength(1.2, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
             Root.ColumnDefinitions[2].MinWidth = 300;
-            ContentControl.IsVisible = true;
-
-            return;
+            ContentControl.Opacity = 1;
         }
     }
 }

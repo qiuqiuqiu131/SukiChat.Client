@@ -298,6 +298,16 @@ public partial class ChatInputPanelView : UserControl
 
                 e.Handled = true;
             }
+            else if (e.Key == Key.Enter)
+            {
+                if (DataContext is ChatInputPanelViewModel chatInputPanelViewModel)
+                {
+                    if (chatInputPanelViewModel.SendMessageCommand.CanExecute())
+                        chatInputPanelViewModel.SendMessageCommand.Execute();
+                }
+
+                e.Handled = true;
+            }
             else if (e.Key == Key.Back)
             {
                 if (string.IsNullOrEmpty(textBox.Text))
@@ -464,17 +474,5 @@ public partial class ChatInputPanelView : UserControl
         textBox.Text += e.Emoji;
         textBox.Focus();
         ScrollViewer.ScrollToEnd();
-    }
-
-    private void ScrollViewer_OnKeyDown(object? sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            if (DataContext is ChatInputPanelViewModel chatInputPanelViewModel)
-            {
-                if (chatInputPanelViewModel.SendMessageCommand.CanExecute())
-                    chatInputPanelViewModel.SendMessageCommand.Execute();
-            }
-        }
     }
 }

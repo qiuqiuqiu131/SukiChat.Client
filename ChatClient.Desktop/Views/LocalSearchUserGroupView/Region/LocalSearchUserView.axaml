@@ -32,8 +32,8 @@
                             <Interaction.Behaviors>
                                 <EventTriggerBehavior EventName="PointerPressed">
                                     <InvokeCommandAction
-                                        Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
-                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                        Command="{Binding ((region:LocalSearchUserViewModel)DataContext).SendMessageCommand 
+                                                ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
                                         CommandParameter="{Binding FriendRelationDto}">
                                     </InvokeCommandAction>
                                 </EventTriggerBehavior>
@@ -77,8 +77,8 @@
                                     <Interaction.Behaviors>
                                         <PointerPressedTrigger>
                                             <InvokeCommandAction
-                                                Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
-                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
+                                                Command="{Binding ((region:LocalSearchUserViewModel)DataContext).MoveToRelationCommand 
+                                                        ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchUserView}}"
                                                 CommandParameter="{Binding FriendRelationDto}">
                                             </InvokeCommandAction>
                                         </PointerPressedTrigger>

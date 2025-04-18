@@ -170,6 +170,7 @@
                                 </TextBlock>
                                 <seperateGroupsView:SeparateGroupsView
                                     x:Name="FriendView"
+                                    Margin="0,0,0,100"
                                     IsVisible="{Binding !GroupFriends,Converter={converter:ListEmptyConverter}}"
                                     GroupFriends="{Binding GroupFriends}"
                                     SelectionChanged="FriendSelectionChanged"
@@ -189,6 +190,7 @@
                                            FontWeight="SemiBold"
                                            IsVisible="{Binding GroupGroups,Converter={converter:ListEmptyConverter}}" />
                                 <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
+                                    Margin="0,0,0,100"
                                     IsVisible="{Binding !GroupGroups.Count,Converter={converter:ListEmptyConverter}}"
                                     GroupFriends="{Binding GroupGroups}"
                                     SelectionChanged="GroupSelectionChanged"

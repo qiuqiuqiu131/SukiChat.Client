@@ -55,6 +55,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
                         <ToggleButton Background="Transparent" Classes="Void Microphone" Padding="0"
                                       CornerRadius="15"
+                                      IsChecked="{Binding IsLocalAudioClosed}"
                                       Command="{Binding SwitchAudioCommand}"
                                       CommandParameter="{Binding $self.IsChecked}"
                                       VerticalAlignment="Center">

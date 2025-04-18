@@ -33,6 +33,8 @@ public class VideoCallOperator(
 
     public event Action OnDisconnected;
 
+    private bool _isOpen = true;
+
     /// <summary>
     /// 更改视频播放状态
     /// </summary>
@@ -119,6 +121,8 @@ public class VideoCallOperator(
     /// <param name="isOpen"></param>
     public async Task ChangeAudioState(bool isOpen)
     {
+        _isOpen = isOpen;
+
         if (_audioEndPoint == null) return;
 
         if (isOpen)
@@ -233,7 +237,9 @@ public class VideoCallOperator(
             else if (state == RTCPeerConnectionState.connected)
             {
                 await _audioEndPoint.StartAudioSink();
-                await _audioEndPoint.StartAudio();
+
+                if (_isOpen)
+                    await _audioEndPoint.StartAudio();
                 // await _cameraEndPoint.StartVideo();
             }
         };

@@ -64,6 +64,8 @@ public class ImageSizeAdjustBehavior : Behavior<Image>
     {
         if (source is Bitmap bitmap)
         {
+            if (bitmap.PixelSize == null) return;
+
             // 使用缩放因子计算初始尺寸
             double width = bitmap.PixelSize.Width / ScaleFactor;
             double height = bitmap.PixelSize.Height / ScaleFactor;

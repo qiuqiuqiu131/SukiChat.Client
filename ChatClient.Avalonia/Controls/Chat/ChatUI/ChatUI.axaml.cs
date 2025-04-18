@@ -343,6 +343,7 @@ public partial class ChatUI : UserControl
                     || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
                 {
                     // 等待渲染完成
+                    UpdateLayout();
                     await Task.Delay(50);
                     ScrollToBottom();
                 }
