@@ -27,7 +27,6 @@
     TitleFontSize="13"
     WindowStartupLocation="CenterScreen"
     Icon="/Assets/Icon.ico"
-    FontFamily="{StaticResource MiSans}"
     mc:Ignorable="d">
     <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}" />
 </suki:SukiWindow>

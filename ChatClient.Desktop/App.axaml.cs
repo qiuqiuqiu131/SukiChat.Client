@@ -1,6 +1,10 @@
+using System;
+using System.Runtime.InteropServices;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Platform;
 using ChatClient.BaseService;
 using ChatClient.Client;
 using ChatClient.DataBase;
@@ -264,9 +268,12 @@ public class App : PrismApplication
 
     public override void OnFrameworkInitializationCompleted()
     {
+        base.OnFrameworkInitializationCompleted();
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = Container.Resolve<LoginWindowView>();
+            var ico = AssetLoader.Open(new Uri("avares://ChatClient.Desktop/Assets/Icon.ico"));
+            desktop.MainWindow.Icon = new WindowIcon(ico);
         }
     }
 }
