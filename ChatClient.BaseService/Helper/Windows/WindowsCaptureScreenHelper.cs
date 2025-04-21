@@ -1,10 +1,11 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using ChatClient.Tool.HelperInterface;
 
-namespace ChatClient.Tool.Tools;
+namespace ChatClient.BaseService.Helper;
 
-public class PrintScreen
+public class WindowsCaptureScreenHelper : ISystemCaptureScreen
 {
     /// <summary>
     /// Creates an Image object containing a screen shot of the entire desktop

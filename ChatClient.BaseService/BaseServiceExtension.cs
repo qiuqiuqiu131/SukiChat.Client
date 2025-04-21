@@ -1,5 +1,7 @@
+using System.Runtime.InteropServices;
 using AutoMapper;
 using ChatClient.BaseService.Helper;
+using ChatClient.BaseService.Helper.Linux;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Mapper;
 using ChatClient.BaseService.MessageHandler;
@@ -40,10 +42,25 @@ public static class BaseServiceExtension
         // 注册Helper
         containerRegistry.Register<IMessageHelper, MessageHelper>()
             .Register<IFileIOHelper, ProtoFileIOHelper>()
-            .Register<IFileOperateHelper, FileOperateHelper>()
-            .Register<ITaskbarFlashHelper, WindowTaskbarFlashHelper>()
-            .Register<ISystemScalingHelper, WindowScalingHelper>()
-            .Register<ISystemFileDialog, WindowsFileDialog>();
+            .Register<IFileOperateHelper, FileOperateHelper>();
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            // 注册平台特定的Helper
+            containerRegistry
+                .Register<ITaskbarFlashHelper, WindowTaskbarFlashHelper>()
+                .Register<ISystemScalingHelper, WindowScalingHelper>()
+                .Register<ISystemFileDialog, WindowsFileDialog>()
+                .Register<ISystemCaptureScreen, WindowsCaptureScreenHelper>();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            containerRegistry
+                .Register<ISystemFileDialog, LinuxFileDialog>()
+                .Register<ITaskbarFlashHelper, LinuxTaskbarFlashHelper>()
+                .Register<ISystemScalingHelper, LinuxScalingHelper>()
+                .Register<ISystemCaptureScreen, LinuxCaptureScreenHelper>();
+        }
 
         // 注册Service
         containerRegistry.Register<ILoginService, LoginService>()

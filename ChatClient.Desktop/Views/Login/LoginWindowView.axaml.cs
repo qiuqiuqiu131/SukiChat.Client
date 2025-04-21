@@ -33,15 +33,19 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     {
         base.OnLoaded(e);
 
-        await Task.Delay(100);
-
-        if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        // 平台特定
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var handle = TryGetPlatformHandle()?.Handle;
-            if (handle != null)
+            await Task.Delay(100);
+
+            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
-                SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
+                var handle = TryGetPlatformHandle()?.Handle;
+                if (handle != null)
+                {
+                    SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
+                    SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
+                }
             }
         }
     }

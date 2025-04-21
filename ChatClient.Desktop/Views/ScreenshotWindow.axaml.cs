@@ -118,8 +118,8 @@ public partial class ScreenshotWindow : Window
     private void CaptureScreen()
     {
         // 使用 PrintScreen 类捕获屏幕
-        var printScreen = new PrintScreen();
-        var screenImage = printScreen.CaptureScreen();
+        var captureScreen = App.Current.Container.Resolve<ISystemCaptureScreen>();
+        var screenImage = captureScreen.CaptureScreen();
 
         // 将 System.Drawing.Image 转换为字节数组
         using (var ms = new MemoryStream())

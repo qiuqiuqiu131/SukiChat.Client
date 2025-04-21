@@ -54,7 +54,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     }
 
     public AsyncDelegateCommand SendMessageCommand { get; init; }
-    public AsyncDelegateCommand SelectFileAndSendCommand { get; init; }
+    public DelegateCommand SelectFileAndSendCommand { get; init; }
     public DelegateCommand<string> SendFileWithPathCommand { get; init; }
     public DelegateCommand ScreenShotCommand { get; init; }
     public DelegateCommand ClearInputMessages { get; init; }
@@ -81,7 +81,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
         AudioRecorderViewModel = new AudioRecorderViewModel(this);
 
         SendMessageCommand = new AsyncDelegateCommand(SendMessages, CanSendMessages);
-        SelectFileAndSendCommand = new AsyncDelegateCommand(SelectFileAndSend);
+        SelectFileAndSendCommand = new DelegateCommand(SelectFileAndSend);
         SendFileWithPathCommand = new DelegateCommand<string>(SendFileWithPath);
         ScreenShotCommand = new DelegateCommand(ScreenShot);
         ClearInputMessages = new DelegateCommand(ClearInput);
@@ -268,7 +268,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
     /// <summary>
     /// 选择文件并发送(单条消息)
     /// </summary>
-    private async Task SelectFileAndSend()
+    private async void SelectFileAndSend()
     {
         // 获取文件地址
         string filePath = "";
