@@ -1,5 +1,8 @@
 # Avalonia 聊天客户端
 
+## 部署问题
+由于SukiChat是通过dll引入项目的，需要自行添加.dll，另外，因为修改了一些SukiChat源码，请使用项目提供的dll，我把dll放在了ChatClient.Desktop/DLL文件夹下面了。
+
 ## 项目简介
 这是一个基于 Avalonia 框架的跨平台聊天客户端，采用 Prism 实现 MVVM 架构。  
 支持文字聊天、文件传输、实时音视频通话等功能，具有良好的扩展性和可维护性。
