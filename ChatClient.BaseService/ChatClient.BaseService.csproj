@@ -15,9 +15,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="SukiUI">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
-      </Reference>
+        <Reference Include="SukiUI">
+            <HintPath>..\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

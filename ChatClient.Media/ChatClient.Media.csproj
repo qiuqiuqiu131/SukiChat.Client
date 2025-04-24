@@ -23,9 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="SIPSorcery.Windows">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SIPSorcery.Windows.dll</HintPath>
-      </Reference>
+        <Reference Include="SIPSorcery.Windows">
+            <HintPath>..\ChatClient.Desktop\DLL\SIPSorcery.Windows.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>

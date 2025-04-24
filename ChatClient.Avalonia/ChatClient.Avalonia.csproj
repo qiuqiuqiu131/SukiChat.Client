@@ -47,12 +47,12 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Notification.Avalonia">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
-      </Reference>
-      <Reference Include="SukiUI">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
-      </Reference>
+        <Reference Include="Notification.Avalonia">
+            <HintPath>..\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+        </Reference>
+        <Reference Include="SukiUI">
+            <HintPath>..\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
 </Project>
