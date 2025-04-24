@@ -1,7 +1,7 @@
 # Avalonia 聊天客户端
 
 ## 部署问题
-由于SukiChat和SIPSorceryMedia.Windows是通过本地dll引入项目的，需要自行添加.dll，另外，因为修改了一些源码，请使用项目提供的dll，我把dll放在了ChatClient.Desktop/DLL文件夹下面了。
+由于SukiChat、SIPSorceryMedia.Windows和Notification.Avalonia是通过本地dll引入项目的，需要自行添加.dll，另外，因为修改了一些源码，请使用项目提供的dll，我把dll放在了ChatClient.Desktop/DLL文件夹下面了。
 
 ## 视频链接
 https://www.bilibili.com/video/BV1mE5jzLEPp
