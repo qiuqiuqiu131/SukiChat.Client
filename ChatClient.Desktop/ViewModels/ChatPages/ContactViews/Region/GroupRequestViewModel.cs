@@ -109,7 +109,7 @@ public class GroupRequestViewModel : ViewModelBase, IRegionMemberLifetime
 
         isOperate = true;
         _sukiDialogManager.CreateDialog()
-            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", RejectRequestCallback))
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝对方的入群请求吗？", RejectRequestCallback))
             .TryShow();
     }
 
@@ -136,7 +136,7 @@ public class GroupRequestViewModel : ViewModelBase, IRegionMemberLifetime
 
         isOperate = true;
         _sukiDialogManager.CreateDialog()
-            .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", AcceptRequestCallback))
+            .WithViewModel(d => new CommonDialogViewModel(d, "确定同意对方的入群请求吗？", AcceptRequestCallback))
             .TryShow();
     }
 

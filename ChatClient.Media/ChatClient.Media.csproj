@@ -12,12 +12,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="SIPSorcery.Windows">
-            <HintPath>..\..\..\web\WebRtcDemo\SIPSorcery.Windows\bin\Debug\net8.0\SIPSorcery.Windows.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="AForge" Version="2.2.5"/>
         <PackageReference Include="AForge.Video" Version="2.2.5"/>
         <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5"/>
@@ -26,6 +20,12 @@
         <PackageReference Include="SIPSorceryMedia.Abstractions" Version="8.0.10"/>
         <PackageReference Include="SIPSorceryMedia.Encoders" Version="8.0.7"/>
         <PackageReference Include="System.Drawing.Common" Version="9.0.4"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="SIPSorcery.Windows">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SIPSorcery.Windows.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

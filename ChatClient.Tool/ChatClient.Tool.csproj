@@ -23,12 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Avalonia.Base">
-            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\Avalonia.Base.dll</HintPath>
-        </Reference>
-        <Reference Include="SukiUI">
-            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\SukiUI.dll</HintPath>
-        </Reference>
+      <Reference Include="SukiUI">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

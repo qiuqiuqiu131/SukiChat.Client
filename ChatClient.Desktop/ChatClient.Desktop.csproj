@@ -157,15 +157,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Notification.Avalonia">
-            <HintPath>bin\Debug\net8.0\Notification.Avalonia.dll</HintPath>
-        </Reference>
-        <Reference Include="SukiUI">
-            <HintPath>bin\Debug\net8.0\SukiUI.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
         <AvaloniaResource Update="Assets\ChartDonutVariant.ico">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </AvaloniaResource>
@@ -192,5 +183,14 @@
         <Content Include="Assets\ring.mp3">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Notification.Avalonia">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+      </Reference>
+      <Reference Include="SukiUI">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

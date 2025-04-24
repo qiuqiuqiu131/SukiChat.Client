@@ -19,15 +19,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Notification.Avalonia">
-            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\Notification.Avalonia.dll</HintPath>
-        </Reference>
-        <Reference Include="SukiUI">
-            <HintPath>..\ChatClient.Desktop\bin\Debug\net8.0\SukiUI.dll</HintPath>
-        </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
         <Folder Include="Controls\FreindGroup\"/>
         <Folder Include="Controls\MultiFriendGroup\"/>
     </ItemGroup>
@@ -53,6 +44,15 @@
             <DependentUpon>AudioLevelVisualizer.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Notification.Avalonia">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+      </Reference>
+      <Reference Include="SukiUI">
+        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
