@@ -12,5 +12,12 @@ public partial class RegisterWindowView : UserControl
     public RegisterWindowView()
     {
         InitializeComponent();
+        Opacity = 0;
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+        Opacity = 1;
     }
 }

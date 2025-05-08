@@ -68,21 +68,7 @@
             </StackPanel>
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,10" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" DockPanel.Dock="Bottom"
-                    Margin="15,15,15,10">
-            <Button Margin="0"
-                    Padding="20,6"
-                    Command="{Binding ShareGroupCommand}">
-                <TextBlock Text="分享至" FontSize="14" />
-            </Button>
-            <Button Classes="Flat"
-                    Margin="0"
-                    Padding="20,6"
-                    Command="{Binding SendMessageCommand}">
-                <TextBlock Text="发消息" FontSize="14" />
-            </Button>
-        </StackPanel>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Spacing="5">
             <Grid>
                 <DockPanel Height="40" IsVisible="{Binding !Group.IsOwner}">
                     <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
@@ -175,6 +161,22 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+            </StackPanel>
+
+            <!-- 底部 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15"
+                        Margin="15,25,15,10">
+                <Button Margin="0"
+                        Padding="17,4.5"
+                        Command="{Binding ShareGroupCommand}">
+                    <TextBlock Text="分享至" FontSize="13.5" />
+                </Button>
+                <Button Classes="Flat"
+                        Margin="0"
+                        Padding="17,4.5"
+                        Command="{Binding SendMessageCommand}">
+                    <TextBlock Text="发消息" FontSize="13.5" />
+                </Button>
             </StackPanel>
         </StackPanel>
     </DockPanel>

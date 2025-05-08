@@ -21,12 +21,15 @@ public partial class SearchUserGroupView : UserControl
         _eventAggregator = eventAggregator;
         InitializeComponent();
 
+        Opacity = 0;
         _regionManager = regionManager.CreateRegionManager();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+
+        Opacity = 1;
 
         var toplevel = TopLevel.GetTopLevel(this);
         RegionManager.SetRegionManager(TopLevel.GetTopLevel(this), _regionManager);

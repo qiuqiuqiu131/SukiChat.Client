@@ -8,7 +8,7 @@
 
         <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
         <TrimMode>copyused</TrimMode>
-        <PublishTrimmed>true</PublishTrimmed>
+	    <PublishTrimmed>true</PublishTrimmed>
         <IsAotCompatible>true</IsAotCompatible>
         <StripSymbols>false</StripSymbols>
         <TargetFrameworks>net9.0</TargetFrameworks>

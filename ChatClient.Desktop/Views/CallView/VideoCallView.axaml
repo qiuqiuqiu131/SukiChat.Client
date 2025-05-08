@@ -316,7 +316,7 @@
                                     Value="{x:Static WindowState.Minimized}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>
-                        <PathIcon Margin="0,0,0,6"
+                        <PathIcon Margin="0,0,0,9"
                                   VerticalAlignment="Bottom"
                                   Data="{x:Static suki:Icons.WindowMinimize}" />
                     </Button>

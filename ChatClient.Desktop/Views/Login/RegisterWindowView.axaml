@@ -13,6 +13,11 @@
     Height="460"
     x:DataType="vm:RegisterWindowViewModel"
     mc:Ignorable="d">
+    <UserControl.Transitions>
+        <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+        </Transitions>
+    </UserControl.Transitions>
     <Grid RowDefinitions="30,*">
         <Panel Background="Transparent">
             <Interaction.Behaviors>

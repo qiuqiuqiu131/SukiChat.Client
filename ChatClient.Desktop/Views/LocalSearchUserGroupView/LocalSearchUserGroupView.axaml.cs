@@ -21,6 +21,7 @@ public partial class LocalSearchUserGroupView : UserControl
     {
         _eventAggregator = eventAggregator;
         InitializeComponent();
+        Opacity = 0;
 
         _regionManager = regionManager.CreateRegionManager();
     }
@@ -28,6 +29,7 @@ public partial class LocalSearchUserGroupView : UserControl
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        Opacity = 1;
 
         RegionManager.SetRegionManager(TopLevel.GetTopLevel(this), _regionManager);
         RegionManager.UpdateRegions();

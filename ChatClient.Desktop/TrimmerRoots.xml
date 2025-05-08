@@ -7,6 +7,8 @@
 	<assembly fullname="AutoMapper" preserve="All" />
 
 	<assembly fullname="Microsoft.EntityFrameworkCore" preserve="All"/>
+	<assembly fullname="Microsoft.EntityFrameworkCore.Sqlite" preserve="All"/>
+	<assembly fullname="Microsoft.EntityFrameworkCore.Relational" preserve="All"/>
 
 	<assembly fullname="Prism" preserve="All" />
 	<assembly fullname="Prism.Avalonia" preserve="All" />

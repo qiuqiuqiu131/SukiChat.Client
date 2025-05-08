@@ -492,6 +492,7 @@
         <!--  好友列表  -->
         <ScrollViewer
             Grid.Row="1"
+            x:Name="ScrollViewer"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Hidden">
             <ScrollViewer.IsVisible>

@@ -78,21 +78,7 @@
             </StackPanel>
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Spacing="15"
-                    Margin="15,15,15,10">
-            <Button Margin="0"
-                    Command="{Binding ShareFriendCommand}"
-                    Padding="20,6">
-                <TextBlock Text="分享至" FontSize="14" />
-            </Button>
-            <Button Classes="Flat"
-                    Margin="0"
-                    Padding="20,6"
-                    Command="{Binding SendMessageCommand}">
-                <TextBlock Text="发消息" FontSize="14" />
-            </Button>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Spacing="0">
+        <StackPanel Orientation="Vertical" Spacing="5">
             <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,8">
                 <StackPanel.Styles>
                     <Style Selector="TextBlock">
@@ -159,6 +145,22 @@
                            HorizontalAlignment="Right"
                            Margin="0" />
             </DockPanel>
+
+            <!-- 底部 -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15"
+                        Margin="15,25,15,10">
+                <Button Margin="0"
+                        Padding="17,4.5"
+                        Command="{Binding ShareFriendCommand}">
+                    <TextBlock Text="分享至" FontSize="13.5" />
+                </Button>
+                <Button Classes="Flat"
+                        Margin="0"
+                        Padding="17,4.5"
+                        Command="{Binding SendMessageCommand}">
+                    <TextBlock Text="发消息" FontSize="13.5" />
+                </Button>
+            </StackPanel>
         </StackPanel>
     </DockPanel>
 </UserControl>

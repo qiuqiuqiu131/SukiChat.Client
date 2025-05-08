@@ -16,6 +16,11 @@
              MinWidth="650"
              x:DataType="localSearchUserGroupView:LocalSearchUserGroupViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.LocalSearchUserGroupView">
+    <UserControl.Transitions>
+        <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+        </Transitions>
+    </UserControl.Transitions>
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
@@ -72,7 +77,7 @@
                                     Value="{x:Static WindowState.Minimized}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>
-                        <PathIcon Margin="0,0,0,6"
+                        <PathIcon Margin="0,0,0,9"
                                   VerticalAlignment="Bottom"
                                   Data="{x:Static suki:Icons.WindowMinimize}" />
                     </Button>
