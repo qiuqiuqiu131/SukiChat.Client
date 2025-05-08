@@ -26,7 +26,14 @@
     ShowTitlebarBackground="False"
     TitleFontSize="13"
     WindowStartupLocation="CenterScreen"
-    Icon="/Assets/Icon.ico"
     mc:Ignorable="d">
-    <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}" />
+    <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}"
+                    prism:RegionManager.RegionManager="{Binding RegionManager}"
+                    x:Name="content">
+        <ContentControl.Transitions>
+            <Transitions>
+                <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+            </Transitions>
+        </ContentControl.Transitions>
+    </ContentControl>
 </suki:SukiWindow>

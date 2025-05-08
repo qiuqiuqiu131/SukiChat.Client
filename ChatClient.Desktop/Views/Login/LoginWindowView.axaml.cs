@@ -6,10 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using ChatClient.Desktop.ViewModels.Login;
+using Avalonia.Platform;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.Login;
@@ -19,6 +16,11 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     public LoginWindowView()
     {
         InitializeComponent();
+
+        SystemDecorations = SystemDecorations.None;
+        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
+        ExtendClientAreaToDecorationsHint = false;
+        content.Opacity = 0;
     }
 
     private SukiDialogHost? _dialogHost;
@@ -33,21 +35,30 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     {
         base.OnLoaded(e);
 
-        // 平台特定
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        _ = Task.Run(async () =>
         {
-            await Task.Delay(100);
-
-            if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            // 平台特定
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                var handle = TryGetPlatformHandle()?.Handle;
-                if (handle != null)
+                await Task.Delay(100);
+
+                if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 {
-                    SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
-                    SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
+                    var handle = TryGetPlatformHandle()?.Handle;
+                    if (handle != null)
+                    {
+                        SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
+                        SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
+                    }
                 }
             }
-        }
+        });
+
+        content.Opacity = 1;
+        await Task.Delay(100);
+        SystemDecorations = SystemDecorations.BorderOnly;
+        ExtendClientAreaToDecorationsHint = true;
+        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)

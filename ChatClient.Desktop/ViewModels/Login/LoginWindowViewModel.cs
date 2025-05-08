@@ -1,9 +1,13 @@
 using System;
+using Avalonia.Threading;
+using ChatClient.Desktop.Views.Login;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.UIEntity;
 using Prism.Events;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SukiUI.Enums;
 
@@ -27,10 +31,13 @@ public class LoginWindowViewModel : ViewModelBase, IDisposable
         private set => SetProperty(ref _currentThemeStyle, value);
     }
 
-    public LoginWindowViewModel(IThemeStyle themeStyle, IConnection connection)
+    public IRegionManager RegionManager { get; }
+
+    public LoginWindowViewModel(IThemeStyle themeStyle, IConnection connection, IRegionManager regionManager)
     {
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
+        RegionManager = regionManager.CreateRegionManager();
     }
 
     #region Dispose

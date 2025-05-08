@@ -1,10 +1,11 @@
 using System;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using ChatClient.BaseService;
 using ChatClient.Client;
 using ChatClient.DataBase;
@@ -12,7 +13,6 @@ using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.About;
 using ChatClient.Desktop.ViewModels.CallViewModel;
-using ChatClient.Desktop.ViewModels.ChatPages;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Dialog;
@@ -268,12 +268,18 @@ public class App : PrismApplication
 
     public override void OnFrameworkInitializationCompleted()
     {
-        base.OnFrameworkInitializationCompleted();
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        Dispatcher.UIThread.Post(() =>
         {
-            desktop.MainWindow = Container.Resolve<LoginWindowView>();
-            var ico = AssetLoader.Open(new Uri("avares://ChatClient.Desktop/Assets/Icon.ico"));
-            desktop.MainWindow.Icon = new WindowIcon(ico);
-        }
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                var window = Container.Resolve<LoginWindowView>();
+                var ico = AssetLoader.Open(new Uri("avares://ChatClient.Desktop/Assets/Icon.ico"));
+                window.Icon = new WindowIcon(ico);
+                window.Show();
+                //window.Hide();
+
+                desktop.MainWindow = window;
+            }
+        });
     }
 }
