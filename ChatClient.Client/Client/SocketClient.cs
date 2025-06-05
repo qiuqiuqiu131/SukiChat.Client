@@ -89,8 +89,11 @@ namespace ChatClient.Client
                     .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
                     {
                         IChannelPipeline pipeline = channel.Pipeline;
-                        pipeline.AddLast("framing-enc", new LengthFieldPrepender(2));
-                        pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 2, 0, 2));
+                        pipeline.AddLast("framing-enc", new LengthFieldPrepender(int.Parse(configuration["MaxFieldLength"]!)));
+                        pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(
+                            int.Parse(configuration["MaxFrameLength"]!),
+                            0, int.Parse(configuration["MaxFieldLength"]!),
+                            0, int.Parse(configuration["MaxFieldLength"]!)));
                         pipeline.AddLast(new IdleStateHandler(0, 0, reconnectConfig.Item3));
 
                         if (channels == null) return;
