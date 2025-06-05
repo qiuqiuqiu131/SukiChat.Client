@@ -218,7 +218,7 @@ public class GroupRelationMessageHandler : MessageHandlerBase
             {
                 RequestId = message.RequestId,
                 RequestTime = DateTime.Now,
-                SolveTime = DateTime.Parse(message.Time),
+                SolveTime = null,
                 IsAccept = message.Accept,
                 IsSolved = true,
                 AcceptByUserId = message.UserId
