@@ -126,8 +126,10 @@ public class App : PrismApplication
 
         containerRegistry.Register<CornerWindow>();
 
-        // 注册导航View
+        // 登录
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
+        // 注册
+        containerRegistry.RegisterForNavigation<RegisterView, RegisterViewModel>();
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
         // 用户和群聊通知面板
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
@@ -163,7 +165,6 @@ public class App : PrismApplication
         containerRegistry.RegisterDialogWindow<SukiChatDialogWindow>(nameof(SukiChatDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
 
-        containerRegistry.RegisterDialog<RegisterWindowView, RegisterWindowViewModel>();
         containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
         // 聊天窗口
         containerRegistry.RegisterDialog<ChatFriendDialogView, ChatFriendDialogViewModel>();
@@ -213,7 +214,6 @@ public class App : PrismApplication
         }
 
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
-        regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, typeof(LoginView));
 
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatFriendPanelView));
@@ -225,6 +225,8 @@ public class App : PrismApplication
 
         IStunServerManager stunServerManager = Container.Resolve<IStunServerManager>();
         stunServerManager.GetStunServersUrl();
+
+        IThemeStyle themeStyle = Container.Resolve<IThemeStyle>();
     }
 
 
@@ -266,7 +268,7 @@ public class App : PrismApplication
             .AddView<SendFileDialogView, SendFileDialogViewModel>(services);
     }
 
-    public override void OnFrameworkInitializationCompleted()
+    public async override void OnFrameworkInitializationCompleted()
     {
         Dispatcher.UIThread.Post(() =>
         {

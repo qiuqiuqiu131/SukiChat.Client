@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # Avalonia 聊天客户端
 
 ## 部署问题
@@ -88,3 +89,86 @@ https://www.bilibili.com/video/BV1mE5jzLEPp
 - 自适应网络带宽控制
 - 支持屏幕共享功能
 - 多人会议模式支持
+=======
+# Avalonia聊天客户端
+
+## 项目简介
+
+这是一个基于Avalonia框架的客户端程序，是一个功能完善的聊天软件。项目采用Prism框架实现MVVM架构模式，具有良好的可扩展性和可维护性。
+
+## 项目架构
+
+项目采用模块化设计，各模块职责明确，通过接口进行解耦，使用Prism框架的EventAggregator实现模块间通信。
+
+## 项目组成
+
+### 1. ChatClient.Avalonia
+
+Avalonia的UI组件库，包含：
+- 自定义控件
+- 主题样式定义
+- Behavior实现
+- 值转换器(Converter)
+
+### 2. ChatClient.BaseService
+
+项目的核心业务逻辑层，包含：
+- **Helper**: 平台特定的辅助类、消息发送和文件处理辅助工具
+- **Manager**: 单例类，负责管理全局数据
+- **Mapper**: 实现Protobuf、数据库实体、Dto之间的数据转换
+- **MessageHandler**: 用于登录后接收服务器主动发送的消息和通知
+- **Services**: 处理消息发送，数据库存取等核心业务
+
+### 3. ChatServer.Client
+
+程序的Socket客户端模块，负责与服务器通信：
+- **MessageOperate/Processor**: 用于接收和处理Protobuf格式的Message消息
+- 通过EventAggregator将接收到的消息通知给其他模块
+
+### 4. ChatClient.DataBase
+
+客户端数据持久化模块：
+- 使用SQLite本地数据库
+- 负责保存用户聊天记录、联系人等数据
+
+### 5. ChatClient.Desktop
+
+程序入口项目：
+- 基于Prism框架
+- 实现MVVM架构模式
+- 负责UI显示和用户交互
+
+### 6. ChatClient.Media
+
+音视频通话模块：
+- 基于WebRTC技术
+- 实现实时音视频通话功能
+
+### 7. ChatClient.Resources
+
+资源处理模块：
+- 负责与资源服务器通信
+- 采用HTTP短连接
+- 实现用户文件的上传和下载
+
+### 8. ChatClient.Tool
+
+工具类库，包含：
+- DTO数据传输对象定义
+- Event事件定义(配合Prism框架的EventAggregator)
+- BaseService项目中实现类的接口定义
+
+### 9. ChatClient.Common
+
+通用模块：
+- 定义了Protobuf消息格式
+- 服务端和客户端共用的基础类型
+
+## 功能介绍
+
+[此部分由用户自行完善]
+
+## 界面展示
+
+[此部分由用户自行完善]
+>>>>>>> Stashed changes

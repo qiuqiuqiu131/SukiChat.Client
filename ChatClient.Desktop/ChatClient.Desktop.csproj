@@ -69,7 +69,7 @@
             <DependentUpon>LoginView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Views\Login\RegisterWindowView.axaml.cs">
+        <Compile Update="Views\Login\RegisterView.axaml.cs">
             <DependentUpon>RegisterView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>

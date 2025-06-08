@@ -5,11 +5,11 @@ using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.Login;
 
-public partial class RegisterWindowView : UserControl
+public partial class RegisterView : UserControl
 {
     private readonly IRegionManager _regionManager;
 
-    public RegisterWindowView()
+    public RegisterView()
     {
         InitializeComponent();
         Opacity = 0;

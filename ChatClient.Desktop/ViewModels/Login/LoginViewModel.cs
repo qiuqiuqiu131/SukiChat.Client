@@ -195,7 +195,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToRegisterView()
     {
-        _dialogService.Show(nameof(RegisterWindowView), res =>
+        _dialogService.Show(nameof(RegisterView), res =>
         {
             if (res.Result == ButtonResult.OK)
             {

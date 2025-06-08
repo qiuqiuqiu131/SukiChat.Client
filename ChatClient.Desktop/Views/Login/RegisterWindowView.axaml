@@ -11,7 +11,7 @@
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     Width="340"
     Height="460"
-    x:DataType="vm:RegisterWindowViewModel"
+    x:DataType="vm:RegisterViewModel"
     mc:Ignorable="d">
     <UserControl.Transitions>
         <Transitions>

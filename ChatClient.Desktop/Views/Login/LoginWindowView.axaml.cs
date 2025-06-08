@@ -6,12 +6,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
 using Avalonia.Platform;
 using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.Login;
 
-public partial class LoginWindowView : SukiWindow, IDisposable
+public class LoginWindowView : Window, IDisposable
 {
     public LoginWindowView()
     {
@@ -20,7 +21,13 @@ public partial class LoginWindowView : SukiWindow, IDisposable
         SystemDecorations = SystemDecorations.None;
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
         ExtendClientAreaToDecorationsHint = false;
-        content.Opacity = 0;
+        Loaded += (sender, args) =>
+        {
+            var scaleTransform = RenderTransform as ScaleTransform;
+            scaleTransform.ScaleX = 1;
+            scaleTransform.ScaleY = 1;
+            Opacity = 1;
+        };
     }
 
     private SukiDialogHost? _dialogHost;

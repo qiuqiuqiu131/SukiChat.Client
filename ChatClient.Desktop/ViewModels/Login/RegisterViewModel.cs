@@ -22,7 +22,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
-public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
+public class RegisterViewModel : ValidateBindableBase, IDialogAware
 {
     #region IsConnected
 
@@ -133,7 +133,7 @@ public class RegisterWindowViewModel : ValidateBindableBase, IDialogAware
 
     private readonly IContainerProvider _containerProvider;
 
-    public RegisterWindowViewModel(IContainerProvider containerProvider,
+    public RegisterViewModel(IContainerProvider containerProvider,
         IConnection connection)
     {
         _containerProvider = containerProvider;
