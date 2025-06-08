@@ -24,6 +24,7 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -39,6 +40,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
     private readonly ISukiDialogManager _sukiDialogManager;
+    private readonly IConfigurationRoot _configurationRoot;
     private readonly IUserManager _userManager;
 
     private SubscriptionToken? _token;
@@ -86,12 +88,14 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         IRegionManager regionManager,
         IEventAggregator eventAggregator,
         ISukiDialogManager sukiDialogManager,
+        IConfigurationRoot configurationRoot,
         IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
         _sukiDialogManager = sukiDialogManager;
+        _configurationRoot = configurationRoot;
         _userManager = userManager;
 
         RegionManager = regionManager.CreateRegionManager();
@@ -302,7 +306,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
 
-        int nextCount = 10;
+        int nextCount = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
         var chatDatas =
             await chatPackService.GetFriendChatDataAsync(User?.Id, SelectedFriend.UserId,
                 SelectedFriend.ChatMessages[0].ChatId,

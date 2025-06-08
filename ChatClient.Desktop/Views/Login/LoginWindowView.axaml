@@ -1,4 +1,4 @@
-<Window
+<suki:SukiWindow
     x:Class="ChatClient.Desktop.Views.Login.LoginWindowView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,14 +7,13 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:vm="using:ChatClient.Desktop.ViewModels.Login"
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
-    xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
     Title="Suki Chat"
-    Width="600"
+    Width="350"
     Height="460"
     ExtendClientAreaTitleBarHeightHint="-1"
+    IsTitleBarVisible="False"
+    TitleBarAnimationEnabled="False"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaToDecorationsHint="False"
     SystemDecorations="None"
@@ -27,6 +26,9 @@
     <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}"
                     prism:RegionManager.RegionManager="{Binding RegionManager}"
                     x:Name="content">
+        <ContentControl.RenderTransform>
+            <ScaleTransform ScaleX="0" ScaleY="0"></ScaleTransform>
+        </ContentControl.RenderTransform>
         <ContentControl.Transitions>
             <Transitions>
                 <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
@@ -34,179 +36,3 @@
         </ContentControl.Transitions>
     </ContentControl>
 </suki:SukiWindow>
-=======
-    Icon="/Assets/Icon.ico"
-    Opacity="0"
-    mc:Ignorable="d">
-    <Window.Styles>
-        <Style Selector="Window">
-            <Setter Property="Background" Value="Transparent" />
-        </Style>
-    </Window.Styles>
-    <Window.Transitions>
-        <Transitions>
-            <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
-        </Transitions>
-    </Window.Transitions>
-    <Panel Margin="15" x:Name="MainPanel">
-        <Panel.RenderTransform>
-            <ScaleTransform ScaleX="0.7" ScaleY="0.7" />
-        </Panel.RenderTransform>
-        <Panel.Transitions>
-            <Transitions>
-                <DoubleTransition Property="ScaleTransform.ScaleX" Duration="0:0:0.3" />
-                <DoubleTransition Property="ScaleTransform.ScaleY" Duration="0:0:0.3" />
-            </Transitions>
-        </Panel.Transitions>
-
-        <Border CornerRadius="7" Background="White" Padding="10,0" Margin="0,20" BoxShadow="4 4 10 4 #44222222">
-            <Panel>
-                <Panel HorizontalAlignment="Left" VerticalAlignment="Stretch" Width="235"
-                       IsVisible="{Binding !IsRegisterView}">
-                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
-                        <StackPanel Orientation="Vertical" DockPanel.Dock="Top"
-                                    Spacing="10"
-                                    Margin="0,30,0,0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock
-                                    Text="欢迎使用 "
-                                    LetterSpacing="1"
-                                    VerticalAlignment="Center"
-                                    FontSize="18" />
-                                <TextBlock Text="Suki Chat"
-                                           VerticalAlignment="Center"
-                                           FontSize="18"
-                                           Opacity="0.9"
-                                           LetterSpacing="0.5"
-                                           Foreground="{DynamicResource SukiPrimaryColor}" />
-                            </StackPanel>
-                            <TextBlock Text="开始你的聊天吧！" Opacity="0.8" HorizontalAlignment="Center" FontSize="13" />
-                        </StackPanel>
-                        <StackPanel Orientation="Vertical"
-                                    Margin="0,20"
-                                    DockPanel.Dock="Bottom">
-                            <TextBlock Text="没有账号？" HorizontalAlignment="Center"
-                                       Margin="0,3"
-                                       Opacity="0.8"
-                                       FontSize="12" />
-                            <Button HorizontalAlignment="Center"
-                                    Classes="Void Login"
-                                    Margin="0,4"
-                                    Cursor="Hand"
-                                    BorderThickness="0"
-                                    Command="{Binding TranslateToRegisterViewCommand}">
-                                <Button.Styles>
-                                    <Style Selector="Button.Login">
-                                        <Style Selector="^ Border">
-                                            <Setter Property="Background" Value="White" />
-                                            <Setter Property="Transitions">
-                                                <Transitions>
-                                                    <BrushTransition Property="Background" Duration="0:0:0.2" />
-                                                </Transitions>
-                                            </Setter>
-                                        </Style>
-                                        <Style Selector="^ TextBlock">
-                                            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
-                                            <Setter Property="Transitions">
-                                                <Transitions>
-                                                    <BrushTransition Property="Foreground" Duration="0:0:0.2" />
-                                                </Transitions>
-                                            </Setter>
-                                        </Style>
-                                    </Style>
-
-                                    <Style Selector="Button.Login:pointerover">
-                                        <Style Selector="^ Border">
-                                            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
-                                        </Style>
-                                        <Style Selector="^ TextBlock">
-                                            <Setter Property="Foreground" Value="White" />
-                                        </Style>
-                                    </Style>
-                                </Button.Styles>
-                                <Border Padding="8,4,8,3" CornerRadius="3"
-                                        BorderBrush="{DynamicResource SukiPrimaryColor50}"
-                                        BorderThickness="2">
-                                    <TextBlock Text="去注册" FontSize="12.5" />
-                                </Border>
-                            </Button>
-                        </StackPanel>
-                        <avalonia:MaterialIcon
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Foreground="{DynamicResource SukiPrimaryColor}"
-                            Kind="ChartDonutVariant" />
-                    </DockPanel>
-                </Panel>
-
-                <Panel HorizontalAlignment="Right" Width="225" VerticalAlignment="Center"
-                       IsVisible="{Binding IsRegisterView}">
-                    <HyperlinkButton HorizontalAlignment="Center" Command="{Binding TranslateToLoginViewCommand}">
-                        <TextBlock Text="返回登录" Margin="0,50,0,0" />
-                    </HyperlinkButton>
-                </Panel>
-            </Panel>
-        </Border>
-
-        <Border Background="Transparent" VerticalAlignment="Top" Height="50">
-            <Interaction.Behaviors>
-                <behaviors:WindowDragBehavior />
-            </Interaction.Behaviors>
-        </Border>
-        <Canvas>
-            <Panel Width="290" Height="430"
-                   Classes="Normal"
-                   Classes.IsRegisterView="{Binding IsRegisterView}">
-                <Panel.Styles>
-                    <Style Selector="Panel.Normal">
-                        <Setter Property="Canvas.Right" Value="20" />
-                    </Style>
-                    <Style Selector="Panel.IsRegisterView">
-                        <Setter Property="Canvas.Right" Value="260"></Setter>
-                    </Style>
-                </Panel.Styles>
-                <Panel.Transitions>
-                    <Transitions>
-                        <DoubleTransition Property="Canvas.Right" Duration="0:0:0.6" Easing="CubicEaseInOut" />
-                    </Transitions>
-                </Panel.Transitions>
-                <Border Background="White" BoxShadow="2 2 10 3 #44222222"
-                        CornerRadius="7" />
-                <Border Background="{DynamicResource SukiPrimaryColor50}"
-                        Opacity="1"
-                        CornerRadius="7" />
-
-                <Grid RowDefinitions="30,*">
-                    <Panel Height="30" Background="Transparent">
-                        <Interaction.Behaviors>
-                            <behaviors:WindowDragBehavior />
-                        </Interaction.Behaviors>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0" Spacing="5">
-                            <Panel Margin="2" IsVisible="{Binding !IsConnected.IsConnected}">
-                                <avalonia:MaterialIcon
-                                    Width="17"
-                                    Height="17"
-                                    Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}"
-                                    Kind="WifiStrengthAlertOutline" />
-                            </Panel>
-                            <Button Name="PART_CloseButton"
-                                    Classes="Basic Rounded WindowControlsButton Close">
-                                <Interaction.Behaviors>
-                                    <EventTriggerBehavior EventName="Click">
-                                        <CallMethodAction TargetObject="{Binding $parent[Window]}"
-                                                          MethodName="Close" />
-                                    </EventTriggerBehavior>
-                                </Interaction.Behaviors>
-                                <PathIcon Data="{x:Static suki:Icons.WindowClose}" Height="9" Width="9" />
-                            </Button>
-                        </StackPanel>
-                    </Panel>
-                    <ContentControl Grid.Row="1" prism:RegionManager.RegionManager="{Binding RegionManager}"
-                                    prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}" />
-                </Grid>
-            </Panel>
-        </Canvas>
-    </Panel>
-</Window>
->>>>>>> Stashed changes

@@ -60,9 +60,6 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("Load Date From Db Cost Time:" + (end - get_start));
         Console.WriteLine("User Init Cost Time:" + (end - start));
 
-        GC.Collect();
-        GC.WaitForPendingFinalizers();
-
         return user;
     }
 
@@ -239,21 +236,21 @@ internal class UserLoginService : BaseService, IUserLoginService
         ];
         await Task.WhenAll(tasks);
 
-        user.UserDetail.UnreadFriendMessageCount = user.FriendReceives.Count(d =>
+        user.UserDetail.UnreadFriendMessageCount = user.FriendReceives!.Count(d =>
                                                        (d.SolveTime ?? d.ReceiveTime) >
                                                        user.UserDetail.LastReadFriendMessageTime &&
                                                        !d.UserFromId.Equals(userId))
-                                                   + user.FriendDeletes.Count(d =>
+                                                   + user.FriendDeletes!.Count(d =>
                                                        d.DeleteTime >
                                                        user.UserDetail.LastReadFriendMessageTime &&
                                                        d.UserId2.Equals(userId));
 
-        user.UserDetail.UnreadGroupMessageCount = user.GroupReceiveds.Count(d =>
+        user.UserDetail.UnreadGroupMessageCount = user.GroupReceiveds!.Count(d =>
                                                       (d.SolveTime ?? d.ReceiveTime) >
                                                       user.UserDetail.LastReadGroupMessageTime &&
                                                       !d.UserFromId.Equals(userId) &&
                                                       (d.AcceptByUserId == null || !d.AcceptByUserId.Equals(userId)))
-                                                  + user.GroupDeletes.Count(d =>
+                                                  + user.GroupDeletes!.Count(d =>
                                                       d.DeleteTime >
                                                       user.UserDetail.LastReadGroupMessageTime &&
                                                       d.MemberId.Equals(userId) && d.DeleteMethod != 0);

@@ -160,24 +160,24 @@
                 </Style>
             </Style>
         </Style>
-        <Style Selector="RadioButton.Enter:visible">
-            <Style.Animations>
-                <Animation
-                    Easing="CubicEaseInOut"
-                    FillMode="Forward"
-                    IterationCount="1"
-                    Duration="0:0:0.3">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="0" />
-                        <Setter Property="ScaleTransform.ScaleY" Value="0" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
+        <!-- <Style Selector="RadioButton.Enter:visible"> -->
+        <!--     <Style.Animations> -->
+        <!--         <Animation -->
+        <!--             Easing="CubicEaseInOut" -->
+        <!--             FillMode="Forward" -->
+        <!--             IterationCount="1" -->
+        <!--             Duration="0:0:0.3"> -->
+        <!--             <KeyFrame Cue="0%"> -->
+        <!--                 <Setter Property="ScaleTransform.ScaleX" Value="0" /> -->
+        <!--                 <Setter Property="ScaleTransform.ScaleY" Value="0" /> -->
+        <!--             </KeyFrame> -->
+        <!--             <KeyFrame Cue="100%"> -->
+        <!--                 <Setter Property="ScaleTransform.ScaleX" Value="1" /> -->
+        <!--                 <Setter Property="ScaleTransform.ScaleY" Value="1" /> -->
+        <!--             </KeyFrame> -->
+        <!--         </Animation> -->
+        <!--     </Style.Animations> -->
+        <!-- </Style> -->
     </UserControl.Styles>
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:FriendChatDto">
@@ -507,7 +507,8 @@
                 suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical" />
+                        <VirtualizingStackPanel Orientation="Vertical" />
+                        <!-- <StackPanel Orientation="Vertical" /> -->
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.Styles>

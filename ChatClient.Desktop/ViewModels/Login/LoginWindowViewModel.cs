@@ -1,22 +1,12 @@
 using System;
-<<<<<<< Updated upstream
-using Avalonia.Threading;
-=======
->>>>>>> Stashed changes
 using ChatClient.Desktop.Views.Login;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
-<<<<<<< Updated upstream
 using Prism.Events;
 using Prism.Navigation.Regions;
-using SukiUI.Dialogs;
-using SukiUI.Enums;
-=======
 using Prism.Commands;
-using Prism.Navigation.Regions;
->>>>>>> Stashed changes
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
@@ -38,15 +28,6 @@ public class LoginWindowViewModel : ViewModelBase, IDisposable
         set => SetProperty(ref isRegisterView, value);
     }
 
-<<<<<<< Updated upstream
-    public IRegionManager RegionManager { get; }
-
-    public LoginWindowViewModel(IThemeStyle themeStyle, IConnection connection, IRegionManager regionManager)
-    {
-        IsConnected = connection.IsConnected;
-        CurrentThemeStyle = themeStyle.CurrentThemeStyle;
-        RegionManager = regionManager.CreateRegionManager();
-=======
     public DelegateCommand TranslateToRegisterViewCommand { get; }
     public DelegateCommand TranslateToLoginViewCommand { get; }
 
@@ -61,7 +42,6 @@ public class LoginWindowViewModel : ViewModelBase, IDisposable
 
         TranslateToRegisterViewCommand = new DelegateCommand(TranslateToRegisterView);
         TranslateToLoginViewCommand = new DelegateCommand(TranslateToLoginView);
->>>>>>> Stashed changes
     }
 
     private void TranslateToLoginView()

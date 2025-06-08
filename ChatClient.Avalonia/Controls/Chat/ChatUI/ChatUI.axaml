@@ -11,36 +11,237 @@
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
     xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
     xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls"
+    xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
-    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
             <Setter Property="Width" Value="4"></Setter>
         </Style>
-        <Style Selector="Image.Head">
-            <Setter Property="Cursor" Value="Hand" />
-        </Style>
-        <Style Selector="Button.Visible:visible">
+        <!-- <Style Selector="circleImage|CircleImage.Head"> -->
+        <!--     <Setter Property="Cursor" Value="Hand" /> -->
+        <!-- </Style> -->
+        <Style Selector="TextBlock.FadeIn">
             <Style.Animations>
-                <Animation FillMode="Forward" IterationCount="1" Easing="CubicEaseInOut" Duration="0:0:0.3">
+                <Animation FillMode="Forward"
+                           IterationCount="1"
+                           PlaybackDirection="Normal"
+                           Duration="0:0:0.200">
                     <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="0" />
-                        <Setter Property="ScaleTransform.ScaleY" Value="0" />
-                        <Setter Property="Opacity" Value="0.5" />
+                        <Setter Property="Opacity" Value="0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                        <Setter Property="Opacity" Value="1" />
+                        <Setter Property="Opacity" Value="0.7" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
+        <Style Selector="Grid.FadeIn">
+            <Style.Animations>
+                <Animation FillMode="Forward"
+                           IterationCount="1"
+                           Easing="CubicEaseOut"
+                           PlaybackDirection="Normal"
+                           Duration="0:0:0.200">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleX"
+                                Value="0.7" />
+                        <Setter Property="ScaleTransform.ScaleY"
+                                Value="0.7" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
+    <UserControl.Resources>
+        <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
+        <chat:MessageDataTemplate x:Key="MessageDataTemplate">
+            <DataTemplate x:Key="Retracted" DataType="data:ChatData">
+                <!-- 撤回消息 -->
+                <Border Background="{DynamicResource SukiPrimaryColor10}"
+                        Margin="0,5"
+                        HorizontalAlignment="Center" CornerRadius="5">
+                    <Panel>
+                        <StackPanel HorizontalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Margin="5,1.5"
+                                    IsVisible="{Binding IsUser}">
+                            <TextBlock FontSize="12"
+                                       Text="你"
+                                       Foreground="{DynamicResource SukiPrimaryColor}"
+                                       Padding="0"
+                                       Margin="0" />
+                            <TextBlock Text="撤回一条消息" FontSize="12"
+                                       Opacity="0.6" Padding="0"
+                                       Margin="0" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Margin="5,1.5"
+                                    IsVisible="{Binding !IsUser}">
+                            <TextBlock FontSize="12"
+                                       Text="对方"
+                                       Foreground="{DynamicResource SukiPrimaryColor}"
+                                       Padding="0"
+                                       Margin="0" />
+                            <TextBlock Text="撤回一条消息" FontSize="12" Padding="0"
+                                       Opacity="0.6"
+                                       Margin="0" />
+                        </StackPanel>
+                    </Panel>
+                </Border>
+            </DataTemplate>
+            <DataTemplate x:Key="User" DataType="data:ChatData">
+                <!-- Right -->
+                <Grid Margin="20,7,0,7"
+                      RenderTransformOrigin="100%,100%"
+                      Classes="FadeIn">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <!-- Head -->
+                        <circleImage:CircleImage Grid.Column="1"
+                                                 Margin="8,0,16,0"
+                                                 VerticalAlignment="Top"
+                                                 DockPanel.Dock="Right"
+                                                 Classes="Head"
+                                                 PointerPressed="Head_OnPointerPressed"
+                                                 Image="{Binding $parent[chatUi:ChatUI].UserImageSource}"
+                                                 Size="35" />
+                        <Grid Grid.Column="0"
+                              ColumnDefinitions="Auto,*"
+                              HorizontalAlignment="Right">
+                            <Grid VerticalAlignment="Bottom" Width="20"
+                                  Height="20"
+                                  Margin="5">
+                                <suki:Loading LoadingStyle="Simple"
+                                              IsVisible="{Binding IsWriting}">
+                                    <suki:Loading.RenderTransform>
+                                        <ScaleTransform ScaleX="0.55"
+                                                        ScaleY="0.55" />
+                                    </suki:Loading.RenderTransform>
+                                </suki:Loading>
+                                <avalonia:MaterialIcon Kind="AlertCircle"
+                                                       IsVisible="{Binding IsError}"
+                                                       Width="20"
+                                                       Height="20"
+                                                       Foreground="Red" />
+                            </Grid>
+                            <suki:GlassCard Grid.Column="1" Classes="Owner"
+                                            CornerRadius="6"
+                                            MaxWidth="450"
+                                            PointerPressed="InputElement_OnPointerPressed"
+                                            Padding="5">
+                                <suki:GlassCard.Styles>
+                                    <Style
+                                        Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
+                                        <Setter Property="Opacity" Value="0.7" />
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource SukiPrimaryColor25}" />
+                                    </Style>
+                                    <Style
+                                        Selector="suki|GlassCard.Owner:pointerover /template/ Border#PART_BorderCard">
+                                        <Setter Property="Opacity" Value="0.6" />
+                                        <Setter Property="Background"
+                                                Value="{DynamicResource SukiPrimaryColor50}" />
+                                    </Style>
+                                </suki:GlassCard.Styles>
+                                <ItemsControl
+                                    ItemsSource="{Binding ChatMessages}"
+                                    HorizontalAlignment="Center"
+                                    Padding="0"
+                                    Margin="0">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical"
+                                                        Spacing="5" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <chatUi:ChatMessageView
+                                                IsLeft="False"
+                                                CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
+                                                HorizontalAlignment="Right"
+                                                MessageBoxShow="ChatMessageView_OnMessageBoxShow"
+                                                Message="{Binding Content}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </suki:GlassCard>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="Friend" DataType="data:ChatData">
+                <!-- Left -->
+                <Grid Margin="0,7,20,7"
+                      RenderTransformOrigin="0%,100%"
+                      Classes="FadeIn">
+                    <Grid ColumnDefinitions="Auto,*">
+                        <!-- Head -->
+                        <circleImage:CircleImage Grid.Column="0"
+                                                 VerticalAlignment="Top"
+                                                 Classes="Head"
+                                                 PointerPressed="Head_OnPointerPressed"
+                                                 Margin="16,0,8,0"
+                                                 Image="{Binding $parent[chatUi:ChatUI].FriendImageSource}"
+                                                 Size="35" />
+                        <suki:GlassCard Grid.Column="1" Classes="Friend"
+                                        CornerRadius="6"
+                                        MaxWidth="450"
+                                        HorizontalAlignment="Left"
+                                        PointerPressed="InputElement_OnPointerPressed"
+                                        Padding="5">
+                            <suki:GlassCard.Styles>
+                                <Style
+                                    Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
+                                    <Setter Property="Opacity" Value="0.7" />
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource SukiGlassCardBackground}" />
+                                </Style>
+                                <Style
+                                    Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
+                                    <Setter Property="Opacity" Value="1" />
+                                    <Setter Property="Background"
+                                            Value="{DynamicResource SukiLightBorderBrush}" />
+                                </Style>
+                            </suki:GlassCard.Styles>
+                            <ItemsControl
+                                ItemsSource="{Binding ChatMessages}"
+                                Padding="0"
+                                HorizontalAlignment="Center"
+                                Margin="0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical"
+                                                    Spacing="5" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <chatUi:ChatMessageView
+                                            IsLeft="True"
+                                            CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
+                                            MessageBoxShow="ChatMessageView_OnMessageBoxShow"
+                                            HorizontalAlignment="Left"
+                                            Message="{Binding Content}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </suki:GlassCard>
+                    </Grid>
+                </Grid>
+            </DataTemplate>
+        </chat:MessageDataTemplate>
+    </UserControl.Resources>
+    <UserControl.Styles>
         <Style Selector="chatUi|ChatUI">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -71,45 +272,6 @@
                                     <ItemsControl.DataTemplates>
                                         <DataTemplate DataType="data:ChatData">
                                             <Grid>
-                                                <Grid.Styles>
-                                                    <Style Selector="TextBlock.FadeIn">
-                                                        <Style.Animations>
-                                                            <Animation FillMode="Forward"
-                                                                       IterationCount="1"
-                                                                       PlaybackDirection="Normal"
-                                                                       Duration="0:0:0.200">
-                                                                <KeyFrame Cue="0%">
-                                                                    <Setter Property="Opacity" Value="0" />
-                                                                </KeyFrame>
-                                                                <KeyFrame Cue="100%">
-                                                                    <Setter Property="Opacity" Value="0.7" />
-                                                                </KeyFrame>
-                                                            </Animation>
-                                                        </Style.Animations>
-                                                    </Style>
-                                                    <Style Selector="Grid.FadeIn">
-                                                        <Style.Animations>
-                                                            <Animation FillMode="Forward"
-                                                                       IterationCount="1"
-                                                                       Easing="CubicEaseInOut"
-                                                                       PlaybackDirection="Normal"
-                                                                       Duration="0:0:0.200">
-                                                                <KeyFrame Cue="0%">
-                                                                    <Setter Property="Opacity" Value="0" />
-                                                                    <Setter Property="ScaleTransform.ScaleX"
-                                                                            Value="0.7" />
-                                                                    <Setter Property="ScaleTransform.ScaleY"
-                                                                            Value="0.7" />
-                                                                </KeyFrame>
-                                                                <KeyFrame Cue="100%">
-                                                                    <Setter Property="Opacity" Value="1" />
-                                                                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                                                                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                                                                </KeyFrame>
-                                                            </Animation>
-                                                        </Style.Animations>
-                                                    </Style>
-                                                </Grid.Styles>
                                                 <StackPanel Orientation="Vertical">
                                                     <!-- 时间条 -->
                                                     <TextBlock
@@ -121,179 +283,8 @@
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
-                                                    <!-- 撤回消息 -->
-                                                    <Border IsVisible="{Binding IsRetracted}"
-                                                            Background="{DynamicResource SukiPrimaryColor10}"
-                                                            Margin="0,5"
-                                                            HorizontalAlignment="Center" CornerRadius="5">
-                                                        <Panel>
-                                                            <StackPanel HorizontalAlignment="Center"
-                                                                        Orientation="Horizontal"
-                                                                        Margin="5,1.5"
-                                                                        IsVisible="{Binding IsUser}">
-                                                                <TextBlock FontSize="12"
-                                                                           Text="你"
-                                                                           Foreground="{DynamicResource SukiPrimaryColor}"
-                                                                           Padding="0"
-                                                                           Margin="0" />
-                                                                <TextBlock Text="撤回一条消息" FontSize="12"
-                                                                           Opacity="0.6" Padding="0"
-                                                                           Margin="0" />
-                                                            </StackPanel>
-                                                            <StackPanel Orientation="Horizontal"
-                                                                        HorizontalAlignment="Center"
-                                                                        Margin="5,1.5"
-                                                                        IsVisible="{Binding !IsUser}">
-                                                                <TextBlock FontSize="12"
-                                                                           Text="对方"
-                                                                           Foreground="{DynamicResource SukiPrimaryColor}"
-                                                                           Padding="0"
-                                                                           Margin="0" />
-                                                                <TextBlock Text="撤回一条消息" FontSize="12" Padding="0"
-                                                                           Opacity="0.6"
-                                                                           Margin="0" />
-                                                            </StackPanel>
-                                                        </Panel>
-                                                    </Border>
-                                                    <!-- 消息内容 -->
-                                                    <Panel IsVisible="{Binding !IsRetracted}">
-                                                        <!-- Left -->
-                                                        <Grid Margin="0,7,20,7"
-                                                              RenderTransformOrigin="0%,100%"
-                                                              Classes="FadeIn"
-                                                              IsVisible="{Binding !IsUser}">
-                                                            <Grid ColumnDefinitions="Auto,*">
-                                                                <!-- Head -->
-                                                                <circleImage:CircleImage Grid.Column="0"
-                                                                    VerticalAlignment="Top"
-                                                                    PointerPressed="Head_OnPointerPressed"
-                                                                    Margin="16,0,8,0"
-                                                                    Image="{Binding $parent[chatUi:ChatUI].FriendImageSource}"
-                                                                    Size="35" />
-                                                                <suki:GlassCard Grid.Column="1" Classes="Friend"
-                                                                    CornerRadius="6"
-                                                                    MaxWidth="450"
-                                                                    HorizontalAlignment="Left"
-                                                                    PointerPressed="InputElement_OnPointerPressed"
-                                                                    Padding="5">
-                                                                    <suki:GlassCard.Styles>
-                                                                        <Style
-                                                                            Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
-                                                                            <Setter Property="Opacity" Value="0.7" />
-                                                                            <Setter Property="Background"
-                                                                                Value="{DynamicResource SukiGlassCardBackground}" />
-                                                                        </Style>
-                                                                        <Style
-                                                                            Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
-                                                                            <Setter Property="Opacity" Value="1" />
-                                                                            <Setter Property="Background"
-                                                                                Value="{DynamicResource SukiLightBorderBrush}" />
-                                                                        </Style>
-                                                                    </suki:GlassCard.Styles>
-                                                                    <ItemsControl
-                                                                        ItemsSource="{Binding ChatMessages}"
-                                                                        Padding="0"
-                                                                        HorizontalAlignment="Center"
-                                                                        Margin="0">
-                                                                        <ItemsControl.ItemsPanel>
-                                                                            <ItemsPanelTemplate>
-                                                                                <StackPanel Orientation="Vertical"
-                                                                                    Spacing="5" />
-                                                                            </ItemsPanelTemplate>
-                                                                        </ItemsControl.ItemsPanel>
-                                                                        <ItemsControl.ItemTemplate>
-                                                                            <DataTemplate>
-                                                                                <chatUi:ChatMessageView
-                                                                                    IsLeft="True"
-                                                                                    CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
-                                                                                    MessageBoxShow="ChatMessageView_OnMessageBoxShow"
-                                                                                    HorizontalAlignment="Left"
-                                                                                    Message="{Binding Content}" />
-                                                                            </DataTemplate>
-                                                                        </ItemsControl.ItemTemplate>
-                                                                    </ItemsControl>
-                                                                </suki:GlassCard>
-                                                            </Grid>
-                                                        </Grid>
-                                                        <!-- Right -->
-                                                        <Grid Margin="20,7,0,7"
-                                                              RenderTransformOrigin="100%,100%"
-                                                              IsVisible="{Binding IsUser}"
-                                                              Classes="FadeIn">
-                                                            <Grid ColumnDefinitions="*,Auto">
-                                                                <!-- Head -->
-                                                                <circleImage:CircleImage Grid.Column="1"
-                                                                    Margin="8,0,16,0"
-                                                                    VerticalAlignment="Top"
-                                                                    DockPanel.Dock="Right"
-                                                                    PointerPressed="Head_OnPointerPressed"
-                                                                    Image="{Binding $parent[chatUi:ChatUI].UserImageSource}"
-                                                                    Size="35" />
-                                                                <Grid Grid.Column="0"
-                                                                      ColumnDefinitions="Auto,*"
-                                                                      HorizontalAlignment="Right">
-                                                                    <Grid VerticalAlignment="Bottom" Width="20"
-                                                                          Height="20"
-                                                                          Margin="5">
-                                                                        <suki:Loading LoadingStyle="Simple"
-                                                                            IsVisible="{Binding IsWriting}">
-                                                                            <suki:Loading.RenderTransform>
-                                                                                <ScaleTransform ScaleX="0.55"
-                                                                                    ScaleY="0.55" />
-                                                                            </suki:Loading.RenderTransform>
-                                                                        </suki:Loading>
-                                                                        <avalonia:MaterialIcon Kind="AlertCircle"
-                                                                            IsVisible="{Binding IsError}"
-                                                                            Width="20"
-                                                                            Height="20"
-                                                                            Foreground="Red" />
-                                                                    </Grid>
-                                                                    <suki:GlassCard Grid.Column="1" Classes="Owner"
-                                                                        CornerRadius="6"
-                                                                        MaxWidth="450"
-                                                                        PointerPressed="InputElement_OnPointerPressed"
-                                                                        Padding="5">
-                                                                        <suki:GlassCard.Styles>
-                                                                            <Style
-                                                                                Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
-                                                                                <Setter Property="Opacity" Value="0.7" />
-                                                                                <Setter Property="Background"
-                                                                                    Value="{DynamicResource SukiPrimaryColor25}" />
-                                                                            </Style>
-                                                                            <Style
-                                                                                Selector="suki|GlassCard.Owner:pointerover /template/ Border#PART_BorderCard">
-                                                                                <Setter Property="Opacity" Value="0.6" />
-                                                                                <Setter Property="Background"
-                                                                                    Value="{DynamicResource SukiPrimaryColor50}" />
-                                                                            </Style>
-                                                                        </suki:GlassCard.Styles>
-                                                                        <ItemsControl
-                                                                            ItemsSource="{Binding ChatMessages}"
-                                                                            HorizontalAlignment="Center"
-                                                                            Padding="0"
-                                                                            Margin="0">
-                                                                            <ItemsControl.ItemsPanel>
-                                                                                <ItemsPanelTemplate>
-                                                                                    <StackPanel Orientation="Vertical"
-                                                                                        Spacing="5" />
-                                                                                </ItemsPanelTemplate>
-                                                                            </ItemsControl.ItemsPanel>
-                                                                            <ItemsControl.ItemTemplate>
-                                                                                <DataTemplate>
-                                                                                    <chatUi:ChatMessageView
-                                                                                        IsLeft="False"
-                                                                                        CallMessageCommand="{Binding $parent[chatUi:ChatUI].ReCallCommand}"
-                                                                                        HorizontalAlignment="Right"
-                                                                                        MessageBoxShow="ChatMessageView_OnMessageBoxShow"
-                                                                                        Message="{Binding Content}" />
-                                                                                </DataTemplate>
-                                                                            </ItemsControl.ItemTemplate>
-                                                                        </ItemsControl>
-                                                                    </suki:GlassCard>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Panel>
+                                                    <ContentControl Content="{Binding}"
+                                                                    ContentTemplate="{StaticResource MessageDataTemplate}" />
                                                 </StackPanel>
                                             </Grid>
                                         </DataTemplate>

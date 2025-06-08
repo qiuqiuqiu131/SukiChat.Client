@@ -77,13 +77,15 @@
                         Margin="8,0,0,3"
                         Foreground="{DynamicResource SukiLowText}"
                         Text="账号" />
-                    <TextBox
+                    <AutoCompleteBox
                         MaxLength="10"
                         ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
-                        LetterSpacing="1.5"
+                        MinimumPrefixLength="3"
+                        ItemsSource="{Binding IdList}"
                         FontSize="13.5"
                         Watermark="输入账号"
-                        Text="{Binding Id}" />
+                        Text="{Binding Id}">
+                    </AutoCompleteBox>
                     <TextBlock
                         FontWeight="SemiBold"
                         Margin="8,5,0,3"

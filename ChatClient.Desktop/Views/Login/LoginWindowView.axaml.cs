@@ -12,7 +12,7 @@ using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.Login;
 
-public class LoginWindowView : Window, IDisposable
+public partial class LoginWindowView : SukiWindow, IDisposable
 {
     public LoginWindowView()
     {
@@ -23,7 +23,7 @@ public class LoginWindowView : Window, IDisposable
         ExtendClientAreaToDecorationsHint = false;
         Loaded += (sender, args) =>
         {
-            var scaleTransform = RenderTransform as ScaleTransform;
+            var scaleTransform = content.RenderTransform as ScaleTransform;
             scaleTransform.ScaleX = 1;
             scaleTransform.ScaleY = 1;
             Opacity = 1;

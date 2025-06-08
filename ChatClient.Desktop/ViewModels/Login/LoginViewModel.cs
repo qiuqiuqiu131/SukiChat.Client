@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
@@ -100,6 +102,14 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     #endregion
 
+    private List<string> idList;
+
+    public List<string> IdList
+    {
+        get => idList;
+        set => SetProperty(ref idList, value);
+    }
+
     private bool autoPassword = false;
 
     public AsyncDelegateCommand LoginCommand { get; init; }
@@ -115,6 +125,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
     public LoginViewModel(IConnection connection,
         IRegionManager regionManager,
         ILoginData loginData,
+        ILoginService loginService,
         IContainerProvider containerProvider,
         IDialogService dialogService)
     {
@@ -131,6 +142,8 @@ public class LoginViewModel : ViewModelBase, IDisposable
         IsConnected.PropertyChanged += IsConnectedOnPropertyChanged;
 
         Id = LoginData.Id;
+
+        loginService.LoginIds().ContinueWith(d => IdList = d.Result);
     }
 
     private void IsConnectedOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -146,9 +159,11 @@ public class LoginViewModel : ViewModelBase, IDisposable
     {
         IsBusy = true;
 
-        CommonResponse? result = null;
-        var _userManager = _containerProvider.Resolve<IUserManager>();
-        result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
+        var result = await Task.Run(() =>
+        {
+            var _userManager = _containerProvider.Resolve<IUserManager>();
+            return _userManager.Login(Id!, Password!, LoginData.RememberPassword);
+        });
 
         // 登录成功
         if (result is { State: true })

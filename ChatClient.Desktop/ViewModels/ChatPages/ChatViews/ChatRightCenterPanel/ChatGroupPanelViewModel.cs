@@ -28,6 +28,7 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
+using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -42,6 +43,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
+    private readonly IConfigurationRoot _configurationRoot;
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
 
@@ -83,12 +85,14 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
         IRegionManager regionManager,
+        IConfigurationRoot configurationRoot,
         ISukiDialogManager sukiDialogManager,
         IUserManager userManager,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
+        _configurationRoot = configurationRoot;
         _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
         ThemeStyle = themeStyle.CurrentThemeStyle;
@@ -216,7 +220,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
         var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
 
-        int nextCount = 10;
+        int nextCount = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
         var chatDatas =
             await groupPackService.GetGroupChatDataAsync(User?.Id, SelectedGroup.GroupId,
                 SelectedGroup.ChatMessages[0].ChatId,

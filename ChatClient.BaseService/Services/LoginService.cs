@@ -15,6 +15,7 @@ public interface ILoginService
     Task<CommonResponse?> Logout(string? userId);
     Task<string?> GetPassword(string id);
     Task LoginSuccess(UserDetailDto user);
+    Task<List<string>> LoginIds();
 }
 
 internal class LoginService : BaseService, ILoginService
@@ -57,6 +58,13 @@ internal class LoginService : BaseService, ILoginService
         // 同时如果选择记住密码，添加登录历史
         await AddUser(user);
         await AddLoginHistory(user.UserDto, user.Password);
+    }
+
+    public async Task<List<string>> LoginIds()
+    {
+        var repository = _unitOfWork.GetRepository<LoginHistory>();
+        var entitys = await repository.GetAllAsync();
+        return entitys.Select(d => d.Id).ToList();
     }
 
     public async Task<CommonResponse?> Logout(string? userId)
