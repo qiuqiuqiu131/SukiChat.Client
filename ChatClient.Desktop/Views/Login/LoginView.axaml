@@ -11,6 +11,7 @@
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
+    xmlns:u="https://irihi.tech/ursa"
     d:DesignHeight="420"
     d:DesignWidth="330"
     x:DataType="vm:LoginViewModel"
@@ -40,7 +41,7 @@
                 </Button>
             </StackPanel>
         </Panel>
-        <suki:BusyArea Grid.Row="1" IsBusy="{Binding IsBusy}" BusyText="登录中">
+        <u:LoadingContainer Grid.Row="1" IsLoading="{Binding IsBusy}" LoadingMessage="登录中">
             <DockPanel LastChildFill="True">
                 <StackPanel
                     DockPanel.Dock="Bottom"
@@ -115,7 +116,7 @@
                     </Button>
                 </StackPanel>
             </DockPanel>
-        </suki:BusyArea>
+        </u:LoadingContainer>
         <controls:NotificationMessageContainer Manager="{Binding NotificationManager}" Grid.RowSpan="2" />
     </Grid>
 </UserControl>

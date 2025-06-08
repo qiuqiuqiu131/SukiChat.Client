@@ -47,6 +47,8 @@
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
+        <PackageReference Include="Irihi.Ursa" Version="1.11.1" />
+        <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.11.1" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
         <PackageReference Include="NAudio.Lame" Version="2.1.0" />

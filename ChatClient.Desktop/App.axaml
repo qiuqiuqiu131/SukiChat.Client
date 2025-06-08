@@ -6,13 +6,15 @@
     xmlns:controls="https://github.com/kikipoulet/SukiUI"
     xmlns:suki="clr-namespace:SukiUI;assembly=SukiUI"
     xmlns:semi="https://irihi.tech/semi"
+    xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
     RequestedThemeVariant="Default">
     <Application.Resources>
         <FontFamily x:Key="MiSans">avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
     </Application.Resources>
     <Application.Styles>
         <suki:SukiTheme />
-        <!-- <semi:SemiTheme Locale="zh-CN" /> -->
+        <semi:SemiTheme Locale="zh-CN" />
+        <u-semi:SemiTheme Locale="zh-CN" />
         <avalonia:MaterialIconStyles />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/NotificationStyles.axaml" />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/Index.axaml" />
