@@ -10,6 +10,7 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
              xmlns:chatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI"
              xmlns:groupChatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI"
+             xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatUI">
     <UserControl.Resources>
@@ -44,12 +45,12 @@
                 <ControlTemplate>
                     <Grid>
                         <!-- 消息列表 -->
-                        <ScrollViewer
+                        <controls:QScrollViewer
                             Name="ChatScrollViewer"
                             Opacity="0"
                             HorizontalScrollBarVisibility="Disabled"
                             VerticalScrollBarVisibility="Visible">
-                            <StackPanel Orientation="Vertical" Name="Content" Background="#00000000">
+                            <StackPanel Orientation="Vertical" Background="#00000000">
                                 <Button IsVisible="{TemplateBinding SearchMoreVisible}"
                                         Classes="Basic"
                                         Command="{TemplateBinding SearchMoreCommand}">
@@ -396,7 +397,7 @@
                                     </ItemsControl.DataTemplates>
                                 </ItemsControl>
                             </StackPanel>
-                        </ScrollViewer>
+                        </controls:QScrollViewer>
                         <!-- 新消息提示 -->
                         <Button IsVisible="{TemplateBinding HaveUnReadMessage}"
                                 HorizontalAlignment="Center"

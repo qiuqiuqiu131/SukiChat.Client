@@ -35,49 +35,13 @@ public partial class GroupChatUI : UserControl
 
     #region ScrollField
 
-    private ScrollViewer ChatScroll;
-    private Control Content;
+    private QScrollViewer ChatScroll;
+    private Control ChatScrollContent;
 
     private bool isMovingToBottom = false;
-    private CancellationTokenSource? AnimationToken;
-    private double currentPosY = 0;
 
     private bool lockScroll = false;
     private double lockBottomDistance = 0;
-
-
-    /// <summary>
-    /// 当前可移动的最大偏移量
-    /// </summary>
-    private double MaxOffsetY
-    {
-        get
-        {
-            var offsetY = Content.Bounds.Height - ChatScroll.Bounds.Height;
-            if (offsetY < 0) offsetY = 0;
-            return offsetY;
-        }
-    }
-
-    /// <summary>
-    /// 记录当前Scroll的偏移量
-    /// </summary>
-    private double CurrentPosY
-    {
-        get => currentPosY;
-        set
-        {
-            if (value < 0) currentPosY = 0;
-            else
-            {
-                var maxValue = MaxOffsetY;
-                if (value > maxValue)
-                    currentPosY = maxValue;
-                else
-                    currentPosY = value;
-            }
-        }
-    }
 
     #endregion
 
@@ -85,21 +49,21 @@ public partial class GroupChatUI : UserControl
     {
         base.OnApplyTemplate(e);
 
-        ChatScroll = e.NameScope.Get<ScrollViewer>("ChatScrollViewer");
+        ChatScroll = e.NameScope.Get<QScrollViewer>("ChatScrollViewer");
+        ChatScrollContent = ChatScroll.Content as Control ??
+                            throw new InvalidOperationException("ChatScroll.Content must be a Control");
         ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
-        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, CurrentPosY); };
-        Content = e.NameScope.Get<Control>("Content");
-        Content.PropertyChanged += ContentOnPropertyChanged;
+        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, ChatScroll.CurrentPos); };
 
         // 捕获鼠标滚动事件
         var wheelEvent = Observable.FromEventPattern<PointerWheelEventArgs>(
-            h => Content.PointerWheelChanged += h,
-            h => Content.PointerWheelChanged -= h);
+            h => ChatScrollContent.PointerWheelChanged += h,
+            h => ChatScrollContent.PointerWheelChanged -= h);
 
         wheelEvent.Subscribe(arg => arg.EventArgs.Handled = true);
 
-        wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 100 + CurrentPosY)
-            .Subscribe(ScrollMove);
+        wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 150)
+            .Subscribe(d => ChatScroll.MoveUp(d));
     }
 
     #region Property
@@ -302,7 +266,7 @@ public partial class GroupChatUI : UserControl
     private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         // 最大可偏移量
-        double maxOffsetY = MaxOffsetY;
+        double maxOffsetY = ChatScroll.MaxOffsetY;
         // 当前偏移量
         double OffsetYOrigion = ChatScroll.Offset.Y;
 
@@ -315,7 +279,7 @@ public partial class GroupChatUI : UserControl
                 Dispatcher.UIThread.Post(() =>
                 {
                     // 等待渲染完成
-                    ScrollToBottom();
+                    ChatScroll.ScrollToBottom();
                 }, DispatcherPriority.Background);
             }
             else if (e.NewStartingIndex == 0)
@@ -376,16 +340,16 @@ public partial class GroupChatUI : UserControl
         if (e.Property == ScrollViewer.ScrollBarMaximumProperty)
         {
             // 最大可偏移量
-            double maxOffsetY = MaxOffsetY;
+            double maxOffsetY = ChatScroll.MaxOffsetY;
             // 当前偏移量
             double OffsetYOrigion = ChatScroll.Offset.Y;
 
-            if (Math.Abs(OffsetYOrigion - MaxOffsetY) < 5)
+            if (Math.Abs(OffsetYOrigion - maxOffsetY) < 5)
                 ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 5);
         }
         else if (e.Property == ScrollViewer.OffsetProperty)
         {
-            if (Math.Abs(ChatScroll.Offset.Y - MaxOffsetY) < 10)
+            if (Math.Abs(ChatScroll.Offset.Y - ChatScroll.MaxOffsetY) < 10)
             {
                 HaveUnReadMessage = false;
                 UnReadMessageCount = 0;
@@ -404,10 +368,10 @@ public partial class GroupChatUI : UserControl
         if (e.Property == Control.BoundsProperty)
         {
             if (!lockScroll) return;
-            double actualOffsetY = MaxOffsetY - lockBottomDistance;
+            double actualOffsetY = ChatScroll.MaxOffsetY - lockBottomDistance;
             if (actualOffsetY < 0) actualOffsetY = 0;
             ChatScroll.Offset = new Vector(ChatScroll.Offset.X, actualOffsetY);
-            CurrentPosY = actualOffsetY;
+            ChatScroll.CurrentPos = actualOffsetY;
         }
     }
 
@@ -418,7 +382,7 @@ public partial class GroupChatUI : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Button_OnClick(object? sender, RoutedEventArgs e) => ScrollToBottom(500);
+    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
 
 
     /// <summary>
@@ -434,123 +398,9 @@ public partial class GroupChatUI : UserControl
         Dispatcher.UIThread.Post(() =>
         {
             ChatScroll.Opacity = 1;
-            ChatScroll.ScrollToEnd();
-            CurrentPosY = ChatScroll.Offset.Y;
+            ChatScroll.ScrollToBottom();
         }, DispatcherPriority.Background);
     }
-
-    #region ScrollAnim
-
-    private void ScrollMove(double target)
-    {
-        if (lockScroll) return;
-
-        CurrentPosY = target;
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            if (isMovingToBottom) return;
-
-            // 创建动画
-            bool isMoving = AnimationToken is { Token.CanBeCanceled: true };
-            double time = Math.Abs(target - ChatScroll.Offset.Y) * 2.5;
-            if (time > 500) time = 500;
-            var anim = new Animation
-            {
-                Duration = TimeSpan.FromMilliseconds(time),
-                FillMode = FillMode.Forward,
-                Easing = isMoving ? new SineEaseOut() : new SineEaseInOut(),
-                IterationCount = new IterationCount(1),
-                PlaybackDirection = PlaybackDirection.Normal,
-                Children =
-                {
-                    new KeyFrame()
-                    {
-                        Setters =
-                        {
-                            new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
-                        },
-                        KeyTime = TimeSpan.FromSeconds(0)
-                    },
-                    new KeyFrame()
-                    {
-                        Setters =
-                        {
-                            new Setter
-                            {
-                                Property = ScrollViewer.OffsetProperty,
-                                Value = new Vector(ChatScroll.Offset.X, target)
-                            }
-                        },
-                        KeyTime = TimeSpan.FromMilliseconds(time)
-                    }
-                }
-            };
-
-            // 启动动画
-            AnimationToken?.Cancel();
-            AnimationToken = new CancellationTokenSource();
-            anim.RunAsync(ChatScroll, AnimationToken.Token);
-        });
-    }
-
-    private async void ScrollToBottom(int duration = 200)
-    {
-        HaveUnReadMessage = false;
-        UnReadMessageCount = 0;
-
-        // 计算移动量
-        double scrollViewerHeight = ChatScroll.Bounds.Height;
-        double contentHeight = Content.Bounds.Height;
-        double targetOffsetY = contentHeight - scrollViewerHeight + 10;
-        if (targetOffsetY < 0) targetOffsetY = 10;
-
-        CurrentPosY = targetOffsetY - 10;
-
-        // 启动动画
-        AnimationToken?.Cancel();
-        AnimationToken = new CancellationTokenSource();
-
-        isMovingToBottom = true;
-
-        // 创建动画
-        var anim = new Animation
-        {
-            Duration = TimeSpan.FromMilliseconds(duration),
-            FillMode = FillMode.Forward,
-            Easing = new SineEaseOut(),
-            IterationCount = new IterationCount(1),
-            PlaybackDirection = PlaybackDirection.Normal,
-            Children =
-            {
-                new KeyFrame()
-                {
-                    Setters =
-                    {
-                        new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
-                    },
-                    KeyTime = TimeSpan.FromSeconds(0)
-                },
-                new KeyFrame()
-                {
-                    Setters =
-                    {
-                        new Setter
-                        {
-                            Property = ScrollViewer.OffsetProperty,
-                            Value = new Vector(ChatScroll.Offset.X, targetOffsetY)
-                        }
-                    },
-                    KeyTime = TimeSpan.FromMilliseconds(duration)
-                }
-            }
-        };
-
-        // 等待动画完成
-        await anim.RunAsync(ChatScroll, AnimationToken.Token);
-        isMovingToBottom = false;
-    }
-
-    #endregion
 
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
@@ -797,28 +647,5 @@ public partial class GroupChatUI : UserControl
             _contextMenu.Close();
             _contextMenu = null;
         }
-    }
-}
-
-/// <summary>
-/// 头像点击事件参数
-/// </summary>
-public class GroupHeadClickEventArgs : RoutedEventArgs
-{
-    /// <summary>
-    /// 用户数据
-    /// </summary>
-    public GroupChatData User { get; }
-
-    /// <summary>
-    /// 鼠标点击事件
-    /// </summary>
-    public PointerPressedEventArgs PointerPressedEventArgs { get; }
-
-    public GroupHeadClickEventArgs(object sender, RoutedEvent routeEvent, GroupChatData user,
-        PointerPressedEventArgs args) : base(routeEvent, sender)
-    {
-        User = user;
-        PointerPressedEventArgs = args;
     }
 }

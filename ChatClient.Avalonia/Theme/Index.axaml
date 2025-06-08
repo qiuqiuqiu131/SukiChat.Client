@@ -25,7 +25,7 @@
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
-    <StyleInclude Source="../Controls/VoiceWaveIcon/VoiceWaveIcon.axaml"/>
+    <StyleInclude Source="../Controls/VoiceWaveIcon/VoiceWaveIcon.axaml" />
     <StyleInclude Source="Slider.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
     <StyleInclude Source="BusyArea.axaml" />
@@ -37,6 +37,7 @@
     <StyleInclude Source="../Controls/FormControls/FormComboBox/FormComboBoxStyle.axaml" />
     <StyleInclude Source="../Controls/OverlaySplitView/OverlaySplitView.axaml" />
     <StyleInclude Source="../Controls/FreindGroup/GroupList/GroupList.axaml" />
+    <StyleInclude Source="../Controls/QScrollViewer/QScrollViewer.axaml" />
     <StyleInclude Source="../Controls/FreindGroup/SeparateGroupsView/SeparateGroupsView.axaml" />
     <StyleInclude Source="../Controls/MultiFriendGroup/MultiGroupList/MultiGroupList.axaml" />
     <StyleInclude Source="../Controls/MultiFriendGroup/MultiSeparateGroupView/MultiSeparateGroupView.axaml" />

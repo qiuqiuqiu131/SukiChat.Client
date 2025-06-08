@@ -32,6 +32,7 @@
         <entry key="ChatClient.Avalonia/Controls/MyHead.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/OverlaySplitView/OverlatSplitView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/OverlaySplitView/OverlaySplitView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/QScrollViewer/QScrollViewer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SearchBox/SearchBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeparateGroupsView/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeperateGroupsView/SeperateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

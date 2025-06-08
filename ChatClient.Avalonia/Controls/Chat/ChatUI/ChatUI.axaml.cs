@@ -1,12 +1,8 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.IO.IsolatedStorage;
 using System.Reactive.Linq;
 using System.Windows.Input;
-using Avalonia.Platform.Storage.FileIO;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
@@ -16,11 +12,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
-using ChatServer.Common.Protobuf;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -37,49 +31,11 @@ public partial class ChatUI : UserControl
 
     #region ScrollField
 
-    private ScrollViewer ChatScroll;
-    private Control Content;
-
-    private bool isMovingToBottom = false;
-    private CancellationTokenSource? AnimationToken;
-    private double currentPosY = 0;
+    private QScrollViewer ChatScroll;
+    private Control ChatScrollContent;
 
     private bool lockScroll = false;
     private double lockBottomDistance = 0;
-
-
-    /// <summary>
-    /// 当前可移动的最大偏移量
-    /// </summary>
-    private double MaxOffsetY
-    {
-        get
-        {
-            var offsetY = Content.Bounds.Height - ChatScroll.Bounds.Height;
-            if (offsetY < 0) offsetY = 0;
-            return offsetY;
-        }
-    }
-
-    /// <summary>
-    /// 记录当前Scroll的偏移量
-    /// </summary>
-    private double CurrentPosY
-    {
-        get => currentPosY;
-        set
-        {
-            if (value < 0) currentPosY = 0;
-            else
-            {
-                var maxValue = MaxOffsetY;
-                if (value > maxValue)
-                    currentPosY = maxValue;
-                else
-                    currentPosY = value;
-            }
-        }
-    }
 
     #endregion
 
@@ -87,21 +43,20 @@ public partial class ChatUI : UserControl
     {
         base.OnApplyTemplate(e);
 
-        ChatScroll = e.NameScope.Get<ScrollViewer>("ChatScrollViewer");
+        ChatScroll = e.NameScope.Get<QScrollViewer>("ChatScrollViewer");
+        ChatScrollContent = (ChatScroll.Content as Control)!;
         ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
-        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, CurrentPosY); };
-        Content = e.NameScope.Get<Control>("Content");
-        Content.PropertyChanged += ContentOnPropertyChanged;
+        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, ChatScroll.CurrentPos); };
 
         // 捕获鼠标滚动事件
         var wheelEvent = Observable.FromEventPattern<PointerWheelEventArgs>(
-            h => Content.PointerWheelChanged += h,
-            h => Content.PointerWheelChanged -= h);
+            h => ChatScrollContent.PointerWheelChanged += h,
+            h => ChatScrollContent.PointerWheelChanged -= h);
 
         wheelEvent.Subscribe(arg => arg.EventArgs.Handled = true);
 
-        wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 100 + CurrentPosY)
-            .Subscribe(ScrollMove);
+        wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 150)
+            .Subscribe(d => ChatScroll.MoveUp(d));
     }
 
     #region Property
@@ -330,20 +285,20 @@ public partial class ChatUI : UserControl
     private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
         // 最大可偏移量
-        double maxOffsetY = MaxOffsetY;
+        double maxOffsetY = ChatScroll.MaxOffsetY;
         // 当前偏移量
         double OffsetYOrigion = ChatScroll.Offset.Y;
 
         if (e.Action == NotifyCollectionChangedAction.Add)
         {
-            if (isMovingToBottom // 正在移动到底部
+            if (ChatScroll.IsToMoving // 正在移动到底部
                 || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
                 || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
             {
                 Dispatcher.UIThread.Post(() =>
                 {
                     // 等待渲染完成
-                    ScrollToBottom();
+                    ChatScroll.MoveToBottom();
                 }, DispatcherPriority.Background);
             }
             else if (e.NewStartingIndex == 0)
@@ -404,16 +359,14 @@ public partial class ChatUI : UserControl
         if (e.Property == ScrollViewer.ScrollBarMaximumProperty)
         {
             // 最大可偏移量
-            double maxOffsetY = MaxOffsetY;
-            // 当前偏移量
-            double OffsetYOrigion = ChatScroll.Offset.Y;
+            double maxOffsetY = ChatScroll.MaxOffsetY;
 
-            if (Math.Abs(OffsetYOrigion - MaxOffsetY) < 5)
+            if (Math.Abs(ChatScroll.Offset.Y - maxOffsetY) < 5)
                 ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 5);
         }
         else if (e.Property == ScrollViewer.OffsetProperty)
         {
-            if (Math.Abs(ChatScroll.Offset.Y - MaxOffsetY) < 10)
+            if (Math.Abs(ChatScroll.Offset.Y - ChatScroll.MaxOffsetY) < 10)
             {
                 HaveUnReadMessage = false;
                 UnReadMessageCount = 0;
@@ -432,10 +385,10 @@ public partial class ChatUI : UserControl
         if (e.Property == BoundsProperty)
         {
             if (!lockScroll) return;
-            double actualOffsetY = MaxOffsetY - lockBottomDistance;
+            double actualOffsetY = ChatScroll.MaxOffsetY - lockBottomDistance;
             if (actualOffsetY < 0) actualOffsetY = 0;
             ChatScroll.Offset = new Vector(ChatScroll.Offset.X, actualOffsetY);
-            CurrentPosY = actualOffsetY;
+            ChatScroll.CurrentPos = actualOffsetY;
         }
     }
 
@@ -447,7 +400,7 @@ public partial class ChatUI : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Button_OnClick(object? sender, RoutedEventArgs e) => ScrollToBottom(500);
+    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
 
 
     /// <summary>
@@ -463,123 +416,10 @@ public partial class ChatUI : UserControl
         Dispatcher.UIThread.Post(() =>
         {
             ChatScroll.Opacity = 1;
-            ChatScroll.ScrollToEnd();
-            CurrentPosY = ChatScroll.Offset.Y;
+            ChatScroll.ScrollToBottom();
+            ChatScroll.CurrentPos = ChatScroll.Offset.Y;
         }, DispatcherPriority.Background);
     }
-
-    #region ScrollAnim
-
-    private void ScrollMove(double target)
-    {
-        if (lockScroll) return;
-
-        CurrentPosY = target;
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            if (isMovingToBottom) return;
-
-            // 创建动画
-            bool isMoving = AnimationToken is { Token.CanBeCanceled: true };
-            double time = Math.Abs(target - ChatScroll.Offset.Y) * 2.5;
-            if (time > 500) time = 500;
-            var anim = new Animation
-            {
-                Duration = TimeSpan.FromMilliseconds(time),
-                FillMode = FillMode.Forward,
-                Easing = isMoving ? new SineEaseOut() : new SineEaseInOut(),
-                IterationCount = new IterationCount(1),
-                PlaybackDirection = PlaybackDirection.Normal,
-                Children =
-                {
-                    new KeyFrame()
-                    {
-                        Setters =
-                        {
-                            new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
-                        },
-                        Cue = new Cue(0)
-                    },
-                    new KeyFrame()
-                    {
-                        Setters =
-                        {
-                            new Setter
-                            {
-                                Property = ScrollViewer.OffsetProperty,
-                                Value = new Vector(ChatScroll.Offset.X, target)
-                            }
-                        },
-                        Cue = new Cue(1)
-                    }
-                }
-            };
-
-            // 启动动画
-            AnimationToken?.Cancel();
-            AnimationToken = new CancellationTokenSource();
-            anim.RunAsync(ChatScroll, AnimationToken.Token);
-        });
-    }
-
-    private async void ScrollToBottom(int duration = 200)
-    {
-        HaveUnReadMessage = false;
-        UnReadMessageCount = 0;
-
-        // 计算移动量
-        double scrollViewerHeight = ChatScroll.Bounds.Height;
-        double contentHeight = Content.Bounds.Height;
-        double targetOffsetY = contentHeight - scrollViewerHeight + 10;
-        if (targetOffsetY < 0) targetOffsetY = 10;
-
-        CurrentPosY = targetOffsetY - 10;
-
-        // 启动动画
-        AnimationToken?.Cancel();
-        AnimationToken = new CancellationTokenSource();
-
-        isMovingToBottom = true;
-
-        // 创建动画
-        var anim = new Animation
-        {
-            Duration = TimeSpan.FromMilliseconds(duration),
-            FillMode = FillMode.Forward,
-            Easing = new SineEaseOut(),
-            IterationCount = new IterationCount(1),
-            PlaybackDirection = PlaybackDirection.Normal,
-            Children =
-            {
-                new KeyFrame()
-                {
-                    Setters =
-                    {
-                        new Setter { Property = ScrollViewer.OffsetProperty, Value = ChatScroll.Offset }
-                    },
-                    Cue = new Cue(0)
-                },
-                new KeyFrame()
-                {
-                    Setters =
-                    {
-                        new Setter
-                        {
-                            Property = ScrollViewer.OffsetProperty,
-                            Value = new Vector(ChatScroll.Offset.X, targetOffsetY)
-                        }
-                    },
-                    Cue = new Cue(1)
-                }
-            }
-        };
-
-        // 等待动画完成
-        await anim.RunAsync(ChatScroll, AnimationToken.Token);
-        isMovingToBottom = false;
-    }
-
-    #endregion
 
 // 左侧好友头像点击
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
@@ -876,57 +716,5 @@ public partial class ChatUI : UserControl
             _contextMenu.Close();
             _contextMenu = null;
         }
-    }
-}
-
-/// <summary>
-/// 头像点击事件参数
-/// </summary>
-public class FriendHeadClickEventArgs : RoutedEventArgs
-{
-    /// <summary>
-    /// 用户数据
-    /// </summary>
-    public ChatData User { get; }
-
-    /// <summary>
-    /// 鼠标点击事件
-    /// </summary>
-    public PointerPressedEventArgs PointerPressedEventArgs { get; }
-
-    public FriendHeadClickEventArgs(object sender, RoutedEvent routeEvent, ChatData user, PointerPressedEventArgs args)
-        : base(routeEvent, sender)
-    {
-        User = user;
-        PointerPressedEventArgs = args;
-    }
-}
-
-public class NotificationMessageEventArgs : RoutedEventArgs
-{
-    public string Message { get; }
-
-    public NotificationType Type { get; }
-
-    public NotificationMessageEventArgs(object sender, RoutedEvent routeEvent, string message, NotificationType type)
-        : base(routeEvent, sender)
-    {
-        Message = message;
-        Type = type;
-    }
-}
-
-public class MessageBoxShowEventArgs : RoutedEventArgs
-{
-    public CardMessDto CardMessDto { get; }
-
-    public PointerPressedEventArgs PointerPressedEventArgs { get; }
-
-    public MessageBoxShowEventArgs(object sender, RoutedEvent routedEvent, PointerPressedEventArgs pressArgs,
-        CardMessDto cardMessDto)
-        : base(routedEvent, sender)
-    {
-        CardMessDto = cardMessDto;
-        PointerPressedEventArgs = pressArgs;
     }
 }

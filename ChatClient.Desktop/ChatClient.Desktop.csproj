@@ -50,6 +50,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
         <PackageReference Include="NAudio.Lame" Version="2.1.0" />
+        <PackageReference Include="Semi.Avalonia" Version="11.2.1.8" />
     </ItemGroup>
 
     <ItemGroup>

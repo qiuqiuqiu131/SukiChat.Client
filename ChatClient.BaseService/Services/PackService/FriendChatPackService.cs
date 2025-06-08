@@ -197,7 +197,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     }
 
     /// <summary>
-    /// 处理好友消息
+    /// 保存单条聊天消息到数据库
     /// </summary>
     /// <param name="chatMessage"></param>
     /// <returns></returns>
@@ -259,6 +259,12 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return true;
     }
 
+    /// <summary>
+    /// 批量保存私聊消息到数据库
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="chatPrivateMessages"></param>
+    /// <returns></returns>
     public async Task<bool> ChatPrivateDetailMessagesOperate(string userId,
         IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
     {
@@ -281,11 +287,11 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     /// <summary>
     /// 获取未读消息数量
     /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">好友ID</param>
+    /// <param name="lastChatId">最后一条已读消息的ID</param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public async Task<int> GetUnReadChatMessageCount(string userId, string targetId, int lastChatId)
+    private async Task<int> GetUnReadChatMessageCount(string userId, string targetId, int lastChatId)
     {
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
         var result = await chatPrivateRepository.GetAll(

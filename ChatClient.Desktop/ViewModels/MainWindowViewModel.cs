@@ -429,11 +429,11 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 await Exit();
         }
 
-        TranslateWindowHelper.CloseAllDialog();
-        SukiDialogManager.DismissDialog();
-        SukiDialogManager.CreateDialog()
-            .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
-            .TryShow();
+        // TranslateWindowHelper.CloseAllDialog();
+        // SukiDialogManager.DismissDialog();
+        // SukiDialogManager.CreateDialog()
+        //     .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
+        //     .TryShow();
     }
 
     private async Task TryExit()

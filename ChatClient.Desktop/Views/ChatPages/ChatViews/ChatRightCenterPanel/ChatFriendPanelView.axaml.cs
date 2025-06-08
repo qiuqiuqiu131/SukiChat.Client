@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Notification.Controls;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.Chat;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.BaseService.Manager;

@@ -4,6 +4,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Controls.Chat;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.Avalonia.Controls.OverlaySplitView;

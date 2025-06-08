@@ -18,15 +18,70 @@ namespace ChatClient.BaseService.Services;
 
 public interface IChatService
 {
+    /// <summary>
+    /// 发送私聊消息，如果发送图片消息，会上传图片，再发送消息
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">好友ID</param>
+    /// <param name="messages">消息内容</param>
+    /// <returns></returns>
     Task<(bool, string)> SendChatMessage(string userId, string targetId, List<ChatMessageDto> messages);
+
+    /// <summary>
+    /// 发送群聊消息，如果发送图片消息，会上传图片，再发送消息
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="groupId">群聊ID</param>
+    /// <param name="messages">消息内容</param>
+    /// <returns></returns>
     Task<(bool, string)> SendGroupChatMessage(string userId, string groupId, List<ChatMessageDto> messages);
 
+    /// <summary>
+    /// 处理聊天消息，用于注入消息资源，如：图片、语音、文件等
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="id">群聊ID\好友ID</param>
+    /// <param name="chatId">消息ID</param>
+    /// <param name="isUser">是否为用户发送消息</param>
+    /// <param name="chatMessages">消息体内容</param>
+    /// <param name="fileTarget">消息发送目标（个人\群聊）</param>
+    /// <returns></returns>
     Task OperateChatMessage(string userId, string id, int chatId, bool isUser, List<ChatMessageDto> chatMessages,
         FileTarget fileTarget);
 
+    /// <summary>
+    /// 向好友发送正在输入的消息
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">好友ID</param>
+    /// <param name="isWriting">输入状态</param>
+    /// <returns></returns>
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
+
+    /// <summary>
+    /// 用于更新文件下载状态,数据库中更改
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="fileMess">文件消息</param>
+    /// <param name="target">消息发送目标（个人\群聊）</param>
+    /// <returns></returns>
     Task UpdateFileMess(string userId, FileMessDto fileMess, FileTarget target);
+
+    /// <summary>
+    /// 读取所有聊天消息，将所有未读消息设置为已读
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">好友ID</param>
+    /// <param name="chatId">最新的聊天消息ID</param>
+    /// <param name="fileTarget">消息发送目标（个人\群聊）</param>
+    /// <returns></returns>
     Task<bool> ReadAllChatMessage(string userId, string targetId, int chatId, FileTarget fileTarget);
+
+    /// <summary>
+    /// 确保聊天对象在聊天列表中，如果不存在，则添加
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     Task AddChatDto(object obj);
 
     Task<bool> DeleteChatMessage(string userId, int chatId, FileTarget fileTarget);
@@ -358,10 +413,7 @@ internal class ChatService : BaseService, IChatService
 
     #endregion
 
-    /// <summary>
-    /// 用于更新文件下载状态,数据库中更改
-    /// </summary>
-    /// <param name="fileMess"></param>
+
     public async Task UpdateFileMess(string userId, FileMessDto fileMess, FileTarget target)
     {
         if (target == FileTarget.User)
@@ -400,13 +452,6 @@ internal class ChatService : BaseService, IChatService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    /// <summary>
-    /// 将所有的消息设置为已读
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public async Task<bool> ReadAllChatMessage(string userId, string targetId, int lastChatId, FileTarget fileTarget)
     {
         // TODO: 已读所有消息
