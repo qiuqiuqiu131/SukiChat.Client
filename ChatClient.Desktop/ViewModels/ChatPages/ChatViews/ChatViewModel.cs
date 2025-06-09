@@ -27,7 +27,7 @@ using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 
-public class ChatViewModel : ChatPageBase
+public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IConfigurationRoot _configurationRoot;
@@ -81,7 +81,7 @@ public class ChatViewModel : ChatPageBase
         IConfigurationRoot configurationRoot,
         IChatLRService chatLRService,
         IDialogService dialogService,
-        IUserManager userManager) : base("聊天", MaterialIconKind.Chat, 0)
+        IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _configurationRoot = configurationRoot;
@@ -308,8 +308,22 @@ public class ChatViewModel : ChatPageBase
 
     #endregion
 
-    public override void OnNavigatedFrom()
+    #region RegionAware
+
+    public void Destroy()
+    {
+    }
+
+    public void OnNavigatedTo(NavigationContext navigationContext)
+    {
+    }
+
+    public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+    public void OnNavigatedFrom(NavigationContext navigationContext)
     {
         ChatLeftPanelViewModel.SearchText = null;
     }
+
+    #endregion
 }

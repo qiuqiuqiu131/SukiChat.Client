@@ -252,7 +252,7 @@ public class SeparateGroupsView : UserControl
             if (items is GroupList.GroupList groupItem)
             {
                 groupItem.SelectedItem = null;
-                groupItem.Close();
+                // groupItem.Close();
             }
     }
 

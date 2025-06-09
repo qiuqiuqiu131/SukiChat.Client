@@ -131,6 +131,9 @@ public class App : PrismApplication
         // 注册
         containerRegistry.RegisterForNavigation<RegisterView, RegisterViewModel>();
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
+        // 主页面
+        containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
+        containerRegistry.RegisterForNavigation<ContactsView, ContactsViewModel>();
         // 用户和群聊通知面板
         containerRegistry.RegisterForNavigation<FriendRequestView, FriendRequestViewModel>();
         containerRegistry.RegisterForNavigation<GroupRequestView, GroupRequestViewModel>();
@@ -215,6 +218,8 @@ public class App : PrismApplication
 
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
 
+        regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(ChatView));
+
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatFriendPanelView));
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatGroupPanelView));
@@ -239,8 +244,6 @@ public class App : PrismApplication
     private SukiChatViews ConfigureViews(IContainerRegistry services)
     {
         return new SukiChatViews()
-            .AddView<ChatView, ChatViewModel>(services)
-            .AddView<ContactsView, ContactsViewModel>(services)
             // 同意添加好友
             .AddView<AcceptFriendView, AcceptFriendViewModel>(services)
             // 编辑用户信息

@@ -124,6 +124,7 @@
                                     </Button>
                                     <Slider
                                         x:Name="ScaleSlider"
+                                        Theme="{StaticResource SemiSlider}"
                                         Grid.Column="1"
                                         Maximum="1"
                                         Minimum="0"

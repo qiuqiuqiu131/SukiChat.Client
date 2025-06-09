@@ -12,6 +12,8 @@ using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.About;
 using ChatClient.Desktop.Views.CallView;
+using ChatClient.Desktop.Views.ChatPages.ChatViews;
+using ChatClient.Desktop.Views.ChatPages.ContactViews;
 using ChatClient.Media.CallManager;
 using ChatClient.Media.CallOperator;
 using ChatClient.Tool.Common;
@@ -19,12 +21,15 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
+using Material.Icons;
 using Org.BouncyCastle.Asn1.X509;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
+using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 using SystemSettingView = ChatClient.Desktop.Views.SystemSetting.SystemSettingView;
 
@@ -36,6 +41,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
     private readonly IDialogService _dialogService;
     private readonly IContainerProvider _containerProvider;
     private readonly IUserManager _userManager;
+
+    public IRegionManager RegionManager { get; set; } = new RegionManager();
 
     #region IsConnected
 
@@ -61,21 +68,27 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     #endregion
 
-    #region ActiveChatPage
+    #region NaviBar
 
-    private ChatPageBase? _activePage;
+    public List<NaviBar> NaviBars { get; } =
+    [
+        new NaviBar("聊天", MaterialIconKind.Chat, MaterialIconKind.ChatOutline, nameof(ChatView)),
+        new NaviBar("通讯录", MaterialIconKind.AccountSupervisor, MaterialIconKind.AccountSupervisorOutline,
+            nameof(ContactsView)),
+        new NaviBar("空间", MaterialIconKind.Star, MaterialIconKind.StarOutline, nameof(ChatView))
+    ];
 
-    public ChatPageBase? ActivePage
+
+    private NaviBar activeNaviBar;
+
+    public NaviBar ActiveNaviBar
     {
-        get => _activePage;
+        get => activeNaviBar;
         set
         {
-            var previousPage = _activePage;
-            if (SetProperty(ref _activePage, value))
+            if (SetProperty(ref activeNaviBar, value))
             {
-                previousPage?.OnNavigatedFrom();
-                _activePage?.OnNavigatedTo();
-                _userManager.CurrentChatPage = ActivePage?.DisplayName ?? "";
+                RegionManager.RequestNavigate(RegionNames.MainRegion, activeNaviBar.RegionName);
             }
         }
     }
@@ -97,17 +110,15 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
     private AvaloniaList<GroupFriendDto> GroupFriends => _userManager.GroupFriends;
     private AvaloniaList<GroupGroupDto> GroupGroups => _userManager.GroupGroups;
 
-    public AvaloniaList<ChatPageBase> ChatPages { get; private set; }
-
     public ISukiDialogManager SukiDialogManager { get; private set; }
 
     public INotificationMessageManager NotificationMessageManager { get; init; } = new NotificationMessageManager();
 
-    public AsyncDelegateCommand ExitCommnad { get; init; }
+    public AsyncDelegateCommand ExitCommand { get; init; }
     public DelegateCommand ShowSystemSettingCommand { get; init; }
     public DelegateCommand ShowAboutCommand { get; init; }
 
-    public MainWindowViewModel(IEnumerable<ChatPageBase> chatPages,
+    public MainWindowViewModel(
         IThemeStyle themeStyle,
         IConnection connection,
         IEventAggregator eventAggregator,
@@ -123,13 +134,11 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         SukiDialogManager = sukiDialogManager;
 
-        ChatPages = new AvaloniaList<ChatPageBase>(chatPages.OrderBy(x => x.Index).ThenBy(x => x.DisplayName));
-
         User = userManager.User?.UserDto!;
         IsConnected = connection.IsConnected;
         CurrentThemeStyle = themeStyle.CurrentThemeStyle;
 
-        ExitCommnad = new AsyncDelegateCommand(TryExit);
+        ExitCommand = new AsyncDelegateCommand(TryExit);
         ShowSystemSettingCommand = new DelegateCommand(ShowSystemSetting);
         ShowAboutCommand = new DelegateCommand(ShowAbout);
 
@@ -334,15 +343,10 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         });
         tokens.Add(token1);
 
-        var token2 = _eventAggregator.GetEvent<ResponseEvent<FriendRequestFromServer>>().Subscribe(d =>
-        {
-            var i = d;
-        });
-        tokens.Add(token2);
-
         var token3 = _eventAggregator.GetEvent<ChangePageEvent>().Subscribe(d =>
         {
-            ActivePage = ChatPages.FirstOrDefault(x => x.DisplayName.Equals(d.PageName));
+            ActiveNaviBar = NaviBars.FirstOrDefault(x => x.PageName.Equals(d.PageName))
+                            ?? NaviBars[0];
         });
         tokens.Add(token3);
 
@@ -354,7 +358,7 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
         var token5 = _eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Subscribe(d =>
         {
-            var page = ChatPages.FirstOrDefault(p => p.DisplayName.Equals(d.Item1));
+            var page = NaviBars.FirstOrDefault(p => p.PageName.Equals(d.Item1));
             if (page != null)
                 page.UnReadMessageCount = d.Item2;
         });
@@ -485,7 +489,6 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 {
                     UnRegisterDtoEvent();
                     UnRegisterEvent();
-                    ChatPages?.Clear();
                 }
                 catch (Exception e)
                 {

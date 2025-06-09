@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Desktop.Tool;
+using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Media.CallManager;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using Material.Icons;
+using Material.Icons.Avalonia;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -313,4 +318,44 @@ public partial class MainWindowView : SukiWindow, IDisposable
     }
 
     #endregion
+
+    private ContextMenu? _contextMenu;
+
+    private ContextMenu CreateContextMenu()
+    {
+        ContextMenu menu = new ContextMenu();
+        menu.Items.Add(new MenuItem
+        {
+            Header = "关于",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.AboutOutline },
+            Command = ((MainWindowViewModel)DataContext).ShowAboutCommand
+        });
+        menu.Items.Add(new MenuItem
+        {
+            Header = "设置",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.SettingsOutline },
+            Command = ((MainWindowViewModel)DataContext).ShowSystemSettingCommand
+        });
+        menu.Items.Add(new MenuItem
+        {
+            Header = "退出登录",
+            Icon = new MaterialIcon { Kind = MaterialIconKind.ExitToApp },
+            Command = ((MainWindowViewModel)DataContext).ExitCommand
+        });
+
+        menu.Placement = PlacementMode.RightEdgeAlignedBottom;
+        menu.PlacementAnchor = PopupAnchor.TopRight;
+        return menu;
+    }
+
+    private void Other_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (_contextMenu == null)
+            _contextMenu = CreateContextMenu();
+
+        if (_contextMenu.IsOpen)
+            _contextMenu.Close();
+        else
+            _contextMenu.Open(Other);
+    }
 }

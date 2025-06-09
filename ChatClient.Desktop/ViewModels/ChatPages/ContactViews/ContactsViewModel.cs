@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Collections;
+using Avalonia.Threading;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
@@ -31,7 +32,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 
-public class ContactsViewModel : ChatPageBase
+public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAware
 {
     private string? searchText;
 
@@ -86,7 +87,6 @@ public class ContactsViewModel : ChatPageBase
         IRegionManager regionManager,
         ILocalSearchService localSearchService,
         IUserManager userManager)
-        : base("通讯录", MaterialIconKind.AccountSupervisor, 1)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;
@@ -107,11 +107,11 @@ public class ContactsViewModel : ChatPageBase
         DeleteGroupCommand = new AsyncDelegateCommand<object>(DeleteGroup);
         SearchMoreCommand = new DelegateCommand<string>(SearchMore);
 
-        User.OnUnreadMessageCountChanged += () =>
-        {
-            UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
-        };
-        UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
+        // User.OnUnreadMessageCountChanged += () =>
+        // {
+        //     // UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
+        // };
+        // // UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
 
         searchDisposable = searchSubject
             .Throttle(TimeSpan.FromMilliseconds(500))
@@ -375,10 +375,25 @@ public class ContactsViewModel : ChatPageBase
 
     #endregion
 
-    public override void OnNavigatedFrom()
+    #region RegionAware
+
+    public void Destroy()
+    {
+        searchDisposable.Dispose();
+    }
+
+    public void OnNavigatedTo(NavigationContext navigationContext)
+    {
+    }
+
+    public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+    public void OnNavigatedFrom(NavigationContext navigationContext)
     {
         _userManager.CurrentContactState = ContactState.None;
         SearchText = null;
-        RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
+        // RegionManager.RequestNavigate(RegionNames.ContactsRegion, nameof(ChatEmptyView));
     }
+
+    #endregion
 }

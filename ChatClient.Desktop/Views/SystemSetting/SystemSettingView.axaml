@@ -56,7 +56,7 @@
     </UserControl.Styles>
     <Panel>
         <Grid ColumnDefinitions="200,*">
-            <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor5}" />
+            <Border Grid.Column="0" Background="{DynamicResource SukiPrimaryColor10}" />
             <ListBox x:Name="ListBox" Grid.Column="0"
                      SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}"
                      Margin="3,20" ItemsSource="{Binding SettingBars}">

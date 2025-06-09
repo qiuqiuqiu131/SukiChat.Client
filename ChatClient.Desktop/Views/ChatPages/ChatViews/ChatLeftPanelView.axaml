@@ -507,8 +507,8 @@
                 suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical" />
-                        <!-- <StackPanel Orientation="Vertical" /> -->
+                        <!-- <VirtualizingStackPanel Orientation="Vertical" /> -->
+                        <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.Styles>

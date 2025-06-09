@@ -9,7 +9,9 @@
                  xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
                  xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
                  xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
-                 xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+                 xmlns:tool="clr-namespace:ChatClient.Desktop.Tool"
+                 xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
+                 xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
                  Theme="{StaticResource MySukiWindowTheme}"
                  mc:Ignorable="d"
                  Width="975"
@@ -32,142 +34,246 @@
         <Style Selector="TrayIcon">
             <Setter Property="TextBlock.FontSize" Value="12" />
         </Style>
+        <Style Selector="ListBox.Navi ListBoxItem">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Panel>
+                        <badge:Badge Name="badge" OverflowCount="5">
+                            <Panel Width="38" Height="38">
+                                <Border CornerRadius="10" Name="bor" Opacity="0"
+                                        Background="{DynamicResource SukiPrimaryColor25}">
+                                    <Border.Transitions>
+                                        <Transitions>
+                                            <DoubleTransition Property="Opacity"
+                                                              Duration="0:0:0.1" />
+                                        </Transitions>
+                                    </Border.Transitions>
+                                </Border>
+                                <avalonia:MaterialIcon
+                                    Name="icon"
+                                    Width="24" Height="24"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Opacity="0"
+                                    Kind="{Binding ((tool:NaviBar)DataContext).Icon,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem}}">
+                                    <avalonia:MaterialIcon.Transitions>
+                                        <Transitions>
+                                            <DoubleTransition Property="Opacity"
+                                                              Duration="0:0:0.2" />
+                                        </Transitions>
+                                    </avalonia:MaterialIcon.Transitions>
+                                </avalonia:MaterialIcon>
+                                <avalonia:MaterialIcon
+                                    Name="outlineIcon"
+                                    Width="24" Height="24"
+                                    Foreground="{DynamicResource SukiText}"
+                                    Opacity="1"
+                                    Kind="{Binding ((tool:NaviBar)DataContext).IconOutline,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBoxItem}}">
+                                    <avalonia:MaterialIcon.Transitions>
+                                        <Transitions>
+                                            <DoubleTransition Property="Opacity"
+                                                              Duration="0:0:0.2" />
+                                        </Transitions>
+                                    </avalonia:MaterialIcon.Transitions>
+                                </avalonia:MaterialIcon>
+                            </Panel>
+                        </badge:Badge>
+                    </Panel>
+                </ControlTemplate>
+            </Setter>
+
+            <Style Selector="^:pointerover /template/ badge|Badge#badge">
+                <Style Selector="^ Border#bor">
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+            </Style>
+
+            <Style Selector="^:pressed /template/ badge|Badge#badge">
+                <Style Selector="^ Border#bor">
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+                <Style Selector="^ avalonia|MaterialIcon#outlineIcon">
+                    <Setter Property="Opacity" Value="0.2" />
+                </Style>
+            </Style>
+
+            <Style Selector="^:selected /template/ badge|Badge#badge">
+                <Style Selector="^ Border#bor">
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+                <Style Selector="^ avalonia|MaterialIcon#icon">
+                    <Setter Property="Opacity" Value="1" />
+                </Style>
+                <Style Selector="^ avalonia|MaterialIcon#outlineIcon">
+                    <Setter Property="Opacity" Value="0" />
+                </Style>
+            </Style>
+        </Style>
     </Window.Styles>
 
     <Panel>
-        <suki:SukiSideMenu IsSearchEnabled="False"
-                           IsMenuExpanded="False"
-                           IsToggleButtonVisible="False"
-                           Theme="{StaticResource SukiSideMenuStyle}"
-                           ItemsSource="{Binding ChatPages}"
-                           CloseMenuClicked="Button_OnClick"
-                           SelectedItem="{Binding ActivePage}">
-            <suki:SukiSideMenu.Styles>
-                <Style Selector="Image.AppIcon">
-                    <Setter Property="Transitions">
-                        <Transitions>
-                            <DoubleTransition Property="Opacity" Duration="0.1" />
-                        </Transitions>
-                    </Setter>
-                    <Style Selector="^:pointerover">
-                        <Setter Property="Opacity" Value="0.7" />
-                    </Style>
-                </Style>
-            </suki:SukiSideMenu.Styles>
+        <Grid ColumnDefinitions="60,*">
+            <Panel Grid.Column="0" Background="{DynamicResource SukiPrimaryColor10}">
+                <DockPanel LastChildFill="False">
+                    <StackPanel Orientation="Vertical" DockPanel.Dock="Top" Spacing="5" Margin="0,5,0,15">
+                        <avalonia:MaterialIcon Kind="ChartDonutVariant" Width="35" Height="35"
+                                               Margin="0,10"
+                                               Foreground="{DynamicResource SukiPrimaryColor}" />
+                        <ListBox x:Name="itemsControl" Classes="Void Navi"
+                                 SelectedItem="{Binding ActiveNaviBar}"
+                                 SelectedIndex="0"
+                                 ItemsSource="{Binding NaviBars}">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" Spacing="8" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                        </ListBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" DockPanel.Dock="Bottom" Width="38" Margin="0,0,0,20" Spacing="8">
+                        <Button Classes="Void" Name="Other" Click="Other_OnClick">
+                            <avalonia:MaterialIcon Kind="FormatListBulleted" Width="24" Height="24" />
+                        </Button>
+                        <circleImage:CircleImage Size="38" Image="{Binding User.HeadImage}" Margin="0,10,0,0"
+                                                 PointerPressed="InputElement_OnPointerPressed" />
+                    </StackPanel>
+                </DockPanel>
+            </Panel>
+            <Grid Grid.Column="1" RowDefinitions="30,*">
+                <ContentControl Grid.Row="0" Grid.RowSpan="2"
+                                prism:RegionManager.RegionManager="{Binding RegionManager}"
+                                prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainRegion}" />
 
-            <suki:SukiSideMenu.ItemTemplate>
-                <DataTemplate>
-                    <suki:SukiSideMenuItem FontWeight="SemiBold" FontSize="13"
-                                           Padding="5"
-                                           CornerRadius="7"
-                                           Classes="Compact"
-                                           IsTopMenuExpanded="True"
-                                           Header="{Binding DisplayName}">
-                        <suki:SukiSideMenuItem.Icon>
-                            <Grid Width="40" Height="40">
-                                <avalonia:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                       Width="22" Height="22" Kind="{Binding Icon}" />
-                                <Border
-                                    Height="13"
-                                    MinWidth="13"
-                                    Background="Red"
-                                    Margin="5"
-                                    Padding="3,0"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Right"
-                                    CornerRadius="10"
-                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
-                                    <TextBlock
-                                        Padding="0"
-                                        Margin="1,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="10"
-                                        Foreground="White"
-                                        Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
-                                </Border>
-                            </Grid>
-                        </suki:SukiSideMenuItem.Icon>
-                    </suki:SukiSideMenuItem>
-                </DataTemplate>
-            </suki:SukiSideMenu.ItemTemplate>
-
-            <suki:SukiSideMenu.HeaderContent>
-                <StackPanel Orientation="Vertical" Margin="0,10">
-                    <Panel Width="80" Height="80">
-                        <Panel.Clip>
-                            <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" />
-                        </Panel.Clip>
-                        <Image Width="80"
-                               Height="80"
-                               Classes="AppIcon"
-                               Source="{Binding User.HeadImage}" />
-                    </Panel>
-                    <TextBlock Classes="h3" Margin="0,10" FontSize="15" HorizontalAlignment="Center"
-                               Text="{Binding User.Name}" />
-                </StackPanel>
-            </suki:SukiSideMenu.HeaderContent>
-            <suki:SukiSideMenu.LeftBottomContent>
-                <circleImage:CircleImage Size="38" Image="{Binding User.HeadImage}" Margin="0,10,0,15"
-                                         PointerPressed="InputElement_OnPointerPressed" />
-            </suki:SukiSideMenu.LeftBottomContent>
-            <suki:SukiSideMenu.FooterContent>
-                <StackPanel HorizontalAlignment="Center" Spacing="12.5" Orientation="Horizontal">
-                    <StackPanel.Styles>
-                        <Style Selector="Button">
-                            <Setter Property="Width" Value="40" />
-                            <Setter Property="Height" Value="40" />
-                        </Style>
-                        <Style Selector="Button avalonia|MaterialIcon">
-                            <Setter Property="Width" Value="25" />
-                            <Setter Property="Height" Value="25" />
-                        </Style>
-
-                        <Style Selector="Button:pointerover avalonia|MaterialIcon">
-                            <Style.Animations>
-                                <Animation Duration="0:0:0.25" IterationCount="1" FillMode="None">
-                                    <KeyFrame Cue="0%">
-                                        <Setter Property="TranslateTransform.Y" Value="0" />
-                                    </KeyFrame>
-                                    <KeyFrame Cue="50%">
-                                        <Setter Property="TranslateTransform.Y" Value="-5" />
-                                    </KeyFrame>
-                                    <KeyFrame Cue="100%">
-                                        <Setter Property="TranslateTransform.Y" Value="0" />
-                                    </KeyFrame>
-                                </Animation>
-                            </Style.Animations>
-                        </Style>
-
-                        <Style Selector="Button:pointer"></Style>
-                    </StackPanel.Styles>
-                    <Button Classes="Basic"
-                            Cursor="Hand"
-                            Command="{Binding ExitCommnad}"
-                            ToolTip.ShowDelay="500">
-                        <avalonia:MaterialIcon Kind="ExitToApp" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        <!-- <ToolTip.Tip> -->
-                        <!--     <TextBlock Text="退出登录" FontSize="12" /> -->
-                        <!-- </ToolTip.Tip> -->
-                    </Button>
-                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500"
-                            Command="{Binding ShowSystemSettingCommand}">
-                        <avalonia:MaterialIcon Kind="SettingsOutline" VerticalAlignment="Center"
-                                               HorizontalAlignment="Center" />
-                        <!-- <ToolTip.Tip> -->
-                        <!--     <TextBlock Text="设置" FontSize="12" /> -->
-                        <!-- </ToolTip.Tip> -->
-                    </Button>
-                    <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500" Command="{Binding ShowAboutCommand}">
-                        <avalonia:MaterialIcon Kind="AboutOutline" VerticalAlignment="Center"
-                                               HorizontalAlignment="Center" />
-                        <!-- <ToolTip.Tip> -->
-                        <!--     <TextBlock Text="关于" FontSize="12" /> -->
-                        <!-- </ToolTip.Tip> -->
-                    </Button>
-                </StackPanel>
-            </suki:SukiSideMenu.FooterContent>
-        </suki:SukiSideMenu>
+                <userControls:WindowTitle Grid.Row="0" />
+            </Grid>
+        </Grid>
+        <!-- <suki:SukiSideMenu IsSearchEnabled="False" -->
+        <!--                    IsMenuExpanded="False" -->
+        <!--                    IsToggleButtonVisible="False" -->
+        <!--                    Theme="{StaticResource SukiSideMenuStyle}" -->
+        <!--                    ItemsSource="{Binding ChatPages}" -->
+        <!--                    CloseMenuClicked="Button_OnClick" -->
+        <!--                    SelectedItem="{Binding ActivePage}"> -->
+        <!--     <suki:SukiSideMenu.Styles> -->
+        <!--         <Style Selector="Image.AppIcon"> -->
+        <!--             <Setter Property="Transitions"> -->
+        <!--                 <Transitions> -->
+        <!--                     <DoubleTransition Property="Opacity" Duration="0.1" /> -->
+        <!--                 </Transitions> -->
+        <!--             </Setter> -->
+        <!--             <Style Selector="^:pointerover"> -->
+        <!--                 <Setter Property="Opacity" Value="0.7" /> -->
+        <!--             </Style> -->
+        <!--         </Style> -->
+        <!--     </suki:SukiSideMenu.Styles> -->
+        <!-- -->
+        <!--     <suki:SukiSideMenu.ItemTemplate> -->
+        <!--         <DataTemplate> -->
+        <!--             ~1~ 导航样式 @1@ -->
+        <!--             <suki:SukiSideMenuItem FontWeight="SemiBold" FontSize="13" -->
+        <!--                                    Padding="5" -->
+        <!--                                    CornerRadius="7" -->
+        <!--                                    Classes="Compact" -->
+        <!--                                    IsTopMenuExpanded="True" -->
+        <!--                                    Header="{Binding DisplayName}"> -->
+        <!--                 <suki:SukiSideMenuItem.Icon> -->
+        <!--                     <Grid Width="40" Height="40"> -->
+        <!--                         <avalonia:MaterialIcon VerticalAlignment="Center" HorizontalAlignment="Center" -->
+        <!--                                                Width="22" Height="22" Kind="{Binding Icon}" /> -->
+        <!--                         <Border -->
+        <!--                             Height="13" -->
+        <!--                             MinWidth="13" -->
+        <!--                             Background="Red" -->
+        <!--                             Margin="5" -->
+        <!--                             Padding="3,0" -->
+        <!--                             VerticalAlignment="Top" -->
+        <!--                             HorizontalAlignment="Right" -->
+        <!--                             CornerRadius="10" -->
+        <!--                             IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}"> -->
+        <!--                             <TextBlock -->
+        <!--                                 Padding="0" -->
+        <!--                                 Margin="1,0,0,0" -->
+        <!--                                 HorizontalAlignment="Center" -->
+        <!--                                 VerticalAlignment="Center" -->
+        <!--                                 FontSize="10" -->
+        <!--                                 Foreground="White" -->
+        <!--                                 Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" /> -->
+        <!--                         </Border> -->
+        <!--                     </Grid> -->
+        <!--                 </suki:SukiSideMenuItem.Icon> -->
+        <!--             </suki:SukiSideMenuItem> -->
+        <!--         </DataTemplate> -->
+        <!--     </suki:SukiSideMenu.ItemTemplate> -->
+        <!-- -->
+        <!--     <suki:SukiSideMenu.HeaderContent> -->
+        <!--         ~1~ 展开头部内容 @1@ -->
+        <!--         <StackPanel Orientation="Vertical" Margin="0,10"> -->
+        <!--             <Panel Width="80" Height="80"> -->
+        <!--                 <Panel.Clip> -->
+        <!--                     <EllipseGeometry Center="40,40" RadiusX="40" RadiusY="40" /> -->
+        <!--                 </Panel.Clip> -->
+        <!--                 <Image Width="80" -->
+        <!--                        Height="80" -->
+        <!--                        Classes="AppIcon" -->
+        <!--                        Source="{Binding User.HeadImage}" /> -->
+        <!--             </Panel> -->
+        <!--             <TextBlock Classes="h3" Margin="0,10" FontSize="15" HorizontalAlignment="Center" -->
+        <!--                        Text="{Binding User.Name}" /> -->
+        <!--         </StackPanel> -->
+        <!--     </suki:SukiSideMenu.HeaderContent> -->
+        <!--     <suki:SukiSideMenu.LeftBottomContent> -->
+        <!--         ~1~ 收缩底部内容 @1@ -->
+        <!--         <circleImage:CircleImage Size="38" Image="{Binding User.HeadImage}" Margin="0,10,0,15" -->
+        <!--                                  PointerPressed="InputElement_OnPointerPressed" /> -->
+        <!--     </suki:SukiSideMenu.LeftBottomContent> -->
+        <!--     <suki:SukiSideMenu.FooterContent> -->
+        <!--         ~1~ 展开底部内容 @1@ -->
+        <!--         <StackPanel HorizontalAlignment="Center" Spacing="12.5" Orientation="Horizontal"> -->
+        <!--             <StackPanel.Styles> -->
+        <!--                 <Style Selector="Button"> -->
+        <!--                     <Setter Property="Width" Value="40" /> -->
+        <!--                     <Setter Property="Height" Value="40" /> -->
+        <!--                 </Style> -->
+        <!--                 <Style Selector="Button avalonia|MaterialIcon"> -->
+        <!--                     <Setter Property="Width" Value="25" /> -->
+        <!--                     <Setter Property="Height" Value="25" /> -->
+        <!--                 </Style> -->
+        <!-- -->
+        <!--                 <Style Selector="Button:pointerover avalonia|MaterialIcon"> -->
+        <!--                     <Style.Animations> -->
+        <!--                         <Animation Duration="0:0:0.25" IterationCount="1" FillMode="None"> -->
+        <!--                             <KeyFrame Cue="0%"> -->
+        <!--                                 <Setter Property="TranslateTransform.Y" Value="0" /> -->
+        <!--                             </KeyFrame> -->
+        <!--                             <KeyFrame Cue="50%"> -->
+        <!--                                 <Setter Property="TranslateTransform.Y" Value="-5" /> -->
+        <!--                             </KeyFrame> -->
+        <!--                             <KeyFrame Cue="100%"> -->
+        <!--                                 <Setter Property="TranslateTransform.Y" Value="0" /> -->
+        <!--                             </KeyFrame> -->
+        <!--                         </Animation> -->
+        <!--                     </Style.Animations> -->
+        <!--                 </Style> -->
+        <!-- -->
+        <!--                 <Style Selector="Button:pointer"></Style> -->
+        <!--             </StackPanel.Styles> -->
+        <!--             <Button Classes="Basic" -->
+        <!--                     Cursor="Hand" -->
+        <!--                     Command="{Binding ExitCommnad}" -->
+        <!--                     ToolTip.ShowDelay="500"> -->
+        <!--                 <avalonia:MaterialIcon Kind="ExitToApp" VerticalAlignment="Center" HorizontalAlignment="Center" /> -->
+        <!--             </Button> -->
+        <!--             <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500" -->
+        <!--                     Command="{Binding ShowSystemSettingCommand}"> -->
+        <!--                 <avalonia:MaterialIcon Kind="SettingsOutline" VerticalAlignment="Center" -->
+        <!--                                        HorizontalAlignment="Center" /> -->
+        <!--             </Button> -->
+        <!--             <Button Classes="Basic" Cursor="Hand" ToolTip.ShowDelay="500" Command="{Binding ShowAboutCommand}"> -->
+        <!--                 <avalonia:MaterialIcon Kind="AboutOutline" VerticalAlignment="Center" -->
+        <!--                                        HorizontalAlignment="Center" /> -->
+        <!--             </Button> -->
+        <!--         </StackPanel> -->
+        <!--     </suki:SukiSideMenu.FooterContent> -->
+        <!-- </suki:SukiSideMenu> -->
 
         <Popup IsOpen="False" Name="MessageBox" WindowManagerAddShadowHint="False" IsLightDismissEnabled="True"
                DataContext="{x:Null}">

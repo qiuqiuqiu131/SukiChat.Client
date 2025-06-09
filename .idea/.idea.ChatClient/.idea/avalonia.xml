@@ -4,6 +4,7 @@
     <option name="projectPerEditor">
       <map>
         <entry key="ChatClient.Avalonia/Controls/AudioLevelVisualizer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/Badge/Badge.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageDataTemplate.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -184,6 +185,7 @@
         <entry key="ChatClient.Desktop/Views/UserControls/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserMessageBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/WarningDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/WindowTitle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Media/Controls/AudioLevelVisualizer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
       </map>
     </option>

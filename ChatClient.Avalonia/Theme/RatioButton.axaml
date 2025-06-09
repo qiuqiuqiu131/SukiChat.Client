@@ -12,7 +12,7 @@
         </Setter>
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid>
+                <Panel>
                     <Border Background="{TemplateBinding Background}" Opacity="0.3"
                             CornerRadius="{TemplateBinding CornerRadius}">
                         <Border.Transitions>
@@ -41,7 +41,7 @@
                             </Transitions>
                         </ContentPresenter.Transitions>
                     </ContentPresenter>
-                </Grid>
+                </Panel>
             </ControlTemplate>
         </Setter>
 
@@ -67,5 +67,24 @@
                 <Setter Property="CornerRadius" Value="13" />
             </Style>
         </Style>
+    </Style>
+
+    <Style Selector="RadioButton.NaviBar">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Background="Transparent">
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Margin="0,0,0,0"
+                                      CornerRadius="0"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      Background="Transparent"
+                                      Height="{TemplateBinding Height}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}">
+                    </ContentPresenter>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
     </Style>
 </Styles>

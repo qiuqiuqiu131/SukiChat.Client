@@ -12,10 +12,10 @@
                                         Margin="0"
                                         RenderTransformOrigin="0%, 0%">
                     <Panel>
-                        <Border Margin="8"
-                                BoxShadow="{DynamicResource SukiPopupShadow}"
+                        <Border Margin="6"
+                                BoxShadow="2 2 8 1 #33555555"
                                 CornerRadius="{TemplateBinding CornerRadius}" />
-                        <Border Margin="4"
+                        <Border Margin="6"
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"

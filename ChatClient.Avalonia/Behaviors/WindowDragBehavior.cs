@@ -17,6 +17,7 @@ public class WindowDragBehavior : Behavior<Control>
         AssociatedObject.PointerPressed += OnPointerPressed;
         AssociatedObject.PointerMoved += OnPointerMoved;
         AssociatedObject.PointerReleased += OnPointerReleased;
+        AssociatedObject.DoubleTapped += OnDoubleTrapped;
     }
 
     protected override void OnDetaching()
@@ -25,13 +26,28 @@ public class WindowDragBehavior : Behavior<Control>
         AssociatedObject.PointerPressed -= OnPointerPressed;
         AssociatedObject.PointerMoved -= OnPointerMoved;
         AssociatedObject.PointerReleased -= OnPointerReleased;
+        AssociatedObject.DoubleTapped -= OnDoubleTrapped;
+        _window = null;
+    }
+
+    private void OnDoubleTrapped(object? sender, TappedEventArgs e)
+    {
+        // _window = AssociatedObject.GetVisualRoot() as Window;
+        // if (_window != null)
+        // {
+        //     if (_window.WindowState == WindowState.Maximized)
+        //         _window.WindowState = WindowState.Normal;
+        // }
     }
 
     private void OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
+        _window = AssociatedObject.GetVisualRoot() as Window;
+        if (_window.WindowState != WindowState.Normal)
+            return;
+
         if (e.GetCurrentPoint(AssociatedObject).Properties.IsLeftButtonPressed)
         {
-            _window = AssociatedObject.GetVisualRoot() as Window;
             if (_window != null)
                 _startPoint = e.GetPosition(_window);
         }
@@ -43,13 +59,13 @@ public class WindowDragBehavior : Behavior<Control>
         {
             var currentPoint = e.GetPosition(_window);
             var offset = currentPoint - _startPoint;
-            _window.Position = new PixelPoint((int)(_window.Position.X + offset.X), (int)(_window.Position.Y + offset.Y));
+            _window.Position =
+                new PixelPoint((int)(_window.Position.X + offset.X), (int)(_window.Position.Y + offset.Y));
         }
     }
 
     private void OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        if (_window != null)
-            _window = null;
+        _window = null;
     }
 }

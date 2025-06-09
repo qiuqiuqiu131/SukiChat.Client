@@ -30,7 +30,7 @@
                         <Track.DecreaseButton>
                             <RepeatButton Name="PART_DecreaseButton"
                                           Height="18"
-                                          Margin="10,0,-29,0"
+                                          Margin="10,0,-28.2,0"
                                           HorizontalAlignment="Stretch"
                                           Background="{DynamicResource SukiPrimaryColor}"
                                           BorderThickness="0"
@@ -39,12 +39,12 @@
                         <Track.IncreaseButton>
                             <RepeatButton Name="PART_IncreaseButton" Classes="repeattrack" />
                         </Track.IncreaseButton>
-                        <Thumb Name="thumb" Margin="6,0,0,0">
+                        <Thumb Name="thumb" Margin="7,0.4,0,0">
                             <Thumb.Template>
                                 <ControlTemplate>
-                                    <Grid Width="25" Height="25">
-                                        <Border Width="14"
-                                                Height="14"
+                                    <Grid Width="24" Height="24">
+                                        <Border Width="13"
+                                                Height="13"
                                                 Margin="0"
                                                 Background="White"
                                                 BorderThickness="0"

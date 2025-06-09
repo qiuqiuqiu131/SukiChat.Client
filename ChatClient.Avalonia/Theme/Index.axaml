@@ -14,6 +14,7 @@
                 <ResourceInclude Source="SukiDialog.axaml" />
                 <ResourceInclude Source="SukiSideMenuItem.axaml" />
                 <ResourceInclude Source="SukiDialogHost.axaml" />
+                <ResourceInclude Source="../Controls/Badge/Badge.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
@@ -22,11 +23,11 @@
     <StyleInclude Source="TabButton.axaml" />
     <StyleInclude Source="RatioButton.axaml" />
     <StyleInclude Source="ListBox.axaml" />
+    <StyleInclude Source="Slider.axaml" />
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="../Controls/VoiceWaveIcon/VoiceWaveIcon.axaml" />
-    <StyleInclude Source="Slider.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
     <StyleInclude Source="BusyArea.axaml" />
     <StyleInclude Source="DatePicker.axaml" />

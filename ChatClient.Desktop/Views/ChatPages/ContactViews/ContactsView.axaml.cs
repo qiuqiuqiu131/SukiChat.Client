@@ -60,8 +60,8 @@ public partial class ContactsView : UserControl, IDestructible
     protected override void OnUnloaded(RoutedEventArgs e)
     {
         base.OnUnloaded(e);
-        GroupView.ClearAllSelected();
-        FriendView.ClearAllSelected();
+        // GroupView.ClearAllSelected();
+        // FriendView.ClearAllSelected();
         isLeftMovable = false;
         isHide = false;
     }

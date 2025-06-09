@@ -64,6 +64,7 @@
         <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
         <chat:MessageDataTemplate x:Key="MessageDataTemplate">
             <DataTemplate x:Key="Retracted" DataType="data:GroupChatData">
+                <!-- 撤回 -->
                 <Border Background="{DynamicResource SukiPrimaryColor10}"
                         Margin="0,5"
                         HorizontalAlignment="Center" CornerRadius="5">
@@ -294,44 +295,14 @@
                 </Grid>
             </DataTemplate>
             <DataTemplate x:Key="System" DataType="data:GroupChatData">
+                <!-- 系统消息 -->
                 <Border CornerRadius="5"
                         Margin="0,5,0,0"
                         HorizontalAlignment="Center"
                         Background="{DynamicResource SukiPrimaryColor10}">
-                    <ItemsControl
-                        Margin="5,1.5"
-                        DataContext="{Binding ChatMessages[0]}"
-                        ItemsSource="{Binding ((data:SystemMessDto)Content).Blocks}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Text}"
-                                           Opacity="0.6"
-                                           Margin="0"
-                                           Padding="0"
-                                           FontSize="12"
-                                           Foreground="{DynamicResource SukiText}">
-                                    <Interaction.Behaviors>
-                                        <DataTriggerBehavior
-                                            Binding="{Binding Bold}"
-                                            Value="True">
-                                            <ChangePropertyAction
-                                                PropertyName="Foreground"
-                                                Value="{DynamicResource SukiPrimaryColor}" />
-                                            <ChangePropertyAction
-                                                PropertyName="Opacity"
-                                                Value="1" />
-                                        </DataTriggerBehavior>
-                                    </Interaction.Behaviors>
-                                </TextBlock>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                    <ContentControl Content="{Binding ChatMessages[0].Content}"
+                                    Margin="0,0,4,0"
+                                    ContentTemplate="{x:Static chat:SystemMessageDataTemplate.GenderDataTemplate}" />
                 </Border>
             </DataTemplate>
         </chat:MessageDataTemplate>
