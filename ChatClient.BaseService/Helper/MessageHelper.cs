@@ -1,3 +1,4 @@
+using Avalonia.Controls.Notifications;
 using ChatClient.Client;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
@@ -24,7 +25,14 @@ internal class MessageHelper : IMessageHelper
     public async Task<bool> SendMessage(IMessage message)
     {
         if (!client.IsConnected || client.Channel == null)
+        {
+            // eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "未连接到服务器，请检查网络连接或服务器状态。",
+            //     Type = NotificationType.Error
+            // });
             return false;
+        }
 
         try
         {
@@ -47,7 +55,14 @@ internal class MessageHelper : IMessageHelper
         });
 
         if (!client.IsConnected || client.Channel == null)
+        {
+            // eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "未连接到服务器，请检查网络连接或服务器状态。",
+            //     Type = NotificationType.Error
+            // });
             return default;
+        }
 
         try
         {
@@ -66,6 +81,11 @@ internal class MessageHelper : IMessageHelper
             else
             {
                 taskCompletionSource.SetCanceled();
+                eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "消息处理超时，请检查网络连接或服务器状态。",
+                    Type = NotificationType.Error
+                });
                 return default;
             }
         }
@@ -88,7 +108,14 @@ internal class MessageHelper : IMessageHelper
         });
 
         if (!client.IsConnected || client.Channel == null)
+        {
+            // eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "未连接到服务器，请检查网络连接或服务器状态。",
+            //     Type = NotificationType.Error
+            // });
             return default;
+        }
 
         try
         {
@@ -107,6 +134,11 @@ internal class MessageHelper : IMessageHelper
             else
             {
                 taskCompletionSource.SetCanceled();
+                eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+                {
+                    Message = "消息处理超时，请检查网络连接或服务器状态。",
+                    Type = NotificationType.Error
+                });
                 return default;
             }
         }

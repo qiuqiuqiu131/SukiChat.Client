@@ -1,7 +1,9 @@
 using System.Net;
+using Avalonia.Controls.Notifications;
 using ChatClient.Resources;
 using ChatClient.Resources.Clients;
 using ChatClient.Tool.Data.File;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatServer.Common;
 using File.Protobuf;
@@ -13,11 +15,13 @@ namespace ChatClient.BaseService.Helper;
 internal class ProtoFileIOHelper : IFileIOHelper
 {
     private readonly IResourcesClientPool _resourcesClientPool;
+    private readonly IEventAggregator _eventAggregator;
     private IFileIOHelper _fileIoHelperImplementation;
 
-    public ProtoFileIOHelper(IResourcesClientPool resourcesClientPool)
+    public ProtoFileIOHelper(IResourcesClientPool resourcesClientPool, IEventAggregator eventAggregator)
     {
         _resourcesClientPool = resourcesClientPool;
+        _eventAggregator = eventAggregator;
     }
 
     /// <summary>
@@ -51,7 +55,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
-            // 异常处理
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件上传失败，请检查网络连接或服务器状态",
+                Type = NotificationType.Error
+            });
             return false;
         }
     }
@@ -68,6 +76,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件上传失败，请检查网络连接或服务器状态",
+                Type = NotificationType.Error
+            });
             return false;
         }
     }
@@ -130,6 +143,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件下载失败，请检查网络连接或服务器状态",
+                Type = NotificationType.Error
+            });
             return false;
         }
     }

@@ -29,6 +29,7 @@ namespace ChatClient.Client
             get => isConnected;
             private set
             {
+                Console.WriteLine(value);
                 isConnected = value;
                 if (value)
                     reconnectCount = 0;
@@ -89,7 +90,8 @@ namespace ChatClient.Client
                     .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
                     {
                         IChannelPipeline pipeline = channel.Pipeline;
-                        pipeline.AddLast("framing-enc", new LengthFieldPrepender(int.Parse(configuration["MaxFieldLength"]!)));
+                        pipeline.AddLast("framing-enc",
+                            new LengthFieldPrepender(int.Parse(configuration["MaxFieldLength"]!)));
                         pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(
                             int.Parse(configuration["MaxFrameLength"]!),
                             0, int.Parse(configuration["MaxFieldLength"]!),

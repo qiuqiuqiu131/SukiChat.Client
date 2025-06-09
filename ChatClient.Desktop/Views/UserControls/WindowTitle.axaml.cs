@@ -6,13 +6,13 @@ namespace ChatClient.Desktop.Views.UserControls;
 
 public partial class WindowTitle : UserControl
 {
-    public static readonly StyledProperty<bool> CloseOnlyProperty = AvaloniaProperty.Register<WindowTitle, bool>(
-        "ClostOnly", defaultValue: false);
+    public static readonly StyledProperty<bool> IsOutLineProperty = AvaloniaProperty.Register<WindowTitle, bool>(
+        "IsOutLine");
 
-    public bool CloseOnly
+    public bool IsOutLine
     {
-        get => GetValue(CloseOnlyProperty);
-        set => SetValue(CloseOnlyProperty, value);
+        get => GetValue(IsOutLineProperty);
+        set => SetValue(IsOutLineProperty, value);
     }
 
     public WindowTitle()

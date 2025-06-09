@@ -401,8 +401,6 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             });
         });
         tokens.Add(token7);
-
-        IsConnected.ConnecttedChanged += ConnectionChanged;
     }
 
     private void UnRegisterEvent()
@@ -410,15 +408,6 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         foreach (var token in tokens)
             token.Dispose();
         tokens.Clear();
-        IsConnected.ConnecttedChanged -= ConnectionChanged;
-    }
-
-    private void ConnectionChanged(bool connected)
-    {
-        if (!connected)
-        {
-            Dispatcher.UIThread.Invoke(() => { ForceToExit("服务器断开连接！"); });
-        }
     }
 
     #endregion
@@ -433,11 +422,11 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                 await Exit();
         }
 
-        // TranslateWindowHelper.CloseAllDialog();
-        // SukiDialogManager.DismissDialog();
-        // SukiDialogManager.CreateDialog()
-        //     .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
-        //     .TryShow();
+        TranslateWindowHelper.CloseAllDialog();
+        SukiDialogManager.DismissDialog();
+        SukiDialogManager.CreateDialog()
+            .WithViewModel(d => new WarningDialogViewModel(d, "登录异常", Content, ForceToExitCallback))
+            .TryShow();
     }
 
     private async Task TryExit()

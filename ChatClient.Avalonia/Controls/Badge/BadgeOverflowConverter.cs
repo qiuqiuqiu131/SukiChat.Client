@@ -1,4 +1,5 @@
 using System.Globalization;
+using Avalonia.Controls;
 using Avalonia.Data.Converters;
 
 namespace ChatClient.Avalonia.Controls.Badge;
