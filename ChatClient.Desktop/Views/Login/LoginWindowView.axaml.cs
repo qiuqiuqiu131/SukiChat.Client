@@ -70,7 +70,6 @@ public partial class LoginWindowView : SukiWindow, IDisposable
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
-        base.OnPointerPressed(e);
         if (e.Handled) return;
         FocusManager?.ClearFocus();
     }

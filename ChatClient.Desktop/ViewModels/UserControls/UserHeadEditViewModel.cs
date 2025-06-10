@@ -163,6 +163,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
             return;
         }
 
+        // 分割图片
         Bitmap bitmap = ImageTool.GetHeadImage(imageResize);
 
         var result = await _userManager.ResetHead(bitmap);

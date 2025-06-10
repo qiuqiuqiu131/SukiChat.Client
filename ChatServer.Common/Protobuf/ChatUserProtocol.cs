@@ -30,7 +30,7 @@ namespace ChatServer.Common.Protobuf {
             "by9DaGF0R3JvdXBQcm90b2NvbC5wcm90bxocUHJvdG8vQ2hhdEJhc2VQcm90",
             "b2NvbC5wcm90byKqAQoLVXNlck1lc3NhZ2USCgoCaWQYASABKAkSDAoEbmFt",
             "ZRgCIAEoCRIOCgZpc01hbGUYAyABKAgSDQoFYmlydGgYBCABKAkSFAoMaW50",
-            "cm9kdWN0aW9uGAUgASgJEhEKCWhlYWRJbmRleBgGIAEoDRIRCgloZWFkQ291",
+            "cm9kdWN0aW9uGAUgASgJEhEKCWhlYWRJbmRleBgGIAEoBRIRCgloZWFkQ291",
             "bnQYByABKA0SFAoMcmVnaXN0ZXJUaW1lGAggASgJEhAKCGlzT25saW5lGAkg",
             "ASgIIhwKDkdldFVzZXJSZXF1ZXN0EgoKAmlkGAEgASgJIoYBCg9HZXRVc2Vy",
             "UmVzcG9uc2USPAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1v",
@@ -38,7 +38,7 @@ namespace ChatServer.Common.Protobuf {
             "dFNlcnZlci5Db21tb24uUHJvdG9idWYuVXNlck1lc3NhZ2Ui/gIKEVVzZXJE",
             "ZXRhaWxNZXNzYWdlEgoKAmlkGAEgASgJEgwKBG5hbWUYAiABKAkSDgoGaXNN",
             "YWxlGAMgASgIEg0KBWJpcnRoGAQgASgJEhQKDGludHJvZHVjdGlvbhgFIAEo",
-            "CRIRCgloZWFkSW5kZXgYBiABKA0SEQoJaGVhZENvdW50GAcgASgNEiEKGWxh",
+            "CRIRCgloZWFkSW5kZXgYBiABKAUSEQoJaGVhZENvdW50GAcgASgNEiEKGWxh",
             "c3RSZWFkRnJpZW5kTWVzc2FnZVRpbWUYCCABKAkSIAoYbGFzdFJlYWRHcm91",
             "cE1lc3NhZ2VUaW1lGAkgASgJEiMKG2xhc3REZWxldGVGcmllbmRNZXNzYWdl",
             "VGltZRgKIAEoCRIiChpsYXN0RGVsZXRlR3JvdXBNZXNzYWdlVGltZRgLIAEo",
@@ -275,9 +275,9 @@ namespace ChatServer.Common.Protobuf {
 
     /// <summary>Field number for the "headIndex" field.</summary>
     public const int HeadIndexFieldNumber = 6;
-    private uint headIndex_;
+    private int headIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint HeadIndex {
+    public int HeadIndex {
       get { return headIndex_; }
       set {
         headIndex_ = value;
@@ -389,7 +389,7 @@ namespace ChatServer.Common.Protobuf {
       }
       if (HeadIndex != 0) {
         output.WriteRawTag(48);
-        output.WriteUInt32(HeadIndex);
+        output.WriteInt32(HeadIndex);
       }
       if (HeadCount != 0) {
         output.WriteRawTag(56);
@@ -427,7 +427,7 @@ namespace ChatServer.Common.Protobuf {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Introduction);
       }
       if (HeadIndex != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(HeadIndex);
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HeadIndex);
       }
       if (HeadCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(HeadCount);
@@ -508,7 +508,7 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 48: {
-            HeadIndex = input.ReadUInt32();
+            HeadIndex = input.ReadInt32();
             break;
           }
           case 56: {
@@ -942,9 +942,9 @@ namespace ChatServer.Common.Protobuf {
 
     /// <summary>Field number for the "headIndex" field.</summary>
     public const int HeadIndexFieldNumber = 6;
-    private uint headIndex_;
+    private int headIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint HeadIndex {
+    public int HeadIndex {
       get { return headIndex_; }
       set {
         headIndex_ = value;
@@ -1147,7 +1147,7 @@ namespace ChatServer.Common.Protobuf {
       }
       if (HeadIndex != 0) {
         output.WriteRawTag(48);
-        output.WriteUInt32(HeadIndex);
+        output.WriteInt32(HeadIndex);
       }
       if (HeadCount != 0) {
         output.WriteRawTag(56);
@@ -1213,7 +1213,7 @@ namespace ChatServer.Common.Protobuf {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Introduction);
       }
       if (HeadIndex != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(HeadIndex);
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(HeadIndex);
       }
       if (HeadCount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(HeadCount);
@@ -1336,7 +1336,7 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 48: {
-            HeadIndex = input.ReadUInt32();
+            HeadIndex = input.ReadInt32();
             break;
           }
           case 56: {

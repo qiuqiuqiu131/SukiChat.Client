@@ -6,6 +6,7 @@ using ChatClient.Tool.Data;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
@@ -15,7 +16,7 @@ public interface ILoginService
     Task<CommonResponse?> Logout(string? userId);
     Task<string?> GetPassword(string id);
     Task LoginSuccess(UserDetailDto user);
-    Task<List<string>> LoginIds();
+    Task<List<LoginUserItem>> LoginUsers();
 }
 
 internal class LoginService : BaseService, ILoginService
@@ -60,21 +61,26 @@ internal class LoginService : BaseService, ILoginService
         await AddLoginHistory(user.UserDto, user.Password);
     }
 
-    public async Task<List<string>> LoginIds()
+    public async Task<List<LoginUserItem>> LoginUsers()
     {
         var repository = _unitOfWork.GetRepository<LoginHistory>();
-        var entitys = await repository.GetAllAsync();
-        return entitys.Select(d => d.Id).ToList();
+        var logins = await repository.GetAllAsync();
+        var ids = logins.Select(d => d.Id).ToList();
+        var times = logins.ToDictionary(d => d.Id, d => d.LastLoginTime);
+
+        var userRepository = _unitOfWork.GetRepository<User>();
+        var entitys = await userRepository.GetAll(predicate: d => ids.Contains(d.Id))
+            .Select(d => new LoginUserItem
+                { ID = d.Id, HeadIndex = d.HeadIndex, LastLoginTime = times[d.Id] })
+            .ToListAsync();
+        return entitys;
     }
 
     public async Task<CommonResponse?> Logout(string? userId)
     {
         if (string.IsNullOrWhiteSpace(userId)) return null;
 
-        var message = new LogoutRequest
-        {
-            Id = userId
-        };
+        var message = new LogoutRequest { Id = userId };
         return await _messageManager.SendMessageWithResponse<CommonResponse>(message);
     }
 

@@ -9,16 +9,27 @@
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:DataType="vm:RegisterViewModel"
-    Height="480"
+    Height="550"
+    Width="490"
     mc:Ignorable="d">
     <UserControl.Transitions>
         <Transitions>
             <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
         </Transitions>
     </UserControl.Transitions>
-    <Grid RowDefinitions="30,*">
-        <Panel Background="Transparent">
+
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="5"></Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="25,*">
+        <!-- 顶部栏 -->
+        <Panel Grid.Row="0" Background="Transparent" Height="25" Margin="0,2">
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
@@ -27,122 +38,104 @@
                     Margin="10,0"
                     Command="{Binding CancelCommand}"
                     Classes="Basic Rounded WindowControlsButton Close">
-                <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
+                <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8.5" Width="8.5" />
             </Button>
         </Panel>
-        <suki:BusyArea Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                       BusyText="注册中"
-                       IsBusy="{Binding IsBusy}">
-            <DockPanel Width="240" LastChildFill="True" Margin="30,10,30,20">
-                <DockPanel DockPanel.Dock="Bottom" Margin="5">
-                    <Button
-                        Width="190"
-                        Margin="0,25,0,0"
-                        HorizontalAlignment="Center"
-                        Classes="Void Login"
-                        Background="White"
-                        Command="{Binding RegisterCommand}">
-                        <Button.Styles>
-                            <Style Selector="Button.Login">
-                                <Style Selector="^ Border">
-                                    <Setter Property="Background" Value="White" />
-                                    <Setter Property="Transitions">
-                                        <Transitions>
-                                            <BrushTransition Property="Background" Duration="0:0:0.2" />
-                                        </Transitions>
-                                    </Setter>
-                                </Style>
-                                <Style Selector="^ TextBlock">
-                                    <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
-                                    <Setter Property="Transitions">
-                                        <Transitions>
-                                            <BrushTransition Property="Foreground" Duration="0:0:0.2" />
-                                        </Transitions>
-                                    </Setter>
-                                </Style>
-                            </Style>
 
-                            <Style Selector="Button.Login:pointerover">
-                                <Style Selector="^ Border">
-                                    <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
-                                </Style>
-                                <Style Selector="^ TextBlock">
-                                    <Setter Property="Foreground" Value="White" />
-                                </Style>
+        <!-- 主体 -->
+        <Panel Grid.Row="1">
+            <!-- 注册页面 -->
+            <suki:BusyArea HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                           BusyText="注册中"
+                           IsVisible="{Binding IsRegistered,Converter={x:Static BoolConverters.Not}}"
+                           IsBusy="{Binding IsBusy}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                Width="260"
+                                Margin="30,10,8,20">
+                        <StackPanel.Styles>
+                            <Style Selector="TextBox.input">
+                                <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+                                <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+                                <Setter Property="FontSize" Value="14.5" />
+                                <Setter Property="LetterSpacing" Value="1" />
+                                <Setter Property="Padding" Value="5,11" />
                             </Style>
-                        </Button.Styles>
-                        <Border Width="190" Height="35" CornerRadius="10"
-                                BorderBrush="{DynamicResource SukiPrimaryColor}">
-                            <TextBlock Text="注册" HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-                        </Border>
-                    </Button>
-                </DockPanel>
-                <StackPanel
-                    HorizontalAlignment="Stretch"
-                    Orientation="Vertical"
-                    Spacing="20">
-                    <StackPanel.Styles>
-                        <Style Selector="TextBlock.title">
-                            <Setter Property="Margin" Value="10,0" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="FontSize" Value="13.7" />
-                            <Setter Property="Foreground" Value="White" />
-                        </Style>
-                        <Style Selector="TextBox.input">
-                            <Setter Property="Height" Value="30" />
-                            <Setter Property="MinHeight" Value="42" />
-                            <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
-                            <Setter Property="Padding" Value="7,0" />
-                            <Setter Property="FontSize" Value="13.5"></Setter>
-                            <Setter Property="Foreground" Value="White" />
-                            <Setter Property="LetterSpacing" Value="1" />
-                            <Setter Property="Margin" Value="5,0,0,0" />
-                        </Style>
-                        <Style Selector="TextBlock.error">
-                            <Setter Property="Foreground" Value="Red" />
-                            <Setter Property="FontSize" Value="12.5" />
-                            <Setter Property="Opacity" Value="0.8" />
-                            <Setter Property="Margin" Value="12,-2,0,0" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                        </Style>
-                    </StackPanel.Styles>
-                    <TextBlock
-                        Margin="0"
-                        HorizontalAlignment="Center"
-                        FontSize="17"
-                        Foreground="{DynamicResource SukiText}"
-                        Text="创建新账号" />
-                    <DockPanel>
-                        <TextBlock Classes="error"
-                                   IsVisible="{Binding NameError,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                   Text="{Binding NameError}"
-                                   DockPanel.Dock="Bottom" />
-                        <TextBox Watermark="填写昵称" Text="{Binding Name}"
-                                 MaxLength="30" Foreground="{DynamicResource SukiText}"
-                                 Classes="input" />
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Classes="error" Text="{Binding PasswordError}"
-                                   IsVisible="{Binding PasswordError,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                   DockPanel.Dock="Bottom" />
-                        <TextBox PasswordChar="*" Watermark="填写密码"
-                                 Text="{Binding Password}" Foreground="{DynamicResource SukiText}"
-                                 MaxLength="18" Classes="input" />
-                    </DockPanel>
-                    <DockPanel>
-                        <TextBlock Classes="error" Text="{Binding RePasswordError}"
-                                   IsVisible="{Binding RePasswordError,Converter={x:Static ObjectConverters.IsNotNull}}"
-                                   DockPanel.Dock="Bottom" />
-                        <MaskedTextBox PasswordChar="*" Watermark="再次输入密码" Foreground="{DynamicResource SukiText}"
-                                       Text="{Binding RePassword}"
-                                       MaxLength="18" Classes="input" />
-                    </DockPanel>
-                </StackPanel>
-            </DockPanel>
-        </suki:BusyArea>
+                            <Style Selector="TextBlock.error">
+                                <Setter Property="Foreground" Value="Red" />
+                                <Setter Property="FontSize" Value="13" />
+                                <Setter Property="Opacity" Value="0.8" />
+                                <Setter Property="Margin" Value="20,2,0,7" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
+                            </Style>
+                        </StackPanel.Styles>
 
-        <theme:SukiDialogHost Grid.Row="0" Grid.RowSpan="2" Manager="{Binding DialogManager}" />
+                        <!-- 标题 -->
+                        <TextBlock
+                            Margin="25"
+                            HorizontalAlignment="Center"
+                            FontSize="20"
+                            Foreground="{DynamicResource SukiText}"
+                            Text="欢迎注册SukiChat" />
+
+                        <StackPanel>
+                            <TextBox Watermark="输入昵称" Text="{Binding Name}"
+                                     MaxLength="30" Foreground="{DynamicResource SukiText}"
+                                     Classes="Register input LightWaterMask">
+                                <TextBox.InnerLeftContent>
+                                    <avalonia:MaterialIcon Kind="AccountOutline" Width="18" Height="18" />
+                                </TextBox.InnerLeftContent>
+                            </TextBox>
+                            <TextBlock Classes="error"
+                                       IsVisible="{Binding NameError,Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       Text="{Binding NameError}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBox Watermark="输入密码"
+                                     LetterSpacing="2.5"
+                                     Text="{Binding Password}"
+                                     MaxLength="18" Classes="Register input LightWaterMask Password">
+                                <TextBox.InnerLeftContent>
+                                    <avalonia:MaterialIcon Kind="KeyOutline" Width="17" Height="17" />
+                                </TextBox.InnerLeftContent>
+                            </TextBox>
+                            <TextBlock Classes="error" Text="{Binding PasswordError}"
+                                       IsVisible="{Binding PasswordError,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBox Watermark="再次确认密码"
+                                     LetterSpacing="2.5"
+                                     Text="{Binding RePassword}"
+                                     MaxLength="18" Classes="Register input LightWaterMask Password">
+                                <TextBox.InnerLeftContent>
+                                    <avalonia:MaterialIcon Kind="ShieldKeyOutline" Width="18" Height="18" />
+                                </TextBox.InnerLeftContent>
+                            </TextBox>
+                            <TextBlock Classes="error" Text="{Binding RePasswordError}"
+                                       IsVisible="{Binding RePasswordError,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                        </StackPanel>
+
+                        <!-- 注册按钮 -->
+                        <Button Width="245"
+                                Margin="0,25,0,5"
+                                Classes="Flat"
+                                Command="{Binding RegisterCommand}">
+                            <TextBlock Text="注册" FontSize="15" />
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </suki:BusyArea>
+
+            <!-- 注册成功页面 -->
+            <StackPanel Width="260" Orientation="Vertical" IsVisible="{Binding IsRegistered}">
+                <TextBlock FontSize="18" Text="注册成功！" HorizontalAlignment="Center" />
+                <TextBlock Text=""></TextBlock>
+                <Button Content="返回登录页面" Command="{Binding ReturnToLoginViewCommand}" />
+            </StackPanel>
+        </Panel>
+
         <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2"
                                                Manager="{Binding NotificationManager}" />
     </Grid>

@@ -1,5 +1,6 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 
     <Style Selector="ToggleButton.Chat">
         <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
@@ -81,5 +82,36 @@
                 </ContentPresenter>
             </ControlTemplate>
         </Setter>
+    </Style>
+
+    <Style Selector="ToggleButton.PasswordRevealButton">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Foreground" Value="{DynamicResource SukiLowText}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <ControlTemplate TargetType="ToggleButton">
+                <Panel
+                    Width="{TemplateBinding Width}"
+                    Height="{TemplateBinding Height}"
+                    Background="{TemplateBinding Background}">
+                    <avalonia:MaterialIcon
+                        Foreground="{DynamicResource SukiLowText}"
+                        Kind="EyeOutline"
+                        IsVisible="{TemplateBinding IsChecked, Converter={x:Static BoolConverters.Not}}" />
+                    <avalonia:MaterialIcon
+                        Foreground="{DynamicResource SukiLowText}"
+                        Kind="EyeRemoveOutline"
+                        IsVisible="{TemplateBinding IsChecked}" />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+        <Style Selector="^:pointerover">
+            <Setter Property="Opacity" Value="0.85" />
+        </Style>
+        <Style Selector="^:pressed">
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
     </Style>
 </Styles>

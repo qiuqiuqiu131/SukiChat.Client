@@ -14,7 +14,7 @@ public class User
 
     public string? Introduction { get; set; }
 
-    public int HeadIndex { get; set; }
+    public int HeadIndex { get; set; } = -1;
 
     public int HeadCount { get; set; }
 

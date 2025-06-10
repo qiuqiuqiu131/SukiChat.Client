@@ -39,6 +39,7 @@
         <entry key="ChatClient.Avalonia/Controls/SeparateGroupsView/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/SeperateGroupsView/SeperateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/VoiceWaveIcon/VoiceWaveIcon.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Theme/AutoCompleteBoxStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/BusyArea.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/Button.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Theme/ComboBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

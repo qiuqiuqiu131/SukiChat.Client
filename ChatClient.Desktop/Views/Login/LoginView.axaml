@@ -11,12 +11,16 @@
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
-    d:DesignHeight="420"
-    d:DesignWidth="330"
+    xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+    d:DesignHeight="440"
+    d:DesignWidth="320"
     x:DataType="vm:LoginViewModel"
     mc:Ignorable="d">
-    <Grid RowDefinitions="30,*">
-        <Panel Height="30" Background="Transparent">
+    <Grid RowDefinitions="25,*">
+        <!-- 顶部栏 -->
+        <Panel Height="25" Margin="0,1" Background="Transparent">
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
@@ -36,12 +40,15 @@
                                               MethodName="Close" />
                         </EventTriggerBehavior>
                     </Interaction.Behaviors>
-                    <PathIcon Data="{x:Static p1:Icons.WindowClose}" Height="10" Width="10" />
+                    <PathIcon Data="{x:Static p1:Icons.WindowClose}" Height="8" Width="8" />
                 </Button>
             </StackPanel>
         </Panel>
+
+        <!-- 主体 -->
         <suki:BusyArea Grid.Row="1" IsBusy="{Binding IsBusy}" BusyText="登录中">
             <DockPanel LastChildFill="True">
+                <!-- 底部导航 -->
                 <StackPanel
                     DockPanel.Dock="Bottom"
                     Margin="0,10"
@@ -49,75 +56,134 @@
                     VerticalAlignment="Bottom"
                     Orientation="Horizontal">
                     <HyperlinkButton
+                        Foreground="{DynamicResource SukiPrimaryColor75}"
                         Command="{Binding ToRegisterViewCommand}">
-                        <TextBlock Text="注册账号"
-                                   FontSize="12.5" />
+                        <TextBlock Text="注册账号" LetterSpacing="1"
+                                   FontSize="13.5" />
                     </HyperlinkButton>
-                    <TextBlock Margin="10" Text="|" />
+                    <TextBlock Margin="10" FontSize="15" Text="|" />
                     <HyperlinkButton
+                        Foreground="{DynamicResource SukiPrimaryColor75}"
                         Command="{Binding ToForgetViewCommand}">
-                        <TextBlock Text="忘记密码"
-                                   FontSize="12.5" />
+                        <TextBlock Text="忘记密码" LetterSpacing="1"
+                                   FontSize="13.5" />
                     </HyperlinkButton>
                 </StackPanel>
+
+                <!-- 登录表单 -->
                 <StackPanel
-                    Width="250"
+                    Width="270"
                     HorizontalAlignment="Center"
-                    Orientation="Vertical"
-                    Spacing="5">
-                    <avalonia:MaterialIcon
-                        Width="48"
-                        Height="48"
-                        Margin="0,10,0,15"
-                        HorizontalAlignment="Center"
-                        Foreground="{DynamicResource SukiPrimaryColor}"
-                        Kind="ChartDonutVariant" />
-                    <TextBlock
-                        FontWeight="SemiBold"
-                        Margin="8,0,0,3"
-                        Foreground="{DynamicResource SukiLowText}"
-                        Text="账号" />
+                    Orientation="Vertical" Spacing="8">
+                    <StackPanel.Styles>
+                        <Style Selector="TextBlock.title">
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Margin" Value="8,0,0,0" />
+                        </Style>
+                        <Style Selector="TextBox.input,AutoCompleteBox.input">
+                            <Setter Property="FontSize" Value="15" />
+                            <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+                        </Style>
+                    </StackPanel.Styles>
+
+                    <!-- 头像 -->
+                    <Panel Margin="0,25,0,7"
+                           HorizontalAlignment="Center">
+                        <avalonia:MaterialIcon
+                            Width="80"
+                            Height="80"
+                            IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNull}}"
+                            Foreground="{DynamicResource SukiPrimaryColor}"
+                            Kind="ChartDonutVariant" />
+                        <Panel Width="80" Height="80"
+                               IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Ellipse Width="80" Height="80" Fill="{DynamicResource SukiDisabledText}" />
+                            <circleImage:CircleImage
+                                Size="75" Image="{Binding SelectedLoginItem.Head}" />
+                        </Panel>
+                    </Panel>
+
+                    <!-- ID -->
                     <AutoCompleteBox
+                        x:Name="IDBox"
                         MaxLength="10"
-                        ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
-                        MinimumPrefixLength="3"
-                        ItemsSource="{Binding IdList}"
-                        FontSize="13.5"
-                        Watermark="输入账号"
+                        MinimumPrefixLength="4"
+                        Classes="Login input"
+                        Padding="7,12.5"
+                        MaxDropDownHeight="200"
+                        ItemsSource="{Binding UserList}"
+                        CornerRadius="8"
+                        Watermark="输入用户ID"
                         Text="{Binding Id}">
+                        <AutoCompleteBox.Styles>
+                            <Style Selector="AutoCompleteBox.Login /template/ TextBox#PART_TextBox">
+                                <Setter Property="LetterSpacing" Value="1" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                                <!-- <Setter Property="p1:TextBoxExtensions.AddDeleteButton" Value="True" /> -->
+                            </Style>
+                        </AutoCompleteBox.Styles>
+                        <AutoCompleteBox.InnerLeftContent>
+                            <avalonia:MaterialIcon Kind="AccountOutline" Width="22" Height="22" />
+                        </AutoCompleteBox.InnerLeftContent>
+                        <AutoCompleteBox.ItemTemplate>
+                            <DataTemplate DataType="data:LoginUserItem">
+                                <DockPanel Margin="10,0" LastChildFill="True" HorizontalAlignment="Stretch">
+                                    <circleImage:CircleImage
+                                        DockPanel.Dock="Left"
+                                        Margin="15,0,0,0"
+                                        Image="{Binding Head}" Size="35" />
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center"
+                                                VerticalAlignment="Center">
+                                        <TextBlock FontSize="13.5" HorizontalAlignment="Center" LetterSpacing="1"
+                                                   Text="{Binding ID,StringFormat='ID: {0}'}" />
+                                        <TextBlock
+                                            Text="{Binding LastLoginTime,Converter={converter:DateOfYMDConverter}}"
+                                            HorizontalAlignment="Center"
+                                            FontSize="12" Opacity="0.65" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </AutoCompleteBox.ItemTemplate>
                     </AutoCompleteBox>
-                    <TextBlock
-                        FontWeight="SemiBold"
-                        Margin="8,5,0,3"
-                        Foreground="{DynamicResource SukiLowText}"
-                        Text="密码" />
+
+                    <!-- 密码 -->
                     <TextBox
                         MaxLength="16"
-                        PasswordChar="*"
-                        FontSize="13.5"
-                        ContextFlyout="{StaticResource DefaultTextBoxContextFlyout}"
-                        LetterSpacing="1"
+                        Padding="7,13,7,11"
+                        Classes="Login input Password"
+                        TextAlignment="Center"
                         Text="{Binding Password}"
-                        Watermark="输入密码" />
-                    <CheckBox Margin="5,5,5,0" IsChecked="{Binding LoginData.RememberPassword}">
+                        Watermark="输入密码">
+                        <TextBox.InnerLeftContent>
+                            <avalonia:MaterialIcon Kind="LockOutline" Width="20" Height="20" />
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+
+                    <!-- 记住密码 -->
+                    <CheckBox Margin="6,5,5,0" IsChecked="{Binding LoginData.RememberPassword}">
                         <TextBlock
-                            FontSize="12"
+                            FontSize="13"
                             FontWeight="DemiBold"
                             Text="记住密码"
                             Foreground="{DynamicResource SukiLowText}" />
                     </CheckBox>
+
+                    <!-- 登录 -->
                     <Button
-                        Width="190"
+                        Width="260"
                         Margin="0,25,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
-                        Classes="Flat Rounded"
+                        Classes="Flat"
                         Command="{Binding LoginCommand}">
-                        <TextBlock Text="登录" />
+                        <TextBlock FontSize="15" Text="登录" />
                     </Button>
                 </StackPanel>
             </DockPanel>
         </suki:BusyArea>
-        <controls:NotificationMessageContainer Manager="{Binding NotificationManager}" Grid.RowSpan="2" />
+
+        <!-- 通知消息容器 -->
+        <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2"
+                                               Manager="{Binding NotificationManager}" />
     </Grid>
 </UserControl>

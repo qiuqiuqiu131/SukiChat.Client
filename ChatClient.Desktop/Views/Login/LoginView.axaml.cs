@@ -1,5 +1,8 @@
 using System;
 using Avalonia.Controls;
+using Avalonia.Data;
+using ChatClient.Desktop.ViewModels.Login;
+using ChatClient.Tool.Data;
 using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.Login;
@@ -9,6 +12,14 @@ public partial class LoginView : UserControl, IDisposable
     public LoginView()
     {
         InitializeComponent();
+
+        IDBox.ValueMemberBinding = new Binding("ID");
+        IDBox.ItemFilter = (searchText, item) =>
+        {
+            if (item is LoginUserItem loginUserItem && !string.IsNullOrEmpty(searchText))
+                return loginUserItem.ID.StartsWith(searchText, StringComparison.OrdinalIgnoreCase);
+            return false;
+        };
     }
 
     #region Dispose

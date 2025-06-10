@@ -9,8 +9,8 @@
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     Title="Suki Chat"
-    Width="350"
-    Height="460"
+    Width="315"
+    Height="440"
     ExtendClientAreaTitleBarHeightHint="-1"
     IsTitleBarVisible="False"
     TitleBarAnimationEnabled="False"
@@ -24,6 +24,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}"
+                    Background="Transparent"
                     prism:RegionManager.RegionManager="{Binding RegionManager}"
                     x:Name="content">
         <ContentControl.RenderTransform>

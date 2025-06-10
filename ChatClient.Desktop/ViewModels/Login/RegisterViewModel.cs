@@ -36,6 +36,26 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
+    #region Registerd
+
+    private bool isRegistered = false;
+
+    public bool IsRegistered
+    {
+        get => isRegistered;
+        set => SetProperty(ref isRegistered, value);
+    }
+
+    private string? userId;
+
+    public string? UserId
+    {
+        get => userId;
+        set => SetProperty(ref userId, value);
+    }
+
+    #endregion
+
     #region IsBusy
 
     private bool isBusy = false;
@@ -56,8 +76,8 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     private string? name;
 
-    [InputRequired(ErrorMessage = "昵称不能为空")]
-    [StringLength(30, ErrorMessage = "昵称长度不能超过30个字符")]
+    [InputRequired(ErrorMessage = "昵称不能为空。")]
+    [StringLength(30, ErrorMessage = "昵称长度不能超过30个字符。")]
     public string? Name
     {
         get => name;
@@ -81,7 +101,7 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
     private string? password;
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
-    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
+    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符。")]
     public string? Password
     {
         get => password;
@@ -105,8 +125,8 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
     private string? repassword;
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
-    [PasswordMatch(nameof(Password), ErrorMessage = "两次输入的密码不一致")]
-    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
+    [PasswordMatch(nameof(Password), ErrorMessage = "两次输入的密码不一致。")]
+    [StringLength(18, ErrorMessage = "密码长度不能超过18个字符。")]
     public string? RePassword
     {
         get => repassword;
@@ -127,8 +147,8 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     public AsyncDelegateCommand RegisterCommand { get; init; }
     public DelegateCommand CancelCommand { get; init; }
+    public DelegateCommand ReturnToLoginViewCommand { get; init; }
 
-    public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();
     public INotificationMessageManager NotificationManager { get; set; } = new NotificationMessageManager();
 
     private readonly IContainerProvider _containerProvider;
@@ -142,6 +162,7 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
         RegisterCommand = new AsyncDelegateCommand(Register, CanRegister);
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
+        ReturnToLoginViewCommand = new DelegateCommand(ReturnToLoginView);
 
         ErrorsChanged += delegate
         {
@@ -167,20 +188,9 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
         if (result is { Response: { State: true } })
         {
             ClipBoardHelper.AddText(result.Id);
-            DialogManager.CreateDialog()
-                .WithViewModel(d =>
-                    new SukiDialogViewModel(d, NotificationType.Information, "注册成功",
-                        $"账号ID：\"{result.Id}\"",
-                        () =>
-                        {
-                            RequestClose.Invoke(new DialogResult(ButtonResult.OK)
-                            {
-                                Parameters = { { "ID", result.Id } }
-                            });
-                        }))
-                .TryShow();
-            await Task.Delay(500);
-            NotificationManager.ShowMessage("ID已复制到剪切板", NotificationType.Success, TimeSpan.FromSeconds(2));
+            UserId = result.Id;
+            IsRegistered = true;
+            NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(2));
         }
         else
         {
@@ -188,6 +198,14 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
             Password = null;
             RePassword = null;
         }
+    }
+
+    private void ReturnToLoginView()
+    {
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK)
+        {
+            Parameters = { { "ID", UserId } }
+        });
     }
 
     #region DialogAware

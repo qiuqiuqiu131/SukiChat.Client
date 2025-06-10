@@ -10,6 +10,8 @@
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="circleImage|CircleImage">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="Template">
                 <ControlTemplate>
                     <Panel Width="{Binding $parent[circleImage:CircleImage].Size}"

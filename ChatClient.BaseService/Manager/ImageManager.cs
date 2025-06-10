@@ -218,9 +218,9 @@ public class ImageManager : IImageManager
 
     public void ClearCache()
     {
-        foreach (var image in _imageCache.Values)
-            image.Dispose();
-        _imageCache.Clear();
+        // foreach (var image in _imageCache.Values)
+        //     image.Dispose();
+        // _imageCache.Clear();
 
         foreach (var image in _chatImageCache.Values)
             image.Dispose();

@@ -14,7 +14,7 @@ namespace ChatClient.BaseService.Services;
 
 public interface IUserService
 {
-    public Task<Bitmap> GetHeadImage(string userId, int headIndex);
+    public Task<Bitmap?> GetHeadImage(string userId, int headIndex);
 
     public Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User);
 
@@ -73,7 +73,7 @@ internal class UserService : BaseService, IUserService
         }
     }
 
-    public async Task<Bitmap> GetHeadImage(string userId, int headIndex)
+    public async Task<Bitmap?> GetHeadImage(string userId, int headIndex)
     {
         if (headIndex == -1)
         {
@@ -90,7 +90,10 @@ internal class UserService : BaseService, IUserService
             return file;
         else
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.ico"));
+            var path = Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png");
+            Bitmap? bitmap = null;
+            if (System.IO.File.Exists(path))
+                bitmap = new Bitmap(path);
             return bitmap;
         }
     }
@@ -109,9 +112,7 @@ internal class UserService : BaseService, IUserService
             if (file == null) continue;
             Bitmap bitmap;
             using (var stream = new MemoryStream(file))
-            {
                 bitmap = new Bitmap(stream);
-            }
 
             Array.Clear(file);
 
@@ -143,7 +144,7 @@ internal class UserService : BaseService, IUserService
                 await respository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id), disableTracking: false);
             if (currentUser != null)
             {
-                currentUser.HeadIndex = (int)userMessage.HeadCount;
+                currentUser.HeadIndex = (int)userMessage.HeadIndex;
                 currentUser.HeadCount = (int)userMessage.HeadCount;
                 currentUser.Introduction = userMessage.Introduction;
                 currentUser.Birthday =
@@ -156,7 +157,7 @@ internal class UserService : BaseService, IUserService
                 var userEntity = new User
                 {
                     HeadCount = (int)userMessage.HeadCount,
-                    HeadIndex = (int)userMessage.HeadCount,
+                    HeadIndex = (int)userMessage.HeadIndex,
                     Id = userMessage.Id,
                     Name = userMessage.Name,
                     Introduction = userMessage.Introduction,

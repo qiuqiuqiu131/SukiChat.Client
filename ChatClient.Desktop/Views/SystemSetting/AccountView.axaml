@@ -122,9 +122,8 @@
                         <TextBlock Text="密码" Classes="Title" DockPanel.Dock="Left" />
                         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal"
                                     Opacity="0.85">
-                            <TextBox PasswordChar="*" IsReadOnly="True"
+                            <TextBox Classes="Password" IsReadOnly="True"
                                      Padding="6,7,12,7"
-                                     LetterSpacing="1.5"
                                      TextAlignment="Center"
                                      Margin="0" MinHeight="0"
                                      Height="42"

@@ -2,8 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Media.Imaging;
 using Avalonia.Notification;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
@@ -52,6 +55,18 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     #endregion
 
+    #region LoginItem
+
+    private LoginUserItem? selectedLoginItem;
+
+    public LoginUserItem? SelectedLoginItem
+    {
+        get => selectedLoginItem;
+        set => SetProperty(ref selectedLoginItem, value);
+    }
+
+    #endregion
+
     #region 昵称(Name)
 
     private string? id;
@@ -63,7 +78,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
         {
             if (SetProperty(ref id, value))
             {
-                if (value != null && LoginData.RememberPassword) GetPassword(value);
+                if (value != null && LoginData.RememberPassword) IdTextChanged(value);
                 LoginCommand.RaiseCanExecuteChanged();
             }
         }
@@ -102,12 +117,12 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     #endregion
 
-    private List<string> idList;
+    private List<LoginUserItem>? userList;
 
-    public List<string> IdList
+    public List<LoginUserItem>? UserList
     {
-        get => idList;
-        set => SetProperty(ref idList, value);
+        get => userList;
+        set => SetProperty(ref userList, value);
     }
 
     private bool autoPassword = false;
@@ -119,17 +134,19 @@ public class LoginViewModel : ViewModelBase, IDisposable
     public INotificationMessageManager NotificationManager { get; init; } = new NotificationMessageManager();
 
     private readonly IRegionManager _regionManager;
+    private readonly IUserManager _userManager;
     private readonly IContainerProvider _containerProvider;
     private readonly IDialogService _dialogService;
 
     public LoginViewModel(IConnection connection,
         IRegionManager regionManager,
         ILoginData loginData,
-        ILoginService loginService,
+        IUserManager userManager,
         IContainerProvider containerProvider,
         IDialogService dialogService)
     {
         _regionManager = regionManager;
+        _userManager = userManager;
         _containerProvider = containerProvider;
         _dialogService = dialogService;
         LoginData = loginData.LoginData;
@@ -141,16 +158,29 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
         IsConnected.PropertyChanged += IsConnectedOnPropertyChanged;
 
-        Id = LoginData.Id;
+        InitData();
+    }
 
-        loginService.LoginIds().ContinueWith(d => IdList = d.Result);
+    private async void InitData()
+    {
+        // 获取登录历史
+        var _loginService = _containerProvider.Resolve<ILoginService>();
+        var _userService = _containerProvider.Resolve<IUserService>();
+        UserList = await _loginService.LoginUsers();
+        List<Task> tasks = new List<Task>();
+        foreach (var userItem in UserList)
+            tasks.Add(Task.Run(async () =>
+                userItem.Head = await _userService.GetHeadImage(userItem.ID, userItem.HeadIndex)));
+        await Task.WhenAll(tasks);
+
+        // 设置最近一次登录的账号
+        Id = LoginData.Id;
     }
 
     private void IsConnectedOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         LoginCommand.RaiseCanExecuteChanged();
     }
-
 
     private bool CanLogin() => IsConnected.IsConnected && !string.IsNullOrEmpty(Id) &&
                                !string.IsNullOrEmpty(Password) && !isBusy;
@@ -159,11 +189,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
     {
         IsBusy = true;
 
-        var result = await Task.Run(() =>
-        {
-            var _userManager = _containerProvider.Resolve<IUserManager>();
-            return _userManager.Login(Id!, Password!, LoginData.RememberPassword);
-        });
+        var result = await Task.Run(() => _userManager.Login(Id!, Password!, LoginData.RememberPassword));
 
         // 登录成功
         if (result is { State: true })
@@ -186,13 +212,15 @@ public class LoginViewModel : ViewModelBase, IDisposable
         IsBusy = false;
     }
 
-    private async void GetPassword(string id)
+    private async void IdTextChanged(string id)
     {
         if (string.IsNullOrEmpty(id) || id.Length != 10)
         {
-            if (autoPassword)
-                Password = null;
+            SelectedLoginItem = null;
+            Password = null;
         }
+
+        SelectedLoginItem = UserList?.FirstOrDefault(d => d.ID == id);
 
         var _loginService = _containerProvider.Resolve<ILoginService>();
         var result = await _loginService.GetPassword(id);

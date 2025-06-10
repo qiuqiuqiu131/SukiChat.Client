@@ -151,4 +151,39 @@
             </Style>
         </Style>
     </Style>
+
+    <Style Selector="ListBox.Normal ListBoxItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="4,2" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Name="BorderBasicStyle"
+                        Margin="0,0,0,0"
+                        Padding="8,4"
+                        CornerRadius="10">
+                    <ContentPresenter Name="PART_ContentPresenter"
+                                      Margin="0,0,0,0"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      Background="Transparent"
+                                      BorderBrush="Transparent"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      CornerRadius="{TemplateBinding CornerRadius}" />
+                </Border>
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="^:selected /template/ Border#BorderBasicStyle">
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
+        </Style>
+        <Style Selector="^:pointerover /template/ Border#BorderBasicStyle">
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
+        </Style>
+    </Style>
 </Styles>
