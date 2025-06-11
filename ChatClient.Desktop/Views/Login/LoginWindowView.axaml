@@ -16,6 +16,7 @@
     TitleBarAnimationEnabled="False"
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaToDecorationsHint="False"
+    BackgroundAnimationEnabled="True"
     SystemDecorations="None"
     CanResize="False"
     TransparencyLevelHint="Transparent"
@@ -27,9 +28,6 @@
                     Background="Transparent"
                     prism:RegionManager.RegionManager="{Binding RegionManager}"
                     x:Name="content">
-        <ContentControl.RenderTransform>
-            <ScaleTransform ScaleX="0" ScaleY="0"></ScaleTransform>
-        </ContentControl.RenderTransform>
         <ContentControl.Transitions>
             <Transitions>
                 <DoubleTransition Property="Opacity" Duration="0:0:0.3" />

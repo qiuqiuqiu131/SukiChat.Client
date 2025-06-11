@@ -10,6 +10,7 @@
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:login="clr-namespace:ChatClient.Desktop.Views.Login"
     x:DataType="vm:RegisterViewModel"
     Height="550"
     Width="490"
@@ -44,6 +45,13 @@
 
         <!-- 主体 -->
         <Panel Grid.Row="1">
+            <avalonia:MaterialIcon
+                HorizontalAlignment="Left" VerticalAlignment="Top"
+                Margin="8,-22"
+                Width="30"
+                Height="30"
+                Foreground="{DynamicResource SukiPrimaryColor}"
+                Kind="ChartDonutVariant" />
             <!-- 注册页面 -->
             <suki:BusyArea HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                            BusyText="注册中"
@@ -56,7 +64,7 @@
                         <StackPanel.Styles>
                             <Style Selector="TextBox.input">
                                 <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
-                                <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+                                <Setter Property="ContextMenu" Value="{StaticResource DefaultTextBoxContextMenu}" />
                                 <Setter Property="FontSize" Value="14.5" />
                                 <Setter Property="LetterSpacing" Value="1" />
                                 <Setter Property="Padding" Value="5,11" />
@@ -76,7 +84,7 @@
                             HorizontalAlignment="Center"
                             FontSize="20"
                             Foreground="{DynamicResource SukiText}"
-                            Text="欢迎注册SukiChat" />
+                            Text="欢迎注册 SukiChat" />
 
                         <StackPanel>
                             <TextBox Watermark="输入昵称" Text="{Binding Name}"
@@ -129,11 +137,8 @@
             </suki:BusyArea>
 
             <!-- 注册成功页面 -->
-            <StackPanel Width="260" Orientation="Vertical" IsVisible="{Binding IsRegistered}">
-                <TextBlock FontSize="18" Text="注册成功！" HorizontalAlignment="Center" />
-                <TextBlock Text=""></TextBlock>
-                <Button Content="返回登录页面" Command="{Binding ReturnToLoginViewCommand}" />
-            </StackPanel>
+            <login:RegisterSuccessView HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsVisible="{Binding IsRegistered}" />
         </Panel>
 
         <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2"

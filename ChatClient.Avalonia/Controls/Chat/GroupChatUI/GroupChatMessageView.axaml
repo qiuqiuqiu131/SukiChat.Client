@@ -9,19 +9,19 @@
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon"
+             xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:TextMessDto">
-            <SelectableTextBlock Text="{Binding Text}"
-                                 FontSize="14"
-                                 ContextMenu="{x:Null}"
-                                 Opacity="0.85"
-                                 HorizontalAlignment="Center"
-                                 ContextFlyout="{x:Null}"
-                                 Margin="3,0,2,2"
-                                 Padding="2"
-                                 TextWrapping="Wrap" />
+            <customSelectableTextBlock:CustomSelectableTextBlock Text="{Binding Text}"
+                                                                 FontSize="14"
+                                                                 Opacity="0.85"
+                                                                 HorizontalAlignment="Center"
+                                                                 ContextFlyout="{x:Null}"
+                                                                 Margin="3,0,2,2"
+                                                                 Padding="2"
+                                                                 TextWrapping="Wrap" />
         </DataTemplate>
         <DataTemplate DataType="data:ImageMessDto">
             <Panel>

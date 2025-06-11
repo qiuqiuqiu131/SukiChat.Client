@@ -155,7 +155,11 @@
                         VerticalAlignment="Center"
                         Spacing="5"
                         Margin="0,3,12.5,0">
-                <Button Classes="Basic" Command="{Binding ClearInputMessages}">
+                <Button Classes="Basic" Command="{Binding ClearInputMessages}" ToolTip.Placement="Top"
+                        ToolTip.VerticalOffset="2">
+                    <ToolTip.Tip>
+                        <TextBlock Text="清空" FontSize="12" />
+                    </ToolTip.Tip>
                     <avalonia:MaterialIcon Kind="TrashCanOutline" Width="22" Height="22" />
                 </Button>
             </StackPanel>
@@ -168,6 +172,48 @@
                           PointerPressed="InputItems_OnPointerPressed"
                           Cursor="Ibeam"
                           VerticalScrollBarVisibility="Hidden">
+                <ScrollViewer.ContextMenu>
+                    <ContextMenu Placement="Pointer">
+                        <MenuItem Name="TextBoxContextFlyoutCutItem"
+                                  Header="剪切"
+                                  InputGesture="{x:Static TextBox.CutGesture}"
+                                  IsEnabled="False">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="ContentCut">
+                                    <avalonia:MaterialIcon.RenderTransform>
+                                        <TransformGroup>
+                                            <RotateTransform Angle="-90" />
+                                            <ScaleTransform ScaleX="1" ScaleY="1" />
+                                        </TransformGroup>
+                                    </avalonia:MaterialIcon.RenderTransform>
+                                </avalonia:MaterialIcon>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="TextBoxContextFlyoutCopyItem"
+                                  Header="复制"
+                                  InputGesture="{x:Static TextBox.CopyGesture}"
+                                  IsEnabled="False">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="ContentCopy" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="TextBoxContextFlyoutPasteItem"
+                                  Click="TextBoxContextFlyoutPasteItem_OnClick"
+                                  Header="粘贴"
+                                  InputGesture="{x:Static TextBox.PasteGesture}">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="ContentPaste" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="TextBoxContextFlyoutSelectAllItem"
+                                  Click="TextBoxContextFlyoutSelectAllItem_OnClick"
+                                  Header="选择全部">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="CheckboxMarkedCircleOutline" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </ScrollViewer.ContextMenu>
                 <ItemsControl Background="Transparent"
                               suki:ItemsControlExtensions.AnimatedScroll="True"
                               Name="InputItems">

@@ -1,14 +1,16 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:suki="https://github.com/kikipoulet/SukiUI"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:extenstions="clr-namespace:ChatClient.Avalonia.Extenstions"
+        xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock">
     <Design.PreviewWith>
         <TextBox Text="TextBox" Classes="Trans" Watermark="输入内容" />
     </Design.PreviewWith>
 
     <Styles.Resources>
-        <MenuFlyout x:Key="DefaultTextBoxContextFlyout" Placement="Bottom">
-            <MenuItem x:Name="TextBoxContextFlyoutCutItem"
+        <ContextMenu x:Key="DefaultTextBoxContextMenu" Placement="Pointer">
+            <MenuItem Name="TextBoxContextFlyoutCutItem"
                       Command="{Binding $parent[TextBox].Cut}"
                       Header="剪切"
                       InputGesture="{x:Static TextBox.CutGesture}"
@@ -24,7 +26,7 @@
                     </avalonia:MaterialIcon>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="TextBoxContextFlyoutCopyItem"
+            <MenuItem Name="TextBoxContextFlyoutCopyItem"
                       Command="{Binding $parent[TextBox].Copy}"
                       Header="复制"
                       InputGesture="{x:Static TextBox.CopyGesture}"
@@ -33,16 +35,15 @@
                     <avalonia:MaterialIcon Kind="ContentCopy" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="TextBoxContextFlyoutPasteItem"
+            <MenuItem Name="TextBoxContextFlyoutPasteItem"
                       Command="{Binding $parent[TextBox].Paste}"
                       Header="粘贴"
-                      InputGesture="{x:Static TextBox.PasteGesture}"
-                      IsEnabled="{Binding $parent[TextBox].CanPaste}">
+                      InputGesture="{x:Static TextBox.PasteGesture}">
                 <MenuItem.Icon>
                     <avalonia:MaterialIcon Kind="ContentPaste" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem x:Name="TextBoxContextFlyoutSelectAllItem"
+            <MenuItem Name="TextBoxContextFlyoutSelectAllItem"
                       Command="{Binding $parent[TextBox].SelectAll}"
                       Header="选择全部"
                       IsEnabled="{Binding $parent[TextBox].Text,Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
@@ -50,7 +51,7 @@
                     <avalonia:MaterialIcon Kind="CheckboxMarkedCircleOutline" />
                 </MenuItem.Icon>
             </MenuItem>
-        </MenuFlyout>
+        </ContextMenu>
     </Styles.Resources>
 
     <Style Selector="TextBlock">
@@ -74,11 +75,6 @@
             <Setter Property="Opacity" Value="0.35" />
         </Style>
     </Style>
-    <Style Selector="SelectableTextBlock">
-        <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
-        <Setter Property="FontSize" Value="14" />
-        <Setter Property="SelectionForegroundBrush" Value="White"></Setter>
-    </Style>
 
     <Style Selector="TextBox.Trans">
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -90,7 +86,7 @@
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
         <Setter Property="Padding" Value="6,8,5,6" />
-        <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextMenu" Value="{StaticResource DefaultTextBoxContextMenu}" />
 
         <Setter Property="Template">
             <ControlTemplate>
@@ -185,7 +181,7 @@
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
-        <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextMenu" Value="{StaticResource DefaultTextBoxContextMenu}" />
 
         <Setter Property="Template">
             <ControlTemplate>
@@ -289,7 +285,8 @@
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
         <Setter Property="MinHeight" Value="45" />
-        <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+        <!-- <Setter Property="ContextMenu" Value="{x:Null}" /> -->
+        <!-- <Setter Property="ContextFlyout" Value="{x:Null}" /> -->
 
         <Setter Property="Template">
             <ControlTemplate>
@@ -458,7 +455,7 @@
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
         <Setter Property="MinHeight" Value="45" />
-        <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+        <Setter Property="ContextMenu" Value="{StaticResource DefaultTextBoxContextMenu}" />
 
         <Setter Property="Template">
             <ControlTemplate>

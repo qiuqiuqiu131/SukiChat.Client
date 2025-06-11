@@ -82,7 +82,7 @@
                         </Style>
                         <Style Selector="TextBox.input,AutoCompleteBox.input">
                             <Setter Property="FontSize" Value="15" />
-                            <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
+                            <Setter Property="ContextMenu" Value="{StaticResource DefaultTextBoxContextMenu}" />
                         </Style>
                     </StackPanel.Styles>
 
@@ -110,6 +110,7 @@
                         MinimumPrefixLength="4"
                         Classes="Login input"
                         Padding="7,12.5"
+                        ContextMenu="{x:Null}"
                         MaxDropDownHeight="200"
                         ItemsSource="{Binding UserList}"
                         CornerRadius="8"
@@ -152,6 +153,8 @@
                         Padding="7,13,7,11"
                         Classes="Login input Password"
                         TextAlignment="Center"
+                        ContextFlyout="{x:Null}"
+                        ContextMenu="{x:Null}"
                         Text="{Binding Password}"
                         Watermark="输入密码">
                         <TextBox.InnerLeftContent>

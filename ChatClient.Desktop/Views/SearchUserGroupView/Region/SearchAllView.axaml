@@ -27,7 +27,7 @@
     </UserControl.Resources>
     <Panel Margin="13,0">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
-                    Margin="0,10,0,20"
+                    Margin="0,15,0,20"
                     Opacity="0.6"
                     IsVisible="{Binding IsEmpty}">
             <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />

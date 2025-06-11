@@ -18,7 +18,7 @@
     <Panel Margin="13,0" IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
         <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center"
                     Opacity="0.6"
-                    Margin="0,20"
+                    Margin="0,15,0,20"
                     IsVisible="{Binding IsEmpty}">
             <avalonia:MaterialIcon Width="50" Height="50" Kind="ArchiveOutline" />
             <TextBlock Text="暂未找到相关信息" FontSize="15" />

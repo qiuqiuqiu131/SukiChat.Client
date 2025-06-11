@@ -18,7 +18,7 @@
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Width" Value="5"></Setter>
         </Style>
         <!-- <Style Selector="circleImage|CircleImage.Head"> -->
         <!--     <Setter Property="Cursor" Value="Hand" /> -->
@@ -66,38 +66,7 @@
         <chat:MessageDataTemplate x:Key="MessageDataTemplate">
             <DataTemplate x:Key="Retracted" DataType="data:ChatData">
                 <!-- 撤回消息 -->
-                <Border Background="{DynamicResource SukiPrimaryColor10}"
-                        Margin="0,5"
-                        HorizontalAlignment="Center" CornerRadius="5">
-                    <Panel>
-                        <StackPanel HorizontalAlignment="Center"
-                                    Orientation="Horizontal"
-                                    Margin="5,1.5"
-                                    IsVisible="{Binding IsUser}">
-                            <TextBlock FontSize="12"
-                                       Text="你"
-                                       Foreground="{DynamicResource SukiPrimaryColor}"
-                                       Padding="0"
-                                       Margin="0" />
-                            <TextBlock Text="撤回一条消息" FontSize="12"
-                                       Opacity="0.6" Padding="0"
-                                       Margin="0" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Center"
-                                    Margin="5,1.5"
-                                    IsVisible="{Binding !IsUser}">
-                            <TextBlock FontSize="12"
-                                       Text="对方"
-                                       Foreground="{DynamicResource SukiPrimaryColor}"
-                                       Padding="0"
-                                       Margin="0" />
-                            <TextBlock Text="撤回一条消息" FontSize="12" Padding="0"
-                                       Opacity="0.6"
-                                       Margin="0" />
-                        </StackPanel>
-                    </Panel>
-                </Border>
+                <Panel />
             </DataTemplate>
             <DataTemplate x:Key="User" DataType="data:ChatData">
                 <!-- Right -->
@@ -283,8 +252,46 @@
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
-                                                    <ContentControl Content="{Binding}"
-                                                                    ContentTemplate="{StaticResource MessageDataTemplate}" />
+                                                    <Panel>
+                                                        <!-- 撤回消息 -->
+                                                        <Border IsVisible="{Binding IsRetracted}"
+                                                                Background="{DynamicResource SukiPrimaryColor10}"
+                                                                Margin="0,5"
+                                                                HorizontalAlignment="Center" CornerRadius="5">
+                                                            <Panel>
+                                                                <StackPanel HorizontalAlignment="Center"
+                                                                            Orientation="Horizontal"
+                                                                            Margin="5,1.5"
+                                                                            IsVisible="{Binding IsUser}">
+                                                                    <TextBlock FontSize="12"
+                                                                               Text="你"
+                                                                               Foreground="{DynamicResource SukiPrimaryColor}"
+                                                                               Padding="0"
+                                                                               Margin="0" />
+                                                                    <TextBlock Text="撤回一条消息" FontSize="12"
+                                                                               Opacity="0.6" Padding="0"
+                                                                               Margin="0" />
+                                                                </StackPanel>
+                                                                <StackPanel Orientation="Horizontal"
+                                                                            HorizontalAlignment="Center"
+                                                                            Margin="5,1.5"
+                                                                            IsVisible="{Binding !IsUser}">
+                                                                    <TextBlock FontSize="12"
+                                                                               Text="对方"
+                                                                               Foreground="{DynamicResource SukiPrimaryColor}"
+                                                                               Padding="0"
+                                                                               Margin="0" />
+                                                                    <TextBlock Text="撤回一条消息" FontSize="12" Padding="0"
+                                                                               Opacity="0.6"
+                                                                               Margin="0" />
+                                                                </StackPanel>
+                                                            </Panel>
+                                                        </Border>
+                                                        <ContentControl
+                                                            IsVisible="{Binding IsRetracted,Converter={x:Static BoolConverters.Not}}"
+                                                            Content="{Binding}"
+                                                            ContentTemplate="{StaticResource MessageDataTemplate}" />
+                                                    </Panel>
                                                 </StackPanel>
                                             </Grid>
                                         </DataTemplate>

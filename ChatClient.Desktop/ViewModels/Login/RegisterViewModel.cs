@@ -3,22 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
 using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
-using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
-using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
@@ -148,6 +143,7 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
     public AsyncDelegateCommand RegisterCommand { get; init; }
     public DelegateCommand CancelCommand { get; init; }
     public DelegateCommand ReturnToLoginViewCommand { get; init; }
+    public DelegateCommand ReturnToRegisterCommand { get; init; }
 
     public INotificationMessageManager NotificationManager { get; set; } = new NotificationMessageManager();
 
@@ -163,6 +159,14 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
         RegisterCommand = new AsyncDelegateCommand(Register, CanRegister);
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
         ReturnToLoginViewCommand = new DelegateCommand(ReturnToLoginView);
+        ReturnToRegisterCommand = new DelegateCommand(() =>
+        {
+            Name = null;
+            Password = null;
+            RePassword = null;
+            IsRegistered = false;
+            UserId = null;
+        });
 
         ErrorsChanged += delegate
         {
@@ -180,6 +184,11 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     private async Task Register()
     {
+        // UserId = "2025000001";
+        // IsRegistered = true;
+        // NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(2));
+        // return;
+
         IsBusy = true;
         var _registerService = _containerProvider.Resolve<IRegisterService>();
         var result = await _registerService.Register(Name!, Password!);
@@ -190,11 +199,11 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
             ClipBoardHelper.AddText(result.Id);
             UserId = result.Id;
             IsRegistered = true;
-            NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(2));
+            NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(3));
         }
         else
         {
-            NotificationManager.ShowMessage("注册失败", NotificationType.Error, TimeSpan.FromSeconds(2));
+            NotificationManager.ShowMessage("注册失败", NotificationType.Error, TimeSpan.FromSeconds(3));
             Password = null;
             RePassword = null;
         }

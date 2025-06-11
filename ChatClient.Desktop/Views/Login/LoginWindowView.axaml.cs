@@ -21,13 +21,7 @@ public partial class LoginWindowView : SukiWindow, IDisposable
         SystemDecorations = SystemDecorations.None;
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
         ExtendClientAreaToDecorationsHint = false;
-        Loaded += (sender, args) =>
-        {
-            var scaleTransform = content.RenderTransform as ScaleTransform;
-            scaleTransform.ScaleX = 1;
-            scaleTransform.ScaleY = 1;
-            Opacity = 1;
-        };
+        Loaded += (sender, args) => { Opacity = 1; };
     }
 
     private SukiDialogHost? _dialogHost;

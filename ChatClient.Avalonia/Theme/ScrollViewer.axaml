@@ -1,17 +1,11 @@
 <Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls">
-    <Design.PreviewWith>
-        <Border Padding="20">
-            <!-- Add Controls for Previewer Here -->
-        </Border>
-    </Design.PreviewWith>
-
-    <Style Selector="controls|QScrollViewer">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="ListBox.Fill /template/ ScrollViewer#PART_ScrollViewer">
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid ColumnDefinitions="*,Auto" RowDefinitions="*,Auto">
-                    <ScrollContentPresenter Name="PART_ContentPresenter"
+                    <ScrollContentPresenter Grid.ColumnSpan="2"
+                                            Name="PART_ContentPresenter"
                                             Padding="{TemplateBinding Padding}"
                                             Background="{TemplateBinding Background}"
                                             HorizontalSnapPointsAlignment="{TemplateBinding HorizontalSnapPointsAlignment}"
@@ -29,10 +23,12 @@
                     <ScrollBar Name="PART_HorizontalScrollBar"
                                Grid.Row="1"
                                Grid.Column="0"
+                               Padding="0"
                                Orientation="Horizontal" />
                     <ScrollBar Name="PART_VerticalScrollBar"
                                Grid.Row="0"
                                Grid.Column="1"
+                               Padding="0"
                                Orientation="Vertical" />
                     <Panel Name="PART_ScrollBarsSeparator"
                            Grid.Row="1"
@@ -41,9 +37,5 @@
                 </Grid>
             </ControlTemplate>
         </Setter>
-
-        <Style Selector="^:pointerover /template/ ScrollBar">
-            <Setter Property="AllowAutoHide" Value="True"></Setter>
-        </Style>
     </Style>
 </Styles>

@@ -445,6 +445,9 @@ public partial class ChatInputPanelView : UserControl
             {
                 var textBox = (TextBox)_itemCollection.Last()!;
                 textBox.Focus();
+                textBox.SelectionStart = textBox.Text?.Length ?? 0;
+                textBox.SelectionEnd = textBox.Text?.Length ?? 0;
+
                 ScrollViewer.ScrollToEnd();
 
                 e.Handled = true;
@@ -453,8 +456,18 @@ public partial class ChatInputPanelView : UserControl
             {
                 var textBox = (TextBox)_itemCollection.Last()!;
                 textBox.Focus();
-                if (textBox.ContextFlyout != null)
-                    textBox.ContextFlyout.ShowAt(textBox);
+                textBox.SelectionStart = textBox.Text?.Length ?? 0;
+                textBox.SelectionEnd = textBox.Text?.Length ?? 0;
+
+                if (control.ContextMenu != null)
+                {
+                    var item = (MenuItem)control.ContextMenu.Items[3];
+                    if (string.IsNullOrEmpty(textBox.Text))
+                        item.IsEnabled = false;
+                    else
+                        item.IsEnabled = true;
+                    control.ContextMenu.Open();
+                }
 
                 e.Handled = true;
             }
@@ -469,10 +482,25 @@ public partial class ChatInputPanelView : UserControl
     // 选择emoji表情
     private void EmojiPickerView_OnEmojiSelected(object? sender, EmojiSelectedEventArgs e)
     {
-        //EmojiView.IsOpen = false;
         var textBox = (TextBox)_itemCollection.Last()!;
         textBox.Text += e.Emoji;
         textBox.Focus();
         ScrollViewer.ScrollToEnd();
     }
+
+    #region ScrollViewerMenu
+
+    private void TextBoxContextFlyoutPasteItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var textBox = (TextBox)_itemCollection.Last()!;
+        textBox.Paste();
+    }
+
+    private void TextBoxContextFlyoutSelectAllItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var textBox = (TextBox)_itemCollection.Last()!;
+        textBox.SelectAll();
+    }
+
+    #endregion
 }

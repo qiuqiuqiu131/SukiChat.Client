@@ -133,7 +133,7 @@
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="RadioButton.IsTop">
-            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor10}" />
+            <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor15}" />
             <Style Selector="^ /template/ Border">
                 <Setter Property="Opacity" Value="0.5" />
             </Style>

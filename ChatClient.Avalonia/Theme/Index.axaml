@@ -28,6 +28,7 @@
     <StyleInclude Source="ListBoxItem.axaml" />
     <StyleInclude Source="ToggleButton.axaml" />
     <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="ScrollViewer.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
     <StyleInclude Source="BusyArea.axaml" />
     <StyleInclude Source="DatePicker.axaml" />

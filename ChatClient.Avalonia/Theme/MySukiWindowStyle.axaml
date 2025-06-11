@@ -17,7 +17,7 @@
             <ControlTemplate>
                 <Border Margin="{TemplateBinding Margin}"
                         ClipToBounds="True"
-                        CornerRadius="{OnPlatform '0',
+                        CornerRadius="{OnPlatform '10',
                                                   Linux='10',
                                                   x:TypeArguments=CornerRadius}">
                     <VisualLayerManager Name="PART_VisualLayerManager" IsHitTestVisible="True">
