@@ -11,20 +11,78 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
+/// <summary>
+/// 好友处理接口
+/// </summary>
 public interface IFriendService
 {
+    /// <summary>
+    /// 判断是否是好友关系
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">目标用户ID</param>
+    /// <returns></returns>
     public Task<bool> IsFriend(string userId, string targetId);
 
+    /// <summary>
+    /// 发送好友请求
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="targetId">目标用户ID</param>
+    /// <param name="remark">备注</param>
+    /// <param name="group">分组</param>
+    /// <param name="message">请求消息</param>
+    /// <returns></returns>
     public Task<(bool, string)> AddFriend(string userId, string targetId, string remark = "", string group = "默认分组",
         string message = "");
 
+    /// <summary>
+    /// 回应好友请求
+    /// </summary>
+    /// <param name="requestId">好友请求ID</param>
+    /// <param name="state">是否接受</param>
+    /// <param name="remark">如果接受，可以设置备注</param>
+    /// <param name="group">如果接受，可以设置分组</param>
+    /// <returns></returns>
     public Task<(bool, string)> ResponseFriendRequest(int requestId, bool state, string remark = "",
         string group = "默认分组");
 
+    /// <summary>
+    /// 获取用户的所有好友ID
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <returns></returns>
     public Task<List<string>> GetFriendIds(string userId);
+
+    /// <summary>
+    /// 获取用户的所有好友ID（仅聊天列表中的好友）
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <returns></returns>
     public Task<List<string>> GetFriendChatIds(string userId);
+
+    /// <summary>
+    /// 获取用户关系实体（FriendRelationDto）
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <param name="friendId">好友ID</param>
+    /// <returns></returns>
     public Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
+
+    /// <summary>
+    /// 更新好友关系，如分组、备注、免打扰、置顶等
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <param name="friendRelationDto">好友关系实体</param>
+    /// <returns></returns>
     public Task<bool> UpdateFriendRelation(string userId, FriendRelationDto friendRelationDto);
+
+    /// <summary>
+    /// 删除好友关系
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <param name="friendId">好友ID</param>
+    /// <returns></returns>
     public Task<bool> DeleteFriend(string userId, string friendId);
 }
 
@@ -49,13 +107,6 @@ internal class FriendService : BaseService, IFriendService
         return friendRelationRepository.ExistsAsync(d => d.User1Id.Equals(userId) && d.User2Id.Equals(targetId));
     }
 
-    /// <summary>
-    /// 发送好友请求
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <param name="group"></param>
-    /// <returns></returns>
     public async Task<(bool, string)> AddFriend(string userId, string targetId, string remark = "",
         string group = "默认分组", string message = "")
     {
@@ -146,11 +197,6 @@ internal class FriendService : BaseService, IFriendService
         return (true, result.Response.Message);
     }
 
-    /// <summary>
-    /// 获取userId的所有好友的Id
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns></returns>
     public Task<List<string>> GetFriendIds(string userId)
     {
         var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
@@ -222,12 +268,6 @@ internal class FriendService : BaseService, IFriendService
         return false;
     }
 
-    /// <summary>
-    /// 删除好友
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="friendId"></param>
-    /// <returns></returns>
     public async Task<bool> DeleteFriend(string userId, string friendId)
     {
         var friendDeleteRequest = new DeleteFriendRequest

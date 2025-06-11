@@ -7,6 +7,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Desktop.Views.SearchUserGroupView.Region;

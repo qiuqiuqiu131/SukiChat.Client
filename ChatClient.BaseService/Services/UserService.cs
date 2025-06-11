@@ -1,27 +1,55 @@
-using System.Collections.ObjectModel;
 using AutoMapper;
 using Avalonia.Media.Imaging;
-using ChatClient.BaseService.Helper;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
-using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
+/// <summary>
+/// 用户信息服务接口
+/// </summary>
 public interface IUserService
 {
+    /// <summary>
+    /// 获取用户当前使用的头像
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="headIndex"></param>
+    /// <returns></returns>
     public Task<Bitmap?> GetHeadImage(string userId, int headIndex);
 
+    /// <summary>
+    /// 获取用户的所有历史头像
+    /// </summary>
+    /// <param name="User"></param>
+    /// <returns></returns>
     public Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User);
 
+    /// <summary>
+    /// 获取用户信息，作为用户基础实体，用于组装其他关系实体
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="isUpdate"></param>
+    /// <returns></returns>
     public Task<UserDto?> GetUserDto(string id, bool isUpdate = false);
 
+    /// <summary>
+    /// 获取用户详细信息(当前登录者)
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
     public Task<UserDetailDto?> GetUserDetailDto(string id, string password);
 
+    /// <summary>
+    /// 保存用户详细信息(当前登陆者)
+    /// </summary>
+    /// <param name="User"></param>
+    /// <returns></returns>
     public Task<bool> SaveUser(UserDetailDto User);
 }
 
@@ -43,10 +71,6 @@ internal class UserService : BaseService, IUserService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
-    /// <summary>
-    /// 获取用户头像
-    /// </summary>
-    /// <returns></returns>
     public async Task<Bitmap> GetHeadImage(UserDto User, bool isUpdate = false)
     {
         var imageManager = _scopedProvider.Resolve<IImageManager>();
@@ -98,11 +122,6 @@ internal class UserService : BaseService, IUserService
         }
     }
 
-    /// <summary>
-    /// 获取用户所有头像
-    /// </summary>
-    /// <param name="User"></param>
-    /// <returns></returns>
     public async Task<Dictionary<int, Bitmap>> GetHeadImages(UserDto User)
     {
         Dictionary<int, Bitmap> bitmaps = new();
@@ -122,13 +141,9 @@ internal class UserService : BaseService, IUserService
         return bitmaps;
     }
 
-    /// <summary>
-    /// 获取用户具体信息
-    /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
     public async Task<UserDto?> GetUserDto(string id, bool isUpdated)
     {
+        // 远程获取用户信息
         GetUserRequest request = new GetUserRequest() { Id = id };
         var response = await _messageHelper.SendMessageWithResponse<GetUserResponse>(request);
         if (response is not { Response: { State: true } }) return null;
@@ -144,7 +159,7 @@ internal class UserService : BaseService, IUserService
                 await respository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id), disableTracking: false);
             if (currentUser != null)
             {
-                currentUser.HeadIndex = (int)userMessage.HeadIndex;
+                currentUser.HeadIndex = userMessage.HeadIndex;
                 currentUser.HeadCount = (int)userMessage.HeadCount;
                 currentUser.Introduction = userMessage.Introduction;
                 currentUser.Birthday =
@@ -157,7 +172,7 @@ internal class UserService : BaseService, IUserService
                 var userEntity = new User
                 {
                     HeadCount = (int)userMessage.HeadCount,
-                    HeadIndex = (int)userMessage.HeadIndex,
+                    HeadIndex = userMessage.HeadIndex,
                     Id = userMessage.Id,
                     Name = userMessage.Name,
                     Introduction = userMessage.Introduction,
@@ -175,7 +190,7 @@ internal class UserService : BaseService, IUserService
         }
 
         if (!isUpdated)
-            Task.Run(async () => user.HeadImage = await GetHeadImage(user));
+            _ = Task.Run(async () => user.HeadImage = await GetHeadImage(user));
         else
             user.HeadImage = await GetHeadImage(user, isUpdated);
 
@@ -200,10 +215,6 @@ internal class UserService : BaseService, IUserService
         return null;
     }
 
-    /// <summary>
-    /// 保存用户信息
-    /// </summary>
-    /// <param name="User"></param>
     public async Task<bool> SaveUser(UserDetailDto User)
     {
         // 服务器保存

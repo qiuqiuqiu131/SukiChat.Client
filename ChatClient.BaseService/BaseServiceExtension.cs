@@ -7,6 +7,8 @@ using ChatClient.BaseService.Mapper;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.PackService;
+using ChatClient.BaseService.Services.RemoteService;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 
@@ -25,7 +27,7 @@ public static class BaseServiceExtension
         }).CreateMapper();
         containerRegistry.RegisterInstance(mapConfig);
 
-        // 注册Manager
+        // 注册单例
         containerRegistry.RegisterSingleton<IAppDataManager, AppDataManager>()
             .RegisterSingleton<IConnection, ConnectionManager>()
             .RegisterSingleton<IThemeStyle, ThemeStyleManager>()
@@ -72,9 +74,11 @@ public static class BaseServiceExtension
             .Register<IGroupGetService, GroupGetService>()
             .Register<IGroupService, GroupService>()
             .Register<IUserGroupService, UserGroupService>()
-            .Register<ISearchService, SearchService>()
             .Register<IPasswordService, PasswordService>()
-            .Register<IChatLRService, ChatLRService>()
+            .Register<IChatLRService, ChatLRService>();
+
+        // 注册SearchService
+        containerRegistry.Register<ISearchService, SearchService>()
             .Register<ILocalSearchService, LocalSearchService>();
 
         // 注册PackService
@@ -82,6 +86,10 @@ public static class BaseServiceExtension
             .Register<IFriendPackService, FriendPackService>()
             .Register<IGroupPackService, GroupPackService>()
             .Register<IGroupChatPackService, GroupChatPackService>();
+
+        // 注册RemoteService
+        containerRegistry.Register<IGroupRemoteService, GroupRemoteService>()
+            .Register<IUserRemoteService, UserRemoteService>();
 
         // 注册MessageHandler
         containerRegistry.Register<IMessageHandler, FriendMessageHandler>()

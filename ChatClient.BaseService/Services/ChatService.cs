@@ -50,7 +50,7 @@ public interface IChatService
         FileTarget fileTarget);
 
     /// <summary>
-    /// 向好友发送正在输入的消息
+    /// 向好友发送输入状态的消息
     /// </summary>
     /// <param name="userId">用户ID</param>
     /// <param name="targetId">好友ID</param>
@@ -59,7 +59,7 @@ public interface IChatService
     Task SendFriendWritingMessage(string? userId, string? targetId, bool isWriting);
 
     /// <summary>
-    /// 用于更新文件下载状态,数据库中更改
+    /// 用于更新文件下载状态,数据库中更改，如未下载、已下载并保存在本地
     /// </summary>
     /// <param name="userId">用户ID</param>
     /// <param name="fileMess">文件消息</param>
@@ -80,13 +80,36 @@ public interface IChatService
     /// <summary>
     /// 确保聊天对象在聊天列表中，如果不存在，则添加
     /// </summary>
-    /// <param name="obj"></param>
+    /// <param name="obj">GroupRelationDto\FriendRelationDto</param>
     /// <returns></returns>
     Task AddChatDto(object obj);
 
+    /// <summary>
+    /// 删除某条聊天记录，用户将不会在看到这条消息，当对方仍然能够看到
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="chatId">聊天消息ID</param>
+    /// <param name="fileTarget">群聊\好友</param>
+    /// <returns></returns>
     Task<bool> DeleteChatMessage(string userId, int chatId, FileTarget fileTarget);
+
+    /// <summary>
+    /// 撤回聊天消息，用户和对方都看不到这条消息，但能看到撤回的提示
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <param name="chatId">聊天消息ID</param>
+    /// <param name="fileTarget">群聊\好友</param>
+    /// <returns></returns>
     Task<bool> RetractChatMessage(string userId, int chatId, FileTarget fileTarget);
 
+    /// <summary>
+    /// 分享聊天消息到其他人或者群聊
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <param name="chatMessageDto">分享目标消息</param>
+    /// <param name="senderMessage">分享备注</param>
+    /// <param name="relations">分享目标(好友、群聊)</param>
+    /// <returns></returns>
     Task<bool> SendChatShareMessage(string userId, ChatMessageDto chatMessageDto, string senderMessage,
         IEnumerable<object> relations);
 }
@@ -525,13 +548,6 @@ internal class ChatService : BaseService, IChatService
         return false;
     }
 
-    /// <summary>
-    /// 将ChatMessages中的资源注入
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="chatId"></param>
-    /// <param name="chatMessages"></param>
-    /// <param name="fileTarget"></param>
     public async Task OperateChatMessage(string userId, string id,
         int chatId, bool isUser,
         List<ChatMessageDto> chatMessages, FileTarget fileTarget)

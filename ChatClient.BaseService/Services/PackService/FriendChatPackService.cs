@@ -11,17 +11,57 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
+/// <summary>
+/// 本地批量获取好友聊天服务接口
+/// </summary>
 public interface IFriendChatPackService
 {
+    /// <summary>
+    /// 获取单个好友聊天记录
+    /// </summary>
+    /// <param name="userId">当前用户Id</param>
+    /// <param name="targetId">目标用户ID</param>
+    /// <returns></returns>
     Task<FriendChatDto?> GetFriendChatDto(string userId, string targetId);
+
+    /// <summary>
+    /// 批量获取好友聊天记录
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <returns></returns>
     Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId);
+
+    /// <summary>
+    /// 获取部分聊天记录
+    /// </summary>
+    /// <param name="userId">当前用户ID</param>
+    /// <param name="targetId">目标用户ID</param>
+    /// <param name="chatId">开始聊天记录，聊天记录部分会从此聊天记录开始往后截取</param>
+    /// <param name="nextCount">聊天记录数量</param>
+    /// <returns></returns>
     Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId, int nextCount);
 
+    /// <summary>
+    /// 处理Protobuf的好友聊天消息，并保存到数据库
+    /// </summary>
+    /// <param name="chatMessage">聊天消息</param>
+    /// <returns></returns>
     Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage);
+
+    /// <summary>
+    /// 批量处理Protobuf的好友聊天消息，并保存到数据库
+    /// </summary>
+    /// <param name="chatMessages"></param>
+    /// <returns></returns>
     Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages);
 
-    Task<bool> ChatPrivateDetailMessagesOperate(string userId,
-        IEnumerable<ChatPrivateDetailMessage> chatPrivateDetailMessages);
+    /// <summary>
+    /// 处理聊天具体信息，并保存到数据库（聊天具体信息：是否被撤回、是否删除等）
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="chatPrivateDetailMessages"></param>
+    /// <returns></returns>
+    Task<bool> ChatPrivateDetailMessagesOperate(IEnumerable<ChatPrivateDetailMessage> chatPrivateDetailMessages);
 }
 
 public class FriendChatPackService : BaseService, IFriendChatPackService
@@ -39,12 +79,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
-    /// <summary>
-    /// 获取userId与好友targetId的聊天记录
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <returns></returns>
     public async Task<FriendChatDto?> GetFriendChatDto(string userId, string targetId)
     {
         #region 查询
@@ -101,11 +135,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return friendChatDto;
     }
 
-    /// <summary>
-    /// 获取某个用户的所有好友的聊天记录
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <returns></returns>
     public async Task<AvaloniaList<FriendChatDto>> GetFriendChatDtos(string userId)
     {
         var result = new AvaloniaList<FriendChatDto>();
@@ -130,14 +159,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return result;
     }
 
-    /// <summary>
-    /// 获取部分聊天记录
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="targetId"></param>
-    /// <param name="chatId"></param>
-    /// <param name="nextCount"></param>
-    /// <returns></returns>
     public async Task<List<ChatData>> GetFriendChatDataAsync(string? userId, string targetId, int chatId,
         int nextCount)
     {
@@ -196,11 +217,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return chatDatas;
     }
 
-    /// <summary>
-    /// 保存单条聊天消息到数据库
-    /// </summary>
-    /// <param name="chatMessage"></param>
-    /// <returns></returns>
     public async Task<bool> FriendChatMessageOperate(FriendChatMessage chatMessage)
     {
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
@@ -224,11 +240,6 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return true;
     }
 
-    /// <summary>
-    /// 批量处理好友请求
-    /// </summary>
-    /// <param name="chatMessages"></param>
-    /// <returns></returns>
     public async Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages)
     {
         var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
@@ -259,14 +270,7 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
         return true;
     }
 
-    /// <summary>
-    /// 批量保存私聊消息到数据库
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="chatPrivateMessages"></param>
-    /// <returns></returns>
-    public async Task<bool> ChatPrivateDetailMessagesOperate(string userId,
-        IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
+    public async Task<bool> ChatPrivateDetailMessagesOperate(IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
     {
         var chatPrivateDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
         foreach (var chatPrivateMessage in chatPrivateMessages)

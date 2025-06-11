@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Tool.Common;

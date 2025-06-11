@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;

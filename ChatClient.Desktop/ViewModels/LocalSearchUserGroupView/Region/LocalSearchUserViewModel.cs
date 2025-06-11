@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Avalonia.Notification;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.DataBase.Data;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
@@ -40,7 +41,7 @@ public class LocalSearchUserViewModel : BindableBase, INavigationAware, IDestruc
         get => _friendSearchDtos;
         set
         {
-            if(SetProperty(ref _friendSearchDtos, value))
+            if (SetProperty(ref _friendSearchDtos, value))
                 RaisePropertyChanged(nameof(IsEmpty));
         }
     }

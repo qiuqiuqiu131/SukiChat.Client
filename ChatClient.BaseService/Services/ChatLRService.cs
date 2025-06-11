@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace ChatClient.BaseService.Services;
 
+/// <summary>
+/// 聊天消息加载和清理服务接口
+/// </summary>
 public interface IChatLRService
 {
     /// <summary>
@@ -163,9 +166,6 @@ internal class ChatLRService : BaseService, IChatLRService
         }
     }
 
-    /// <summary>
-    /// 清理好友聊天记录
-    /// </summary>
     public void ClearFriendChatDto(FriendChatDto friendChatDto)
     {
         // 处理上一个选中的好友
@@ -207,10 +207,6 @@ internal class ChatLRService : BaseService, IChatLRService
         friendChatDto.IsSelected = false;
     }
 
-    /// <summary>
-    /// 清理群组聊天记录
-    /// </summary>
-    /// <param name="groupChatDto"></param>
     public void ClearGroupChatDto(GroupChatDto groupChatDto)
     {
         // 处理上一个选中的群组

@@ -47,6 +47,8 @@ internal class MessageHelper : IMessageHelper
 
     public async Task<T?> SendMessageWithResponse<T>(IMessage message) where T : IMessage
     {
+        DateTime startTime = DateTime.Now;
+
         TaskCompletionSource<T> taskCompletionSource = new TaskCompletionSource<T>();
         var token = eventAggregator.GetEvent<ResponseEvent<T>>().Subscribe(e =>
         {
@@ -55,14 +57,7 @@ internal class MessageHelper : IMessageHelper
         });
 
         if (!client.IsConnected || client.Channel == null)
-        {
-            // eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            // {
-            //     Message = "未连接到服务器，请检查网络连接或服务器状态。",
-            //     Type = NotificationType.Error
-            // });
             return default;
-        }
 
         try
         {
@@ -75,9 +70,7 @@ internal class MessageHelper : IMessageHelper
 
 
             if (task == taskCompletionSource.Task)
-            {
                 return taskCompletionSource.Task.Result;
-            }
             else
             {
                 taskCompletionSource.SetCanceled();
@@ -93,6 +86,12 @@ internal class MessageHelper : IMessageHelper
         {
             token?.Dispose();
             return default;
+        }
+        finally
+        {
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine(
+                $"Message Sent: {message.GetType().Name}, Time Taken: {(endTime - startTime).TotalMilliseconds} ms");
         }
     }
 

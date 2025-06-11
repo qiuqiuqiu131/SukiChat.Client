@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Avalonia.Notification;
 using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
@@ -39,7 +40,7 @@ public class LocalSearchGroupViewModel : BindableBase, INavigationAware, IDestru
         get => _GroupSearchDtos;
         set
         {
-            if(SetProperty(ref _GroupSearchDtos, value))
+            if (SetProperty(ref _GroupSearchDtos, value))
                 RaisePropertyChanged(nameof(IsEmpty));
         }
     }

@@ -10,12 +10,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.BaseService.Services;
 
+/// <summary>
+/// 登录服务接口
+/// </summary>
 public interface ILoginService
 {
+    /// <summary>
+    /// 用户登录
+    /// </summary>
+    /// <param name="id">用户ID</param>
+    /// <param name="password">密码</param>
+    /// <param name="isRemember">是否记住密码</param>
+    /// <returns></returns>
     Task<LoginResponse?> Login(string id, string password, bool isRemember = false);
+
+    /// <summary>
+    /// 用户登出，退出账号后调用
+    /// </summary>
+    /// <param name="userId">用户ID</param>
+    /// <returns></returns>
     Task<CommonResponse?> Logout(string? userId);
+
+    /// <summary>
+    /// 从本地数据库的历史登录记录中获取对应用户的密码
+    /// </summary>
+    /// <param name="id">用户ID</param>
+    /// <returns></returns>
     Task<string?> GetPassword(string id);
+
+    /// <summary>
+    /// 登录成功后触发，更新用户信息和登录历史
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns></returns>
     Task LoginSuccess(UserDetailDto user);
+
+    /// <summary>
+    /// 获取本地历史登录用户列表
+    /// </summary>
+    /// <returns></returns>
     Task<List<LoginUserItem>> LoginUsers();
 }
 
@@ -35,12 +68,6 @@ internal class LoginService : BaseService, ILoginService
         _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
     }
 
-    /// <summary>
-    /// 登录请求
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
     public async Task<LoginResponse?> Login(string id, string password, bool isRemember = false)
     {
         var message = new LoginRequest
@@ -91,10 +118,6 @@ internal class LoginService : BaseService, ILoginService
         return history?.Password;
     }
 
-    /// <summary>
-    /// 将从服务器获取的用户信息添加到数据库
-    /// </summary>
-    /// <param name="user"></param>
     private async Task AddUser(UserDetailDto user)
     {
         User userData = _mapper.Map<User>(user);
@@ -118,10 +141,6 @@ internal class LoginService : BaseService, ILoginService
         await _unitOfWork.SaveChangesAsync();
     }
 
-    /// <summary>
-    /// 登录成功后添加登录历史
-    /// </summary>
-    /// <param name="user"></param>
     private async Task AddLoginHistory(UserDto user, string password)
     {
         LoginHistory loginHistory = new LoginHistory
