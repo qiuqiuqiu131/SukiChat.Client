@@ -41,6 +41,13 @@ public interface IGroupGetService
     Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadHead = false);
 
     /// <summary>
+    /// 根据GroupMessage获取群聊实体
+    /// </summary>
+    /// <param name="groupMessage">proto消息</param>
+    /// <returns></returns>
+    Task<GroupDto> GetGroupDto(GroupMessage groupMessage);
+
+    /// <summary>
     /// 获取群组成员ID列表
     /// </summary>
     /// <param name="userId">用户ID</param>
@@ -55,6 +62,13 @@ public interface IGroupGetService
     /// <param name="memberId">成员ID</param>
     /// <returns></returns>
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
+
+    /// <summary>
+    /// 根据GroupMemberMessage获取群组成员实体（GroupMemberDto,非本地数据库访问)
+    /// </summary>
+    /// <param name="memberMessage"></param>
+    /// <returns></returns>
+    Task<GroupMemberDto> GetGroupMemberDto(GroupMemberMessage memberMessage, IUserService userService);
 
     /// <summary>
     /// 获取用户管理的群组ID列表（用户为群主或者群管理员）
@@ -107,13 +121,14 @@ public class GroupGetService : BaseService, IGroupGetService
 
         var groupDto = _mapper.Map<GroupDto>(groupMessage);
 
-        var group = _mapper.Map<Group>(groupDto);
-        var groupRepository = _unitOfWork.GetRepository<Group>();
-        if (await groupRepository.ExistsAsync(d => d.Id.Equals(group.Id)))
-            groupRepository.Update(group);
-        else
-            await groupRepository.InsertAsync(group);
-        await _unitOfWork.SaveChangesAsync();
+        // 数据库处理
+        // var group = _mapper.Map<Group>(groupDto);
+        // var groupRepository = _unitOfWork.GetRepository<Group>();
+        // if (await groupRepository.ExistsAsync(d => d.Id.Equals(group.Id)))
+        //     groupRepository.Update(group);
+        // else
+        //     await groupRepository.InsertAsync(group);
+        // await _unitOfWork.SaveChangesAsync();
 
         if (!loadHead)
             _ = Task.Run(async () =>
@@ -121,6 +136,13 @@ public class GroupGetService : BaseService, IGroupGetService
         else
             groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead);
 
+        return groupDto;
+    }
+
+    public async Task<GroupDto> GetGroupDto(GroupMessage groupMessage)
+    {
+        var groupDto = _mapper.Map<GroupDto>(groupMessage);
+        groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupMessage.GroupId, groupDto.IsCustomHead);
         return groupDto;
     }
 
@@ -145,18 +167,26 @@ public class GroupGetService : BaseService, IGroupGetService
                 await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
         }).ConfigureAwait(false);
 
-        if (groupMemberDto.Status != 3)
-        {
-            var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
-            var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
-            var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
-                predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
-            if (entity != null)
-                groupMember.Id = entity.Id;
-            groupMemberRepository.Update(groupMember);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        // 数据库处理
+        // if (groupMemberDto.Status != 3)
+        // {
+        //     var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
+        //     var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
+        //     var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
+        //         predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
+        //     if (entity != null)
+        //         groupMember.Id = entity.Id;
+        //     groupMemberRepository.Update(groupMember);
+        //     await _unitOfWork.SaveChangesAsync();
+        // }
 
+        return groupMemberDto;
+    }
+
+    public async Task<GroupMemberDto> GetGroupMemberDto(GroupMemberMessage memberMessage, IUserService userService)
+    {
+        var groupMemberDto = _mapper.Map<GroupMemberDto>(memberMessage);
+        groupMemberDto.HeadImage = await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
         return groupMemberDto;
     }
 

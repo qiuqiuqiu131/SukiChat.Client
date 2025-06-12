@@ -12,7 +12,7 @@ public class CustomSelectableTextBlock : SelectableTextBlock
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
-        if (string.IsNullOrEmpty(SelectedText))
+        if (!CanCopy)
         {
             if (_contextMenu == null && ContextMenu != null)
                 _contextMenu = ContextMenu;
@@ -24,7 +24,7 @@ public class CustomSelectableTextBlock : SelectableTextBlock
         base.OnPointerPressed(e);
         if (e.GetCurrentPoint(this).Properties.IsRightButtonPressed)
         {
-            if (string.IsNullOrWhiteSpace(SelectedText))
+            if (!CanCopy)
                 e.Handled = false;
         }
     }

@@ -2,6 +2,7 @@ using AutoMapper;
 using Avalonia.Collections;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Manager;
+using ChatClient.BaseService.Services.RemoteService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
@@ -67,6 +68,39 @@ internal class UserLoginService : BaseService, IUserLoginService
         Console.WriteLine("User Init Cost Time:" + (end - start));
 
         return user;
+    }
+
+    /// <summary>
+    /// 批量获取远程实体信息
+    /// </summary>
+    /// <param name="userId"></param>
+    private async Task InitEntityDto(string userId)
+    {
+        DateTime start = DateTime.Now;
+
+        Task task_1 = Task.Run(async () =>
+        {
+            var groupRemoteService = _scopedProvider.Resolve<IGroupRemoteService>();
+            var groups = await groupRemoteService.GetRemoteGroups(userId);
+            foreach (var group in groups)
+            {
+                var members = await groupRemoteService.GetRemoteGroupMembers(userId, group.Id);
+                group.GroupMembers = new AvaloniaList<GroupMemberDto>(members);
+            }
+
+            await _userDtoManager.AddGroupDtos(groups);
+        });
+
+        Task task_2 = Task.Run(async () =>
+        {
+            var userRemoteService = _scopedProvider.Resolve<IUserRemoteService>();
+            var users = await userRemoteService.GetRemoteUsersAsync(userId);
+            await _userDtoManager.AddUserDtos(users);
+        });
+
+        await Task.WhenAll(task_1, task_2);
+        DateTime end = DateTime.Now;
+        Console.WriteLine("Init Entity Dto Cost Time:" + (end - start));
     }
 
     /// <summary>
@@ -280,16 +314,12 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         // 获取离线消息
         var message = new OutlineMessageRequest { Id = userId, LastLogoutTime = lastTime.ToString() };
-
-        DateTime start = DateTime.Now;
         var outlineResponse = await _messageHelper.SendMessageWithResponse<OutlineMessageResponse>(message);
-        DateTime end = DateTime.Now;
-        Console.WriteLine("Get Outline Message Cost Time:" + (end - start));
 
         if (outlineResponse == null) return;
 
         // 开启线程，用于提前加载用户和群聊Dto
-        await _userDtoManager.InitDtos(userId);
+        _ = InitEntityDto(userId);
 
         // 暂存用户分组信息
         _userGroupMessages = outlineResponse.UserGroups;

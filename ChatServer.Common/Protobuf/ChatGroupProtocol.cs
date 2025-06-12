@@ -43,29 +43,29 @@ namespace ChatServer.Common.Protobuf {
             "cm91cE1lbWJlck1lc3NhZ2USDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQY",
             "AiABKAkSEAoIam9pblRpbWUYAyABKAkSFQoNbGFzdFNwZWFrVGltZRgEIAEo",
             "CRIOCgZzdGF0dXMYBSABKAUSEAoIbmlja25hbWUYBiABKAkSEQoJaGVhZElu",
-            "ZGV4GAcgASgFIk4KFkdyb3VwTWVtYmVyTGlzdFJlcXVlc3QSDgoGdXNlcklk",
-            "GAEgASgJEhEKCXBhZ2VJbmRleBgCIAEoBRIRCglwYWdlQ291bnQYAyABKAUi",
-            "3wEKF0dyb3VwTWVtYmVyTGlzdFJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgL",
-            "MiouQ2hhdFNlcnZlci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2US",
-            "DgoGdXNlcklkGAIgASgJEj8KB21lbWJlcnMYAyADKAsyLi5DaGF0U2VydmVy",
-            "LkNvbW1vbi5Qcm90b2J1Zi5Hcm91cE1lbWJlck1lc3NhZ2USEQoJcGFnZUlu",
-            "ZGV4GAQgASgFEhEKCXBhZ2VDb3VudBgFIAEoBRIPCgdoYXNOZXh0GAYgASgI",
-            "IjgKFUdyb3VwTWVtYmVySWRzUmVxdWVzdBIOCgZ1c2VySWQYASABKAkSDwoH",
-            "Z3JvdXBJZBgCIAEoCSI0Cg5Hcm91cE1lbWJlcklkcxIPCgdncm91cElkGAEg",
-            "ASgJEhEKCW1lbWJlcklkcxgCIAMoCSLWAQoRRW50ZXJHcm91cE1lc3NhZ2US",
-            "DwoHZ3JvdXBJZBgBIAEoCRIOCgZ1c2VySWQYAiABKAkSDgoGc3RhdHVzGAMg",
-            "ASgJEhAKCGdyb3VwaW5nGAQgASgJEhAKCGpvaW5UaW1lGAUgASgJEhAKCE5p",
-            "Y2tOYW1lGAYgASgJEg4KBlJlbWFyaxgHIAEoCRITCgtjYW50RGlzdHVyYhgI",
-            "IAEoCBINCgVpc1RvcBgJIAEoCBISCgpsYXN0Q2hhdElkGAogASgFEhIKCmlz",
-            "Q2hhdHRpbmcYCyABKAgiXwoZVXBkYXRlR3JvdXBNZXNzYWdlUmVxdWVzdBIO",
-            "CgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCRIMCgRuYW1lGAMgASgJ",
-            "EhMKC2Rlc2NyaXB0aW9uGAQgASgJIjgKFVJlc2V0SGVhZEltYWdlUmVxdWVz",
-            "dBIOCgZ1c2VySWQYASABKAkSDwoHZ3JvdXBJZBgCIAEoCSJWChZSZXNldEhl",
-            "YWRJbWFnZVJlc3BvbnNlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZl",
-            "ci5Db21tb24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2UiYwoSVXBkYXRlR3Jv",
-            "dXBNZXNzYWdlEjwKCHJlc3BvbnNlGAEgASgLMiouQ2hhdFNlcnZlci5Db21t",
-            "b24uUHJvdG9idWYuQ29tbW9uUmVzcG9uc2USDwoHZ3JvdXBJZBgCIAEoCWIG",
-            "cHJvdG8z"));
+            "ZGV4GAcgASgFIl8KFkdyb3VwTWVtYmVyTGlzdFJlcXVlc3QSDgoGdXNlcklk",
+            "GAEgASgJEg8KB2dyb3VwSWQYAiABKAkSEQoJcGFnZUluZGV4GAMgASgFEhEK",
+            "CXBhZ2VDb3VudBgEIAEoBSLwAQoXR3JvdXBNZW1iZXJMaXN0UmVzcG9uc2US",
+            "PAoIcmVzcG9uc2UYASABKAsyKi5DaGF0U2VydmVyLkNvbW1vbi5Qcm90b2J1",
+            "Zi5Db21tb25SZXNwb25zZRIOCgZ1c2VySWQYAiABKAkSDwoHZ3JvdXBJZBgD",
+            "IAEoCRI/CgdtZW1iZXJzGAQgAygLMi4uQ2hhdFNlcnZlci5Db21tb24uUHJv",
+            "dG9idWYuR3JvdXBNZW1iZXJNZXNzYWdlEhEKCXBhZ2VJbmRleBgFIAEoBRIR",
+            "CglwYWdlQ291bnQYBiABKAUSDwoHaGFzTmV4dBgHIAEoCCI4ChVHcm91cE1l",
+            "bWJlcklkc1JlcXVlc3QSDgoGdXNlcklkGAEgASgJEg8KB2dyb3VwSWQYAiAB",
+            "KAkiNAoOR3JvdXBNZW1iZXJJZHMSDwoHZ3JvdXBJZBgBIAEoCRIRCgltZW1i",
+            "ZXJJZHMYAiADKAki1gEKEUVudGVyR3JvdXBNZXNzYWdlEg8KB2dyb3VwSWQY",
+            "ASABKAkSDgoGdXNlcklkGAIgASgJEg4KBnN0YXR1cxgDIAEoCRIQCghncm91",
+            "cGluZxgEIAEoCRIQCghqb2luVGltZRgFIAEoCRIQCghOaWNrTmFtZRgGIAEo",
+            "CRIOCgZSZW1hcmsYByABKAkSEwoLY2FudERpc3R1cmIYCCABKAgSDQoFaXNU",
+            "b3AYCSABKAgSEgoKbGFzdENoYXRJZBgKIAEoBRISCgppc0NoYXR0aW5nGAsg",
+            "ASgIIl8KGVVwZGF0ZUdyb3VwTWVzc2FnZVJlcXVlc3QSDgoGdXNlcklkGAEg",
+            "ASgJEg8KB2dyb3VwSWQYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtkZXNjcmlw",
+            "dGlvbhgEIAEoCSI4ChVSZXNldEhlYWRJbWFnZVJlcXVlc3QSDgoGdXNlcklk",
+            "GAEgASgJEg8KB2dyb3VwSWQYAiABKAkiVgoWUmVzZXRIZWFkSW1hZ2VSZXNw",
+            "b25zZRI8CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlBy",
+            "b3RvYnVmLkNvbW1vblJlc3BvbnNlImMKElVwZGF0ZUdyb3VwTWVzc2FnZRI8",
+            "CghyZXNwb25zZRgBIAEoCzIqLkNoYXRTZXJ2ZXIuQ29tbW9uLlByb3RvYnVm",
+            "LkNvbW1vblJlc3BvbnNlEg8KB2dyb3VwSWQYAiABKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::ChatServer.Common.Protobuf.ChatBaseProtocolReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -75,8 +75,8 @@ namespace ChatServer.Common.Protobuf {
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMessageListResponse), global::ChatServer.Common.Protobuf.GroupMessageListResponse.Parser, new[]{ "Response", "UserId", "Groups", "PageIndex", "PageCount", "HasNext" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberRequest), global::ChatServer.Common.Protobuf.GroupMemberRequest.Parser, new[]{ "GroupId", "MemberId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberMessage), global::ChatServer.Common.Protobuf.GroupMemberMessage.Parser, new[]{ "UserId", "GroupId", "JoinTime", "LastSpeakTime", "Status", "Nickname", "HeadIndex" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberListRequest), global::ChatServer.Common.Protobuf.GroupMemberListRequest.Parser, new[]{ "UserId", "PageIndex", "PageCount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberListResponse), global::ChatServer.Common.Protobuf.GroupMemberListResponse.Parser, new[]{ "Response", "UserId", "Members", "PageIndex", "PageCount", "HasNext" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberListRequest), global::ChatServer.Common.Protobuf.GroupMemberListRequest.Parser, new[]{ "UserId", "GroupId", "PageIndex", "PageCount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberListResponse), global::ChatServer.Common.Protobuf.GroupMemberListResponse.Parser, new[]{ "Response", "UserId", "GroupId", "Members", "PageIndex", "PageCount", "HasNext" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIdsRequest), global::ChatServer.Common.Protobuf.GroupMemberIdsRequest.Parser, new[]{ "UserId", "GroupId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.GroupMemberIds), global::ChatServer.Common.Protobuf.GroupMemberIds.Parser, new[]{ "GroupId", "MemberIds" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::ChatServer.Common.Protobuf.EnterGroupMessage), global::ChatServer.Common.Protobuf.EnterGroupMessage.Parser, new[]{ "GroupId", "UserId", "Status", "Grouping", "JoinTime", "NickName", "Remark", "CantDisturb", "IsTop", "LastChatId", "IsChatting" }, null, null, null, null),
@@ -1531,6 +1531,7 @@ namespace ChatServer.Common.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GroupMemberListRequest(GroupMemberListRequest other) : this() {
       userId_ = other.userId_;
+      groupId_ = other.groupId_;
       pageIndex_ = other.pageIndex_;
       pageCount_ = other.pageCount_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -1552,8 +1553,19 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 2;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "pageIndex" field.</summary>
-    public const int PageIndexFieldNumber = 2;
+    public const int PageIndexFieldNumber = 3;
     private int pageIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageIndex {
@@ -1564,7 +1576,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "pageCount" field.</summary>
-    public const int PageCountFieldNumber = 3;
+    public const int PageCountFieldNumber = 4;
     private int pageCount_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageCount {
@@ -1588,6 +1600,7 @@ namespace ChatServer.Common.Protobuf {
         return true;
       }
       if (UserId != other.UserId) return false;
+      if (GroupId != other.GroupId) return false;
       if (PageIndex != other.PageIndex) return false;
       if (PageCount != other.PageCount) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -1597,6 +1610,7 @@ namespace ChatServer.Common.Protobuf {
     public override int GetHashCode() {
       int hash = 1;
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
       if (PageIndex != 0) hash ^= PageIndex.GetHashCode();
       if (PageCount != 0) hash ^= PageCount.GetHashCode();
       if (_unknownFields != null) {
@@ -1616,12 +1630,16 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(10);
         output.WriteString(UserId);
       }
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(GroupId);
+      }
       if (PageIndex != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(PageIndex);
       }
       if (PageCount != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(PageCount);
       }
       if (_unknownFields != null) {
@@ -1634,6 +1652,9 @@ namespace ChatServer.Common.Protobuf {
       int size = 0;
       if (UserId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
       }
       if (PageIndex != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PageIndex);
@@ -1654,6 +1675,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.UserId.Length != 0) {
         UserId = other.UserId;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
       }
       if (other.PageIndex != 0) {
         PageIndex = other.PageIndex;
@@ -1676,11 +1700,15 @@ namespace ChatServer.Common.Protobuf {
             UserId = input.ReadString();
             break;
           }
-          case 16: {
-            PageIndex = input.ReadInt32();
+          case 18: {
+            GroupId = input.ReadString();
             break;
           }
           case 24: {
+            PageIndex = input.ReadInt32();
+            break;
+          }
+          case 32: {
             PageCount = input.ReadInt32();
             break;
           }
@@ -1720,6 +1748,7 @@ namespace ChatServer.Common.Protobuf {
     public GroupMemberListResponse(GroupMemberListResponse other) : this() {
       response_ = other.response_ != null ? other.response_.Clone() : null;
       userId_ = other.userId_;
+      groupId_ = other.groupId_;
       members_ = other.members_.Clone();
       pageIndex_ = other.pageIndex_;
       pageCount_ = other.pageCount_;
@@ -1754,10 +1783,21 @@ namespace ChatServer.Common.Protobuf {
       }
     }
 
+    /// <summary>Field number for the "groupId" field.</summary>
+    public const int GroupIdFieldNumber = 3;
+    private string groupId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string GroupId {
+      get { return groupId_; }
+      set {
+        groupId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "members" field.</summary>
-    public const int MembersFieldNumber = 3;
+    public const int MembersFieldNumber = 4;
     private static readonly pb::FieldCodec<global::ChatServer.Common.Protobuf.GroupMemberMessage> _repeated_members_codec
-        = pb::FieldCodec.ForMessage(26, global::ChatServer.Common.Protobuf.GroupMemberMessage.Parser);
+        = pb::FieldCodec.ForMessage(34, global::ChatServer.Common.Protobuf.GroupMemberMessage.Parser);
     private readonly pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupMemberMessage> members_ = new pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupMemberMessage>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public pbc::RepeatedField<global::ChatServer.Common.Protobuf.GroupMemberMessage> Members {
@@ -1765,7 +1805,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "pageIndex" field.</summary>
-    public const int PageIndexFieldNumber = 4;
+    public const int PageIndexFieldNumber = 5;
     private int pageIndex_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageIndex {
@@ -1776,7 +1816,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "pageCount" field.</summary>
-    public const int PageCountFieldNumber = 5;
+    public const int PageCountFieldNumber = 6;
     private int pageCount_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PageCount {
@@ -1787,7 +1827,7 @@ namespace ChatServer.Common.Protobuf {
     }
 
     /// <summary>Field number for the "hasNext" field.</summary>
-    public const int HasNextFieldNumber = 6;
+    public const int HasNextFieldNumber = 7;
     private bool hasNext_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool HasNext {
@@ -1812,6 +1852,7 @@ namespace ChatServer.Common.Protobuf {
       }
       if (!object.Equals(Response, other.Response)) return false;
       if (UserId != other.UserId) return false;
+      if (GroupId != other.GroupId) return false;
       if(!members_.Equals(other.members_)) return false;
       if (PageIndex != other.PageIndex) return false;
       if (PageCount != other.PageCount) return false;
@@ -1824,6 +1865,7 @@ namespace ChatServer.Common.Protobuf {
       int hash = 1;
       if (response_ != null) hash ^= Response.GetHashCode();
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (GroupId.Length != 0) hash ^= GroupId.GetHashCode();
       hash ^= members_.GetHashCode();
       if (PageIndex != 0) hash ^= PageIndex.GetHashCode();
       if (PageCount != 0) hash ^= PageCount.GetHashCode();
@@ -1849,17 +1891,21 @@ namespace ChatServer.Common.Protobuf {
         output.WriteRawTag(18);
         output.WriteString(UserId);
       }
+      if (GroupId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(GroupId);
+      }
       members_.WriteTo(output, _repeated_members_codec);
       if (PageIndex != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(PageIndex);
       }
       if (PageCount != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(48);
         output.WriteInt32(PageCount);
       }
       if (HasNext != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteBool(HasNext);
       }
       if (_unknownFields != null) {
@@ -1875,6 +1921,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (UserId.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (GroupId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(GroupId);
       }
       size += members_.CalculateSize(_repeated_members_codec);
       if (PageIndex != 0) {
@@ -1905,6 +1954,9 @@ namespace ChatServer.Common.Protobuf {
       }
       if (other.UserId.Length != 0) {
         UserId = other.UserId;
+      }
+      if (other.GroupId.Length != 0) {
+        GroupId = other.GroupId;
       }
       members_.Add(other.members_);
       if (other.PageIndex != 0) {
@@ -1939,18 +1991,22 @@ namespace ChatServer.Common.Protobuf {
             break;
           }
           case 26: {
+            GroupId = input.ReadString();
+            break;
+          }
+          case 34: {
             members_.AddEntriesFrom(input, _repeated_members_codec);
             break;
           }
-          case 32: {
+          case 40: {
             PageIndex = input.ReadInt32();
             break;
           }
-          case 40: {
+          case 48: {
             PageCount = input.ReadInt32();
             break;
           }
-          case 48: {
+          case 56: {
             HasNext = input.ReadBool();
             break;
           }

@@ -7,7 +7,8 @@ namespace ChatClient.BaseService.Manager;
 
 public interface IUserDtoManager
 {
-    Task InitDtos(string userId);
+    Task AddUserDtos(List<UserDto> userDtos);
+    Task AddGroupDtos(List<GroupDto> groupDtos);
 
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
@@ -45,31 +46,43 @@ internal class UserDtoManager : IUserDtoManager
         _containerProvider = containerProvider;
     }
 
-    public async Task InitDtos(string userId)
+    public async Task AddUserDtos(List<UserDto> userDtos)
     {
-        List<string> userIds = [userId];
-        List<string> groupIds;
-        using (var scope = _containerProvider.CreateScope())
+        if (userDtos.Count == 0) return;
+        try
         {
-            var friendService = scope.Resolve<IFriendService>();
-            var ids = await friendService.GetFriendIds(userId);
-            userIds.AddRange(ids);
-
-            var groupService = scope.Resolve<IGroupGetService>();
-            groupIds = await groupService.GetGroupIds(userId);
+            await _semaphore_1.WaitAsync();
+            foreach (var userDto in userDtos)
+                _userDtos.TryAdd(userDto.Id, userDto);
         }
-
-        _ = Task.Run(async () =>
+        finally
         {
-            foreach (var id in userIds)
-                await GetUserDto(id);
-        });
+            _semaphore_1.Release();
+        }
+    }
 
-        _ = Task.Run(async () =>
+    public async Task AddGroupDtos(List<GroupDto> groupDtos)
+    {
+        if (groupDtos.Count == 0) return;
+        try
         {
-            foreach (var id in groupIds)
-                await GetGroupDto(userId, id);
-        });
+            await _semaphore_3.WaitAsync();
+            await _semaphore_5.WaitAsync();
+            foreach (var groupDto in groupDtos)
+            {
+                _groupDtos.TryAdd(groupDto.Id, groupDto);
+                foreach (var groupMember in groupDto.GroupMembers)
+                {
+                    string key = groupMember.GroupId + groupMember.UserId;
+                    _groupMemberDtos.TryAdd(key, groupMember);
+                }
+            }
+        }
+        finally
+        {
+            _semaphore_3.Release();
+            _semaphore_5.Release();
+        }
     }
 
     /// <summary>

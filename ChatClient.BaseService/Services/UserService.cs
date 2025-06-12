@@ -38,6 +38,13 @@ public interface IUserService
     public Task<UserDto?> GetUserDto(string id, bool isUpdate = false);
 
     /// <summary>
+    /// 根据UserMessage获取用户信息
+    /// </summary>
+    /// <param name="userMessage"></param>
+    /// <returns></returns>
+    public Task<UserDto> GetUserDto(UserMessage userMessage);
+
+    /// <summary>
     /// 获取用户详细信息(当前登录者)
     /// </summary>
     /// <param name="id"></param>
@@ -151,48 +158,56 @@ internal class UserService : BaseService, IUserService
         var userMessage = response.User;
         var user = _mapper.Map<UserDto>(userMessage);
 
-        try
-        {
-            // 本地数据库保存
-            var respository = _unitOfWork.GetRepository<User>();
-            var currentUser =
-                await respository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id), disableTracking: false);
-            if (currentUser != null)
-            {
-                currentUser.HeadIndex = userMessage.HeadIndex;
-                currentUser.HeadCount = (int)userMessage.HeadCount;
-                currentUser.Introduction = userMessage.Introduction;
-                currentUser.Birthday =
-                    string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth);
-                currentUser.isMale = userMessage.IsMale;
-                currentUser.Name = userMessage.Name;
-            }
-            else
-            {
-                var userEntity = new User
-                {
-                    HeadCount = (int)userMessage.HeadCount,
-                    HeadIndex = userMessage.HeadIndex,
-                    Id = userMessage.Id,
-                    Name = userMessage.Name,
-                    Introduction = userMessage.Introduction,
-                    Birthday = string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth),
-                    isMale = userMessage.IsMale
-                };
-                await respository.InsertAsync(userEntity);
-            }
-
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            // ignore
-        }
+        // try
+        // {
+        //     // 本地数据库保存
+        //     var respository = _unitOfWork.GetRepository<User>();
+        //     var currentUser =
+        //         await respository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id), disableTracking: false);
+        //     if (currentUser != null)
+        //     {
+        //         currentUser.HeadIndex = userMessage.HeadIndex;
+        //         currentUser.HeadCount = (int)userMessage.HeadCount;
+        //         currentUser.Introduction = userMessage.Introduction;
+        //         currentUser.Birthday =
+        //             string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth);
+        //         currentUser.isMale = userMessage.IsMale;
+        //         currentUser.Name = userMessage.Name;
+        //     }
+        //     else
+        //     {
+        //         var userEntity = new User
+        //         {
+        //             HeadCount = (int)userMessage.HeadCount,
+        //             HeadIndex = userMessage.HeadIndex,
+        //             Id = userMessage.Id,
+        //             Name = userMessage.Name,
+        //             Introduction = userMessage.Introduction,
+        //             Birthday = string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth),
+        //             isMale = userMessage.IsMale
+        //         };
+        //         await respository.InsertAsync(userEntity);
+        //     }
+        //
+        //     await _unitOfWork.SaveChangesAsync();
+        // }
+        // catch (Exception e)
+        // {
+        //     // ignore
+        // }
 
         if (!isUpdated)
             _ = Task.Run(async () => user.HeadImage = await GetHeadImage(user));
         else
             user.HeadImage = await GetHeadImage(user, isUpdated);
+
+        return user;
+    }
+
+    public async Task<UserDto> GetUserDto(UserMessage userMessage)
+    {
+        var user = _mapper.Map<UserDto>(userMessage);
+        user.HeadImage = await GetHeadImage(user);
 
         return user;
     }
