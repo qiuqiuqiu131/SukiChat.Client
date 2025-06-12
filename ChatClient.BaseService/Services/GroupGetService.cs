@@ -142,7 +142,8 @@ public class GroupGetService : BaseService, IGroupGetService
     public async Task<GroupDto> GetGroupDto(GroupMessage groupMessage)
     {
         var groupDto = _mapper.Map<GroupDto>(groupMessage);
-        groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupMessage.GroupId, groupDto.IsCustomHead);
+        _ = Task.Run(async () =>
+            groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupMessage.GroupId, groupDto.IsCustomHead));
         return groupDto;
     }
 
@@ -186,7 +187,8 @@ public class GroupGetService : BaseService, IGroupGetService
     public async Task<GroupMemberDto> GetGroupMemberDto(GroupMemberMessage memberMessage, IUserService userService)
     {
         var groupMemberDto = _mapper.Map<GroupMemberDto>(memberMessage);
-        groupMemberDto.HeadImage = await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
+        _ = Task.Run(async () => groupMemberDto.HeadImage =
+            await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex));
         return groupMemberDto;
     }
 
@@ -210,16 +212,34 @@ public class GroupGetService : BaseService, IGroupGetService
 
     private async Task<Bitmap> GetHeadImage(int headIndex, string groupId, bool isCustom = false)
     {
-        var imageManager = _scopedProvider.Resolve<IImageManager>();
-        if (!isCustom)
-            return await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
-        else
+        try
         {
-            imageManager.RemoveFromCache(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group);
-            var image = await imageManager.GetFile(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group)!;
-            if (image == null)
-                return await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
-            return image;
+            var imageManager = _scopedProvider.Resolve<IImageManager>();
+            if (!isCustom)
+            {
+                var image = await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
+                if (image == null)
+                    image = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultGroupHead.png"));
+                return image;
+            }
+            else
+            {
+                imageManager.RemoveFromCache(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group);
+                var image = await imageManager.GetFile(groupId, "HeadImage", $"{groupId}.png", FileTarget.Group)!;
+                if (image == null)
+                {
+                    image = await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
+                    if (image == null)
+                        image = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets",
+                            "DefaultGroupHead.png"));
+                }
+
+                return image;
+            }
+        }
+        catch (Exception e)
+        {
+            return new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultGroupHead.png"));
         }
     }
 

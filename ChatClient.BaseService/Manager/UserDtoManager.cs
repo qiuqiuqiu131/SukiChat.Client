@@ -1,6 +1,7 @@
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
 using System.Collections.Concurrent;
+using ChatClient.BaseService.Services.RemoteService;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.BaseService.Manager;
@@ -58,6 +59,21 @@ internal class UserDtoManager : IUserDtoManager
         finally
         {
             _semaphore_1.Release();
+        }
+    }
+
+    private async Task AddGroupMemberDtos(List<GroupMemberDto> memberDtos)
+    {
+        if (memberDtos.Count == 0) return;
+        try
+        {
+            await _semaphore_5.WaitAsync();
+            foreach (var memberDto in memberDtos)
+                _groupMemberDtos.TryAdd(memberDto.GroupId + memberDto.UserId, memberDto);
+        }
+        finally
+        {
+            _semaphore_5.Release();
         }
     }
 
@@ -188,21 +204,10 @@ internal class UserDtoManager : IUserDtoManager
 
             if (group != null)
             {
-                var memberIds = await groupService.GetGroupMemberIds(userId, groupId);
-                // 加载GroupMember
-                _ = Task.Run(async () =>
-                {
-                    if (memberIds != null)
-                    {
-                        foreach (var memberId in memberIds)
-                        {
-                            // 注入群组成员信息
-                            var memberDto = await GetGroupMemberDto(groupId, memberId);
-                            if (memberDto != null)
-                                group.GroupMembers.Add(memberDto);
-                        }
-                    }
-                });
+                var groupRemoteService = _containerProvider.Resolve<IGroupRemoteService>();
+                var memberLists = await groupRemoteService.GetRemoteGroupMembers(userId, groupId);
+                await AddGroupMemberDtos(memberLists);
+                group.GroupMembers.AddRange(memberLists);
 
                 // 如果获取到用户信息，添加到缓存中
                 _groupDtos.TryAdd(groupId, group);

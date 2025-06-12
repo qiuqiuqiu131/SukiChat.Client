@@ -334,7 +334,7 @@ public class GroupService : BaseService, IGroupService
             GroupId = groupId
         };
 
-        var response = await _messageHelper.SendMessageWithResponse<RemoveMemberMessage>(request);
+        var response = await _messageHelper.SendMessageWithResponse<DisbandGroupMessage>(request);
         return (response is { Response: { State: true } }, response?.Response?.Message ?? string.Empty);
     }
 

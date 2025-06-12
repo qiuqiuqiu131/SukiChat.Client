@@ -53,6 +53,14 @@ internal class ChatMessageHandler : MessageHandlerBase
         var token5 = eventAggregator.GetEvent<ResponseEvent<ChatPrivateRetractMessage>>()
             .Subscribe(d => ExecuteInScope(d, OnChatPrivateRetractMessage));
         _subscriptionTokens.Add(token5);
+
+        var token6 = eventAggregator.GetEvent<ResponseEvent<FriendChatMessageList>>()
+            .Subscribe(d => ExecuteInScope(d, OnFriendChatMessageList));
+        _subscriptionTokens.Add(token6);
+
+        var token7 = eventAggregator.GetEvent<ResponseEvent<GroupChatMessageList>>()
+            .Subscribe(d => ExecuteInScope(d, OnGroupChatMessageList));
+        _subscriptionTokens.Add(token7);
     }
 
     /// <summary>
@@ -101,9 +109,11 @@ internal class ChatMessageHandler : MessageHandlerBase
         FriendChatDto friendChat =
             _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
 
+        if (friendChat == null) return;
+
         await Dispatcher.UIThread.InvokeAsync(async () =>
         {
-            if (friendChat != null && friendChat.ChatMessages.Count != 0)
+            if (friendChat.ChatMessages.Count != 0)
             {
                 // 判断是否已经存在chatId
                 if (friendChat.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(chatData.ChatId)) != null) return;
@@ -112,16 +122,15 @@ internal class ChatMessageHandler : MessageHandlerBase
                 if (chatData.Time - last.Time > TimeSpan.FromMinutes(3))
                     chatData.ShowTime = true;
                 friendChat.ChatMessages.Add(chatData);
-                if (!friendChat.IsSelected && !chatData.IsUser)
-                    friendChat.UnReadMessageCount++;
             }
-            else if (friendChat != null)
+            else
             {
                 chatData.ShowTime = true;
                 friendChat.ChatMessages.Add(chatData);
-                if (!friendChat.IsSelected && !chatData.IsUser)
-                    friendChat.UnReadMessageCount++;
             }
+
+            if (!friendChat.IsSelected && !chatData.IsUser)
+                friendChat.UnReadMessageCount++;
         });
 
         if (!friendRelationDto.CantDisturb && !chatData.IsUser)
@@ -155,11 +164,9 @@ internal class ChatMessageHandler : MessageHandlerBase
             }
         }
 
-        if (friendChat != null && friendChat.IsSelected)
-        {
+        if (friendChat.IsSelected)
             await chatService.ReadAllChatMessage(_userManager.User!.Id, friendId, chatMessage.Id,
                 FileTarget.User);
-        }
 
         _semaphoreSlim2.Release();
     }
@@ -383,6 +390,289 @@ internal class ChatMessageHandler : MessageHandlerBase
                     chatMess.IsRetracted = true;
             }
         }
+    }
+
+    /// <summary>
+    /// 接收到来自服务器的多条好友聊天消息列表
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnFriendChatMessageList(IScopedProvider scopedprovider, FriendChatMessageList message)
+    {
+        await _semaphoreSlim2.WaitAsync();
+
+        var friendRelationDto = await _userDtoManager.GetFriendRelationDto(_userManager.User.Id, message.FriendId);
+
+        var chatService = scopedprovider.Resolve<IChatService>();
+        await chatService.AddChatDto(friendRelationDto);
+
+        // 将消息存入数据库
+        var friendChatPackService = scopedprovider.Resolve<IFriendChatPackService>();
+        await friendChatPackService.FriendChatMessagesOperate(message.Messages);
+
+        List<Task<ChatData>> chatTasks = [];
+        foreach (var mess in message.Messages)
+        {
+            // 生成消息Dto
+            var chatData = new ChatData
+            {
+                ChatId = mess.Id,
+                Time = DateTime.Parse(mess.Time),
+                IsWriting = false,
+                IsUser = mess.UserFromId.Equals(_userManager.User.Id),
+                IsRetracted = mess.IsRetracted,
+                RetractedTime = string.IsNullOrWhiteSpace(mess.RetractTime)
+                    ? DateTime.MinValue
+                    : DateTime.Parse(mess.RetractTime),
+                ChatMessages = _mapper.Map<List<ChatMessageDto>>(mess.Messages)
+            };
+
+            var friendId = mess.UserFromId.Equals(_userManager.User.Id)
+                ? mess.UserTargetId
+                : mess.UserFromId;
+
+            // 注入消息资源
+            if (!chatData.IsRetracted)
+                await chatService.OperateChatMessage(_userManager.User.Id, friendId, chatData.ChatId,
+                    chatData.IsUser,
+                    chatData.ChatMessages,
+                    FileTarget.User);
+        }
+
+        await Task.WhenAll(chatTasks);
+        var chatDatas = chatTasks.Select(d => d.Result).ToList();
+
+        // 更新消息Dto
+        FriendChatDto friendChat =
+            _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(message.FriendId));
+        if (friendChat == null) return; // 提前返回，避免后续重复判断
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            if (friendChat.ChatMessages.Count != 0)
+            {
+                var cd = friendChat.ChatMessages.Last();
+                chatDatas[0].ShowTime = ShouldShowTime(chatDatas[0].Time, cd.Time);
+                foreach (var chatData in chatDatas)
+                {
+                    await Task.Delay(100);
+                    friendChat.ChatMessages.Add(chatData);
+                }
+            }
+            else
+            {
+                // 第一条消息总是显示时间
+                chatDatas[0].ShowTime = true;
+                foreach (var chatData in chatDatas)
+                {
+                    await Task.Delay(100);
+                    friendChat.ChatMessages.Add(chatData);
+                }
+            }
+
+            // 更新未读消息计数
+            if (!friendChat.IsSelected)
+                friendChat.UnReadMessageCount += chatDatas.Count(d => !d.IsUser);
+            else
+            {
+                var id = chatDatas.Max(d => d.ChatId);
+                // 群聊被选中时，标记消息为已读
+                await chatService.ReadAllChatMessage(_userManager.User!.Id, message.FriendId, id,
+                    FileTarget.User);
+            }
+        });
+
+        var lastChatData = chatDatas.LastOrDefault(d => !d.IsUser);
+        if (!friendRelationDto.CantDisturb && lastChatData != null)
+        {
+            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                    cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                    {
+                        { "ChatData", lastChatData },
+                        { "Dto", friendRelationDto }
+                    }, null);
+                });
+            }
+
+            if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    {
+                        if (desktop.MainWindow != null)
+                        {
+                            var taskbarFlashHelper = scopedprovider.Resolve<ITaskbarFlashHelper>();
+                            taskbarFlashHelper.FlashWindow(desktop.MainWindow);
+                        }
+                    }
+                });
+            }
+        }
+
+        _semaphoreSlim2.Release();
+    }
+
+    /// <summary>
+    /// 接收到来自服务器的多条群聊消息列表
+    /// </summary>
+    /// <param name="scopedprovider"></param>
+    /// <param name="message"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    private async Task OnGroupChatMessageList(IScopedProvider scopedprovider, GroupChatMessageList message)
+    {
+        await _semaphoreSlim.WaitAsync();
+
+        var groupRelationDto = await _userDtoManager.GetGroupRelationDto(_userManager.User.Id, message.GroupId);
+
+        var chatService = scopedprovider.Resolve<IChatService>();
+        await chatService.AddChatDto(groupRelationDto);
+
+        // 将消息存入数据库
+        var groupChatPackService = scopedprovider.Resolve<IGroupChatPackService>();
+        await groupChatPackService.GroupChatMessagesOperate(_userManager.User.Id, message.Messages);
+
+        var chatDataList = message.Messages.AsParallel().AsOrdered()
+            .Select(mess =>
+            {
+                var chatData = new GroupChatData
+                {
+                    ChatId = mess.Id,
+                    Time = DateTime.Parse(mess.Time),
+                    IsWriting = false,
+                    IsUser = mess.UserFromId.Equals(_userManager.User.Id),
+                    IsRetracted = mess.IsRetracted,
+                    RetractedTime = string.IsNullOrWhiteSpace(mess.RetractTime)
+                        ? DateTime.MinValue
+                        : DateTime.Parse(mess.RetractTime),
+                    ChatMessages = _mapper.Map<List<ChatMessageDto>>(mess.Messages)
+                };
+                return chatData;
+            });
+
+        // 处理proto消息，转化为Dto实体
+        List<Task<GroupChatData>> chatTasks = [];
+        foreach (var mess in message.Messages)
+        {
+            chatTasks.Add(Task.Run(async () =>
+            {
+                var chatData = new GroupChatData
+                {
+                    ChatId = mess.Id,
+                    Time = DateTime.Parse(mess.Time),
+                    IsWriting = false,
+                    IsUser = mess.UserFromId.Equals(_userManager.User.Id),
+                    IsRetracted = mess.IsRetracted,
+                    RetractedTime = string.IsNullOrWhiteSpace(mess.RetractTime)
+                        ? DateTime.MinValue
+                        : DateTime.Parse(mess.RetractTime),
+                    ChatMessages = _mapper.Map<List<ChatMessageDto>>(mess.Messages)
+                };
+
+                // 注入发送方实体
+                if (mess.UserFromId.Equals("System"))
+                    chatData.IsSystem = true;
+                else
+                    chatData.Owner = await _userDtoManager.GetGroupMemberDto(mess.GroupId, mess.UserFromId);
+
+                // 注入消息资源
+                // 注入消息资源
+                if (!chatData.IsRetracted)
+                    await chatService.OperateChatMessage(_userManager.User.Id, message.GroupId, chatData.ChatId,
+                        chatData.IsUser,
+                        chatData.ChatMessages,
+                        FileTarget.Group);
+
+                return chatData;
+            }));
+        }
+
+        await Task.WhenAll(chatTasks);
+        var chatDatas = chatTasks.Select(d => d.Result).ToList();
+
+        if (chatDatas.Count == 0) return; // 如果没有消息，直接返回
+
+        // 更新消息Dto,获取群聊聊天实体
+        GroupChatDto groupChat = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(message.GroupId));
+        if (groupChat == null) return; // 提前返回，避免后续重复判断
+        await Dispatcher.UIThread.InvokeAsync(async () =>
+        {
+            // 确定插入位置
+            if (groupChat.ChatMessages.Count > 0)
+            {
+                var cd = groupChat.ChatMessages.Last();
+                chatDatas[0].ShowTime = ShouldShowTime(chatDatas[0].Time, cd.Time);
+                foreach (var chatData in chatDatas)
+                {
+                    await Task.Delay(100);
+                    groupChat.ChatMessages.Add(chatData);
+                }
+            }
+            else
+            {
+                // 第一条消息总是显示时间
+                chatDatas[0].ShowTime = true;
+                foreach (var chatData in chatDatas)
+                {
+                    await Task.Delay(100);
+                    groupChat.ChatMessages.Add(chatData);
+                }
+            }
+
+            // 更新未读消息计数
+            if (!groupChat.IsSelected)
+                groupChat.UnReadMessageCount += chatDatas.Count(d => !d.IsUser);
+            else
+            {
+                var id = chatDatas.Max(d => d.ChatId);
+                // 群聊被选中时，标记消息为已读
+                await chatService.ReadAllChatMessage(_userManager.User!.Id, message.GroupId, id,
+                    FileTarget.Group);
+            }
+        });
+
+        // 如果群聊处于免打扰状态，且消息不是系统消息或用户消息，则显示消息提醒
+        var lastChatData = chatDatas.LastOrDefault(d => !d.IsSystem && !d.IsUser);
+        if (!groupRelationDto.CantDisturb && lastChatData != null)
+        {
+            // 边角弹窗
+            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                    cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                    {
+                        { "ChatData", lastChatData },
+                        { "Dto", groupRelationDto }
+                    }, null);
+                });
+            }
+
+            // 任务栏闪烁
+            if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
+            {
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                    {
+                        if (desktop.MainWindow != null)
+                        {
+                            var taskbarFlashHelper = scopedprovider.Resolve<ITaskbarFlashHelper>();
+                            taskbarFlashHelper.FlashWindow(desktop.MainWindow);
+                        }
+                    }
+                });
+            }
+        }
+
+        _semaphoreSlim.Release();
     }
 
     // 辅助方法：判断是否应该显示时间（时间间隔超过5分钟）

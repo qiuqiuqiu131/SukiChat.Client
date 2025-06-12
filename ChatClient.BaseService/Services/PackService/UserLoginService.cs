@@ -88,14 +88,14 @@ internal class UserLoginService : BaseService, IUserLoginService
                 group.GroupMembers = new AvaloniaList<GroupMemberDto>(members);
             }
 
-            await _userDtoManager.AddGroupDtos(groups);
+            _ = _userDtoManager.AddGroupDtos(groups);
         });
 
         Task task_2 = Task.Run(async () =>
         {
             var userRemoteService = _scopedProvider.Resolve<IUserRemoteService>();
             var users = await userRemoteService.GetRemoteUsersAsync(userId);
-            await _userDtoManager.AddUserDtos(users);
+            _ = _userDtoManager.AddUserDtos(users);
         });
 
         await Task.WhenAll(task_1, task_2);

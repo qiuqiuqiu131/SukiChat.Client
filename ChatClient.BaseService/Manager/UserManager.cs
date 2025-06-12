@@ -235,11 +235,13 @@ internal class UserManager : IUserManager
 
             if (GroupChats == null)
                 UserData!.GroupChats = new AvaloniaList<GroupChatDto>();
-            GroupChats!.Add(new GroupChatDto
-            {
-                GroupRelationDto = dto,
-                GroupId = groupId,
-            });
+            var chatDto = GroupChats!.FirstOrDefault(d => d.GroupRelationDto == dto);
+            if (chatDto == null)
+                GroupChats!.Add(new GroupChatDto
+                {
+                    GroupRelationDto = dto,
+                    GroupId = groupId,
+                });
         }
 
         return dto;

@@ -106,26 +106,33 @@ internal class UserService : BaseService, IUserService
 
     public async Task<Bitmap?> GetHeadImage(string userId, int headIndex)
     {
-        if (headIndex == -1)
+        try
         {
-            Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
-            return bitmap;
+            if (headIndex == -1)
+            {
+                Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
+                return bitmap;
+            }
+
+            var imageManager = _scopedProvider.Resolve<IImageManager>();
+
+            // 获取头像
+            var file =
+                await imageManager.GetFile(userId, "HeadImage", $"head_{headIndex}.png", FileTarget.User);
+            if (file != null)
+                return file;
+            else
+            {
+                var path = Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png");
+                Bitmap? bitmap = null;
+                if (System.IO.File.Exists(path))
+                    bitmap = new Bitmap(path);
+                return bitmap;
+            }
         }
-
-        var imageManager = _scopedProvider.Resolve<IImageManager>();
-
-        // 获取头像
-        var file =
-            await imageManager.GetFile(userId, "HeadImage", $"head_{headIndex}.png", FileTarget.User);
-        if (file != null)
-            return file;
-        else
+        catch (Exception e)
         {
-            var path = Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png");
-            Bitmap? bitmap = null;
-            if (System.IO.File.Exists(path))
-                bitmap = new Bitmap(path);
-            return bitmap;
+            return new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
         }
     }
 
@@ -207,7 +214,7 @@ internal class UserService : BaseService, IUserService
     public async Task<UserDto> GetUserDto(UserMessage userMessage)
     {
         var user = _mapper.Map<UserDto>(userMessage);
-        user.HeadImage = await GetHeadImage(user);
+        _ = Task.Run(async () => user.HeadImage = await GetHeadImage(user));
 
         return user;
     }

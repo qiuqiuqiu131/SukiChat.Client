@@ -44,6 +44,9 @@ public class RegularFileDownloadClient : IFileClient
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
 
+        if(!channel.Active)
+            throw new Exception("连接未激活，请检查连接状态");
+        
         try
         {
             // 创建文件处理器

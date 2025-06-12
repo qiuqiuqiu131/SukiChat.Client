@@ -43,7 +43,7 @@ public class ResourcesClientPool : IResourcesClientPool
             .Group(group)
             .Channel<TcpSocketChannel>()
             .Option(ChannelOption.TcpNodelay, true)
-            .Option(ChannelOption.ConnectTimeout, TimeSpan.FromSeconds(5))
+            .Option(ChannelOption.ConnectTimeout, TimeSpan.FromMilliseconds(500))
             .Option(ChannelOption.Allocator, PooledByteBufferAllocator.Default);
         bootstrap.RemoteAddress(_endPoint);
         _channelPool = new SimpleChannelPool(bootstrap, new ResourcesClientPoolHandler(_endPoint));

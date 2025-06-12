@@ -265,45 +265,49 @@ public partial class GroupChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
     {
-        // 最大可偏移量
-        double maxOffsetY = ChatScroll.MaxOffsetY;
-        // 当前偏移量
-        double OffsetYOrigion = ChatScroll.Offset.Y;
-
-        if (e.Action == NotifyCollectionChangedAction.Add)
+        Dispatcher.UIThread.Invoke(() =>
         {
-            if (isMovingToBottom // 正在移动到底部
-                || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
+            // 最大可偏移量
+            double maxOffsetY = ChatScroll.MaxOffsetY;
+            // 当前偏移量
+            double OffsetYOrigion = ChatScroll.Offset.Y;
+
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                Dispatcher.UIThread.Post(() =>
+                if (isMovingToBottom // 正在移动到底部
+                    || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
+                    || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 &&
+                    chatData.IsUser) // 是自己发送的消息
                 {
-                    // 等待渲染完成
-                    ChatScroll.ScrollToBottom();
-                }, DispatcherPriority.Background);
-            }
-            else if (e.NewStartingIndex == 0)
-            {
-                Dispatcher.UIThread.Invoke(async () =>
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        // 等待渲染完成
+                        ChatScroll.ScrollToBottom();
+                    }, DispatcherPriority.Background);
+                }
+                else if (e.NewStartingIndex == 0)
                 {
-                    lockScroll = true;
-                    lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
-                    await Task.Delay(150);
-                    lockScroll = false;
-                    lockBottomDistance = 0;
-                });
-            }
-            else
-            {
-                Dispatcher.UIThread.Post(() =>
+                    Dispatcher.UIThread.Invoke(async () =>
+                    {
+                        lockScroll = true;
+                        lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
+                        await Task.Delay(150);
+                        lockScroll = false;
+                        lockBottomDistance = 0;
+                    });
+                }
+                else
                 {
-                    //-- 新消息提醒 --//
-                    HaveUnReadMessage = true;
-                    int addCount = e.NewItems?.Count ?? 0;
-                    UnReadMessageCount += addCount;
-                }, DispatcherPriority.Background);
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        //-- 新消息提醒 --//
+                        HaveUnReadMessage = true;
+                        int addCount = e.NewItems?.Count ?? 0;
+                        UnReadMessageCount += addCount;
+                    }, DispatcherPriority.Background);
+                }
             }
-        }
+        });
     }
 
     #endregion

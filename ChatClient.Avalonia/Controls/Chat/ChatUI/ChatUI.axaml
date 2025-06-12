@@ -265,7 +265,7 @@
                                                                             IsVisible="{Binding IsUser}">
                                                                     <TextBlock FontSize="12"
                                                                                Text="你"
-                                                                               Foreground="{DynamicResource SukiPrimaryColor}"
+                                                                               Foreground="{DynamicResource SukiPrimaryColor75}"
                                                                                Padding="0"
                                                                                Margin="0" />
                                                                     <TextBlock Text="撤回一条消息" FontSize="12"

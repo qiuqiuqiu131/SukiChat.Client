@@ -38,6 +38,9 @@ public class RegularFileUploadClient : IFileClient
     {
         if (!_channel.TryGetTarget(out IChannel? channel))
             throw new NullReferenceException();
+        
+        if(!channel.Active)
+            throw new Exception("连接未激活，请检查连接状态");
 
         // 生成Stream流
         _fileStream = new MemoryStream(file);

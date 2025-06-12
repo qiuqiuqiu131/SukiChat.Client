@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <AvaloniaResource Remove="Assets\DefaultGroupHead.png" />
         <AvaloniaResource Remove="Assets\DefaultHead.ico" />
         <AvaloniaResource Remove="Assets\DefaultHead.png" />
         <AvaloniaResource Remove="Assets\hangup.mp3" />
@@ -175,6 +176,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="Assets\DefaultGroupHead.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="Assets\DefaultHead.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>

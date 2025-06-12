@@ -55,11 +55,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "文件上传失败，请检查网络连接或服务器状态",
-                Type = NotificationType.Error
-            });
+            // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "文件上传失败，请检查网络连接或服务器状态",
+            //     Type = NotificationType.Error
+            // });
             return false;
         }
     }
@@ -76,11 +76,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "文件上传失败，请检查网络连接或服务器状态",
-                Type = NotificationType.Error
-            });
+            // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "文件上传失败，请检查网络连接或服务器状态",
+            //     Type = NotificationType.Error
+            // });
             return false;
         }
     }
@@ -143,11 +143,11 @@ internal class ProtoFileIOHelper : IFileIOHelper
         }
         catch (Exception e)
         {
-            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-            {
-                Message = "文件下载失败，请检查网络连接或服务器状态",
-                Type = NotificationType.Error
-            });
+            // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            // {
+            //     Message = "文件下载失败，请检查网络连接或服务器状态",
+            //     Type = NotificationType.Error
+            // });
             return false;
         }
     }

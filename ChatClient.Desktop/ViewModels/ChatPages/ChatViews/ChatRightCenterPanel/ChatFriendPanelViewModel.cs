@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
@@ -131,11 +132,15 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     /// <exception cref="NotImplementedException"></exception>
     private async Task VideoCall()
     {
-        // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-        // {
-        //     Message = "功能开发中...",
-        //     Type = NotificationType.Information
-        // });
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "暂不支持非Windows平台的视频通话",
+                Type = NotificationType.Warning
+            });
+            return;
+        }
 
         var exist = ChatCallHelper.OpenCallDialog(SelectedFriend!.UserId);
         if (exist) return;
@@ -160,11 +165,15 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     /// <exception cref="NotImplementedException"></exception>
     private async Task VoiceCall()
     {
-        // _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
-        // {
-        //     Message = "功能开发中...",
-        //     Type = NotificationType.Information
-        // });
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "暂不支持非Windows平台的语音通话",
+                Type = NotificationType.Warning
+            });
+            return;
+        }
 
         var exist = ChatCallHelper.OpenCallDialog(SelectedFriend!.UserId);
         if (exist) return;
