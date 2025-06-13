@@ -13,7 +13,7 @@ public interface IUserDtoManager
 
     Task<UserDto?> GetUserDto(string id);
     Task<FriendRelationDto?> GetFriendRelationDto(string userId, string friendId);
-    Task<GroupDto?> GetGroupDto(string userId, string groupId);
+    Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadMembers = true);
     Task<GroupRelationDto?> GetGroupRelationDto(string userId, string groupId);
     Task<GroupMemberDto?> GetGroupMemberDto(string groupId, string memberId);
 
@@ -186,10 +186,22 @@ internal class UserDtoManager : IUserDtoManager
     /// <param name="userId"></param>
     /// <param name="groupId"></param>
     /// <returns></returns>
-    public async Task<GroupDto?> GetGroupDto(string userId, string groupId)
+    public async Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadMembers = true)
     {
         if (_groupDtos.TryGetValue(groupId, out var cachedGroup))
+        {
+            // 加载群成员信息
+            if (cachedGroup.GroupMembers.Count == 0 && loadMembers)
+            {
+                var groupRemoteService = _containerProvider.Resolve<IGroupRemoteService>();
+                var memberLists = await groupRemoteService.GetRemoteGroupMembers(userId, groupId);
+                await AddGroupMemberDtos(memberLists);
+                cachedGroup.GroupMembers.AddRange(memberLists);
+            }
+
             return cachedGroup;
+        }
+
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
@@ -202,7 +214,7 @@ internal class UserDtoManager : IUserDtoManager
             var groupService = _containerProvider.Resolve<IGroupGetService>();
             var group = await groupService.GetGroupDto(userId, groupId);
 
-            if (group != null)
+            if (group != null && loadMembers)
             {
                 var groupRemoteService = _containerProvider.Resolve<IGroupRemoteService>();
                 var memberLists = await groupRemoteService.GetRemoteGroupMembers(userId, groupId);

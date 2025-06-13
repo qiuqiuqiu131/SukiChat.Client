@@ -20,12 +20,23 @@
     mc:Ignorable="d">
     <Grid RowDefinitions="25,*">
         <!-- 顶部栏 -->
-        <Panel Height="25" Margin="0,1" Background="Transparent">
+        <Panel Height="25" Margin="0,2" Background="Transparent">
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0">
-                <Panel Margin="2" IsVisible="{Binding !IsConnected.IsConnected}">
+                <Panel Margin="4" IsVisible="{Binding !IsConnected.IsConnected}" ToolTip.ShowDelay="250"
+                       ToolTip.Placement="Bottom" ToolTip.VerticalOffset="5"
+                       ToolTip.HorizontalOffset="-10">
+                    <ToolTip.Tip>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="{x:Static p1:Icons.CircleWarning}"
+                                      Width="17.5" Height="17.5"
+                                      Opacity="0.9"
+                                      Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}" />
+                            <TextBlock Text="网络连接断开" FontSize="13" Opacity="0.75" Foreground="Red" />
+                        </StackPanel>
+                    </ToolTip.Tip>
                     <avalonia:MaterialIcon
                         Width="17"
                         Height="17"
@@ -33,6 +44,7 @@
                         Kind="WifiStrengthAlertOutline" />
                 </Panel>
                 <Button Name="PART_CloseButton"
+                        HorizontalAlignment="Right"
                         Classes="Basic Rounded WindowControlsButton Close">
                     <Interaction.Behaviors>
                         <EventTriggerBehavior EventName="Click">

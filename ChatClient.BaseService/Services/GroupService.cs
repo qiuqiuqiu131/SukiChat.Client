@@ -259,7 +259,6 @@ public class GroupService : BaseService, IGroupService
         if (response is { Response: { State: true } })
         {
             // 如果请求成功,数据库中保存此请求信息
-            var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
             var groupRequest = new GroupRequest
             {
                 UserFromId = userId,
@@ -272,15 +271,42 @@ public class GroupService : BaseService, IGroupService
                 Message = message,
                 IsSolved = false
             };
-            groupRequestRepository.Update(groupRequest);
-            await _unitOfWork.SaveChangesAsync();
+            try
+            {
+                var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
+                var entity = await groupRequestRepository.GetFirstOrDefaultAsync(
+                    predicate: d => d.GroupId == groupRequest.GroupId,
+                    orderBy: o => o.OrderByDescending(d => d.RequestTime),
+                    disableTracking: true);
+                if (entity != null)
+                    groupRequest.Id = entity.Id;
+                groupRequestRepository.Update(groupRequest);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
             // UI更新
             var userManager = _scopedProvider.Resolve<IUserManager>();
-            var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
-            var groupRequestDto = _mapper.Map<GroupRequestDto>(groupRequest);
-            groupRequestDto.GroupDto = await userDtoManager.GetGroupDto(userId, groupId);
-            userManager.GroupRequests?.Insert(0, groupRequestDto);
+            var dto = userManager.GroupRequests?.FirstOrDefault(d => d.RequestId == groupRequest.RequestId);
+            if (dto != null)
+            {
+                dto.Message = groupRequest.Message;
+                dto.IsSolved = false;
+
+                userManager.GroupRequests?.Remove(dto);
+                userManager.GroupRequests?.Insert(0, dto);
+            }
+            else
+            {
+                var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
+                dto = _mapper.Map<GroupRequestDto>(groupRequest);
+                dto.GroupDto = await userDtoManager.GetGroupDto(userId, groupId, false);
+
+                userManager.GroupRequests?.Insert(0, dto);
+            }
         }
 
         return (response?.Response.State ?? false, response?.Response?.Message ?? "未知错误");
@@ -341,9 +367,10 @@ public class GroupService : BaseService, IGroupService
     public async Task<(bool, string)> EditGroupHead(string userId, string groupId, Bitmap bitmap)
     {
         var fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
-        var result1 = await fileOperateHelper.UploadFile(groupId, "HeadImage", $"{groupId}.png",
-            bitmap.BitmapToByteArray(),
-            FileTarget.Group);
+        var result1 = false;
+        await using (var stream = bitmap.BitmapToStream())
+            result1 = await fileOperateHelper.UploadFile(groupId, "HeadImage", $"{groupId}.png", stream,
+                FileTarget.Group);
 
         if (!result1) return (false, "上传头像失败");
 

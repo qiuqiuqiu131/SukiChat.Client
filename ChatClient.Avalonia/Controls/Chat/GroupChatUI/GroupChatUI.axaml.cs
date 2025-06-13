@@ -1,10 +1,9 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
@@ -14,11 +13,9 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
-using Avalonia.Styling;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.Tools;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -37,11 +34,6 @@ public partial class GroupChatUI : UserControl
 
     private QScrollViewer ChatScroll;
     private Control ChatScrollContent;
-
-    private bool isMovingToBottom = false;
-
-    private bool lockScroll = false;
-    private double lockBottomDistance = 0;
 
     #endregion
 
@@ -263,9 +255,9 @@ public partial class GroupChatUI : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(async () =>
         {
             // 最大可偏移量
             double maxOffsetY = ChatScroll.MaxOffsetY;
@@ -274,37 +266,23 @@ public partial class GroupChatUI : UserControl
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                if (isMovingToBottom // 正在移动到底部
-                    || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                    || e.NewItems?[0] is GroupChatData chatData && e.NewStartingIndex != 0 &&
-                    chatData.IsUser) // 是自己发送的消息
+                if (e.NewStartingIndex == 0)
                 {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        // 等待渲染完成
-                        ChatScroll.ScrollToBottom();
-                    }, DispatcherPriority.Background);
+                    // -- 加载历史聊天记录 --//
+                    ChatScroll.UnLock();
                 }
-                else if (e.NewStartingIndex == 0)
+                else if (ChatScroll.IsToMoving
+                         || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 // 靠近底部且不是扩展聊天记录
+                         || e.NewItems?[0] is GroupChatData chatData && chatData.IsUser) // 是自己发送的消息
                 {
-                    Dispatcher.UIThread.Invoke(async () =>
-                    {
-                        lockScroll = true;
-                        lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
-                        await Task.Delay(150);
-                        lockScroll = false;
-                        lockBottomDistance = 0;
-                    });
+                    ChatScroll.ScrollToBottom();
                 }
                 else
                 {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        //-- 新消息提醒 --//
-                        HaveUnReadMessage = true;
-                        int addCount = e.NewItems?.Count ?? 0;
-                        UnReadMessageCount += addCount;
-                    }, DispatcherPriority.Background);
+                    //-- 新消息提醒 --//
+                    HaveUnReadMessage = true;
+                    int addCount = e.NewItems?.Count ?? 0;
+                    UnReadMessageCount += addCount;
                 }
             }
         });
@@ -320,6 +298,7 @@ public partial class GroupChatUI : UserControl
     /// <param name="change"></param>
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
+        base.OnPropertyChanged(change);
         if (change.Property == MessagesProperty)
         {
             if (change.OldValue is AvaloniaList<GroupChatData> oldMessages)
@@ -361,24 +340,6 @@ public partial class GroupChatUI : UserControl
         }
     }
 
-    /// <summary>
-    /// ChatUI中的内容发生变化后调用
-    /// 1、BoundsProperty 当添加历史聊天记录时，会锁定Offset，使offset的值始终保持与最底端不变
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ContentOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property == Control.BoundsProperty)
-        {
-            if (!lockScroll) return;
-            double actualOffsetY = ChatScroll.MaxOffsetY - lockBottomDistance;
-            if (actualOffsetY < 0) actualOffsetY = 0;
-            ChatScroll.Offset = new Vector(ChatScroll.Offset.X, actualOffsetY);
-            ChatScroll.CurrentPos = actualOffsetY;
-        }
-    }
-
     #endregion
 
     /// <summary>
@@ -387,6 +348,19 @@ public partial class GroupChatUI : UserControl
     /// <param name="sender"></param>
     /// <param name="e"></param>
     private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
+
+    /// <summary>
+    /// 查看更多聊天记录按钮点击事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void MoreButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        // 锁定ScrollViewer滚动
+        ChatScroll.Lock();
+        await Task.Delay(1500);
+        ChatScroll.UnLock();
+    }
 
 
     /// <summary>
@@ -637,7 +611,7 @@ public partial class GroupChatUI : UserControl
         return contextMenu;
     }
 
-    private void GroupChatMessageView_OnMessageBoxShow(object? sender, MessageBoxShowEventArgs e)
+    private void GroupChatMessageView_OnMessageBoxShow(object sender, MessageBoxShowEventArgs e)
     {
         e.PointerPressedEventArgs.Source = sender;
         RaiseEvent(new MessageBoxShowEventArgs(sender, MessageBoxShowEvent, e.PointerPressedEventArgs,

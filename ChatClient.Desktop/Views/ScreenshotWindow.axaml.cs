@@ -16,7 +16,7 @@ using Prism.Ioc;
 
 namespace ChatClient.Desktop.Views;
 
-public partial class ScreenshotWindow : Window
+public partial class ScreenshotWindow : Window, IDisposable
 {
     #region Field
 
@@ -125,13 +125,8 @@ public partial class ScreenshotWindow : Window
         using (var ms = new MemoryStream())
         {
             screenImage.Save(ms, ImageFormat.Png);
-            byte[] imageBytes = ms.ToArray();
-
-            // 将字节数组转换为 Avalonia Bitmap
-            using (var stream = new MemoryStream(imageBytes))
-            {
-                _screenBitmap = new Bitmap(stream);
-            }
+            ms.Position = 0; // 重置流位置
+            _screenBitmap = new Bitmap(ms);
         }
 
         // 设置窗口背景为屏幕截图
@@ -383,5 +378,11 @@ public partial class ScreenshotWindow : Window
         }
 
         _renderTarget = renderTarget;
+    }
+
+    public void Dispose()
+    {
+        _screenBitmap.Dispose();
+        _renderTarget.Dispose();
     }
 }

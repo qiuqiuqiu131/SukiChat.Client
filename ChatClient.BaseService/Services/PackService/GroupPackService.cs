@@ -134,7 +134,7 @@ public class GroupPackService : BaseService, IGroupPackService
         foreach (var dto in friendRequestDtos)
             _ = Task.Run(async () =>
             {
-                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId, false);
                 if (dto.IsSolved && dto.AcceptByUserId != null)
                     dto.AcceptByGroupMemberDto = await _userManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
             });
@@ -156,7 +156,7 @@ public class GroupPackService : BaseService, IGroupPackService
         foreach (var dto in groupRequestDtos)
             _ = Task.Run(async () =>
             {
-                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId, false);
                 dto.UserDto = await _userManager.GetUserDto(dto.UserFromId);
                 if (dto.IsSolved && dto.AcceptByUserId != null)
                     dto.AcceptByGroupMemberDto = await _userManager.GetGroupMemberDto(dto.GroupId, dto.AcceptByUserId);
@@ -180,7 +180,7 @@ public class GroupPackService : BaseService, IGroupPackService
         {
             _ = Task.Run(async () =>
             {
-                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId);
+                dto.GroupDto = await _userManager.GetGroupDto(userId, dto.GroupId, false);
                 dto.UserDto = await _userManager.GetUserDto(dto.OperateUserId);
             });
         }

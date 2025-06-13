@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
 
 namespace ChatClient.Avalonia.Controls;
@@ -11,16 +12,6 @@ namespace ChatClient.Avalonia.Controls;
 /// </summary>
 public class QScrollViewer : ScrollViewer
 {
-    // 如果上锁，scrollViewer不会将移动
-    public static readonly StyledProperty<bool> IsLockedProperty = AvaloniaProperty.Register<QScrollViewer, bool>(
-        "IsLocked");
-
-    public bool IsLocked
-    {
-        get => GetValue(IsLockedProperty);
-        set => SetValue(IsLockedProperty, value);
-    }
-
     /// <summary>
     /// 可移动的最大偏移量Y
     /// </summary>
@@ -56,6 +47,51 @@ public class QScrollViewer : ScrollViewer
     // 正在移动到最顶部或最底部
     public bool IsToMoving { get; private set; } = false;
 
+    private bool isLocked = false; // 是否锁定滚动
+    private double lockDistance = 0; // 锁定时与底部的距离
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        (Content as Control).PropertyChanged += OnContentPropertyChanged;
+    }
+
+    /// <summary>
+    /// ScrollViewer的Content属性发生变化时触发
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    /// <exception cref="NotImplementedException"></exception>
+    private void OnContentPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == Control.BoundsProperty)
+        {
+            // 锁上了，那么要保证与底部距离保持不变
+            if (isLocked)
+            {
+                double offsetY = MaxOffsetY - lockDistance;
+                Offset = new Vector(Offset.X, offsetY);
+            }
+        }
+    }
+
+    #region Lock
+
+    public void Lock()
+    {
+        if (AnimationToken != null)
+            AnimationToken.Cancel();
+        isLocked = true;
+        lockDistance = MaxOffsetY - CurrentPos;
+    }
+
+    public void UnLock()
+    {
+        isLocked = false;
+    }
+
+    #endregion
+
     #region Scroll
 
     /// <summary>
@@ -64,7 +100,7 @@ public class QScrollViewer : ScrollViewer
     /// <param name="offset"></param>
     public void MoveUp(double offset)
     {
-        if (IsToMoving || IsLocked) return;
+        if (IsToMoving || isLocked) return;
         _ = ScrollMove(CurrentPos + offset);
     }
 
@@ -74,7 +110,7 @@ public class QScrollViewer : ScrollViewer
     /// <param name="offset"></param>
     public void MoveDown(double offset)
     {
-        if (IsToMoving || IsLocked) return;
+        if (IsToMoving || isLocked) return;
         _ = ScrollMove(CurrentPos - offset);
     }
 
@@ -83,7 +119,7 @@ public class QScrollViewer : ScrollViewer
     /// </summary>
     public async void MoveToBottom()
     {
-        if (IsToMoving || IsLocked) return;
+        if (isLocked) return;
 
         IsToMoving = true;
         await ScrollMove(MaxOffsetY);
@@ -95,7 +131,7 @@ public class QScrollViewer : ScrollViewer
     /// </summary>
     public async void MoveToTop()
     {
-        if (IsToMoving || IsLocked) return;
+        if (isLocked) return;
 
         IsToMoving = true;
         await ScrollMove(0);

@@ -22,13 +22,15 @@
         <chatViews:ChatLeftPanelView Grid.Column="0"
                                      DataContext="{Binding  ChatLeftPanelViewModel}" />
 
-        <GridSplitter Grid.Column="1"
-                      Background="{DynamicResource SukiBorderBrush}" />
+        <Border Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
         <ContentControl Grid.Column="2"
                         x:Name="ContentControl"
                         MinWidth="300"
                         prism:RegionManager.RegionManager="{Binding RegionManager}"
                         prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ChatRightRegion}" />
+
+        <GridSplitter Grid.Column="1" Margin="-2.5,0"
+                      Background="Transparent" />
     </Grid>
 </UserControl>

@@ -14,6 +14,7 @@
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+    xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
     d:DesignHeight="650"
     d:DesignWidth="300"
     x:DataType="vm:ChatLeftPanelViewModel"
@@ -160,24 +161,6 @@
                 </Style>
             </Style>
         </Style>
-        <!-- <Style Selector="RadioButton.Enter:visible"> -->
-        <!--     <Style.Animations> -->
-        <!--         <Animation -->
-        <!--             Easing="CubicEaseInOut" -->
-        <!--             FillMode="Forward" -->
-        <!--             IterationCount="1" -->
-        <!--             Duration="0:0:0.3"> -->
-        <!--             <KeyFrame Cue="0%"> -->
-        <!--                 <Setter Property="ScaleTransform.ScaleX" Value="0" /> -->
-        <!--                 <Setter Property="ScaleTransform.ScaleY" Value="0" /> -->
-        <!--             </KeyFrame> -->
-        <!--             <KeyFrame Cue="100%"> -->
-        <!--                 <Setter Property="ScaleTransform.ScaleX" Value="1" /> -->
-        <!--                 <Setter Property="ScaleTransform.ScaleY" Value="1" /> -->
-        <!--             </KeyFrame> -->
-        <!--         </Animation> -->
-        <!--     </Style.Animations> -->
-        <!-- </Style> -->
     </UserControl.Styles>
     <UserControl.DataTemplates>
         <DataTemplate DataType="data:FriendChatDto">
@@ -242,26 +225,16 @@
                                     Opacity="0.6"
                                     Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
                                     TextTrimming="CharacterEllipsis" />
-                                <Panel IsVisible="{Binding LastChatMessages.IsRetracted}">
-                                    <TextBlock
-                                        Margin="0,0,15,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        IsVisible="{Binding LastChatMessages.IsUser}"
-                                        Foreground="{DynamicResource SukiText}"
-                                        Opacity="0.6"
-                                        Text="你撤回了一条消息"
-                                        TextTrimming="CharacterEllipsis" />
-                                    <TextBlock
-                                        Margin="0,0,15,0"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        IsVisible="{Binding !LastChatMessages.IsUser}"
-                                        Foreground="{DynamicResource SukiText}"
-                                        Opacity="0.6"
-                                        Text="对方撤回了一条消息"
-                                        TextTrimming="CharacterEllipsis" />
-                                </Panel>
+                                <TextBlock IsVisible="{Binding LastChatMessages.IsRetracted}" Margin="0,0,15,0"
+                                           VerticalAlignment="Center"
+                                           FontSize="12"
+                                           Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.6"
+                                           TextTrimming="CharacterEllipsis">
+                                    <Run
+                                        Text="{Binding LastChatMessages.IsUser,Converter={chatUi:RetractedMessageConverter}}" />
+                                    <Run Text="撤回一条消息" />
+                                </TextBlock>
                             </Panel>
                             <Panel Grid.Column="1">
                                 <Panel
@@ -274,13 +247,13 @@
                                         Opacity="0.4" />
                                 </Panel>
                                 <Border
-                                    Height="15"
-                                    MinWidth="15"
+                                    Height="14"
+                                    MinWidth="14"
                                     Margin="0,0"
-                                    Padding="3,0"
+                                    Padding="2,0"
                                     HorizontalAlignment="Right"
                                     Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
-                                    CornerRadius="8"
+                                    CornerRadius="7"
                                     IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
@@ -292,7 +265,7 @@
                                         </Style>
                                     </Border.Styles>
                                     <TextBlock
-                                        Margin="1,1,0,0"
+                                        Margin="1,0,0,0"
                                         Padding="0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -410,13 +383,13 @@
                                         Opacity="0.4" />
                                 </Panel>
                                 <Border
-                                    Height="15"
-                                    MinWidth="15"
+                                    Height="14"
+                                    MinWidth="14"
                                     Margin="0,0"
-                                    Padding="3,0"
+                                    Padding="2"
                                     HorizontalAlignment="Right"
                                     Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
-                                    CornerRadius="8"
+                                    CornerRadius="7"
                                     IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
                                     <Border.Styles>
                                         <Style Selector="Border">
@@ -430,7 +403,7 @@
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
-                                        Margin="1,1,0,0"
+                                        Margin="1,0,0,0"
                                         FontSize="10"
                                         Padding="0"
                                         Foreground="White"

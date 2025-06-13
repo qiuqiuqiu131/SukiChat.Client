@@ -78,8 +78,9 @@ public class AudioPlayer : IDisposable
 
         try
         {
-            var stream = new MemoryStream(audioData);
-            mp3Reader = new Mp3FileReader(stream);
+            using (var stream = new MemoryStream(audioData))
+                mp3Reader = new Mp3FileReader(stream);
+
             activeStream = mp3Reader;
 
             InitializeWaveOut();
@@ -87,6 +88,25 @@ public class AudioPlayer : IDisposable
         catch (Exception ex)
         {
             throw new AudioPlayerException("无法加载音频数据", ex);
+        }
+    }
+
+    public void LoadFromMemory(Stream audioStream)
+    {
+        CleanupResources();
+
+        try
+        {
+            audioStream.Position = 0;
+            mp3Reader = new Mp3FileReader(audioStream);
+
+            activeStream = mp3Reader;
+
+            InitializeWaveOut();
+        }
+        catch (Exception e)
+        {
+            throw new AudioPlayerException("无法加载音频数据", e);
         }
     }
 

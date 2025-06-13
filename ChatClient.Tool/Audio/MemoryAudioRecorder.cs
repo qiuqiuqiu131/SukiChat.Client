@@ -98,7 +98,7 @@ public class MemoryAudioRecorder : IDisposable
     /// 结束录音并返回MP3格式的字节数组
     /// </summary>
     /// <returns></returns>
-    public byte[] StopRecording()
+    public Stream? StopRecording()
     {
         if (state == RecordingState.Stopped)
             return null;
@@ -112,7 +112,7 @@ public class MemoryAudioRecorder : IDisposable
         OnStateChanged();
 
         // 返回MP3格式的字节数组
-        return mp3Stream?.ToArray();
+        return mp3Stream;
     }
 
     private void OnStateChanged()

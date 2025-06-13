@@ -40,11 +40,8 @@ public class ImageManager : IImageManager
             if (_imageCache.TryGetValue(cacheKey, out cachedBitmap))
                 return cachedBitmap;
 
-            var bytes = await _fileOperateHelper.GetGroupFile(path, fileName);
-            if (bytes == null) return null;
-
             Bitmap bitmap;
-            using (var stream = new MemoryStream(bytes))
+            await using (var stream = await _fileOperateHelper.GetGroupFile(path, fileName))
                 bitmap = new Bitmap(stream);
 
             // 添加bitmap到字典中缓存
@@ -62,6 +59,7 @@ public class ImageManager : IImageManager
         }
     }
 
+    // 获取头像资源
     public async Task<Bitmap?> GetFile(string id, string path, string fileName, FileTarget fileTarget)
     {
         // 先检查是否存在缓存
@@ -76,14 +74,9 @@ public class ImageManager : IImageManager
             if (_imageCache.TryGetValue(cacheKey, out cachedBitmap))
                 return cachedBitmap;
 
-            var bytes = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget);
-            if (bytes == null) return null;
-
             Bitmap bitmap;
-            using (var stream = new MemoryStream(bytes))
+            await using (var stream = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget))
                 bitmap = new Bitmap(stream);
-
-            Array.Clear(bytes);
 
             // 添加bitmap到字典中缓存
             _imageCache.TryAdd(cacheKey, bitmap);
@@ -120,14 +113,9 @@ public class ImageManager : IImageManager
                 return cachedBitmap;
             }
 
-            var bytes = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget);
-            if (bytes == null) return null;
-
             Bitmap bitmap;
-            using (var stream = new MemoryStream(bytes))
+            await using (var stream = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget))
                 bitmap = new Bitmap(stream);
-
-            Array.Clear(bytes);
 
             // 添加bitmap到字典中缓存
             _chatImageCache.TryAdd(cacheKey, bitmap);

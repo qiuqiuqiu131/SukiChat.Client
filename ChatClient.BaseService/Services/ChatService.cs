@@ -370,9 +370,12 @@ internal class ChatService : BaseService, IChatService
 
         var fileName =
             $"{DateTime.Now:yyyyMMddHHmmss}_{(string.IsNullOrWhiteSpace(filename) ? "图片" : Path.GetFileName(filename))}.png";
-        var result =
-            await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, bitmap.BitmapToByteArray(),
+        var result = false;
+        await using (var stream = bitmap.BitmapToStream())
+        {
+            await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, stream,
                 fileTarget);
+        }
 
         if (result)
             return (true, fileName);
@@ -387,13 +390,14 @@ internal class ChatService : BaseService, IChatService
     /// <param name="fileTarget"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
-    private async Task<(bool, string)> UploadChatVoice(string id, byte[] voice, FileTarget fileTarget,
+    private async Task<(bool, string)> UploadChatVoice(string id, Stream voice, FileTarget fileTarget,
         string? filename = null)
     {
         var _fileOperateHelper = _scopedProvider.Resolve<IFileOperateHelper>();
 
         var fileName =
             $"{DateTime.Now:yyyyMMddHHmmss}_{(string.IsNullOrWhiteSpace(filename) ? "语音" : Path.GetFileName(filename))}.mp3";
+
         var result =
             await _fileOperateHelper.UploadFile(id, "ChatFile", fileName, voice,
                 fileTarget);
@@ -477,7 +481,6 @@ internal class ChatService : BaseService, IChatService
 
     public async Task<bool> ReadAllChatMessage(string userId, string targetId, int lastChatId, FileTarget fileTarget)
     {
-        // TODO: 已读所有消息
         if (fileTarget == FileTarget.User)
         {
             var request = new UpdateFriendLastChatIdRequest
@@ -511,7 +514,8 @@ internal class ChatService : BaseService, IChatService
 
             return false;
         }
-        else if (fileTarget == FileTarget.Group)
+
+        if (fileTarget == FileTarget.Group)
         {
             var request = new UpdateGroupLastChatIdRequest
             {
@@ -590,14 +594,15 @@ internal class ChatService : BaseService, IChatService
                     "ChatFile", messContent.FilePath);
                 messContent.ActualPath = _appDataManager.GetFileInfo(actualPath).FullName;
 
-                var bytes = await _fileOperateHelper.GetFile(
-                    fileTarget == FileTarget.Group ? id : (isUser ? userId : id), "ChatFile", messContent.FilePath,
-                    fileTarget);
-                if (bytes == null)
-                    messContent.Failed = true;
-                else
+                try
                 {
-                    messContent.AudioData = bytes;
+                    // 加载音频
+                    messContent.AudioData = await _fileOperateHelper.GetFile(
+                        fileTarget == FileTarget.Group ? id : (isUser ? userId : id), "ChatFile",
+                        messContent.FilePath,
+                        fileTarget);
+
+                    // 计算音频时长
                     using (var audioPlayer = new AudioPlayer())
                     {
                         try
@@ -611,6 +616,10 @@ internal class ChatService : BaseService, IChatService
                             messContent.AudioData = null;
                         }
                     }
+                }
+                catch (NullReferenceException e)
+                {
+                    messContent.Failed = true;
                 }
             }
             else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)

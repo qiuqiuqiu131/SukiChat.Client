@@ -106,15 +106,16 @@ internal class UserService : BaseService, IUserService
 
     public async Task<Bitmap?> GetHeadImage(string userId, int headIndex)
     {
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
+
         try
         {
             if (headIndex == -1)
             {
-                Bitmap bitmap = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
+                Bitmap bitmap = await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                    "DefaultHead.png"));
                 return bitmap;
             }
-
-            var imageManager = _scopedProvider.Resolve<IImageManager>();
 
             // 获取头像
             var file =
@@ -123,16 +124,14 @@ internal class UserService : BaseService, IUserService
                 return file;
             else
             {
-                var path = Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png");
-                Bitmap? bitmap = null;
-                if (System.IO.File.Exists(path))
-                    bitmap = new Bitmap(path);
-                return bitmap;
+                return await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                    "DefaultHead.png"));
             }
         }
         catch (Exception e)
         {
-            return new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultHead.png"));
+            return await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                "DefaultHead.png"));
         }
     }
 
@@ -141,15 +140,16 @@ internal class UserService : BaseService, IUserService
         Dictionary<int, Bitmap> bitmaps = new();
         foreach (var i in Enumerable.Range(0, User.HeadCount))
         {
-            byte[]? file = await _fileOperateHelper.GetFile(User.Id, "HeadImage", $"head_{i}.png", FileTarget.User);
-            if (file == null) continue;
-            Bitmap bitmap;
-            using (var stream = new MemoryStream(file))
-                bitmap = new Bitmap(stream);
-
-            Array.Clear(file);
-
-            bitmaps.Add(i, bitmap);
+            try
+            {
+                await using var stream =
+                    await _fileOperateHelper.GetFile(User.Id, "HeadImage", $"head_{i}.png", FileTarget.User);
+                var bitmap = new Bitmap(stream);
+                bitmaps.Add(i, bitmap);
+            }
+            catch (NullReferenceException e)
+            {
+            }
         }
 
         return bitmaps;
@@ -164,44 +164,6 @@ internal class UserService : BaseService, IUserService
 
         var userMessage = response.User;
         var user = _mapper.Map<UserDto>(userMessage);
-
-        // try
-        // {
-        //     // 本地数据库保存
-        //     var respository = _unitOfWork.GetRepository<User>();
-        //     var currentUser =
-        //         await respository.GetFirstOrDefaultAsync(predicate: d => d.Id.Equals(user.Id), disableTracking: false);
-        //     if (currentUser != null)
-        //     {
-        //         currentUser.HeadIndex = userMessage.HeadIndex;
-        //         currentUser.HeadCount = (int)userMessage.HeadCount;
-        //         currentUser.Introduction = userMessage.Introduction;
-        //         currentUser.Birthday =
-        //             string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth);
-        //         currentUser.isMale = userMessage.IsMale;
-        //         currentUser.Name = userMessage.Name;
-        //     }
-        //     else
-        //     {
-        //         var userEntity = new User
-        //         {
-        //             HeadCount = (int)userMessage.HeadCount,
-        //             HeadIndex = userMessage.HeadIndex,
-        //             Id = userMessage.Id,
-        //             Name = userMessage.Name,
-        //             Introduction = userMessage.Introduction,
-        //             Birthday = string.IsNullOrEmpty(userMessage.Birth) ? null : DateOnly.Parse(userMessage.Birth),
-        //             isMale = userMessage.IsMale
-        //         };
-        //         await respository.InsertAsync(userEntity);
-        //     }
-        //
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
-        // catch (Exception e)
-        // {
-        //     // ignore
-        // }
 
         if (!isUpdated)
             _ = Task.Run(async () => user.HeadImage = await GetHeadImage(user));

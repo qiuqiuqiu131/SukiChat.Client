@@ -34,22 +34,23 @@ public class RegularFileUploadClient : IFileClient
     /// 1、连接超时会抛出ConnectTimeoutException
     /// 2、连接对象未初始化会抛出NullReferenceException
     /// </summary>
-    public async Task<FileResponse?> UploadFile(string targetPath, string fileName, byte[] file)
+    public async Task<FileResponse?> UploadFile(string targetPath, string fileName, Stream stream)
     {
         if (!_channel.TryGetTarget(out IChannel? channel))
             throw new NullReferenceException();
-        
-        if(!channel.Active)
+
+        if (!channel.Active)
             throw new Exception("连接未激活，请检查连接状态");
 
         // 生成Stream流
-        _fileStream = new MemoryStream(file);
+        _fileStream = new MemoryStream();
+        await stream.CopyToAsync(_fileStream);
 
         _fileName = fileName;
 
         // 初始化文件资源读取
         _packIndex = 0;
-        _totelCount = (int)Math.Ceiling((double)file.Length / CHUNK_SIZE);
+        _totelCount = (int)Math.Ceiling((double)_fileStream.Length / CHUNK_SIZE);
 
         taskCompletionSourceOfFileResponse = new TaskCompletionSource<FileResponse>();
 
@@ -60,7 +61,7 @@ public class RegularFileUploadClient : IFileClient
             Path = targetPath,
             FileName = fileName,
             Type = Path.GetExtension(fileName),
-            TotleSize = file.Length,
+            TotleSize = (int)_fileStream.Length,
             TotleCount = _totelCount,
             Time = DateTime.Now.ToString("yyyyMMddHHmmss")
         };

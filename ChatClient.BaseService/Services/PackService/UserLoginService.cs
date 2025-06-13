@@ -377,7 +377,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var friendRequest = _mapper.Map<FriendRequest>(request);
                 var req = (FriendRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(friendRequest.RequestId));
+                    d.RequestId == friendRequest.RequestId);
                 if (req != null)
                     friendRequest.Id = req.Id;
                 requestRespository.Update(friendRequest);
@@ -395,7 +395,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var friendReceived = _mapper.Map<FriendReceived>(receive);
                 var req = (FriendReceived?)await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(friendReceived.RequestId));
+                    d.RequestId == friendReceived.RequestId);
                 if (req != null)
                     friendReceived.Id = req.Id;
                 receiveRespository.Update(friendReceived);
@@ -521,7 +521,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var groupRequest = _mapper.Map<GroupRequest>(request);
                 var req = (GroupRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(groupRequest.RequestId));
+                    d.RequestId == groupRequest.RequestId);
                 if (req != null)
                     groupRequest.Id = req.Id;
                 requestRespository.Update(groupRequest);
@@ -534,7 +534,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             {
                 var groupReceived = _mapper.Map<GroupReceived>(receive);
                 var req = (GroupReceived?)await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
-                    d.RequestId.Equals(groupReceived.RequestId));
+                    d.RequestId == groupReceived.RequestId);
                 if (req != null)
                     groupReceived.Id = req.Id;
                 friendRespository.Update(groupReceived);

@@ -34,9 +34,6 @@ public partial class ChatUI : UserControl
     private QScrollViewer ChatScroll;
     private Control ChatScrollContent;
 
-    private bool lockScroll = false;
-    private double lockBottomDistance = 0;
-
     #endregion
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -282,9 +279,9 @@ public partial class ChatUI : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ValueOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(async () =>
         {
             // 最大可偏移量
             double maxOffsetY = ChatScroll.MaxOffsetY;
@@ -293,36 +290,23 @@ public partial class ChatUI : UserControl
 
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                if (ChatScroll.IsToMoving // 正在移动到底部
-                    || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 && e.NewStartingIndex != 0 // 靠近底部且不是扩展聊天记录
-                    || e.NewItems?[0] is ChatData chatData && e.NewStartingIndex != 0 && chatData.IsUser) // 是自己发送的消息
+                if (e.NewStartingIndex == 0)
                 {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        // 等待渲染完成
-                        ChatScroll.MoveToBottom();
-                    }, DispatcherPriority.Background);
+                    // -- 加载历史聊天记录 --//
+                    ChatScroll.UnLock();
                 }
-                else if (e.NewStartingIndex == 0)
+                else if (ChatScroll.IsToMoving
+                         || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 // 靠近底部且不是扩展聊天记录
+                         || e.NewItems?[0] is GroupChatData chatData && chatData.IsUser) // 是自己发送的消息
                 {
-                    Dispatcher.UIThread.Invoke(async () =>
-                    {
-                        lockScroll = true;
-                        lockBottomDistance = maxOffsetY - ChatScroll.Offset.Y;
-                        await Task.Delay(150);
-                        lockScroll = false;
-                        lockBottomDistance = 0;
-                    });
+                    ChatScroll.ScrollToBottom();
                 }
                 else
                 {
-                    Dispatcher.UIThread.Post(() =>
-                    {
-                        //-- 新消息提醒 --//
-                        HaveUnReadMessage = true;
-                        int addCount = e.NewItems?.Count ?? 0;
-                        UnReadMessageCount += addCount;
-                    }, DispatcherPriority.Background);
+                    //-- 新消息提醒 --//
+                    HaveUnReadMessage = true;
+                    int addCount = e.NewItems?.Count ?? 0;
+                    UnReadMessageCount += addCount;
                 }
             }
         });
@@ -364,34 +348,18 @@ public partial class ChatUI : UserControl
             // 最大可偏移量
             double maxOffsetY = ChatScroll.MaxOffsetY;
 
-            if (Math.Abs(ChatScroll.Offset.Y - maxOffsetY) < 5)
-                ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 5);
+            // 当ScrollViewer的视口宽度发生变化时，重新变更偏移量，保证底部固定不变
+            if (Math.Abs(ChatScroll.Offset.Y - maxOffsetY) < 10)
+                ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 10);
         }
         else if (e.Property == ScrollViewer.OffsetProperty)
         {
+            // 当ScrollViewer滚动到最底部时，取消新消息气泡的显示
             if (Math.Abs(ChatScroll.Offset.Y - ChatScroll.MaxOffsetY) < 10)
             {
                 HaveUnReadMessage = false;
                 UnReadMessageCount = 0;
             }
-        }
-    }
-
-    /// <summary>
-    /// ChatUI中的内容发生变化后调用
-    /// 1、BoundsProperty 当添加历史聊天记录时，会锁定Offset，使offset的值始终保持与最底端不变
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void ContentOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
-    {
-        if (e.Property == BoundsProperty)
-        {
-            if (!lockScroll) return;
-            double actualOffsetY = ChatScroll.MaxOffsetY - lockBottomDistance;
-            if (actualOffsetY < 0) actualOffsetY = 0;
-            ChatScroll.Offset = new Vector(ChatScroll.Offset.X, actualOffsetY);
-            ChatScroll.CurrentPos = actualOffsetY;
         }
     }
 
@@ -405,6 +373,18 @@ public partial class ChatUI : UserControl
     /// <param name="e"></param>
     private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
 
+    /// <summary>
+    /// 查看更多聊天记录按钮点击事件
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private async void MoreButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        // 锁定ScrollViewer滚动
+        ChatScroll.Lock();
+        await Task.Delay(1500);
+        ChatScroll.UnLock();
+    }
 
     /// <summary>
     /// 当ChatUI绑定的ItemsSource发生变化时调用，当聊天对象发生变化时调用，将聊天框滚到最底部

@@ -57,18 +57,7 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         if (result)
         {
             // UserManager更新Dto
-            var groupDto = await _userManager.NewGroupReceive(pullGroupMessage.GroupId);
-
-            /*if (groupDto != null)
-            {
-                Dispatcher.UIThread.Invoke(() =>
-                {
-                    _toastManager.CreateSimpleInfoToast()
-                        .WithTitle("新群聊")
-                        .WithContent($"你成为\"{groupDto.GroupDto!.Name}\"的成员")
-                        .Queue();
-                });
-            }*/
+            await _userManager.NewGroupReceive(pullGroupMessage.GroupId);
         }
     }
 
@@ -81,13 +70,29 @@ public class GroupRelationMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnJoinGroupRequestFromServer(IScopedProvider scopedprovider, JoinGroupRequestFromServer message)
     {
-        var _userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
-        GroupReceivedDto groupReceivedDto = _mapper.Map<GroupReceivedDto>(message);
-        groupReceivedDto.UserDto = await _userDtoManager.GetUserDto(message.UserId);
-        groupReceivedDto.GroupDto = await _userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
-
         // UI处理
-        _userManager.GroupReceiveds?.Insert(0, groupReceivedDto);
+        var receiveDto = _userManager.GroupReceiveds?.FirstOrDefault(d => d.GroupId == message.GroupId);
+        if (receiveDto != null)
+        {
+            receiveDto.IsSolved = false;
+            receiveDto.ReceiveTime = DateTime.Parse(message.Time);
+            receiveDto.Message = message.Message;
+
+            _userManager.GroupReceiveds?.Remove(receiveDto);
+            _userManager.GroupReceiveds?.Insert(0, receiveDto);
+        }
+        else
+        {
+            // 构建消息实体
+            var _userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
+            receiveDto = _mapper.Map<GroupReceivedDto>(message);
+            receiveDto.UserDto = await _userDtoManager.GetUserDto(message.UserId);
+            receiveDto.GroupDto = await _userDtoManager.GetGroupDto(_userManager.User!.Id, message.GroupId, false);
+
+            _userManager.GroupReceiveds?.Insert(0, receiveDto);
+        }
+
+        // 更新未读消息数
         if (_userManager is not
             { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null })
             _userManager.User!.UnreadGroupMessageCount++;
@@ -95,21 +100,29 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         {
             _userManager.User!.LastReadGroupMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
             _userManager.User!.UnreadGroupMessageCount = 0;
-            _userManager.SaveUser();
+            await _userManager.SaveUser();
         }
 
-        var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
-        await receiveRepository.InsertAsync(_mapper.Map<GroupReceived>(groupReceivedDto));
-        await _unitOfWork.SaveChangesAsync();
-
-        Dispatcher.UIThread.Invoke(() =>
+        // 更新数据库
+        try
         {
-            /*_toastManager.CreateSimpleInfoToast()
-                .WithTitle("好友请求")
-                .WithContent($"来自{groupReceivedDto.UserDto!.Name} 的好友请求")
-                .Queue();*/
-        });
+            var receive = _mapper.Map<GroupReceived>(receiveDto);
+            var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+            var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
+            var entity = await receiveRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.RequestId == message.RequestId,
+                orderBy: o => o.OrderByDescending(d => d.RequestId),
+                disableTracking: true);
+            if (entity != null)
+                receive.Id = entity.Id;
+            receiveRepository.Update(receive);
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
 

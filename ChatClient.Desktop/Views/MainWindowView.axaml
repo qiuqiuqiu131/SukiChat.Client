@@ -143,6 +143,7 @@
             </Panel>
             <Grid Grid.Column="1" RowDefinitions="30,*">
                 <ContentControl Grid.Row="0" Grid.RowSpan="2"
+                                Background="Transparent"
                                 prism:RegionManager.RegionManager="{Binding RegionManager}"
                                 prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainRegion}" />
 

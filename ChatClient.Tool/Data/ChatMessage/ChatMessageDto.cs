@@ -61,7 +61,7 @@ public class VoiceMessDto : BindableBase, IDisposable
     public string? FilePath { get; set; }
     public long FileSize { get; set; }
 
-    public byte[]? AudioData { get; set; }
+    public Stream? AudioData { get; set; }
 
     public AudioPlayer? AudioPlayer { get; set; }
 
@@ -88,7 +88,7 @@ public class VoiceMessDto : BindableBase, IDisposable
     public void Dispose()
     {
         if (AudioData != null)
-            Array.Clear(AudioData);
+            AudioData.Dispose();
         AudioData = null;
     }
 }

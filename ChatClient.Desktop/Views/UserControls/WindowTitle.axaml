@@ -31,7 +31,20 @@
                                         <Setter Property="Width" Value="8.5" />
                                     </Style>
                                 </StackPanel.Styles>
-                                <Panel Margin="2" IsVisible="{TemplateBinding IsOutLine}">
+                                <Panel ToolTip.ShowDelay="250" ToolTip.Placement="Bottom" ToolTip.VerticalOffset="5"
+                                       ToolTip.HorizontalOffset="-10"
+                                       Margin="4,2"
+                                       IsVisible="{TemplateBinding IsOutLine}"
+                                       Background="Transparent">
+                                    <ToolTip.Tip>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <PathIcon Data="{x:Static suki:Icons.CircleWarning}"
+                                                      Width="17.5" Height="17.5"
+                                                      Opacity="0.9"
+                                                      Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}" />
+                                            <TextBlock Text="网络连接断开" FontSize="13" Opacity="0.75" Foreground="Red" />
+                                        </StackPanel>
+                                    </ToolTip.Tip>
                                     <avalonia:MaterialIcon
                                         Width="17"
                                         Height="17"

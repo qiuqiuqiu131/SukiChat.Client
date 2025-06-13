@@ -57,7 +57,7 @@ public partial class ChatInputPanelView : UserControl
             foreach (var item in _itemCollection)
             {
                 if (item is TextBox textBox)
-                    textBox.ContextFlyout?.Hide();
+                    textBox.ContextMenu?.Close();
             }
         });
     }
@@ -132,7 +132,7 @@ public partial class ChatInputPanelView : UserControl
     // 当输入消息集合发生变化时调用
     private void InputMessagesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             // 后台添加消息
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -159,6 +159,9 @@ public partial class ChatInputPanelView : UserControl
                     InputMessages.Add(string.Empty);
                 }
 
+                var con = _itemCollection.Last() as Control;
+                if (con != null)
+                    con.Focus();
                 ScrollViewer.ScrollToEnd();
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
@@ -176,6 +179,9 @@ public partial class ChatInputPanelView : UserControl
                         textBox.RemoveHandler(KeyDownEvent, ControlOnKeyDown);
                     }
 
+                    if (e.OldItems[i] is Bitmap bitmap)
+                        bitmap.Dispose();
+
                     removeItems.Add(control);
                 }
 
@@ -183,7 +189,10 @@ public partial class ChatInputPanelView : UserControl
                     _itemCollection.Remove(item);
 
                 if (InputMessages.Count == 0)
+                {
+                    // 消息清空时，Focus选中输入框
                     InputMessages.Add(string.Empty);
+                }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {

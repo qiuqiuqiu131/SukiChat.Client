@@ -173,7 +173,7 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
     #region SendMessages
 
-    public async Task SendVoiceMessage(byte[] voiceData)
+    public async Task SendVoiceMessage(Stream voiceData)
     {
         if (voiceData.Length > 5 * 1024 * 1024)
         {

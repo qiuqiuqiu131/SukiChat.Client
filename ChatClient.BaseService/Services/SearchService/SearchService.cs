@@ -104,7 +104,7 @@ public class SearchService : BaseService, ISearchService
             var groupService = _scopedProvider.Resolve<IGroupService>();
             foreach (var id in result.Ids)
             {
-                var groupDto = await groupGetService.GetGroupDto(userId, id);
+                var groupDto = await userDtoManager.GetGroupDto(userId, id, false);
                 if (groupDto != null)
                 {
                     if (await groupService.IsMember(userId, groupDto.Id))

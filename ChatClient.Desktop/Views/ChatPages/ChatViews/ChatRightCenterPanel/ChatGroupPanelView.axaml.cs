@@ -122,7 +122,7 @@ public partial class ChatGroupPanelView : UserControl, IDestructible
             else
             {
                 var userDtoManager = App.Current.Container.Resolve<IUserDtoManager>();
-                var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, e.CardMessDto.Id);
+                var groupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, e.CardMessDto.Id, false);
                 if (groupDto != null)
                 {
                     var position = ((Control)e.PointerPressedEventArgs.Source).TranslatePoint(new Point(0, 0), chatUi);

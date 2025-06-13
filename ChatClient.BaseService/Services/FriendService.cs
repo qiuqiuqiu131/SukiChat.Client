@@ -131,6 +131,7 @@ internal class FriendService : BaseService, IFriendService
             return (false, mess);
         }
 
+        // 数据库更新
         var friendRequest = new FriendRequest
         {
             RequestId = result.RequestId,
@@ -141,14 +142,42 @@ internal class FriendService : BaseService, IFriendService
             Group = group,
             Remark = remark
         };
-        await _unitOfWork.GetRepository<FriendRequest>().InsertAsync(friendRequest);
-        await _unitOfWork.SaveChangesAsync();
 
+        try
+        {
+            var repository = _unitOfWork.GetRepository<FriendRequest>();
+            var entity = await repository.GetFirstOrDefaultAsync(
+                predicate: d => d.RequestId == friendRequest.RequestId,
+                orderBy: o => o.OrderByDescending(d => d.RequestTime), disableTracking: true);
+            if (entity != null)
+                friendRequest.Id = entity.Id;
+            repository.Update(friendRequest);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
+        // UI更新
         var userManager = _scopedProvider.Resolve<IUserManager>();
         var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
-        var dto = _mapper.Map<FriendRequestDto>(friendRequest);
-        dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
-        userManager.FriendRequests?.Insert(0, dto);
+        var dto = userManager.FriendRequests?.FirstOrDefault(d => d.RequestId == friendRequest.RequestId);
+        if (dto != null)
+        {
+            dto.Message = friendRequest.Message;
+            dto.IsSolved = false;
+
+            userManager.FriendRequests?.Remove(dto);
+            userManager.FriendRequests?.Insert(0, dto);
+        }
+        else
+        {
+            dto = _mapper.Map<FriendRequestDto>(friendRequest);
+            dto.UserDto = await userDtoManager.GetUserDto(dto.UserTargetId);
+
+            userManager.FriendRequests?.Insert(0, dto);
+        }
 
         return (true, result.Response.Message);
     }

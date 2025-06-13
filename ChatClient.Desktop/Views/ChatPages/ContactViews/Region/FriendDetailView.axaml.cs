@@ -16,9 +16,18 @@ public partial class FriendDetailView : UserControl
         InitializeComponent();
     }
 
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
+    }
+
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         Bitmap bitmap = ((FriendDetailViewModel)DataContext!).Friend.UserDto.HeadImage;
         ImageTool.OpenImageInSystemViewer(bitmap);
+    }
+
+    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
     }
 }

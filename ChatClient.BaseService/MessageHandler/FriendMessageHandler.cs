@@ -48,11 +48,29 @@ internal class FriendMessageHandler : MessageHandlerBase
     /// <param name="friendRequestFromServer"></param>
     private async Task OnFriendRequestFromServer(IScopedProvider scope, FriendRequestFromServer friendRequestFromServer)
     {
-        var _userDtoManager = scope.Resolve<IUserDtoManager>();
-        FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
-        friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
         // UI处理
-        _userManager.FriendReceives?.Insert(0, friendReceived);
+        var receiveDto =
+            _userManager.FriendReceives?.FirstOrDefault(d => d.RequestId == friendRequestFromServer.RequestId);
+        if (receiveDto != null)
+        {
+            receiveDto.ReceiveTime = DateTime.Parse(friendRequestFromServer.RequestTime);
+            receiveDto.Message = friendRequestFromServer.Message;
+            receiveDto.IsSolved = false;
+
+            _userManager.FriendReceives?.Remove(receiveDto);
+            _userManager.FriendReceives?.Insert(0, receiveDto);
+        }
+        else
+        {
+            // 构建消息实体
+            var _userDtoManager = scope.Resolve<IUserDtoManager>();
+            FriendReceiveDto friendReceived = _mapper.Map<FriendReceiveDto>(friendRequestFromServer);
+            friendReceived.UserDto = await _userDtoManager.GetUserDto(friendRequestFromServer.UserFromId);
+
+            _userManager.FriendReceives?.Insert(0, friendReceived);
+        }
+
+        // 未读消息处理
         if (_userManager is not
             { CurrentChatPage: "通讯录", CurrentContactState: ContactState.FriendRequest, User: not null })
             _userManager.User!.UnreadFriendMessageCount++;
@@ -60,21 +78,27 @@ internal class FriendMessageHandler : MessageHandlerBase
         {
             _userManager.User!.LastReadFriendMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
             _userManager.User!.UnreadFriendMessageCount = 0;
-            _userManager.SaveUser();
+            await _userManager.SaveUser();
         }
 
-        var _unitOfWork = scope.Resolve<IUnitOfWork>();
-        var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
-        await receivedRepository.InsertAsync(_mapper.Map<FriendReceived>(friendReceived));
-        await _unitOfWork.SaveChangesAsync();
-
-        Dispatcher.UIThread.Invoke(() =>
+        // 更新数据库
+        try
         {
-            /*_toastManager.CreateSimpleInfoToast()
-                .WithTitle("好友请求")
-                .WithContent($"来自{friendReceived.UserDto!.Name} 的好友请求")
-                .Queue();*/
-        });
+            var data = _mapper.Map<FriendReceived>(friendRequestFromServer);
+            var _unitOfWork = scope.Resolve<IUnitOfWork>();
+            var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
+            var entity = receivedRepository.GetFirstOrDefaultAsync(
+                predicate: d => d.RequestId == friendRequestFromServer.RequestId,
+                orderBy: o => o.OrderByDescending(d => d.ReceiveTime), disableTracking: true);
+            if (entity != null)
+                data.Id = entity.Id;
+            receivedRepository.Update(data);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     /// <summary>
@@ -137,15 +161,7 @@ internal class FriendMessageHandler : MessageHandlerBase
         var result = await friendService.NewFriendMessageOperate(_userManager.User.Id, newFriendMessage);
         if (result)
         {
-            var dto = await _userManager.NewFriendReceive(newFriendMessage.FrinedId);
-
-            Dispatcher.UIThread.Invoke(() =>
-            {
-                /*_toastManager.CreateSimpleInfoToast()
-                    .WithTitle("新好友")
-                    .WithContent($"{dto.UserDto.Name} 成为了你的好友")
-                    .Queue();*/
-            });
+            await _userManager.NewFriendReceive(newFriendMessage.FrinedId);
         }
     }
 

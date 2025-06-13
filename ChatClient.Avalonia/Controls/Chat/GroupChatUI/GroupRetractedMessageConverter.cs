@@ -1,10 +1,11 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using ChatClient.Tool.Data;
 
-namespace ChatClient.Avalonia.Converter;
+namespace ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 
-public class GroupIdentityConverter : MarkupExtension, IValueConverter
+public class GroupRetractedMessageConverter : MarkupExtension, IValueConverter
 {
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
@@ -13,17 +14,15 @@ public class GroupIdentityConverter : MarkupExtension, IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is int identity)
+        if (value is GroupChatData groupChatData)
         {
-            return value switch
-            {
-                0 => "[群主]",
-                1 => "[管理员]",
-                2 => "[成员]",
-            };
+            if (groupChatData.IsUser)
+                return "你";
+            else
+                return groupChatData.Owner?.NickName ?? "某人";
         }
 
-        return null;
+        return string.Empty;
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

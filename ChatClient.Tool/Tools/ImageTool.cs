@@ -42,6 +42,13 @@ public static class ImageTool
         }
     }
 
+    public static Stream BitmapToStream(this Bitmap bitmap)
+    {
+        var stream = new MemoryStream();
+        bitmap.Save(stream);
+        return stream;
+    }
+
     public static Bitmap Clone(this Bitmap bitmap)
     {
         using (var memoryStream = new MemoryStream())

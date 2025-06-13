@@ -19,7 +19,7 @@ public static class SystemMessageDataTemplate
     {
         TextBlock textBlock = new TextBlock();
         textBlock.TextAlignment = TextAlignment.Center;
-        textBlock.Opacity = 0.7;
+        textBlock.Opacity = 0.75;
         textBlock.FontSize = 12;
         textBlock.Padding = new Thickness(0, 0, 5, 0);
         foreach (var block in mess.Blocks)

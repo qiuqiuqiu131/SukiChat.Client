@@ -266,12 +266,16 @@
             </ScrollViewer>
         </Grid>
 
-        <GridSplitter Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
+        <Border Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 
         <ContentControl Grid.Column="2"
                         MinWidth="300"
                         x:Name="ContentControl"
+                        Background="Transparent"
                         regions:RegionManager.RegionManager="{Binding RegionManager}"
                         regions:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.ContactsRegion}" />
+
+        <GridSplitter Grid.Column="1" Margin="-2.5,0"
+                      Background="Transparent" />
     </Grid>
 </UserControl>

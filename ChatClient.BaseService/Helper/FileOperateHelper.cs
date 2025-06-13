@@ -17,23 +17,32 @@ internal class FileOperateHelper : IFileOperateHelper
         _appDataManager = appDataManager;
     }
 
-    public async Task<byte[]?> GetGroupFile(string path, string fileName)
+    public async Task<Stream> GetGroupFile(string path, string fileName)
     {
         var fileInfo = _appDataManager.GetFileInfo(Path.Combine("Groups", path, fileName));
         if (fileInfo.Exists)
-            return await System.IO.File.ReadAllBytesAsync(fileInfo.FullName);
-        else
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        // TODO: 更改为Stream流操作文件
+        await using var file = await _fileIOHelper.GetFileAsync(Path.Combine("Groups", path), fileName);
+        if (file != null)
         {
-            byte[]? file = await _fileIOHelper.GetFileAsync(Path.Combine("Groups", path), fileName, null);
-            if (file != null)
+            if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
+                Directory.CreateDirectory(fileInfo.DirectoryName!);
+
+            // 写入文件
+            await using (var fileStream =
+                         new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
-                    Directory.CreateDirectory(fileInfo.DirectoryName!);
-                await System.IO.File.WriteAllBytesAsync(fileInfo.FullName, file);
+                await file.CopyToAsync(fileStream);
             }
 
-            return file;
+            // 返回文件流
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
+
+        // 如果文件不存在，抛出异常
+        throw new NullReferenceException();
     }
 
     /// <summary>
@@ -42,7 +51,7 @@ internal class FileOperateHelper : IFileOperateHelper
     /// <param name="path"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public async Task<byte[]?> GetFile(string Id, string path, string fileName, FileTarget fileTarget)
+    public async Task<Stream> GetFile(string Id, string path, string fileName, FileTarget fileTarget)
     {
         var basePath = fileTarget switch
         {
@@ -53,21 +62,28 @@ internal class FileOperateHelper : IFileOperateHelper
 
         var fileInfo = _appDataManager.GetFileInfo(Path.Combine(actualPath, fileName));
         if (fileInfo.Exists)
-            return await System.IO.File.ReadAllBytesAsync(fileInfo.FullName);
-        else
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+
+        // TODO: 更改为Stream流操作文件
+        await using var file = await _fileIOHelper.GetFileAsync(actualPath, fileName);
+        if (file != null)
         {
-            byte[]? file = await _fileIOHelper.GetFileAsync(actualPath, fileName, null);
-            if (file != null)
+            if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
+                Directory.CreateDirectory(fileInfo.DirectoryName!);
+
+            // 写入文件
+            await using (var fileStream =
+                         new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
-                if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
-                    Directory.CreateDirectory(fileInfo.DirectoryName!);
-                await System.IO.File.WriteAllBytesAsync(fileInfo.FullName, file);
+                await file.CopyToAsync(fileStream);
             }
 
-            return file;
+            // 返回文件流
+            return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
-    }
 
+        throw new NullReferenceException();
+    }
 
     /// <summary>
     /// 用于用户信息的文件保存
@@ -76,7 +92,7 @@ internal class FileOperateHelper : IFileOperateHelper
     /// <param name="fileName"></param>
     /// <param name="bytes"></param>
     /// <returns></returns>
-    public async Task<bool> UploadFile(string id, string path, string fileName, byte[] bytes,
+    public async Task<bool> UploadFile(string id, string path, string fileName, Stream stream,
         FileTarget fileTarget)
     {
         var basePath = fileTarget switch
@@ -86,7 +102,7 @@ internal class FileOperateHelper : IFileOperateHelper
         };
 
         var actualPath = Path.Combine(basePath, id, path);
-        var result = await _fileIOHelper.UploadFileAsync(actualPath, fileName, bytes);
+        var result = await _fileIOHelper.UploadFileAsync(actualPath, fileName, stream);
 
         // 如果上传失败，返回false
         if (!result) return false;
@@ -95,7 +111,14 @@ internal class FileOperateHelper : IFileOperateHelper
         var fileInfo = _appDataManager.GetFileInfo(Path.Combine(actualPath, fileName));
         if (fileInfo.Directory != null && !fileInfo.Directory.Exists)
             Directory.CreateDirectory(fileInfo.DirectoryName!);
-        await System.IO.File.WriteAllBytesAsync(fileInfo.FullName, bytes);
+
+        // 写入文件
+        await using (var fileStream =
+                     new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            await stream.CopyToAsync(fileStream);
+        }
+
         return true;
     }
 
@@ -111,14 +134,19 @@ internal class FileOperateHelper : IFileOperateHelper
         var fileInfo = _appDataManager.GetFileInfo(Path.Combine(actualPath, fileName));
         if (fileInfo.Exists)
         {
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+            await using (var sourceStream =
+                         new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-                fileStream.Write(System.IO.File.ReadAllBytes(fileInfo.FullName));
+                await using (var destinationStream =
+                             new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    await sourceStream.CopyToAsync(destinationStream);
+                }
             }
 
             return true;
         }
-        else
-            return await _fileIOHelper.DownloadLargeFileAsync(actualPath, fileName, filePath, new Progress<double>());
+
+        return await _fileIOHelper.DownloadLargeFileAsync(actualPath, fileName, filePath, new Progress<double>());
     }
 }

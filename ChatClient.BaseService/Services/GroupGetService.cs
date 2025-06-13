@@ -120,16 +120,6 @@ public class GroupGetService : BaseService, IGroupGetService
         if (groupMessage == null) return null;
 
         var groupDto = _mapper.Map<GroupDto>(groupMessage);
-
-        // 数据库处理
-        // var group = _mapper.Map<Group>(groupDto);
-        // var groupRepository = _unitOfWork.GetRepository<Group>();
-        // if (await groupRepository.ExistsAsync(d => d.Id.Equals(group.Id)))
-        //     groupRepository.Update(group);
-        // else
-        //     await groupRepository.InsertAsync(group);
-        // await _unitOfWork.SaveChangesAsync();
-
         if (!loadHead)
             _ = Task.Run(async () =>
                 groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead));
@@ -168,19 +158,6 @@ public class GroupGetService : BaseService, IGroupGetService
                 await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
         }).ConfigureAwait(false);
 
-        // 数据库处理
-        // if (groupMemberDto.Status != 3)
-        // {
-        //     var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
-        //     var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
-        //     var entity = await groupMemberRepository.GetFirstOrDefaultAsync(
-        //         predicate: d => d.GroupId.Equals(groupId) && d.UserId.Equals(memberId));
-        //     if (entity != null)
-        //         groupMember.Id = entity.Id;
-        //     groupMemberRepository.Update(groupMember);
-        //     await _unitOfWork.SaveChangesAsync();
-        // }
-
         return groupMemberDto;
     }
 
@@ -212,14 +189,15 @@ public class GroupGetService : BaseService, IGroupGetService
 
     private async Task<Bitmap> GetHeadImage(int headIndex, string groupId, bool isCustom = false)
     {
+        var imageManager = _scopedProvider.Resolve<IImageManager>();
         try
         {
-            var imageManager = _scopedProvider.Resolve<IImageManager>();
             if (!isCustom)
             {
                 var image = await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
                 if (image == null)
-                    image = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultGroupHead.png"));
+                    image = await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                        "DefaultGroupHead.png"));
                 return image;
             }
             else
@@ -230,7 +208,7 @@ public class GroupGetService : BaseService, IGroupGetService
                 {
                     image = await imageManager.GetGroupFile("HeadImage", $"{headIndex}.png")!;
                     if (image == null)
-                        image = new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets",
+                        image = await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
                             "DefaultGroupHead.png"));
                 }
 
@@ -239,7 +217,8 @@ public class GroupGetService : BaseService, IGroupGetService
         }
         catch (Exception e)
         {
-            return new Bitmap(Path.Combine(Environment.CurrentDirectory, "Assets", "DefaultGroupHead.png"));
+            return await imageManager.GetStaticFile(Path.Combine(Environment.CurrentDirectory, "Assets",
+                "DefaultGroupHead.png"));
         }
     }
 

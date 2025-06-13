@@ -31,7 +31,7 @@ internal class ProtoFileIOHelper : IFileIOHelper
     /// <param name="fileName"></param>
     /// <param name="file"></param>
     /// <returns></returns>
-    public async Task<bool> UploadFileAsync(string targetPath, string fileName, byte[] file)
+    public async Task<bool> UploadFileAsync(string targetPath, string fileName, Stream stream)
     {
         try
         {
@@ -39,7 +39,7 @@ internal class ProtoFileIOHelper : IFileIOHelper
 
             // 开启两个线程同时执行
             var timeoutTask = Task.Delay(10000);
-            var uploadTask = client.UploadFile(targetPath, fileName, file);
+            var uploadTask = client.UploadFile(targetPath, fileName, stream);
             // 等待其中一个线程执行完成
             var completedTask = await Task.WhenAny(uploadTask, timeoutTask);
             if (completedTask == timeoutTask)
@@ -91,7 +91,7 @@ internal class ProtoFileIOHelper : IFileIOHelper
     /// <param name="targetPath"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public async Task<byte[]?> GetFileAsync(string targetPath, string fileName, IProgress<double>? fileProgress)
+    public async Task<Stream?> GetFileAsync(string targetPath, string fileName, IProgress<double>? fileProgress = null)
     {
         try
         {
@@ -109,9 +109,13 @@ internal class ProtoFileIOHelper : IFileIOHelper
             if (fileUnit != null)
                 result = fileUnit.Combine();
 
+            Stream? stream = null;
+            if (result != null)
+                stream = new MemoryStream(result);
+
             _resourcesClientPool.ReturnClient(client);
 
-            return result;
+            return stream;
         }
         catch (Exception e)
         {

@@ -131,9 +131,13 @@ internal class UserManager : IUserManager
         if (bitmap == null || User == null) return false;
 
         var fileName = $"head_{User.UserDto.HeadCount}.png";
-        byte[] bytes = bitmap.BitmapToByteArray();
-        var _fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
-        var result = await _fileOperateHelper.UploadFile(User.Id, "HeadImage", fileName, bytes, FileTarget.User);
+        bool result = false;
+        await using (var stream = bitmap.BitmapToStream())
+        {
+            var _fileOperateHelper = _containerProvider.Resolve<IFileOperateHelper>();
+            result = await _fileOperateHelper.UploadFile(User.Id, "HeadImage", fileName, stream, FileTarget.User);
+        }
+
         if (!result) return false;
 
         User.UserDto.HeadCount++;

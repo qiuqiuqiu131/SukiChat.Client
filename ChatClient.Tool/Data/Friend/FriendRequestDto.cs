@@ -8,8 +8,6 @@ public class FriendRequestDto : BindableBase, IDisposable
 
     public string UserTargetId { get; set; }
 
-    public string Group { get; set; }
-
     public string Message { get; set; }
     public DateTime RequestTime { get; set; }
 

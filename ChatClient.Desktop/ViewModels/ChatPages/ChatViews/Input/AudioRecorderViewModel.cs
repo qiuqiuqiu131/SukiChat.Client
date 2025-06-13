@@ -99,7 +99,8 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         {
             var recordedData = AudioRecorder.StopRecording();
 
-            ChatInputPanelViewModel?.SendVoiceMessage(recordedData);
+            if (recordedData != null)
+                ChatInputPanelViewModel?.SendVoiceMessage(recordedData);
 
             _recordingStopwatch.Stop();
             IsRecording = false;

@@ -731,7 +731,6 @@ public partial class ChatLeftPanelView : UserControl
                 selectedMenu.PlacementAnchor = PopupAnchor.TopRight;
                 selectedMenu.Placement = PlacementMode.Pointer;
                 selectedMenu.PlacementTarget = radioButton;
-                radioButton.ContextMenu = selectedMenu;
 
                 selectedMenu.Open(radioButton);
                 e.Handled = true;

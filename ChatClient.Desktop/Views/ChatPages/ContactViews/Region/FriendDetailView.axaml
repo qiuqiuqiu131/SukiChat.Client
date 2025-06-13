@@ -21,7 +21,7 @@
             </Style>
         </Style>
     </UserControl.Styles>
-    <DockPanel LastChildFill="True" Margin="100,85,100,15">
+    <DockPanel LastChildFill="True" Margin="100,85,100,15" PointerPressed="InputElement_OnPointerPressed">
         <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal" Spacing="15">
                 <Panel
@@ -76,7 +76,7 @@
                     </Grid>
                 </StackPanel>
             </StackPanel>
-            <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
+            <Border Name="TopBackground" Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
         </StackPanel>
         <StackPanel Orientation="Vertical" Spacing="5">
             <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,8">
