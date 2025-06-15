@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using ChatClient.Tool.ManagerInterface;
 using Microsoft.Extensions.Configuration;
 
@@ -9,8 +10,21 @@ internal class AppDataManager : IAppDataManager
 
     public AppDataManager(IConfigurationRoot configurationRoot)
     {
-        var floaderPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        _appDataFolder = Path.Combine(floaderPath, "QiuQiuQiu", configurationRoot["BaseFolder"] ?? "ChatApp");
+        string baseFolder;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var cacheFolder = Environment.GetEnvironmentVariable("XDG_CACHE_HOME") ??
+                              Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".cache");
+            baseFolder = Path.Combine(cacheFolder, "QiuQiuQiu");
+        }
+        else
+        {
+            baseFolder = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "QiuQiuQiu");
+        }
+
+        _appDataFolder = Path.Combine(baseFolder, configurationRoot["BaseFolder"] ?? "ChatApp");
 
         // Create the folder if it doesn't exist
         if (!Directory.Exists(_appDataFolder))

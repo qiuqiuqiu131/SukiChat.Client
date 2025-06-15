@@ -119,12 +119,18 @@
                                                             ScaleY="0.55" />
                                         </suki:Loading.RenderTransform>
                                     </suki:Loading>
-                                    <avalonia:MaterialIcon
-                                        Kind="AlertCircle"
-                                        IsVisible="{Binding IsError}"
-                                        Width="20"
-                                        Height="20"
-                                        Foreground="Red" />
+                                    <avalonia:MaterialIcon Kind="AlertCircle"
+                                                           IsVisible="{Binding IsError}"
+                                                           Width="20"
+                                                           Height="20"
+                                                           Opacity="0.7"
+                                                           Background="Transparent"
+                                                           ToolTip.ShowDelay="500"
+                                                           Foreground="Red">
+                                        <ToolTip.Tip>
+                                            <TextBlock Text="消息发送失败" Foreground="Red" FontSize="12" Opacity="0.7" />
+                                        </ToolTip.Tip>
+                                    </avalonia:MaterialIcon>
                                 </Grid>
                                 <suki:GlassCard Grid.Column="1"
                                                 Classes="Owner"

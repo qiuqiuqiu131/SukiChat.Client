@@ -169,29 +169,29 @@
         </StackPanel>
 
         <!-- 样式 -->
-        <StackPanel>
-            <TextBlock Text="背景" Margin="15,0" FontSize="15" />
-            <Border Height="1.5" Background="{DynamicResource SukiBorderBrush}" />
-            <ListBox ItemsSource="{Binding AvailableBackgroundStyles}"
-                     SelectedItem="{Binding ThemeStyle.BackgroundStyle}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border CornerRadius="7" ClipToBounds="True" Width="140" Height="100" Margin="10,5">
-                            <Panel>
-                                <suki:SukiBackground Style="{Binding}"
-                                                     AnimationEnabled="False"
-                                                     Margin="0"
-                                                     TransitionsEnabled="False" />
-                            </Panel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+        <!-- <StackPanel> -->
+        <!--     <TextBlock Text="背景" Margin="15,0" FontSize="15" /> -->
+        <!--     <Border Height="1.5" Background="{DynamicResource SukiBorderBrush}" /> -->
+        <!--     <ListBox ItemsSource="{Binding AvailableBackgroundStyles}" -->
+        <!--              SelectedItem="{Binding SelectedBackgroundStyle}"> -->
+        <!--         <ListBox.ItemsPanel> -->
+        <!--             <ItemsPanelTemplate> -->
+        <!--                 <WrapPanel Orientation="Horizontal" /> -->
+        <!--             </ItemsPanelTemplate> -->
+        <!--         </ListBox.ItemsPanel> -->
+        <!--         <ItemsControl.ItemTemplate> -->
+        <!--             <DataTemplate> -->
+        <!--                 <Border CornerRadius="7" ClipToBounds="True" Width="140" Height="100" Margin="10,5"> -->
+        <!--                     <Panel> -->
+        <!--                         <suki:SukiBackground Style="{Binding}" -->
+        <!--                                              AnimationEnabled="False" -->
+        <!--                                              Margin="0" -->
+        <!--                                              TransitionsEnabled="False" /> -->
+        <!--                     </Panel> -->
+        <!--                 </Border> -->
+        <!--             </DataTemplate> -->
+        <!--         </ItemsControl.ItemTemplate> -->
+        <!--     </ListBox> -->
+        <!-- </StackPanel> -->
     </StackPanel>
 </UserControl>

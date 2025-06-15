@@ -29,13 +29,7 @@ public class EditGroupHeadViewModel : BindableBase
         _sukiDialog = sukiDialog;
         _requestClose = requestClose;
 
-        string path = parameters.GetValue<string>("Path");
-        var fileInfo = new FileInfo(path);
-        if (!fileInfo.Exists)
-            throw new FileNotFoundException("File not found", path);
-
-        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
-            HeadImage = new Bitmap(stream);
+        HeadImage = parameters.GetValue<Bitmap>("Image");
 
         CancelCommand = new DelegateCommand(() =>
         {

@@ -127,10 +127,16 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
         // 选择好图像后，直接显示在页面上，但是暂时不许要上传。等用户设置好头像位置，点击确认后，在保存图片并上传。
-        byte[] bytes = await System.IO.File.ReadAllBytesAsync(filePath);
         Bitmap? bitmap = null;
-        using (var stream = new MemoryStream(bytes))
-            bitmap = new Bitmap(stream);
+        try
+        {
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                bitmap = new Bitmap(stream);
+        }
+        catch (Exception e)
+        {
+            return;
+        }
 
         if (bitmap == null) return;
 

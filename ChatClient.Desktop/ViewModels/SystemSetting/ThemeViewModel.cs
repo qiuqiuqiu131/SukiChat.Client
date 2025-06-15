@@ -1,12 +1,20 @@
 using System;
 using System.Linq;
+using Avalonia;
 using Avalonia.Collections;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using ChatClient.Avalonia.Extenstions;
+using ChatClient.Desktop.Views;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Material.Icons;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation.Regions;
+using SukiUI.Controls;
 using SukiUI.Enums;
 using SukiUI.Models;
 

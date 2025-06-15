@@ -126,7 +126,7 @@
                             Kind="ChartDonutVariant" />
                         <Panel Width="80" Height="80"
                                IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <Ellipse Width="80" Height="80" Fill="{DynamicResource SukiPrimaryColor75}" />
+                            <Ellipse Width="80" Height="80" Fill="{DynamicResource SukiPrimaryColor50}" />
                             <circleImage:CircleImage
                                 Size="75" Image="{Binding SelectedLoginItem.Head}" />
                         </Panel>

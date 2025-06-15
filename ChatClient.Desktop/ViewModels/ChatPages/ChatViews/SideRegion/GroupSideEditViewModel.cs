@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
@@ -68,11 +70,38 @@ public class GroupSideEditViewModel : BindableBase, INavigationAware, IRegionMem
 
         if (string.IsNullOrWhiteSpace(filePath)) return;
 
+        var fileInfo = new FileInfo(filePath);
+        if (!fileInfo.Exists)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "文件不存在",
+                Type = NotificationType.Error
+            });
+            return;
+        }
+
+        Bitmap? HeadImage = null;
+        try
+        {
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                HeadImage = new Bitmap(stream);
+        }
+        catch (Exception e)
+        {
+            _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "图片格式不正确,无法读取",
+                Type = NotificationType.Error
+            });
+            return;
+        }
+
         // 打开头像编辑窗口
         _sukiDialogManager.CreateDialog()
             .WithViewModel(d => new EditGroupHeadViewModel(d, new DialogParameters
             {
-                { "Path", filePath }
+                { "Image", HeadImage }
             }, async result =>
             {
                 if (result.Result != ButtonResult.OK) return;
