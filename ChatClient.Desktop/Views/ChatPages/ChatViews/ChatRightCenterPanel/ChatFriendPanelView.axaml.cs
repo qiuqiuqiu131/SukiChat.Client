@@ -15,9 +15,11 @@ using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 
+[RegionMemberLifetime(KeepAlive = true)]
 public partial class ChatFriendPanelView : UserControl, IDestructible
 {
     private readonly IEventAggregator _eventAggregator;
@@ -60,6 +62,7 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
     public void Destroy()
     {
         token?.Dispose();
+        token2?.Dispose();
     }
 
     private void ChatUI_OnHeadClick(object? sender, FriendHeadClickEventArgs e)

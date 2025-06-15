@@ -15,7 +15,7 @@
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     d:DesignHeight="440"
-    d:DesignWidth="320"
+    d:DesignWidth="315"
     x:DataType="vm:LoginViewModel"
     mc:Ignorable="d">
     <Grid RowDefinitions="25,*">
@@ -24,7 +24,24 @@
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0">
+            <Button Margin="10,2,10,0" HorizontalAlignment="Left" Classes="Void" Click="Button_OnClick">
+                <Button.ContextMenu>
+                    <ContextMenu HorizontalOffset="-4">
+                        <MenuItem Header="登录管理" Command="{Binding LoginSettingCommand}">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="AccountMultipleOutline" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="网络配置" Command="{Binding NetSettingCommand}">
+                            <MenuItem.Icon>
+                                <avalonia:MaterialIcon Kind="Web" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Button.ContextMenu>
+                <avalonia:MaterialIcon Kind="SettingsOutline" Width="16.5" Height="16.5" />
+            </Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
                 <Panel Margin="4" IsVisible="{Binding !IsConnected.IsConnected}" ToolTip.ShowDelay="250"
                        ToolTip.Placement="Bottom" ToolTip.VerticalOffset="5"
                        ToolTip.HorizontalOffset="-10">
@@ -140,17 +157,17 @@
                         </AutoCompleteBox.InnerLeftContent>
                         <AutoCompleteBox.ItemTemplate>
                             <DataTemplate DataType="data:LoginUserItem">
-                                <DockPanel Margin="10,0" LastChildFill="True" HorizontalAlignment="Stretch">
+                                <DockPanel Margin="0" LastChildFill="True" HorizontalAlignment="Stretch">
                                     <circleImage:CircleImage
                                         DockPanel.Dock="Left"
-                                        Margin="15,0,0,0"
+                                        Margin="10,0,0,0"
                                         Image="{Binding Head}" Size="35" />
                                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
                                         <TextBlock FontSize="13.5" HorizontalAlignment="Center" LetterSpacing="1"
                                                    Text="{Binding ID,StringFormat='ID: {0}'}" />
                                         <TextBlock
-                                            Text="{Binding LastLoginTime,Converter={converter:DateOfYMDConverter}}"
+                                            Text="{Binding LastLoginTime}"
                                             HorizontalAlignment="Center"
                                             FontSize="12" Opacity="0.65" />
                                     </StackPanel>

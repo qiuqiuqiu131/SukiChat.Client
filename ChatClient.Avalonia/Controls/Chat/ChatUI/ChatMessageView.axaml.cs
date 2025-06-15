@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Controls.Chat.ChatUI;
 

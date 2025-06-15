@@ -2,7 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupList"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage">
+        xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
     <Style Selector="multiGroupList|MultiGroupList">
         <Setter Property="Template">
             <ControlTemplate>
@@ -28,7 +29,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="data:FriendRelationDto">
+                            <DataTemplate DataType="friend:FriendRelationDto">
                                 <Grid Height="42">
                                     <Grid Margin="3,3" ColumnDefinitions="36,*">
                                         <circleImage:CircleImage Size="36"

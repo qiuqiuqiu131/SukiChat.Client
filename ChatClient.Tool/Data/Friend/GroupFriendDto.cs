@@ -1,6 +1,6 @@
 using Avalonia.Collections;
 
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.Friend;
 
 public class GroupFriendDto : BindableBase, IDisposable
 {

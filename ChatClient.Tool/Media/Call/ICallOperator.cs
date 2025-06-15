@@ -1,6 +1,6 @@
 using ChatServer.Common.Protobuf;
 
-namespace ChatClient.Media.CallOperator;
+namespace ChatClient.Tool.Media.Call;
 
 public interface ICallOperator
 {

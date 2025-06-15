@@ -9,6 +9,7 @@ using ChatClient.BaseService.Services.SearchService;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.LocalSearchUserGroupView.Region;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Data.SearchData;
 using ChatClient.Tool.Events;
@@ -30,8 +31,6 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
     private readonly IUserManager _userManager;
 
     private LocalSearchUserGroupViewModel? _localSearchUserGroupViewModel;
-
-    private INotificationMessageManager? _notificationManager;
 
     private SubscriptionToken token;
 
@@ -140,7 +139,6 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
         string searchText = navigationContext.Parameters["searchText"] as string ?? string.Empty;
         searchAllSubject.OnNext(searchText);
 
-        _notificationManager = navigationContext.Parameters["notificationManager"] as INotificationMessageManager;
         _localSearchUserGroupViewModel =
             navigationContext.Parameters["localSearchUserGroupViewModel"] as LocalSearchUserGroupViewModel;
     }
@@ -149,7 +147,6 @@ public class LocalSearchAllViewModel : BindableBase, INavigationAware, IDestruct
 
     public void OnNavigatedFrom(NavigationContext navigationContext)
     {
-        _notificationManager = null;
         _localSearchUserGroupViewModel = null;
     }
 

@@ -136,7 +136,7 @@
                         <Button Classes="Void" Name="Other" Click="Other_OnClick">
                             <avalonia:MaterialIcon Kind="FormatListBulleted" Width="24" Height="24" />
                         </Button>
-                        <circleImage:CircleImage Size="38" Image="{Binding User.HeadImage}" Margin="0,10,0,0"
+                        <circleImage:CircleImage Size="38" Image="{Binding User.UserDto.HeadImage}" Margin="0,10,0,0"
                                                  PointerPressed="InputElement_OnPointerPressed" />
                     </StackPanel>
                 </DockPanel>

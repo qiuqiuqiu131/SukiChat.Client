@@ -5,6 +5,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 

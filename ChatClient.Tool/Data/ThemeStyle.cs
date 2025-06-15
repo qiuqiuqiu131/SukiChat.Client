@@ -24,7 +24,7 @@ public class ThemeStyle : BindableBase
             if (SetProperty(ref _backgroundStyle, value))
             {
                 ThemeStyleChanged?.Invoke(("背景", value.ToString()));
-                ThemeStyleTool.CurrentSukiBackgroundStyle = _backgroundStyle;
+                ThemeStyleTool.CurrentSukiBackgroundStyle = value;
             }
         }
     }

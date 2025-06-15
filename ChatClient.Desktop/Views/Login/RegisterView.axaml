@@ -35,7 +35,7 @@
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Panel Margin="4" IsVisible="{Binding !IsConnected.IsConnected}" ToolTip.ShowDelay="250"
                        ToolTip.Placement="Bottom" ToolTip.VerticalOffset="5"
                        ToolTip.HorizontalOffset="-10">

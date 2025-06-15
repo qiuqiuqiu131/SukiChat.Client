@@ -12,6 +12,7 @@
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:region="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
     xmlns:region1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
+    xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="region1:FriendRequestViewModel"
@@ -44,7 +45,7 @@
         </Style>
     </UserControl.Styles>
     <UserControl.DataTemplates>
-        <DataTemplate DataType="data:FriendRequestDto">
+        <DataTemplate DataType="friend:FriendRequestDto">
             <suki:GlassCard
                 Background="{DynamicResource SukiPrimaryColor5}"
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
@@ -91,7 +92,7 @@
                 </DockPanel>
             </suki:GlassCard>
         </DataTemplate>
-        <DataTemplate DataType="data:FriendReceiveDto">
+        <DataTemplate DataType="friend:FriendReceiveDto">
             <suki:GlassCard
                 BorderBrush="{DynamicResource SukiPrimaryColor50}"
                 BorderThickness="0.5"
@@ -154,7 +155,7 @@
                 </DockPanel>
             </suki:GlassCard>
         </DataTemplate>
-        <DataTemplate DataType="data:FriendDeleteDto">
+        <DataTemplate DataType="friend:FriendDeleteDto">
             <suki:GlassCard
                 BorderBrush="{DynamicResource SukiAccentColor50}"
                 Background="{DynamicResource SukiAccentColor5}"

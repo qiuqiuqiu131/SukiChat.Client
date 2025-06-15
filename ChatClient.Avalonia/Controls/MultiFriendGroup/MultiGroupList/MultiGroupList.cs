@@ -7,6 +7,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 
 namespace ChatClient.Avalonia.Controls.MultiGroupList;
 

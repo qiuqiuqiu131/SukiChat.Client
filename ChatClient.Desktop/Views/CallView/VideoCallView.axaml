@@ -137,7 +137,7 @@
                                       Name="VideoButton"
                                       Classes="Void Video" Padding="0"
                                       CornerRadius="15"
-                                      IsChecked="True"
+                                      IsChecked="{Binding IsVideoButtonChecked}"
                                       Command="{Binding SwitchVideoCommand}"
                                       CommandParameter="{Binding $self.IsChecked}"
                                       VerticalAlignment="Center">

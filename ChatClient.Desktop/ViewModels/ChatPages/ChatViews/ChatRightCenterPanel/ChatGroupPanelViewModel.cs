@@ -20,6 +20,7 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
@@ -39,6 +40,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 
+[RegionMemberLifetime(KeepAlive = true)]
 public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
@@ -523,6 +525,8 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     {
         SelectedGroup = null;
         ChatInputPanelViewModel?.Dispose();
+
+        RegionManager?.Regions[RegionNames.ChatSideRegion].RemoveAll();
     }
 
     #endregion

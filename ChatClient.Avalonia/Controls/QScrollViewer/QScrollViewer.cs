@@ -71,6 +71,7 @@ public class QScrollViewer : ScrollViewer
             {
                 double offsetY = MaxOffsetY - lockDistance;
                 Offset = new Vector(Offset.X, offsetY);
+                CurrentPos = offsetY;
             }
         }
     }

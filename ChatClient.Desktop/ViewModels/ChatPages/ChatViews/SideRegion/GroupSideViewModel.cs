@@ -6,6 +6,7 @@ using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
@@ -73,6 +74,7 @@ public class GroupSideViewModel : BindableBase, INavigationAware
     public DelegateCommand GroupMemberCommand { get; }
     public DelegateCommand InviteMemberCommand { get; }
     public DelegateCommand RemoveMemberCommand { get; }
+    public DelegateCommand CanDisturbCommand { get; }
 
     public GroupSideViewModel(IEventAggregator eventAggregator, IContainerProvider containerProvider,
         ISukiDialogManager sukiDialogManager,
@@ -89,6 +91,10 @@ public class GroupSideViewModel : BindableBase, INavigationAware
         GroupMemberCommand = new DelegateCommand(GroupMemberShow);
         InviteMemberCommand = new DelegateCommand(InviteMember);
         RemoveMemberCommand = new DelegateCommand(RemoveMember);
+        CanDisturbCommand = new DelegateCommand(() =>
+        {
+            _eventAggregator.GetEvent<UpdateUnreadChatMessageCountEvent>().Publish();
+        });
     }
 
     private void RemoveMember()

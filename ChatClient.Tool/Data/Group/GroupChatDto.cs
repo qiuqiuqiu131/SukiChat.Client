@@ -1,5 +1,6 @@
 using System.Collections.Specialized;
 using Avalonia.Collections;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data.Group;
@@ -98,6 +99,7 @@ public class GroupChatDto : BindableBase, IDisposable
         InputMessages.Clear();
         InputMessages = null;
 
+        ChatMessages.CollectionChanged -= ChatMessagesOnCollectionChanged;
         ChatMessages.Clear();
         ChatMessages = null;
 

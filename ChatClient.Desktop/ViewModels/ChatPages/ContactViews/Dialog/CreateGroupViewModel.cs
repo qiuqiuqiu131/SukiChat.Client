@@ -6,6 +6,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;

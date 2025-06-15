@@ -1,8 +1,8 @@
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Avalonia.Collections;
+using ChatClient.Tool.Data.ChatMessage;
 
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.Friend;
 
 public class FriendChatDto : BindableBase, IDisposable
 {

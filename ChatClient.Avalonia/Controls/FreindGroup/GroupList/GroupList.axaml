@@ -3,7 +3,8 @@
         xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
         xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
+        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
     <Style Selector="groupList|GroupList">
         <Setter Property="Template">
             <ControlTemplate>
@@ -36,7 +37,7 @@
                             </ItemsPanelTemplate>
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
-                            <DataTemplate DataType="data:FriendRelationDto">
+                            <DataTemplate DataType="friend:FriendRelationDto">
                                 <Grid Height="55" ClipToBounds="False">
                                     <Grid ColumnDefinitions="42,*" HorizontalAlignment="Stretch" Margin="6,7">
                                         <Grid Grid.Column="0" Width="42" Height="42">

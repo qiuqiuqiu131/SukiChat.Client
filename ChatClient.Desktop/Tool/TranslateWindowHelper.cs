@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
@@ -12,7 +13,7 @@ namespace ChatClient.Desktop.Tool;
 
 public static class TranslateWindowHelper
 {
-    public static void TranslateToMainWindow(IRegionManager regionManager)
+    public static void TranslateToMainWindow()
     {
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -23,27 +24,10 @@ public static class TranslateWindowHelper
                 var window = App.Current.Container.Resolve<MainWindowView>();
                 desktopLifetime.MainWindow = window;
 
-                IRegionManager newRegionManager = regionManager.CreateRegionManager();
-                RegionManager.SetRegionManager(window, newRegionManager);
-                RegionManager.UpdateRegions();
-
                 window.Show();
 
                 foreach (var w in windows)
                 {
-                    var oldRegion = RegionManager.GetRegionManager(w);
-                    if (oldRegion != null)
-                        foreach (var region in oldRegion.Regions)
-                        {
-                            foreach (var view in region.Views)
-                            {
-                                if (view is IDisposable v)
-                                    v.Dispose();
-                            }
-
-                            region.RemoveAll();
-                        }
-
                     w.Close();
                     if (w is IDisposable disposable)
                         disposable.Dispose();
@@ -52,9 +36,9 @@ public static class TranslateWindowHelper
         });
     }
 
-    public static void TranslateToLoginWindow()
+    public static async Task TranslateToLoginWindow()
     {
-        Dispatcher.UIThread.Invoke(() =>
+        await Dispatcher.UIThread.InvokeAsync(() =>
         {
             if (App.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopLifetime)
             {
@@ -63,13 +47,9 @@ public static class TranslateWindowHelper
                 desktopLifetime.MainWindow = window;
 
                 window.Show();
+
                 foreach (var wd in windows)
                 {
-                    var oldRegion = RegionManager.GetRegionManager(wd);
-                    if (oldRegion != null)
-                        foreach (var region in oldRegion.Regions)
-                            region.RemoveAll();
-
                     wd.Close();
 
                     if (wd is IDisposable disposable)

@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj"/>
         <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
     </ItemGroup>
 

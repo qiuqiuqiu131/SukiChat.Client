@@ -115,9 +115,11 @@
             </Grid>
             <DockPanel LastChildFill="True">
                 <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
-                    <searchBox:SearchBox Name="SearchBox" TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
+                    <searchBox:SearchBox Name="SearchBox" TextChanged="SearchBox_OnTextChanged"
+                                         SearchText="{Binding SearchText,Mode=TwoWay}"
+                                         WaterMask="输入搜索关键字"
                                          Margin="20,10" />
-                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                    <TabControl Margin="10,0"
                                 SelectedIndex="{Binding SelectedIndex}">
                         <TabItem Header="全部" FontSize="13" Margin="12,0" />
                         <TabItem Header="用户" FontSize="13" Margin="12,0" />
@@ -126,6 +128,7 @@
                     <Border Margin="3,5,3,0" Background="{DynamicResource SukiMediumBorderBrush}" Height="2" />
                 </StackPanel>
                 <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity:RegionNames.AddFriendRegion}"
+                                prism:RegionManager.RegionManager="{Binding RegionManager}"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch" />
             </DockPanel>

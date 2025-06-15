@@ -15,6 +15,8 @@
     xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
     xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
+    xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
+    xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
     d:DesignHeight="650"
     d:DesignWidth="300"
     x:DataType="vm:ChatLeftPanelViewModel"
@@ -23,7 +25,7 @@
     <UserControl.Resources>
         <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
-        <DataTemplate x:Key="FriendMenu" DataType="data:FriendRelationDto">
+        <DataTemplate x:Key="FriendMenu" DataType="friend:FriendRelationDto">
             <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
                 <MenuItem
                     Click="OnFriendTopMenuItemClick"
@@ -163,7 +165,7 @@
         </Style>
     </UserControl.Styles>
     <UserControl.DataTemplates>
-        <DataTemplate DataType="data:FriendChatDto">
+        <DataTemplate DataType="friend:FriendChatDto">
             <RadioButton
                 Height="65"
                 Margin="0"
@@ -246,33 +248,12 @@
                                         Kind="BellOffOutline"
                                         Opacity="0.4" />
                                 </Panel>
-                                <Border
-                                    Height="14"
-                                    MinWidth="14"
-                                    Margin="0,0"
-                                    Padding="2,0"
-                                    HorizontalAlignment="Right"
-                                    Classes.CantDisturb="{Binding FriendRelatoinDto.CantDisturb}"
-                                    CornerRadius="7"
-                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
-                                    <Border.Styles>
-                                        <Style Selector="Border">
-                                            <Setter Property="Background" Value="Red" />
-                                        </Style>
-                                        <Style Selector="Border.CantDisturb">
-                                            <Setter Property="Background"
-                                                    Value="{DynamicResource SukiControlBorderBrush}" />
-                                        </Style>
-                                    </Border.Styles>
-                                    <TextBlock
-                                        Margin="1,0,0,0"
-                                        Padding="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="10"
-                                        Foreground="White"
-                                        Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
-                                </Border>
+                                <badge:Badge HorizontalAlignment="Right"
+                                             Classes.Danger="{Binding FriendRelatoinDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
+                                             Classes.Gray="{Binding FriendRelatoinDto.CantDisturb}"
+                                             Header="{Binding UnReadMessageCount}"
+                                             OverflowCount="99"
+                                             IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}" />
                             </Panel>
                         </Grid>
                     </Grid>
@@ -382,33 +363,12 @@
                                         Kind="BellOffOutline"
                                         Opacity="0.4" />
                                 </Panel>
-                                <Border
-                                    Height="14"
-                                    MinWidth="14"
-                                    Margin="0,0"
-                                    Padding="2"
-                                    HorizontalAlignment="Right"
-                                    Classes.CantDisturb="{Binding GroupRelationDto.CantDisturb}"
-                                    CornerRadius="7"
-                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
-                                    <Border.Styles>
-                                        <Style Selector="Border">
-                                            <Setter Property="Background" Value="Red" />
-                                        </Style>
-                                        <Style Selector="Border.CantDisturb">
-                                            <Setter Property="Background"
-                                                    Value="{DynamicResource SukiControlBorderBrush}" />
-                                        </Style>
-                                    </Border.Styles>
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Margin="1,0,0,0"
-                                        FontSize="10"
-                                        Padding="0"
-                                        Foreground="White"
-                                        Text="{Binding UnReadMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
-                                </Border>
+                                <badge:Badge HorizontalAlignment="Right"
+                                             Classes.Danger="{Binding GroupRelationDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
+                                             Classes.Gray="{Binding GroupRelationDto.CantDisturb}"
+                                             Header="{Binding UnReadMessageCount}"
+                                             OverflowCount="99"
+                                             IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}" />
                             </Panel>
                         </Grid>
                     </Grid>
@@ -480,7 +440,6 @@
                 suki:ItemsControlExtensions.AnimatedScroll="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <!-- <VirtualizingStackPanel Orientation="Vertical" /> -->
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>

@@ -15,7 +15,9 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -257,13 +259,10 @@ public partial class GroupChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        double maxOffsetY = ChatScroll.MaxOffsetY; // 最大可偏移量
+        double OffsetYOrigion = ChatScroll.Offset.Y; // 当前偏移量
         Dispatcher.UIThread.Post(async () =>
         {
-            // 最大可偏移量
-            double maxOffsetY = ChatScroll.MaxOffsetY;
-            // 当前偏移量
-            double OffsetYOrigion = ChatScroll.Offset.Y;
-
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 if (e.NewStartingIndex == 0)
@@ -511,6 +510,58 @@ public partial class GroupChatUI : UserControl
                     { Header = "另存为", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentSaveMoveOutline } };
                 item4.Click += (sender, args) => { FileRestoreCommand.Execute(imageMessDto); };
                 contextMenu.Items.Add(item4);
+            }
+            else if (chatData.ChatMessages[0].Content is VoiceMessDto voiceMessDto && !voiceMessDto.Failed)
+            {
+                var item1 = new MenuItem
+                    { Header = "播放", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
+                item1.Click += async (s, e) =>
+                {
+                    try
+                    {
+                        if (voiceMessDto.IsPlaying)
+                        {
+                            voiceMessDto.AudioPlayer?.StopAsync();
+                            voiceMessDto.IsPlaying = false;
+                            voiceMessDto.AudioPlayer = null;
+                        }
+                        else if (voiceMessDto.AudioData != null)
+                        {
+                            using (var audioPlayer = AudioPlayerFactory.CreateAudioPlayer())
+                            {
+                                voiceMessDto.IsPlaying = true;
+                                voiceMessDto.AudioPlayer = audioPlayer;
+                                audioPlayer.LoadFromMemory(voiceMessDto.AudioData);
+                                await audioPlayer.PlayToEndAsync();
+                                voiceMessDto.IsPlaying = false;
+                                voiceMessDto.AudioPlayer = null;
+                            }
+                        }
+                    }
+                    catch
+                    {
+                    }
+                };
+                contextMenu.Items.Add(item1);
+
+                var item2 = new MenuItem
+                    { Header = "打开所在文件夹", Icon = new MaterialIcon { Kind = MaterialIconKind.FolderOutline } };
+                item2.Click += (s, e) =>
+                {
+                    if (System.IO.File.Exists(voiceMessDto.ActualPath))
+                    {
+                        var argument = $"/select,\"{voiceMessDto.ActualPath}\"";
+                        Process.Start(new ProcessStartInfo("explorer.exe", argument)
+                        {
+                            UseShellExecute = true,
+                            WindowStyle = ProcessWindowStyle.Normal
+                        });
+                    }
+                    else
+                        RaiseEvent(new NotificationMessageEventArgs(this, NotificationEvent, "语音不存在",
+                            NotificationType.Information));
+                };
+                contextMenu.Items.Add(item2);
             }
             else if (chatData.ChatMessages[0].Content is FileMessDto fileMessDto)
             {

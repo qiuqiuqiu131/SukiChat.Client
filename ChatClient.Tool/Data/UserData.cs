@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Avalonia.Collections;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Tool.Data;

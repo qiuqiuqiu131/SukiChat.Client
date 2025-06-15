@@ -4,9 +4,10 @@
         xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
+        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
     <Styles.Resources>
-        <DataTemplate x:Key="Menu" DataType="data:GroupFriendDto">
+        <DataTemplate x:Key="Menu" DataType="friend:GroupFriendDto">
             <ContextMenu Placement="Pointer">
                 <MenuItem Header="添加分组" CommandParameter="{Binding}">
                     <MenuItem.Icon>
@@ -31,7 +32,7 @@
             <ControlTemplate>
                 <ItemsControl Name="FriendList" Classes="Void">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="data:GroupFriendDto">
+                        <DataTemplate DataType="friend:GroupFriendDto">
                             <groupList:GroupList GroupContents="{Binding Friends}"
                                                  Header="{Binding GroupName}"
                                                  SelectionChangedCommand="{Binding $parent[separateGroupsView:SeparateGroupsView].SelectionChangedCommand}" />

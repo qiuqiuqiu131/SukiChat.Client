@@ -145,7 +145,7 @@
                                               SearchMoreCommand="{Binding SearchMoreCommand}"
                                               UserImageSource="{Binding User.HeadImage}" />
 
-                    <GridSplitter Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
+                    <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 
                     <!-- 输入框 -->
                     <Grid Grid.Row="2">
@@ -155,6 +155,8 @@
                         <input:ChatInputPanelView
                             DataContext="{Binding ChatInputPanelViewModel }" />
                     </Grid>
+
+                    <GridSplitter Grid.Row="1" Background="Transparent" Margin="0,-2.5" />
                 </Grid>
 
                 <!-- 底部按钮 -->

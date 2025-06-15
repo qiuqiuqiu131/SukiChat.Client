@@ -13,6 +13,7 @@ using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
@@ -312,6 +313,8 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 
     public void Destroy()
     {
+        foreach (var region in RegionManager.Regions.ToList())
+            region.RemoveAll();
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)

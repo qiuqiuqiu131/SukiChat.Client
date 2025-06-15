@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;

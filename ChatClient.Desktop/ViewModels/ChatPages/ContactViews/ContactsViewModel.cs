@@ -16,6 +16,7 @@ using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 using ChatClient.Desktop.Views.SearchUserGroupView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Data.SearchData;
 using ChatClient.Tool.Events;
@@ -107,12 +108,6 @@ public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAwa
         RenameGroupCommand = new AsyncDelegateCommand<object>(RenameGroup);
         DeleteGroupCommand = new AsyncDelegateCommand<object>(DeleteGroup);
         SearchMoreCommand = new DelegateCommand<string>(SearchMore);
-
-        // User.OnUnreadMessageCountChanged += () =>
-        // {
-        //     // UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
-        // };
-        // // UnReadMessageCount = User.UnreadFriendMessageCount + User.UnreadGroupMessageCount;
 
         searchDisposable = searchSubject
             .Throttle(TimeSpan.FromMilliseconds(500))
@@ -381,6 +376,8 @@ public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAwa
     public void Destroy()
     {
         searchDisposable.Dispose();
+        foreach (var region in RegionManager.Regions.ToList())
+            region.RemoveAll();
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)

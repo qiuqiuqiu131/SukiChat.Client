@@ -6,6 +6,7 @@ using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;

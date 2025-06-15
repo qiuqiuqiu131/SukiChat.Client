@@ -33,7 +33,7 @@
             </Button>
         </Grid>
         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
-        <ScrollViewer Grid.Row="2" Padding="8,0,0,0" VerticalScrollBarVisibility="Visible"
+        <ScrollViewer Classes="Fill" Grid.Row="2" Padding="8,0,0,0" VerticalScrollBarVisibility="Visible"
                       HorizontalScrollBarVisibility="Disabled">
             <StackPanel Margin="15" Orientation="Vertical"
                         Spacing="12">

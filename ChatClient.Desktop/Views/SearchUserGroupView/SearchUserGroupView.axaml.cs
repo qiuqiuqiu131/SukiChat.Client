@@ -14,69 +14,18 @@ namespace ChatClient.Desktop.Views.SearchUserGroupView;
 public partial class SearchUserGroupView : UserControl
 {
     private readonly IEventAggregator _eventAggregator;
-    private readonly IRegionManager _regionManager;
 
     public SearchUserGroupView(IRegionManager regionManager, IEventAggregator eventAggregator)
     {
         _eventAggregator = eventAggregator;
         InitializeComponent();
-
         Opacity = 0;
-        _regionManager = regionManager.CreateRegionManager();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-
         Opacity = 1;
-
-        var toplevel = TopLevel.GetTopLevel(this);
-        RegionManager.SetRegionManager(TopLevel.GetTopLevel(this), _regionManager);
-        RegionManager.UpdateRegions();
-
-        INavigationParameters parameters = new NavigationParameters
-        {
-            { "searchText", SearchBox?.SearchText ?? string.Empty },
-            { "notificationManager", NotificationManager.Manager },
-            { "searchUserGroupViewModel", DataContext }
-        };
-        _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
-    }
-
-    private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        if (sender is TabControl tabControl && _regionManager != null)
-        {
-            if (tabControl.SelectedIndex == 0)
-            {
-                INavigationParameters parameters = new NavigationParameters
-                {
-                    { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager },
-                    { "searchUserGroupViewModel", DataContext }
-                };
-                _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchAllView), parameters);
-            }
-            else if (tabControl.SelectedIndex == 1)
-            {
-                INavigationParameters parameters = new NavigationParameters
-                {
-                    { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager },
-                };
-                _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchFriendView), parameters);
-            }
-            else if (tabControl.SelectedIndex == 2)
-            {
-                INavigationParameters parameters = new NavigationParameters
-                {
-                    { "searchText", SearchBox?.SearchText ?? string.Empty },
-                    { "notificationManager", NotificationManager.Manager },
-                };
-                _regionManager.RequestNavigate(RegionNames.AddFriendRegion, nameof(SearchGroupView), parameters);
-            }
-        }
     }
 
     private void SearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)

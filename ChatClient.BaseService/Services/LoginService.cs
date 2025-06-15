@@ -50,6 +50,13 @@ public interface ILoginService
     /// </summary>
     /// <returns></returns>
     Task<List<LoginUserItem>> LoginUsers();
+
+    /// <summary>
+    /// 从本地历史记录中移除对应的用户
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    Task RemoveLoginUser(string userId);
 }
 
 internal class LoginService : BaseService, ILoginService
@@ -96,11 +103,13 @@ internal class LoginService : BaseService, ILoginService
         var times = logins.ToDictionary(d => d.Id, d => d.LastLoginTime);
 
         var userRepository = _unitOfWork.GetRepository<User>();
-        var entitys = await userRepository.GetAll(predicate: d => ids.Contains(d.Id))
+        var entitys = await userRepository.GetAll(
+                predicate: d => ids.Contains(d.Id))
             .Select(d => new LoginUserItem
                 { ID = d.Id, HeadIndex = d.HeadIndex, LastLoginTime = times[d.Id] })
             .ToListAsync();
-        return entitys;
+
+        return entitys.OrderByDescending(d => d.LastLoginTime).ToList();
     }
 
     public async Task<CommonResponse?> Logout(string? userId)
@@ -168,5 +177,22 @@ internal class LoginService : BaseService, ILoginService
             await repository.InsertAsync(loginHistory);
 
         await _unitOfWork.SaveChangesAsync();
+    }
+
+    public async Task RemoveLoginUser(string userId)
+    {
+        try
+        {
+            var repository = _unitOfWork.GetRepository<LoginHistory>();
+            var entity = await repository.GetFirstOrDefaultAsync(predicate: d => d.Id == userId);
+            if (entity != null)
+                repository.Delete(entity);
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+            // 处理异常，例如记录日志或显示错误消息
+            Console.WriteLine($"Error removing login user: {e.Message}");
+        }
     }
 }

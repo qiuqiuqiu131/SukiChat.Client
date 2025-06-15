@@ -1,4 +1,4 @@
-namespace ChatClient.Media.CallOperator;
+namespace ChatClient.Tool.Media.Call;
 
 public class CallException : Exception
 {

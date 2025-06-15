@@ -1,6 +1,7 @@
 using ChatClient.Media.CallOperator;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Media.CallManager;
@@ -58,8 +59,7 @@ public class CallManager : ICallManager, ICallOperator
 
     public async Task RemoveCall()
     {
-        if (CallOperator == null) return;
-        CallOperator?.EndCall();
+        // CallOperator?.EndCall();
         CallOperator = null;
     }
 

@@ -2,6 +2,7 @@ using Avalonia.Threading;
 using ChatClient.Media.CallManager;
 using ChatClient.Media.CallOperator;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.MessageHandler;

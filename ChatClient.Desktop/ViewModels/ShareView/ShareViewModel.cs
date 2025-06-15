@@ -7,6 +7,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;

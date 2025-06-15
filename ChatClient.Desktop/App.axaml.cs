@@ -109,7 +109,7 @@ public class App : PrismApplication
         });
         containerRegistry.RegisterInstance(loggerFactory);
 
-        LogFactory.Set(loggerFactory);
+        // LogFactory.Set(loggerFactory);
 
         // 注册数据库
         containerRegistry.RegisterDataBase();
@@ -128,6 +128,7 @@ public class App : PrismApplication
 
         // 登录
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
+        containerRegistry.RegisterForNavigation<LoginSettingView, LoginSettingViewModel>();
         // 注册
         containerRegistry.RegisterForNavigation<RegisterView, RegisterViewModel>();
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
@@ -168,6 +169,7 @@ public class App : PrismApplication
         containerRegistry.RegisterDialogWindow<SukiChatDialogWindow>(nameof(SukiChatDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
 
+        containerRegistry.RegisterDialog<NetSettingView, NetSettingViewModel>();
         containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
         // 聊天窗口
         containerRegistry.RegisterDialog<ChatFriendDialogView, ChatFriendDialogViewModel>();
@@ -218,6 +220,8 @@ public class App : PrismApplication
 
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
 
+        regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, nameof(LoginView));
+
         regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(ChatView));
 
         regionManager.RegisterViewWithRegion(RegionNames.ChatRightRegion, typeof(ChatEmptyView));
@@ -231,7 +235,7 @@ public class App : PrismApplication
         IStunServerManager stunServerManager = Container.Resolve<IStunServerManager>();
         stunServerManager.GetStunServersUrl();
 
-        IThemeStyle themeStyle = Container.Resolve<IThemeStyle>();
+        Container.Resolve<IThemeStyle>();
     }
 
 
@@ -271,7 +275,7 @@ public class App : PrismApplication
             .AddView<SendFileDialogView, SendFileDialogViewModel>(services);
     }
 
-    public async override void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
     {
         Dispatcher.UIThread.Post(() =>
         {

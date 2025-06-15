@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -15,63 +16,18 @@ namespace ChatClient.Desktop.Views.LocalSearchUserGroupView;
 public partial class LocalSearchUserGroupView : UserControl
 {
     private readonly IEventAggregator _eventAggregator;
-    private readonly IRegionManager _regionManager;
 
-    public LocalSearchUserGroupView(IRegionManager regionManager, IEventAggregator eventAggregator)
+    public LocalSearchUserGroupView(IEventAggregator eventAggregator)
     {
         _eventAggregator = eventAggregator;
         InitializeComponent();
         Opacity = 0;
-
-        _regionManager = regionManager.CreateRegionManager();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
         Opacity = 1;
-
-        RegionManager.SetRegionManager(TopLevel.GetTopLevel(this), _regionManager);
-        RegionManager.UpdateRegions();
-
-        ChangedSelection();
-    }
-
-    private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-    {
-        ChangedSelection();
-    }
-
-    private void ChangedSelection()
-    {
-        if (Tabs == null) return;
-
-        if (Tabs.SelectedIndex == 0)
-        {
-            INavigationParameters parameters = new NavigationParameters
-            {
-                { "searchText", SearchBox?.SearchText ?? string.Empty },
-                { "notificationManager", NotificationManager.Manager },
-                { "localSearchUserGroupViewModel", DataContext }
-            };
-            _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchAllView), parameters);
-        }
-        else if (Tabs.SelectedIndex == 1)
-        {
-            INavigationParameters parameters = new NavigationParameters
-            {
-                { "searchText", SearchBox?.SearchText ?? string.Empty }
-            };
-            _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchUserView), parameters);
-        }
-        else if (Tabs.SelectedIndex == 2)
-        {
-            INavigationParameters parameters = new NavigationParameters
-            {
-                { "searchText", SearchBox?.SearchText ?? string.Empty }
-            };
-            _regionManager.RequestNavigate(RegionNames.LocalSearchRegion, nameof(LocalSearchGroupView), parameters);
-        }
     }
 
     private void SearchBox_OnTextChanged(object? sender, TextChangedEventArgs e)

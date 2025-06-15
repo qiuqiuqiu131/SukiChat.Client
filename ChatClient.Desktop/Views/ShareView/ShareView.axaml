@@ -13,6 +13,8 @@
              xmlns:multiSeparateGroupGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon;assembly=ChatClient.Avalonia"
+             xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
              mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
              x:DataType="shareView:ShareViewModel"
              Width="550" Height="550"
@@ -63,14 +65,14 @@
             <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Vertical">
                     <StackPanel.DataTemplates>
-                        <DataTemplate DataType="data:TextMessDto">
+                        <DataTemplate DataType="chatMessage:TextMessDto">
                             <TextBlock Text="{Binding Text}" HorizontalAlignment="Left" FontSize="13.5" Margin="13,5" />
                         </DataTemplate>
-                        <DataTemplate DataType="data:ImageMessDto">
+                        <DataTemplate DataType="chatMessage:ImageMessDto">
                             <Image MaxWidth="200" MaxHeight="100" Source="{Binding ImageSource}"
                                    HorizontalAlignment="Center" />
                         </DataTemplate>
-                        <DataTemplate DataType="data:CardMessDto">
+                        <DataTemplate DataType="chatMessage:CardMessDto">
                             <suki:GlassCard Padding="5" Margin="3.5" CornerRadius="5" HorizontalAlignment="Center">
                                 <Grid RowDefinitions="*,*,*" Margin="3.5,0">
                                     <TextBlock Grid.Row="0" Text="{Binding Title}" FontSize="13" Margin="0,4" />
@@ -94,7 +96,7 @@
                                 </Grid>
                             </suki:GlassCard>
                         </DataTemplate>
-                        <DataTemplate DataType="data:VoiceMessDto">
+                        <DataTemplate DataType="chatMessage:VoiceMessDto">
                             <suki:GlassCard Padding="5" Margin="5,3.5" CornerRadius="5" HorizontalAlignment="Center">
                                 <Panel>
                                     <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -177,7 +179,7 @@
                                   VerticalScrollBarVisibility="Hidden">
                         <ItemsControl Margin="0,5,0,100" ItemsSource="{Binding SelectedRelations}">
                             <ItemsControl.DataTemplates>
-                                <DataTemplate DataType="data:FriendRelationDto">
+                                <DataTemplate DataType="friend:FriendRelationDto">
                                     <Grid Height="44" Classes="Item" Background="Transparent"
                                           PointerPressed="InputElement_OnPointerPressed">
                                         <Border Name="Back" Background="{DynamicResource SukiGlassCardBackground}" />

@@ -7,7 +7,6 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Prism.Events;
 
 namespace ChatClient.Client
 {
@@ -37,7 +36,6 @@ namespace ChatClient.Client
             }
         }
 
-        private EndPoint endPoint;
         private readonly (int, int, int) reconnectConfig;
 
         private readonly List<Type>? channels;
@@ -46,14 +44,13 @@ namespace ChatClient.Client
 
         public SocketClient(IServiceProvider serviceProvider)
         {
-            this.services = serviceProvider;
-            this.configuration = services.GetService<IConfigurationRoot>()!;
-            this.eventAggregator = services.GetService<IEventAggregator>()!;
+            services = serviceProvider;
+            configuration = services.GetService<IConfigurationRoot>()!;
+            eventAggregator = services.GetService<IEventAggregator>()!;
 
             // 初始化客户端处理器
             channels = new SocketClientBuilder().HandlerInit().GetChannels();
 
-            endPoint = GetAddress();
             reconnectConfig = GetReconnect();
         }
 
@@ -66,6 +63,13 @@ namespace ChatClient.Client
             if (Channel is { Active: true })
                 await Channel.CloseAsync();
             Channel = null;
+        }
+
+        public async Task ChangeAddress()
+        {
+            await Stop();
+            bootstrap?.RemoteAddress(GetAddress());
+            await ClientConnectAsync();
         }
 
         /// <summary>
@@ -105,7 +109,7 @@ namespace ChatClient.Client
                             pipeline.AddLast(handle);
                         }
                     }));
-                bootstrap.RemoteAddress(endPoint);
+                bootstrap.RemoteAddress(GetAddress());
             }
 
             // 尝试连接服务器
@@ -132,6 +136,8 @@ namespace ChatClient.Client
 
         private void scheduleReconnect()
         {
+            if (Channel != null && Channel.Active) return;
+
             reconnectCount++;
             if (group != null)
                 group.Schedule(async () => await ClientConnectAsync(), TimeSpan.FromSeconds(reconnectConfig.Item2));

@@ -3,6 +3,7 @@ using Avalonia.Controls.Notifications;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
@@ -24,15 +25,16 @@ public class FriendSideViewModel : BindableBase, INavigationAware
 
     private IRegionNavigationService _regionManager;
 
-    private FriendRelationDto _selectedFriend;
+    private FriendRelationDto? _selectedFriend;
 
-    public FriendRelationDto SelectedFriend
+    public FriendRelationDto? SelectedFriend
     {
         get => _selectedFriend;
         set => SetProperty(ref _selectedFriend, value);
     }
 
     public DelegateCommand DeleteCommand { get; }
+    public DelegateCommand CanDisturbCommand { get; }
 
     public FriendSideViewModel(IContainerProvider containerProvider, IUserManager userManager,
         IEventAggregator eventAggregator,
@@ -42,7 +44,12 @@ public class FriendSideViewModel : BindableBase, INavigationAware
         _userManager = userManager;
         _eventAggregator = eventAggregator;
         _sukiDialogManager = sukiDialogManager;
+
         DeleteCommand = new DelegateCommand(DeleteFriend);
+        CanDisturbCommand = new DelegateCommand(() =>
+        {
+            _eventAggregator.GetEvent<UpdateUnreadChatMessageCountEvent>().Publish();
+        });
     }
 
     /// <summary>

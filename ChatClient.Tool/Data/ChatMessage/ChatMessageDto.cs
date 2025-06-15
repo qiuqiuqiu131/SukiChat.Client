@@ -1,17 +1,14 @@
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
-using ChatClient.Tool.Audio;
-using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
-using ChatClient.Tool.Tools;
-using ChatServer.Common.Protobuf;
+using ChatClient.Tool.Media.Audio;
 using Material.Icons;
 
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.ChatMessage;
 
 public class ChatMessageDto : IDisposable
 {
-    public ChatMessage.ContentOneofCase Type { get; set; }
+    public ChatServer.Common.Protobuf.ChatMessage.ContentOneofCase Type { get; set; }
 
     public object Content { get; set; }
 
@@ -63,7 +60,7 @@ public class VoiceMessDto : BindableBase, IDisposable
 
     public Stream? AudioData { get; set; }
 
-    public AudioPlayer? AudioPlayer { get; set; }
+    public IPlatformAudioPlayer? AudioPlayer { get; set; }
 
     public TimeSpan Duration { get; set; }
 

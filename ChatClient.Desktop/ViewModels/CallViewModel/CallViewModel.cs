@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Media.CallManager;
 using ChatClient.Media.CallOperator;
-using ChatClient.Tool.Audio;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Audio;
+using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
 using Microsoft.Extensions.Configuration;
 using Prism.Commands;
@@ -38,7 +42,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
     private CancellationTokenSource? _cancellationTokenSource;
 
-    private AudioPlayer? _audioPlayer;
+    private IPlatformAudioPlayer? _audioPlayer;
 
     private bool isAudioOver;
 
@@ -183,26 +187,35 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     {
         if (isAudioOver) return;
 
-        var ringPath = Path.Combine(Environment.CurrentDirectory, "Assets", "ring.mp3");
-        _audioPlayer = new AudioPlayer();
-        _audioPlayer.LoadFile(ringPath);
-        _audioPlayer.Play();
-        _audioPlayer.PlaybackCompleted += PlayerAgain;
+        try
+        {
+            var ringPath = Path.Combine(Environment.CurrentDirectory, "Assets", "ring.mp3");
+            _audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+            _audioPlayer.LoadFile(ringPath);
+            _audioPlayer.PlayAsync();
+            _audioPlayer.PlaybackCompleted += PlayerAgain;
+        }
+        catch
+        {
+            _audioPlayer?.StopAsync();
+            _audioPlayer?.Dispose();
+            _audioPlayer = null;
+        }
     }
 
-    private void PlayerAgain(object sender, EventArgs e)
+    private void PlayerAgain(object? sender, EventArgs e)
     {
         if (isAudioOver) return;
         if (_audioPlayer == null) return;
         _audioPlayer.CurrentPosition = TimeSpan.Zero;
-        _audioPlayer.Play();
+        _audioPlayer.PlayAsync();
     }
 
     private void StopRing()
     {
         isAudioOver = true;
         if (_audioPlayer == null) return;
-        _audioPlayer.Stop();
+        _audioPlayer.StopAsync();
         _audioPlayer.PlaybackCompleted -= PlayerAgain;
         _audioPlayer.Dispose();
         _audioPlayer = null;
@@ -213,14 +226,21 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     /// </summary>
     private void HangUpRing()
     {
-        var audio = new AudioPlayer();
-        audio.LoadFile(Path.Combine(Environment.CurrentDirectory, "Assets", "hangup.mp3"));
-        audio.Play();
-        audio.PlaybackCompleted += (s, e) =>
+        try
         {
-            audio.Stop();
-            audio.Dispose();
-        };
+            var audio = AudioPlayerFactory.CreateAudioPlayer();
+            audio.LoadFile(Path.Combine(Environment.CurrentDirectory, "Assets", "hangup.mp3"));
+            audio.PlayAsync();
+            audio.PlaybackCompleted += (s, e) =>
+            {
+                audio.StopAsync();
+                audio.Dispose();
+            };
+        }
+        catch
+        {
+            Console.WriteLine("无法播放挂断铃声");
+        }
     }
 
     #endregion
@@ -341,6 +361,17 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             var callManager = _containerProvider.Resolve<ICallManager>();
             await callManager.RemoveCall();
         }
+        catch (PlatformNotSupportedException e)
+        {
+            State = CallViewState.Over;
+
+            StopRing();
+
+            Message = e.Message;
+
+            var callManager = _containerProvider.Resolve<ICallManager>();
+            await callManager.RemoveCall();
+        }
     }
 
     private async void CallDisconnected()
@@ -365,7 +396,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         }
         else if (e == CallStatus.Ended)
         {
-            ClearCall();
+            // ClearCall();
 
             var callManager = _containerProvider.Resolve<ICallManager>();
             callManager.RemoveCall();
@@ -473,6 +504,8 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
         _telephoneCallOperator.OnCallStatusChanged -= CallStatusChanged;
         _telephoneCallOperator.OnIceConntectionStateChanged -= IceConnectionStateChanged;
+        _telephoneCallOperator.OnDisconnected -= CallDisconnected;
+        _telephoneCallOperator.Dispose();
         _telephoneCallOperator = null;
     }
 

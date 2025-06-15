@@ -15,6 +15,7 @@
                 <ResourceInclude Source="SukiSideMenuItem.axaml" />
                 <ResourceInclude Source="SukiDialogHost.axaml" />
                 <ResourceInclude Source="../Controls/Badge/Badge.axaml" />
+                <ResourceInclude Source="../Controls/IPv4Box/IPv4Box.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>

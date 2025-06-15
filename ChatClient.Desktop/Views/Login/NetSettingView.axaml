@@ -1,0 +1,79 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+             xmlns:theme="https://github.com/kikipoulet/SukiUI"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d"
+             d:DesignHeight="200"
+             d:DesignWidth="330"
+             Width="330" Height="200"
+             x:DataType="login:NetSettingViewModel"
+             x:Class="ChatClient.Desktop.Views.Login.NetSettingView">
+    <UserControl.Transitions>
+        <Transitions>
+            <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
+        </Transitions>
+    </UserControl.Transitions>
+
+    <UserControl.Styles>
+        <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
+            <Setter Property="Width" Value="5"></Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="25,*" Background="Transparent" PointerPressed="InputElement_OnPointerPressed">
+        <Panel Grid.Row="0" Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+            <Button Name="PART_CloseButton"
+                    HorizontalAlignment="Right" Margin="3,3,3,0"
+                    Classes="Basic Rounded WindowControlsButton Close">
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="Click">
+                        <CallMethodAction TargetObject="{Binding $parent[theme:SukiWindow]}"
+                                          MethodName="Close" />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
+                <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
+            </Button>
+        </Panel>
+        <StackPanel Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Margin="30,20,30,0" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Center">
+                <avalonia:MaterialIcon Kind="Web" Margin="-5,0,5,0"
+                                       Width="20" Height="20" />
+                <TextBlock Text="网络配置" HorizontalAlignment="Center" FontSize="17.5" />
+            </StackPanel>
+            <TextBlock Margin="8">
+                <Run Text="服务器: " FontSize="14.5" />
+                <Run Text="(设置IPv4地址，请关注开发者动态)" FontSize="11" Foreground="{DynamicResource SukiLowText}" />
+            </TextBlock>
+            <iPv4Box:IPv4Box ShowLeadingZero="False" FontSize="15" FontFamily="{StaticResource MiSans}"
+                             HorizontalAlignment="Stretch"
+                             InputMode="Fast" IPAddress="{Binding IPAddress,UpdateSourceTrigger=LostFocus}" />
+
+            <Button Classes="Basic user" Padding="14,6" Margin="0,10,0,0" Command="{Binding ApplyCommand}">
+                <Button.Styles>
+                    <Style Selector="Button.user TextBlock#text">
+                        <Setter Property="Opacity" Value="1" />
+                    </Style>
+                    <Style Selector="Button.user:pointerover TextBlock#text">
+                        <Setter Property="Opacity" Value="0.7" />
+                    </Style>
+                </Button.Styles>
+                <TextBlock Name="text" Text="应用" FontSize="15">
+                    <TextBlock.Transitions>
+                        <Transitions>
+                            <DoubleTransition Property="Opacity" Duration="0:0:0.2" />
+                        </Transitions>
+                    </TextBlock.Transitions>
+                </TextBlock>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

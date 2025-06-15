@@ -17,6 +17,7 @@
     ExtendClientAreaChromeHints="NoChrome"
     ExtendClientAreaToDecorationsHint="False"
     BackgroundAnimationEnabled="True"
+    BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
     SystemDecorations="None"
     CanResize="False"
     TransparencyLevelHint="Transparent"

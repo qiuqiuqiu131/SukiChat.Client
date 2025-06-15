@@ -1,3 +1,5 @@
+using ChatClient.Tool.Data.Friend;
+
 namespace ChatClient.Tool.Data.SearchData;
 
 public class FriendSearchDto : BindableBase

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using Prism.Dialogs;
 using SukiUI.Controls;
 

@@ -237,6 +237,7 @@
                                   HorizontalAlignment="Right"
                                   Margin="0"
                                   RenderTransformOrigin="0.5,0.5"
+                                  Command="{Binding CanDisturbCommand}"
                                   IsChecked="{Binding SelectedGroup.CantDisturb}"
                                   DockPanel.Dock="Right">
                         <ToggleButton.RenderTransform>

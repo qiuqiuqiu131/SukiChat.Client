@@ -2,6 +2,7 @@ using ChatClient.BaseService.Manager;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.SearchData;
 using Microsoft.EntityFrameworkCore;
 

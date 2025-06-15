@@ -5,14 +5,17 @@ using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services.PackService;
 using ChatClient.DataBase.Data;
 using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Tool.Audio;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
+using Exception = System.Exception;
 
 namespace ChatClient.BaseService.Services;
 
@@ -603,23 +606,16 @@ internal class ChatService : BaseService, IChatService
                         fileTarget);
 
                     // 计算音频时长
-                    using (var audioPlayer = new AudioPlayer())
+                    using (var audioPlayer = AudioPlayerFactory.CreateAudioPlayer())
                     {
-                        try
-                        {
-                            audioPlayer.LoadFromMemory(messContent.AudioData);
-                            messContent.Duration = audioPlayer.TotalTime;
-                        }
-                        catch (Exception e)
-                        {
-                            messContent.Failed = true;
-                            messContent.AudioData = null;
-                        }
+                        audioPlayer.LoadFromMemory(messContent.AudioData);
+                        messContent.Duration = audioPlayer.TotalTime;
                     }
                 }
-                catch (NullReferenceException e)
+                catch
                 {
                     messContent.Failed = true;
+                    messContent.AudioData = null;
                 }
             }
             else if (chatMessage.Type == ChatMessage.ContentOneofCase.FileMess)

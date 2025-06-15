@@ -13,8 +13,9 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using ChatClient.Tool.Audio;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
 using Material.Icons.Avalonia;
 
@@ -281,13 +282,11 @@ public partial class ChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        double maxOffsetY = ChatScroll.MaxOffsetY; // 最大可偏移量
+        double OffsetYOrigion = ChatScroll.Offset.Y; // 当前偏移量
+
         Dispatcher.UIThread.Post(async () =>
         {
-            // 最大可偏移量
-            double maxOffsetY = ChatScroll.MaxOffsetY;
-            // 当前偏移量
-            double OffsetYOrigion = ChatScroll.Offset.Y;
-
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 if (e.NewStartingIndex == 0)
@@ -297,7 +296,7 @@ public partial class ChatUI : UserControl
                 }
                 else if (ChatScroll.IsToMoving
                          || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 // 靠近底部且不是扩展聊天记录
-                         || e.NewItems?[0] is GroupChatData chatData && chatData.IsUser) // 是自己发送的消息
+                         || e.NewItems?[0] is ChatData chatData && chatData.IsUser) // 是自己发送的消息
                 {
                     ChatScroll.ScrollToBottom();
                 }
@@ -533,23 +532,31 @@ public partial class ChatUI : UserControl
                     { Header = "播放", Icon = new MaterialIcon { Kind = MaterialIconKind.ContentCopy } };
                 item1.Click += async (s, e) =>
                 {
-                    if (voiceMessDto.IsPlaying)
+                    try
                     {
-                        voiceMessDto.AudioPlayer?.Stop();
-                        voiceMessDto.IsPlaying = false;
-                        voiceMessDto.AudioPlayer = null;
-                    }
-                    else if (voiceMessDto.AudioData != null)
-                    {
-                        using (var audioPlayer = new AudioPlayer())
+                        if (voiceMessDto.IsPlaying)
                         {
-                            voiceMessDto.IsPlaying = true;
-                            voiceMessDto.AudioPlayer = audioPlayer;
-                            audioPlayer.LoadFromMemory(voiceMessDto.AudioData);
-                            await audioPlayer.PlayToEndAsync();
+                            voiceMessDto.AudioPlayer?.StopAsync();
                             voiceMessDto.IsPlaying = false;
                             voiceMessDto.AudioPlayer = null;
                         }
+                        else if (voiceMessDto.AudioData != null)
+                        {
+                            using (var audioPlayer = AudioPlayerFactory.CreateAudioPlayer())
+                            {
+                                if (audioPlayer == null) return;
+
+                                voiceMessDto.IsPlaying = true;
+                                voiceMessDto.AudioPlayer = audioPlayer;
+                                audioPlayer.LoadFromMemory(voiceMessDto.AudioData);
+                                await audioPlayer.PlayToEndAsync();
+                                voiceMessDto.IsPlaying = false;
+                                voiceMessDto.AudioPlayer = null;
+                            }
+                        }
+                    }
+                    catch
+                    {
                     }
                 };
                 contextMenu.Items.Add(item1);

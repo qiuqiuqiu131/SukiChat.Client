@@ -1,6 +1,4 @@
-using System.Collections.ObjectModel;
-
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.ChatMessage;
 
 public class ChatData : BindableBase, IDisposable
 {

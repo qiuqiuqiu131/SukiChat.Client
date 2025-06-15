@@ -2,17 +2,17 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using ChatClient.Tool.Audio;
+using ChatClient.Tool.Media.Audio;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.Input;
 
 public partial class AudioRecorderView : UserControl
 {
-    public static readonly StyledProperty<MemoryAudioRecorder?> AudioRecorderProperty =
-        AvaloniaProperty.Register<AudioRecorderView, MemoryAudioRecorder?>(
+    public static readonly StyledProperty<IPlatformAudioRecorder?> AudioRecorderProperty =
+        AvaloniaProperty.Register<AudioRecorderView, IPlatformAudioRecorder?>(
             "AudioRecorder");
 
-    public MemoryAudioRecorder? AudioRecorder
+    public IPlatformAudioRecorder? AudioRecorder
     {
         get => GetValue(AudioRecorderProperty);
         set => SetValue(AudioRecorderProperty, value);

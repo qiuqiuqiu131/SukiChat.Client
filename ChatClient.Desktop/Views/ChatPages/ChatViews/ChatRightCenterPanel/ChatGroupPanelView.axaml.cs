@@ -16,9 +16,11 @@ using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 
+[RegionMemberLifetime(KeepAlive = true)]
 public partial class ChatGroupPanelView : UserControl, IDestructible
 {
     private readonly IEventAggregator _eventAggregator;

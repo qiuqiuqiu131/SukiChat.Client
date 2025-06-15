@@ -10,10 +10,11 @@
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon"
              xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
+             xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
-        <DataTemplate DataType="data:TextMessDto">
+        <DataTemplate DataType="chatMessage:TextMessDto">
             <customSelectableTextBlock:CustomSelectableTextBlock Text="{Binding Text}"
                                                                  FontSize="14"
                                                                  Opacity="0.85"
@@ -23,7 +24,7 @@
                                                                  Padding="2"
                                                                  TextWrapping="Wrap" />
         </DataTemplate>
-        <DataTemplate DataType="data:ImageMessDto">
+        <DataTemplate DataType="chatMessage:ImageMessDto">
             <Panel>
                 <Panel
                     IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNull}}">
@@ -93,7 +94,7 @@
                 </Panel>
             </Panel>
         </DataTemplate>
-        <DataTemplate DataType="data:FileMessDto">
+        <DataTemplate DataType="chatMessage:FileMessDto">
             <Border Margin="5,5,5,0" Padding="0" Background="Transparent">
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Bottom" Margin="0,0,0,3" Height="16">
@@ -184,7 +185,7 @@
                 </DockPanel>
             </Border>
         </DataTemplate>
-        <DataTemplate DataType="data:CardMessDto">
+        <DataTemplate DataType="chatMessage:CardMessDto">
             <Panel Background="Transparent" Margin="3" PointerPressed="InputElement_OnPointerPressed">
                 <Grid RowDefinitions="*,*,*" Margin="5,0">
                     <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="0,4" />
@@ -207,7 +208,7 @@
                 </Grid>
             </Panel>
         </DataTemplate>
-        <DataTemplate DataType="data:VoiceMessDto">
+        <DataTemplate DataType="chatMessage:VoiceMessDto">
             <Border Background="Transparent" Classes.Voice="{Binding !Failed}">
                 <Border.Styles>
                     <Style Selector="Border.Voice">

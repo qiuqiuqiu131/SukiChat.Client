@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Collections;
 using Avalonia.Notification;
 using ChatClient.Desktop.Views.SystemSetting;
@@ -70,6 +71,8 @@ public class SystemSettingViewModel : BindableBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        foreach (var region in RegionManager.Regions.ToList())
+            region.RemoveAll();
     }
 
     public void OnDialogOpened(IDialogParameters parameters)

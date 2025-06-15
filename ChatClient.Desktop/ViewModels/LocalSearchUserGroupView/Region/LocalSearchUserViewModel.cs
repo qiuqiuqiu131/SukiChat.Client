@@ -10,6 +10,7 @@ using ChatClient.BaseService.Services.SearchService;
 using ChatClient.DataBase.Data;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.SearchData;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;

@@ -55,7 +55,7 @@ public class UserDetailDto : BindableBase, IDisposable
         {
             if (SetProperty(ref unreadFriendMessageCount, value))
             {
-                OnUnreadMessageCountChanged?.Invoke();
+                RaisePropertyChanged(nameof(ContactUnReadMessageCount));
             }
         }
     }
@@ -69,10 +69,12 @@ public class UserDetailDto : BindableBase, IDisposable
         {
             if (SetProperty(ref unreadGroupMessageCount, value))
             {
-                OnUnreadMessageCountChanged?.Invoke();
+                RaisePropertyChanged(nameof(ContactUnReadMessageCount));
             }
         }
     }
+
+    public int ContactUnReadMessageCount => UnreadFriendMessageCount + UnreadGroupMessageCount;
 
     private string? phoneNumber;
 
@@ -127,14 +129,11 @@ public class UserDetailDto : BindableBase, IDisposable
         set => SetProperty(ref isFirstLogin, value);
     }
 
-    public event Action OnUnreadMessageCountChanged;
-
     public event Action OnPhoneNumberChanged;
     public event Action OnEmailNumberChanged;
 
     public void Dispose()
     {
         UserDto.Dispose();
-        OnUnreadMessageCountChanged = null;
     }
 }

@@ -1,10 +1,11 @@
+using ChatClient.Media.EndPoint;
+using ChatClient.Media.EndPoint.Windows;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.Extensions.Configuration;
 using SIPSorcery.Media;
 using SIPSorcery.Net;
-using SIPSorcery.Windows;
 
 namespace ChatClient.Media.CallOperator;
 
@@ -16,7 +17,7 @@ public class TelephoneCallOperator(
     IUserSetting userSetting)
     : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot, userSetting)
 {
-    private WindowsAudioEndPoint? _audioEndPoint;
+    private IAudioEndPoint? _audioEndPoint;
 
     public event EventHandler<RTCIceConnectionState> OnIceConntectionStateChanged;
     public event Action OnDisconnected;
@@ -48,7 +49,7 @@ public class TelephoneCallOperator(
         var peerConnection = new RTCPeerConnection(config);
 
         // 添加媒体轨道
-        _audioEndPoint = new WindowsAudioEndPoint(new AudioEncoder());
+        _audioEndPoint = AudioEndPointFactory.CreateAudioEndPoint(new AudioEncoder());
 
         // 添加音频轨道
         var audioTrack = new MediaStreamTrack(_audioEndPoint.GetAudioSourceFormats());
@@ -130,9 +131,7 @@ public class TelephoneCallOperator(
     {
         await base.CleanupCall();
 
-        if (_audioEndPoint != null)
-            await _audioEndPoint.CloseAudio();
-
+        _audioEndPoint?.Dispose();
         _audioEndPoint = null;
     }
 

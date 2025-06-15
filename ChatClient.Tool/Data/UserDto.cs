@@ -1,6 +1,6 @@
 ﻿using Avalonia.Media.Imaging;
-using ChatClient.Desktop.UIEntity;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.UIEntity;
 
 namespace ChatClient.Tool.Data
 {

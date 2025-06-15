@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 

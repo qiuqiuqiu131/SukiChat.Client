@@ -8,7 +8,7 @@
 
         <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
         <TrimMode>copyused</TrimMode>
-	    <PublishTrimmed>true</PublishTrimmed>
+        <PublishTrimmed>true</PublishTrimmed>
         <IsAotCompatible>true</IsAotCompatible>
         <StripSymbols>false</StripSymbols>
         <TargetFrameworks>net9.0</TargetFrameworks>
@@ -20,23 +20,23 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <TrimmerRootDescriptor Include="TrimmerRoots.xml" />
+        <TrimmerRootDescriptor Include="TrimmerRoots.xml"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
+        <AvaloniaResource Include="Assets\**"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaResource Remove="Assets\DefaultGroupHead.png" />
-        <AvaloniaResource Remove="Assets\DefaultHead.ico" />
-        <AvaloniaResource Remove="Assets\DefaultHead.png" />
-        <AvaloniaResource Remove="Assets\hangup.mp3" />
-        <AvaloniaResource Remove="Assets\ring.mp3" />
+        <AvaloniaResource Remove="Assets\DefaultGroupHead.png"/>
+        <AvaloniaResource Remove="Assets\DefaultHead.ico"/>
+        <AvaloniaResource Remove="Assets\DefaultHead.png"/>
+        <AvaloniaResource Remove="Assets\hangup.mp3"/>
+        <AvaloniaResource Remove="Assets\ring.mp3"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove="Assets\DefaultHead.ico" />
+        <None Remove="Assets\DefaultHead.ico"/>
         <None Update="appsettings.webrtc.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
@@ -44,14 +44,13 @@
 
     <ItemGroup>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-        <PackageReference Include="Avalonia" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
-        <PackageReference Include="NAudio.Lame" Version="2.1.0" />
-        <PackageReference Include="Semi.Avalonia" Version="11.2.1.8" />
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4"/>
+        <PackageReference Include="NAudio.Lame" Version="2.1.0"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -61,8 +60,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj" />
-        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj" />
+        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj"/>
+        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -149,13 +148,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\TextStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml" />
-        <UpToDateCheckInput Remove="Views\Login\RegisterStepView\RegisterStepFirstView.axaml" />
+        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\TextStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml"/>
+        <UpToDateCheckInput Remove="Views\Login\RegisterStepView\RegisterStepFirstView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -163,21 +162,21 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </AvaloniaResource>
         <AvaloniaResource Update="Assets\Icon.ico">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </AvaloniaResource>
         <AvaloniaResource Update="Assets\MiSans-Normal.ttf">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </AvaloniaResource>
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml" />
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml" />
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml"/>
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
         <Content Include="Assets\DefaultGroupHead.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Assets\DefaultHead.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -191,11 +190,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Notification.Avalonia">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
-      </Reference>
-      <Reference Include="SukiUI">
-        <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
-      </Reference>
+        <Reference Include="Notification.Avalonia">
+            <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+        </Reference>
+        <Reference Include="SukiUI">
+            <HintPath>..\..\..\..\git\github\SukiChat.Client\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+        </Reference>
     </ItemGroup>
 </Project>

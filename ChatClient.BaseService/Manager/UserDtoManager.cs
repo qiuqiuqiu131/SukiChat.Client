@@ -2,6 +2,7 @@ using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
 using System.Collections.Concurrent;
 using ChatClient.BaseService.Services.RemoteService;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.BaseService.Manager;

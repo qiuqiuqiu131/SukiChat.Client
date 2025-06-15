@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using Avalonia.VisualTree;
 using ChatClient.Avalonia.Controls.CircleImage;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using Prism.Events;
 using Prism.Navigation.Regions;

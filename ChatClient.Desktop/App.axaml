@@ -13,7 +13,6 @@
     </Application.Resources>
     <Application.Styles>
         <suki:SukiTheme />
-        <!-- <semi:SemiTheme Locale="zh-CN" /> -->
         <avalonia:MaterialIconStyles />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/NotificationStyles.axaml" />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/Index.axaml" />

@@ -16,6 +16,7 @@
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
     xmlns:contactViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
+    xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="vm:ContactsViewModel"
@@ -90,24 +91,10 @@
                             </PathIcon>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <TextBlock Text="好友通知" />
-                                <Border
-                                    Height="15"
-                                    MinWidth="15"
-                                    Background="Red"
-                                    Margin="5,0"
-                                    Padding="3,0"
-                                    VerticalAlignment="Center"
-                                    CornerRadius="10"
-                                    IsVisible="{Binding User.UnreadFriendMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
-                                    <TextBlock
-                                        Padding="0"
-                                        Margin="1,0.5,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="10"
-                                        Foreground="White"
-                                        Text="{Binding User.UnreadFriendMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
-                                </Border>
+                                <badge:Badge OverflowCount="99" Classes="Danger"
+                                             Header="{Binding User.UnreadFriendMessageCount}"
+                                             IsVisible="{Binding User.UnreadFriendMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}"
+                                             Margin="5,0" />
                             </StackPanel>
                         </Grid>
                     </Button>
@@ -130,24 +117,10 @@
                             </PathIcon>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                                 <TextBlock Text="群聊通知" />
-                                <Border
-                                    Height="15"
-                                    MinWidth="15"
-                                    Background="Red"
-                                    Margin="5,0"
-                                    Padding="3,0"
-                                    VerticalAlignment="Center"
-                                    CornerRadius="10"
-                                    IsVisible="{Binding User.UnreadGroupMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}">
-                                    <TextBlock
-                                        Padding="0"
-                                        Margin="0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="10"
-                                        Foreground="White"
-                                        Text="{Binding User.UnreadGroupMessageCount, Converter={converter:UnReadMessageCountConverter}}" />
-                                </Border>
+                                <badge:Badge OverflowCount="99" Classes="Danger"
+                                             Header="{Binding User.UnreadGroupMessageCount}"
+                                             IsVisible="{Binding User.UnreadGroupMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}"
+                                             Margin="5,0" />
                             </StackPanel>
                         </Grid>
                     </Button>

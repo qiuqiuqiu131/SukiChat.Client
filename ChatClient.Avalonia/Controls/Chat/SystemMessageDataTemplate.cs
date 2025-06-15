@@ -4,8 +4,8 @@ using Avalonia.Controls.Documents;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Media;
-using ChatClient.Desktop.UIEntity;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Controls.Chat;
 

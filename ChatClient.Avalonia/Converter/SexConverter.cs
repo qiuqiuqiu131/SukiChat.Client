@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
-using ChatClient.Desktop.UIEntity;
+using ChatClient.Tool.UIEntity;
 
 namespace ChatClient.Avalonia.Converter;
 

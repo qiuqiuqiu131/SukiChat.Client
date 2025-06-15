@@ -1,10 +1,11 @@
+using ChatClient.Media.EndPoint;
+using ChatClient.Media.EndPoint.Windows;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
 using Microsoft.Extensions.Configuration;
 using SIPSorcery.Media;
 using SIPSorcery.Net;
-using SIPSorcery.Windows;
 using SIPSorceryMedia.Encoders;
 
 namespace ChatClient.Media.CallOperator;
@@ -17,10 +18,10 @@ public class VideoCallOperator(
     IStunServerManager stunServerManager)
     : CallOperatorBase(messageHelper, userManager, stunServerManager, configurationRoot, userSetting)
 {
-    private bool isCameraOpen;
-    private WindowsCameraEndPoint? _cameraEndPoint;
+    private ICameraEndPoint? _cameraEndPoint;
+    private IAudioEndPoint? _audioEndPoint;
 
-    private WindowsAudioEndPoint? _audioEndPoint;
+    public bool IsVideoRunning => _cameraEndPoint?.IsRunning ?? false;
 
     // -- 事件 -- //
     // 接收到远端视频帧
@@ -41,77 +42,34 @@ public class VideoCallOperator(
     /// <param name="isOpen"></param>
     public async Task<(bool, string)> ChangeVideoState(bool isOpen)
     {
-        try
+        if (_cameraEndPoint == null)
         {
-            if (_cameraEndPoint == null)
-            {
-                Console.WriteLine("摄像头未初始化");
-                return (false, "摄像头未初始化");
-            }
+            Console.WriteLine("摄像头未初始化");
+            return (false, "摄像头未初始化");
+        }
 
-            if (isOpen)
+        if (isOpen)
+        {
+            // 打开摄像头设备
+            try
             {
-                if (isCameraOpen)
-                {
-                    // 如果摄像头已经打开，只需恢复视频流
-                    await _cameraEndPoint.ResumeVideo();
+                await _cameraEndPoint.StartVideo();
+                if (_cameraEndPoint.IsRunning)
                     return (true, "摄像头已打开");
-                }
                 else
-                {
-                    // 检查系统中是否存在可用的摄像头设备
-                    var devices = WindowsCameraEndPoint.GetVideoCaptureDevices();
-                    if (devices.Count == 0)
-                    {
-                        Console.WriteLine("系统中未检测到摄像头设备");
-                        return (false, "系统中未检测到摄像头设备");
-                    }
-
-                    // 初始化摄像头设备
-                    try
-                    {
-                        bool initialized = await _cameraEndPoint.InitialiseVideoSourceDevice();
-                        if (initialized)
-                        {
-                            try
-                            {
-                                await _cameraEndPoint.StartVideo();
-                                isCameraOpen = true;
-                                return (true, "摄像头已打开");
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"摄像头启动失败: {ex.Message}");
-                                // 如果启动失败，确保清理资源
-                                await _cameraEndPoint.CloseVideo();
-                                return (false, "摄像头启动失败");
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("摄像头初始化失败");
-                            return (false, "摄像头初始化失败");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"摄像头初始化过程中发生异常: {ex.Message}");
-                        return (false, "摄像头初始化过程中发生异常");
-                    }
-                }
+                    return (false, "摄像头打开失败");
             }
-            else
+            catch (Exception ex)
             {
-                // 关闭摄像头
-                await _cameraEndPoint.PauseVideo();
-
-                return (true, "");
+                Console.WriteLine($"摄像头初始化过程中发生异常: {ex.Message}");
+                return (false, "摄像头打开失败");
             }
         }
-        catch (Exception ex)
+        else
         {
-            Console.WriteLine($"更改视频状态时发生异常: {ex.Message}");
-            return (false, "更改视频状态时发生异常");
+            // 关闭摄像头
+            await _cameraEndPoint.PauseVideo();
+            return (true, "摄像头关闭成功");
         }
     }
 
@@ -141,10 +99,8 @@ public class VideoCallOperator(
 
         // 添加媒体轨道
         // IVideoSource videoEndPoint = _currentVideoSource == VideoSourceType.Camera ? _cameraEndPoint : _screenEndPoint;
-        _audioEndPoint = new WindowsAudioEndPoint(new AudioEncoder());
-        _cameraEndPoint =
-            new WindowsCameraEndPoint(new VpxVideoEncoder(), WindowsCameraEndPoint.GetVideoCaptureDevices()[0].ID);
-
+        _audioEndPoint = AudioEndPointFactory.CreateAudioEndPoint(new AudioEncoder());
+        _cameraEndPoint = CameraEndPointFactory.CreateCameraEndPoint();
 
         // 添加音频轨道
         var audioTrack = new MediaStreamTrack(_audioEndPoint.GetAudioSourceFormats());
@@ -156,6 +112,7 @@ public class VideoCallOperator(
         peerConnection.addTrack(videoTrack);
         _cameraEndPoint.OnVideoSourceRawSample += (milliseconds, width, height, sample, format) =>
         {
+            // 触发本地视频帧接收事件
             OnLocalVideoFrameReceived?.Invoke(this, new VideoFrameReceivedEventArgs
             {
                 IsCamera = true,
@@ -168,6 +125,7 @@ public class VideoCallOperator(
         _cameraEndPoint.OnVideoSourceEncodedSample += (units, sample) => peerConnection.SendVideo(units, sample);
         _cameraEndPoint.OnVideoSinkDecodedSample += (s, w, h, st, p) =>
         {
+            // 触发远端视频帧接收事件
             OnVideoFrameReceived?.Invoke(this, new VideoFrameReceivedEventArgs
             {
                 IsCamera = true,
@@ -254,12 +212,10 @@ public class VideoCallOperator(
     {
         await base.CleanupCall();
 
-        if (_audioEndPoint != null)
-            await _audioEndPoint.CloseAudio();
-        if (_cameraEndPoint != null)
-            await _cameraEndPoint.CloseVideo();
-
+        _audioEndPoint?.Dispose();
         _audioEndPoint = null;
+
+        _cameraEndPoint?.Dispose();
         _cameraEndPoint = null;
     }
 

@@ -2,8 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
-using ChatClient.Tool.Audio;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Behaviors;
 
@@ -42,16 +43,17 @@ public class VoicePlayBehavior : Behavior<Control>
         if (VoiceMess != null && VoiceMess.AudioData != null &&
             e.GetCurrentPoint(sender as Control).Properties.IsLeftButtonPressed)
         {
-            if (VoiceMess.IsPlaying)
+            try
             {
-                VoiceMess.AudioPlayer?.Stop();
-                VoiceMess.IsPlaying = false;
-                VoiceMess.AudioPlayer = null;
-            }
-            else if (VoiceMess.AudioData != null)
-            {
-                using (var audioPlayer = new AudioPlayer())
+                if (VoiceMess.IsPlaying)
                 {
+                    VoiceMess.AudioPlayer?.StopAsync();
+                    VoiceMess.IsPlaying = false;
+                    VoiceMess.AudioPlayer = null;
+                }
+                else if (VoiceMess.AudioData != null)
+                {
+                    using var audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
                     VoiceMess.IsPlaying = true;
                     VoiceMess.AudioPlayer = audioPlayer;
                     audioPlayer.LoadFromMemory(VoiceMess.AudioData);
@@ -59,6 +61,9 @@ public class VoicePlayBehavior : Behavior<Control>
                     VoiceMess.IsPlaying = false;
                     VoiceMess.AudioPlayer = null;
                 }
+            }
+            catch
+            {
             }
         }
     }

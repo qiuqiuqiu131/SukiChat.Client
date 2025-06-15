@@ -8,6 +8,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.SeperateGroupsView;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 
 namespace ChatClient.Avalonia.Controls.MultiSeparateGroupView;
 
@@ -170,6 +171,7 @@ public class MultiSeparateGroupView : UserControl
                     break;
                 }
             }
+
             insertIndex++;
         }
 

@@ -1,4 +1,4 @@
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.Friend;
 
 public class FriendRelationDto : BindableBase, IDisposable
 {

@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:suki="https://github.com/kikipoulet/SukiUI"
                     xmlns:dialogs="clr-namespace:SukiUI.Dialogs;assembly=SukiUI"
-                    xmlns:tools="clr-namespace:ChatClient.Tool.Tools;assembly=ChatClient.Tool">
+                    xmlns:tools="clr-namespace:ChatClient.Tool.Tools;assembly=ChatClient.Tool"
+                    xmlns:extenstions="clr-namespace:ChatClient.Avalonia.Extenstions">
     <ControlTheme TargetType="suki:SukiDialog" x:Key="SukiDialogTheme">
         <Setter Property="ClipToBounds" Value="False" />
         <Setter Property="Template">
@@ -13,6 +14,9 @@
                         <Border CornerRadius="7" ClipToBounds="True" Background="Transparent">
                             <Panel>
                                 <suki:SukiBackground Style="{x:Static tools:ThemeStyleTool.CurrentSukiBackgroundStyle}"
+                                                     TransitionsEnabled="{TemplateBinding extenstions:SukiDialogExtensions.BackgroundTransitionsEnabled}"
+                                                     TransitionTime="{TemplateBinding extenstions:SukiDialogExtensions.BackgroundTransitionTime}"
+                                                     AnimationEnabled="{TemplateBinding extenstions:SukiDialogExtensions.BackgroundAnimation}"
                                                      Margin="-100" MinHeight="250" MinWidth="300" />
                                 <Border CornerRadius="7" ClipToBounds="True">
                                     <ContentControl Content="{TemplateBinding ViewModel}"

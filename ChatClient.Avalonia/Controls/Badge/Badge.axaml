@@ -120,6 +120,9 @@
         <Style Selector="^.Danger /template/ Border#PART_BadgeContainer">
             <Setter Property="Background" Value="Red" />
         </Style>
+        <Style Selector="^.Gray /template/ Border#PART_BadgeContainer">
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+        </Style>
 
         <Style Selector="^.Light">
             <Style Selector="^/template/ ContentPresenter#PART_HeaderPresenter">

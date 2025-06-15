@@ -1,27 +1,24 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.Media.Imaging;
 using Avalonia.Notification;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;
-using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
-using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
-using ChatServer.Common.Protobuf;
-using Google.Protobuf.WellKnownTypes;
+using ChatClient.Tool.UIEntity;
 using Prism.Commands;
 using Prism.Dialogs;
+using Prism.Events;
 using Prism.Ioc;
-using Prism.Navigation.Regions;
+using Prism.Navigation;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
@@ -117,9 +114,9 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     #endregion
 
-    private List<LoginUserItem>? userList;
+    private ObservableCollection<LoginUserItem>? userList;
 
-    public List<LoginUserItem>? UserList
+    public ObservableCollection<LoginUserItem>? UserList
     {
         get => userList;
         set => SetProperty(ref userList, value);
@@ -130,31 +127,36 @@ public class LoginViewModel : ViewModelBase, IDisposable
     public AsyncDelegateCommand LoginCommand { get; init; }
     public DelegateCommand ToRegisterViewCommand { get; init; }
     public DelegateCommand ToForgetViewCommand { get; init; }
+    public DelegateCommand LoginSettingCommand { get; init; }
+    public DelegateCommand NetSettingCommand { get; init; }
 
     public INotificationMessageManager NotificationManager { get; init; } = new NotificationMessageManager();
 
-    private readonly IRegionManager _regionManager;
     private readonly IUserManager _userManager;
+    private readonly IEventAggregator _eventAggregator;
     private readonly IContainerProvider _containerProvider;
     private readonly IDialogService _dialogService;
 
     public LoginViewModel(IConnection connection,
-        IRegionManager regionManager,
         ILoginData loginData,
         IUserManager userManager,
+        IEventAggregator eventAggregator,
         IContainerProvider containerProvider,
         IDialogService dialogService)
     {
-        _regionManager = regionManager;
         _userManager = userManager;
+        _eventAggregator = eventAggregator;
         _containerProvider = containerProvider;
         _dialogService = dialogService;
         LoginData = loginData.LoginData;
+
         IsConnected = connection.IsConnected;
 
         LoginCommand = new AsyncDelegateCommand(Login, CanLogin);
         ToRegisterViewCommand = new DelegateCommand(ToRegisterView);
         ToForgetViewCommand = new DelegateCommand(ToForgetView);
+        LoginSettingCommand = new DelegateCommand(LoginSetting);
+        NetSettingCommand = new DelegateCommand(NetSetting);
 
         IsConnected.PropertyChanged += IsConnectedOnPropertyChanged;
 
@@ -166,8 +168,8 @@ public class LoginViewModel : ViewModelBase, IDisposable
         // 获取登录历史
         var _loginService = _containerProvider.Resolve<ILoginService>();
         var _userService = _containerProvider.Resolve<IUserService>();
-        UserList = await _loginService.LoginUsers();
-        List<Task> tasks = new List<Task>();
+        UserList = new ObservableCollection<LoginUserItem>(await _loginService.LoginUsers());
+        List<Task> tasks = [];
         foreach (var userItem in UserList)
             tasks.Add(Task.Run(async () =>
                 userItem.Head = await _userService.GetHeadImage(userItem.ID, userItem.HeadIndex)));
@@ -200,7 +202,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
             Id = null;
             Password = null;
 
-            TranslateWindowHelper.TranslateToMainWindow(_regionManager);
+            TranslateWindowHelper.TranslateToMainWindow();
         }
         else
         {
@@ -236,6 +238,21 @@ public class LoginViewModel : ViewModelBase, IDisposable
             Password = null;
     }
 
+    private void LoginSetting()
+    {
+        _eventAggregator.GetEvent<RegionNavigationEvent>().Publish(new RegionNavigationEventArgs
+        {
+            Parameters = new NavigationParameters { { "UserList", UserList } },
+            RegionName = RegionNames.LoginRegion,
+            ViewName = nameof(LoginSettingView)
+        });
+    }
+
+    private void NetSetting()
+    {
+        _dialogService.Show(nameof(NetSettingView));
+    }
+
     private void ToRegisterView()
     {
         _dialogService.Show(nameof(RegisterView), res =>
@@ -251,8 +268,6 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void ToForgetView()
     {
-        // var cornerDialogManager = _containerProvider.Resolve<ICornerDialogService>();
-        // NotificationManager.ShowMessage("功能未开放", NotificationType.Information, TimeSpan.FromSeconds(1.5));
         _dialogService.Show(nameof(ForgetPasswordView), res =>
         {
             if (res.Result == ButtonResult.OK)

@@ -141,5 +141,6 @@ public class GroupRelationDto : BindableBase, IDisposable
     {
         _groupDto = null;
         OnGroupRelationChanged = null;
+        OnGroupingChanged = null;
     }
 }

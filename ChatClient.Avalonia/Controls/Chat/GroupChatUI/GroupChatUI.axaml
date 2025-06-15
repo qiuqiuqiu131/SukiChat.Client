@@ -12,6 +12,7 @@
              xmlns:groupChatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI"
              xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls"
              xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat"
+             xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatUI">
     <UserControl.Styles>
@@ -63,11 +64,11 @@
     <UserControl.Resources>
         <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
         <chat:MessageDataTemplate x:Key="MessageDataTemplate">
-            <DataTemplate x:Key="Retracted" DataType="data:GroupChatData">
+            <DataTemplate x:Key="Retracted" DataType="chatMessage:GroupChatData">
                 <!-- 撤回 -->
                 <Panel />
             </DataTemplate>
-            <DataTemplate x:Key="User" DataType="data:GroupChatData">
+            <DataTemplate x:Key="User" DataType="chatMessage:GroupChatData">
                 <!-- Right -->
                 <Grid Margin="20,7,0,7"
                       RenderTransformOrigin="100%,100%"
@@ -175,7 +176,7 @@
                     </Grid>
                 </Grid>
             </DataTemplate>
-            <DataTemplate x:Key="Member" DataType="data:GroupChatData">
+            <DataTemplate x:Key="Member" DataType="chatMessage:GroupChatData">
                 <!-- Left -->
                 <Grid Margin="0,7,20,7"
                       RenderTransformOrigin="0%,100%"
@@ -263,7 +264,7 @@
                     </Grid>
                 </Grid>
             </DataTemplate>
-            <DataTemplate x:Key="System" DataType="data:GroupChatData">
+            <DataTemplate x:Key="System" DataType="chatMessage:GroupChatData">
                 <!-- 系统消息 -->
                 <Border CornerRadius="5"
                         Margin="0,5,0,0"
@@ -306,7 +307,7 @@
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.DataTemplates>
-                                        <DataTemplate DataType="data:GroupChatData">
+                                        <DataTemplate DataType="chatMessage:GroupChatData">
                                             <Grid>
                                                 <StackPanel Orientation="Vertical">
                                                     <!-- 时间条 -->

@@ -1,31 +1,33 @@
-﻿using NAudio.Lame;
+using ChatClient.Tool.Media.Audio;
+using NAudio.Lame;
 using NAudio.Wave;
 
-namespace ChatClient.Tool.Audio;
+namespace ChatClient.Media.AudioRecorder;
 
-public class MemoryAudioRecorder : IDisposable
+public class WindowsAudioRecorder : IPlatformAudioRecorder
 {
-    private WaveInEvent waveIn;
-    private MemoryStream mp3Stream;
-    private LameMP3FileWriter mp3Writer;
+    private WaveInEvent? waveIn;
+    private LameMP3FileWriter? mp3Writer;
+
     private RecordingState state = RecordingState.Stopped;
 
-    public event EventHandler<RecordingStateChangedEventArgs> StateChanged;
-    public event EventHandler<AudioLevelEventArgs> AudioLevelDetected;
-
-    public RecordingState State => state;
-
-    // 获取可用的录音设备列表
-    public static List<WaveInCapabilities> GetAvailableDevices()
+    private RecordingState State
     {
-        var devices = new List<WaveInCapabilities>();
-        for (int i = 0; i < WaveInEvent.DeviceCount; i++)
+        get => state;
+        set
         {
-            devices.Add(WaveInEvent.GetCapabilities(i));
+            if (state != value)
+            {
+                state = value;
+                StateChanged?.Invoke(this, new RecordingStateChangedEventArgs(state));
+            }
         }
-
-        return devices;
     }
+
+    public Stream? TargetStream { get; set; }
+
+    public event EventHandler<RecordingStateChangedEventArgs>? StateChanged;
+    public event EventHandler<AudioLevelEventArgs>? AudioLevelDetected;
 
     /// <summary>
     /// 开始录音
@@ -38,13 +40,11 @@ public class MemoryAudioRecorder : IDisposable
     public void StartRecording(int deviceNumber = 0, int sampleRate = 44100, int channels = 1,
         LAMEPreset preset = LAMEPreset.STANDARD)
     {
-        if (state == RecordingState.Recording)
+        if (state == RecordingState.Recording || TargetStream == null)
             return;
 
         try
         {
-            mp3Stream = new MemoryStream();
-
             waveIn = new WaveInEvent
             {
                 DeviceNumber = deviceNumber,
@@ -52,15 +52,14 @@ public class MemoryAudioRecorder : IDisposable
             };
 
             // 使用LAME编码器将音频编码为MP3格式
-            mp3Writer = new LameMP3FileWriter(mp3Stream,
+            mp3Writer = new LameMP3FileWriter(TargetStream,
                 waveIn.WaveFormat,
                 preset);
 
             waveIn.DataAvailable += OnDataAvailable;
             waveIn.StartRecording();
 
-            state = RecordingState.Recording;
-            OnStateChanged();
+            State = RecordingState.Recording;
         }
         catch (Exception ex)
         {
@@ -73,12 +72,11 @@ public class MemoryAudioRecorder : IDisposable
     /// </summary>
     public void PauseRecording()
     {
-        if (state != RecordingState.Recording)
+        if (state != RecordingState.Recording || TargetStream == null)
             return;
 
         waveIn?.StopRecording();
-        state = RecordingState.Paused;
-        OnStateChanged();
+        State = RecordingState.Paused;
     }
 
     /// <summary>
@@ -86,42 +84,35 @@ public class MemoryAudioRecorder : IDisposable
     /// </summary>
     public void ResumeRecording()
     {
-        if (state != RecordingState.Paused)
+        if (state != RecordingState.Paused || TargetStream == null)
             return;
 
         waveIn?.StartRecording();
-        state = RecordingState.Recording;
-        OnStateChanged();
+        State = RecordingState.Recording;
     }
 
     /// <summary>
     /// 结束录音并返回MP3格式的字节数组
     /// </summary>
     /// <returns></returns>
-    public Stream? StopRecording()
+    public void StopRecording()
     {
-        if (state == RecordingState.Stopped)
-            return null;
+        if (state == RecordingState.Stopped || TargetStream == null)
+            return;
 
         waveIn?.StopRecording();
         mp3Writer?.Flush();
         mp3Writer?.Dispose();
         waveIn?.Dispose();
 
-        state = RecordingState.Stopped;
-        OnStateChanged();
-
-        // 返回MP3格式的字节数组
-        return mp3Stream;
+        State = RecordingState.Stopped;
     }
 
-    private void OnStateChanged()
+    private void OnDataAvailable(object? sender, WaveInEventArgs e)
     {
-        StateChanged?.Invoke(this, new RecordingStateChangedEventArgs(state));
-    }
+        if (state != RecordingState.Recording || mp3Writer == null)
+            return;
 
-    private void OnDataAvailable(object sender, WaveInEventArgs e)
-    {
         // 计算音量级别
         float loudness = CalculateLoudness(e.Buffer, e.BytesRecorded);
         AudioLevelDetected?.Invoke(this, new AudioLevelEventArgs(loudness));
@@ -155,44 +146,5 @@ public class MemoryAudioRecorder : IDisposable
     public void Dispose()
     {
         StopRecording();
-        mp3Stream?.Dispose();
-    }
-}
-
-public enum RecordingState
-{
-    Recording,
-    Paused,
-    Stopped
-}
-
-public class RecordingStateChangedEventArgs : EventArgs
-{
-    public RecordingState State { get; }
-
-    public RecordingStateChangedEventArgs(RecordingState state)
-    {
-        State = state;
-    }
-}
-
-public class AudioLevelEventArgs : EventArgs
-{
-    public float Level { get; }
-
-    public AudioLevelEventArgs(float level)
-    {
-        Level = level;
-    }
-}
-
-public class AudioRecordingException : Exception
-{
-    public AudioRecordingException(string message) : base(message)
-    {
-    }
-
-    public AudioRecordingException(string message, Exception innerException) : base(message, innerException)
-    {
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using ChatClient.BaseService.Services;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
@@ -28,7 +30,7 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews;
 
-public partial class ChatLeftPanelView : UserControl
+public partial class ChatLeftPanelView : UserControl, IDisposable
 {
     #region StyledProperty
 
@@ -82,6 +84,7 @@ public partial class ChatLeftPanelView : UserControl
     private ContextMenu? _activeContextMenu;
 
     private readonly IEventAggregator eventAggregator;
+    private List<SubscriptionToken> _subscriptions = new();
 
     // 缓存置顶项数量，避免重复计算
     private int _topItemsCount = 0;
@@ -95,12 +98,15 @@ public partial class ChatLeftPanelView : UserControl
         _itemCollection = Items.Items;
 
         eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
-        eventAggregator.GetEvent<SendMessageToViewEvent>().Subscribe(SendMessageToView);
-        eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
+        _subscriptions.Add(eventAggregator.GetEvent<SendMessageToViewEvent>().Subscribe(SendMessageToView));
+        _subscriptions.Add(eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
         {
             _activeContextMenu?.Close();
             _activeContextMenu = null;
-        });
+        }));
+        _subscriptions.Add(eventAggregator.GetEvent<UpdateUnreadChatMessageCountEvent>()
+            .Subscribe(ItemOnOnUnReadMessageCountChanged));
+
 
         // 初始化共享菜单
         _friendContextMenu = CreateFriendContextMenu();
@@ -514,6 +520,7 @@ public partial class ChatLeftPanelView : UserControl
         if (_friendContextMenu.DataContext is FriendRelationDto friendRelation)
         {
             friendRelation.CantDisturb = !friendRelation.CantDisturb;
+            ItemOnOnUnReadMessageCountChanged();
         }
 
         _friendContextMenu.Close();
@@ -611,6 +618,7 @@ public partial class ChatLeftPanelView : UserControl
         if (_groupContextMenu.DataContext is GroupRelationDto groupRelation)
         {
             groupRelation.CantDisturb = !groupRelation.CantDisturb;
+            ItemOnOnUnReadMessageCountChanged();
         }
 
         _groupContextMenu.Close();
@@ -769,5 +777,11 @@ public partial class ChatLeftPanelView : UserControl
                 OpenGroupChatDialog?.Execute(groupChatDto);
             }
         }
+    }
+
+    public void Dispose()
+    {
+        foreach (var token in _subscriptions)
+            token.Dispose();
     }
 }

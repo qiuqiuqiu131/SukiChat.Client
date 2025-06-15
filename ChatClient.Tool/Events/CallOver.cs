@@ -1,4 +1,5 @@
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Tool.Events;
 

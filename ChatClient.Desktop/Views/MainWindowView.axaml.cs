@@ -294,11 +294,10 @@ public partial class MainWindowView : SukiWindow, IDisposable
             if (disposing)
             {
                 if (DataContext is IDisposable disposable)
-                {
                     disposable.Dispose();
-                    foreach (var token in _subscriptionTokens)
-                        token.Dispose();
-                }
+
+                foreach (var token in _subscriptionTokens)
+                    token.Dispose();
 
                 HideTrayIcon();
             }

@@ -1,13 +1,14 @@
 using System.Net;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
 using Microsoft.Extensions.Configuration;
 using SIPSorcery.Net;
 
 namespace ChatClient.Media.CallOperator;
 
-public abstract class CallOperatorBase : ICallSession, ICallOperator
+public abstract class CallOperatorBase : ICallSession, ICallOperator, IDisposable
 {
     protected readonly IMessageHelper _messageHelper;
     private readonly IStunServerManager _stunServerManager;
@@ -299,4 +300,10 @@ public abstract class CallOperatorBase : ICallSession, ICallOperator
     }
 
     protected abstract CallType GetCallType();
+
+    public void Dispose()
+    {
+        _peerConnection?.Dispose();
+        CleanupCall().Wait();
+    }
 }

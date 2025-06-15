@@ -1,6 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Tool.Data;
 using Prism.Navigation;
@@ -60,4 +61,18 @@ public partial class LoginView : UserControl, IDisposable
     }
 
     #endregion
+
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button button)
+        {
+            if (button.ContextMenu != null)
+            {
+                if (button.ContextMenu.IsOpen)
+                    button.ContextMenu.Close();
+                else
+                    button.ContextMenu.Open();
+            }
+        }
+    }
 }

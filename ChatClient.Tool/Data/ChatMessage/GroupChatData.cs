@@ -1,7 +1,6 @@
 using ChatClient.Tool.Data.Group;
-using ChatServer.Common.Protobuf;
 
-namespace ChatClient.Tool.Data;
+namespace ChatClient.Tool.Data.ChatMessage;
 
 public class GroupChatData : BindableBase, IDisposable
 {

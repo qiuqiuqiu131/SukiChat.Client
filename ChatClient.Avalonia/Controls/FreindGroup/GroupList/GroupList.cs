@@ -9,6 +9,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.Friend;
 
 namespace ChatClient.Avalonia.Controls.GroupList;
 

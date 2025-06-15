@@ -138,8 +138,7 @@
                     <searchBox:SearchBox Name="SearchBox" SearchText="{Binding SearchText,Mode=TwoWay}"
                                          TextChanged="SearchBox_OnTextChanged" WaterMask="输入搜索关键字"
                                          Margin="20,10" />
-                    <TabControl Margin="10,0" SelectionChanged="SelectingItemsControl_OnSelectionChanged"
-                                x:Name="Tabs"
+                    <TabControl Margin="10,0"
                                 SelectedIndex="{Binding SearchIndex}">
                         <TabItem Header="全部" FontSize="13" Margin="12,0" />
                         <TabItem Header="用户" FontSize="13" Margin="12,0" />
@@ -148,6 +147,7 @@
                     <Border Margin="3,5,3,0" Background="{DynamicResource SukiMediumBorderBrush}" Height="2" />
                 </StackPanel>
                 <ContentControl regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.LocalSearchRegion}"
+                                regions:RegionManager.RegionManager="{Binding RegionManager}"
                                 VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch" />
             </DockPanel>

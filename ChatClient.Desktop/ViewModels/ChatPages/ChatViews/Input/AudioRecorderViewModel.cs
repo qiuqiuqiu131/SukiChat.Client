@@ -3,10 +3,14 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
+using Avalonia.Controls.Notifications;
 using ChatClient.Desktop;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
-using ChatClient.Tool.Audio;
+using ChatClient.Media.AudioRecorder;
+using ChatClient.Tool.Events;
+using ChatClient.Tool.Media.Audio;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
 
@@ -14,11 +18,13 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
 {
     private readonly IDisposable _audioLevelSubscription;
     private readonly Stopwatch _recordingStopwatch = new();
-    private ChatInputPanelViewModel? _chatInputPanelViewModel;
+
     private bool _isRecording;
     private double _audioLevel;
     private string _recordingTime = "00:00";
     private bool _isDisposed;
+
+    private ChatInputPanelViewModel? _chatInputPanelViewModel;
 
     public ChatInputPanelViewModel? ChatInputPanelViewModel
     {
@@ -26,7 +32,9 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         private set => SetProperty(ref _chatInputPanelViewModel, value);
     }
 
-    public MemoryAudioRecorder AudioRecorder { get; } = new();
+    public IPlatformAudioRecorder? AudioRecorder { get; init; }
+
+    private Stream? audioStream;
 
     public bool IsRecording
     {
@@ -54,22 +62,43 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
     {
         ChatInputPanelViewModel = chatInputPanelViewModel;
 
+        try
+        {
+            AudioRecorder = AudioRecorderFactory.CreateAudioPlayer();
+            _audioLevelSubscription = Observable.FromEventPattern<AudioLevelEventArgs>(
+                    h => AudioRecorder.AudioLevelDetected += h,
+                    h => AudioRecorder.AudioLevelDetected -= h)
+                .Throttle(TimeSpan.FromMilliseconds(50))
+                .Subscribe(e => AudioLevel = e.EventArgs.Level);
+        }
+        catch (Exception e)
+        {
+            AudioRecorder = null;
+        }
+
         StartRecordingCommand = new DelegateCommand(StartRecording);
         StopRecordingCommand = new DelegateCommand(StopRecording);
         CancelRecordingCommand = new DelegateCommand(CancelRecording);
-
-        // 订阅音频电平变化
-        _audioLevelSubscription = Observable.FromEventPattern<AudioLevelEventArgs>(
-                h => AudioRecorder.AudioLevelDetected += h,
-                h => AudioRecorder.AudioLevelDetected -= h)
-            .Throttle(TimeSpan.FromMilliseconds(50))
-            .Subscribe(e => AudioLevel = e.EventArgs.Level);
     }
 
     private void StartRecording()
     {
+        if (AudioRecorder == null)
+        {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "当前平台不支持录音功能，请检查配置。",
+                Type = NotificationType.Error
+            });
+            return;
+        }
+
         try
         {
+            audioStream = new MemoryStream();
+            AudioRecorder.TargetStream = audioStream;
+
             AudioRecorder.StartRecording();
             IsRecording = true;
             _recordingStopwatch.Restart();
@@ -95,12 +124,23 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
 
     private void StopRecording()
     {
+        if (AudioRecorder == null)
+        {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "当前平台不支持录音功能，请检查配置。",
+                Type = NotificationType.Error
+            });
+            return;
+        }
+
         try
         {
-            var recordedData = AudioRecorder.StopRecording();
+            AudioRecorder.StopRecording();
 
-            if (recordedData != null)
-                ChatInputPanelViewModel?.SendVoiceMessage(recordedData);
+            if (audioStream != null)
+                ChatInputPanelViewModel?.SendVoiceMessage(audioStream);
 
             _recordingStopwatch.Stop();
             IsRecording = false;
@@ -144,13 +184,15 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         {
             try
             {
-                AudioRecorder.StopRecording();
+                AudioRecorder?.StopRecording();
             }
             catch
             {
                 // 忽略释放时的错误
             }
         }
+
+        AudioRecorder?.Dispose();
 
         ChatInputPanelViewModel = null;
         _isDisposed = true;

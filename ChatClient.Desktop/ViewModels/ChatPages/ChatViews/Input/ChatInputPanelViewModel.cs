@@ -11,12 +11,14 @@ using Avalonia.Media.Imaging;
 using ChatClient.BaseService.Services;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Tool.Audio;
+using ChatClient.Media.AudioPlayer;
 using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
+using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Audio;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
@@ -186,18 +188,30 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
             return;
         }
 
-        AudioPlayer audioPlayer = new AudioPlayer();
-        audioPlayer.LoadFromMemory(voiceData);
-        var voiceMess = new VoiceMessDto
+        try
         {
-            FilePath = "",
-            AudioData = voiceData,
-            FileSize = voiceData.Length,
-            Duration = audioPlayer.TotalTime
-        };
-        audioPlayer.Dispose();
+            IPlatformAudioPlayer? audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+            audioPlayer.LoadFromMemory(voiceData);
+            var voiceMess = new VoiceMessDto
+            {
+                FilePath = "",
+                AudioData = voiceData,
+                FileSize = voiceData.Length,
+                Duration = audioPlayer.TotalTime
+            };
+            audioPlayer.Dispose();
 
-        await sendChatMessage(ChatMessage.ContentOneofCase.VoiceMess, voiceMess);
+            await sendChatMessage(ChatMessage.ContentOneofCase.VoiceMess, voiceMess);
+        }
+        catch (PlatformNotSupportedException)
+        {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "当前平台不支持音频文件",
+                Type = NotificationType.Warning
+            });
+        }
     }
 
     // 选择图片并发送
