@@ -66,13 +66,18 @@
 
         <!-- 主体 -->
         <Panel Grid.Row="1">
-            <avalonia:MaterialIcon
-                HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="8,-22"
-                Width="30"
-                Height="30"
-                Foreground="{DynamicResource SukiPrimaryColor}"
-                Kind="ChartDonutVariant" />
+            <StackPanel IsHitTestVisible="False" Orientation="Horizontal" HorizontalAlignment="Left"
+                        VerticalAlignment="Top" Margin="8,-20,0,0"
+                        Spacing="2.5">
+                <avalonia:MaterialIcon
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Width="22"
+                    Height="22"
+                    Foreground="{DynamicResource SukiPrimaryColor}"
+                    Kind="ChartDonutVariant" />
+                <TextBlock Text="Suki" Foreground="{DynamicResource SukiPrimaryColor}" VerticalAlignment="Center"
+                           FontSize="13.5" />
+            </StackPanel>
             <!-- 注册页面 -->
             <suki:BusyArea HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                            BusyText="注册中"

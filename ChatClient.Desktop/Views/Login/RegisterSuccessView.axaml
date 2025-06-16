@@ -99,16 +99,16 @@
             <HyperlinkButton DockPanel.Dock="Left" Foreground="{DynamicResource SukiPrimaryColor75}"
                              Command="{Binding ReturnToRegisterCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <PathIcon Foreground="{DynamicResource SukiPrimaryColor75}" Opacity="0.5" Width="13" Height="13"
+                    <PathIcon Foreground="{DynamicResource SukiPrimaryColor75}" Width="13" Height="13"
                               Data="{x:Static suki:Icons.ChevronLeft}" />
-                    <TextBlock Text="返回注册" FontSize="13" />
+                    <TextBlock Text="返回注册" FontSize="13" Foreground="{DynamicResource SukiPrimaryColor75}"/>
                 </StackPanel>
             </HyperlinkButton>
             <HyperlinkButton DockPanel.Dock="Right" Foreground="{DynamicResource SukiPrimaryColor75}"
                              Command="{Binding ReturnToLoginViewCommand}">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="前往登录" FontSize="13" />
-                    <PathIcon Foreground="{DynamicResource SukiPrimaryColor75}" Opacity="0.5" Width="13" Height="13"
+                    <TextBlock Text="前往登录" FontSize="13" Foreground="{DynamicResource SukiPrimaryColor75}"/>
+                    <PathIcon Foreground="{DynamicResource SukiPrimaryColor75}" Width="13" Height="13"
                               Data="{x:Static suki:Icons.ChevronRight}" />
                 </StackPanel>
             </HyperlinkButton>

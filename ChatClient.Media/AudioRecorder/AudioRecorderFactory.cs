@@ -24,10 +24,12 @@ public static class AudioRecorderFactory
     /// </summary>
     /// <returns></returns>
     /// <exception cref="PlatformNotSupportedException"></exception>
-    public static IPlatformAudioRecorder CreateAudioPlayer()
+    public static IPlatformAudioRecorder CreateAudioRecorder()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             return new WindowsAudioRecorder();
+        // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        //     return new LinuxAudioRecorder();
         else
             throw new PlatformNotSupportedException("当前平台不支持的音频录音器");
     }

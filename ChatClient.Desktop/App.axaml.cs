@@ -277,18 +277,18 @@ public class App : PrismApplication
 
     public override void OnFrameworkInitializationCompleted()
     {
-        Dispatcher.UIThread.Post(() =>
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
-                var window = Container.Resolve<LoginWindowView>();
-                var ico = AssetLoader.Open(new Uri("avares://ChatClient.Desktop/Assets/Icon.ico"));
-                window.Icon = new WindowIcon(ico);
-                window.Show();
-                //window.Hide();
-
-                desktop.MainWindow = window;
-            }
-        });
+            var window = Container.Resolve<LoginWindowView>();
+            desktop.MainWindow = window;
+            var ico = AssetLoader.Open(new Uri("avares://ChatClient.Desktop/Assets/Icon.ico"));
+            window.Icon = new WindowIcon(ico);
+            window.Show();
+        }
+        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
+        {
+            var view = Container.Resolve<LoginView>();
+            singleView.MainView = view;
+        }
     }
 }

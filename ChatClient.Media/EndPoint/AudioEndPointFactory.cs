@@ -14,9 +14,16 @@ public static class AudioEndPointFactory
     /// <exception cref="PlatformNotSupportedException"></exception>
     public static IAudioEndPoint CreateAudioEndPoint(IAudioEncoder audioEncoder)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return new WindowsAudioEndPoint(audioEncoder);
-        else
-            throw new PlatformNotSupportedException("当前平台不支持的音频端点");
+        try
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return new WindowsAudioEndPoint(audioEncoder);
+        }
+        catch (Exception e)
+        {
+            throw new PlatformNotSupportedException("当前设备不支持的音频通话", e);
+        }
+
+        throw new PlatformNotSupportedException("当前平台不支持的音频通话");
     }
 }

@@ -82,7 +82,7 @@ internal class UserManager : IUserManager
             return new CommonResponse
             {
                 State = false,
-                Message = "加载错误，请重试"
+                Message = e.Message
             };
         }
 

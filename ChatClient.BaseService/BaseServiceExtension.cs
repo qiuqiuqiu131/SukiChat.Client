@@ -89,7 +89,8 @@ public static class BaseServiceExtension
 
         // 注册RemoteService
         containerRegistry.Register<IGroupRemoteService, GroupRemoteService>()
-            .Register<IUserRemoteService, UserRemoteService>();
+            .Register<IUserRemoteService, UserRemoteService>()
+            .Register<IChatRemoteService, ChatRemoteService>();
 
         // 注册MessageHandler
         containerRegistry.Register<IMessageHandler, FriendMessageHandler>()

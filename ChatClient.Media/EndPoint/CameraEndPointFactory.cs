@@ -9,15 +9,20 @@ public static class CameraEndPointFactory
 {
     public static ICameraEndPoint CreateCameraEndPoint()
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        try
         {
-            return new WindowsCameraEndPoint(new VpxVideoEncoder(),
-                WindowsCameraEndPoint.GetVideoCaptureDevices()[0].ID);
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return new WindowsCameraEndPoint(new VpxVideoEncoder(),
+                    WindowsCameraEndPoint.GetVideoCaptureDevices()[0].ID);
+            }
         }
-        else
+        catch (Exception e)
         {
-            throw new PlatformNotSupportedException("当前平台不支持的摄像头端点");
+            throw new PlatformNotSupportedException("当前设备不支持的摄像头通话", e);
         }
+
+        throw new PlatformNotSupportedException("当前平台不支持的摄像头通话");
     }
 
     public static List<VideoCaptureDeviceInfo> GetVideoCaptureDevices()
@@ -28,7 +33,7 @@ public static class CameraEndPointFactory
         }
         else
         {
-            throw new PlatformNotSupportedException("当前平台不支持的摄像头端点");
+            throw new PlatformNotSupportedException("当前平台不支持的摄像头通话");
         }
     }
 }

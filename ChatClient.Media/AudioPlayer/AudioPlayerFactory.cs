@@ -14,6 +14,8 @@ public static class AudioPlayerFactory
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             return new WindowsAudioPlayer();
+        // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        //     return new LinuxAudioPlayer();
         else
             throw new PlatformNotSupportedException("当前平台不支持的音频播放器");
     }

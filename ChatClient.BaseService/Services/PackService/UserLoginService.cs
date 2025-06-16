@@ -321,6 +321,8 @@ internal class UserLoginService : BaseService, IUserLoginService
 
         // 开启线程，用于提前加载用户和群聊Dto
         _ = InitEntityDto(userId);
+        
+        // TODO: 获取聊天信息
 
         // 暂存用户分组信息
         _userGroupMessages = outlineResponse.UserGroups;

@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using AutoMapper;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -137,17 +138,20 @@ internal class ChatMessageHandler : MessageHandlerBase
 
         if (!friendRelationDto.CantDisturb && !chatData.IsUser)
         {
-            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
-                    cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                    await Dispatcher.UIThread.InvokeAsync(() =>
                     {
-                        { "ChatData", chatData },
-                        { "Dto", friendRelationDto }
-                    }, null);
-                });
+                        var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                        cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                        {
+                            { "ChatData", chatData },
+                            { "Dto", friendRelationDto }
+                        }, null);
+                    });
+                }
             }
 
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
@@ -284,22 +288,25 @@ internal class ChatMessageHandler : MessageHandlerBase
 
         if (!groupRelationDto.CantDisturb && !chatData.IsSystem && !chatData.IsUser)
         {
-            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
-                    cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                    Dispatcher.UIThread.Post(() =>
                     {
-                        { "ChatData", chatData },
-                        { "Dto", groupRelationDto }
-                    }, null);
-                });
+                        var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                        cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                        {
+                            { "ChatData", chatData },
+                            { "Dto", groupRelationDto }
+                        }, null);
+                    });
+                }
             }
 
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                Dispatcher.UIThread.Post(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {
@@ -488,22 +495,25 @@ internal class ChatMessageHandler : MessageHandlerBase
         var lastChatData = chatDatas.LastOrDefault(d => !d.IsUser);
         if (!friendRelationDto.CantDisturb && lastChatData != null)
         {
-            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
-                    cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                    Dispatcher.UIThread.Post(() =>
                     {
-                        { "ChatData", lastChatData },
-                        { "Dto", friendRelationDto }
-                    }, null);
-                });
+                        var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                        cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
+                        {
+                            { "ChatData", lastChatData },
+                            { "Dto", friendRelationDto }
+                        }, null);
+                    });
+                }
             }
 
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                Dispatcher.UIThread.Post(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {
@@ -643,24 +653,27 @@ internal class ChatMessageHandler : MessageHandlerBase
         var lastChatData = chatDatas.LastOrDefault(d => !d.IsSystem && !d.IsUser);
         if (!groupRelationDto.CantDisturb && lastChatData != null)
         {
-            // 边角弹窗
-            if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                // 边角弹窗
+                if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
-                    cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                    Dispatcher.UIThread.Post(() =>
                     {
-                        { "ChatData", lastChatData },
-                        { "Dto", groupRelationDto }
-                    }, null);
-                });
+                        var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
+                        cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
+                        {
+                            { "ChatData", lastChatData },
+                            { "Dto", groupRelationDto }
+                        }, null);
+                    });
+                }
             }
 
             // 任务栏闪烁
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
+                Dispatcher.UIThread.Post(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {

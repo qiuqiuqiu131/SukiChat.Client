@@ -64,7 +64,7 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
 
         try
         {
-            AudioRecorder = AudioRecorderFactory.CreateAudioPlayer();
+            AudioRecorder = AudioRecorderFactory.CreateAudioRecorder();
             _audioLevelSubscription = Observable.FromEventPattern<AudioLevelEventArgs>(
                     h => AudioRecorder.AudioLevelDetected += h,
                     h => AudioRecorder.AudioLevelDetected -= h)
