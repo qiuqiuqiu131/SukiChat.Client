@@ -28,7 +28,7 @@ namespace ChatClient.MessageOperate
         private readonly IContainerProvider container;
 
         // 消息队列
-        private readonly BlockingCollection<IMessage> queue = new BlockingCollection<IMessage>();
+        private readonly BlockingCollection<IMessage> queue = new();
 
         // 信号量,控制消息队列大小
         private readonly SemaphoreSlim semaphore;
@@ -37,7 +37,7 @@ namespace ChatClient.MessageOperate
         {
             this.container = container;
 
-            semaphore = new SemaphoreSlim(1, 1);
+            semaphore = new SemaphoreSlim(5, 5);
         }
 
         /// <summary>
@@ -73,12 +73,11 @@ namespace ChatClient.MessageOperate
         {
             foreach (var unit in queue.GetConsumingEnumerable())
             {
-                Task.Run(async () =>
+                _ = Task.Run(async () =>
                 {
-                    await semaphore.WaitAsync();
-
                     try
                     {
+                        await semaphore.WaitAsync();
                         await OperateMessageUnit(unit);
                     }
                     catch (Exception ex)

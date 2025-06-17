@@ -90,8 +90,8 @@ internal class MessageHelper : IMessageHelper
         finally
         {
             DateTime endTime = DateTime.Now;
-            Console.WriteLine(
-                $"Message Sent: {message.GetType().Name}, Time Taken: {(endTime - startTime).TotalMilliseconds} ms");
+            // Console.WriteLine(
+            //     $"Message Sent: {message.GetType().Name}, Time Taken: {(endTime - startTime).TotalMilliseconds} ms");
         }
     }
 

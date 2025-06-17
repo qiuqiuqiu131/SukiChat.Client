@@ -69,7 +69,7 @@ internal class ChatRemoteService(
                     break;
             }
             else
-                break;
+                throw new Exception("聊天记录获取失败");
         }
 
         return result;
@@ -101,7 +101,7 @@ internal class ChatRemoteService(
                     break;
             }
             else
-                break;
+                throw new Exception("聊天记录获取失败");
         }
 
         return result;
@@ -133,7 +133,7 @@ internal class ChatRemoteService(
                     break;
             }
             else
-                break;
+                throw new Exception("聊天记录获取失败");
         }
 
         return result;
@@ -165,7 +165,7 @@ internal class ChatRemoteService(
                     break;
             }
             else
-                break;
+                throw new Exception("聊天记录获取失败");
         }
 
         return result;
