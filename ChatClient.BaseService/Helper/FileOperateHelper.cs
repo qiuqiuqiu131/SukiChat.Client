@@ -23,7 +23,6 @@ internal class FileOperateHelper : IFileOperateHelper
         if (fileInfo.Exists)
             return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-        // TODO: 更改为Stream流操作文件
         await using var file = await _fileIOHelper.GetFileAsync(Path.Combine("Groups", path), fileName);
         if (file != null)
         {
@@ -65,7 +64,6 @@ internal class FileOperateHelper : IFileOperateHelper
         if (fileInfo.Exists)
             return new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
 
-        // TODO: 更改为Stream流操作文件
         await using var file = await _fileIOHelper.GetFileAsync(actualPath, fileName);
         if (file != null)
         {

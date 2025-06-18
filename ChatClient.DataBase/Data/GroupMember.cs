@@ -1,14 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatClient.DataBase.Data;
 
+[PrimaryKey(nameof(GroupId), nameof(UserId))]
 public class GroupMember
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-
     [StringLength(10)] public string GroupId { get; set; }
 
     [StringLength(10)] public string UserId { get; set; }

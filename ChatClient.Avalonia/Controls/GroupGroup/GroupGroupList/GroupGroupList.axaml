@@ -25,7 +25,7 @@
                         <Interaction.Behaviors>
                             <EventTriggerBehavior EventName="SelectionChanged">
                                 <InvokeCommandAction
-                                    Command="{Binding SelectionChangedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=groupList:GroupGroupList}}"
+                                    Command="{TemplateBinding SelectionChangedCommand}"
                                     CommandParameter="{Binding $parent[ListBox].SelectedItem.DataContext}" />
                             </EventTriggerBehavior>
                         </Interaction.Behaviors>

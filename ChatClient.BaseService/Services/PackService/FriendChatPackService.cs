@@ -275,18 +275,18 @@ public class FriendChatPackService : BaseService, IFriendChatPackService
     public async Task<bool> ChatPrivateDetailMessagesOperate(IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
     {
         var chatPrivateDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
-        foreach (var chatPrivateMessage in chatPrivateMessages)
+        foreach (var message in chatPrivateMessages)
         {
-            var chatGroupDetail = _mapper.Map<ChatPrivateDetail>(chatPrivateMessage);
-            var result = chatPrivateDetailRepository.GetFirstOrDefault(predicate: d =>
-                d.UserId.Equals(chatGroupDetail.UserId) && d.ChatPrivateId.Equals(chatGroupDetail.ChatPrivateId));
-            if (result != null)
-                chatPrivateDetailRepository.Update(chatGroupDetail);
+            var chatMessage = _mapper.Map<ChatPrivateDetail>(message);
+            if (await chatPrivateDetailRepository.ExistsAsync(d =>
+                    d.UserId == chatMessage.UserId && d.ChatPrivateId == chatMessage.ChatPrivateId))
+                chatPrivateDetailRepository.Update(chatMessage);
             else
-                await chatPrivateDetailRepository.InsertAsync(chatGroupDetail);
+                await chatPrivateDetailRepository.InsertAsync(chatMessage);
         }
 
         await _unitOfWork.SaveChangesAsync();
+
         return true;
     }
 

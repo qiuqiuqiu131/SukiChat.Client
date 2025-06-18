@@ -29,6 +29,12 @@
             Selector="TextBlock,SelectableTextBlock,customSelectableTextBlock|CustomSelectableTextBlock,avalonia|MaterialIcon">
             <Setter Property="TextElement.Foreground" Value="{DynamicResource SukiLowText}" />
         </Style>
+        <Style Selector="MenuItem TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+        </Style>
+        <Style Selector="MenuItem avalonia|MaterialIcon">
+            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
+        </Style>
         <Style Selector="TextBlock.FadeIn">
             <Style.Animations>
                 <Animation FillMode="Forward"

@@ -212,6 +212,7 @@ public class GroupPackService : BaseService, IGroupPackService
     public async Task<bool> EnterGroupMessagesOperate(string userId, IEnumerable<EnterGroupMessage> enterGroupMessages)
     {
         var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+        var groupEnters = new List<GroupRelation>();
         foreach (var enterGroupMessage in enterGroupMessages)
         {
             if (!enterGroupMessage.UserId.Equals(userId)) continue;
@@ -221,8 +222,10 @@ public class GroupPackService : BaseService, IGroupPackService
                     d.GroupId.Equals(enterGroupMessage.GroupId) && d.UserId.Equals(enterGroupMessage.UserId));
             if (entity != null)
                 groupRelation.Id = entity.Id;
-            groupRelationRepository.Update(groupRelation);
+            groupEnters.Add(groupRelation);
         }
+
+        groupRelationRepository.Update(groupEnters);
 
         try
         {

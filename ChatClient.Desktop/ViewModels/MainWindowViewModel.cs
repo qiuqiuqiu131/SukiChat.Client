@@ -513,7 +513,8 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
                     UnRegisterDtoEvent();
                     UnRegisterEvent();
 
-                    foreach (var region in RegionManager.Regions.ToList())
+                    var regions = RegionManager.Regions.ToList();
+                    foreach (var region in regions)
                         region.RemoveAll();
                 }
                 catch (Exception e)

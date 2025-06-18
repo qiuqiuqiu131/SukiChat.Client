@@ -37,7 +37,7 @@ namespace ChatClient.MessageOperate
         {
             this.container = container;
 
-            semaphore = new SemaphoreSlim(5, 5);
+            semaphore = new SemaphoreSlim(1, 1);
         }
 
         /// <summary>

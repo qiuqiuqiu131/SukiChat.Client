@@ -170,7 +170,19 @@ internal class UserService : BaseService, IUserService
         else
             user.HeadImage = await GetHeadImage(user, isUpdated);
 
-        // TODO: 更新数据库
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var _user = _mapper.Map<User>(user);
+                var userRepository = _unitOfWork.GetRepository<User>();
+                userRepository.Update(_user);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+            }
+        });
 
 
         return user;
@@ -180,8 +192,6 @@ internal class UserService : BaseService, IUserService
     {
         var user = _mapper.Map<UserDto>(userMessage);
         _ = Task.Run(async () => user.HeadImage = await GetHeadImage(user));
-
-        // TODO: 更新数据库
 
         return user;
     }

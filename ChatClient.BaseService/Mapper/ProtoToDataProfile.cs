@@ -9,6 +9,24 @@ public class ProtoToDataProfile : Profile
 {
     public ProtoToDataProfile()
     {
+        CreateMap<UserMessage, User>()
+            .ForMember(u => u.RegisteTime, opt => opt.MapFrom(um => DateTime.Parse(um.RegisterTime)))
+            .ForMember(u => u.Introduction,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Introduction) ? null : um.Introduction))
+            .ForMember(u => u.Birthday,
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateOnly?)null : DateOnly.Parse(um.Birth)));
+
+        CreateMap<GroupMemberMessage, GroupMember>()
+            .ForMember(gm => gm.JoinTime, opt =>
+                opt.MapFrom(gmm =>
+                    string.IsNullOrEmpty(gmm.JoinTime) ? (DateTime?)null : DateTime.Parse(gmm.JoinTime)));
+
+        CreateMap<GroupMessage, Group>()
+            .ForMember(g => g.Id, opt => opt.MapFrom(gm => gm.GroupId))
+            .ForMember(g => g.CreateTime, opt => opt.MapFrom(gm => DateTime.Parse(gm.CreateTime)))
+            .ForMember(g => g.Description, opt => opt.MapFrom(gm => gm.Description ?? string.Empty));
+
+
         #region FriendChatMessage + ChatPrivate
 
         CreateMap<FriendChatMessage, ChatPrivate>()

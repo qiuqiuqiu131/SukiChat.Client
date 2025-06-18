@@ -14,9 +14,11 @@ using Material.Icons.Avalonia;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
 
+// [RegionMemberLifetime(KeepAlive = false)]
 public partial class ContactsView : UserControl, IDestructible
 {
     // 在类的顶部添加私有字段来存储活动菜单

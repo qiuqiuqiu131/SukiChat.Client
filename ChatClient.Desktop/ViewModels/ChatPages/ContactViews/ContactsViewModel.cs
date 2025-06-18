@@ -378,8 +378,8 @@ public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAwa
     public void Destroy()
     {
         searchDisposable.Dispose();
-        foreach (var region in RegionManager.Regions.ToList())
-            region.RemoveAll();
+        // foreach (var region in RegionManager.Regions.ToList())
+        //     region.RemoveAll();
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)

@@ -132,31 +132,33 @@ internal class UserLoginService : BaseService, IUserLoginService
     private async Task OperateChatMessages(string userId, DateTime lastLoginTime,
         CancellationTokenSource cancellationToken)
     {
-        var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
-
         Task task_1 = Task.Run(async () =>
         {
+            var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var friendMessages = await chatRemoteService.GetFriendChatMessages(userId, lastLoginTime);
             await OperateFriendChatMessages(userId, friendMessages);
-        });
+        }, cancellationToken.Token);
 
         Task task_2 = Task.Run(async () =>
         {
+            var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var groupMessages = await chatRemoteService.GetGroupChatMessages(userId, lastLoginTime);
             await OperateGroupChatMessages(userId, groupMessages);
-        });
+        }, cancellationToken.Token);
 
         Task task_3 = Task.Run(async () =>
         {
+            var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var chatPrivateMessages = await chatRemoteService.GetChatPrivateDetailMessages(userId, lastLoginTime);
             await OperateChatPrivateDetailMessage(userId, chatPrivateMessages);
-        });
+        }, cancellationToken.Token);
 
         Task task_4 = Task.Run(async () =>
         {
+            var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var chatGroupMessages = await chatRemoteService.GetChatGroupDetailMessages(userId, lastLoginTime);
             await OperateChatGroupDetailMessage(userId, chatGroupMessages);
-        });
+        }, cancellationToken.Token);
 
         await Task.WhenAll(task_1, task_2, task_3, task_4).ConfigureAwait(false);
     }
@@ -271,17 +273,19 @@ internal class UserLoginService : BaseService, IUserLoginService
         using (var scope = _scopedProvider.CreateScope())
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
-            var requestRespository = unitOfWork.GetRepository<FriendRequest>();
+            var requestRepository = unitOfWork.GetRepository<FriendRequest>();
+            var friendRequests = new List<FriendRequest>();
             foreach (var request in requests)
             {
                 var friendRequest = _mapper.Map<FriendRequest>(request);
-                var req = (FriendRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (FriendRequest?)await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId == friendRequest.RequestId);
                 if (req != null)
                     friendRequest.Id = req.Id;
-                requestRespository.Update(friendRequest);
+                friendRequests.Add(friendRequest);
             }
 
+            requestRepository.Update(friendRequests);
             await unitOfWork.SaveChangesAsync();
         }
 
@@ -289,17 +293,19 @@ internal class UserLoginService : BaseService, IUserLoginService
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
 
-            var receiveRespository = unitOfWork.GetRepository<FriendReceived>();
+            var receiveRepository = unitOfWork.GetRepository<FriendReceived>();
+            var receivesList = new List<FriendReceived>();
             foreach (var receive in receives)
             {
                 var friendReceived = _mapper.Map<FriendReceived>(receive);
-                var req = (FriendReceived?)await receiveRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (FriendReceived?)await receiveRepository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId == friendReceived.RequestId);
                 if (req != null)
                     friendReceived.Id = req.Id;
-                receiveRespository.Update(friendReceived);
+                receivesList.Add(friendReceived);
             }
 
+            receiveRepository.Update(receivesList);
             await unitOfWork.SaveChangesAsync();
         }
 
@@ -415,29 +421,35 @@ internal class UserLoginService : BaseService, IUserLoginService
         {
             var unitOfWork = scope.Resolve<IUnitOfWork>();
 
-            var requestRespository = unitOfWork.GetRepository<GroupRequest>();
+            var requestRepository = unitOfWork.GetRepository<GroupRequest>();
+            var requestLists = new List<GroupRequest>();
             foreach (var request in requests)
             {
                 var groupRequest = _mapper.Map<GroupRequest>(request);
-                var req = (GroupRequest?)await requestRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (GroupRequest?)await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId == groupRequest.RequestId);
                 if (req != null)
                     groupRequest.Id = req.Id;
-                requestRespository.Update(groupRequest);
+                requestLists.Add(groupRequest);
             }
+
+            requestRepository.Update(requestLists);
 
             await unitOfWork.SaveChangesAsync();
 
-            var friendRespository = unitOfWork.GetRepository<GroupReceived>();
+            var friendRepository = unitOfWork.GetRepository<GroupReceived>();
+            var receivesList = new List<GroupReceived>();
             foreach (var receive in receives)
             {
                 var groupReceived = _mapper.Map<GroupReceived>(receive);
-                var req = (GroupReceived?)await friendRespository.GetFirstOrDefaultAsync(predicate: d =>
+                var req = (GroupReceived?)await friendRepository.GetFirstOrDefaultAsync(predicate: d =>
                     d.RequestId == groupReceived.RequestId);
                 if (req != null)
                     groupReceived.Id = req.Id;
-                friendRespository.Update(groupReceived);
+                receivesList.Add(groupReceived);
             }
+
+            friendRepository.Update(receivesList);
 
             await unitOfWork.SaveChangesAsync();
         }

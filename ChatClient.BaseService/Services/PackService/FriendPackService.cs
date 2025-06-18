@@ -195,6 +195,7 @@ public class FriendPackService : BaseService, IFriendPackService
     public async Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages)
     {
         var friendRepository = _unitOfWork.GetRepository<FriendRelation>();
+        var friendRelations = new List<FriendRelation>();
         foreach (var message in messages)
         {
             if (!message.UserId.Equals(userId)) continue;
@@ -204,9 +205,10 @@ public class FriendPackService : BaseService, IFriendPackService
                 d.User1Id.Equals(friendRelation.User1Id) && d.User2Id.Equals(friendRelation.User2Id));
             if (relation != null)
                 friendRelation.Id = relation.Id;
-            friendRepository.Update(friendRelation);
+            friendRelations.Add(friendRelation);
         }
 
+        friendRepository.Update(friendRelations);
         await _unitOfWork.SaveChangesAsync();
         return true;
     }

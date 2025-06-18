@@ -313,8 +313,9 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 
     public void Destroy()
     {
-        foreach (var region in RegionManager.Regions.ToList())
-            region.RemoveAll();
+        // var regions = RegionManager.Regions.ToList();
+        // foreach (var region in regions)
+        //     region.RemoveAll();
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)

@@ -276,18 +276,18 @@ public class GroupChatPackService : BaseService, IGroupChatPackService
         IEnumerable<ChatGroupDetailMessage> chatGroupMessages)
     {
         var chatGroupDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
-        foreach (var chatGroupMessage in chatGroupMessages)
+        foreach (var message in chatGroupMessages)
         {
-            var chatGroupDetail = _mapper.Map<ChatGroupDetail>(chatGroupMessage);
-            var result = chatGroupDetailRepository.GetFirstOrDefault(predicate: d =>
-                d.UserId.Equals(chatGroupDetail.UserId) && d.ChatGroupId.Equals(chatGroupDetail.ChatGroupId));
-            if (result != null)
-                chatGroupDetailRepository.Update(chatGroupDetail);
+            var chatMessage = _mapper.Map<ChatGroupDetail>(message);
+            if (await chatGroupDetailRepository.ExistsAsync(d =>
+                    d.UserId == chatMessage.UserId && d.ChatGroupId == chatMessage.ChatGroupId))
+                chatGroupDetailRepository.Update(chatMessage);
             else
-                await chatGroupDetailRepository.InsertAsync(chatGroupDetail);
+                await chatGroupDetailRepository.InsertAsync(chatMessage);
         }
 
         await _unitOfWork.SaveChangesAsync();
+
         return true;
     }
 

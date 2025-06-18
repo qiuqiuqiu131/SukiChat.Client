@@ -1,3 +1,6 @@
+using AutoMapper;
+using ChatClient.DataBase.Data;
+using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
@@ -66,7 +69,32 @@ internal class GroupRemoteService(
 
         await Task.WhenAll(tasks);
 
+        _ = SaveGroupsToDB(result).ConfigureAwait(false);
+
         return tasks.Select(d => d.Result).ToList();
+    }
+
+    private async Task SaveGroupsToDB(IEnumerable<GroupMessage> groupMessages)
+    {
+        try
+        {
+            var _mapper = _scopedProvider.Resolve<IMapper>();
+            var _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
+            var groupRepository = _unitOfWork.GetRepository<Group>();
+            foreach (var message in groupMessages)
+            {
+                var group = _mapper.Map<Group>(message);
+                if (await groupRepository.ExistsAsync(d => d.Id == group.Id))
+                    groupRepository.Update(group);
+                else
+                    await groupRepository.InsertAsync(group);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     public async Task<List<GroupMemberDto>> GetRemoteGroupMembers(string userId, string groupId)
@@ -104,6 +132,32 @@ internal class GroupRemoteService(
 
         await Task.WhenAll(tasks);
 
+        _ = SaveGroupMembersToDB(result).ConfigureAwait(false);
+
         return tasks.Select(d => d.Result).ToList();
+    }
+
+    private async Task SaveGroupMembersToDB(IEnumerable<GroupMemberMessage> groupMemberMessages)
+    {
+        try
+        {
+            var _mapper = _scopedProvider.Resolve<IMapper>();
+            var _unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
+            var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
+            foreach (var message in groupMemberMessages)
+            {
+                var groupMember = _mapper.Map<GroupMember>(message);
+                if (await groupMemberRepository.ExistsAsync(d =>
+                        d.UserId == groupMember.UserId && d.GroupId == groupMember.GroupId))
+                    groupMemberRepository.Update(groupMember);
+                else
+                    await groupMemberRepository.InsertAsync(groupMember);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+        }
     }
 }

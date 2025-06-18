@@ -199,7 +199,6 @@ internal class FriendService : BaseService, IFriendService
         var result = await _messageHelper.SendMessageWithResponse<FriendResponseFromClientResponse>(response);
         if (!(result is { Response: { State: true } }))
         {
-            //TODO:接受失败
             string message = result == null ? "请求超时" : result.Response.Message;
             return (false, message);
         }

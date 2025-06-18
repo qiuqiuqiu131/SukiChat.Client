@@ -1,4 +1,7 @@
+using AutoMapper;
 using ChatClient.BaseService.Manager;
+using ChatClient.DataBase.Data;
+using ChatClient.DataBase.UnitOfWork;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.HelperInterface;
 using ChatServer.Common.Protobuf;
@@ -52,12 +55,38 @@ internal class UserRemoteService(
                 break;
         }
 
+        // 加载用户实体
         List<Task<UserDto>> tasks = [];
         foreach (var userMessage in result)
             tasks.Add(userService.GetUserDto(userMessage));
-
         await Task.WhenAll(tasks);
 
+        // 数据库保存
+        _ = SaveUsersToDB(result).ConfigureAwait(false);
+
         return tasks.Select(d => d.Result).ToList();
+    }
+
+    private async Task SaveUsersToDB(IEnumerable<UserMessage> userMessage)
+    {
+        try
+        {
+            var mapper = _scopedProvider.Resolve<IMapper>();
+            var unitOfWork = _scopedProvider.Resolve<IUnitOfWork>();
+            var userRepository = unitOfWork.GetRepository<User>();
+            foreach (var message in userMessage)
+            {
+                var user = mapper.Map<User>(message);
+                if (await userRepository.ExistsAsync(d => d.Id == user.Id))
+                    userRepository.Update(user);
+                else
+                    await userRepository.InsertAsync(user);
+            }
+
+            await unitOfWork.SaveChangesAsync();
+        }
+        catch (Exception e)
+        {
+        }
     }
 }

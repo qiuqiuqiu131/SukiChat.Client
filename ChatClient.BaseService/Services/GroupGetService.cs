@@ -126,7 +126,19 @@ public class GroupGetService : BaseService, IGroupGetService
         else
             groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead);
 
-        // TODO: 更新数据库
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var group = _mapper.Map<Group>(groupDto);
+                var groupRepository = _unitOfWork.GetRepository<Group>();
+                groupRepository.Update(group);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+            }
+        });
 
         return groupDto;
     }
@@ -134,10 +146,9 @@ public class GroupGetService : BaseService, IGroupGetService
     public async Task<GroupDto> GetGroupDto(GroupMessage groupMessage)
     {
         var groupDto = _mapper.Map<GroupDto>(groupMessage);
+
         _ = Task.Run(async () =>
             groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupMessage.GroupId, groupDto.IsCustomHead));
-
-        // TODO: 更新数据库
 
         return groupDto;
     }
@@ -156,6 +167,7 @@ public class GroupGetService : BaseService, IGroupGetService
         if (groupMemberMessage == null) return null;
 
         var groupMemberDto = _mapper.Map<GroupMemberDto>(groupMemberMessage);
+
         _ = Task.Run(async () =>
         {
             var userService = _scopedProvider.Resolve<IUserService>();
@@ -163,7 +175,19 @@ public class GroupGetService : BaseService, IGroupGetService
                 await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
         }).ConfigureAwait(false);
 
-        // TODO: 更新数据库
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                var groupMember = _mapper.Map<GroupMember>(groupMemberDto);
+                var groupMemberRepository = _unitOfWork.GetRepository<GroupMember>();
+                groupMemberRepository.Update(groupMember);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch
+            {
+            }
+        });
 
         return groupMemberDto;
     }
@@ -171,10 +195,9 @@ public class GroupGetService : BaseService, IGroupGetService
     public async Task<GroupMemberDto> GetGroupMemberDto(GroupMemberMessage memberMessage, IUserService userService)
     {
         var groupMemberDto = _mapper.Map<GroupMemberDto>(memberMessage);
+
         _ = Task.Run(async () => groupMemberDto.HeadImage =
             await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex));
-
-        // TODO: 更新数据库
 
         return groupMemberDto;
     }
