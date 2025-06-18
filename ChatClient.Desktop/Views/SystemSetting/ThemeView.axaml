@@ -39,7 +39,7 @@
                                 Margin="58,42,42,42"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom"
-                                FontWeight="DemiBold"
+                                FontWeight="SemiBold"
                                 Foreground="#555555"
                                 Text="白天" />
                         </Grid>
@@ -61,7 +61,7 @@
                                 Margin="58,42,42,42"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Bottom"
-                                FontWeight="DemiBold"
+                                FontWeight="SemiBold"
                                 Foreground="#fafafa"
                                 Text="黑夜" />
                         </Grid>

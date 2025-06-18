@@ -1,6 +1,8 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using ChatClient.Desktop.ViewModels.CallViewModel;
 using Prism.Dialogs;
 using SukiUI.Controls;
@@ -12,6 +14,9 @@ public partial class SukiCallDialogWindow : SukiWindow, IDialogWindow
     public SukiCallDialogWindow()
     {
         InitializeComponent();
+
+        RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
     }
 
     public IDialogResult Result { get; set; }

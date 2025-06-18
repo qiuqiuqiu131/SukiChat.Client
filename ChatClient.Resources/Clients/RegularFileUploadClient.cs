@@ -44,7 +44,9 @@ public class RegularFileUploadClient : IFileClient
 
         // 生成Stream流
         _fileStream = new MemoryStream();
+        stream.Position = 0;
         await stream.CopyToAsync(_fileStream);
+        _fileStream.Position = 0;
 
         _fileName = fileName;
 

@@ -55,6 +55,7 @@
                         Margin="5"
                         Opacity="0.6"
                         FontSize="12"
+                        Classes="Small"
                         HorizontalAlignment="Right"
                         DockPanel.Dock="Right"
                         Text="{Binding SelectedGroup.GroupDto.GroupMembers.Count,StringFormat=查看{0}名群聊成员>}">
@@ -79,10 +80,11 @@
                                     <TextBlock Text="{Binding NickName}"
                                                FontSize="12"
                                                Margin="0"
+                                               Classes="Small"
                                                Padding="0"
                                                HorizontalAlignment="Center"
                                                MaxWidth="36"
-                                               Opacity="0.6"
+                                               Opacity="0.7"
                                                TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
                             </Border>

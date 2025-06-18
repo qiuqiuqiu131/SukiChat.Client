@@ -54,14 +54,6 @@
         </ContextMenu>
     </Styles.Resources>
 
-    <Style Selector="TextBlock">
-        <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
-    <Style Selector="TextBox">
-        <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="FontSize" Value="14" />
-    </Style>
     <Style Selector="TextBox.Password">
         <Style Selector="^ /template/ TextBlock#watermark">
             <Setter Property="LetterSpacing" Value="1" />
@@ -70,6 +62,22 @@
         <Setter Property="LetterSpacing" Value="2.5" />
         <Setter Property="PasswordChar" Value="•" />
     </Style>
+
+    <Style Selector="TextBox.Small">
+        <!-- <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" /> -->
+        <Setter Property="FontWeight" Value="Medium"></Setter>
+    </Style>
+
+    <Style Selector="TextBlock.Small">
+        <!-- <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" /> -->
+        <Setter Property="FontWeight" Value="Medium"></Setter>
+    </Style>
+
+    <Style Selector="SelectableTextBlock.Small">
+        <!-- <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" /> -->
+        <Setter Property="FontWeight" Value="Medium"></Setter>
+    </Style>
+
     <Style Selector="TextBox.LightWaterMask">
         <Style Selector="^ /template/ TextBlock#watermark">
             <Setter Property="Opacity" Value="0.35" />
@@ -79,7 +87,6 @@
     <Style Selector="TextBox.Trans">
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="FontSize" Value="14" />
         <Setter Property="BorderBrush" Value="{DynamicResource SukiControlBorderBrush}" />
         <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />

@@ -225,7 +225,7 @@ internal class UserLoginService : BaseService, IUserLoginService
             LoadFriendReceives(userId, user), LoadFriendRequests(userId, user), LoadFriendDeletes(userId, user),
             LoadFriendChats(userId, user), LoadGroupFriends(userId, user),
             LoadGroupReceiveds(userId, user), LoadGroupRequests(userId, user), LoadGroupDeletes(userId, user),
-            LoadGroupChats(userId, user), LoadGroupChats(userId, user)
+            LoadGroupChats(userId, user), LoadGroupGroups(userId, user)
         ];
         await Task.WhenAll(tasks);
 

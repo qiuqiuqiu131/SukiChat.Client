@@ -58,28 +58,29 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Name}"
                                          Height="22"
+                                         FontWeight="SemiBold"
                                          FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Friend.UserDto.Id,StringFormat=ID: {0}}"
-                                         FontSize="12.5"
+                                         FontSize="12.5" Classes="Small"
                                          Opacity="0.7" />
                     <Grid>
                         <StackPanel Orientation="Horizontal" Spacing="7"
                                     IsVisible="{Binding Friend.UserDto.IsOnline}">
                             <Ellipse Fill="LimeGreen" Width="13" Height="13" />
-                            <TextBlock Text="在线" FontSize="13" />
+                            <TextBlock Text="在线" FontSize="13" Classes="Small" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Spacing="7"
                                     IsVisible="{Binding !Friend.UserDto.IsOnline}">
                             <Ellipse Fill="Red" Width="13" Height="13" />
-                            <TextBlock Text="离线" FontSize="13" />
+                            <TextBlock Text="离线" FontSize="13" Classes="Small" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>
             </StackPanel>
             <Border Name="TopBackground" Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,5" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" Spacing="5">
-            <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,8">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" Margin="0,8" Spacing="15">
                 <StackPanel.Styles>
                     <Style Selector="TextBlock">
                         <Setter Property="FontSize" Value="12" />
@@ -88,14 +89,14 @@
                 <StackPanel Orientation="Horizontal" Spacing="3">
                     <ContentControl
                         Content="{Binding Friend.UserDto.Sex,Converter={converter:SexIconKindConverter Size= 15}}" />
-                    <TextBlock Text="{Binding Friend.UserDto.Sex,Converter={converter:SexConverter}}" />
+                    <TextBlock Classes="Small" Text="{Binding Friend.UserDto.Sex,Converter={converter:SexConverter}}" />
                 </StackPanel>
-                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"
+                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}" Classes="Small"
                            Text="{Binding Friend.UserDto.Birth,Converter={converter:AgeConverter}}" />
-                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}"
+                <TextBlock IsVisible="{Binding Friend.UserDto.Birth}" Classes="Small"
                            Text="{Binding Friend.UserDto.Birth,Converter={converter:DateOfMDConverter}}" />
             </StackPanel>
-            <DockPanel Height="40">
+            <DockPanel Height="45">
                 <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
                 <TextBlock Text="备注" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
@@ -103,27 +104,25 @@
                     Text="{Binding Friend.Remark,Mode=TwoWay}"
                     DefaultText="设置好友备注"
                     DockPanel.Dock="Right"
-                    FontSize="14"
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
             </DockPanel>
-            <DockPanel Height="40">
+            <DockPanel Height="45">
                 <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
                 <TextBlock Text="好友分组" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="0,3" />
                 <ComboBox HorizontalAlignment="Right"
-                          Margin="0,7"
+                          Margin="0,10"
                           Padding="0"
-                          FontSize="13"
                           ItemsSource="{Binding GroupNames}"
                           SelectedValue="{Binding Friend.Grouping}" />
             </DockPanel>
-            <DockPanel MinHeight="40" Margin="0,8">
+            <DockPanel MinHeight="45">
                 <avalonia:MaterialIcon Kind="PencilOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        DockPanel.Dock="Left"
-                                       VerticalAlignment="Top"
+                                       VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="个性签名" VerticalAlignment="Top" Margin="0,3" DockPanel.Dock="Left" />
+                <TextBlock Text="个性签名" VerticalAlignment="Center" Margin="0,3" DockPanel.Dock="Left" />
                 <TextBlock DockPanel.Dock="Right"
                            IsVisible="{Binding Friend.UserDto.Introduction,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                            Text="{Binding Friend.UserDto.Introduction}"
@@ -138,7 +137,7 @@
                            IsVisible="{Binding Friend.UserDto.Introduction,Converter={x:Static StringConverters.IsNullOrEmpty}}"
                            Text="暂无个性签名"
                            Padding="0,3"
-                           Opacity="0.6"
+                           Opacity="0.5"
                            MinHeight="0"
                            VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis"
@@ -152,13 +151,13 @@
                 <Button Margin="0"
                         Padding="17,4.5"
                         Command="{Binding ShareFriendCommand}">
-                    <TextBlock Text="分享至" FontSize="13.5" />
+                    <TextBlock Text="分享至" FontSize="14" />
                 </Button>
                 <Button Classes="Flat"
                         Margin="0"
                         Padding="17,4.5"
                         Command="{Binding SendMessageCommand}">
-                    <TextBlock Text="发消息" FontSize="13.5" />
+                    <TextBlock Text="发消息" FontSize="14" />
                 </Button>
             </StackPanel>
         </StackPanel>

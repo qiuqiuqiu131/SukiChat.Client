@@ -16,22 +16,19 @@
     <UserControl.DataTemplates>
         <DataTemplate DataType="chatMessage:TextMessDto">
             <customSelectableTextBlock:CustomSelectableTextBlock Text="{Binding Text}"
-                                                                 FontSize="14"
-                                                                 Opacity="0.85"
                                                                  HorizontalAlignment="Center"
                                                                  ContextFlyout="{x:Null}"
-                                                                 Margin="3,0,2,2"
-                                                                 Padding="2"
+                                                                 Margin="3,0,2,2" Padding="2"
                                                                  TextWrapping="Wrap" />
         </DataTemplate>
         <DataTemplate DataType="chatMessage:CallMessDto">
-            <Border Background="Transparent" Margin="1,1,0,0" Padding="2" Opacity="0.85"
+            <Border Background="Transparent" Margin="1,1,0,0" Padding="2"
                     PointerPressed="CallMess_PointerPressed">
                 <DockPanel LastChildFill="True">
                     <avalonia:MaterialIcon DockPanel.Dock="{Binding Dock}" Kind="{Binding IconKind}" Height="19"
                                            Width="19" Margin="0"
                                            VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding Message}" Margin="3,0" Padding="0" FontSize="14" IsHitTestVisible="False" />
+                    <TextBlock Text="{Binding Message}" Margin="3,0" Padding="0" IsHitTestVisible="False" />
                 </DockPanel>
             </Border>
         </DataTemplate>
@@ -48,8 +45,8 @@
                                     HorizontalAlignment="Center">
                             <avalonia:MaterialIcon Kind="ImageRemove" Foreground="#999"
                                                    Width="40" Height="40" />
-                            <TextBlock Text="图片已过期" HorizontalAlignment="Center" Opacity="0.4"
-                                       FontSize="13" />
+                            <TextBlock Text="图片已过期" HorizontalAlignment="Center" Opacity="0.8"
+                                       FontSize="14" />
                         </StackPanel>
                     </Border>
                 </Panel>
@@ -63,8 +60,8 @@
                                     Spacing="10"
                                     HorizontalAlignment="Center">
                             <suki:Loading Foreground="#999" Width="30" Height="30" />
-                            <TextBlock Text="图片加载中" HorizontalAlignment="Center" Opacity="0.4"
-                                       FontSize="13" />
+                            <TextBlock Text="图片加载中" HorizontalAlignment="Center" Opacity="0.8"
+                                       FontSize="14" />
                         </StackPanel>
                     </Border>
                     <Panel Classes="Icon"
@@ -79,8 +76,8 @@
                                    ToolTip.ShowDelay="500"
                                    Source="{Binding ImageSource}">
                                 <ToolTip.Tip>
-                                    <TextBlock FontSize="12"
-                                               Text="双击查看图片" />
+                                    <TextBlock FontSize="13"
+                                               Text="双击查看图片" Classes="Small" />
                                 </ToolTip.Tip>
                                 <Interaction.Behaviors>
                                     <behaviors:ImageSizeAdjustBehavior />
@@ -121,7 +118,7 @@
             </Panel>
         </DataTemplate>
         <DataTemplate DataType="chatMessage:FileMessDto">
-            <Border Margin="5,5,5,0" Padding="0" Background="Transparent">
+            <Border Margin="5,5,5,0" Padding="0" Background="Transparent" DoubleTapped="FileMess_DoubleTapped">
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Bottom" Margin="0,0,0,3" Height="16">
                         <ProgressBar Width="100"
@@ -130,33 +127,32 @@
                                      VerticalAlignment="Center"
                                      Maximum="1"
                                      ShowProgressText="True"
-                                     FontSize="12"
+                                     FontSize="12.5"
                                      Value="{Binding DownloadProgress}" />
                         <DockPanel HorizontalAlignment="Stretch" LastChildFill="True"
                                    VerticalAlignment="Center"
                                    IsVisible="{Binding !IsDownloading}">
                             <Panel DockPanel.Dock="Right" Margin="0,0,5,0" IsVisible="{Binding IsUser}">
-                                <TextBlock Text="已发送" FontSize="11.5" Opacity="0.6"
+                                <TextBlock Text="已发送" FontSize="12" Opacity="0.8" Classes="Small"
                                            Foreground="{DynamicResource SukiText}" IsVisible="{Binding IsExit}" />
-                                <TextBlock Text="文件已失效" FontSize="11.5" Foreground="{DynamicResource SukiText}"
-                                           Opacity="0.6"
+                                <TextBlock Text="文件已失效" FontSize="12" Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.8" Classes="Small"
                                            IsVisible="{Binding !IsExit}" />
                             </Panel>
                             <Panel DockPanel.Dock="Right" Margin="0,0,5,0" IsVisible="{Binding !IsUser}">
-                                <TextBlock Text="已下载" FontSize="11.5" Opacity="0.6"
+                                <TextBlock Text="已下载" FontSize="12" Opacity="0.8" Classes="Small"
                                            Foreground="{DynamicResource SukiText}" IsVisible="{Binding IsSuccess}" />
                                 <Panel IsVisible="{Binding !IsSuccess}">
-                                    <TextBlock Text="文件已失效" FontSize="11.5" Foreground="{DynamicResource SukiText}"
-                                               Opacity="0.6"
+                                    <TextBlock Text="文件已失效" FontSize="12" Foreground="{DynamicResource SukiText}"
+                                               Opacity="0.8" Classes="Small"
                                                IsVisible="{Binding !IsExit}" />
                                 </Panel>
                             </Panel>
                             <TextBlock
-                                Opacity="0.8"
-                                Margin="8,0"
+                                Margin="8,0" Classes="Small"
                                 HorizontalAlignment="Left"
                                 Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
-                                FontSize="12"
+                                FontSize="12.5"
                                 TextWrapping="NoWrap" />
                         </DockPanel>
                     </Grid>
@@ -164,7 +160,6 @@
                         <TextBlock
                             Margin="10,0"
                             Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
-                            FontSize="13.5"
                             HorizontalAlignment="Left"
                             TextWrapping="Wrap"
                             MaxLines="2"
@@ -218,13 +213,13 @@
         <DataTemplate DataType="chatMessage:CardMessDto">
             <Panel Background="Transparent" Margin="3" PointerPressed="InputElement_OnPointerPressed">
                 <Grid RowDefinitions="*,*,*" Margin="5,0">
-                    <TextBlock Grid.Row="0" Text="{Binding Title}" Opacity="0.85" Margin="0,4" />
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="0,4" />
                     <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
                         <TextBlock Margin="0,0,5,0"
-                                   Opacity="0.6"
+                                   Opacity="0.8"
                                    TextWrapping="Wrap"
                                    LineSpacing="2"
-                                   FontSize="12"
+                                   FontSize="12" Classes="Small"
                                    Text="{Binding Detail}" />
                         <Image Grid.Column="1" Width="50" Height="50" Source="{Binding HeadImage}">
                             <Image.Clip>
@@ -234,7 +229,8 @@
                     </Grid>
                     <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
                             BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
-                    <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,5,0,2" Opacity="0.6" FontSize="11.5" />
+                    <TextBlock Grid.Row="2" Text="{Binding Bottom}" Classes="Small"
+                               Margin="0,5,0,2" Opacity="0.7" FontSize="12" />
                 </Grid>
             </Panel>
         </DataTemplate>
@@ -261,15 +257,14 @@
                         <TextBlock DockPanel.Dock="Right"
                                    HorizontalAlignment="Right"
                                    IsVisible="{Binding !Failed}"
-                                   FontSize="12.5"
-                                   Opacity="0.8"
+                                   FontSize="13"
                                    Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
                         <voiceWaveIcon:VoiceWaveIcon Duration="{Binding Duration}"
                                                      Foreground="{DynamicResource SukiText}"
                                                      Opacity="0.8"
                                                      IsVisible="{Binding !Failed}"
                                                      IsPlaying="{Binding IsPlaying}" />
-                        <TextBlock Margin="5,1.5,5,0" Text="语音已过期" Opacity="0.6" FontSize="12.5"
+                        <TextBlock Margin="5,1.5,5,0" Text="语音已过期" Opacity="0.8" FontSize="13"
                                    IsVisible="{Binding Failed}" />
                     </DockPanel>
                 </Panel>
@@ -284,7 +279,7 @@
         </Style>
 
         <Style Selector="ProgressBar:horizontal /template/ TextBlock#PART_Text">
-            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontSize" Value="12.5" />
         </Style>
 
         <Style Selector="chatUi1|ChatMessageView">

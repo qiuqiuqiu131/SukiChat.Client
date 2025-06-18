@@ -70,4 +70,23 @@ public partial class ChatMessageView : UserControl
             CallMessageCommand?.Execute(callMessDto);
         }
     }
+
+    private void FileMess_DoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (sender is Control control && control.DataContext is FileMessDto fileMessDto)
+        {
+            if (fileMessDto.IsSuccess && fileMessDto.TargetFilePath != null)
+            {
+                var info = new FileInfo(fileMessDto.TargetFilePath);
+                if (info.Exists)
+                {
+                    var argument = $"/select,\"{fileMessDto.TargetFilePath}\"";
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("explorer.exe", argument)
+                    {
+                        UseShellExecute = true
+                    });
+                }
+            }
+        }
+    }
 }

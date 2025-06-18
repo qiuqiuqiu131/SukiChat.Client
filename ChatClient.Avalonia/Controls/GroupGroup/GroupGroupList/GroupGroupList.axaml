@@ -65,7 +65,8 @@
                                             </Grid>
                                             <DockPanel Grid.Row="1" Margin="0,3,15,0" LastChildFill="True">
                                                 <TextBlock VerticalAlignment="Center"
-                                                           FontSize="11.5"
+                                                           FontSize="12"
+                                                           Classes="Small"
                                                            IsVisible="{Binding GroupDto.Description,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                                            Opacity="0.6"
                                                            LetterSpacing="0.5"

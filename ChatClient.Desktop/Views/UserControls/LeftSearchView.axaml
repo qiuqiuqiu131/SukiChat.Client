@@ -36,7 +36,8 @@
         <converter:IntEqualityConverter x:Key="IntNotEqualityConverter" Equal="False" Value="0" />
     </UserControl.Resources>
     <Panel>
-        <TextBlock Text="暂未找到相关信息" FontSize="13" Opacity="0.6" Margin="10,20" HorizontalAlignment="Center">
+        <TextBlock Text="暂未找到相关信息" FontSize="13" Opacity="0.6" Classes="Small" Margin="10,20"
+                   HorizontalAlignment="Center">
             <TextBlock.IsVisible>
                 <MultiBinding Converter="{x:Static BoolConverters.And}">
                     <Binding Path="FriendSearchDtos.Count" Converter="{StaticResource IntEqualityConverter}" />
@@ -54,9 +55,9 @@
             <StackPanel Orientation="Vertical"
                         IsVisible="{Binding FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
                 <Panel Margin="7,8">
-                    <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
+                    <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Classes="Small" Opacity="0.6" />
                     <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
-                               Cursor="Hand"
+                               Cursor="Hand" Classes="Small"
                                Foreground="{DynamicResource SukiPrimaryColor75}">
                         <Interaction.Behaviors>
                             <EventTriggerBehavior EventName="PointerPressed">
@@ -107,7 +108,8 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                                     Margin="0,3,15,0"
                                                     Grid.Row="1">
-                                            <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                            <TextBlock Opacity="0.6" Text="{Binding Message}" Classes="Small"
+                                                       FontSize="12" />
                                         </StackPanel>
                                     </Grid>
                                     <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
@@ -138,8 +140,8 @@
             <StackPanel Orientation="Vertical"
                         IsVisible="{Binding GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
                 <Panel Margin="7,8">
-                    <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
-                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                    <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" Classes="Small" />
+                    <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5" Classes="Small"
                                Cursor="Hand"
                                Foreground="{DynamicResource SukiPrimaryColor75}">
                         <Interaction.Behaviors>
@@ -191,7 +193,8 @@
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                                     Margin="0,3,15,0"
                                                     Grid.Row="1">
-                                            <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                            <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12"
+                                                       Classes="Small" />
                                         </StackPanel>
                                     </Grid>
                                     <Border Grid.Column="2" Name="IconBorder" Background="Transparent"

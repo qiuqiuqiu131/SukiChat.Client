@@ -7,6 +7,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using SukiUI.Controls;
 
@@ -17,6 +18,9 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     public LoginWindowView()
     {
         InitializeComponent();
+
+        RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         SystemDecorations = SystemDecorations.None;
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
@@ -43,14 +47,11 @@ public partial class LoginWindowView : SukiWindow, IDisposable
             {
                 await Task.Delay(100);
 
-                if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                var handle = TryGetPlatformHandle()?.Handle;
+                if (handle != null)
                 {
-                    var handle = TryGetPlatformHandle()?.Handle;
-                    if (handle != null)
-                    {
-                        SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
-                        SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
-                    }
+                    SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
+                    SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
                 }
             }
         });

@@ -22,7 +22,7 @@
                                              TextWrapping="Wrap"
                                              FontSize="16.5" />
                         <SelectableTextBlock Text="{Binding Id,StringFormat=ID: {0}}"
-                                             FontSize="12"
+                                             FontSize="12" Classes="Small"
                                              Opacity="0.7" />
                     </StackPanel>
                 </StackPanel>

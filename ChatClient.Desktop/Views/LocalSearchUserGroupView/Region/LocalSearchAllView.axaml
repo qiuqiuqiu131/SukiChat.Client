@@ -29,8 +29,8 @@
                 <StackPanel Orientation="Vertical"
                             IsVisible="{Binding AllSearchDto.FriendSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
                     <Panel Margin="7,8">
-                        <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
-                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                        <TextBlock Text="联系人" HorizontalAlignment="Left" FontSize="13" Classes="Small" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5" Classes="Small"
                                    Cursor="Hand"
                                    Foreground="{DynamicResource SukiPrimaryColor75}">
                             <Interaction.Behaviors>
@@ -90,7 +90,8 @@
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                                         Margin="0,3,15,0"
                                                         Grid.Row="1">
-                                                <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                                <TextBlock Opacity="0.6" Text="{Binding Message}" Classes="Small"
+                                                           FontSize="12" />
                                             </StackPanel>
                                         </Grid>
                                         <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"
@@ -132,8 +133,8 @@
                 <StackPanel Orientation="Vertical"
                             IsVisible="{Binding AllSearchDto.GroupSearchDtos.Count,Converter={StaticResource IntNotEqualityConverter}}">
                     <Panel Margin="7,8">
-                        <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Opacity="0.6" />
-                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5"
+                        <TextBlock Text="群聊" HorizontalAlignment="Left" FontSize="13" Classes="Small" Opacity="0.6" />
+                        <TextBlock Text="更多" HorizontalAlignment="Right" FontSize="12.5" Classes="Small"
                                    Cursor="Hand"
                                    Foreground="{DynamicResource SukiPrimaryColor75}">
                             <Interaction.Behaviors>
@@ -193,7 +194,8 @@
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                                         Margin="0,3,15,0"
                                                         Grid.Row="1">
-                                                <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                                <TextBlock Opacity="0.6" Text="{Binding Message}" Classes="Small"
+                                                           FontSize="12" />
                                             </StackPanel>
                                         </Grid>
                                         <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"

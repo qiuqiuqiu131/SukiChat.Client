@@ -54,23 +54,23 @@
                 </StackPanel>
             </DockPanel>
         </Border>
-        <TextBlock Grid.Row="0" Text="关于" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="13" />
+        <TextBlock Grid.Row="0" Text="关于" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="13.5" />
         <DockPanel LastChildFill="True" Grid.Row="1" Margin="35,30,35,20">
             <StackPanel Orientation="Vertical" Margin="5,0" Spacing="10" DockPanel.Dock="Bottom">
                 <Border Height="1" Background="{DynamicResource SukiBorderBrush}" />
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Width="65" Text="开发者:" FontSize="12" />
-                    <TextBlock Text="丘丘丘" FontSize="12" />
+                    <TextBlock Width="65" Text="开发者:" FontSize="12" Classes="Small" />
+                    <TextBlock Text="丘丘丘" FontSize="12" Classes="Small" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="版本号：" Width="65" FontSize="12" />
-                    <TextBlock Text="{Binding Version}" FontSize="12" />
+                    <TextBlock Text="版本号：" Width="65" FontSize="12" Classes="Small" />
+                    <TextBlock Text="{Binding Version}" FontSize="12" Classes="Small" />
                 </StackPanel>
                 <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left">
                     <TextBlock Grid.Column="0" Text="项目地址："
-                               Width="65" FontSize="12" />
+                               Width="65" FontSize="12" Classes="Small" />
                     <controls:ClickableTextBlock Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center"
-                                                 FontSize="12.5"
+                                                 FontSize="12.5" Classes="Small"
                                                  FontWeight="Medium"
                                                  Cursor="Hand"
                                                  TextDecorations="Underline"
@@ -88,10 +88,10 @@
                     <TextBlock Text="Suki Chat" FontSize="16"
                                Margin="0,5,0,10"
                                HorizontalAlignment="Center" />
-                    <TextBlock Text="这是一款由avalonia开发的聊天软件" TextWrapping="Wrap" FontSize="13"
+                    <TextBlock Text="这是一款由avalonia开发的聊天软件" TextWrapping="Wrap" FontSize="13" Classes="Small"
                                HorizontalAlignment="Center" />
                     <TextBlock Text="   Suki Chat内置了聊天机器人，如果有什么问题，尽管提问它们。"
-                               TextAlignment="Center"
+                               TextAlignment="Center" Classes="Small"
                                TextWrapping="Wrap" FontSize="12.5">
                     </TextBlock>
                 </StackPanel>

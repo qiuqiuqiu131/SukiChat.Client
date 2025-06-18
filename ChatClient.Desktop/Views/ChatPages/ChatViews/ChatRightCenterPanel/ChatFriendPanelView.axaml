@@ -58,7 +58,7 @@
                             ToolTip.VerticalOffset="-4"
                             ToolTip.Placement="Bottom">
                         <ToolTip.Tip>
-                            <TextBlock Text="语音通话" FontSize="12" />
+                            <TextBlock Text="语音通话" FontSize="12" Classes="Small" />
                         </ToolTip.Tip>
                         <avalonia:MaterialIcon Kind="PhoneOutline" Width="23" Height="23" />
                     </Button>
@@ -66,7 +66,7 @@
                             ToolTip.VerticalOffset="-4"
                             ToolTip.Placement="Bottom">
                         <ToolTip.Tip>
-                            <TextBlock Text="语音通话" FontSize="12" />
+                            <TextBlock Text="语音通话" FontSize="12" Classes="Small" />
                         </ToolTip.Tip>
                         <avalonia:MaterialIcon Kind="VideoOutline" Width="23" Height="23" />
                     </Button>
@@ -90,6 +90,7 @@
                             VerticalAlignment="Center"
                             LetterSpacing="1"
                             Padding="3,0"
+                            FontWeight="SemiBold"
                             FontSize="17"
                             PointerPressed="HeadName_OnPointerPressed"
                             Foreground="{DynamicResource SukiText}" />
@@ -98,6 +99,7 @@
                             Text="{Binding SelectedFriend.FriendRelatoinDto.UserDto.Name}"
                             VerticalAlignment="Center"
                             LetterSpacing="1"
+                            FontWeight="SemiBold"
                             Padding="3,0"
                             FontSize="17"
                             PointerPressed="HeadName_OnPointerPressed"
@@ -116,13 +118,13 @@
                             <TextBlock Text="在线"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}"
-                                       FontSize="12.5" />
+                                       FontSize="13" />
                         </StackPanel>
                         <TextBlock IsVisible="{Binding SelectedFriend.IsWriting}"
                                    Text="对方正在输入..."
                                    Margin="5,5,5,0"
                                    VerticalAlignment="Center"
-                                   FontSize="12.5"
+                                   FontSize="13"
                                    Foreground="{DynamicResource SukiText}" />
                     </Grid>
                     <Grid VerticalAlignment="Center"
@@ -136,7 +138,7 @@
                             <TextBlock Text="离线"
                                        VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}"
-                                       FontSize="12.5" />
+                                       FontSize="13" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>

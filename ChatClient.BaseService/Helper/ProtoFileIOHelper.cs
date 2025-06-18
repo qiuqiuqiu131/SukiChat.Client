@@ -38,7 +38,7 @@ internal class ProtoFileIOHelper : IFileIOHelper
             var client = await _resourcesClientPool.GetClientAsync<RegularFileUploadClient>();
 
             // 开启两个线程同时执行
-            var timeoutTask = Task.Delay(10000);
+            var timeoutTask = Task.Delay(5000);
             var uploadTask = client.UploadFile(targetPath, fileName, stream);
             // 等待其中一个线程执行完成
             var completedTask = await Task.WhenAny(uploadTask, timeoutTask);

@@ -33,7 +33,6 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Opacity="0.6"
-                               FontWeight="SemiBold"
                                IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
                     </TextBlock>
                     <DockPanel LastChildFill="True"
@@ -73,7 +72,7 @@
                         <DockPanel LastChildFill="True" Margin="10">
                             <TextBlock DockPanel.Dock="Right" FontSize="11"
                                        IsVisible="{Binding SelectedFriends.Count}"
-                                       Opacity="0.75"
+                                       Opacity="0.75" Classes="Small"
                                        Text="{Binding SelectedFriends.Count,StringFormat=已选择 {0} 个好友}" />
                             <TextBlock FontSize="13.5" Text="创建群聊" />
                         </DockPanel>

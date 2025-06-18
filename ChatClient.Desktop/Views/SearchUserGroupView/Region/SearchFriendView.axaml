@@ -42,26 +42,27 @@
                                                              DockPanel.Dock="Left" />
                                     <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,3,0,3">
                                         <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" />
-                                        <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12"
+                                        <TextBlock Grid.Row="1" Text="{Binding Id}" FontSize="12" Classes="Small"
                                                    VerticalAlignment="Center"
                                                    Opacity="0.6" />
                                     </Grid>
                                 </Grid>
                                 <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center"
                                        Margin="15,0">
-                                    <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}" Opacity="0.6" />
+                                    <TextBlock Text="自己" FontSize="13" IsVisible="{Binding IsUser}" Opacity="0.6"
+                                               Classes="Small" />
                                     <Panel IsVisible="{Binding !IsUser}">
                                         <Button Padding="12,4" Margin="0"
                                                 IsVisible="{Binding !IsFriend}"
                                                 CommandParameter="{Binding}"
                                                 Command="{Binding ((region:SearchFriendViewModel)DataContext).AddFriendRequestCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                            <TextBlock Text="添加" FontSize="12.5" />
+                                            <TextBlock Text="添加" FontSize="12.5" Classes="Small" />
                                         </Button>
                                         <Button FontSize="12" Padding="12,4" Margin="0"
                                                 IsVisible="{Binding IsFriend}"
                                                 CommandParameter="{Binding}"
                                                 Command="{Binding ((region:SearchFriendViewModel)DataContext).SendMessageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                            <TextBlock Text="发消息" FontSize="12.5" />
+                                            <TextBlock Text="发消息" FontSize="12.5" Classes="Small" />
                                         </Button>
                                     </Panel>
                                 </Panel>

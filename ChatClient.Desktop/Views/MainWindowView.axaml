@@ -123,6 +123,7 @@
                                                    VerticalAlignment="Center"
                                                    Foreground="{DynamicResource SukiPrimaryColor}" />
                             <TextBlock Text="Suki" FontSize="12" VerticalAlignment="Center"
+                                       FontWeight="SemiBold"
                                        Foreground="{DynamicResource SukiPrimaryColor}" />
                         </StackPanel>
                         <circleImage:CircleImage Size="40" Image="{Binding User.UserDto.HeadImage}" Margin="0,13,0,15"

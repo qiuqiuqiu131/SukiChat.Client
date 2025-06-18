@@ -43,7 +43,7 @@
                     <Grid RowDefinitions="1.3*,*" Margin="13,0">
                         <TextBlock Text="{Binding UserDto.Name}" FontSize="14.5" VerticalAlignment="Center" />
                         <TextBlock Grid.Row="1" Text="{Binding UserDto.Id}" FontSize="12"
-                                   VerticalAlignment="Center"
+                                   VerticalAlignment="Center" Classes="Small"
                                    Opacity="0.6" />
                     </Grid>
                 </StackPanel>
@@ -53,11 +53,11 @@
                          VerticalContentAlignment="Top"
                          Watermark="填写验证信息" />
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="备注" Opacity="0.7" FontSize="12.5" />
+                    <TextBlock Text="备注" Opacity="0.7" FontSize="12.5" Classes="Small" />
                     <TextBox Text="{Binding Remark}" Watermark="填写备注" Margin="-3,0" />
                 </StackPanel>
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Text="分组" FontSize="12.5" Opacity="0.7" />
+                    <TextBlock Text="分组" FontSize="12.5" Opacity="0.7" Classes="Small" />
                     <ComboBox ItemsSource="{Binding Groups}" Margin="0,2" Height="35"
                               HorizontalContentAlignment="Left"
                               SelectedItem="{Binding Group}" />

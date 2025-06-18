@@ -34,6 +34,7 @@ internal class FileOperateHelper : IFileOperateHelper
             await using (var fileStream =
                          new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
+                file.Position = 0;
                 await file.CopyToAsync(fileStream);
             }
 
@@ -75,6 +76,7 @@ internal class FileOperateHelper : IFileOperateHelper
             await using (var fileStream =
                          new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
             {
+                file.Position = 0;
                 await file.CopyToAsync(fileStream);
             }
 
@@ -116,6 +118,7 @@ internal class FileOperateHelper : IFileOperateHelper
         await using (var fileStream =
                      new FileStream(fileInfo.FullName, FileMode.Create, FileAccess.Write, FileShare.None))
         {
+            stream.Position = 0;
             await stream.CopyToAsync(fileStream);
         }
 
@@ -140,6 +143,7 @@ internal class FileOperateHelper : IFileOperateHelper
                 await using (var destinationStream =
                              new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
                 {
+                    sourceStream.Position = 0;
                     await sourceStream.CopyToAsync(destinationStream);
                 }
             }

@@ -13,12 +13,17 @@
              xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls"
              xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatUI">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
             <Setter Property="Width" Value="5"></Setter>
+        </Style>
+        <Style
+            Selector="TextBlock,SelectableTextBlock,customSelectableTextBlock|CustomSelectableTextBlock,avalonia|MaterialIcon">
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource SukiLowText}" />
         </Style>
         <!-- <Style Selector="circleImage|CircleImage.Head"> -->
         <!--     <Setter Property="Cursor" Value="Hand" /> -->
@@ -92,18 +97,18 @@
                                         Margin="0,0,0,3">
                                 <Border Padding="3,1,1,1" Margin="4,0"
                                         CornerRadius="3"
-                                        Opacity="0.5"
+                                        Opacity="0.7"
                                         Background="{DynamicResource SukiPrimaryColor50}"
                                         IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
-                                    <TextBlock Text="群主" FontSize="12"
+                                    <TextBlock Text="群主" FontSize="11.5" Classes="Small"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
                                 </Border>
                                 <TextBlock Text="{Binding Owner.NickName}"
-                                           FontSize="12"
+                                           FontSize="12" Classes="Small"
                                            VerticalAlignment="Center"
                                            Padding="0"
-                                           Opacity="0.7" />
+                                           Opacity="0.8" />
                             </StackPanel>
                             <Grid Grid.Row="1"
                                   ColumnDefinitions="Auto,*"
@@ -207,15 +212,16 @@
                                         Margin="0,0,0,3">
                                 <TextBlock Text="{Binding Owner.NickName}"
                                            FontSize="12"
+                                           Classes="Small"
                                            Padding="0"
                                            VerticalAlignment="Center"
-                                           Opacity="0.7" />
+                                           Opacity="0.8" />
                                 <Border Padding="3,1,1,1" Margin="4,0"
                                         CornerRadius="3"
-                                        Opacity="0.5"
+                                        Opacity="0.7"
                                         Background="{DynamicResource SukiPrimaryColor50}"
                                         IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
-                                    <TextBlock Text="群主" FontSize="12"
+                                    <TextBlock Text="群主" FontSize="11.5" Classes="Small"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
                                 </Border>
@@ -300,7 +306,7 @@
                                         Click="MoreButton_OnClick"
                                         Command="{TemplateBinding SearchMoreCommand}">
                                     <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
-                                               Cursor="Hand"
+                                               Cursor="Hand" Classes="Small"
                                                Foreground="{DynamicResource SukiPrimaryColor75}" />
                                 </Button>
                                 <ItemsControl Name="IC"
@@ -318,7 +324,7 @@
                                                 <StackPanel Orientation="Vertical">
                                                     <!-- 时间条 -->
                                                     <TextBlock
-                                                        Classes="FadeIn"
+                                                        Classes="FadeIn Small"
                                                         Margin="5"
                                                         Opacity="0.7"
                                                         IsVisible="{Binding ShowTime}"
@@ -332,7 +338,7 @@
                                                                 Background="{DynamicResource SukiPrimaryColor10}"
                                                                 Margin="0,5"
                                                                 HorizontalAlignment="Center" CornerRadius="5">
-                                                            <TextBlock FontSize="12" Opacity="0.75"
+                                                            <TextBlock FontSize="12" Opacity="0.75" Classes="Small"
                                                                        HorizontalAlignment="Center" Margin="5,1.5">
                                                                 <Run Foreground="{DynamicResource SukiPrimaryColor}"
                                                                      Text="{Binding Converter={chatUI:GroupRetractedMessageConverter}}" />
@@ -357,7 +363,7 @@
                                 VerticalAlignment="Bottom"
                                 Margin="0"
                                 Padding="0"
-                                Classes="Basic Visible"
+                                Classes="Basic Visible "
                                 RenderTransformOrigin="0.5,1"
                                 Click="Button_OnClick">
                             <suki:GlassCard Background="{DynamicResource SukiPrimaryColor}"
@@ -365,7 +371,7 @@
                                             Padding="10,5"
                                             CornerRadius="7">
                                 <TextBlock
-                                    FontSize="13"
+                                    FontSize="13" Classes="Small"
                                     Text="{Binding $parent[groupChatUi:GroupChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}">
                                 </TextBlock>
                             </suki:GlassCard>

@@ -2,7 +2,7 @@ namespace ChatClient.Tool.ManagerInterface;
 
 public interface IAppDataManager
 {
-    string GetBaseFloaderPath();
+    string GetBaseFolderPath();
     string GetFilePath(string path);
     FileInfo GetFileInfo(string path);
 }

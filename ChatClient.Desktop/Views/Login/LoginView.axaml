@@ -75,7 +75,7 @@
         </Panel>
 
         <!-- 主体 -->
-        <suki:BusyArea Grid.Row="1" IsBusy="{Binding IsBusy}" BusyText="登录中">
+        <suki:BusyArea Grid.Row="1" Classes="Qiu" IsBusy="{Binding IsBusy}" BusyText="登录中...">
             <DockPanel LastChildFill="True">
                 <!-- 底部导航 -->
                 <StackPanel
@@ -168,7 +168,7 @@
                                                    Text="{Binding ID,StringFormat='ID: {0}'}" />
                                         <TextBlock
                                             Text="{Binding LastLoginTime}"
-                                            HorizontalAlignment="Center"
+                                            HorizontalAlignment="Center" Classes="Small"
                                             FontSize="12" Opacity="0.65" />
                                     </StackPanel>
                                 </DockPanel>
@@ -194,8 +194,7 @@
                     <!-- 记住密码 -->
                     <CheckBox Margin="6,5,5,0" IsChecked="{Binding LoginData.RememberPassword}">
                         <TextBlock
-                            FontSize="13"
-                            FontWeight="DemiBold"
+                            FontSize="13.5"
                             Text="记住密码"
                             Foreground="{DynamicResource SukiLowText}" />
                     </CheckBox>

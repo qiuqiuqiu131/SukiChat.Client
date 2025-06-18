@@ -75,7 +75,8 @@
                     Height="22"
                     Foreground="{DynamicResource SukiPrimaryColor}"
                     Kind="ChartDonutVariant" />
-                <TextBlock Text="Suki" Foreground="{DynamicResource SukiPrimaryColor}" VerticalAlignment="Center"
+                <TextBlock Text="Suki" FontWeight="SemiBold" Foreground="{DynamicResource SukiPrimaryColor}"
+                           VerticalAlignment="Center"
                            FontSize="13.5" />
             </StackPanel>
             <!-- 注册页面 -->

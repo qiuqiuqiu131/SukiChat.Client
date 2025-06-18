@@ -74,7 +74,6 @@
                 </formComboBox:FormComboBox>
                 <formDatePicker:FormDatePicker Name="datePicker"
                                                MonthFormat="MM"
-                                               FontWeight="Medium"
                                                YearFormat="yyyy"
                                                DayFormat="dd"
                                                Height="35" FontSize="14" Head="生日" />

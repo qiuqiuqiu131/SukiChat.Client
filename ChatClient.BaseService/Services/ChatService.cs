@@ -376,7 +376,7 @@ internal class ChatService : BaseService, IChatService
         var result = false;
         await using (var stream = bitmap.BitmapToStream())
         {
-            await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, stream,
+            result = await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, stream,
                 fileTarget);
         }
 

@@ -71,8 +71,9 @@
                                                             DockPanel.Dock="Left"
                                                             HorizontalAlignment="Left">
                                                     <TextBlock Text="[" Opacity="0.6"
-                                                               Foreground="{DynamicResource SukiText}" FontSize="11.5"
+                                                               Foreground="{DynamicResource SukiText}" FontSize="12"
                                                                Margin="0"
+                                                               Classes="Small"
                                                                FontWeight="Normal"
                                                                Padding="0" />
                                                     <Ellipse IsVisible="{Binding UserDto.IsOnline}"
@@ -92,17 +93,20 @@
                                                         Opacity="0.6"
                                                         Foreground="{DynamicResource SukiText}"
                                                         FontSize="12"
+                                                        Classes="Small"
                                                         FontWeight="Normal"
                                                         Margin="2,0,2,3"
                                                         Padding="0" />
-                                                    <TextBlock Text="]" Opacity="0.6" FontSize="11.5" Margin="0"
+                                                    <TextBlock Text="]" Opacity="0.6" FontSize="12" Margin="0"
                                                                Foreground="{DynamicResource SukiText}"
+                                                               Classes="Small"
                                                                FontWeight="Normal"
                                                                Padding="0" />
                                                 </StackPanel>
-                                                <TextBlock FontSize="11.5" Opacity="0.6" Margin="0,0,15,0"
+                                                <TextBlock FontSize="12" Opacity="0.6" Margin="0,0,15,0"
                                                            Text="{Binding UserDto.Introduction}"
                                                            FontWeight="Normal"
+                                                           Classes="Small"
                                                            HorizontalAlignment="Left"
                                                            Foreground="{DynamicResource SukiText}"
                                                            TextTrimming="CharacterEllipsis" />

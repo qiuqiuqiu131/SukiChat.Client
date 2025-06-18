@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using Avalonia.Collections;
@@ -30,8 +31,18 @@ public class GroupDetailViewModel : ViewModelBase, IRegionMemberLifetime
     public GroupRelationDto? Group
     {
         get => _group;
-        set => SetProperty(ref _group, value);
+        set
+        {
+            if (SetProperty(ref _group, value))
+            {
+                RaisePropertyChanged(nameof(GroupMembers));
+            }
+        }
     }
+
+    public IEnumerable<GroupMemberDto>? GroupMembers => Group?.GroupDto?.GroupMembers
+        .OrderBy(d => d.Status)
+        .ThenBy(d => d.JoinTime).Take(10);
 
 
     public AvaloniaList<string>? GroupNames { get; private set; }

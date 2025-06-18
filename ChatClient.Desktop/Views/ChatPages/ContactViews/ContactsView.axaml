@@ -138,7 +138,6 @@
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
-                                           FontWeight="SemiBold"
                                            IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
                                 </TextBlock>
                                 <seperateGroupsView:SeparateGroupsView
@@ -160,7 +159,6 @@
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
-                                           FontWeight="SemiBold"
                                            IsVisible="{Binding GroupGroups,Converter={converter:ListEmptyConverter}}" />
                                 <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
                                     Margin="0,0,0,100"
@@ -192,7 +190,7 @@
                 </ScrollViewer.IsVisible>
                 <StackPanel Orientation="Vertical" content:StackPanelExtensions.AnimatedScroll="True">
                     <Panel>
-                        <TextBlock HorizontalAlignment="Left" Text="本地搜索" Opacity="0.6"
+                        <TextBlock HorizontalAlignment="Left" Text="本地搜索" Opacity="0.6" Classes="Small"
                                    IsVisible="{Binding AllSearchDto, Converter={x:Static ObjectConverters.IsNull}}"
                                    FontSize="12.5" Margin="15,10,0,5" />
                         <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -231,7 +229,7 @@
                             </Panel>
                             <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,0">
                                 <TextBlock Grid.Row="0" Text="进入全网搜索" />
-                                <TextBlock Grid.Row="1" Text="查找群聊、用户等" FontSize="12.5" Opacity="0.6" />
+                                <TextBlock Grid.Row="1" Text="查找群聊、用户等" FontSize="12.5" Classes="Small" Opacity="0.7" />
                             </Grid>
                         </Grid>
                     </suki:GlassCard>

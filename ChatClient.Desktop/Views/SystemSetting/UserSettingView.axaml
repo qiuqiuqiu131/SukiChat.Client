@@ -19,7 +19,7 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Spacing="20" Width="370">
                 <DockPanel LastChildFill="False">
                     <TextBlock Text="当无法建立通话时，勾选此设置，会提供服务器中转" FontSize="11" Opacity="0.7"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Center" Classes="Small"
                                DockPanel.Dock="Bottom"
                                Margin="0,-5,0,0" />
                     <TextBlock Text="通话中转" DockPanel.Dock="Left" VerticalAlignment="Center" />

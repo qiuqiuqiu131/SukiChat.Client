@@ -3,6 +3,8 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using Prism.Dialogs;
@@ -25,6 +27,9 @@ public partial class SukiChatDialogWindow : SukiWindow, IDialogWindow
     public SukiChatDialogWindow(IThemeStyle themeStyle)
     {
         InitializeComponent();
+
+        RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
 
         ThemeStyle = themeStyle;
 

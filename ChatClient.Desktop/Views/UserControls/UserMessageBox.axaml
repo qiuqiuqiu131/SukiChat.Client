@@ -25,18 +25,18 @@
                                             VerticalAlignment="Bottom" Margin="5,2" />
                         </StackPanel>
                         <SelectableTextBlock Text="{Binding Id,StringFormat=ID: {0}}"
-                                             FontSize="12"
+                                             FontSize="12" Classes="Small"
                                              Opacity="0.7" />
                         <Grid>
                             <StackPanel Orientation="Horizontal" Spacing="7"
                                         IsVisible="{Binding IsOnline}">
                                 <Ellipse Fill="LimeGreen" Width="13" Height="13" />
-                                <TextBlock Text="在线" FontSize="13" />
+                                <TextBlock Text="在线" FontSize="13" Classes="Small" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Spacing="7"
                                         IsVisible="{Binding !IsOnline}">
                                 <Ellipse Fill="Red" Width="13" Height="13" />
-                                <TextBlock Text="离线" FontSize="13" />
+                                <TextBlock Text="离线" FontSize="13" Classes="Small" />
                             </StackPanel>
                         </Grid>
                     </StackPanel>

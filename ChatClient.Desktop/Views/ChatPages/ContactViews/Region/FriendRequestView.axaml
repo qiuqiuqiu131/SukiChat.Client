@@ -59,11 +59,13 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" Classes="Small"
+                                       IsVisible="{Binding IsAccept}" />
+                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" Classes="Small"
+                                       IsVisible="{Binding !IsAccept}" />
                         </Grid>
                         <TextBlock Text="等待验证" FontSize="12" Opacity="0.6"
-                                   VerticalAlignment="Center"
+                                   VerticalAlignment="Center" Classes="Small"
                                    IsVisible="{Binding !IsSolved}" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
@@ -72,19 +74,18 @@
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
                                     FontSize="13.5"
-                                    FontWeight="SemiBold"
                                     Text="{Binding UserDto.Name}" />
                                 <TextBlock Text="正在验证你的邀请"
                                            Foreground="{DynamicResource SukiText}"
-                                           FontSize="13" />
+                                           FontSize="13" Classes="Small" />
                                 <TextBlock Text="{Binding RequestTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5"
+                                           FontSize="12.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock Text="留言：" FontSize="12" Opacity="0.6" />
+                                <TextBlock Text="留言：" FontSize="12" Opacity="0.6" Classes="Small" />
                                 <TextBlock
-                                    FontSize="12" Opacity="0.6"
+                                    FontSize="12" Opacity="0.6" Classes="Small"
                                     Text="{Binding Message,Converter={converter:DefaultTextConverter DefaultText=已发送验证消息}}" />
                             </StackPanel>
                         </Grid>
@@ -106,8 +107,10 @@
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
                         <Grid IsVisible="{Binding IsSolved}" VerticalAlignment="Center">
-                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" IsVisible="{Binding IsAccept}" />
-                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" IsVisible="{Binding !IsAccept}" />
+                            <TextBlock Text="已同意" FontSize="12" Opacity="0.6" Classes="Small"
+                                       IsVisible="{Binding IsAccept}" />
+                            <TextBlock Text="已拒绝" FontSize="12" Opacity="0.6" Classes="Small"
+                                       IsVisible="{Binding !IsAccept}" />
                         </Grid>
                         <StackPanel IsVisible="{Binding !IsSolved}"
                                     Margin="0,0,-10,0"
@@ -118,14 +121,14 @@
                                     Opacity="0.9"
                                     Command="{Binding ((region1:FriendRequestViewModel)DataContext).AcceptCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="同意" FontSize="12" />
+                                <TextBlock Text="同意" FontSize="12" Classes="Small" />
                             </Button>
                             <Button Classes="Outlined Accent" Padding="8,4" Margin="0"
                                     Opacity="0.9"
                                     CommandParameter="{Binding}"
                                     Command="{Binding ((region1:FriendRequestViewModel)DataContext).RejectCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
-                                <TextBlock Text="拒绝" FontSize="12" />
+                                <TextBlock Text="拒绝" FontSize="12" Classes="Small" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -135,19 +138,18 @@
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
                                     FontSize="13.5"
-                                    FontWeight="SemiBold"
                                     Text="{Binding UserDto.Name}" />
-                                <TextBlock Text="请求加为好友"
+                                <TextBlock Text="请求加为好友" Classes="Small"
                                            Foreground="{DynamicResource SukiText}"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding ReceiveTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5"
+                                           FontSize="12.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
-                                <TextBlock Text="留言：" FontSize="12" Opacity="0.6" Margin="0" />
+                                <TextBlock Text="留言：" FontSize="12" Classes="Small" Opacity="0.6" Margin="0" />
                                 <TextBlock
-                                    FontSize="12" Opacity="0.6"
+                                    FontSize="12" Opacity="0.6" Classes="Small"
                                     Text="{Binding Message,Converter={converter:DefaultTextConverter DefaultText=已发送验证消息}}" />
                             </StackPanel>
                         </Grid>
@@ -168,10 +170,10 @@
                 CornerRadius="5">
                 <DockPanel LastChildFill="True">
                     <Grid DockPanel.Dock="Right">
-                        <TextBlock Opacity="0.6" FontSize="12" VerticalAlignment="Center"
+                        <TextBlock Opacity="0.6" FontSize="12" VerticalAlignment="Center" Classes="Small"
                                    Text="{Binding UserDto.Name,StringFormat=处理者: {0}}"
                                    IsVisible="{Binding !IsUser}" />
-                        <TextBlock Opacity="0.6" FontSize="12" Text="处理者:你" VerticalAlignment="Center"
+                        <TextBlock Opacity="0.6" FontSize="12" Text="处理者:你" VerticalAlignment="Center" Classes="Small"
                                    IsVisible="{Binding IsUser}" />
                     </Grid>
                     <StackPanel Margin="0,10" Orientation="Horizontal">
@@ -180,20 +182,19 @@
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
                                     FontSize="13.5"
-                                    FontWeight="SemiBold"
                                     Text="{Binding UserDto.Name}" />
-                                <TextBlock Text="删除好友"
+                                <TextBlock Text="删除好友" Classes="Small"
                                            Foreground="{DynamicResource SukiText}"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding DeleteTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5"
+                                           FontSize="12.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="1">
                                 <TextBlock Text="消息：" FontSize="12" Opacity="0.6" />
-                                <TextBlock Text="你已将其删除" FontSize="12" Opacity="0.6" Margin="0"
+                                <TextBlock Text="你已将其删除" FontSize="12" Opacity="0.6" Margin="0" Classes="Small"
                                            IsVisible="{Binding IsUser}" />
-                                <TextBlock Text="你已被删除" FontSize="12" Opacity="0.6" Margin="0"
+                                <TextBlock Text="你已被删除" FontSize="12" Opacity="0.6" Margin="0" Classes="Small"
                                            IsVisible="{Binding !IsUser}" />
                             </StackPanel>
                         </Grid>
@@ -215,7 +216,6 @@
         <Grid RowDefinitions="65,*" IsVisible="{Binding !IsRequestEmpty}">
             <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0">
                 <TextBlock Text="好友通知" FontSize="16.5" VerticalAlignment="Bottom"
-                           FontWeight="SemiBold"
                            DockPanel.Dock="Left"
                            Margin="10,10" />
                 <StackPanel Orientation="Horizontal"
@@ -273,7 +273,6 @@
                                    Foreground="{DynamicResource SukiText}" />
             <TextBlock
                 FontSize="17"
-                FontWeight="SemiBold"
                 HorizontalAlignment="Center"
                 Text="暂无通知" />
         </StackPanel>

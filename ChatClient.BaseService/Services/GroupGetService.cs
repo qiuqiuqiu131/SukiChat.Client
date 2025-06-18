@@ -126,6 +126,8 @@ public class GroupGetService : BaseService, IGroupGetService
         else
             groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupId, groupDto.IsCustomHead);
 
+        // TODO: 更新数据库
+
         return groupDto;
     }
 
@@ -134,6 +136,9 @@ public class GroupGetService : BaseService, IGroupGetService
         var groupDto = _mapper.Map<GroupDto>(groupMessage);
         _ = Task.Run(async () =>
             groupDto.HeadImage = await GetHeadImage(groupDto.HeadIndex, groupMessage.GroupId, groupDto.IsCustomHead));
+
+        // TODO: 更新数据库
+
         return groupDto;
     }
 
@@ -158,6 +163,8 @@ public class GroupGetService : BaseService, IGroupGetService
                 await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex);
         }).ConfigureAwait(false);
 
+        // TODO: 更新数据库
+
         return groupMemberDto;
     }
 
@@ -166,6 +173,9 @@ public class GroupGetService : BaseService, IGroupGetService
         var groupMemberDto = _mapper.Map<GroupMemberDto>(memberMessage);
         _ = Task.Run(async () => groupMemberDto.HeadImage =
             await userService.GetHeadImage(groupMemberDto.UserId, groupMemberDto.HeadIndex));
+
+        // TODO: 更新数据库
+
         return groupMemberDto;
     }
 

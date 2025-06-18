@@ -51,7 +51,8 @@
             </StackPanel>
             <TextBlock Margin="8">
                 <Run Text="服务器: " FontSize="14.5" />
-                <Run Text="(设置IPv4地址，请关注开发者动态)" FontSize="11" Foreground="{DynamicResource SukiLowText}" />
+                <Run Text="(设置IPv4地址，请关注开发者动态)" Classes="Small" FontSize="11"
+                     Foreground="{DynamicResource SukiLowText}" />
             </TextBlock>
             <iPv4Box:IPv4Box ShowLeadingZero="False" FontSize="15" FontFamily="{StaticResource MiSans}"
                              HorizontalAlignment="Stretch"

@@ -56,7 +56,7 @@
                                     Opacity="0.5"
                                     Background="{DynamicResource SukiPrimaryColor50}"
                                     IsVisible="{Binding Status,Converter={converter:IntEqualityConverter Value=0}}">
-                                <TextBlock Text="群主" FontSize="12"
+                                <TextBlock Text="群主" FontSize="12" Classes="Small"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center" />
                             </Border>

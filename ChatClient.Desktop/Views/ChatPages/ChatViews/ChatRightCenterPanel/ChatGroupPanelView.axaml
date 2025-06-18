@@ -76,6 +76,7 @@
                             VerticalAlignment="Center"
                             Padding="3,0"
                             LetterSpacing="1"
+                            FontWeight="SemiBold"
                             FontSize="16"
                             Foreground="{DynamicResource SukiText}" />
                         <TextBlock
@@ -84,6 +85,7 @@
                             VerticalAlignment="Center"
                             PointerPressed="HeadName_OnPointerPressed"
                             Padding="3,0"
+                            FontWeight="SemiBold"
                             LetterSpacing="1"
                             FontSize="16"
                             Foreground="{DynamicResource SukiText}" />
@@ -92,6 +94,7 @@
                         Text="{Binding SelectedGroup.GroupRelationDto.GroupDto.GroupMembers.Count,StringFormat=({0})}"
                         Margin="0,0,0,10"
                         VerticalAlignment="Center"
+                        FontWeight="SemiBold"
                         LetterSpacing="1"
                         FontSize="16"
                         Foreground="{DynamicResource SukiText}" />

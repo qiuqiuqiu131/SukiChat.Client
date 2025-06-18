@@ -8,6 +8,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Primitives.PopupPositioning;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels;
@@ -38,7 +40,9 @@ public partial class MainWindowView : SukiWindow, IDisposable
         _userManager = userManager;
         InitializeComponent();
 
-        // Icon = new WindowIcon(Environment.CurrentDirectory + "/Assets/DefaultHead.ico");
+        RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
+        RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
+
         eventAggregator.GetEvent<DialogShowEvent>().Subscribe(async show =>
         {
             if (show)

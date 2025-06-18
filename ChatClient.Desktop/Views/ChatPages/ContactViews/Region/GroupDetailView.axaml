@@ -60,17 +60,18 @@
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Spacing="8">
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Name}"
                                          Height="22"
+                                         FontWeight="SemiBold"
                                          FontSize="17.5" />
                     <SelectableTextBlock Text="{Binding Group.GroupDto.Id,StringFormat=ID: {0}}"
-                                         FontSize="12.5"
+                                         FontSize="12.5" Classes="Small"
                                          Opacity="0.7" />
                 </StackPanel>
             </StackPanel>
             <Border Background="{DynamicResource SukiBorderBrush}" Height="1.5" Margin="5,20,5,10" />
         </StackPanel>
-        <StackPanel Orientation="Vertical" Spacing="5">
+        <StackPanel Orientation="Vertical">
             <Grid>
-                <DockPanel Height="40" IsVisible="{Binding !Group.IsOwner}">
+                <DockPanel Height="45" IsVisible="{Binding !Group.IsOwner}">
                     <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
                     <TextBlock Text="备注" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
@@ -81,7 +82,7 @@
                         HorizontalContentAlignment="Right"
                         VerticalAlignment="Center" />
                 </DockPanel>
-                <DockPanel Height="40" IsVisible="{Binding Group.IsOwner}">
+                <DockPanel Height="45" IsVisible="{Binding Group.IsOwner}">
                     <avalonia:MaterialIcon Kind="NoteEditOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
                     <TextBlock Text="群名" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
@@ -93,7 +94,7 @@
                         VerticalAlignment="Center" />
                 </DockPanel>
             </Grid>
-            <DockPanel Height="40">
+            <DockPanel Height="45">
                 <avalonia:MaterialIcon Kind="AccountOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
                 <TextBlock Text="群聊昵称" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
@@ -104,23 +105,22 @@
                     HorizontalContentAlignment="Right"
                     VerticalAlignment="Center" />
             </DockPanel>
-            <DockPanel Height="40">
+            <DockPanel Height="45">
                 <avalonia:MaterialIcon Kind="BookOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        Foreground="{DynamicResource SukiText}" />
                 <TextBlock Text="群分组" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
                 <ComboBox HorizontalAlignment="Right"
-                          Margin="0,7"
+                          Margin="0,10"
                           Padding="0"
-                          FontSize="13"
                           ItemsSource="{Binding GroupNames}"
                           SelectedValue="{Binding Group.Grouping}" />
             </DockPanel>
-            <DockPanel MinHeight="40" Margin="0,8">
+            <DockPanel MinHeight="45">
                 <avalonia:MaterialIcon Kind="NoteTextOutline" Width="20" Height="20" Margin="0,0,8,0"
                                        DockPanel.Dock="Left"
-                                       VerticalAlignment="Top"
+                                       VerticalAlignment="Center"
                                        Foreground="{DynamicResource SukiText}" />
-                <TextBlock Text="群介绍" VerticalAlignment="Top" DockPanel.Dock="Left" Margin="0,3" />
+                <TextBlock Text="群介绍" VerticalAlignment="Center" DockPanel.Dock="Left" Margin="0,3" />
                 <editableTextBlock:EditableTextBlock
                     IsVisible="{Binding Group.IsOwner}"
                     Text="{Binding Group.GroupDto.Description,Mode=TwoWay}"
@@ -139,7 +139,7 @@
                            HorizontalAlignment="Right"
                            Margin="0" />
             </DockPanel>
-            <StackPanel Orientation="Vertical" Margin="8" ClipToBounds="True">
+            <StackPanel Orientation="Vertical" Margin="0,12" ClipToBounds="True">
                 <StackPanel Orientation="Horizontal">
                     <avalonia:MaterialIcon Kind="AccountMultipleOutline" Width="20" Height="20" Margin="0,0,8,0"
                                            Foreground="{DynamicResource SukiText}" />
@@ -149,7 +149,7 @@
                         <Run Text=")" />
                     </TextBlock>
                 </StackPanel>
-                <ItemsControl ItemsSource="{Binding Group.GroupDto.GroupMembers}" Margin="0,8">
+                <ItemsControl ItemsSource="{Binding GroupMembers}" Margin="0,8">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Horizontal" />
@@ -157,7 +157,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <circleImage:CircleImage Size="35" Margin="2.5" Image="{Binding HeadImage}" />
+                            <circleImage:CircleImage Size="35" Margin="3" Image="{Binding HeadImage}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -169,13 +169,13 @@
                 <Button Margin="0"
                         Padding="17,4.5"
                         Command="{Binding ShareGroupCommand}">
-                    <TextBlock Text="分享至" FontSize="13.5" />
+                    <TextBlock Text="分享至" FontSize="14" />
                 </Button>
                 <Button Classes="Flat"
                         Margin="0"
                         Padding="17,4.5"
                         Command="{Binding SendMessageCommand}">
-                    <TextBlock Text="发消息" FontSize="13.5" />
+                    <TextBlock Text="发消息" FontSize="14" />
                 </Button>
             </StackPanel>
         </StackPanel>

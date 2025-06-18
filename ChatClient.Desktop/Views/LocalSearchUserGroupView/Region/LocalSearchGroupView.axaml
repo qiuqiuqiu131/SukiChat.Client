@@ -67,7 +67,7 @@
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center"
                                                 Margin="0,3,15,0"
                                                 Grid.Row="1">
-                                        <TextBlock Opacity="0.6" Text="{Binding Message}" FontSize="12" />
+                                        <TextBlock Opacity="0.6" Text="{Binding Message}" Classes="Small" FontSize="12" />
                                     </StackPanel>
                                 </Grid>
                                 <Border Grid.Column="2" Name="IconBorder" VerticalAlignment="Center"

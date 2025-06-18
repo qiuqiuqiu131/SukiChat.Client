@@ -168,7 +168,9 @@
                     </DockPanel>
                 </StackPanel>
             </Border>
-            <TextBlock Margin="43,5" FontSize="12" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填" Opacity="0.5"></TextBlock>
+            <TextBlock Classes="Small" Margin="43,5" FontSize="12" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填"
+                       Opacity="0.5">
+            </TextBlock>
         </StackPanel>
     </StackPanel>
 </UserControl>

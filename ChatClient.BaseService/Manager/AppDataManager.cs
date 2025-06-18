@@ -31,7 +31,7 @@ internal class AppDataManager : IAppDataManager
             Directory.CreateDirectory(_appDataFolder);
     }
 
-    public string GetBaseFloaderPath() => _appDataFolder;
+    public string GetBaseFolderPath() => _appDataFolder;
 
     public string GetFilePath(string path)
     {

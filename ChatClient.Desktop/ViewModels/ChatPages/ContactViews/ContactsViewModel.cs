@@ -337,7 +337,9 @@ public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAwa
 
     private void CreateGroup()
     {
-        _dialogService.ShowDialog(nameof(CreateGroupView));
+        _sukiDialogManager.CreateDialog()
+            .WithViewModel(d => new CreateGroupViewModel(d, null))
+            .TryShow();
     }
 
     private void SearchMore(string obj)

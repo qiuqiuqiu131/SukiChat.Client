@@ -113,7 +113,6 @@
                                         x:Name="SubButton"
                                         Grid.Column="0"
                                         Padding="3"
-                                        FontWeight="Bold"
                                         FontSize="15"
                                         Classes="Basic">
                                         <avalonia:MaterialIcon
@@ -134,7 +133,6 @@
                                         Grid.Column="2"
                                         Padding="3"
                                         FontSize="15"
-                                        FontWeight="Bold"
                                         Classes="Basic">
                                         <avalonia:MaterialIcon
                                             Width="20"

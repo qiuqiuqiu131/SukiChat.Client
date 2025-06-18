@@ -52,14 +52,16 @@ public class GroupSideViewModel : BindableBase, INavigationAware
             var list = new List<object>();
             if (SelectedGroup.IsOwner)
             {
-                var member = SelectedGroup.GroupDto!.GroupMembers.OrderBy(d => d.Status).Take(13);
+                var member = SelectedGroup.GroupDto!.GroupMembers.OrderBy(d => d.Status)
+                    .ThenBy(d => d.JoinTime).Take(13);
                 list.AddRange(member);
                 list.Add("Minus");
                 list.Add("Add");
             }
             else
             {
-                var member = SelectedGroup.GroupDto!.GroupMembers.OrderBy(d => d.Status).Take(14);
+                var member = SelectedGroup.GroupDto!.GroupMembers.OrderBy(d => d.Status)
+                    .ThenBy(d => d.JoinTime).Take(14);
                 list.AddRange(member);
                 list.Add("Add");
             }

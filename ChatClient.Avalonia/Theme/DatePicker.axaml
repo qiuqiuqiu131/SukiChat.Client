@@ -39,7 +39,7 @@
                                 </Grid.OpacityMask>
                                 <Grid.Styles>
                                     <Style Selector="ListBoxItem:selected TextBlock">
-                                        <Setter Property="FontWeight" Value="Bold" />
+                                        <Setter Property="FontWeight" Value="SemiBold" />
                                     </Style>
                                     <Style Selector="DateTimePickerPanel &gt; ListBoxItem">
                                         <Setter Property="Background" Value="Transparent" />

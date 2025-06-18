@@ -13,6 +13,7 @@
     xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls"
     xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat"
     xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+    xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -24,6 +25,10 @@
         <!-- <Style Selector="circleImage|CircleImage.Head"> -->
         <!--     <Setter Property="Cursor" Value="Hand" /> -->
         <!-- </Style> -->
+        <Style
+            Selector="TextBlock,SelectableTextBlock,customSelectableTextBlock|CustomSelectableTextBlock,avalonia|MaterialIcon">
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource SukiLowText}" />
+        </Style>
         <Style Selector="TextBlock.FadeIn">
             <Style.Animations>
                 <Animation FillMode="Forward"
@@ -235,7 +240,7 @@
                                         Cursor="Hand"
                                         Click="MoreButton_OnClick"
                                         Command="{TemplateBinding SearchMoreCommand}">
-                                    <TextBlock Text="查看更多历史记录" FontSize="11.5" LetterSpacing="1"
+                                    <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1" Classes="Small"
                                                Foreground="{DynamicResource SukiPrimaryColor75}" />
                                 </Button>
                                 <ItemsControl Name="IC"
@@ -253,11 +258,11 @@
                                                 <StackPanel Orientation="Vertical">
                                                     <!-- 时间条 -->
                                                     <TextBlock
-                                                        Classes="FadeIn"
+                                                        Classes="FadeIn Small"
                                                         Margin="5"
                                                         Opacity="0.7"
                                                         IsVisible="{Binding ShowTime}"
-                                                        FontSize="11.5"
+                                                        FontSize="12"
                                                         Foreground="{DynamicResource SukiText}"
                                                         HorizontalAlignment="Center"
                                                         Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
@@ -268,6 +273,7 @@
                                                                 Margin="0,5"
                                                                 HorizontalAlignment="Center" CornerRadius="5">
                                                             <TextBlock FontSize="12" Margin="5,1.5" Opacity="0.75"
+                                                                       Classes="Small"
                                                                        HorizontalAlignment="Center">
                                                                 <Run
                                                                     Text="{Binding IsUser,Converter={chatUi:RetractedMessageConverter}}"
@@ -303,7 +309,7 @@
                                             Padding="8,4,4,4"
                                             CornerRadius="7">
                                 <TextBlock
-                                    FontSize="12"
+                                    FontSize="12" Classes="Small"
                                     Opacity="0.7"
                                     Text="{Binding $parent[chatUi:ChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}">
                                 </TextBlock>

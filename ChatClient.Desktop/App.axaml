@@ -7,9 +7,12 @@
     xmlns:suki="clr-namespace:SukiUI;assembly=SukiUI"
     xmlns:semi="https://irihi.tech/semi"
     xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia"
+    xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
     RequestedThemeVariant="Default">
     <Application.Resources>
-        <FontFamily x:Key="MiSans">avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
+        <!-- <FontFamily x:Key="MiSans_Semibold">avares://ChatClient.Desktop/Assets/MiSans-Semibold.ttf#MiSans</FontFamily> -->
+        <FontFamily x:Key="MiSans_Normal">avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
+        <!-- <FontFamily x:Key="MiSans_Medium">avares://ChatClient.Desktop/Assets/MiSans-Medium.ttf#MiSans</FontFamily> -->
     </Application.Resources>
     <Application.Styles>
         <suki:SukiTheme />
@@ -17,9 +20,11 @@
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/NotificationStyles.axaml" />
         <StyleInclude Source="avares://ChatClient.Avalonia/Theme/Index.axaml" />
 
-        <Style Selector="TextBlock,SelectableTextBlock,TextBox,customSelectableTextBlock|CustomSelectableTextBlock">
-            <Setter Property="TextElement.FontFamily" Value="{StaticResource MiSans}" />
+        <Style
+            Selector="TextBlock,SelectableTextBlock,TextBox,iPv4Box|IPv4Box,customSelectableTextBlock|CustomSelectableTextBlock">
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource MiSans_Normal}" />
             <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+            <Setter Property="TextElement.FontSize" Value="14.5" />
         </Style>
     </Application.Styles>
 </Application>

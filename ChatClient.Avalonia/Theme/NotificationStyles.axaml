@@ -126,7 +126,7 @@
                                     <Setter Property="Background"
                                             Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type controls:NotificationMessage}}, Path=BadgeAccentBrush}" />
                                     <Setter Property="FontSize" Value="11" />
-                                    <Setter Property="FontWeight" Value="Bold" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
                                     <Setter Property="Foreground" Value="White" />
                                     <Setter Property="HorizontalAlignment" Value="Center" />
                                     <Setter Property="Margin" Value="10,2,0,2" />

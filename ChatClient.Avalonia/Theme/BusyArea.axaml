@@ -7,7 +7,7 @@
         </Border>
     </Design.PreviewWith>
 
-    <Style Selector="suki|BusyArea">
+    <Style Selector="suki|BusyArea.Qiu">
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
@@ -20,18 +20,14 @@
                         <TextBlock Margin="3"
                                    DockPanel.Dock="Bottom"
                                    IsHitTestVisible="False"
-                                   FontWeight="{DynamicResource DefaultDemiBold}"
                                    IsVisible="{TemplateBinding BusyText,
                                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                    Text="{TemplateBinding BusyText}" />
-
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           IsHitTestVisible="False"
                                           Content="{TemplateBinding IsBusy, Converter={x:Static suki:ProgressToContentConverter.Instance}}">
                         </ContentPresenter>
-
-
                     </DockPanel>
                 </Panel>
             </ControlTemplate>

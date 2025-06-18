@@ -3,8 +3,8 @@
         xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock"
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter">
     <Style Selector="editableTextBlock|EditableTextBlock">
-        <Setter Property="FontSize" Value="14" />
         <Setter Property="Margin" Value="0" />
+        <Setter Property="FontSize" Value="15" />
         <Setter Property="Padding" Value="8,4" />
         <Setter Property="Template">
             <ControlTemplate>

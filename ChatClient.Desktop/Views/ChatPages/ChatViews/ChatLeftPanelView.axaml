@@ -208,11 +208,12 @@
                                 Name="Time_Text"
                                 Grid.Column="1"
                                 Margin="0,5"
+                                Classes="Small"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                FontSize="11.5"
+                                FontSize="11"
                                 Foreground="{DynamicResource SukiText}"
-                                Opacity="0.6"
+                                Opacity="0.7"
                                 Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
                         </Grid>
                         <Grid Grid.Row="1" ColumnDefinitions="*,auto">
@@ -223,15 +224,17 @@
                                     VerticalAlignment="Center"
                                     IsVisible="{Binding !LastChatMessages.IsRetracted}"
                                     FontSize="12"
+                                    Classes="Small"
                                     Foreground="{DynamicResource SukiText}"
-                                    Opacity="0.6"
+                                    Opacity="0.7"
                                     Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
                                     TextTrimming="CharacterEllipsis" />
                                 <TextBlock IsVisible="{Binding LastChatMessages.IsRetracted}" Margin="0,0,15,0"
                                            VerticalAlignment="Center"
                                            FontSize="12"
+                                           Classes="Small"
                                            Foreground="{DynamicResource SukiText}"
-                                           Opacity="0.6"
+                                           Opacity="0.7"
                                            TextTrimming="CharacterEllipsis">
                                     <Run
                                         Text="{Binding LastChatMessages.IsUser,Converter={chatUi:RetractedMessageConverter}}" />
@@ -246,7 +249,7 @@
                                         Height="16"
                                         IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
                                         Kind="BellOffOutline"
-                                        Opacity="0.4" />
+                                        Opacity="0.6" />
                                 </Panel>
                                 <badge:Badge HorizontalAlignment="Right"
                                              Classes.Danger="{Binding FriendRelatoinDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
@@ -305,7 +308,8 @@
                                 Margin="0,5"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
-                                FontSize="11.5"
+                                Classes="Small"
+                                FontSize="11"
                                 Foreground="{DynamicResource SukiText}"
                                 Opacity="0.6"
                                 Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
@@ -318,9 +322,10 @@
                                         Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
+                                        Classes="Small"
                                         Foreground="{DynamicResource SukiText}"
                                         IsVisible="{Binding !LastChatMessages.IsRetracted}"
-                                        Opacity="0.6"
+                                        Opacity="0.7"
                                         TextTrimming="CharacterEllipsis">
                                         <Run Text="{Binding LastChatMessages.Owner.NickName}" />
                                         <Run Text=":" />
@@ -331,9 +336,10 @@
                                         Margin="0,0,15,0"
                                         VerticalAlignment="Center"
                                         FontSize="12"
+                                        Classes="Small"
                                         Foreground="{DynamicResource SukiText}"
                                         IsVisible="{Binding LastChatMessages.IsRetracted}"
-                                        Opacity="0.6"
+                                        Opacity="0.7"
                                         TextTrimming="CharacterEllipsis">
                                         <Run Text="{Binding LastChatMessages.Owner.NickName}" />
                                         <Run Text=":" />
@@ -345,9 +351,10 @@
                                     Margin="0,0,15,0"
                                     VerticalAlignment="Center"
                                     FontSize="12"
+                                    Classes="Small"
                                     Foreground="{DynamicResource SukiText}"
                                     IsVisible="{Binding LastChatMessages.IsSystem}"
-                                    Opacity="0.6"
+                                    Opacity="0.7"
                                     TextTrimming="CharacterEllipsis">
                                     <Run
                                         Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
@@ -361,7 +368,7 @@
                                         Height="16"
                                         IsVisible="{Binding GroupRelationDto.CantDisturb}"
                                         Kind="BellOffOutline"
-                                        Opacity="0.4" />
+                                        Opacity="0.6" />
                                 </Panel>
                                 <badge:Badge HorizontalAlignment="Right"
                                              Classes.Danger="{Binding GroupRelationDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
@@ -388,7 +395,7 @@
     <chatViews:ChatLeftPanelView.OpenGroupChatDialog>
         <Binding Path="GroupOpenDialogCommand" />
     </chatViews:ChatLeftPanelView.OpenGroupChatDialog>
-    <Grid Margin="0" RowDefinitions="70,*">
+    <Grid Margin="0" RowDefinitions="70,*" Background="Transparent">
         <!--  顶部  -->
         <suki:GlassCard
             Grid.Row="0"
@@ -481,7 +488,7 @@
             </ScrollViewer.IsVisible>
             <StackPanel Orientation="Vertical" suki:StackPanelExtensions.AnimatedScroll="True">
                 <Panel>
-                    <TextBlock HorizontalAlignment="Left" Text="本地搜索" Opacity="0.6"
+                    <TextBlock HorizontalAlignment="Left" Text="本地搜索" Opacity="0.7" Classes="Small"
                                IsVisible="{Binding AllSearchDto, Converter={x:Static ObjectConverters.IsNull}}"
                                FontSize="12.5" Margin="15,10,0,5" />
                     <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
@@ -520,7 +527,7 @@
                         </Panel>
                         <Grid Grid.Column="1" RowDefinitions="1.2*,*" Margin="12,0">
                             <TextBlock Grid.Row="0" Text="进入全网搜索" />
-                            <TextBlock Grid.Row="1" Text="查找群聊、用户等" FontSize="12.5" Opacity="0.6" />
+                            <TextBlock Grid.Row="1" Text="查找群聊、用户等" Classes="Small" FontSize="12.5" Opacity="0.7" />
                         </Grid>
                     </Grid>
                 </suki:GlassCard>

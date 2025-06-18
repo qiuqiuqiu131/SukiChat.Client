@@ -81,6 +81,7 @@
                                                    Opacity="0.6"
                                                    TextWrapping="Wrap"
                                                    LineSpacing="2"
+                                                   Classes="Small"
                                                    FontSize="11"
                                                    Text="{Binding Detail}" />
                                         <Image Grid.Column="1" Width="40" Height="40" Source="{Binding HeadImage}">
@@ -92,7 +93,7 @@
                                     <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
                                             BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
                                     <TextBlock Grid.Row="2" Text="{Binding Bottom}" Margin="0,3.5,0,1" Opacity="0.6"
-                                               FontSize="10.5" />
+                                               FontSize="10.5" Classes="Small" />
                                 </Grid>
                             </suki:GlassCard>
                         </DataTemplate>
@@ -107,7 +108,7 @@
                                                                Height="20" />
                                         <TextBlock DockPanel.Dock="Right"
                                                    HorizontalAlignment="Right"
-                                                   FontSize="12.5"
+                                                   FontSize="12.5" Classes="Small"
                                                    Opacity="0.8"
                                                    Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
                                         <voiceWaveIcon:VoiceWaveIcon Duration="{Binding Duration}"
@@ -168,10 +169,10 @@
                 <Grid RowDefinitions="Auto,*">
                     <Grid Grid.Row="0">
                         <DockPanel LastChildFill="False" Margin="10">
-                            <TextBlock FontSize="12" Text="发送至" DockPanel.Dock="Left" />
+                            <TextBlock FontSize="12" Text="发送至" Classes="Small" DockPanel.Dock="Left" />
                             <TextBlock DockPanel.Dock="Right" FontSize="11"
                                        IsVisible="{Binding SelectedRelations.Count}"
-                                       Opacity="0.75"
+                                       Opacity="0.75" Classes="Small"
                                        Text="{Binding SelectedRelations.Count,StringFormat=已选择 {0} 个联系人}" />
                         </DockPanel>
                     </Grid>
