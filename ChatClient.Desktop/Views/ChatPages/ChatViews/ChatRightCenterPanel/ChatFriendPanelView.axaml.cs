@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
+using ChatClient.Avalonia.Controls.OverlaySplitView;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Events;

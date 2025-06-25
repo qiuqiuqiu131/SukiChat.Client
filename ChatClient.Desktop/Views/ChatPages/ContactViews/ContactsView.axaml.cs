@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using ChatClient.Avalonia.Controls.SearchBox;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;

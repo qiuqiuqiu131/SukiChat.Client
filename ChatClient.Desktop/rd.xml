@@ -19,6 +19,7 @@
 
 		<Assembly Name="ChatClient.Avalonia" Dynamic="Required All"/>
 		<Assembly Name="ChatClient.Client" Dynamic="Required All"/>
+		<Assembly Name="ChatClient.Resources" Dynamic="Required All"/>
 		<Assembly Name="ChatClient.Desktop" Dynamic="Required All"/>
 
 		<Assembly Name="SqlSugar" Dynamic="Required All" />

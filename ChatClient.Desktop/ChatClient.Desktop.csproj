@@ -1,32 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <OutputType>WinExe</OutputType>
         <Nullable>enable</Nullable>
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <TrimMode>link</TrimMode>
-        <PublishTrimmed>false</PublishTrimmed>
+        <PublishTrimmed>true</PublishTrimmed>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <PublishAot>true</PublishAot>
+        <PublishAot>false</PublishAot>
         <IsAotCompatible>true</IsAotCompatible>
         <StripSymbols>false</StripSymbols>
         <TargetFrameworks>net8.0</TargetFrameworks>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
-        <IlcDisableReflection>false</IlcDisableReflection>
+    </PropertyGroup>
+	
+	<!--<IlcDisableReflection>false</IlcDisableReflection>
 		<IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
 		<IlcGenerateTrimAnalysis>true</IlcGenerateTrimAnalysis>
 		<IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
 		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
-		<IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
-    </PropertyGroup>
+		<IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies> 
+				<RdXmlFile Include="rd.xml" />-->
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <DebugType>none</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-		<RdXmlFile Include="rd.xml" />
 		<TrimmerRootDescriptor Include="TrimmedRoots.xml" />
     </ItemGroup>
 

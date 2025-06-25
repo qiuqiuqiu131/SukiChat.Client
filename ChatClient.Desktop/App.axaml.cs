@@ -111,8 +111,20 @@ public class App : PrismApplication
         containerRegistry.RegisterInstance(loggerFactory);
 
         // 注册数据库
-        // containerRegistry.RegisterDataBase();
-        containerRegistry.RegisterSugarDataBase();
+        // containerRegistry.RegisterDataBase(); // EFCore 数据库
+        containerRegistry.RegisterSugarDataBase(); // SqlSugar 数据库
+
+        //// 资源模块加载
+        //var resourcesModule = new ResourcesModule();
+        //resourcesModule.RegisterTypes(containerRegistry);
+
+        //// 媒体模块加载
+        //var mediaModule = new MediaModule();
+        //mediaModule.RegisterTypes(containerRegistry);
+
+        //// 通信模块加载
+        //var clientModule = new ClientModule();
+        //clientModule.RegisterTypes(containerRegistry);
 
         // 注册业务服务
         containerRegistry.RegisterBaseServices();

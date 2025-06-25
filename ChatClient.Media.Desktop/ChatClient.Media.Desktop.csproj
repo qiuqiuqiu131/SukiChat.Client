@@ -15,7 +15,7 @@
         <PackageReference Include="AForge" Version="2.2.5" />
         <PackageReference Include="AForge.Video" Version="2.2.5" />
         <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
-        <PackageReference Include="NAudio.Lame.CrossPlatform" Version="2.2.1" />
+        <PackageReference Include="NAudio.Lame" Version="2.1.0" />
         <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
 		<PackageReference Include="NAudio" Version="2.2.1" />
 		<PackageReference Include="NAudio.Core" Version="2.2.1" />

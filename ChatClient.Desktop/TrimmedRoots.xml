@@ -1,29 +1,41 @@
-﻿<link>
-	<assembly fullName="Avalonia.Controls" preserve="All" />
+﻿<linker>
+	<assembly fullname="Avalonia.Controls" preserve="all" />
 
-	<assembly fullName="ChatClient.DataBase" preserve="All"/>
-	<assembly fullName="ChatClient.Avalonia" preserve="All"/>
-	<assembly fullName="ChatClient.BaseService" preserve="All"/>
-	<assembly fullName="ChatClient.Client" preserve="All"/>
-	<assembly fullName="ChatClient.Resources" preserve="All"/>
-	<assembly fullName="ChatClient.Desktop" preserve="All"/>
-	<assembly fullName="ChatServer.Common" preserve="All"/>
-	<assembly fullName="ChatClient.Tool" preserve="All" />
-	<assembly fullName="ChatClient.Media.Desktop" preserve="All" />
+	<assembly fullname="AutoMapper" preserve="all" />
 
-	<assembly fullName="AForge" preserve="All"/>
-	<assembly fullName="AForge.Video" preserve="All"/>
-	<assembly fullName="AForge.Video.DirectShow" preserve="All"/>
+	<assembly fullname="ChatClient.DataBase" preserve="all"/>
+	<assembly fullname="ChatClient.Avalonia" preserve="all"/>
+	<assembly fullname="ChatClient.BaseService" preserve="all"/>
+	<assembly fullname="ChatClient.Client" preserve="all"/>
+	<assembly fullname="ChatClient.Resources" preserve="all"/>
+	<assembly fullname="ChatClient.Desktop" preserve="all"/>
+	<assembly fullname="ChatServer.Common" preserve="all"/>
+	<assembly fullname="ChatClient.Tool" preserve="all" />
+	<assembly fullname="ChatClient.Media.Desktop" preserve="all" />
+
+	<assembly fullname="DotNetty.Buffers" preserve="all" />
+	<assembly fullname="DotNetty.Codecs" preserve="all" />
+	<assembly fullname="DotNetty.Common" preserve="all" />
+	<assembly fullname="DotNetty.Handlers" preserve="all" />
+	<assembly fullname="DotNetty.Transport" preserve="all" />
+
+	<aseembly fullname="NAudio.Lame" preserve="all" />
+	<assembly fullname="netstandard" preserve="All" />
+
+	<assembly fullname="AForge" preserve="all"/>
+	<assembly fullname="AForge.Video" preserve="all"/>
+	<assembly fullname="AForge.Video.DirectShow" preserve="all"/>
 	
-	<assembly fullName="SIPSorcery" preserve="All" />
+	<assembly fullname="SIPSorcery" preserve="all" />
 
-	<assembly fullName="SqlSugar" preserve="All" />
+	<assembly fullname="SqlSugar" preserve="all" />
 
-	<assembly fullName="DryIoc" preserve="All"/>
-	<assembly fullName="Prism" preserve="All" />
-	<assembly fullName="Prism.Avalonia" preserve="All" />
-	<assembly fullName="Prism.DryIoc.Avalonia" preserve="All" />
-	<assembly fullName="Prism.Container.DryIoc" preserve="All" />
+	<assembly fullname="DryIoc" preserve="all"/>
+	<assembly fullname="Prism" preserve="all" />
+	<assembly fullname="Prism.Avalonia" preserve="all" />
+	<assembly fullname="Prism.DryIoc.Avalonia" preserve="all" />
+	<assembly fullname="Prism.Container.DryIoc" preserve="all" />
+	<assembly fullname="Prism.Container.Abstractions" preserve="all" />
 
-	<assembly fullName="SukiUI" preserve="All" />
-</link>
+	<assembly fullname="SukiUI" preserve="all" />
+</linker>
