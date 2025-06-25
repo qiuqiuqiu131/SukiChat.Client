@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:icons="https://github.com/kikipoulet/SukiUI"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+             xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="userControls:CommonDialogViewModel"
+             x:DataType="sukiDialogs:CommonDialogViewModel"
              Width="300"
-             x:Class="ChatClient.Desktop.Views.UserControls.CommonDialogView">
+             x:Class="ChatClient.Desktop.Views.SukiDialog.CommonDialogView">
     <Grid RowDefinitions="25,auto,auto">
         <Button Name="PART_CloseButton" HorizontalAlignment="Right" Width="25" Height="25" Margin="10,0"
                 Classes="Basic Rounded WindowControlsButton Close"

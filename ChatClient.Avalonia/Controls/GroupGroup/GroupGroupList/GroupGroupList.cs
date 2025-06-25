@@ -7,7 +7,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Avalonia.Controls.GroupGroup.GroupGroupList;
@@ -91,30 +90,33 @@ public class GroupGroupList : UserControl
     {
         base.OnPropertyChanged(change);
         if (!inited) return;
-        if (change.Property == GroupContentsProperty)
+        Dispatcher.UIThread.Post(() =>
         {
-            if (change.OldValue != null)
+            if (change.Property == GroupContentsProperty)
             {
-                _itemCollection.Clear();
-                if (change.OldValue is AvaloniaList<GroupRelationDto> oldValue)
-                    oldValue.CollectionChanged -= NewValueOnCollectionChanged;
-            }
-
-            if (change.NewValue != null)
-            {
-                if (change.NewValue is AvaloniaList<GroupRelationDto> newValue)
+                if (change.OldValue != null)
                 {
-                    InitItems(newValue);
-                    newValue.CollectionChanged += NewValueOnCollectionChanged;
+                    _itemCollection.Clear();
+                    if (change.OldValue is AvaloniaList<GroupRelationDto> oldValue)
+                        oldValue.CollectionChanged -= NewValueOnCollectionChanged;
+                }
+
+                if (change.NewValue != null)
+                {
+                    if (change.NewValue is AvaloniaList<GroupRelationDto> newValue)
+                    {
+                        InitItems(newValue);
+                        newValue.CollectionChanged += NewValueOnCollectionChanged;
+                    }
                 }
             }
-        }
+        });
     }
 
     private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (!inited) return;
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {

@@ -2,17 +2,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="320" Height="420"
              x:DataType="dialog:AcceptFriendViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog.AcceptFriendView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="4" />
         </Style>
     </UserControl.Styles>
     <Grid RowDefinitions="25,0.5,*,auto">

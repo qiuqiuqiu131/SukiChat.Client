@@ -1,6 +1,5 @@
 using ChatClient.Resources.Clients;
-using ChatClient.Resources.FileOperator;
-using ChatServer.Common.Tool;
+using ChatServer.Common.Helper;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using File.Protobuf;

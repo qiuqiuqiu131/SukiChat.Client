@@ -14,7 +14,7 @@ public class ProtoToDataProfile : Profile
             .ForMember(u => u.Introduction,
                 opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Introduction) ? null : um.Introduction))
             .ForMember(u => u.Birthday,
-                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateOnly?)null : DateOnly.Parse(um.Birth)));
+                opt => opt.MapFrom(um => string.IsNullOrEmpty(um.Birth) ? (DateTime?)null : DateTime.Parse(um.Birth)));
 
         CreateMap<GroupMemberMessage, GroupMember>()
             .ForMember(gm => gm.JoinTime, opt =>

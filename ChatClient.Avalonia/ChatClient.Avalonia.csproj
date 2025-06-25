@@ -7,37 +7,37 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.3"/>
-        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.7"/>
-        <PackageReference Include="Material.Icons.Avalonia" Version="2.1.11"/>
-        <PackageReference Include="PInvoke.Kernel32" Version="0.7.124"/>
-        <PackageReference Include="PInvoke.User32" Version="0.7.124"/>
+        <PackageReference Include="Avalonia" Version="11.2.3" />
+        <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0.7" />
+        <PackageReference Include="Material.Icons.Avalonia" Version="2.1.11" />
+        <PackageReference Include="PInvoke.Kernel32" Version="0.7.124" />
+        <PackageReference Include="PInvoke.User32" Version="0.7.124" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj"/>
-        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+        <ProjectReference Include="..\ChatClient.Media.Desktop\ChatClient.Media.Desktop.csproj" />
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Controls\FreindGroup\"/>
-        <Folder Include="Controls\MultiFriendGroup\"/>
+        <Folder Include="Controls\FreindGroup\" />
+        <Folder Include="Controls\MultiFriendGroup\" />
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatMessageView.axaml"/>
-        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatUI.axaml"/>
-        <AdditionalFiles Include="Controls\Chat\GroupChatUI\GroupChatUI.axaml"/>
-        <AdditionalFiles Include="Controls\FreindGroup\GroupList\GroupList.axaml"/>
-        <AdditionalFiles Include="Controls\FreindGroup\SeparateGroupsView\SeparateGroupsView.axaml"/>
-        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiGroupList\MultiGroupList.axaml"/>
-        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiSeparateGroupView\MultiSeparateGroupView.axaml"/>
+        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatMessageView.axaml" />
+        <AdditionalFiles Include="Controls\Chat\ChatUI\ChatUI.axaml" />
+        <AdditionalFiles Include="Controls\Chat\GroupChatUI\GroupChatUI.axaml" />
+        <AdditionalFiles Include="Controls\FreindGroup\GroupList\GroupList.axaml" />
+        <AdditionalFiles Include="Controls\FreindGroup\SeparateGroupsView\SeparateGroupsView.axaml" />
+        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiGroupList\MultiGroupList.axaml" />
+        <AdditionalFiles Include="Controls\MultiFriendGroup\MultiSeparateGroupView\MultiSeparateGroupView.axaml" />
     </ItemGroup>
 
     <ItemGroup>
-        <UpToDateCheckInput Remove="Controls\SeparateGroupsView\SeparateGroupsView.axaml"/>
-        <UpToDateCheckInput Remove="Controls\MultiSeparateGroupView\MultiSeparateGroupView.axaml"/>
-        <UpToDateCheckInput Remove="Controls\GroupChatUI\GroupChatUI.axaml"/>
+        <UpToDateCheckInput Remove="Controls\SeparateGroupsView\SeparateGroupsView.axaml" />
+        <UpToDateCheckInput Remove="Controls\MultiSeparateGroupView\MultiSeparateGroupView.axaml" />
+        <UpToDateCheckInput Remove="Controls\GroupChatUI\GroupChatUI.axaml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -48,12 +48,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Reference Include="Notification.Avalonia">
-            <HintPath>..\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
-        </Reference>
-        <Reference Include="SukiUI">
-            <HintPath>..\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
-        </Reference>
+      <Reference Include="Notification.Avalonia">
+        <HintPath>..\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+      </Reference>
+      <Reference Include="SukiUI">
+        <HintPath>..\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

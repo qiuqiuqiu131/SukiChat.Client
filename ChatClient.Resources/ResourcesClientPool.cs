@@ -1,14 +1,12 @@
-using System.Net;
 using System.Collections.Concurrent;
+using System.Net;
 using ChatClient.Resources.Clients;
+using ChatClient.Tool.Config;
 using DotNetty.Buffers;
-using DotNetty.Codecs;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Pool;
 using DotNetty.Transport.Channels.Sockets;
-using Microsoft.Extensions.Configuration;
-using BindingFlags = System.Reflection.BindingFlags;
 
 namespace ChatClient.Resources;
 
@@ -27,10 +25,9 @@ public class ResourcesClientPool : IResourcesClientPool
     // 添加构造函数缓存字典
     private readonly ConcurrentDictionary<Type, System.Reflection.ConstructorInfo> _constructorCache = new();
 
-    public ResourcesClientPool(IConfigurationRoot configurationRoot)
+    public ResourcesClientPool(AppSettings appSettings)
     {
-        _endPoint = new IPEndPoint(IPAddress.Parse(configurationRoot["Address:IP"]!),
-            int.Parse(configurationRoot["Address:Resources_Port"]!));
+        _endPoint = new IPEndPoint(IPAddress.Parse(appSettings.Address.Ip), appSettings.Address.ResourcesPort);
 
         // 设置环境变量,不记录已发字节流
         Environment.SetEnvironmentVariable("io.netty.allocator.numDirectArenas", "0");

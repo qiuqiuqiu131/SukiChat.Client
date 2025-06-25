@@ -1,13 +1,17 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace ChatClient.DataBase.Data;
 
+[Table("FriendReceiveds")]
+[SugarTable("FriendReceiveds")]
+[SugarIndex("unique_friendRequest_requestId", nameof(RequestId), OrderByType.Desc, true)]
 public class FriendReceived
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
     public int Id { get; set; }
 
     public int RequestId { get; set; }
@@ -24,5 +28,5 @@ public class FriendReceived
 
     public bool IsSolved { get; set; }
 
-    public DateTime? SolveTime { get; set; }
+    [SugarColumn(IsNullable = true)] public DateTime? SolveTime { get; set; }
 }

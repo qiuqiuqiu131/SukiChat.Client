@@ -5,9 +5,9 @@
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
              xmlns:sideRegion1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="sideRegion:GroupSideViewModel"
@@ -98,8 +98,7 @@
                                         <EventTriggerBehavior EventName="PointerPressed">
                                             <InvokeCommandAction
                                                 Command="{Binding ((sideRegion:GroupSideViewModel)DataContext).InviteMemberCommand
-                                                    ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=sideRegion1:GroupSideView}}">
-                                            </InvokeCommandAction>
+                                                    ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=sideRegion1:GroupSideView}}" />
                                         </EventTriggerBehavior>
                                     </Interaction.Behaviors>
                                     <StackPanel Orientation="Vertical" Spacing="3">
@@ -127,8 +126,7 @@
                                         <EventTriggerBehavior EventName="PointerPressed">
                                             <InvokeCommandAction
                                                 Command="{Binding ((sideRegion:GroupSideViewModel)DataContext).RemoveMemberCommand
-                                                    ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=sideRegion1:GroupSideView}}">
-                                            </InvokeCommandAction>
+                                                    ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=sideRegion1:GroupSideView}}" />
                                         </EventTriggerBehavior>
                                     </Interaction.Behaviors>
                                     <StackPanel Orientation="Vertical" Spacing="3">

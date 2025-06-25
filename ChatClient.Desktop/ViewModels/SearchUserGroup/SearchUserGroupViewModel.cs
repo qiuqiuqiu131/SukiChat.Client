@@ -1,8 +1,7 @@
 using System.Linq;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Common;
 using ChatClient.Desktop.Views.SearchUserGroupView.Region;
-using ChatClient.Tool.Common;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
 using Prism.Commands;

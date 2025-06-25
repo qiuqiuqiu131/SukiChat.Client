@@ -1,16 +1,13 @@
-using System.Net;
-using System.Text;
-using ChatClient.Client;
+using ChatServer.Common.Helper;
 using ChatServer.Common.Protobuf;
-using ChatServer.Common.Tool;
 using DotNetty.Buffers;
 using DotNetty.Handlers.Timeout;
 using DotNetty.Transport.Channels;
-using Prism.Events;
+using SocketClient.Client;
 
-namespace ChatClient.IOServer.Handler;
+namespace SocketClient.IOServer.Handler;
 
-public class ClientConnectHandler: ChannelHandlerAdapter
+public class ClientConnectHandler : ChannelHandlerAdapter
 {
     private readonly ISocketClient client;
 
@@ -21,7 +18,6 @@ public class ClientConnectHandler: ChannelHandlerAdapter
 
     public override void ChannelActive(IChannelHandlerContext context)
     {
-    
     }
 
     public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)

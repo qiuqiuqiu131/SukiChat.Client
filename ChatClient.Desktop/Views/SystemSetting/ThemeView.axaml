@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:chatPages1="clr-namespace:ChatClient.Desktop.Views.SystemSetting"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
+             xmlns:chatPages111="clr-namespace:ChatClient.Desktop.Views.SystemSetting"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="systemSetting:ThemeViewModel"
              x:Class="ChatClient.Desktop.Views.SystemSetting.ThemeView">
@@ -117,7 +117,7 @@
                             Padding="3"
                             BorderThickness="5"
                             Classes="h"
-                            Command="{Binding ((systemSetting:ThemeViewModel)DataContext).SwitchToColorThemeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type chatPages1:ThemeView}}}"
+                            Command="{Binding ((systemSetting:ThemeViewModel)DataContext).SwitchToColorThemeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type chatPages111:ThemeView}}}"
                             CommandParameter="{Binding}"
                             CornerRadius="50"
                             GroupName="RadioColorTheme">
@@ -125,7 +125,7 @@
                                 <MultiBinding Converter="{StaticResource EqualityConverter}">
                                     <Binding
                                         Path="((systemSetting:ThemeViewModel)DataContext).SelectedColorTheme"
-                                        RelativeSource="{RelativeSource AncestorType={x:Type chatPages1:ThemeView}}" />
+                                        RelativeSource="{RelativeSource AncestorType={x:Type chatPages111:ThemeView}}" />
                                     <Binding />
                                 </MultiBinding>
                             </RadioButton.IsChecked>

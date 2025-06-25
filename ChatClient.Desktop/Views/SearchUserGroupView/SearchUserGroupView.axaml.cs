@@ -1,12 +1,8 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ChatClient.Avalonia.Controls.SearchBox;
-using ChatClient.Desktop.Views.SearchUserGroupView.Region;
 using ChatClient.Tool.Events;
-using ChatClient.Tool.UIEntity;
 using Prism.Events;
-using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Views.SearchUserGroupView;

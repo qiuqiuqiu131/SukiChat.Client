@@ -4,18 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Common;
 using ChatClient.Avalonia.Validation;
-using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
-using ChatClient.Tool.Common;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
-using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class EditPasswordViewModel : ValidateBindableBase
 {

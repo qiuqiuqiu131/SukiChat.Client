@@ -8,15 +8,15 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:extenstions="clr-namespace:ChatClient.Avalonia.Extenstions;assembly=ChatClient.Avalonia"
-             xmlns:region="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
-             xmlns:region1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
+             xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="region1:GroupRequestViewModel"
+             x:DataType="region:GroupRequestViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Region.GroupRequestView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="4" />
         </Style>
 
         <Style Selector="suki|GlassCard">
@@ -131,14 +131,14 @@
                             <Button Classes="Outlined" Padding="8,4" Margin="0"
                                     CommandParameter="{Binding}"
                                     Opacity="0.9"
-                                    Command="{Binding ((region1:GroupRequestViewModel)DataContext).AcceptCommand,
+                                    Command="{Binding ((region:GroupRequestViewModel)DataContext).AcceptCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="同意" FontSize="12" Classes="Small" />
                             </Button>
                             <Button Classes="Outlined Accent" Padding="8,4" Margin="0"
                                     Opacity="0.9"
                                     CommandParameter="{Binding}"
-                                    Command="{Binding ((region1:GroupRequestViewModel)DataContext).RejectCommand,
+                                    Command="{Binding ((region:GroupRequestViewModel)DataContext).RejectCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="拒绝" FontSize="13" Classes="Small" />
                             </Button>
@@ -216,15 +216,15 @@
             </suki:GlassCard>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <region:GroupRequestView.GroupRequestDtos>
+    <region1:GroupRequestView.GroupRequestDtos>
         <Binding Path="GroupRequestDtos" />
-    </region:GroupRequestView.GroupRequestDtos>
-    <region:GroupRequestView.GroupReceivedDtos>
+    </region1:GroupRequestView.GroupRequestDtos>
+    <region1:GroupRequestView.GroupReceivedDtos>
         <Binding Path="GroupReceivedDtos" />
-    </region:GroupRequestView.GroupReceivedDtos>
-    <region:GroupRequestView.GroupDeleteDtos>
+    </region1:GroupRequestView.GroupReceivedDtos>
+    <region1:GroupRequestView.GroupDeleteDtos>
         <Binding Path="GroupDeleteDtos" />
-    </region:GroupRequestView.GroupDeleteDtos>
+    </region1:GroupRequestView.GroupDeleteDtos>
     <Grid>
         <Grid RowDefinitions="65,*" IsVisible="{Binding !IsRequestEmpty}">
             <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0">

@@ -6,7 +6,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Threading;
-using ChatClient.Avalonia.Controls.SeperateGroupsView;
+using ChatClient.Avalonia.Controls.FreindGroup.GroupList;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView;
@@ -132,7 +132,7 @@ public class MultiSeparateGroupGroupView : UserControl
                         if (oldItem is GroupGroupDto groupGroup)
                         {
                             var control = (MultiGroupGroupList.MultiGroupGroupList)_itemCollection.FirstOrDefault(d =>
-                                d is GroupList.GroupList control && control.DataContext == groupGroup)!;
+                                d is GroupList control && control.DataContext == groupGroup)!;
                             control.SelectionChanged -= OnSelectionChanged;
                             _itemCollection.Remove(control);
                         }

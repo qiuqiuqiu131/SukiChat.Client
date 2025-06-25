@@ -3,7 +3,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using ChatClient.Tool.HelperInterface;
 
-namespace ChatClient.BaseService.Helper;
+namespace ChatClient.BaseService.Helper.Windows;
 
 public class WindowsCaptureScreenHelper : ISystemCaptureScreen
 {

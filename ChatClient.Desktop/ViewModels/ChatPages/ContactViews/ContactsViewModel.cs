@@ -5,16 +5,12 @@ using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Threading;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.SearchService;
-using ChatClient.Desktop.Tool;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.SearchService;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
-using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
-using ChatClient.Desktop.Views.ChatPages.ContactViews;
-using ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.ChatPages.ContactViews.Region;
 using ChatClient.Desktop.Views.SearchUserGroupView;
-using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
@@ -23,7 +19,6 @@ using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
-using Material.Icons;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -235,21 +230,31 @@ public class ContactsViewModel : ValidateBindableBase, IDestructible, IRegionAwa
             {
                 if (type == 0)
                 {
-                    var dto = obj as GroupFriendDto;
-                    dto.GroupName = groupName;
-                    var friends = dto.Friends;
-                    foreach (var friend in friends)
-                        friend.GroupingWithoutEvent = groupName;
-
-                    await Task.Delay(50);
+                    if (obj is GroupFriendDto dto)
+                    {
+                        dto.GroupName = groupName;
+                        await Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            _eventAggregator.GetEvent<GroupRenameEvent>().Publish();
+                        });
+                        if (dto.Friends != null)
+                            foreach (var friend in dto.Friends)
+                                friend.GroupingWithoutEvent = groupName;
+                    }
                 }
                 else
                 {
-                    var dto = obj as GroupGroupDto;
-                    dto.GroupName = groupName;
-                    var groups = dto.Groups;
-                    foreach (var group in groups)
-                        group.GroupingWithoutEvent = groupName;
+                    if (obj is GroupGroupDto dto)
+                    {
+                        dto.GroupName = groupName;
+                        await Dispatcher.UIThread.InvokeAsync(() =>
+                        {
+                            _eventAggregator.GetEvent<GroupRenameEvent>().Publish();
+                        });
+                        if (dto.Groups != null)
+                            foreach (var group in dto.Groups)
+                                group.GroupingWithoutEvent = groupName;
+                    }
                 }
             }
         }

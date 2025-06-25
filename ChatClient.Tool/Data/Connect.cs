@@ -1,5 +1,3 @@
-using Prism.Mvvm;
-
 namespace ChatClient.Tool.Data;
 
 public class Connect:BindableBase

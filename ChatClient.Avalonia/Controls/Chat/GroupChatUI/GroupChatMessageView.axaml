@@ -11,6 +11,7 @@
              xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon"
              xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
@@ -141,7 +142,7 @@
                             <TextBlock
                                 Margin="8,0"
                                 HorizontalAlignment="Left"
-                                Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
+                                Text="{Binding FileSize,Converter={chatUiConverter:FileSizeConverter}}"
                                 FontSize="12.5" Classes="Small"
                                 TextWrapping="NoWrap" />
                         </DockPanel>
@@ -149,7 +150,7 @@
                     <Grid ColumnDefinitions="160,45" Margin="0,0,0,5">
                         <TextBlock
                             Margin="10,0"
-                            Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
+                            Text="{Binding FileName,Converter={chatUiConverter:GetFileNameConverter}}"
                             HorizontalAlignment="Left"
                             TextWrapping="Wrap"
                             MaxLines="2"
@@ -159,7 +160,7 @@
                                     Height="42"
                                     Cursor="Hand"
                                     IsHitTestVisible="{Binding IsSuccess}"
-                                    Background="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
+                                    Background="{Binding FileType,Converter={chatUiConverter:FileExtensionToColorConverter}}"
                                     CornerRadius="5">
                                 <Interaction.Behaviors>
                                     <behaviors:OpenFileInExplorerBehavior
@@ -172,7 +173,7 @@
                                     Foreground="White"
                                     Height="35"
                                     Width="35"
-                                    Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
+                                    Kind="{Binding FileType,Converter={chatUiConverter:FileExtensionToIconConverter}}" />
                             </Border>
                             <Border Width="38" Height="42" CornerRadius="5"
                                     IsVisible="{Binding !IsSuccess}"
@@ -244,7 +245,7 @@
                                    HorizontalAlignment="Right"
                                    IsVisible="{Binding !Failed}"
                                    FontSize="13"
-                                   Text="{Binding Duration,Converter={converter:VoiceDurationConverter}}" />
+                                   Text="{Binding Duration,Converter={chatUiConverter:VoiceDurationConverter}}" />
                         <voiceWaveIcon:VoiceWaveIcon Duration="{Binding Duration}"
                                                      Foreground="{DynamicResource SukiText}"
                                                      Opacity="0.8"

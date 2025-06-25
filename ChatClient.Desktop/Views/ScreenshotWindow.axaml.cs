@@ -1,6 +1,6 @@
 using System;
-using System.IO;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,10 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using ChatClient.Avalonia;
-using ChatClient.BaseService.Helper;
 using ChatClient.Tool.HelperInterface;
-using ChatClient.Tool.Tools;
 using Prism.Ioc;
 
 namespace ChatClient.Desktop.Views;

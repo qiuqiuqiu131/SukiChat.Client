@@ -14,6 +14,8 @@
              xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
              xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock"
+             xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter"
+             xmlns:qScrollViewer="clr-namespace:ChatClient.Avalonia.Controls.QScrollViewer"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Avalonia.Controls.Chat.GroupChatUI.GroupChatUI">
     <UserControl.Styles>
@@ -73,7 +75,7 @@
         </Style>
     </UserControl.Styles>
     <UserControl.Resources>
-        <converter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
+        <chatUiConverter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
         <chat:MessageDataTemplate x:Key="MessageDataTemplate">
             <DataTemplate x:Key="Retracted" DataType="chatMessage:GroupChatData">
                 <!-- 撤回 -->
@@ -301,7 +303,7 @@
                 <ControlTemplate>
                     <Grid>
                         <!-- 消息列表 -->
-                        <controls:QScrollViewer
+                        <qScrollViewer:QScrollViewer
                             Name="ChatScrollViewer"
                             Opacity="0"
                             HorizontalScrollBarVisibility="Disabled"
@@ -362,7 +364,7 @@
                                     </ItemsControl.DataTemplates>
                                 </ItemsControl>
                             </StackPanel>
-                        </controls:QScrollViewer>
+                        </qScrollViewer:QScrollViewer>
                         <!-- 新消息提示 -->
                         <Button IsVisible="{TemplateBinding HaveUnReadMessage}"
                                 HorizontalAlignment="Center"

@@ -1,16 +1,15 @@
-using ChatClient.IOServer.Handler;
-using ChatClient.MessageOperate;
-using Prism.Ioc;
-using Prism.Modularity;
+using SocketClient.Client;
+using SocketClient.IOServer.Handler;
+using SocketClient.MessageOperate;
 
-namespace ChatClient.Client;
+namespace SocketClient;
 
-public class ClientModule:IModule
+public class ClientModule : IModule
 {
     public void RegisterTypes(IContainerRegistry containerRegistry)
     {
         // 注册客户端
-        containerRegistry.RegisterSingleton<ISocketClient, SocketClient>();
+        containerRegistry.RegisterSingleton<ISocketClient, Client.SocketClient>();
 
         // 注册客户端处理器
         containerRegistry.Register<EchoClientHandler>();

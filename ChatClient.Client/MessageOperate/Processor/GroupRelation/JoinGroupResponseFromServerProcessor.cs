@@ -1,6 +1,6 @@
 using ChatServer.Common.Protobuf;
 
-namespace ChatClient.MessageOperate.Processor.GroupRelation;
+namespace SocketClient.MessageOperate.Processor.GroupRelation;
 
 public class JoinGroupResponseFromServerProcessor(IContainerProvider container)
     : ProcessorBase<JoinGroupResponseFromServer>(container);

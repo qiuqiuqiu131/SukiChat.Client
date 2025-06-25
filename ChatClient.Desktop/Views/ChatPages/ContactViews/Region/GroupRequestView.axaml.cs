@@ -10,7 +10,6 @@ using Avalonia.Interactivity;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
 using ChatClient.Avalonia.Controls.CircleImage;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using Prism.Events;
@@ -25,7 +24,7 @@ public partial class GroupRequestView : UserControl
     private readonly IEventAggregator _eventAggregator;
 
     public static readonly StyledProperty<AvaloniaList<GroupRequestDto>> GroupRequestDtosProperty
-        = AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupRequestDto>>(
+        = AvaloniaProperty.Register<FriendRequestView, AvaloniaList<GroupRequestDto>>(
             nameof(GroupRequestDtos));
 
     public AvaloniaList<GroupRequestDto> GroupRequestDtos
@@ -35,7 +34,7 @@ public partial class GroupRequestView : UserControl
     }
 
     public static readonly StyledProperty<AvaloniaList<GroupReceivedDto>> GroupReceivedDtosProperty =
-        AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupReceivedDto>>(
+        AvaloniaProperty.Register<FriendRequestView, AvaloniaList<GroupReceivedDto>>(
             nameof(GroupReceivedDtos));
 
     public AvaloniaList<GroupReceivedDto> GroupReceivedDtos
@@ -45,7 +44,7 @@ public partial class GroupRequestView : UserControl
     }
 
     public static readonly StyledProperty<AvaloniaList<GroupDeleteDto>> GroupDeleteDtosProperty =
-        AvaloniaProperty.Register<Region.FriendRequestView, AvaloniaList<GroupDeleteDto>>(
+        AvaloniaProperty.Register<FriendRequestView, AvaloniaList<GroupDeleteDto>>(
             nameof(GroupDeleteDtos));
 
     public AvaloniaList<GroupDeleteDto> GroupDeleteDtos

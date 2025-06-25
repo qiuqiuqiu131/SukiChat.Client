@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;

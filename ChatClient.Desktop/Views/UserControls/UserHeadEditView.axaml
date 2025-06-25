@@ -7,13 +7,12 @@
     xmlns:helpers="clr-namespace:SukiUI.Helpers;assembly=SukiUI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:content="https://github.com/kikipoulet/SukiUI"
-    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+    xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
     Width="410"
     Height="570"
-    x:DataType="vm:UserHeadEditViewModel"
+    x:DataType="userControls:UserHeadEditViewModel"
     mc:Ignorable="d">
     <Grid RowDefinitions="35,*">
         <Panel Background="Transparent">
@@ -173,7 +172,7 @@
                                         </Style>
                                         <Style Selector="ListBox.Void ListBoxItem:pointerover suki|GlassCard">
                                             <Setter Property="BorderThickness" Value="3" />
-                                            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}"></Setter>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor50}" />
                                         </Style>
                                         <Style Selector="ListBox.Void ListBoxItem:selected suki|GlassCard">
                                             <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />

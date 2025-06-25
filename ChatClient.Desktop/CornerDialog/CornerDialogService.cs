@@ -2,16 +2,13 @@ using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Platform;
-using ChatClient.Desktop.Views;
 using ChatClient.Tool.HelperInterface;
-using Google.Protobuf.WellKnownTypes;
 using Prism.Common;
 using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Mvvm;
 
-namespace ChatClient.Desktop.Tool;
+namespace ChatClient.Desktop.CornerDialog;
 
 public class CornerDialogService : ICornerDialogService
 {

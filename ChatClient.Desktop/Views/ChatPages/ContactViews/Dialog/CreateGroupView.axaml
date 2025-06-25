@@ -2,20 +2,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:prism="http://prismlibrary.com/"
-             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
+             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
              xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              mc:Ignorable="d"
              prism:ViewModelLocator.AutoWireViewModel="True"
              Width="550" Height="550"
              Background="Transparent"
              x:DataType="dialog:CreateGroupViewModel"
-             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.CreateGroupView">
+             x:Class="ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog.CreateGroupView">
     <Grid ColumnDefinitions="*,1.1*">
         <Grid Grid.Column="0" RowDefinitions="50,*">
             <suki:GlassCard Padding="8"
@@ -33,8 +32,7 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Opacity="0.6"
-                               IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
-                    </TextBlock>
+                               IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}" />
                     <DockPanel LastChildFill="True"
                                IsVisible="{Binding !GroupFriends.Count,Converter={converter:ListEmptyConverter}}">
                         <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource SukiBorderBrush}"

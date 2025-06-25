@@ -1,4 +1,4 @@
-using ChatClient.Tool.Data;
+using ChatClient.Tool.Config;
 
 namespace ChatClient.Tool.ManagerInterface;
 

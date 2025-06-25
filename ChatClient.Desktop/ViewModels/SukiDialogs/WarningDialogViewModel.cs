@@ -1,12 +1,10 @@
 using System;
-using ChatClient.Tool.Events;
 using Prism.Commands;
 using Prism.Dialogs;
-using Prism.Events;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class WarningDialogViewModel : BindableBase
 {

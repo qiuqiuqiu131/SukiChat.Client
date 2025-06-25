@@ -2,7 +2,7 @@ using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 
-namespace ChatClient.Avalonia.Converter;
+namespace ChatClient.Avalonia.Converter.ChatUIConverter;
 
 public class GetFileNameConverter : MarkupExtension, IValueConverter
 {

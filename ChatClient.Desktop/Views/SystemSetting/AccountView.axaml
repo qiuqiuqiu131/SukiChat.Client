@@ -2,10 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:editableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.EditableTextBlock;assembly=ChatClient.Avalonia"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="700"
              x:DataType="systemSetting:AccountViewModel"
              x:Class="ChatClient.Desktop.Views.SystemSetting.AccountView">
@@ -169,8 +169,7 @@
                 </StackPanel>
             </Border>
             <TextBlock Classes="Small" Margin="43,5" FontSize="12" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填"
-                       Opacity="0.5">
-            </TextBlock>
+                       Opacity="0.5" />
         </StackPanel>
     </StackPanel>
 </UserControl>

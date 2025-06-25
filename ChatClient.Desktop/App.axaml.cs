@@ -1,16 +1,13 @@
 using System;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
 using Avalonia.Platform;
-using Avalonia.Threading;
+using ChatClient.Avalonia.Common;
 using ChatClient.BaseService;
-using ChatClient.Client;
-using ChatClient.DataBase;
-using ChatClient.Desktop.Tool;
+using ChatClient.DataBase.SugarDB;
+using ChatClient.Desktop.CornerDialog;
 using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.About;
 using ChatClient.Desktop.ViewModels.CallViewModel;
@@ -27,12 +24,12 @@ using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Desktop.ViewModels.SearchUserGroup;
 using ChatClient.Desktop.ViewModels.SearchUserGroup.Region;
 using ChatClient.Desktop.ViewModels.ShareView;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Desktop.ViewModels.SystemSetting;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.About;
 using ChatClient.Desktop.Views.CallView;
-using ChatClient.Desktop.Views.ChatPages;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog;
@@ -49,15 +46,12 @@ using ChatClient.Desktop.Views.ShareView;
 using ChatClient.Desktop.Views.SukiDialog;
 using ChatClient.Desktop.Views.SystemSetting;
 using ChatClient.Desktop.Views.UserControls;
-using ChatClient.Media;
+using ChatClient.Media.Desktop;
 using ChatClient.Resources;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
-using DnsClient.Internal;
-using Material.Icons;
-using Material.Icons.Avalonia;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Prism.DryIoc;
@@ -65,10 +59,9 @@ using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Navigation.Regions;
 using SIPSorcery;
+using SocketClient;
+using SqlSugar;
 using SukiUI.Dialogs;
-using EditUserDataView = ChatClient.Desktop.Views.SukiDialog.EditUserDataView;
-using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
-using SystemSettingView = ChatClient.Desktop.Views.SystemSetting.SystemSettingView;
 
 namespace ChatClient.Desktop;
 
@@ -100,24 +93,28 @@ public class App : PrismApplication
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
         // 注册配置文件
-        IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("appsettings.webrtc.json", optional: false, reloadOnChange: true);
-        containerRegistry.RegisterInstance(configurationBuilder.Build());
+            .AddJsonFile("appsettings.webrtc.json", optional: false, reloadOnChange: true)
+            .Build();
 
+        var appsettings = new AppSettings();
+        configuration.Bind(appsettings);
+        containerRegistry.RegisterInstance(appsettings);
+
+        // 注册Logger
         ILoggerFactory loggerFactory = LoggerFactory.Create(build =>
         {
             build.AddConsole()
-                .AddConfiguration(configurationBuilder.Build());
+                .AddConfiguration(configuration);
         });
         containerRegistry.RegisterInstance(loggerFactory);
 
-        // LogFactory.Set(loggerFactory);
-
         // 注册数据库
-        containerRegistry.RegisterDataBase();
+        // containerRegistry.RegisterDataBase();
+        containerRegistry.RegisterSugarDataBase();
 
-        // 注册服务
+        // 注册业务服务
         containerRegistry.RegisterBaseServices();
 
         containerRegistry.Register<MainWindowView>()
@@ -205,7 +202,7 @@ public class App : PrismApplication
 
     protected override AvaloniaObject CreateShell()
     {
-        return null;
+        return null!;
     }
 
     /// <summary>
@@ -213,14 +210,16 @@ public class App : PrismApplication
     /// </summary>
     protected override void OnInitialized()
     {
-        var configuration = Container.Resolve<IConfigurationRoot>();
+        StaticConfig.EnableAot = true;
 
-        if (configuration.GetSection("SIPSorceryDebug")?.Get<bool>() ?? false)
+        var appSettings = Container.Resolve<AppSettings>();
+        if (appSettings.SIPSorceryDebug)
         {
             ILoggerFactory loggerFactory = Container.Resolve<ILoggerFactory>();
             LogFactory.Set(loggerFactory);
         }
 
+        // 设置Region默认视图
         IRegionManager regionManager = Container.Resolve<IRegionManager>();
 
         regionManager.RegisterViewWithRegion(RegionNames.LoginRegion, nameof(LoginView));
@@ -235,9 +234,10 @@ public class App : PrismApplication
 
         regionManager.RegisterViewWithRegion(RegionNames.SystemSettingRegion, nameof(ThemeView));
 
-        IStunServerManager stunServerManager = Container.Resolve<IStunServerManager>();
-        stunServerManager.GetStunServersUrl();
+        // 获取STUN服务器地址
+        Container.Resolve<IStunServerManager>().GetStunServersUrl();
 
+        // 加载主题样式
         Container.Resolve<IThemeStyle>();
     }
 

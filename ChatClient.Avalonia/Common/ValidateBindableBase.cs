@@ -2,7 +2,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ChatClient.Tool.Common;
+namespace ChatClient.Avalonia.Common;
 
 public class ValidateBindableBase : BindableBase, INotifyDataErrorInfo
 {
@@ -26,16 +26,16 @@ public class ValidateBindableBase : BindableBase, INotifyDataErrorInfo
         var context = new ValidationContext(this) { MemberName = propertyName };
         var validationResults = new List<ValidationResult>();
         Validator.TryValidateProperty(value, context, validationResults);
-        
+
         HandleValidationResults(propertyName, validationResults);
     }
 
     private void HandleValidationResults(string propertyName, List<ValidationResult> validationResults)
     {
         var origionErrors = _errors.GetValueOrDefault(propertyName) ?? [];
-        
+
         // 检查是否有变化
-        bool hasChanged = origionErrors.Count != validationResults.Count 
+        bool hasChanged = origionErrors.Count != validationResults.Count
                           || !origionErrors!.SequenceEqual(validationResults.Select(vr => vr.ErrorMessage));
 
         if (!hasChanged) return;

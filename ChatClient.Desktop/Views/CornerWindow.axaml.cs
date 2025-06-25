@@ -1,15 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Styling;
-using ChatClient.Desktop.Tool;
-using ChatClient.Tool.ManagerInterface;
+using ChatClient.Desktop.CornerDialog;
 using Prism.Dialogs;
-using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views;
 

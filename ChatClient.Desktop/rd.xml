@@ -1,0 +1,26 @@
+﻿<Directives xmlns="http://schemas.microsoft.com/netfx/2013/01/metadata">
+	<Application>
+		<Assembly Name="Avalonia.Controls" Dynamic="Required All" />
+		<Assembly Name="Avalonia.Markup.Xaml" Dynamic="Required All" />
+
+		<Assembly Name="AutoMapper" Dynamic="Required All" />
+
+		<Assembly Name="DryIoc" Dynamic="Required All" />
+		<Assembly Name="Prism" Dynamic="Required All" />
+		<Assembly Name="Prism.Avalonia" Dynamic="Required All" />
+		<Assembly Name="Prism.DryIoc.Avalonia" Dynamic="Required All" />
+		<Assembly Name="Prism.Container.DryIoc" Dynamic="Required All" />
+
+		<Assembly Name="DotNetty.Buffers" Dynamic="Required All" />
+		<Assembly Name="DotNetty.Codecs" Dynamic="Required All" />
+		<Assembly Name="DotNetty.Common" Dynamic="Required All" />
+		<Assembly Name="DotNetty.Handlers" Dynamic="Required All" />
+		<Assembly Name="DotNetty.Transport" Dynamic="Required All" />
+
+		<Assembly Name="ChatClient.Avalonia" Dynamic="Required All"/>
+		<Assembly Name="ChatClient.Client" Dynamic="Required All"/>
+		<Assembly Name="ChatClient.Desktop" Dynamic="Required All"/>
+
+		<Assembly Name="SqlSugar" Dynamic="Required All" />
+	</Application>
+</Directives>

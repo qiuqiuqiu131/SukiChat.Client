@@ -5,7 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Styling;
 
-namespace ChatClient.Avalonia.Controls;
+namespace ChatClient.Avalonia.Controls.QScrollViewer;
 
 /// <summary>
 /// 垂直方向上的平缓滚动视图控件

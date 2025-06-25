@@ -11,11 +11,10 @@ using Avalonia.Platform;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.Tool;
-using ChatClient.Media;
-using ChatClient.Media.AudioPlayer;
-using ChatClient.Media.CallManager;
-using ChatClient.Media.CallOperator;
-using ChatClient.Tool.Data;
+using ChatClient.Media.Desktop;
+using ChatClient.Media.Desktop.AudioPlayer;
+using ChatClient.Media.Desktop.CallOperator;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
@@ -24,7 +23,6 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Media.Audio;
 using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -41,6 +39,7 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
     private readonly IMessageHelper _messageHelper;
     private readonly IEventAggregator _eventAggregator;
     private readonly IContainerProvider _containerProvider;
+    private readonly AppSettings _appSettings;
 
     private List<SubscriptionToken> _subscriptions = [];
 
@@ -213,11 +212,13 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
     public VideoCallViewModel(IUserDtoManager userDtoManager, IUserManager userManager,
         IMessageHelper messageHelper,
+        AppSettings appSettings,
         IEventAggregator eventAggregator,
         IContainerProvider containerProvider)
     {
         _userDtoManager = userDtoManager;
         _userManager = userManager;
+        _appSettings = appSettings;
         _messageHelper = messageHelper;
         _eventAggregator = eventAggregator;
         _containerProvider = containerProvider;
@@ -706,8 +707,7 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
             if (State == CallViewState.InCall)
                 return;
 
-            var outConnectTime =
-                int.Parse(_containerProvider.Resolve<IConfigurationRoot>()["OutConnectTime"] ?? "5000");
+            var outConnectTime = _appSettings.OutConnectTime;
 
             checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(outConnectTime));
 

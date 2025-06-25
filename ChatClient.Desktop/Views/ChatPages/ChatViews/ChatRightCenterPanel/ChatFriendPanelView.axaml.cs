@@ -2,14 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Notification.Controls;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
-using ChatClient.Avalonia.Controls.Chat.GroupChatUI;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Events;
@@ -35,7 +32,10 @@ public partial class ChatFriendPanelView : UserControl, IDestructible
         InitializeComponent();
 
         token = eventAggregator.GetEvent<SelectChatDtoChanged>()
-            .Subscribe(() => { Dispatcher.UIThread.Invoke(() => { return OverlaySplitView.IsPaneOpen = false; }); });
+            .Subscribe(() =>
+            {
+                Dispatcher.UIThread.Invoke<bool>(() => { return OverlaySplitView.IsPaneOpen = false; });
+            });
         token2 = eventAggregator.GetEvent<NewMenuShow>().Subscribe(() =>
         {
             Dispatcher.UIThread.Invoke(() => { ChatUI.CloseMenu(); });

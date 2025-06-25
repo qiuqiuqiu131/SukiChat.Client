@@ -1,7 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 
-namespace ChatClient.Avalonia.Converter;
+namespace ChatClient.Avalonia.Converter.ChatUIConverter;
 
 public class ChatUIDateTimeConverter : IValueConverter
 {

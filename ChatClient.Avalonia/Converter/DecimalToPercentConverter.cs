@@ -1,4 +1,3 @@
-using AutoMapper;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 

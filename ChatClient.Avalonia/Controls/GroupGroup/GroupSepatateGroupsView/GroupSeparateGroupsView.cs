@@ -9,8 +9,7 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChatClient.Avalonia.Controls.SeperateGroupsView;
-using ChatClient.Tool.Data;
+using ChatClient.Avalonia.Controls.FreindGroup.SeparateGroupsView;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;

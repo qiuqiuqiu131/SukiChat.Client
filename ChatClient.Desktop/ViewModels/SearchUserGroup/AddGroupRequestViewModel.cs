@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
-using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;

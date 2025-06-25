@@ -4,21 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
-             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+             xmlns:systemSetting="clr-namespace:ChatClient.Desktop.ViewModels.SystemSetting"
              mc:Ignorable="d"
              x:DataType="systemSetting:SystemSettingViewModel"
              Width="750" Height="750"
              x:Class="ChatClient.Desktop.Views.SystemSetting.SystemSettingView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="4" />
         </Style>
         <Style Selector="ListBoxItem">
             <Setter Property="Background" Value="Transparent" />

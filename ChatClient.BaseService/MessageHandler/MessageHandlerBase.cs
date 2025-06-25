@@ -1,4 +1,3 @@
-using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using Google.Protobuf;
 
@@ -33,9 +32,7 @@ public abstract class MessageHandlerBase : IMessageHandler
 
     protected async void ExecuteInScope<T>(T value, MessageEvent<T> action) where T : IMessage
     {
-        using (var scope = _containerProvider.CreateScope())
-        {
-            await action(scope, value);
-        }
+        using var scope = _containerProvider.CreateScope();
+        await action(scope, value);
     }
 }

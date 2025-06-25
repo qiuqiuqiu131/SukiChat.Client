@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using ChatClient.Tool.HelperInterface;
 
-namespace ChatClient.BaseService.Helper;
+namespace ChatClient.BaseService.Helper.Windows;
 
 internal class WindowTaskbarFlashHelper : ITaskbarFlashHelper
 {

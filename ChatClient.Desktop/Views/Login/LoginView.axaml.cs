@@ -2,9 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
-using ChatClient.Desktop.ViewModels.Login;
 using ChatClient.Tool.Data;
-using Prism.Navigation;
 
 namespace ChatClient.Desktop.Views.Login;
 

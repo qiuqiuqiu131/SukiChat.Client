@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf;
 
-namespace ChatClient.MessageOperate
+namespace SocketClient.MessageOperate
 {
     public interface IProcessor<in T> where T : IMessage
     {

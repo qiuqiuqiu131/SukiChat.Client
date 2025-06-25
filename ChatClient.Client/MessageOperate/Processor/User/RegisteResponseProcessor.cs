@@ -1,6 +1,6 @@
 using ChatServer.Common.Protobuf;
 
-namespace ChatClient.MessageOperate.Processor.User;
+namespace SocketClient.MessageOperate.Processor.User;
 
-public class RegisteResponseProcessor(IContainerProvider container) 
+public class RegisteResponseProcessor(IContainerProvider container)
     : ProcessorBase<RegisteResponse>(container);

@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.LocalSearchUserGroupView.Region"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView.Region"
+             xmlns:region1="clr-namespace:ChatClient.Desktop.Views.LocalSearchUserGroupView.Region"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:LocalSearchAllViewModel"
              x:Class="ChatClient.Desktop.Views.LocalSearchUserGroupView.Region.LocalSearchAllView">
@@ -57,8 +57,7 @@
                                             <InvokeCommandAction
                                                 Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
                                                 ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
-                                                CommandParameter="{Binding FriendRelationDto}">
-                                            </InvokeCommandAction>
+                                                CommandParameter="{Binding FriendRelationDto}" />
                                         </EventTriggerBehavior>
                                     </Interaction.Behaviors>
                                     <Grid ColumnDefinitions="42,*,25" Margin="10,6">
@@ -103,8 +102,7 @@
                                                     <InvokeCommandAction
                                                         Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
                                                         ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
-                                                        CommandParameter="{Binding FriendRelationDto}">
-                                                    </InvokeCommandAction>
+                                                        CommandParameter="{Binding FriendRelationDto}" />
                                                 </PointerPressedTrigger>
                                             </Interaction.Behaviors>
                                             <avalonia:MaterialIcon Name="Icon" Classes="icon"
@@ -161,8 +159,7 @@
                                             <InvokeCommandAction
                                                 Command="{Binding ((region:LocalSearchAllViewModel)DataContext).SendMessageCommand 
                                                 ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
-                                                CommandParameter="{Binding GroupRelationDto}">
-                                            </InvokeCommandAction>
+                                                CommandParameter="{Binding GroupRelationDto}" />
                                         </EventTriggerBehavior>
                                     </Interaction.Behaviors>
                                     <Grid ColumnDefinitions="42,*,25" Margin="10,6">
@@ -207,8 +204,7 @@
                                                     <InvokeCommandAction
                                                         Command="{Binding ((region:LocalSearchAllViewModel)DataContext).MoveToRelationCommand 
                                                         ,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=region1:LocalSearchAllView}}"
-                                                        CommandParameter="{Binding GroupRelationDto}">
-                                                    </InvokeCommandAction>
+                                                        CommandParameter="{Binding GroupRelationDto}" />
                                                 </PointerPressedTrigger>
                                             </Interaction.Behaviors>
                                             <avalonia:MaterialIcon Name="Icon" Classes="icon"

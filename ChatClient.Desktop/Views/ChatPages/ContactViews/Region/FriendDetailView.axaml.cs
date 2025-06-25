@@ -1,12 +1,8 @@
 using System.Diagnostics;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using Avalonia.Media.Imaging;
-using ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 using ChatClient.Tool.ManagerInterface;
-using ChatClient.Tool.Tools;
 using Prism.Ioc;
 using Prism.Navigation.Regions;
 using Path = System.IO.Path;

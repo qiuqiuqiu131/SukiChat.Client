@@ -2,17 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
-             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
-             xmlns:sukiDialog="clr-namespace:ChatClient.Desktop.Views.SukiDialog"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
+             xmlns:sukiDialog="clr-namespace:ChatClient.Desktop.Views.SukiDialog"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="550" Height="550"
-             x:DataType="userControls:RemoveGroupMemberViewModel"
+             x:DataType="sukiDialogs:RemoveGroupMemberViewModel"
              x:Class="ChatClient.Desktop.Views.SukiDialog.RemoveGroupMemberView">
     <sukiDialog:RemoveGroupMemberView.SelectedMembers>
         <Binding Path="SelectedMembers" />

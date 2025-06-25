@@ -1,14 +1,12 @@
 using System;
 using Avalonia.Threading;
-using ChatClient.Desktop.Views.Login;
-using ChatClient.Tool.Common;
-using ChatClient.Tool.Data;
+using ChatClient.Avalonia.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
 using Prism.Events;
 using Prism.Navigation.Regions;
-using Prism.Commands;
 using RegionNavigationEventArgs = ChatClient.Tool.Events.RegionNavigationEventArgs;
 
 namespace ChatClient.Desktop.ViewModels.Login;

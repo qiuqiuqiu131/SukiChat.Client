@@ -13,8 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
-using ChatClient.Media.AudioPlayer;
-using ChatClient.Tool.Data;
+using ChatClient.Media.Desktop.AudioPlayer;
 using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
 using Material.Icons.Avalonia;
@@ -32,7 +31,7 @@ public partial class ChatUI : UserControl
 
     #region ScrollField
 
-    private QScrollViewer ChatScroll;
+    private QScrollViewer.QScrollViewer ChatScroll;
     private Control ChatScrollContent;
 
     #endregion
@@ -41,7 +40,7 @@ public partial class ChatUI : UserControl
     {
         base.OnApplyTemplate(e);
 
-        ChatScroll = e.NameScope.Get<QScrollViewer>("ChatScrollViewer");
+        ChatScroll = e.NameScope.Get<QScrollViewer.QScrollViewer>("ChatScrollViewer");
         ChatScrollContent = (ChatScroll.Content as Control)!;
         ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
         ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, ChatScroll.CurrentPos); };

@@ -1,10 +1,10 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
         xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
-        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup.GroupList">
     <Style Selector="groupList|GroupList">
         <Setter Property="Template">
             <ControlTemplate>

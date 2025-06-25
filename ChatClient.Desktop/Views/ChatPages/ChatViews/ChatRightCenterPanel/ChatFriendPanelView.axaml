@@ -4,20 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
-             xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
              xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
              xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
              xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatFriendPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatFriendPanelView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="5"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="5" />
         </Style>
     </UserControl.Styles>
     <Grid RowDefinitions="70,*">
@@ -160,8 +159,7 @@
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
                         <ContentControl
                             regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.ChatSideRegion}"
-                            regions:RegionManager.RegionManager="{Binding RegionManager}">
-                        </ContentControl>
+                            regions:RegionManager.RegionManager="{Binding RegionManager}" />
                     </ScrollViewer>
                 </Panel>
             </overlaySplitView:OverlaySplitView.PaneContent>

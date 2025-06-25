@@ -1,6 +1,6 @@
 using System;
 using Avalonia.Media.Imaging;
-using ChatClient.Media;
+using ChatClient.Media.Desktop;
 using SIPSorceryMedia.Abstractions;
 
 namespace ChatClient.Desktop.Tool;

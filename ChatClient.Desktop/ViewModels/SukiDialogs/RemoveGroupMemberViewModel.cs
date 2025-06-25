@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Collections;
-using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Services;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
@@ -16,7 +14,7 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class RemoveGroupMemberViewModel : BindableBase
 {

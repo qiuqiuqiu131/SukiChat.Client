@@ -3,7 +3,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 
-namespace ChatClient.Avalonia.Converter;
+namespace ChatClient.Avalonia.Converter.ChatUIConverter;
 
 public class FileExtensionToColorConverter : MarkupExtension, IValueConverter
 {

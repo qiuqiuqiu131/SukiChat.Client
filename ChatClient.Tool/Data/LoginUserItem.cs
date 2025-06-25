@@ -9,7 +9,7 @@ public class LoginUserItem : BindableBase
 
     public DateTime LastLoginTime { get; set; }
 
-    private Bitmap? head;
+    private Bitmap? head = null;
 
     public Bitmap? Head
     {

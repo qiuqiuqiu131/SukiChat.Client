@@ -1,18 +1,17 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
 using Avalonia.Controls.Notifications;
-using ChatClient.Desktop;
-using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
-using ChatClient.Media.AudioRecorder;
+using ChatClient.Media.Desktop.AudioRecorder;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.Media.Audio;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
+
+namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 
 public class AudioRecorderViewModel : BindableBase, IDisposable
 {
@@ -110,6 +109,12 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         }
         catch (Exception ex)
         {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "录音出错，请检查配置。",
+                Type = NotificationType.Error
+            });
             Debug.WriteLine($"开始录音失败: {ex.Message}");
         }
     }
@@ -147,6 +152,13 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         }
         catch (Exception ex)
         {
+            var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
+            eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
+            {
+                Message = "录音出错，请检查配置。",
+                Type = NotificationType.Error
+            });
+            Debug.WriteLine($"开始录音失败: {ex.Message}");
         }
     }
 

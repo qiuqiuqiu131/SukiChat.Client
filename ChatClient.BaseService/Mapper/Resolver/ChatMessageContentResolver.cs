@@ -1,5 +1,4 @@
 using AutoMapper;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatServer.Common.Protobuf;
 

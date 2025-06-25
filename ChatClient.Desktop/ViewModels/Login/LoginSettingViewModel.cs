@@ -1,15 +1,11 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using ChatClient.BaseService.Services;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Views.Login;
-using ChatClient.Tool.Common;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
-using ChatClient.Tool.UIEntity;
 using Prism.Commands;
-using Prism.Dialogs;
-using Prism.Mvvm;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.Login;

@@ -1,12 +1,13 @@
 using System.Text.Json;
 using Avalonia.Collections;
 using Avalonia.Styling;
-using ChatClient.Tool.Data;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using SukiUI;
 using SukiUI.Enums;
 using SukiUI.Models;
+using ThemeStyleContext = ChatClient.Tool.Config.ThemeStyleContext;
 
 namespace ChatClient.BaseService.Manager;
 
@@ -35,7 +36,8 @@ internal class ThemeStyleManager : IThemeStyle
             {
                 var json = reader.ReadToEnd();
                 if (!string.IsNullOrWhiteSpace(json))
-                    CurrentThemeStyle = JsonSerializer.Deserialize<ThemeStyle>(json) ?? new ThemeStyle();
+                    CurrentThemeStyle = JsonSerializer.Deserialize(json, ThemeStyleContext.Default.ThemeStyle) ??
+                                        new ThemeStyle();
                 else
                 {
                     CurrentThemeStyle = new ThemeStyle();
@@ -78,7 +80,7 @@ internal class ThemeStyleManager : IThemeStyle
     {
         using (var writer = new StreamWriter(_themeStyleFile.Create()))
         {
-            var json = JsonSerializer.Serialize(CurrentThemeStyle);
+            var json = JsonSerializer.Serialize(CurrentThemeStyle, ThemeStyleContext.Default.ThemeStyle);
             writer.Write(json);
         }
     }

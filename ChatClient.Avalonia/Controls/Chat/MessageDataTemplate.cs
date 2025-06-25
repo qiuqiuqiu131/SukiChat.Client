@@ -1,7 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using Avalonia.Metadata;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Controls.Chat;

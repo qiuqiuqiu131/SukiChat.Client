@@ -3,11 +3,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:searchData="clr-namespace:ChatClient.Tool.Data.SearchData;assembly=ChatClient.Tool"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="searchData:AllSearchDto"
              x:Class="ChatClient.Desktop.Views.UserControls.LeftSearchView">

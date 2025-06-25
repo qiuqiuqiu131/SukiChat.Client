@@ -1,9 +1,6 @@
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 
@@ -31,14 +28,16 @@ public partial class ShareView : UserControl
         if (relationDto is FriendRelationDto friendRelationDto)
         {
             var grouping = friendRelationDto.Grouping;
-            var groupFriends = MultiSeparateGroupView.GroupFriends.FirstOrDefault(d => d.GroupName.Equals(grouping));
+            var groupFriends = Enumerable.FirstOrDefault<GroupFriendDto>(MultiSeparateGroupView.GroupFriends,
+                d => d.GroupName.Equals(grouping));
             if (groupFriends != null)
                 groupFriends.DeSelectItem(friendRelationDto);
         }
         else if (relationDto is GroupRelationDto groupRelationDto)
         {
             var grouping = groupRelationDto.Grouping;
-            var groupGroups = MultiSeparateGroupGroupView.GroupGroups.FirstOrDefault(d => d.GroupName.Equals(grouping));
+            var groupGroups = Enumerable.FirstOrDefault<GroupGroupDto>(MultiSeparateGroupGroupView.GroupGroups,
+                d => d.GroupName.Equals(grouping));
             if (groupGroups != null)
                 groupGroups.DeSelectItem(groupRelationDto);
         }

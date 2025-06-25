@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ChatClient.Resources.Clients;
-using ChatClient.Resources.FileOperator;
-using ChatServer.Common.Tool;
+using ChatServer.Common.Helper;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using File.Protobuf;
 using Google.Protobuf;
 
-namespace ChatClient.ResourcesClient.ServerHandlers
+namespace ChatClient.Resources.ServerHandlers
 {
     public class LargeFileDownloadServerHandler : ChannelHandlerAdapter
     {

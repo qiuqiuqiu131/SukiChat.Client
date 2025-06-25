@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:callViewModel="clr-namespace:ChatClient.Desktop.ViewModels.CallViewModel"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:callView="clr-namespace:ChatClient.Desktop.Views.CallView"
              xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+             xmlns:callViewModel="clr-namespace:ChatClient.Desktop.ViewModels.CallViewModel"
+             xmlns:callView="clr-namespace:ChatClient.Desktop.Views.CallView"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:DataType="callViewModel:VideoCallViewModel"
              x:Class="ChatClient.Desktop.Views.CallView.VideoCallView">
@@ -18,7 +18,8 @@
                    Source="{Binding UserTarget.UserDto.HeadImage}" Opacity="0.7">
                 <Image.IsVisible>
                     <MultiBinding Converter="{x:Static BoolConverters.Or}">
-                        <Binding Path="State" Converter="{callView:CallViewStateConverter State=InCall,IsEquals=False}" />
+                        <Binding Path="State"
+                                 Converter="{callView:CallViewStateConverter State=InCall,IsEquals=False}" />
                         <Binding Path="IsRemoteMainVideo" Mode="OneWay" />
                     </MultiBinding>
                 </Image.IsVisible>

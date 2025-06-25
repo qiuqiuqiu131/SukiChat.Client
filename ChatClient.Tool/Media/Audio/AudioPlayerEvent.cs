@@ -1,12 +1,10 @@
-using NAudio.Wave;
-
 namespace ChatClient.Tool.Media.Audio;
 
 public class PlaybackStateChangedEventArgs : EventArgs
 {
-    public PlaybackState State { get; }
+    public AudioState State { get; }
 
-    public PlaybackStateChangedEventArgs(PlaybackState state)
+    public PlaybackStateChangedEventArgs(AudioState state)
     {
         State = state;
     }

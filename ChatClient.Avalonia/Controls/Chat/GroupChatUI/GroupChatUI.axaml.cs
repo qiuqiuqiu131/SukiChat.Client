@@ -1,6 +1,5 @@
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Avalonia;
@@ -15,8 +14,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat.ChatUI;
-using ChatClient.Media.AudioPlayer;
-using ChatClient.Tool.Data;
+using ChatClient.Media.Desktop.AudioPlayer;
 using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
 using Material.Icons.Avalonia;
@@ -34,7 +32,7 @@ public partial class GroupChatUI : UserControl
 
     #region ScrollField
 
-    private QScrollViewer ChatScroll;
+    private QScrollViewer.QScrollViewer ChatScroll;
     private Control ChatScrollContent;
 
     #endregion
@@ -43,7 +41,7 @@ public partial class GroupChatUI : UserControl
     {
         base.OnApplyTemplate(e);
 
-        ChatScroll = e.NameScope.Get<QScrollViewer>("ChatScrollViewer");
+        ChatScroll = e.NameScope.Get<QScrollViewer.QScrollViewer>("ChatScrollViewer");
         ChatScrollContent = ChatScroll.Content as Control ??
                             throw new InvalidOperationException("ChatScroll.Content must be a Control");
         ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;

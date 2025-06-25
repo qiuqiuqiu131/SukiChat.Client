@@ -7,19 +7,19 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:regions="http://prismlibrary.com/"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:seperateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
     xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
-    xmlns:contactViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
     xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
+    xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup.SeparateGroupsView;assembly=ChatClient.Avalonia"
+    xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
+    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+    xmlns:contactViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="vm:ContactsViewModel"
+    x:DataType="contactViews:ContactsViewModel"
     mc:Ignorable="d">
     <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
@@ -138,9 +138,8 @@
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
-                                           IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}">
-                                </TextBlock>
-                                <seperateGroupsView:SeparateGroupsView
+                                           IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}" />
+                                <separateGroupsView:SeparateGroupsView
                                     x:Name="FriendView"
                                     Margin="0,0,0,100"
                                     IsVisible="{Binding !GroupFriends,Converter={converter:ListEmptyConverter}}"
@@ -196,8 +195,8 @@
                         <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
                             <userControls:LeftSearchView DataContext="{Binding AllSearchDto}"
                                                          CardClick="LeftSearchView_OnCardClick"
-                                                         SearchMore="{Binding ((vm:ContactsViewModel)DataContext).SearchMoreCommand,
-                                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=contactViews:ContactsView}}" />
+                                                         SearchMore="{Binding ((contactViews:ContactsViewModel)DataContext).SearchMoreCommand,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=contactViews1:ContactsView}}" />
                         </Panel>
                     </Panel>
                     <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="5,10" />

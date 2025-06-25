@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Services;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
@@ -17,7 +15,6 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
-using SukiUI.Controls.Experimental;
 using SukiUI.Dialogs;
 using ChatMessage = ChatServer.Common.Protobuf.ChatMessage;
 

@@ -1,14 +1,11 @@
 using AutoMapper;
-using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.DataBase.Data;
-using ChatClient.DataBase.UnitOfWork;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
-using SukiUI.Toasts;
 
 namespace ChatClient.BaseService.MessageHandler;
 
@@ -104,25 +101,8 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         }
 
         // 更新数据库
-        try
-        {
-            var receive = _mapper.Map<GroupReceived>(receiveDto);
-            var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-            var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
-            var entity = await receiveRepository.GetFirstOrDefaultAsync(
-                predicate: d => d.RequestId == message.RequestId,
-                orderBy: o => o.OrderByDescending(d => d.RequestId),
-                disableTracking: true);
-            if (entity != null)
-                receive.Id = entity.Id;
-            receiveRepository.Update(receive);
-
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        var groupService = scopedprovider.Resolve<IGroupService>();
+        await groupService.GetJoinGroupRequestFromServer(_userManager.User!.Id, receiveDto);
     }
 
 
@@ -136,38 +116,11 @@ public class GroupRelationMessageHandler : MessageHandlerBase
     private async Task OnJoinGroupResponseFromServer(IScopedProvider scopedprovider,
         JoinGroupResponseFromServer message)
     {
-        var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        // 更新groupRequest表
-        var requestRepository = _unitOfWork.GetRepository<GroupRequest>();
-        var result = await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.RequestId.Equals(message.RequestId), disableTracking: false);
-        if (result == null) return;
-        result.IsSolved = true;
-        result.IsAccept = message.Accept;
-        result.AcceptByUserId = message.UserIdFrom;
-        result.SolveTime = DateTime.Parse(message.Time);
-        await _unitOfWork.SaveChangesAsync();
-
-        // 更新groupRelation表
-        var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
-        if (message.Accept)
-        {
-            var groupRelation = new GroupRelation
-            {
-                GroupId = result.GroupId,
-                UserId = result.UserFromId,
-                Status = 2,
-                JoinTime = DateTime.Now,
-                Grouping = result.Grouping,
-                NickName = result.NickName,
-                Remark = result.Remark
-            };
-            await groupRelationRepository.InsertAsync(groupRelation);
-            await _unitOfWork.SaveChangesAsync();
-        }
+        var groupService = scopedprovider.Resolve<IGroupService>();
+        var result = await groupService.GetJoinGroupResponseFromServer(_userManager.User!.Id, message);
 
         // 更新UI
-        var dto = _userManager.GroupRequests.FirstOrDefault(d => d.RequestId == message.RequestId);
+        var dto = _userManager.GroupRequests!.FirstOrDefault(d => d.RequestId == message.RequestId);
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         if (dto != null)
         {
@@ -180,7 +133,7 @@ public class GroupRelationMessageHandler : MessageHandlerBase
             _userManager.GroupRequests?.Remove(dto);
             _userManager.GroupRequests?.Insert(0, dto);
         }
-        else
+        else if (result != null)
         {
             var request = _mapper.Map<GroupRequestDto>(result);
             request.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(result.GroupId, message.UserIdFrom);
@@ -212,41 +165,8 @@ public class GroupRelationMessageHandler : MessageHandlerBase
     private async Task OnJoinGroupResponseResponseFromServer(IScopedProvider scopedprovider,
         JoinGroupResponseResponseFromServer message)
     {
-        var _unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        // 如果请求成功,数据库中更改此请求信息
-        var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
-        var groupRequest =
-            await groupRequestRepository.GetFirstOrDefaultAsync(predicate: x => x.RequestId == message.RequestId,
-                disableTracking: false);
-        if (groupRequest != null)
-        {
-            groupRequest.IsAccept = message.Accept;
-            groupRequest.IsSolved = true;
-            groupRequest.SolveTime = DateTime.Parse(message.Time);
-            groupRequest.AcceptByUserId = message.UserId;
-        }
-        else
-        {
-            var gresponse = new GroupRequest
-            {
-                RequestId = message.RequestId,
-                RequestTime = DateTime.Now,
-                SolveTime = null,
-                IsAccept = message.Accept,
-                IsSolved = true,
-                AcceptByUserId = message.UserId
-            };
-            groupRequestRepository.Update(gresponse);
-        }
-
-        try
-        {
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch
-        {
-            // ignored
-        }
+        var groupService = scopedprovider.Resolve<IGroupService>();
+        await groupService.GetJoinGroupResponseResponseFromServer(_userManager.User!.Id, message);
 
         // 更新UI
         var dto = _userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId.Equals(message.RequestId));

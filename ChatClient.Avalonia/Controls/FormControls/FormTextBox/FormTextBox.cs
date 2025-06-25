@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 
-namespace ChatClient.Avalonia.Controls.FormControls;
+namespace ChatClient.Avalonia.Controls.FormControls.FormTextBox;
 
 public class FormTextBox : UserControl
 {

@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Services;
-using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Tool.Common;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
@@ -13,7 +13,6 @@ using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
-using SukiUI.Toasts;
 
 namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region;
 

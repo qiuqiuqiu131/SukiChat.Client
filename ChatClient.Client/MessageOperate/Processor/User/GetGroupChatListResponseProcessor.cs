@@ -1,14 +1,9 @@
-﻿using ChatClient.MessageOperate;
-using ChatServer.Common.Protobuf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChatServer.Common.Protobuf;
 
 namespace SocketClient.MessageOperate.Processor.User
 {
-    class GetGroupChatListResponseProcessor(IContainerProvider container) : ProcessorBase<GetGroupChatListResponse>(container)
+    class GetGroupChatListResponseProcessor(IContainerProvider container)
+        : ProcessorBase<GetGroupChatListResponse>(container)
     {
     }
 }

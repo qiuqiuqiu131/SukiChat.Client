@@ -1,10 +1,8 @@
 using ChatClient.Resources.FileOperator;
-using ChatClient.ResourcesClient.ServerHandlers;
-using ChatClient.Tool.Data.File;
+using ChatClient.Resources.ServerHandlers;
 using ChatServer.Common;
 using DotNetty.Transport.Channels;
 using File.Protobuf;
-using Google.Protobuf;
 
 namespace ChatClient.Resources.Clients;
 
@@ -24,8 +22,8 @@ public class LargeFileDownloadClient : IFileClient
     {
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
-        
-        if(!channel.Active)
+
+        if (!channel.Active)
             throw new Exception("连接未激活，请检查连接状态");
 
         try

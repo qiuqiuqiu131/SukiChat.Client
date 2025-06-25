@@ -3,11 +3,10 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:controls="https://github.com/kikipoulet/SukiUI"
     xmlns:suki="clr-namespace:SukiUI;assembly=SukiUI"
-    xmlns:semi="https://irihi.tech/semi"
     xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia"
     xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
+    xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     RequestedThemeVariant="Default">
     <Application.Resources>
         <!-- <FontFamily x:Key="MiSans_Semibold">avares://ChatClient.Desktop/Assets/MiSans-Semibold.ttf#MiSans</FontFamily> -->

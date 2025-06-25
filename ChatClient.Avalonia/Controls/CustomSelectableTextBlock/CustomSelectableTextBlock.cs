@@ -1,8 +1,5 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Material.Icons;
-using Material.Icons.Avalonia;
 
 namespace ChatClient.Avalonia.Controls.CustomSelectableTextBlock;
 

@@ -1,12 +1,8 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.ViewModels.ShareView;
 using ChatClient.Desktop.Views.SearchUserGroupView;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;

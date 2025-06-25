@@ -1,5 +1,5 @@
 using Avalonia.Collections;
-using ChatClient.Tool.Data;
+using ChatClient.Tool.Config;
 using SukiUI.Enums;
 using SukiUI.Models;
 

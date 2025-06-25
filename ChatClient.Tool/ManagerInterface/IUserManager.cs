@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data;
@@ -49,8 +48,8 @@ public interface IUserManager
     Task<GroupRelationDto?> NewGroupReceive(string groupId);
     Task<GroupMemberDto?> NewGroupMember(string groupId, string userId);
 
-    Task DeleteFriend(string friendId, string groupName);
-    Task DeleteGroup(string groupId, string groupName);
+    Task DeleteFriend(string friendId, string? groupName);
+    Task DeleteGroup(string groupId, string? groupName);
     Task RemoveMember(string groupId, string memberId);
 }
 

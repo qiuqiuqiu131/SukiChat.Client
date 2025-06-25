@@ -2,15 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
-             xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
+             xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
              mc:Ignorable="d"
              Width="300" Height="380"
-             x:DataType="userControls:SendFileDialogViewModel"
+             x:DataType="sukiDialogs:SendFileDialogViewModel"
              x:Class="ChatClient.Desktop.Views.SukiDialog.SendFileDialogView">
     <Grid RowDefinitions="30,*,Auto" VerticalAlignment="Stretch">
         <TextBlock Text="{Binding SendTargetName,StringFormat='发送给 {0}'}"
@@ -27,7 +26,7 @@
                                     Height="42"
                                     Margin="10,5"
                                     Cursor="Hand"
-                                    Background="{Binding FileType,Converter={converter:FileExtensionToColorConverter}}"
+                                    Background="{Binding FileType,Converter={chatUiConverter:FileExtensionToColorConverter}}"
                                     CornerRadius="5">
                                 <Interaction.Behaviors>
                                     <behaviors:OpenFileInExplorerBehavior
@@ -40,16 +39,16 @@
                                     Foreground="White"
                                     Height="33"
                                     Width="33"
-                                    Kind="{Binding FileType,Converter={converter:FileExtensionToIconConverter}}" />
+                                    Kind="{Binding FileType,Converter={chatUiConverter:FileExtensionToIconConverter}}" />
                             </Border>
                             <Grid Grid.Column="1" RowDefinitions="*,*" VerticalAlignment="Center" Margin="5,0,10,0">
-                                <TextBlock Text="{Binding FileName,Converter={converter:GetFileNameConverter}}"
+                                <TextBlock Text="{Binding FileName,Converter={chatUiConverter:GetFileNameConverter}}"
                                            TextWrapping="NoWrap"
                                            VerticalAlignment="Center"
                                            TextTrimming="CharacterEllipsis" />
                                 <TextBlock Grid.Row="1"
                                            VerticalAlignment="Center"
-                                           Text="{Binding FileSize,Converter={converter:FileSizeConverter}}"
+                                           Text="{Binding FileSize,Converter={chatUiConverter:FileSizeConverter}}"
                                            FontSize="12" Opacity="0.6" />
                             </Grid>
                         </Grid>

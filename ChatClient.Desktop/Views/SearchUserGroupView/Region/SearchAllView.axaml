@@ -7,9 +7,9 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.SearchUserGroup.Region"
              xmlns:region1="clr-namespace:ChatClient.Desktop.Views.SearchUserGroupView.Region"
-             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="region:SearchAllViewModel"
              x:Class="ChatClient.Desktop.Views.SearchUserGroupView.Region.SearchAllView">

@@ -1,0 +1,29 @@
+﻿<link>
+	<assembly fullName="Avalonia.Controls" preserve="All" />
+
+	<assembly fullName="ChatClient.DataBase" preserve="All"/>
+	<assembly fullName="ChatClient.Avalonia" preserve="All"/>
+	<assembly fullName="ChatClient.BaseService" preserve="All"/>
+	<assembly fullName="ChatClient.Client" preserve="All"/>
+	<assembly fullName="ChatClient.Resources" preserve="All"/>
+	<assembly fullName="ChatClient.Desktop" preserve="All"/>
+	<assembly fullName="ChatServer.Common" preserve="All"/>
+	<assembly fullName="ChatClient.Tool" preserve="All" />
+	<assembly fullName="ChatClient.Media.Desktop" preserve="All" />
+
+	<assembly fullName="AForge" preserve="All"/>
+	<assembly fullName="AForge.Video" preserve="All"/>
+	<assembly fullName="AForge.Video.DirectShow" preserve="All"/>
+	
+	<assembly fullName="SIPSorcery" preserve="All" />
+
+	<assembly fullName="SqlSugar" preserve="All" />
+
+	<assembly fullName="DryIoc" preserve="All"/>
+	<assembly fullName="Prism" preserve="All" />
+	<assembly fullName="Prism.Avalonia" preserve="All" />
+	<assembly fullName="Prism.DryIoc.Avalonia" preserve="All" />
+	<assembly fullName="Prism.Container.DryIoc" preserve="All" />
+
+	<assembly fullName="SukiUI" preserve="All" />
+</link>

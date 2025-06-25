@@ -1,10 +1,10 @@
 using Avalonia.Controls.Notifications;
-using ChatClient.Client;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatServer.Common;
 using Google.Protobuf;
-using Microsoft.Extensions.Configuration;
+using SocketClient.Client;
 
 namespace ChatClient.BaseService.Helper;
 
@@ -12,13 +12,13 @@ internal class MessageHelper : IMessageHelper
 {
     private readonly ISocketClient client;
     private readonly IEventAggregator eventAggregator;
-    private readonly IConfigurationRoot configuration;
+    private readonly AppSettings appSettings;
 
-    public MessageHelper(ISocketClient client, IEventAggregator eventAggregator, IConfigurationRoot configuration)
+    public MessageHelper(ISocketClient client, IEventAggregator eventAggregator, AppSettings appSettings)
     {
         this.client = client;
         this.eventAggregator = eventAggregator;
-        this.configuration = configuration;
+        this.appSettings = appSettings;
     }
 
 
@@ -64,7 +64,7 @@ internal class MessageHelper : IMessageHelper
             // 发送消息
             await client.Channel.WriteAndFlushProtobufAsync(message);
 
-            Task wait = Task.Delay(TimeSpan.FromSeconds(int.Parse(configuration["OutOfTime"]!)));
+            Task wait = Task.Delay(TimeSpan.FromSeconds(appSettings.OutOfTime));
             var task = await Task.WhenAny(taskCompletionSource.Task, wait);
             token?.Dispose();
 

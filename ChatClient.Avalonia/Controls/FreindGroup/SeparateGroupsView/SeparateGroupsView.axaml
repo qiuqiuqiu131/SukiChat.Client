@@ -1,11 +1,11 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.SeperateGroupsView"
-        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.GroupList"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter"
-        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+        xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup.SeparateGroupsView"
+        xmlns:groupList="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup.GroupList">
     <Styles.Resources>
         <DataTemplate x:Key="Menu" DataType="friend:GroupFriendDto">
             <ContextMenu Placement="Pointer">

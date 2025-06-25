@@ -5,12 +5,12 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
-    xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
     xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+    xmlns:chatViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
+    xmlns:chatViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="vm:ChatViewModel"
+    x:DataType="chatViews:ChatViewModel"
     mc:Ignorable="d">
     <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
@@ -19,8 +19,8 @@
             <ColumnDefinition MinWidth="300" Width="*" />
         </Grid.ColumnDefinitions>
 
-        <chatViews:ChatLeftPanelView Grid.Column="0"
-                                     DataContext="{Binding  ChatLeftPanelViewModel}" />
+        <chatViews1:ChatLeftPanelView Grid.Column="0"
+                                      DataContext="{Binding  ChatLeftPanelViewModel}" />
 
         <Border Grid.Column="1" Background="{DynamicResource SukiBorderBrush}" />
 

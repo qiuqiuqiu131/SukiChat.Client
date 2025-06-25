@@ -1,8 +1,6 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
-namespace ChatClient.Desktop.Views.UserControls;
+namespace ChatClient.Desktop.Views.SukiDialog;
 
 public partial class SukiDialogView : UserControl
 {

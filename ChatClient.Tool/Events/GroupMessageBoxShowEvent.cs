@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Input;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Group;
 
 namespace ChatClient.Tool.Events;

@@ -1,16 +1,11 @@
 using AutoMapper;
-using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Services;
-using ChatClient.DataBase.Data;
-using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
-using Microsoft.EntityFrameworkCore;
-using SukiUI.Toasts;
 
 namespace ChatClient.BaseService.MessageHandler;
 
@@ -82,24 +77,8 @@ internal class FriendMessageHandler : MessageHandlerBase
             await _userManager.SaveUser();
         }
 
-        // 更新数据库
-        try
-        {
-            var data = _mapper.Map<FriendReceived>(friendRequestFromServer);
-            var _unitOfWork = scope.Resolve<IUnitOfWork>();
-            var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
-            var entity = receivedRepository.GetFirstOrDefaultAsync(
-                predicate: d => d.RequestId == friendRequestFromServer.RequestId,
-                orderBy: o => o.OrderByDescending(d => d.ReceiveTime), disableTracking: true);
-            if (entity != null)
-                data.Id = entity.Id;
-            receivedRepository.Update(data);
-            await _unitOfWork.SaveChangesAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+        var friendService = scope.Resolve<IFriendService>();
+        await friendService.GetFriendRequestFromServer(_userManager.User.Id, friendRequestFromServer);
     }
 
     /// <summary>
@@ -110,15 +89,8 @@ internal class FriendMessageHandler : MessageHandlerBase
     private async Task OnFriendResponseFromServer(IScopedProvider scope,
         FriendResponseFromServer friendResponseFromServer)
     {
-        var _unitOfWork = scope.Resolve<IUnitOfWork>();
-        var requestRepository = _unitOfWork.GetRepository<FriendRequest>();
-        var result = await requestRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.RequestId.Equals(friendResponseFromServer.RequestId), disableTracking: false);
-        if (result == null) return;
-        result.IsSolved = true;
-        result.IsAccept = friendResponseFromServer.Accept;
-        result.SolveTime = DateTime.Parse(friendResponseFromServer.ResponseTime);
-        await _unitOfWork.SaveChangesAsync();
+        var friendService = scope.Resolve<IFriendService>();
+        var result = await friendService.GetFriendResponseFromServer(_userManager.User!.Id, friendResponseFromServer);
 
         // 更新UI
         var dto = _userManager.FriendRequests?.FirstOrDefault(d => d.RequestId == friendResponseFromServer.RequestId);
@@ -131,7 +103,7 @@ internal class FriendMessageHandler : MessageHandlerBase
             _userManager.FriendRequests?.Remove(dto);
             _userManager.FriendRequests?.Insert(0, dto);
         }
-        else
+        else if (result != null)
         {
             var request = _mapper.Map<FriendRequestDto>(result);
             var userDtoManager = scope.Resolve<IUserDtoManager>();

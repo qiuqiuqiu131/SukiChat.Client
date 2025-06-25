@@ -5,13 +5,11 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 
-namespace ChatClient.Avalonia.Controls.GroupList;
+namespace ChatClient.Avalonia.Controls.FreindGroup.GroupList;
 
 public class GroupList : UserControl
 {
@@ -92,7 +90,7 @@ public class GroupList : UserControl
     {
         base.OnPropertyChanged(change);
         if (!inited) return;
-        Dispatcher.UIThread.Invoke(() =>
+        Dispatcher.UIThread.Post(() =>
         {
             if (change.Property == GroupContentsProperty)
             {
@@ -118,7 +116,8 @@ public class GroupList : UserControl
     private void NewValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         if (!inited) return;
-        Dispatcher.UIThread.Invoke(() =>
+
+        Dispatcher.UIThread.Post(() =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {

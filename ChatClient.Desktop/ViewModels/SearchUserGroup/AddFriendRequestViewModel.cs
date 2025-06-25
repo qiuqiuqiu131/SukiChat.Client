@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Avalonia.Collections;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
-using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
@@ -15,9 +13,8 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
-using SukiUI.Toasts;
 
-namespace ChatClient.Desktop.ViewModels.ChatPages.ContactViews;
+namespace ChatClient.Desktop.ViewModels.SearchUserGroup;
 
 public class AddFriendRequestViewModel : BindableBase, IDialogAware
 {

@@ -1,6 +1,6 @@
 using File.Protobuf;
 
-namespace ChatClient.MessageOperate.Processor.File;
+namespace SocketClient.MessageOperate.Processor.File;
 
 public class FilePackProcessor : ProcessorBase<FilePack>
 {

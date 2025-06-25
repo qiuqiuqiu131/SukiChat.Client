@@ -1,9 +1,9 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiSeparateGroupView"
         xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-        xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupList"
-        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool">
+        xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+        xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup.MultiSeparateGroupView"
+        xmlns:multiGroupList="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup.MultiGroupList">
     <Style Selector="multiSeparateGroupView|MultiSeparateGroupView">
         <Setter Property="Template">
             <ControlTemplate>

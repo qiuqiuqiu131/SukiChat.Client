@@ -1,14 +1,9 @@
 using System.Linq;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
-using Prism.Dialogs;
-using SukiUI.Controls;
 
-namespace ChatClient.Desktop.Views.ChatPages.ContactViews;
+namespace ChatClient.Desktop.Views.ChatPages.ContactViews.Dialog;
 
 public partial class CreateGroupView : UserControl
 {
@@ -21,7 +16,8 @@ public partial class CreateGroupView : UserControl
     private void RemoveSelectedItem(FriendRelationDto friendRelationDto)
     {
         var grouping = friendRelationDto.Grouping;
-        var groupFriends = MultiSeparateGroupView.GroupFriends.FirstOrDefault(d => d.GroupName.Equals(grouping));
+        var groupFriends = Enumerable.FirstOrDefault<GroupFriendDto>(MultiSeparateGroupView.GroupFriends,
+            d => d.GroupName.Equals(grouping));
         if (groupFriends != null)
             groupFriends.DeSelectItem(friendRelationDto);
     }

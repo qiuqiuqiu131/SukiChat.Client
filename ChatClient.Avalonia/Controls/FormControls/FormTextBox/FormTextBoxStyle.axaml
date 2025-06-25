@@ -1,14 +1,15 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls"
-        xmlns:suki="https://github.com/kikipoulet/SukiUI">
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:formTextBox="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormTextBox">
     <Design.PreviewWith>
         <Border Padding="20">
-            <formControls:FormTextBox MaxLength="10" Text="hello" Width="200" Head="昵称" />
+            <formTextBox:FormTextBox MaxLength="10" Text="hello" Width="200" Head="昵称" />
         </Border>
     </Design.PreviewWith>
 
-    <Style Selector="formControls|FormTextBox">
+    <Style Selector="formTextBox|FormTextBox">
         <Setter Property="Padding" Value="10,5" />
         <Setter Property="Template">
             <ControlTemplate>
@@ -35,7 +36,7 @@
                                  Watermark="{TemplateBinding WaterMask}"
                                  VerticalAlignment="Center"
                                  VerticalContentAlignment="Center"
-                                 Text="{Binding $parent[formControls:FormTextBox].Text,Mode=TwoWay}" />
+                                 Text="{Binding $parent[formTextBox:FormTextBox].Text,Mode=TwoWay}" />
                     </DockPanel>
                 </suki:GlassCard>
             </ControlTemplate>

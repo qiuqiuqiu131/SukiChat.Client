@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using ChatClient.Tool.Data.SearchData;
 using ChatClient.Tool.Events;
 using Prism.Events;

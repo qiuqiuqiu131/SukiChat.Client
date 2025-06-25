@@ -2,17 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
-             xmlns:desktop="clr-namespace:ChatClient.Desktop"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
-             xmlns:input1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
+             xmlns:input="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
+             xmlns:input1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="input1:ChatInputPanelViewModel"
+             x:DataType="input:ChatInputPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Input.ChatInputPanelView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="x:String">
@@ -42,12 +39,12 @@
             </Image>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <input:ChatInputPanelView.InputMessages>
+    <input1:ChatInputPanelView.InputMessages>
         <Binding Path="InputMessages" Mode="TwoWay" />
-    </input:ChatInputPanelView.InputMessages>
-    <input:ChatInputPanelView.SendFileCommand>
+    </input1:ChatInputPanelView.InputMessages>
+    <input1:ChatInputPanelView.SendFileCommand>
         <Binding Path="SendFileWithPathCommand" Mode="OneWay" />
-    </input:ChatInputPanelView.SendFileCommand>
+    </input1:ChatInputPanelView.SendFileCommand>
     <Panel>
         <Grid RowDefinitions="35,*" IsVisible="{Binding !AudioRecorderIsOpen}">
             <Grid.Styles>
@@ -224,9 +221,9 @@
                 </ItemsControl>
             </ScrollViewer>
         </Grid>
-        <input:AudioRecorderView
-            IsVisible="{Binding ((input1:ChatInputPanelViewModel)DataContext).AudioRecorderIsOpen
-                ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=input:ChatInputPanelView}}"
+        <input1:AudioRecorderView
+            IsVisible="{Binding ((input:ChatInputPanelViewModel)DataContext).AudioRecorderIsOpen
+                ,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=input1:ChatInputPanelView}}"
             DataContext="{Binding AudioRecorderViewModel}" />
     </Panel>
 </UserControl>

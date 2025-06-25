@@ -1,14 +1,11 @@
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Text;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Primitives;
 
-namespace ChatClient.Avalonia.Converter;
+namespace ChatClient.Avalonia.Converter.ChatUIConverter;
 
 public class ChatMessageToStringConverter : MarkupExtension, IValueConverter
 {

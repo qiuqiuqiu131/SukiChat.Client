@@ -1,15 +1,11 @@
-using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using AutoMapper;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.DataBase.Data;
-using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
@@ -332,27 +328,16 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnChatPrivateRetractMessage(IScopedProvider scopedprovider, ChatPrivateRetractMessage message)
     {
-        var unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        var chatService = scopedprovider.Resolve<IChatService>();
 
-        string friendId = "";
-
-        var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
-        var chatPrivate =
-            await chatPrivateRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(message.ChatPrivateId),
-                disableTracking: false);
-        if (chatPrivate != null)
-        {
-            chatPrivate.IsRetracted = true;
-            chatPrivate.RetractedTime = DateTime.Now;
-            friendId = _userManager.User.Id.Equals(message.UserId) ? chatPrivate.UserTargetId : chatPrivate.UserFromId;
-        }
-
-        await unitOfWork.SaveChangesAsync();
+        string friendId =
+            await chatService.OperateRetractedChatMessage(_userManager.User!.Id, message.ChatPrivateId,
+                FileTarget.User);
 
         // 更新UI Dto
         if (!string.IsNullOrWhiteSpace(friendId))
         {
-            var friendChatDto = _userManager.FriendChats.FirstOrDefault(d => d.UserId.Equals(friendId));
+            var friendChatDto = _userManager.FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
             if (friendChatDto != null)
             {
                 var chatMess = friendChatDto.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(message.ChatPrivateId));
@@ -371,27 +356,15 @@ internal class ChatMessageHandler : MessageHandlerBase
     /// <exception cref="NotImplementedException"></exception>
     private async Task OnChatGroupRetractMessage(IScopedProvider scopedprovider, ChatGroupRetractMessage message)
     {
-        var unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
+        var chatService = scopedprovider.Resolve<IChatService>();
 
-        string groupId = "";
-
-        var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
-        var chatGroup =
-            await chatGroupRepository.GetFirstOrDefaultAsync(predicate: d => d.ChatId.Equals(message.ChatGroupId),
-                disableTracking: false);
-        if (chatGroup != null)
-        {
-            chatGroup.IsRetracted = true;
-            chatGroup.RetractedTime = DateTime.Now;
-            groupId = chatGroup.GroupId;
-        }
-
-        await unitOfWork.SaveChangesAsync();
+        string? groupId =
+            await chatService.OperateRetractedChatMessage(_userManager.User!.Id, message.ChatGroupId, FileTarget.Group);
 
         // 更新UI Dto
         if (!string.IsNullOrWhiteSpace(groupId))
         {
-            var groupChatDto = _userManager.GroupChats.FirstOrDefault(d => d.GroupId.Equals(groupId));
+            var groupChatDto = _userManager.GroupChats!.FirstOrDefault(d => d.GroupId.Equals(groupId));
             if (groupChatDto != null)
             {
                 var chatMess = groupChatDto.ChatMessages.FirstOrDefault(d => d.ChatId.Equals(message.ChatGroupId));
@@ -421,7 +394,7 @@ internal class ChatMessageHandler : MessageHandlerBase
         var friendChatPackService = scopedprovider.Resolve<IFriendChatPackService>();
         await friendChatPackService.FriendChatMessagesOperate(message.Messages);
 
-        List<Task<ChatData>> chatTasks = [];
+        List<ChatData> chatDatas = [];
         foreach (var mess in message.Messages)
         {
             // 生成消息Dto
@@ -448,10 +421,8 @@ internal class ChatMessageHandler : MessageHandlerBase
                     chatData.IsUser,
                     chatData.ChatMessages,
                     FileTarget.User);
+            chatDatas.Add(chatData);
         }
-
-        await Task.WhenAll(chatTasks);
-        var chatDatas = chatTasks.Select(d => d.Result).ToList();
 
         // 更新消息Dto
         FriendChatDto friendChat =

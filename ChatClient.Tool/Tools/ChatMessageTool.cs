@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatServer.Common.Protobuf;
 using Google.Protobuf.Collections;

@@ -1,14 +1,11 @@
 using AutoMapper;
 using ChatClient.BaseService.Mapper.Resolver;
-using ChatClient.DataBase.Data;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
-using DryIoc.ImTools;
-using Google.Protobuf.Collections;
 
 namespace ChatClient.BaseService.Mapper;
 

@@ -1,4 +1,3 @@
-using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -8,7 +7,6 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using ChatClient.Desktop.ViewModels.UserControls;
 using ChatClient.Tool.Tools;
-using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.UserControls;
 

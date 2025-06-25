@@ -1,6 +1,6 @@
 using Material.Icons;
 
-namespace ChatClient.Tool.Common;
+namespace ChatClient.Avalonia.Common;
 
 public class ChatPageBase(string displayName, MaterialIconKind icon, int index) : ValidateBindableBase
 {

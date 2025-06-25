@@ -1,7 +1,4 @@
-using ChatClient.BaseService.Helper;
-using ChatClient.DataBase.Data;
-using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.HelperInterface;
 using File.Protobuf;
@@ -52,35 +49,29 @@ internal class FileManager : IFileManager, IDisposable
             _semaphoreSlim.Release();
         }
 
-        using (var scope = _containerProvider.CreateScope())
+        using var scope = _containerProvider.CreateScope();
+        var chatService = scope.Resolve<IChatService>();
+        // 查询数据库中文件状态
+        if (fileTarget == FileTarget.User)
         {
-            var _unitOfWork = scope.Resolve<IUnitOfWork>();
-            // 查询数据库中文件状态
-            if (fileTarget == FileTarget.User)
+            var targetPath = await chatService.GetTargetPath(userId, fileMessDto.ChatId, FileTarget.User);
+            if (targetPath != null)
             {
-                var chatPrivateFile = await _unitOfWork.GetRepository<ChatPrivateFile>()
-                    .GetFirstOrDefaultAsync(predicate: d =>
-                        d.ChatId.Equals(fileMessDto.ChatId) && d.UserId.Equals(userId));
-                if (chatPrivateFile != null)
-                {
-                    fileMessDto.TargetFilePath = chatPrivateFile.TargetPath;
-                    var fileInfo = new FileInfo(fileMessDto.TargetFilePath);
-                    if (fileInfo.Exists && fileInfo.Length.Equals(fileMessDto.FileSize))
-                        fileMessDto.IsSuccess = true;
-                }
+                fileMessDto.TargetFilePath = targetPath;
+                var fileInfo = new FileInfo(fileMessDto.TargetFilePath);
+                if (fileInfo.Exists && fileInfo.Length.Equals(fileMessDto.FileSize))
+                    fileMessDto.IsSuccess = true;
             }
-            else if (fileTarget == FileTarget.Group)
+        }
+        else if (fileTarget == FileTarget.Group)
+        {
+            var targetPath = await chatService.GetTargetPath(userId, fileMessDto.ChatId, FileTarget.Group);
+            if (targetPath != null)
             {
-                var chatGroupFile = await _unitOfWork.GetRepository<ChatGroupFile>()
-                    .GetFirstOrDefaultAsync(predicate: d =>
-                        d.ChatId.Equals(fileMessDto.ChatId) && d.UserId.Equals(userId));
-                if (chatGroupFile != null)
-                {
-                    fileMessDto.TargetFilePath = chatGroupFile.TargetPath;
-                    var fileInfo = new FileInfo(fileMessDto.TargetFilePath);
-                    if (fileInfo.Exists && fileInfo.Length.Equals(fileMessDto.FileSize))
-                        fileMessDto.IsSuccess = true;
-                }
+                fileMessDto.TargetFilePath = targetPath;
+                var fileInfo = new FileInfo(fileMessDto.TargetFilePath);
+                if (fileInfo.Exists && fileInfo.Length.Equals(fileMessDto.FileSize))
+                    fileMessDto.IsSuccess = true;
             }
         }
     }

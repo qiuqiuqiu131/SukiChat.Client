@@ -3,10 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Tool.Tools;
 
 namespace ChatClient.Desktop.Views.SukiDialog;

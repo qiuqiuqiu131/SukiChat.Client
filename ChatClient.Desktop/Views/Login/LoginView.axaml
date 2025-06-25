@@ -7,16 +7,15 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p1="https://github.com/kikipoulet/SukiUI"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="using:ChatClient.Desktop.ViewModels.Login"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
-    xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+    xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
     d:DesignHeight="440"
     d:DesignWidth="315"
-    x:DataType="vm:LoginViewModel"
+    x:DataType="login:LoginViewModel"
     mc:Ignorable="d">
     <Grid RowDefinitions="25,*">
         <!-- 顶部栏 -->
@@ -27,12 +26,12 @@
             <Button Margin="10,2,10,0" HorizontalAlignment="Left" Classes="Void" Click="Button_OnClick">
                 <Button.ContextMenu>
                     <ContextMenu HorizontalOffset="-4">
-                        <MenuItem Header="登录管理" Command="{Binding LoginSettingCommand}">
+                        <MenuItem Header="登录管理" Command="{CompiledBinding LoginSettingCommand}">
                             <MenuItem.Icon>
                                 <avalonia:MaterialIcon Kind="AccountMultipleOutline" />
                             </MenuItem.Icon>
                         </MenuItem>
-                        <MenuItem Header="网络配置" Command="{Binding NetSettingCommand}">
+                        <MenuItem Header="网络配置" Command="{CompiledBinding NetSettingCommand}">
                             <MenuItem.Icon>
                                 <avalonia:MaterialIcon Kind="Web" />
                             </MenuItem.Icon>

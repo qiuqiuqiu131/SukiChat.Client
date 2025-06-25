@@ -7,7 +7,6 @@ using Avalonia.Threading;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.Login;
 using Prism.Ioc;
-using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.Tool;
 

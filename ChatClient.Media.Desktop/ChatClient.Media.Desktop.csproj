@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj" />
+        <ProjectReference Include="..\ChatServer.Common\ChatServer.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AForge" Version="2.2.5" />
+        <PackageReference Include="AForge.Video" Version="2.2.5" />
+        <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+        <PackageReference Include="NAudio.Lame.CrossPlatform" Version="2.2.1" />
+        <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
+		<PackageReference Include="NAudio" Version="2.2.1" />
+		<PackageReference Include="NAudio.Core" Version="2.2.1" />
+    </ItemGroup>
+
+</Project>

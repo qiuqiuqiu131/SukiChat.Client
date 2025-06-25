@@ -13,10 +13,9 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Mvvm;
-using Prism.Navigation.Regions;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class EditUserDataViewModel : BindableBase
 {

@@ -1,6 +1,6 @@
 using Prism.Dialogs;
 
-namespace ChatClient.Desktop.Tool;
+namespace ChatClient.Desktop.CornerDialog;
 
 public static class ICornerDialogWindowExtensions
 {

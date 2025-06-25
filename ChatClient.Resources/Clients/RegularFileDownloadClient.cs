@@ -1,16 +1,9 @@
-using System.Net;
 using ChatClient.Resources.FileOperator;
 using ChatClient.Resources.ServerHandlers;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.File;
-using ChatClient.Tool.Events;
 using ChatServer.Common;
-using DotNetty.Codecs;
-using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
-using DotNetty.Transport.Channels.Sockets;
 using File.Protobuf;
-using Google.Protobuf;
 
 namespace ChatClient.Resources.Clients;
 
@@ -44,9 +37,9 @@ public class RegularFileDownloadClient : IFileClient
         if (!_channel.TryGetTarget(out var channel))
             throw new NullReferenceException();
 
-        if(!channel.Active)
+        if (!channel.Active)
             throw new Exception("连接未激活，请检查连接状态");
-        
+
         try
         {
             // 创建文件处理器

@@ -1,7 +1,6 @@
 using System.Collections.Specialized;
 using Avalonia.Collections;
 using ChatClient.Tool.Data.ChatMessage;
-using ChatServer.Common.Protobuf;
 
 namespace ChatClient.Tool.Data.Group;
 

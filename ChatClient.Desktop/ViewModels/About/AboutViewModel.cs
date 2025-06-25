@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.Reflection;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Mvvm;

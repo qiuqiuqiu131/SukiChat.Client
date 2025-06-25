@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:about="clr-namespace:ChatClient.Desktop.ViewModels.About"
              xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:about="clr-namespace:ChatClient.Desktop.ViewModels.About"
              mc:Ignorable="d" d:DesignWidth="320" d:DesignHeight="420"
              x:DataType="about:AboutViewModel"
              Width="320" Height="420"
@@ -92,8 +92,7 @@
                                HorizontalAlignment="Center" />
                     <TextBlock Text="   Suki Chat内置了聊天机器人，如果有什么问题，尽管提问它们。"
                                TextAlignment="Center" Classes="Small"
-                               TextWrapping="Wrap" FontSize="12.5">
-                    </TextBlock>
+                               TextWrapping="Wrap" FontSize="12.5" />
                 </StackPanel>
             </ScrollViewer>
         </DockPanel>

@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Common;
 using ChatClient.Avalonia.Validation;
-using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Data;
+using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
@@ -29,6 +31,19 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
         "手机",
         "邮箱"
     };
+
+    #region IsConnected
+
+    private Connect _isConnected;
+
+    public Connect IsConnected
+    {
+        get => _isConnected;
+        set => SetProperty(ref _isConnected, value);
+    }
+
+    #endregion
+
 
     private string firstAccountWaySelected = "ID";
 
@@ -154,7 +169,7 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
     public DelegateCommand CancelCommand { get; }
     public AsyncDelegateCommand ConfirmCommand { get; init; }
 
-    public ForgetPasswordViewModel(IContainerProvider containerProvider)
+    public ForgetPasswordViewModel(IContainerProvider containerProvider, IConnection connection)
     {
         _containerProvider = containerProvider;
 
@@ -167,6 +182,8 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
             RaisePropertyChanged(nameof(NewPasswordError));
             RaisePropertyChanged(nameof(ConfirmPasswordError));
         };
+
+        IsConnected = connection.IsConnected;
     }
 
     private bool CanConfirm() => !string.IsNullOrWhiteSpace(FirstAccount) &&

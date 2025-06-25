@@ -14,12 +14,16 @@ public class GroupRelationDto : BindableBase, IDisposable
         set => SetProperty(ref _groupDto, value);
     }
 
-    private string grouping;
+    private string grouping = string.Empty;
 
     public string GroupingWithoutEvent
     {
         get => grouping;
-        set => SetProperty(ref grouping, value);
+        set
+        {
+            if (SetProperty(ref grouping, value))
+                RaisePropertyChanged(nameof(Grouping));
+        }
     }
 
     public string Grouping

@@ -9,11 +9,9 @@ using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
-using ChatClient.Tool.Data.Group;
 
-namespace ChatClient.Avalonia.Controls.SeperateGroupsView;
+namespace ChatClient.Avalonia.Controls.FreindGroup.SeparateGroupsView;
 
 public class SeparateGroupsView : UserControl
 {
@@ -188,7 +186,7 @@ public class SeparateGroupsView : UserControl
     private void OnGroupFriendsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
         if (!Inited) return;
-        Dispatcher.UIThread.Invoke(async () =>
+        Dispatcher.UIThread.Post(async () =>
         {
             if (args.Action == NotifyCollectionChangedAction.Add)
             {

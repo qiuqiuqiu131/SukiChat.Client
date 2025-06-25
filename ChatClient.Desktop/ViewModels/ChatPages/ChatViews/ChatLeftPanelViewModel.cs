@@ -1,13 +1,10 @@
 using System;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Tasks;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.SearchService;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface.SearchService;
 using ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog;
 using ChatClient.Desktop.Views.SearchUserGroupView;
-using ChatClient.Tool.Common;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Data.SearchData;

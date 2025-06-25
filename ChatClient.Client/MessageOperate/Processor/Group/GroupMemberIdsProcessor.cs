@@ -1,6 +1,6 @@
 using ChatServer.Common.Protobuf;
 
-namespace ChatClient.MessageOperate.Processor.Group;
+namespace SocketClient.MessageOperate.Processor.Group;
 
 public class GroupMemberIdsProcessor(IContainerProvider container)
     : ProcessorBase<GroupMemberIds>(container);

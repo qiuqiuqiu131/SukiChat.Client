@@ -1,11 +1,8 @@
-using ChatClient.Client;
 using ChatServer.Common;
 using ChatServer.Common.Protobuf;
-using ChatServer.Common.Tool;
-using DotNetty.Buffers;
-using Prism.Ioc;
+using SocketClient.Client;
 
-namespace ChatClient.MessageOperate.Processor.Base;
+namespace SocketClient.MessageOperate.Processor.Base;
 
 public class HeartBeatProcessor(IContainerProvider container)
     : ProcessorBase<HeartBeat>(container)

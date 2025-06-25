@@ -2,13 +2,22 @@ using System.Runtime.InteropServices;
 using AutoMapper;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Helper.Linux;
+using ChatClient.BaseService.Helper.Windows;
 using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Mapper;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.BaseService.Services.RemoteService;
-using ChatClient.BaseService.Services.SearchService;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
+using ChatClient.BaseService.Services.Interface.RemoteService;
+using ChatClient.BaseService.Services.Interface.SearchService;
+using ChatClient.BaseService.Services.ServiceEfCore.PackService;
+using ChatClient.BaseService.Services.ServiceEfCore.RemoteService;
+using ChatClient.BaseService.Services.ServiceEfCore.SearchService;
+using ChatClient.BaseService.Services.ServiceSugar;
+using ChatClient.BaseService.Services.ServiceSugar.PackService;
+using ChatClient.BaseService.Services.ServiceSugar.RemoteService;
+using ChatClient.BaseService.Services.ServiceSugar.SearchServie;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 
@@ -65,32 +74,32 @@ public static class BaseServiceExtension
         }
 
         // 注册Service
-        containerRegistry.Register<ILoginService, LoginService>()
-            .Register<IRegisterService, RegisterService>()
-            .Register<IFriendService, FriendService>()
-            .Register<IUserService, UserService>()
-            .Register<IUserLoginService, UserLoginService>()
-            .Register<IChatService, ChatService>()
-            .Register<IGroupGetService, GroupGetService>()
-            .Register<IGroupService, GroupService>()
-            .Register<IUserGroupService, UserGroupService>()
-            .Register<IPasswordService, PasswordService>()
-            .Register<IChatLRService, ChatLRService>();
+        containerRegistry.Register<ILoginService, LoginSugarService>() // 
+            .Register<IFriendService, FriendSugarService>() // 
+            .Register<IUserService, UserSugarService>() //
+            .Register<IChatService, ChatSugarService>() //
+            .Register<IGroupGetService, GroupGetSugarService>() //
+            .Register<IGroupService, GroupSugarService>() //
+            .Register<IUserGroupService, UserGroupSugarService>() // 
+            .Register<IPasswordService, PasswordService>() // -
+            .Register<IRegisterService, RegisterService>() // -
+            .Register<IChatLRService, ChatLRService>(); // -
 
         // 注册SearchService
-        containerRegistry.Register<ISearchService, SearchService>()
-            .Register<ILocalSearchService, LocalSearchService>();
+        containerRegistry.Register<ISearchService, SearchService>() // -
+            .Register<ILocalSearchService, LocalSearchSugarService>(); //
 
         // 注册PackService
-        containerRegistry.Register<IFriendChatPackService, FriendChatPackService>()
-            .Register<IFriendPackService, FriendPackService>()
-            .Register<IGroupPackService, GroupPackService>()
-            .Register<IGroupChatPackService, GroupChatPackService>();
+        containerRegistry.Register<IFriendChatPackService, FriendChatSugarPackService>() //
+            .Register<IFriendPackService, FriendSugarPackService>() //
+            .Register<IGroupPackService, GroupSugarPackService>() //
+            .Register<IGroupChatPackService, GroupChatSugarPackService>() //
+            .Register<IUserLoginService, UserLoginService>(); // -
 
         // 注册RemoteService
-        containerRegistry.Register<IGroupRemoteService, GroupRemoteService>()
-            .Register<IUserRemoteService, UserRemoteService>()
-            .Register<IChatRemoteService, ChatRemoteService>();
+        containerRegistry.Register<IGroupRemoteService, GroupSugarRemoteService>() //
+            .Register<IUserRemoteService, UserSugarRemoteService>() // 
+            .Register<IChatRemoteService, ChatRemoteService>(); // -
 
         // 注册MessageHandler
         containerRegistry.Register<IMessageHandler, FriendMessageHandler>()
@@ -99,6 +108,6 @@ public static class BaseServiceExtension
             .Register<IMessageHandler, GroupMessageHandler>()
             .Register<IMessageHandler, GroupRelationMessageHandler>()
             .Register<IMessageHandler, DeleteMessageHandler>()
-            .Register<IMessageHandler, CallMessageHandler>();
+            .Register<IMessageHandler, CallMessageHandler>(); // -
     }
 }

@@ -4,15 +4,15 @@ namespace ChatClient.Tool.Data.Friend;
 
 public class GroupFriendDto : BindableBase, IDisposable
 {
-    private AvaloniaList<FriendRelationDto> _friends;
+    private AvaloniaList<FriendRelationDto>? _friends;
 
-    public AvaloniaList<FriendRelationDto> Friends
+    public AvaloniaList<FriendRelationDto>? Friends
     {
         get => _friends;
         set => SetProperty(ref _friends, value);
     }
 
-    private string _groupName;
+    private string _groupName = string.Empty;
 
     public string GroupName
     {
@@ -28,7 +28,7 @@ public class GroupFriendDto : BindableBase, IDisposable
     public void Dispose()
     {
         DeSelectItemEvent = null;
-        Friends.Clear();
+        Friends?.Clear();
         Friends = null;
     }
 }

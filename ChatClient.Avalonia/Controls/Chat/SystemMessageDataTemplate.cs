@@ -2,9 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Templates;
-using Avalonia.Data;
 using Avalonia.Media;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Controls.Chat;

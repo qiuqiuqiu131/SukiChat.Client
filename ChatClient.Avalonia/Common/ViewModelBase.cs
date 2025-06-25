@@ -1,8 +1,9 @@
-﻿namespace ChatClient.Tool.Common;
+﻿namespace ChatClient.Avalonia.Common;
 
 public abstract class ViewModelBase : BindableBase, INavigationAware
 {
     private string _title;
+
     public string Title
     {
         get => _title;

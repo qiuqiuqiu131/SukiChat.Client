@@ -1,5 +1,3 @@
-using ChatClient.Tool.Data.File;
-
 namespace ChatClient.Tool.HelperInterface;
 
 public interface IFileIOHelper

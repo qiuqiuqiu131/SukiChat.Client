@@ -1,10 +1,7 @@
 using AutoMapper;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.DataBase.Data;
-using ChatClient.DataBase.UnitOfWork;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
@@ -59,12 +56,10 @@ public class DeleteMessageHandler : MessageHandlerBase
     {
         if (message is not { Response: { State: true } }) return;
 
-        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        var friendRelationRepository = unitOfWork.GetRepository<FriendRelation>();
-
         var friendId = message.UserId.Equals(_userManager.User!.Id) ? message.FriendId : message.UserId;
-        var groupName = (await friendRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.User1Id.Equals(_userManager.User.Id) && d.User2Id.Equals(friendId))).Grouping;
+
+        var friendService = scopedprovider.Resolve<IFriendService>();
+        var groupName = await friendService.GetFriendGroupName(_userManager.User.Id, friendId);
 
         var friendPackService = scopedprovider.Resolve<IFriendPackService>();
         _ = await friendPackService.FriendDeleteMessageOperate(_userManager.User!.Id, message);
@@ -90,7 +85,7 @@ public class DeleteMessageHandler : MessageHandlerBase
         {
             _userManager.User.LastReadFriendMessageTime = DateTime.Now;
             _userManager.User.UnreadFriendMessageCount = 0;
-            _userManager.SaveUser();
+            await _userManager.SaveUser();
         }
     }
 
@@ -105,11 +100,9 @@ public class DeleteMessageHandler : MessageHandlerBase
     {
         if (message is not { Response: { State: true } }) return;
 
-        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
+        var groupGetService = scopedprovider.Resolve<IGroupGetService>();
 
-        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.UserId))).Grouping;
+        var groupName = await groupGetService.GetGroupGroupName(_userManager.User!.Id, message.GroupId);
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
@@ -120,12 +113,12 @@ public class DeleteMessageHandler : MessageHandlerBase
         // 添加解散群聊消息
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
         var deleteDto = _mapper.Map<GroupDeleteDto>(message);
+        _userManager.GroupDeletes?.Add(deleteDto);
         _ = Task.Run(async () =>
         {
             deleteDto.GroupDto = await userDtoManager.GetGroupDto(_userManager.User.Id, message.GroupId);
             deleteDto.UserDto = await userDtoManager.GetUserDto(deleteDto.OperateUserId);
         });
-        _userManager.GroupDeletes?.Add(deleteDto);
     }
 
     /// <summary>
@@ -138,19 +131,17 @@ public class DeleteMessageHandler : MessageHandlerBase
     private async Task OnRemoveMemberMessage(IScopedProvider scopedprovider, RemoveMemberMessage message)
     {
         if (message is not { Response: { State: true } }) return;
-        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
 
-        var groupRelation = await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId));
+        var groupGetService = scopedprovider.Resolve<IGroupGetService>();
+        var groupName = await groupGetService.GetGroupGroupName(_userManager.User!.Id, message.GroupId);
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
 
         // 如果接受者为被移除对象，则删除群聊
-        if (message.MemberId.Equals(_userManager.User.Id) && groupRelation != null)
+        if (message.MemberId.Equals(_userManager.User.Id))
         {
-            await _userManager.DeleteGroup(message.GroupId, groupRelation.Grouping);
+            await _userManager.DeleteGroup(message.GroupId, groupName);
 
             // 添加解散群聊消息
             var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
@@ -184,11 +175,9 @@ public class DeleteMessageHandler : MessageHandlerBase
     private async Task OnDisbandGroupMessage(IScopedProvider scopedprovider, DisbandGroupMessage message)
     {
         if (message is not { Response: { State: true } }) return;
-        IUnitOfWork unitOfWork = scopedprovider.Resolve<IUnitOfWork>();
-        var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
 
-        var groupName = (await groupRelationRepository.GetFirstOrDefaultAsync(predicate: d =>
-            d.GroupId.Equals(message.GroupId) && d.UserId.Equals(message.MemberId))).Grouping;
+        var groupGetService = scopedprovider.Resolve<IGroupGetService>();
+        var groupName = await groupGetService.GetGroupGroupName(_userManager.User!.Id, message.GroupId);
 
         var groupPackService = scopedprovider.Resolve<IGroupPackService>();
         _ = await groupPackService.GroupDeleteMessageOperate(_userManager.User!.Id, message);
@@ -213,7 +202,7 @@ public class DeleteMessageHandler : MessageHandlerBase
         {
             _userManager.User.LastReadGroupMessageTime = DateTime.Now;
             _userManager.User.UnreadGroupMessageCount = 0;
-            _userManager.SaveUser();
+            await _userManager.SaveUser();
         }
     }
 

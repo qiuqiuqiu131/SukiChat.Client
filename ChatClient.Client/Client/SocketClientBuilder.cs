@@ -1,6 +1,6 @@
 ﻿using DotNetty.Transport.Channels;
 
-namespace ChatClient.Client
+namespace SocketClient.Client
 {
     public class SocketClientBuilder
     {

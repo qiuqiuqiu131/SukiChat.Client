@@ -1,12 +1,7 @@
-using System.Diagnostics;
-using ChatClient.Client;
 using ChatClient.Tool.Events;
-using ChatServer.Common.Protobuf;
 using Google.Protobuf;
-using Prism.Events;
-using Prism.Ioc;
 
-namespace ChatClient.MessageOperate;
+namespace SocketClient.MessageOperate;
 
 public class ProcessorBase<T> : IProcessor<T>
     where T : IMessage

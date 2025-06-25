@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using ChatClient.Tool.HelperInterface;
 
-namespace ChatClient.BaseService.Helper;
+namespace ChatClient.BaseService.Helper.Windows;
 
 internal class WindowScalingHelper : ISystemScalingHelper
 {

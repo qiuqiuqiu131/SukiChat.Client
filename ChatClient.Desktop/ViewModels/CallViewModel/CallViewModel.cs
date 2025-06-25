@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.BaseService.Manager;
-using ChatClient.Media.AudioPlayer;
-using ChatClient.Media.CallManager;
-using ChatClient.Media.CallOperator;
-using ChatClient.Tool.Data;
+using ChatClient.Media.Desktop.AudioPlayer;
+using ChatClient.Media.Desktop.CallOperator;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
@@ -18,7 +16,6 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Media.Audio;
 using ChatClient.Tool.Media.Call;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -35,6 +32,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     private readonly IContainerProvider _containerProvider;
     private readonly IMessageHelper _messageHelper;
     private readonly IEventAggregator _eventAggregator;
+    private readonly AppSettings _appSettings;
 
     private List<SubscriptionToken> _subscriptions = [];
 
@@ -113,6 +111,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
     public CallViewModel(IUserDtoManager userDtoManager, IUserManager userManager,
         IContainerProvider containerProvider,
+        AppSettings appSettings,
         IMessageHelper messageHelper,
         IEventAggregator eventAggregator)
     {
@@ -121,6 +120,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
         _containerProvider = containerProvider;
         _messageHelper = messageHelper;
         _eventAggregator = eventAggregator;
+        _appSettings = appSettings;
 
         HangUpCommand = new AsyncDelegateCommand(OnHangUp);
         AcceptCommand = new AsyncDelegateCommand(OnAccept, CanAccept);
@@ -470,8 +470,7 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
             if (State == CallViewState.InCall)
                 return;
 
-            var outConnectTime =
-                int.Parse(_containerProvider.Resolve<IConfigurationRoot>()["OutConnectTime"] ?? "5000");
+            var outConnectTime = _appSettings.OutConnectTime;
 
             checkingCancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(outConnectTime));
 

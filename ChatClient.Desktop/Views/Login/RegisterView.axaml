@@ -5,14 +5,16 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.Login"
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
     xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:login="clr-namespace:ChatClient.Desktop.Views.Login"
     xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
-    x:DataType="vm:RegisterViewModel"
+    xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+    xmlns:login1="clr-namespace:ChatClient.Desktop.Views.Login"
+    x:DataType="login:RegisterViewModel"
+    d:DesignHeight="550"
+    d:DesignWidth="490"
     Height="550"
     Width="490"
     mc:Ignorable="d">
@@ -24,8 +26,8 @@
 
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="5"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="5" />
         </Style>
     </UserControl.Styles>
 
@@ -164,8 +166,8 @@
             </suki:BusyArea>
 
             <!-- 注册成功页面 -->
-            <login:RegisterSuccessView HorizontalAlignment="Center" VerticalAlignment="Center"
-                                       IsVisible="{Binding IsRegistered}" />
+            <login1:RegisterSuccessView HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        IsVisible="{Binding IsRegistered}" />
         </Panel>
 
         <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2"

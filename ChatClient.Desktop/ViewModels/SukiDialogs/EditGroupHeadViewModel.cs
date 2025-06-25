@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using Avalonia.Media.Imaging;
-using Avalonia.Xaml.Interactivity;
 using ChatClient.Desktop.Views.SukiDialog;
 using ChatClient.Tool.Tools;
 using Prism.Commands;
@@ -9,7 +7,7 @@ using Prism.Dialogs;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class EditGroupHeadViewModel : BindableBase
 {

@@ -2,7 +2,6 @@ using System.Globalization;
 using System.Text;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.Primitives;
 
 namespace ChatClient.Avalonia.Converter;
 

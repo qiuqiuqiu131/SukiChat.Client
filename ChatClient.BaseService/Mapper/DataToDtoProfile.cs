@@ -6,8 +6,6 @@ using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
-using ChatServer.Common.Protobuf;
-using DryIoc.ImTools;
 
 namespace ChatClient.BaseService.Mapper;
 
@@ -20,6 +18,9 @@ internal class DataToDtoProfile : Profile
         CreateMap<User, UserDto>()
             .ForMember(ud => ud.Sex, opt => opt.MapFrom(u => u.isMale ? Sex.Male : Sex.Female));
 
+        CreateMap<UserDto, User>()
+            .ForMember(u => u.isMale, opt => opt.MapFrom(ud => ud.Sex == Sex.Male));
+
         #endregion
 
         #region UserDetailDto + User
@@ -28,7 +29,8 @@ internal class DataToDtoProfile : Profile
             .ForMember(um => um.RegisteTime, opt => opt.MapFrom(u => u.UserDto.RegisteTime))
             .ForMember(um => um.Introduction, opt => opt.MapFrom(u => u.UserDto.Introduction ?? string.Empty))
             .ForMember(um => um.Birthday,
-                opt => opt.MapFrom(u => u.UserDto.Birth))
+                opt => opt.MapFrom(u =>
+                    u.UserDto.Birth == null ? (DateTime?)null : new DateTime(u.UserDto.Birth.Value, TimeOnly.MinValue)))
             .ForMember(um => um.isMale, opt => opt.MapFrom(u => u.UserDto.Sex == Sex.Male))
             .ForMember(um => um.Name, opt => opt.MapFrom(u => u.UserDto.Name))
             .ForMember(um => um.HeadCount, opt => opt.MapFrom(u => u.UserDto.HeadCount))

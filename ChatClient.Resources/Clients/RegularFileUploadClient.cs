@@ -1,6 +1,5 @@
 using System.Buffers;
 using ChatClient.Resources.ServerHandlers;
-using ChatClient.Tool.Data.File;
 using ChatServer.Common;
 using DotNetty.Transport.Channels;
 using File.Protobuf;
@@ -138,7 +137,11 @@ public class RegularFileUploadClient : IFileClient
     {
         if (_channel.TryGetTarget(out var channel))
         {
-            channel.Pipeline.Remove<RegularFileUploadServerHandler>();
+            try
+            {
+                channel.Pipeline.Remove<RegularFileUploadServerHandler>();
+            }
+            catch { }
             return channel;
         }
 

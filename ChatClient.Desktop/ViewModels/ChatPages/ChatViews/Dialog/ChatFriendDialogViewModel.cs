@@ -1,17 +1,10 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Avalonia.Threading;
-using ChatClient.BaseService.Services;
-using ChatClient.DataBase.Data;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
-using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;

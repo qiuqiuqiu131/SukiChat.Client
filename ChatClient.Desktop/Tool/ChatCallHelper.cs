@@ -4,7 +4,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using ChatClient.Desktop.Views;
-using ChatClient.Desktop.Views.CallView;
 using Prism.Dialogs;
 
 namespace ChatClient.Desktop.Tool;

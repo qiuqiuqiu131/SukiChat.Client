@@ -1,15 +1,13 @@
 using System.Collections.Specialized;
-using System.Windows.Input;
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Interactivity;
-using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 
-namespace ChatClient.Avalonia.Controls.MultiGroupList;
+namespace ChatClient.Avalonia.Controls.MultiFriendGroup.MultiGroupList;
 
 public class MultiGroupList : UserControl
 {

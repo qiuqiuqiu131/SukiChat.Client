@@ -8,26 +8,27 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using ChatClient.BaseService.Services;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;
-using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.CallView;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
-using ChatClient.Media.CallManager;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -44,7 +45,7 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
     private readonly ISukiDialogManager _sukiDialogManager;
-    private readonly IConfigurationRoot _configurationRoot;
+    private readonly AppSettings _appSettings;
     private readonly IUserManager _userManager;
 
     private SubscriptionToken? _token;
@@ -92,14 +93,14 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         IRegionManager regionManager,
         IEventAggregator eventAggregator,
         ISukiDialogManager sukiDialogManager,
-        IConfigurationRoot configurationRoot,
+        AppSettings appSettings,
         IThemeStyle themeStyle,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
         _sukiDialogManager = sukiDialogManager;
-        _configurationRoot = configurationRoot;
+        _appSettings = appSettings;
         _userManager = userManager;
 
         RegionManager = regionManager.CreateRegionManager();
@@ -316,9 +317,10 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
         if (SelectedFriend == null) return;
 
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-        var chatPackService = _containerProvider.Resolve<IFriendChatPackService>();
+        using var scopeProvider = _containerProvider.CreateScope();
+        var chatPackService = scopeProvider.Resolve<IFriendChatPackService>();
 
-        int nextCount = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
+        int nextCount = _appSettings.ChatMessageCount;
         var chatDatas =
             await chatPackService.GetFriendChatDataAsync(User?.Id, SelectedFriend.UserId,
                 SelectedFriend.ChatMessages[0].ChatId,

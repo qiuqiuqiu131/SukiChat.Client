@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,20 +7,17 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using ChatClient.Avalonia;
-using ChatClient.BaseService.Helper;
+using ChatClient.Avalonia.Common;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;
-using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
-using ChatClient.Desktop.Views.UserControls;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
-using ChatClient.Tool.Data.File;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.HelperInterface;
@@ -29,7 +25,6 @@ using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Configuration;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -45,7 +40,7 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
 {
     private readonly IContainerProvider _containerProvider;
     private readonly IEventAggregator _eventAggregator;
-    private readonly IConfigurationRoot _configurationRoot;
+    private readonly AppSettings _appSettings;
     private readonly ISukiDialogManager _sukiDialogManager;
     private readonly IUserManager _userManager;
 
@@ -87,14 +82,14 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     public ChatGroupPanelViewModel(IContainerProvider containerProvider,
         IEventAggregator eventAggregator,
         IRegionManager regionManager,
-        IConfigurationRoot configurationRoot,
+        AppSettings appSettings,
         ISukiDialogManager sukiDialogManager,
         IUserManager userManager,
         IThemeStyle themeStyle)
     {
         _containerProvider = containerProvider;
         _eventAggregator = eventAggregator;
-        _configurationRoot = configurationRoot;
+        _appSettings = appSettings;
         _sukiDialogManager = sukiDialogManager;
         _userManager = userManager;
         ThemeStyle = themeStyle.CurrentThemeStyle;
@@ -220,9 +215,10 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
         if (SelectedGroup == null) return;
 
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-        var groupPackService = _containerProvider.Resolve<IGroupChatPackService>();
+        using var scopeProvider = _containerProvider.CreateScope();
+        var groupPackService = scopeProvider.Resolve<IGroupChatPackService>();
 
-        int nextCount = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
+        int nextCount = _appSettings.ChatMessageCount;
         var chatDatas =
             await groupPackService.GetGroupChatDataAsync(User?.Id, SelectedGroup.GroupId,
                 SelectedGroup.ChatMessages[0].ChatId,

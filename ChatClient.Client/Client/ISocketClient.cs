@@ -1,7 +1,6 @@
-﻿using System.Net;
-using DotNetty.Transport.Channels;
+﻿using DotNetty.Transport.Channels;
 
-namespace ChatClient.Client
+namespace SocketClient.Client
 {
     public interface ISocketClient
     {

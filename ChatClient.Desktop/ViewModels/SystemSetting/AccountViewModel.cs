@@ -1,10 +1,9 @@
 using System;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
-using ChatClient.BaseService.Services;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
-using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Desktop.Views.SukiDialog;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;

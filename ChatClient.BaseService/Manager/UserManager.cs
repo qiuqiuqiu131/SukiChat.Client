@@ -1,14 +1,14 @@
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.BaseService.MessageHandler;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.Media.CallManager;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.ServiceEfCore.PackService;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
@@ -65,7 +65,8 @@ internal class UserManager : IUserManager
     // 用户登录请求调用，返回登录的用户数据
     public async Task<CommonResponse?> Login(string id, string password, bool isRemember = false)
     {
-        var loginService = _containerProvider.Resolve<ILoginService>();
+        using var scopeProvider = _containerProvider.CreateScope();
+        var loginService = scopeProvider.Resolve<ILoginService>();
         var response = await loginService.Login(id, password, isRemember);
 
         if (!(response is { Response: { State: true } })) return response?.Response;
@@ -73,7 +74,7 @@ internal class UserManager : IUserManager
         // 调用userService获取用户完整数据
         try
         {
-            var _userService = _containerProvider.Resolve<IUserLoginService>();
+            var _userService = scopeProvider.Resolve<IUserLoginService>();
             UserData = await _userService.GetUserFullData(id, password);
         }
         catch (Exception e)
@@ -87,7 +88,7 @@ internal class UserManager : IUserManager
         }
 
         // 登录成功
-        _ = loginService.LoginSuccess(UserData.UserDetail);
+        await loginService.LoginSuccess(UserData.UserDetail);
 
         IsLogin = true;
         // 登录成功后，程序启用全双工通信，开始监听消息。接收到消息后，由eventaggregator发布消息。 
@@ -277,7 +278,7 @@ internal class UserManager : IUserManager
     /// <summary>
     /// 删除好友
     /// </summary>
-    public async Task DeleteFriend(string friendId, string groupName)
+    public async Task DeleteFriend(string friendId, string? groupName)
     {
         // 删除好友列表
         var friendGroup = GroupFriends!.FirstOrDefault(d => d.GroupName.Equals(groupName));
@@ -304,7 +305,7 @@ internal class UserManager : IUserManager
         user.Remark = null;
     }
 
-    public async Task DeleteGroup(string groupId, string groupName)
+    public async Task DeleteGroup(string groupId, string? groupName)
     {
         var groupGroup = GroupGroups!.FirstOrDefault(d => d.GroupName.Equals(groupName));
         if (groupGroup != null)

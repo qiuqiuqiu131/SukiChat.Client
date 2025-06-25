@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
+             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Desktop.Views.UserControls.WindowTitle">
     <UserControl.Styles>

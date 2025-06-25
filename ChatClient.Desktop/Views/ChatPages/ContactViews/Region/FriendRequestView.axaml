@@ -6,21 +6,20 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:theme="https://github.com/kikipoulet/SukiUI"
-    xmlns:region="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
-    xmlns:region1="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
     xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+    xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
+    xmlns:region1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
     d:DesignHeight="450"
     d:DesignWidth="800"
-    x:DataType="region1:FriendRequestViewModel"
+    x:DataType="region:FriendRequestViewModel"
     mc:Ignorable="d">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="4" />
         </Style>
 
         <Style Selector="suki|GlassCard">
@@ -119,14 +118,14 @@
                             <Button Classes="Outlined" Padding="8,4" Margin="0"
                                     CommandParameter="{Binding}"
                                     Opacity="0.9"
-                                    Command="{Binding ((region1:FriendRequestViewModel)DataContext).AcceptCommand,
+                                    Command="{Binding ((region:FriendRequestViewModel)DataContext).AcceptCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="同意" FontSize="12" Classes="Small" />
                             </Button>
                             <Button Classes="Outlined Accent" Padding="8,4" Margin="0"
                                     Opacity="0.9"
                                     CommandParameter="{Binding}"
-                                    Command="{Binding ((region1:FriendRequestViewModel)DataContext).RejectCommand,
+                                    Command="{Binding ((region:FriendRequestViewModel)DataContext).RejectCommand,
                                         RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}">
                                 <TextBlock Text="拒绝" FontSize="12" Classes="Small" />
                             </Button>
@@ -203,15 +202,15 @@
             </suki:GlassCard>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <region:FriendRequestView.FriendRequestDtos>
+    <region1:FriendRequestView.FriendRequestDtos>
         <Binding Path="FriendRequestDtos" />
-    </region:FriendRequestView.FriendRequestDtos>
-    <region:FriendRequestView.FriendReceivedDtos>
+    </region1:FriendRequestView.FriendRequestDtos>
+    <region1:FriendRequestView.FriendReceivedDtos>
         <Binding Path="FriendReceivedDtos" />
-    </region:FriendRequestView.FriendReceivedDtos>
-    <region:FriendRequestView.FriendDeleteDtos>
+    </region1:FriendRequestView.FriendReceivedDtos>
+    <region1:FriendRequestView.FriendDeleteDtos>
         <Binding Path="FriendDeleteDtos" />
-    </region:FriendRequestView.FriendDeleteDtos>
+    </region1:FriendRequestView.FriendDeleteDtos>
     <Grid>
         <Grid RowDefinitions="65,*" IsVisible="{Binding !IsRequestEmpty}">
             <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10,0">

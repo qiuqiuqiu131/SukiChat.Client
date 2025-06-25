@@ -3,27 +3,27 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:chatViews="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:vm="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
-    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
     xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
     xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
     xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+    xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
+    xmlns:chatViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
+    xmlns:chatViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
+    xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
     d:DesignHeight="650"
     d:DesignWidth="300"
-    x:DataType="vm:ChatLeftPanelViewModel"
+    x:DataType="chatViews:ChatLeftPanelViewModel"
     FontSize="15"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
+        <chatUiConverter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
         <converter:DateTimeConverter x:Key="DateTimeConverter" />
         <DataTemplate x:Key="FriendMenu" DataType="friend:FriendRelationDto">
             <ContextMenu Padding="0,0,10,0" Closed="OnContextMenuClosed">
@@ -173,7 +173,7 @@
                 Classes.IsTop="{Binding FriendRelatoinDto.IsTop}"
                 Click="Button_OnClick"
                 DoubleTapped="OnDoubleTapped"
-                Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                Command="{Binding ((chatViews:ChatLeftPanelViewModel)DataContext).FriendSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
                 CommandParameter="{Binding}"
                 CornerRadius="0"
                 GroupName="ChatLeft"
@@ -271,7 +271,7 @@
                 Classes.IsTop="{Binding GroupRelationDto.IsTop}"
                 Click="Button_OnClick"
                 DoubleTapped="OnDoubleTapped"
-                Command="{Binding ((vm:ChatLeftPanelViewModel)DataContext).GroupSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                Command="{Binding ((chatViews:ChatLeftPanelViewModel)DataContext).GroupSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
                 CommandParameter="{Binding}"
                 CornerRadius="0"
                 GroupName="ChatLeft"
@@ -383,18 +383,18 @@
             </RadioButton>
         </DataTemplate>
     </UserControl.DataTemplates>
-    <chatViews:ChatLeftPanelView.FriendItemsSource>
+    <chatViews1:ChatLeftPanelView.FriendItemsSource>
         <Binding Path="ChatViewModel.Friends" />
-    </chatViews:ChatLeftPanelView.FriendItemsSource>
-    <chatViews:ChatLeftPanelView.GroupItemsSource>
+    </chatViews1:ChatLeftPanelView.FriendItemsSource>
+    <chatViews1:ChatLeftPanelView.GroupItemsSource>
         <Binding Path="ChatViewModel.Groups" />
-    </chatViews:ChatLeftPanelView.GroupItemsSource>
-    <chatViews:ChatLeftPanelView.OpenFriendChatDialog>
+    </chatViews1:ChatLeftPanelView.GroupItemsSource>
+    <chatViews1:ChatLeftPanelView.OpenFriendChatDialog>
         <Binding Path="FriendOpenDialogCommand" />
-    </chatViews:ChatLeftPanelView.OpenFriendChatDialog>
-    <chatViews:ChatLeftPanelView.OpenGroupChatDialog>
+    </chatViews1:ChatLeftPanelView.OpenFriendChatDialog>
+    <chatViews1:ChatLeftPanelView.OpenGroupChatDialog>
         <Binding Path="GroupOpenDialogCommand" />
-    </chatViews:ChatLeftPanelView.OpenGroupChatDialog>
+    </chatViews1:ChatLeftPanelView.OpenGroupChatDialog>
     <Grid Margin="0" RowDefinitions="70,*" Background="Transparent">
         <!--  顶部  -->
         <suki:GlassCard
@@ -494,8 +494,8 @@
                     <Panel IsVisible="{Binding AllSearchDto,Converter={x:Static ObjectConverters.IsNotNull}}">
                         <userControls:LeftSearchView DataContext="{Binding AllSearchDto}"
                                                      CardClick="LeftSearchView_OnCardClick"
-                                                     SearchMore="{Binding ((vm:ChatLeftPanelViewModel)DataContext).SearchMoreCommand,
-                                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=chatViews:ChatLeftPanelView}}" />
+                                                     SearchMore="{Binding ((chatViews:ChatLeftPanelViewModel)DataContext).SearchMoreCommand,
+                                                    RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=chatViews1:ChatLeftPanelView}}" />
                     </Panel>
                 </Panel>
                 <Border Height="1" Background="{DynamicResource SukiBorderBrush}" Margin="5,10" />

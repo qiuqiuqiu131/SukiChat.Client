@@ -2,13 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:colorTheme="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
+             xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="userControls:WarningDialogViewModel"
+             x:DataType="sukiDialogs:WarningDialogViewModel"
              MinWidth="300"
-             x:Class="ChatClient.Desktop.Views.UserControls.WarningDialogView">
+             x:Class="ChatClient.Desktop.Views.SukiDialog.WarningDialogView">
     <Grid RowDefinitions="25,0.5,auto,auto">
         <avalonia:MaterialIcon Kind="AlertCircle"
                                Foreground="{x:Static colorTheme:NotificationColor.ErrorIconForeground}" Height="22"

@@ -1,5 +1,4 @@
 using System.Net;
-using ChatClient.Resources.ServerHandlers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Pool;

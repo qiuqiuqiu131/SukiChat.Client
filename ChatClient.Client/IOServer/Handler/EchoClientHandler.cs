@@ -1,10 +1,9 @@
-﻿using ChatClient.MessageOperate;
-using ChatServer.Common.Tool;
-using DotNetty.Buffers;
+﻿using DotNetty.Buffers;
 using DotNetty.Common.Utilities;
 using DotNetty.Transport.Channels;
+using SocketClient.MessageOperate;
 
-namespace ChatClient.IOServer.Handler
+namespace SocketClient.IOServer.Handler
 {
     public class EchoClientHandler : ChannelHandlerAdapter
     {
@@ -42,7 +41,7 @@ namespace ChatClient.IOServer.Handler
         /// <param name="context"></param>
         public override void ChannelReadComplete(IChannelHandlerContext context)
         {
-            context.Flush();//将WriteAsync写入的数据流缓存发送出去
+            context.Flush(); //将WriteAsync写入的数据流缓存发送出去
         }
     }
 }

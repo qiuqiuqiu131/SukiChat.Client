@@ -1,11 +1,10 @@
-﻿using Avalonia;
-using System;
+﻿using System;
+using Avalonia;
 using Avalonia.Dialogs;
-using Avalonia.Media;
 
 namespace ChatClient.Desktop;
 
-sealed class Program
+class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

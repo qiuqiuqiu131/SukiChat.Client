@@ -1,18 +1,18 @@
 ﻿using System.Net;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Events;
 using DotNetty.Codecs;
 using DotNetty.Handlers.Timeout;
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChatClient.Client
+namespace SocketClient.Client
 {
     public class SocketClient : ISocketClient
     {
-        private readonly IConfigurationRoot configuration;
+        private readonly AppSettings appSettings;
         private readonly IServiceProvider services;
         private readonly IEventAggregator eventAggregator;
 
@@ -45,7 +45,7 @@ namespace ChatClient.Client
         public SocketClient(IServiceProvider serviceProvider)
         {
             services = serviceProvider;
-            configuration = services.GetService<IConfigurationRoot>()!;
+            appSettings = services.GetRequiredService<AppSettings>();
             eventAggregator = services.GetService<IEventAggregator>()!;
 
             // 初始化客户端处理器
@@ -95,11 +95,11 @@ namespace ChatClient.Client
                     {
                         IChannelPipeline pipeline = channel.Pipeline;
                         pipeline.AddLast("framing-enc",
-                            new LengthFieldPrepender(int.Parse(configuration["MaxFieldLength"]!)));
+                            new LengthFieldPrepender(appSettings.MaxFieldLength));
                         pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(
-                            int.Parse(configuration["MaxFrameLength"]!),
-                            0, int.Parse(configuration["MaxFieldLength"]!),
-                            0, int.Parse(configuration["MaxFieldLength"]!)));
+                            appSettings.MaxFrameLength,
+                            0, appSettings.MaxFieldLength,
+                            0, appSettings.MaxFieldLength));
                         pipeline.AddLast(new IdleStateHandler(0, 0, reconnectConfig.Item3));
 
                         if (channels == null) return;
@@ -152,14 +152,9 @@ namespace ChatClient.Client
         /// <exception cref="ArgumentNullException"></exception>
         private IPEndPoint GetAddress()
         {
-            string? ip = configuration["Address:IP"];
-            if (ip == null)
-                throw new ArgumentNullException($"Configuration didn't exits Address:IP");
-            string? port = configuration["Address:Main_Port"];
-            if (port == null)
-                throw new ArgumentNullException($"Configuration didn't exits Address:Port");
-
-            return new IPEndPoint(IPAddress.Parse(ip), int.Parse(port));
+            string ip = appSettings.Address.Ip;
+            int port = appSettings.Address.MainPort;
+            return new IPEndPoint(IPAddress.Parse(ip), port);
         }
 
         /// <summary>
@@ -168,15 +163,9 @@ namespace ChatClient.Client
         /// <returns></returns>
         private (int, int, int) GetReconnect()
         {
-            int connectTime = configuration["Reconnect:ConnectTime"] == null
-                ? 3
-                : int.Parse(configuration["Reconnect:ConnectTime"]!);
-            int reconnectTime = configuration["Reconnect:ReconnectTime"] == null
-                ? 5
-                : int.Parse(configuration["Reconnect:ReconnectTime"]!);
-            int allIdleTime = configuration["Reconnect:AllIdleTime"] == null
-                ? 10
-                : int.Parse(configuration["Reconnect:AllIdleTime"]!);
+            int connectTime = appSettings.Reconnect.ConnectTime;
+            int reconnectTime = appSettings.Reconnect.ReconnectTime;
+            int allIdleTime = appSettings.Reconnect.AllIdleTime;
             return (connectTime, reconnectTime, allIdleTime);
         }
 

@@ -1,9 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Collections;
 using Avalonia.Notification;
 using ChatClient.Desktop.Views.SystemSetting;
-using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.UIEntity;
 using Material.Icons;

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 
-namespace ChatServer.Common.Tool
+namespace ChatServer.Common.Helper
 {
     internal class ProtobufDto
     {
@@ -25,7 +20,7 @@ namespace ChatServer.Common.Tool
 
             // 获取当前程序集下所有的类型
             var q = from t in Assembly.GetExecutingAssembly().GetTypes()
-                    select t;
+                select t;
             q.ToList().ForEach(t =>
             {
                 // 如果是IMessage的子类
@@ -45,6 +40,7 @@ namespace ChatServer.Common.Tool
                 {
                     return x.FullName.Length - y.FullName.Length;
                 }
+
                 //如果长度相同
                 return string.Compare(x.FullName, y.FullName, StringComparison.Ordinal);
             });

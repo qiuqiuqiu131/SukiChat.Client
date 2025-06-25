@@ -1,8 +1,6 @@
-using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
-using ChatClient.BaseService.Services;
-using ChatClient.Desktop.ViewModels.UserControls;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;

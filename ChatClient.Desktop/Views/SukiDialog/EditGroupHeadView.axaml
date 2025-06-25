@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
              xmlns:icons="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
              xmlns:sukiDialog="clr-namespace:ChatClient.Desktop.Views.SukiDialog"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="userControls:EditGroupHeadViewModel"
+             x:DataType="sukiDialogs:EditGroupHeadViewModel"
              x:Class="ChatClient.Desktop.Views.SukiDialog.EditGroupHeadView">
     <sukiDialog:EditGroupHeadView.Image>
         <Binding Path="HeadImage" />

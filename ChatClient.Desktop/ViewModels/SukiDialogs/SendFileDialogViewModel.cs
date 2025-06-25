@@ -5,7 +5,7 @@ using Prism.Dialogs;
 using Prism.Mvvm;
 using SukiUI.Dialogs;
 
-namespace ChatClient.Desktop.ViewModels.UserControls;
+namespace ChatClient.Desktop.ViewModels.SukiDialogs;
 
 public class SendFileDialogViewModel : BindableBase
 {

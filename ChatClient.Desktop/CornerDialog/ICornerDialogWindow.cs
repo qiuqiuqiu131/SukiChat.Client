@@ -4,7 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Prism.Dialogs;
 
-namespace ChatClient.Desktop.Tool;
+namespace ChatClient.Desktop.CornerDialog;
 
 public interface ICornerDialogWindow
 {

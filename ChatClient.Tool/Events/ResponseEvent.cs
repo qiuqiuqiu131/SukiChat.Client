@@ -1,5 +1,4 @@
 using Google.Protobuf;
-using Prism.Events;
 
 namespace ChatClient.Tool.Events;
 

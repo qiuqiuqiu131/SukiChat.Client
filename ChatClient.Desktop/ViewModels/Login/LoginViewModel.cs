@@ -6,10 +6,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
-using ChatClient.BaseService.Services;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
@@ -191,7 +192,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
     {
         IsBusy = true;
 
-        var result = await Task.Run(() => _userManager.Login(Id!, Password!, LoginData.RememberPassword));
+        var result = await _userManager.Login(Id!, Password!, LoginData.RememberPassword);
 
         // 登录成功
         if (result is { State: true })

@@ -1,68 +1,34 @@
-using ChatClient.BaseService.Services.PackService;
-using ChatClient.DataBase.Data;
-using ChatClient.Tool.Data;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.PackService;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.HelperInterface;
-using ChatClient.Tool.ManagerInterface;
 using ChatServer.Common.Protobuf;
-using Microsoft.Extensions.Configuration;
 
 namespace ChatClient.BaseService.Services;
 
-/// <summary>
-/// 聊天消息加载和清理服务接口
-/// </summary>
-public interface IChatLRService
+internal class ChatLRService : IChatLRService
 {
-    /// <summary>
-    /// 加载好友聊天记录,为FriendChatDto中添加新的聊天记录
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="friendChatDto"></param>
-    /// <returns></returns>
-    Task LoadFriendChatDto(string userId, FriendChatDto friendChatDto);
+    private readonly IContainerProvider _containerProvider;
+    private readonly AppSettings _appSettings;
 
-    /// <summary>
-    /// 加载群组聊天记录，为GroupChatDto中添加新的聊天记录
-    /// </summary>
-    /// <param name="userId"></param>
-    /// <param name="groupChatDto"></param>
-    /// <returns></returns>
-    Task LoadGroupChatDto(string userId, GroupChatDto groupChatDto);
-
-    /// <summary>
-    /// 清理上选中对象的聊天记录
-    /// </summary>
-    /// <param name="friendChatDto"></param>
-    void ClearFriendChatDto(FriendChatDto friendChatDto);
-
-    /// <summary>
-    /// 清理上选中对象的聊天记录
-    /// </summary>
-    /// <param name="groupChatDto"></param>
-    void ClearGroupChatDto(GroupChatDto groupChatDto);
-}
-
-internal class ChatLRService : BaseService, IChatLRService
-{
-    private readonly IConfigurationRoot _configurationRoot;
-
-    public ChatLRService(IContainerProvider containerProvider, IConfigurationRoot configurationRoot) : base(
-        containerProvider)
+    public ChatLRService(IContainerProvider containerProvider, AppSettings appSettings)
     {
-        _configurationRoot = configurationRoot;
+        _containerProvider = containerProvider;
+        _appSettings = appSettings;
     }
 
     public async Task LoadFriendChatDto(string userId, FriendChatDto friendChatDto)
     {
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-        int size = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
+        using var scopeProvider = _containerProvider.CreateScope();
+        int size = _appSettings.ChatMessageCount;
         if (friendChatDto.ChatMessages.Count == 0)
             friendChatDto.HasMoreMessage = false;
         else if (friendChatDto.ChatMessages.Count < size)
         {
-            var chatPackService = _scopedProvider.Resolve<IFriendChatPackService>();
+            var chatPackService = scopeProvider.Resolve<IFriendChatPackService>();
 
             int nextCount = size - friendChatDto.ChatMessages.Count;
             var chatDatas =
@@ -105,7 +71,7 @@ internal class ChatLRService : BaseService, IChatLRService
 
             var maxChatId = friendChatDto.ChatMessages.Max(d => d.ChatId);
 
-            var chatService = _scopedProvider.Resolve<IChatService>();
+            var chatService = _containerProvider.Resolve<IChatService>();
             _ = chatService.ReadAllChatMessage(userId, friendChatDto.UserId, maxChatId, FileTarget.User);
         }
     }
@@ -113,12 +79,13 @@ internal class ChatLRService : BaseService, IChatLRService
     public async Task LoadGroupChatDto(string userId, GroupChatDto groupChatDto)
     {
         // ChatMessage.Count 不为 1,说明聊天记录已经加载过了或者没有聊天记录
-        int size = int.Parse(_configurationRoot["ChatMessageCount"] ?? "15");
+        using var scopedProvider = _containerProvider.CreateScope();
+        int size = _appSettings.ChatMessageCount;
         if (groupChatDto.ChatMessages.Count == 0)
             groupChatDto.HasMoreMessage = false;
         else if (groupChatDto.ChatMessages.Count < size)
         {
-            var groupPackService = _scopedProvider.Resolve<IGroupChatPackService>();
+            var groupPackService = scopedProvider.Resolve<IGroupChatPackService>();
 
             int nextCount = size - groupChatDto.ChatMessages.Count;
             var chatDatas =
@@ -161,7 +128,7 @@ internal class ChatLRService : BaseService, IChatLRService
 
             var maxChatId = groupChatDto.ChatMessages.Max(d => d.ChatId);
 
-            var chatService = _scopedProvider.Resolve<IChatService>();
+            var chatService = _containerProvider.Resolve<IChatService>();
             _ = chatService.ReadAllChatMessage(userId, groupChatDto.GroupRelationDto!.Id, maxChatId,
                 FileTarget.Group);
         }

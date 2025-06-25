@@ -1,6 +1,7 @@
 using System.Text.Json;
-using ChatClient.Tool.Data;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.ManagerInterface;
+using LoginDataContext = ChatClient.Tool.Config.LoginDataContext;
 
 namespace ChatClient.BaseService.Manager;
 
@@ -17,12 +18,13 @@ internal class LoginDataManager : ILoginData
         else
         {
             var data = System.IO.File.ReadAllText(fileInfo.FullName);
-            LoginData = JsonSerializer.Deserialize<LoginData>(data) ?? new LoginData();
+            LoginData = JsonSerializer.Deserialize(data, LoginDataContext.Default.LoginData) ?? new LoginData();
         }
 
         LoginData.LoginDataChanged += delegate
         {
-            System.IO.File.WriteAllText(fileInfo.FullName, JsonSerializer.Serialize(LoginData));
+            System.IO.File.WriteAllText(fileInfo.FullName,
+                JsonSerializer.Serialize(LoginData, LoginDataContext.Default.LoginData));
         };
     }
 }

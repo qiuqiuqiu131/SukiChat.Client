@@ -1,18 +1,18 @@
+using ChatClient.Tool.Config;
 using ChatClient.Tool.ManagerInterface;
-using Microsoft.Extensions.Configuration;
 
 namespace ChatClient.BaseService.Manager;
 
 public class StunServerManager : IStunServerManager
 {
-    private readonly IConfigurationRoot _configuration;
+    private readonly AppSettings _appSettings;
     private readonly HttpClient httpClient;
 
     private List<string>? stunServerUrl;
 
-    public StunServerManager(IConfigurationRoot configuration)
+    public StunServerManager(AppSettings appSettings)
     {
-        _configuration = configuration;
+        _appSettings = appSettings;
         httpClient = new HttpClient { Timeout = TimeSpan.FromSeconds(5) };
     }
 
@@ -24,14 +24,13 @@ public class StunServerManager : IStunServerManager
         }
 
         if (stunServerUrl == null || !stunServerUrl.Any())
-            stunServerUrl = _configuration.GetSection("IceServers")?.Get<List<string>>();
+            stunServerUrl = _appSettings.IceServers.ToList();
         return stunServerUrl?.Take(10).ToList() ?? [];
     }
 
     public async Task GetStunServersUrlAsync()
     {
-        string url = _configuration["StunServerUrl"] ??
-                     "https://raw.githubusercontent.com/pradt2/always-online-stun/master/valid_ipv4s.txt";
+        string url = _appSettings.StunServerUrl;
         try
         {
             var response = await httpClient.GetStringAsync(url);

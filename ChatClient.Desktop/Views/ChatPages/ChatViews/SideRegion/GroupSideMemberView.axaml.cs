@@ -1,12 +1,9 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using ChatClient.BaseService.Manager;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using Prism.Events;
-using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion;
 

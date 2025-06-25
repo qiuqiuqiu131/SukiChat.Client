@@ -1,7 +1,7 @@
-using ChatClient.BaseService.Services;
 using ChatClient.Tool.Data;
 using System.Collections.Concurrent;
-using ChatClient.BaseService.Services.RemoteService;
+using ChatClient.BaseService.Services.Interface;
+using ChatClient.BaseService.Services.Interface.RemoteService;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 

@@ -8,8 +8,8 @@
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
-             xmlns:localSearchUserGroupView="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:localSearchUserGroupView="clr-namespace:ChatClient.Desktop.ViewModels.LocalSearchUserGroupView"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="650" Height="750"
              MinHeight="750"
@@ -23,8 +23,8 @@
     </UserControl.Transitions>
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
-            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}"></Setter>
-            <Setter Property="Width" Value="4"></Setter>
+            <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
+            <Setter Property="Width" Value="4" />
         </Style>
 
         <Style Selector="suki|GlassCard.search">

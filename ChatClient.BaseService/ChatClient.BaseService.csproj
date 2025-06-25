@@ -5,19 +5,22 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
+	
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
-        <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj"/>
-        <ProjectReference Include="..\ChatClient.DataBase\ChatClient.DataBase.csproj"/>
-        <ProjectReference Include="..\ChatClient.Media\ChatClient.Media.csproj"/>
-        <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj" />
+        <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj" />
+        <ProjectReference Include="..\ChatClient.DataBase\ChatClient.DataBase.csproj" />
+        <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Reference Include="SukiUI">
             <HintPath>..\ChatClient.Desktop\DLL\SukiUI.dll</HintPath>
         </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.1" />
     </ItemGroup>
 
 </Project>

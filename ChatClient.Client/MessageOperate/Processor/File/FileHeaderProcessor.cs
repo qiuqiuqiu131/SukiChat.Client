@@ -1,13 +1,9 @@
 using File.Protobuf;
 
-namespace ChatClient.MessageOperate.Processor.File;
+namespace SocketClient.MessageOperate.Processor.File;
 
-public class FileHeaderProcessor : ProcessorBase<FileHeader>
+public class FileHeaderProcessor(IContainerProvider container) : ProcessorBase<FileHeader>(container)
 {
-    public FileHeaderProcessor(IContainerProvider container) : base(container)
-    {
-    }
-
     protected override async Task OnProcess(FileHeader message)
     {
         // 与FileManager交互

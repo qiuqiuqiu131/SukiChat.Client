@@ -2,7 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ChatClient.Avalonia.Controls.FormControls.FormDatePicker;
-using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 
 namespace ChatClient.Desktop.Views.SukiDialog;
 

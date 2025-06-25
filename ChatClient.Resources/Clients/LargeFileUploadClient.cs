@@ -1,6 +1,5 @@
 using System.Buffers;
-using ChatClient.ResourcesClient.ServerHandlers;
-using ChatClient.Tool.Data.File;
+using ChatClient.Resources.ServerHandlers;
 using ChatServer.Common;
 using DotNetty.Transport.Channels;
 using File.Protobuf;
@@ -44,8 +43,8 @@ public class LargeFileUploadClient : IFileClient
     {
         if (!_channel.TryGetTarget(out IChannel? channel))
             throw new NullReferenceException();
-        
-        if(!channel.Active)
+
+        if (!channel.Active)
             throw new Exception("连接未激活，请检查连接状态");
 
         // 打开文件

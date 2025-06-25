@@ -7,27 +7,27 @@ using System.Threading.Tasks;
 using Avalonia.Collections;
 using Avalonia.Notification;
 using Avalonia.Threading;
-using ChatClient.BaseService.Services;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
-using ChatClient.Desktop.ViewModels.UserControls;
+using ChatClient.Desktop.ViewModels.SukiDialogs;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.About;
 using ChatClient.Desktop.Views.CallView;
 using ChatClient.Desktop.Views.ChatPages.ChatViews;
 using ChatClient.Desktop.Views.ChatPages.ContactViews;
-using ChatClient.Media.CallManager;
-using ChatClient.Media.CallOperator;
-using ChatClient.Tool.Common;
+using ChatClient.Media.Desktop.CallOperator;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 using ChatClient.Tool.Events;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 using ChatClient.Tool.UIEntity;
 using ChatServer.Common.Protobuf;
 using Material.Icons;
-using Org.BouncyCastle.Asn1.X509;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Events;
@@ -252,10 +252,12 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             {
                 if (item is GroupFriendDto groupFriendDto)
                 {
+                    if (groupFriendDto.Friends == null) return;
                     groupFriendDto.Friends.CollectionChanged += OnRelationCollectionChanged;
                 }
                 else if (item is GroupGroupDto groupGroupDto)
                 {
+                    if (groupGroupDto.Groups == null) return;
                     groupGroupDto.Groups.CollectionChanged += OnRelationCollectionChanged;
                 }
             }
@@ -266,10 +268,12 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
             {
                 if (item is GroupFriendDto groupFriendDto)
                 {
+                    if (groupFriendDto.Friends == null) return;
                     groupFriendDto.Friends.CollectionChanged -= OnRelationCollectionChanged;
                 }
                 else if (item is GroupGroupDto groupGroupDto)
                 {
+                    if (groupGroupDto.Groups == null) return;
                     groupGroupDto.Groups.CollectionChanged -= OnRelationCollectionChanged;
                 }
             }
@@ -314,31 +318,37 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
 
     private async void GroupRelationDtoOnOnGroupingChanged(GroupRelationDto obj, string origionName)
     {
+        if (obj.Grouping == null) return;
+
         var groupList1 = _userManager.GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(origionName));
         if (groupList1 != null)
-            groupList1.Groups.Remove(obj);
+        {
+            groupList1.Groups?.Remove(obj);
 
-        var groupList2 = _userManager.GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
-        if (groupList2 != null)
-            groupList2.Groups.Add(obj);
+            var groupList2 = _userManager.GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
+            if (groupList2 != null)
+                groupList2.Groups?.Add(obj);
+        }
 
-        await Task.Delay(50);
-
+        await Task.Delay(80);
         _eventAggregator.GetEvent<GroupRelationSelectEvent>().Publish(obj);
     }
 
     private async void FriendRelationDtoOnOnGroupingChanged(FriendRelationDto obj, string origionName)
     {
+        if (obj.Grouping == null) return;
+
         var groupList1 = _userManager.GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(origionName));
         if (groupList1 != null)
-            groupList1.Friends.Remove(obj);
+        {
+            groupList1.Friends?.Remove(obj);
 
-        var groupList2 = _userManager.GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
-        if (groupList2 != null)
-            groupList2.Friends.Add(obj);
+            var groupList2 = _userManager.GroupFriends?.FirstOrDefault(d => d.GroupName.Equals(obj.Grouping));
+            if (groupList2 != null)
+                groupList2.Friends?.Add(obj);
+        }
 
-        await Task.Delay(50);
-
+        await Task.Delay(80);
         _eventAggregator.GetEvent<FriendRelationSelectEvent>().Publish(obj);
     }
 

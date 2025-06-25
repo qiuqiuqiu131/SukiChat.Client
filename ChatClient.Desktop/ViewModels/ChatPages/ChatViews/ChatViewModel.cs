@@ -1,26 +1,17 @@
-using System;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Collections;
-using Avalonia.Threading;
-using ChatClient.BaseService.Services;
-using ChatClient.BaseService.Services.PackService;
+using ChatClient.Avalonia.Common;
+using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog;
-using ChatClient.Tool.Common;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
-using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.UIEntity;
-using ChatServer.Common.Protobuf;
-using Material.Icons;
-using Microsoft.Extensions.Configuration;
 using Prism.Dialogs;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -31,7 +22,7 @@ namespace ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 {
     private readonly IContainerProvider _containerProvider;
-    private readonly IConfigurationRoot _configurationRoot;
+    private readonly AppSettings _appSettings;
     private readonly IChatLRService _chatLrService;
     private readonly IDialogService _dialogService;
     private readonly IUserManager _userManager;
@@ -79,13 +70,13 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 
     public ChatViewModel(IContainerProvider containerProvider,
         IRegionManager regionManager,
-        IConfigurationRoot configurationRoot,
+        AppSettings appSettings,
         IChatLRService chatLRService,
         IDialogService dialogService,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
-        _configurationRoot = configurationRoot;
+        _appSettings = appSettings;
         _chatLrService = chatLRService;
         _dialogService = dialogService;
         _userManager = userManager;

@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 
-namespace ChatClient.Tool.Common;
+namespace ChatClient.Avalonia.Common;
 
 public class ViewLocator(SukiChatViews views) : IDataTemplate
 {

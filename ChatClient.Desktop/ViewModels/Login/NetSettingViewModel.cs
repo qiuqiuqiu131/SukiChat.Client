@@ -3,18 +3,17 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using ChatClient.Client;
-using Microsoft.Extensions.Configuration;
+using ChatClient.Tool.Config;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Mvvm;
+using SocketClient.Client;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
 public class NetSettingViewModel : BindableBase, IDialogAware
 {
-    private readonly IConfigurationRoot _configuration;
+    private readonly AppSettings _appSettings;
     private readonly ISocketClient _client;
     private readonly string _appSettingsPath;
 
@@ -28,13 +27,13 @@ public class NetSettingViewModel : BindableBase, IDialogAware
 
     public DelegateCommand ApplyCommand { get; }
 
-    public NetSettingViewModel(IConfigurationRoot configuration, ISocketClient client)
+    public NetSettingViewModel(AppSettings appSettings, ISocketClient client)
     {
-        _configuration = configuration;
+        _appSettings = appSettings;
         _client = client;
         _appSettingsPath = Path.Combine(Environment.CurrentDirectory, "appsettings.json");
 
-        var canParse = IPAddress.TryParse(configuration["Address:IP"], out _ipAddress);
+        var canParse = IPAddress.TryParse(appSettings.Address.Ip, out _ipAddress);
         if (!canParse)
             _ipAddress = IPAddress.Parse("127.0.0.1");
 
@@ -43,56 +42,18 @@ public class NetSettingViewModel : BindableBase, IDialogAware
 
     private void Apply()
     {
-        UpdateAppSetting("Address:IP", _ipAddress?.ToString() ?? "127.0.0.1");
+        UpdateAppSetting(IPAddress?.ToString() ?? "127.0.0.1");
         _client.ChangeAddress();
         RequestClose.Invoke();
     }
 
-    private void UpdateAppSetting(string sectionPath, string value)
+    private void UpdateAppSetting(string ip)
     {
-        // 1. 读取当前 appsettings.json 内容
-        var json = System.IO.File.ReadAllText(_appSettingsPath, Encoding.UTF8);
+        _appSettings.Address.Ip = ip;
 
-        // 2. 将JSON解析为JsonNode
-        var jsonObj = JsonNode.Parse(json);
-        if (jsonObj == null)
-        {
-            throw new InvalidOperationException("Failed to parse appsettings.json");
-        }
-
-        // 3. 分割section路径（支持嵌套配置）
-        var sections = sectionPath.Split(':');
-        var currentNode = jsonObj;
-
-        // 4. 导航到目标节点（除了最后一个部分）
-        for (int i = 0; i < sections.Length - 1; i++)
-        {
-            var section = sections[i];
-            if (currentNode[section] == null)
-            {
-                currentNode[section] = new JsonObject();
-            }
-
-            currentNode = currentNode[section];
-        }
-
-        // 5. 设置最终值
-        var finalSection = sections[^1];
-        currentNode[finalSection] = value;
-
-        // 6. 序列化回JSON
-        var options = new JsonSerializerOptions
-        {
-            WriteIndented = true
-        };
-
-        var output = jsonObj.ToJsonString(options);
-
-        // 7. 写回文件
-        System.IO.File.WriteAllText(_appSettingsPath, output, Encoding.UTF8);
-
-        // 8. 重新加载配置
-        _configuration.Reload();
+        // 写会配置文件
+        var settings = JsonSerializer.Serialize(_appSettings, AppSettingsContext.Default.AppSettings);
+        System.IO.File.WriteAllText(_appSettingsPath, settings, Encoding.UTF8);
     }
 
     #region IDialogAware

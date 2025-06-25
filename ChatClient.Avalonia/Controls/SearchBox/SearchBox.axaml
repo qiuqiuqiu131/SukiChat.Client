@@ -47,7 +47,6 @@
                                 VerticalAlignment="Center"
                                 FontSize="12"
                                 Classes="NoShadow "
-                                FontFamily="{DynamicResource DefaultFontFamily}"
                                 LetterSpacing="0.5"
                                 ContextMenu="{StaticResource DefaultTextBoxContextMenu}"
                                 Text="{Binding $parent[searchBox:SearchBox].SearchText, Mode=TwoWay}"

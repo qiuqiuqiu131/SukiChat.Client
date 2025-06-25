@@ -2,13 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:input="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
-             xmlns:input1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
-             xmlns:global="clr-namespace:"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:controls1="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
+             xmlns:input="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
+             xmlns:input1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="global:AudioRecorderViewModel"
+             x:DataType="input:AudioRecorderViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Input.AudioRecorderView">
 
     <input1:AudioRecorderView.AudioRecorder>

@@ -2,9 +2,9 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
-using ChatClient.Desktop;
+using ChatClient.Main;
 
-namespace AvaloniaApplication2.Android;
+namespace ChatClient.Android;
 
 [Activity(
     Label = "ChatClient.Android",

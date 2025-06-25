@@ -2,11 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Dialog"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Dialog"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="dialog:ChatGroupDialogViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Dialog.ChatGroupDialogView">
