@@ -135,9 +135,8 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         }
         else if (result != null)
         {
-            var request = _mapper.Map<GroupRequestDto>(result);
-            request.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(result.GroupId, message.UserIdFrom);
-            _userManager.GroupRequests?.Insert(0, request);
+            result.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(result.GroupId, message.UserIdFrom);
+            _userManager.GroupRequests?.Insert(0, result);
         }
 
         // if (_userManager is not

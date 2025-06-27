@@ -3,6 +3,7 @@ using System.Net;
 using AForge;
 using AForge.Video;
 using AForge.Video.DirectShow;
+using ChatClient.Tool.Media.EndPoint;
 using ChatClient.Tool.Media.Video;
 using Microsoft.Extensions.Logging;
 using SIPSorceryMedia.Abstractions;

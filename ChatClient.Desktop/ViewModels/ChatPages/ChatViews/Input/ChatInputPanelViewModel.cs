@@ -189,14 +189,16 @@ public class ChatInputPanelViewModel : ViewModelBase, IDisposable
 
         try
         {
-            IPlatformAudioPlayer? audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+            var audioPlayerFactory = App.Current.Container.Resolve<IFactory<IPlatformAudioPlayer>>();
+            IPlatformAudioPlayer? audioPlayer = audioPlayerFactory.Create();
             audioPlayer.LoadFromMemory(voiceData);
             var voiceMess = new VoiceMessDto
             {
                 FilePath = "",
                 AudioData = voiceData,
                 FileSize = voiceData.Length,
-                Duration = audioPlayer.TotalTime
+                Duration = audioPlayer.TotalTime,
+                AudioPlayerFactory = audioPlayerFactory
             };
             audioPlayer.Dispose();
 

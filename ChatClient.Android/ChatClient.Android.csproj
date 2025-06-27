@@ -4,14 +4,46 @@
         <TargetFramework>net8.0-android</TargetFramework>
         <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
         <Nullable>enable</Nullable>
-        <ApplicationId>com.CompanyName.AvaloniaApplication2</ApplicationId>
+        <ApplicationId>com.CompanyName.ChatClient</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-		<AndroidPackageFormat>apk</AndroidPackageFormat>
-		<AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-        <AssemblyName>ChatClient.Android</AssemblyName>
-        <RootNamespace>ChatClient.Android</RootNamespace>
-    </PropertyGroup>
+        <AndroidPackageFormat>apk</AndroidPackageFormat>
+        <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>link</TrimMode>
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
+		<UseInterpreter>false</UseInterpreter>
+		<AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+	</PropertyGroup>
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+      <None Remove="appsettings.webrtc.json" />
+    </ItemGroup>
+    <ItemGroup>
+      <AndroidAsset Include="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AndroidAsset>
+      <AndroidAsset Include="appsettings.webrtc.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </AndroidAsset>
+    </ItemGroup>
+	
+	<!--
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>link</TrimMode>
+		<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
+		<UseInterpreter>false</UseInterpreter>
+		<AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+		<EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk> 
+	-->
+
+	<ItemGroup>
+		<TrimmerRootDescriptor Include="TrimmedRoots.xml" />
+	</ItemGroup>
 
     <ItemGroup>
         <AndroidResource Include="Icon.png">
@@ -20,11 +52,29 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.3" />
         <PackageReference Include="Avalonia.Android" Version="11.2.3" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
+        <PackageReference Include="Semi.Avalonia" Version="11.2.1.8" />
         <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ChatClient.Main\ChatClient.Desktop.csproj" />
+        <ProjectReference Include="..\ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj" />
+        <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj" />
+        <ProjectReference Include="..\ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj" />
+        <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj" />
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="App.axaml.cs">
+            <DependentUpon>App.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\LoginView.axaml.cs">
+            <DependentUpon>LoginView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 </Project>

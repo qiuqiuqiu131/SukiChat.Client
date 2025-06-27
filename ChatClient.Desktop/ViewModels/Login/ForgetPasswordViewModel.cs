@@ -7,6 +7,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
 using ChatClient.Avalonia.Common;
 using ChatClient.Avalonia.Validation;
+using ChatClient.BaseService.Manager;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.UserControls;
@@ -19,18 +20,18 @@ using SukiUI.Dialogs;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
+public enum ForgetPasswordState
+{
+    Authenticate,
+    ResetPassword,
+    Success
+}
+
 public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
 {
     private readonly IContainerProvider _containerProvider;
-    public ISukiDialogManager DialogManager { get; set; } = new SukiDialogManager();
+    private readonly IUserDtoManager _userDtoManager;
     public INotificationMessageManager NotificationMessageManager { get; set; } = new NotificationMessageManager();
-
-    public List<string> FirstAccountWay => new List<string>
-    {
-        "ID",
-        "手机",
-        "邮箱"
-    };
 
     #region IsConnected
 
@@ -44,74 +45,61 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
+    #region 电话(Phone)
 
-    private string firstAccountWaySelected = "ID";
+    private string? phone;
 
-    public string FirstAccountWaySelected
+    [QPhone(ErrorMessage = "请输入有效的电话号码")]
+    public string? Phone
     {
-        get => firstAccountWaySelected;
+        get => phone;
         set
         {
-            bool isSame = secondAccountWaySelected.Equals(firstAccountWaySelected);
-            if (SetProperty(ref firstAccountWaySelected, value))
+            if (SetProperty(ref phone, value))
             {
-                FirstAccount = string.Empty;
-                SecondAccount = string.Empty;
-                RaisePropertyChanged(nameof(SecondAccountWay));
-                SecondAccountWaySelected = SecondAccountWay[0];
+                ValidateProperty(nameof(Phone), value);
+                RaisePropertyChanged(nameof(PhoneError));
                 ConfirmCommand.RaiseCanExecuteChanged();
             }
         }
     }
 
-    private string firstAccount;
+    private List<string>? PhoneErrors => (List<string>?)GetErrors(nameof(Phone));
+    public string? PhoneError => PhoneErrors?.FirstOrDefault();
 
-    public string FirstAccount
+    #endregion
+
+    #region 邮箱(Email)
+
+    private string? email;
+
+    [QEmailAddress(ErrorMessage = "请输入有效的邮箱地址")]
+    public string? Email
     {
-        get => firstAccount;
+        get => email;
         set
         {
-            if (SetProperty(ref firstAccount, value))
+            if (SetProperty(ref email, value))
+            {
+                ValidateProperty(nameof(Email), value);
+                RaisePropertyChanged(nameof(EmailError));
                 ConfirmCommand.RaiseCanExecuteChanged();
+            }
         }
     }
 
-    public List<string> SecondAccountWay =>
-        FirstAccountWaySelected != null
-            ? FirstAccountWay.Where(way => way != FirstAccountWaySelected).ToList()
-            : FirstAccountWay;
+    private List<string>? EmailErrors => (List<string>?)GetErrors(nameof(Email));
+    public string? EmailError => EmailErrors?.FirstOrDefault();
 
-    private string secondAccountWaySelected = "手机";
-
-    public string SecondAccountWaySelected
-    {
-        get => secondAccountWaySelected;
-        set
-        {
-            if (SetProperty(ref secondAccountWaySelected, value))
-                ConfirmCommand.RaiseCanExecuteChanged();
-        }
-    }
-
-    private string secondAccount;
-
-    public string SecondAccount
-    {
-        get => secondAccount;
-        set
-        {
-            if (SetProperty(ref secondAccount, value))
-                ConfirmCommand.RaiseCanExecuteChanged();
-        }
-    }
+    #endregion
 
     #region NewPassword
 
-    private string newPassword;
+    private string? newPassword;
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
     [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
-    public string NewPassword
+    public string? NewPassword
     {
         get => newPassword;
         set
@@ -119,7 +107,8 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
             if (SetProperty(ref newPassword, value))
             {
                 ValidateProperty(nameof(NewPassword), value);
-                ConfirmCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(NewPasswordError));
+                ResetCommand.RaiseCanExecuteChanged();
             }
         }
     }
@@ -129,14 +118,14 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
-
     #region ConfirmPassword
 
-    private string confirmPassword;
+    private string? confirmPassword;
 
     [PasswordValidation(MinClass = 2, MinLength = 8)]
+    [PasswordMatch(nameof(NewPassword), ErrorMessage = "两次输入的密码不一致。")]
     [StringLength(18, ErrorMessage = "密码长度不能超过18个字符")]
-    public string ConfirmPassword
+    public string? ConfirmPassword
     {
         get => confirmPassword;
         set
@@ -144,7 +133,8 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
             if (SetProperty(ref confirmPassword, value))
             {
                 ValidateProperty(nameof(ConfirmPassword), value);
-                ConfirmCommand.RaiseCanExecuteChanged();
+                RaisePropertyChanged(nameof(ConfirmPasswordError));
+                ResetCommand.RaiseCanExecuteChanged();
             }
         }
     }
@@ -153,6 +143,39 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
     public string? ConfirmPasswordError => ConfirmPasswordErrors?.FirstOrDefault();
 
     #endregion
+
+    #region State
+
+    private ForgetPasswordState _state;
+
+    public ForgetPasswordState State
+    {
+        get => _state;
+        set
+        {
+            if (SetProperty(ref _state, value))
+            {
+                RaisePropertyChanged(nameof(IsAuthenticate));
+                RaisePropertyChanged(nameof(IsSuccess));
+            }
+        }
+    }
+
+    public bool IsAuthenticate => State == ForgetPasswordState.Authenticate;
+
+    public bool IsSuccess => State == ForgetPasswordState.Success;
+
+    #endregion
+
+    private UserDto? user;
+
+    public UserDto? User
+    {
+        get => user;
+        set => SetProperty(ref user, value);
+    }
+
+    private string? passkey;
 
     private bool isBusy;
 
@@ -166,15 +189,29 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
         }
     }
 
+    private string busyText = "验证中";
+
+    public string BusyText
+    {
+        get => busyText;
+        set => SetProperty(ref busyText, value);
+    }
+
     public DelegateCommand CancelCommand { get; }
     public AsyncDelegateCommand ConfirmCommand { get; init; }
+    public AsyncDelegateCommand ResetCommand { get; init; }
+    public DelegateCommand ReturnToLoginCommand { get; init; }
 
-    public ForgetPasswordViewModel(IContainerProvider containerProvider, IConnection connection)
+    public ForgetPasswordViewModel(IContainerProvider containerProvider, IConnection connection,
+        IUserDtoManager userDtoManager)
     {
         _containerProvider = containerProvider;
+        _userDtoManager = userDtoManager;
 
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke(ButtonResult.Cancel));
         ConfirmCommand = new AsyncDelegateCommand(Confirm, CanConfirm);
+        ResetCommand = new AsyncDelegateCommand(Reset, CanReset);
+        ReturnToLoginCommand = new DelegateCommand(ReturnToLoginView);
 
         ErrorsChanged += (_, _) =>
         {
@@ -184,79 +221,89 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
         };
 
         IsConnected = connection.IsConnected;
+        IsConnected.ConnecttedChanged += ConnectedChanged;
     }
 
-    private bool CanConfirm() => !string.IsNullOrWhiteSpace(FirstAccount) &&
-                                 !string.IsNullOrWhiteSpace(SecondAccount) &&
-                                 !string.IsNullOrWhiteSpace(NewPassword) &&
-                                 !string.IsNullOrWhiteSpace(ConfirmPassword) &&
+    private void ConnectedChanged(bool b) => ConfirmCommand.RaiseCanExecuteChanged();
+
+    private bool CanConfirm() => !string.IsNullOrWhiteSpace(Email) &&
+                                 !string.IsNullOrWhiteSpace(Phone) &&
+                                 IsConnected.IsConnected &&
                                  !HasErrors && !isBusy;
 
     private async Task Confirm()
     {
-        if (!newPassword.Equals(confirmPassword))
+        BusyText = "验证中";
+        IsBusy = true;
+        var passwordService = _containerProvider.Resolve<IPasswordService>();
+        var response = await passwordService.ForgetPasswordConfirmAsync(Phone!, Email!);
+
+        if (response is { Response: { State: true } })
         {
-            NotificationMessageManager.ShowMessage("输入密码不一致", NotificationType.Error, TimeSpan.FromSeconds(2));
-            ConfirmPassword = string.Empty;
+            User = await _userDtoManager.GetUserDto(response.UserId);
+            passkey = response.PassKey;
+            State = ForgetPasswordState.ResetPassword;
+            IsBusy = false;
+        }
+        else if (response != null)
+        {
+            NotificationMessageManager.ShowMessage(response.Response.Message, NotificationType.Error,
+                TimeSpan.FromSeconds(2));
+            ClearInput();
+            IsBusy = false;
+        }
+    }
+
+    private bool CanReset() => !string.IsNullOrWhiteSpace(ConfirmPassword) &&
+                               !string.IsNullOrWhiteSpace(NewPassword) &&
+                               IsConnected.IsConnected && !HasErrors && !IsBusy;
+
+    private async Task Reset()
+    {
+        if (User == null || passkey == null)
+        {
+            NotificationMessageManager.ShowMessage("重置密码出错", NotificationType.Error,
+                TimeSpan.FromSeconds(2));
+            ClearInput();
+            State = ForgetPasswordState.Authenticate;
             return;
         }
 
-        var passwordService = _containerProvider.Resolve<IPasswordService>();
-        string? id = null;
-        string? phoneNumber = null;
-        string? emailNumber = null;
-
-        // 根据第一选择设置相应的验证信息
-        switch (firstAccountWaySelected)
-        {
-            case "ID":
-                id = firstAccount;
-                break;
-            case "手机":
-                phoneNumber = firstAccount;
-                break;
-            case "邮箱":
-                emailNumber = firstAccount;
-                break;
-        }
-
-        // 根据第二选择设置相应的验证信息
-        switch (secondAccountWaySelected)
-        {
-            case "ID":
-                id = secondAccount;
-                break;
-            case "手机":
-                phoneNumber = secondAccount;
-                break;
-            case "邮箱":
-                emailNumber = secondAccount;
-                break;
-        }
-
+        BusyText = "重置中";
         IsBusy = true;
-        var (success, message) = await passwordService.ForgetPasswordAsync(id, phoneNumber, emailNumber, newPassword);
-        IsBusy = false;
-        if (success)
+        var passwordService = _containerProvider.Resolve<IPasswordService>();
+        var response = await passwordService.ForgetPasswordResetAsync(User.Id, passkey, NewPassword!);
+        if (response.Item1)
         {
-            DialogManager.CreateDialog()
-                .WithViewModel(d =>
-                    new SukiDialogViewModel(d, NotificationType.Information, "密码重置成功", $"将返回登录界面",
-                        () =>
-                        {
-                            RequestClose.Invoke(new DialogResult(ButtonResult.OK)
-                            {
-                                Parameters = { { "ID", id } }
-                            });
-                        }))
-                .TryShow();
+            NotificationMessageManager.ShowMessage("密码重置成功", NotificationType.Success,
+                TimeSpan.FromSeconds(2));
+            State = ForgetPasswordState.Success;
         }
         else
         {
-            NotificationMessageManager.ShowMessage(message, NotificationType.Error, TimeSpan.FromSeconds(2));
-            NewPassword = null;
-            ConfirmPassword = null;
+            NotificationMessageManager.ShowMessage(response.Item2, NotificationType.Error,
+                TimeSpan.FromSeconds(2));
+            ClearInput();
+            State = ForgetPasswordState.Authenticate;
         }
+    }
+
+    private void ReturnToLoginView()
+    {
+        RequestClose.Invoke(new DialogResult(ButtonResult.OK)
+        {
+            Parameters = { { "ID", User?.Id } }
+        });
+    }
+
+    private void ClearInput()
+    {
+        User = null;
+        passkey = null;
+        NewPassword = null;
+        ConfirmPassword = null;
+        Email = null;
+        Phone = null;
     }
 
     #region IDialogAware
@@ -265,6 +312,8 @@ public class ForgetPasswordViewModel : ValidateBindableBase, IDialogAware
 
     public void OnDialogClosed()
     {
+        ClearInput();
+        IsConnected.ConnecttedChanged -= ConnectedChanged;
     }
 
     public void OnDialogOpened(IDialogParameters parameters)

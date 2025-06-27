@@ -5,11 +5,11 @@
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
-             xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
              xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
              xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
+             xmlns:chatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.ChatUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatFriendPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatFriendPanelView">

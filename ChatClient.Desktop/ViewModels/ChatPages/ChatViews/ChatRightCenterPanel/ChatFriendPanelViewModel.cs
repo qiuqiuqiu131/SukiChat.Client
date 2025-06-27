@@ -11,6 +11,7 @@ using Avalonia.Threading;
 using ChatClient.Avalonia.Common;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.BaseService.Services.Interface.PackService;
+using ChatClient.Desktop.Suki;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input;
 using ChatClient.Desktop.ViewModels.ShareView;

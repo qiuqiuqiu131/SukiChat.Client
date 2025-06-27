@@ -5,11 +5,9 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:icons="https://github.com/kikipoulet/SukiUI"
-             xmlns:formComboBox="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormComboBox;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-             xmlns:formDatePicker="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormDatePicker;assembly=ChatClient.Avalonia"
-             xmlns:formTextBox="clr-namespace:ChatClient.Avalonia.Controls.FormControls.FormTextBox;assembly=ChatClient.Avalonia"
              xmlns:sukiDialogs="clr-namespace:ChatClient.Desktop.ViewModels.SukiDialogs"
+             xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              Width="430"
              Height="500"
@@ -54,29 +52,29 @@
                                                Opacity="0.5" />
                     </Border>
                 </Grid>
-                <formTextBox:FormTextBox Text="{Binding Name,Mode=TwoWay}" Height="35" Head="昵称"
-                                         FontSize="14"
-                                         WaterMask="设置昵称" MaxLength="30" />
-                <formTextBox:FormTextBox Text="{Binding Introduction,Mode=TwoWay}"
-                                         FontSize="14"
-                                         Height="35" Head="个签"
-                                         WaterMask="编辑个签，展示我的独特态度" MaxLength="100" />
-                <formComboBox:FormComboBox Head="性别"
+                <formControls:FormTextBox Text="{Binding Name,Mode=TwoWay}" Height="35" Head="昵称"
+                                          FontSize="14"
+                                          WaterMask="设置昵称" MaxLength="30" />
+                <formControls:FormTextBox Text="{Binding Introduction,Mode=TwoWay}"
+                                          FontSize="14"
+                                          Height="35" Head="个签"
+                                          WaterMask="编辑个签，展示我的独特态度" MaxLength="100" />
+                <formControls:FormComboBox Head="性别"
                                            FontSize="14"
                                            Height="35"
                                            ItemsSource="{Binding SexEnum}"
                                            SelectedItem="{Binding Sex,Mode=TwoWay}">
-                    <formComboBox:FormComboBox.ItemTemplate>
+                    <formControls:FormComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Converter={converter:SexConverter}}" />
                         </DataTemplate>
-                    </formComboBox:FormComboBox.ItemTemplate>
-                </formComboBox:FormComboBox>
-                <formDatePicker:FormDatePicker Name="datePicker"
-                                               MonthFormat="MM"
-                                               YearFormat="yyyy"
-                                               DayFormat="dd"
-                                               Height="35" FontSize="14" Head="生日" />
+                    </formControls:FormComboBox.ItemTemplate>
+                </formControls:FormComboBox>
+                <formControls:FormDatePicker Name="datePicker"
+                                             MonthFormat="MM"
+                                             YearFormat="yyyy"
+                                             DayFormat="dd"
+                                             Height="35" FontSize="14" Head="生日" />
             </StackPanel>
         </DockPanel>
     </Grid>

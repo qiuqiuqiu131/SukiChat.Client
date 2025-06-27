@@ -4,7 +4,7 @@ using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Styling;
-using SukiUI.Enums;
+using ChatClient.Avalonia.Common;
 
 namespace ChatClient.Avalonia.Controls.Badge;
 

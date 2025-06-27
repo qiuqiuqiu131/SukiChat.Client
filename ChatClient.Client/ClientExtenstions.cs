@@ -141,6 +141,8 @@ public static class ClientExtenstions
         containerRegistry.RegisterScoped<IProcessor<UpdatePhoneNumberResponse>, UpdatePhoneNumberResponseProcessor>();
         containerRegistry.RegisterScoped<IProcessor<UpdateUserDataResponse>, UpdateUserDataResponseProcessor>();
         containerRegistry.RegisterScoped<IProcessor<UserMessage>, UserMessageProcessor>();
+        containerRegistry
+            .RegisterScoped<IProcessor<PasswordAuthenticateResponse>, PasswordAuthenticateResponseProcessor>();
 
         // WebRtc 处理器
         containerRegistry.RegisterScoped<IProcessor<AudioStateChanged>, AudioStateChangedProcessor>();

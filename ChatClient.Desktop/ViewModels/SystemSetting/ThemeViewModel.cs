@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Avalonia.Collections;
+using ChatClient.Desktop.Suki;
 using ChatClient.Tool.Config;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;

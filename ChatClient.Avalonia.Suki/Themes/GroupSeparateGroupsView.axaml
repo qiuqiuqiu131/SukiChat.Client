@@ -1,0 +1,47 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup;assembly=ChatClient.Avalonia">
+    <Styles.Resources>
+        <DataTemplate x:Key="Menu">
+            <ContextMenu Placement="Pointer" x:DataType="group:GroupGroupDto">
+                <MenuItem Header="添加分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="Add" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="重命名分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="RenameOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="删除分组" CommandParameter="{Binding}">
+                    <MenuItem.Icon>
+                        <avalonia:MaterialIcon Kind="DeleteOutline" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </ContextMenu>
+        </DataTemplate>
+    </Styles.Resources>
+    <Style Selector="separateGroupsView|GroupSeparateGroupsView">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ItemsControl Name="FriendList" Classes="Void">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="group:GroupGroupDto">
+                            <separateGroupsView:GroupGroupList GroupContents="{Binding Groups}"
+                                                               Header="{Binding GroupName}"
+                                                               SelectionChangedCommand="{Binding $parent[separateGroupsView:GroupSeparateGroupsView].SelectionChangedCommand}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

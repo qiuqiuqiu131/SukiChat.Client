@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+                    xmlns:extensions="clr-namespace:ChatClient.Avalonia.Suki.Extensions;assembly=ChatClient.Avalonia.Suki"
+                    xmlns:tools1="clr-namespace:ChatClient.Desktop.Suki">
+    <ControlTheme TargetType="suki:SukiDialog" x:Key="SukiDialogTheme">
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <Border CornerRadius="7" BoxShadow="5 5 10 #44000000" Background="Transparent" MinWidth="250"
+                            Margin="10">
+                        <Border CornerRadius="7" ClipToBounds="True" Background="Transparent">
+                            <Panel>
+                                <suki:SukiBackground
+                                    Style="{x:Static tools1:ThemeStyleTool.CurrentSukiBackgroundStyle}"
+                                    TransitionsEnabled="{TemplateBinding extensions:SukiDialogExtensions.BackgroundTransitionsEnabled}"
+                                    TransitionTime="{TemplateBinding extensions:SukiDialogExtensions.BackgroundTransitionTime}"
+                                    AnimationEnabled="{TemplateBinding extensions:SukiDialogExtensions.BackgroundAnimation}"
+                                    Margin="-100" MinHeight="250" MinWidth="300" />
+                                <Border CornerRadius="7" ClipToBounds="True">
+                                    <ContentControl Content="{TemplateBinding ViewModel}"
+                                                    CornerRadius="7"
+                                                    IsVisible="{TemplateBinding IsViewModelOnly}" />
+                                </Border>
+                            </Panel>
+                        </Border>
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+    <ControlTheme TargetType="suki:SukiDialog"
+                  BasedOn="{StaticResource SukiDialogTheme}"
+                  x:Key="{x:Type suki:SukiDialog}" />
+</ResourceDictionary>

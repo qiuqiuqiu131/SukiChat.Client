@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Xaml.Interactivity;
-using ChatClient.Media.Desktop.AudioPlayer;
 using ChatClient.Tool.Data.ChatMessage;
 
 namespace ChatClient.Avalonia.Behaviors;
@@ -50,9 +49,9 @@ public class VoicePlayBehavior : Behavior<Control>
                     VoiceMess.IsPlaying = false;
                     VoiceMess.AudioPlayer = null;
                 }
-                else if (VoiceMess.AudioData != null)
+                else if (VoiceMess.AudioData != null && VoiceMess.AudioPlayerFactory != null)
                 {
-                    using var audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+                    using var audioPlayer = VoiceMess.AudioPlayerFactory.Create();
                     VoiceMess.IsPlaying = true;
                     VoiceMess.AudioPlayer = audioPlayer;
                     audioPlayer.LoadFromMemory(VoiceMess.AudioData);
@@ -61,8 +60,9 @@ public class VoicePlayBehavior : Behavior<Control>
                     VoiceMess.AudioPlayer = null;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
             }
         }
     }

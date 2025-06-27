@@ -1,13 +1,14 @@
 using System.Runtime.InteropServices;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Media.Audio;
 using NAudio.Wave;
 
 namespace ChatClient.Media.Desktop.AudioRecorder;
 
-public static class AudioRecorderFactory
+public class AudioRecorderFactory : IFactory<IPlatformAudioRecorder>
 {
     // 获取可用的录音设备列表
-    public static List<WaveInCapabilities> GetAvailableDevices()
+    public List<WaveInCapabilities> GetAvailableDevices()
     {
         var devices = new List<WaveInCapabilities>();
         for (int i = 0; i < WaveInEvent.DeviceCount; i++)
@@ -23,12 +24,10 @@ public static class AudioRecorderFactory
     /// </summary>
     /// <returns></returns>
     /// <exception cref="PlatformNotSupportedException"></exception>
-    public static IPlatformAudioRecorder CreateAudioRecorder()
+    public IPlatformAudioRecorder Create()
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             return new WindowsAudioRecorder();
-        // else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-        //     return new LinuxAudioRecorder();
         else
             throw new PlatformNotSupportedException("当前平台不支持的音频录音器");
     }

@@ -1,0 +1,58 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
+        xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|OverlaySplitView">
+        <Setter Property="IsPaneOpen" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <!-- 主内容 -->
+                    <ContentPresenter Content="{TemplateBinding Content}" />
+
+                    <!-- 侧边栏 -->
+                    <Border Name="PaneContainer"
+                            Width="{TemplateBinding PaneWidth}"
+                            Background="Transparent"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource SukiBorderBrush}"
+                            BoxShadow="-5 0 10 0 #10000000"
+                            HorizontalAlignment="Right">
+                        <Border.RenderTransform>
+                            <TranslateTransform
+                                X="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Border.RenderTransform>
+                        <ContentPresenter Content="{TemplateBinding PaneContent}" />
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|OverlaySplitView[IsPaneOpen=true] /template/ Border#PaneContainer">
+        <Style.Animations>
+            <Animation Duration="0:0:0.2" FillMode="Forward" Easing="QuadraticEaseInOut">
+                <KeyFrame Cue="100%">
+                    <Setter Property="TranslateTransform.X" Value="0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="controls|OverlaySplitView[IsPaneOpen=false] /template/ Border#PaneContainer">
+        <Style.Animations>
+            <Animation Duration="0:0:0.2" FillMode="Forward" Easing="QuadraticEaseInOut">
+                <KeyFrame Cue="100%">
+                    <Setter Property="TranslateTransform.X"
+                            Value="{Binding PaneWidth, RelativeSource={RelativeSource TemplatedParent},Converter={converter:DoubleAddConverter AddValue=5}}" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Styles>

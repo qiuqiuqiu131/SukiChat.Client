@@ -1,0 +1,44 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <formControls:FormTextBox MaxLength="10" Text="hello" Width="200" Head="昵称" />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="formControls|FormTextBox">
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <suki:GlassCard CornerRadius="7" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding Margin}">
+                    <DockPanel>
+                        <TextBlock FontSize="{TemplateBinding FontSize}"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Left"
+                                   Margin="5,0"
+                                   Text="{TemplateBinding Head}" />
+                        <TextBlock Opacity="0.6" Margin="10,0" FontSize="13"
+                                   VerticalAlignment="Center"
+                                   DockPanel.Dock="Right">
+                            <Run Text="{Binding Text.Length,ElementName=PART_TextBox}" FontSize="13" />
+                            <Run Text="/" FontSize="13" />
+                            <Run Text="{TemplateBinding MaxLength}" FontSize="13" />
+                        </TextBlock>
+                        <TextBox FontSize="{TemplateBinding FontSize}"
+                                 Classes="Trans"
+                                 Name="PART_TextBox"
+                                 Padding="0"
+                                 Margin="0,0,0,2"
+                                 MaxLength="{TemplateBinding MaxLength}"
+                                 Watermark="{TemplateBinding WaterMask}"
+                                 VerticalAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding $parent[formControls:FormTextBox].Text,Mode=TwoWay}" />
+                    </DockPanel>
+                </suki:GlassCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

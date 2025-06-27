@@ -1,8 +1,21 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+using ChatClient.Tool.Config;
 using ChatClient.Tool.ManagerInterface;
 
 namespace ChatClient.BaseService.Manager;
+
+[JsonSerializable(typeof(UserSettings))]
+public partial class UserSettingsContext : JsonSerializerContext
+{
+}
+
+public class UserSettings
+{
+    public bool UseTurnServer { get; set; }
+    public bool DoubleClickOpenExtendChatView { get; set; }
+}
 
 public class UserSettingsManager : IUserSetting
 {
@@ -40,17 +53,22 @@ public class UserSettingsManager : IUserSetting
         if (!fileInfo.Exists)
         {
             fileInfo.Create().Dispose();
-            var json = JsonSerializer.Serialize(this);
+            var setting = new UserSettings
+            {
+                UseTurnServer = UseTurnServer,
+                DoubleClickOpenExtendChatView = DoubleClickOpenExtendChatView
+            };
+            var json = JsonSerializer.Serialize(setting, UserSettingsContext.Default.UserSettings);
             System.IO.File.WriteAllText(settingPath, json);
         }
         else
         {
             var json = System.IO.File.ReadAllText(settingPath);
-            var settings = JsonNode.Parse(json);
-            if (settings != null)
+            var setting = JsonSerializer.Deserialize(json, UserSettingsContext.Default.UserSettings);
+            if (setting != null)
             {
-                UseTurnServer = settings["UseTurnServer"]?.GetValue<bool>() ?? true;
-                DoubleClickOpenExtendChatView = settings["DoubleClickOpenExtendChatView"]?.GetValue<bool>() ?? false;
+                UseTurnServer = setting.UseTurnServer;
+                DoubleClickOpenExtendChatView = setting.DoubleClickOpenExtendChatView;
             }
         }
     }
@@ -61,7 +79,12 @@ public class UserSettingsManager : IUserSetting
         if (!fileInfo.Exists)
             fileInfo.Create().Dispose();
 
-        var json = JsonSerializer.Serialize(this);
+        var setting = new UserSettings
+        {
+            UseTurnServer = UseTurnServer,
+            DoubleClickOpenExtendChatView = DoubleClickOpenExtendChatView
+        };
+        var json = JsonSerializer.Serialize(setting, UserSettingsContext.Default.UserSettings);
         System.IO.File.WriteAllText(settingPath, json);
     }
 }

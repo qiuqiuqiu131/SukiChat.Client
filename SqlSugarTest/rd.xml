@@ -1,7 +1,0 @@
-<Directives>
-    <Application>
-        <Assembly Name="SqlSugar"  Dynamic="Required All" />
-        <Assembly Name="SqlSugarTest"  Dynamic="Required All" />
-		<Assembly Name="ChatClient.Database"  Dynamic="Required All" />
-    </Application>
-</Directives>

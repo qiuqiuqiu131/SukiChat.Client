@@ -105,11 +105,10 @@ internal class FriendMessageHandler : MessageHandlerBase
         }
         else if (result != null)
         {
-            var request = _mapper.Map<FriendRequestDto>(result);
             var userDtoManager = scope.Resolve<IUserDtoManager>();
-            request.UserDto = await userDtoManager.GetUserDto(result.UserTargetId);
+            result.UserDto = await userDtoManager.GetUserDto(result.UserTargetId);
 
-            _userManager.FriendRequests?.Insert(0, request);
+            _userManager.FriendRequests?.Insert(0, result);
         }
 
         // if (_userManager is not

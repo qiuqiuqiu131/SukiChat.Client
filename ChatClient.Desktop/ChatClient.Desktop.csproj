@@ -14,41 +14,41 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     </PropertyGroup>
-	
-	<!--<IlcDisableReflection>false</IlcDisableReflection>
-		<IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
-		<IlcGenerateTrimAnalysis>true</IlcGenerateTrimAnalysis>
-		<IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
-		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
-		<IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies> 
-				<RdXmlFile Include="rd.xml" />-->
+
+    <!--<IlcDisableReflection>false</IlcDisableReflection>
+        <IlcGenerateCompleteTypeMetadata>true</IlcGenerateCompleteTypeMetadata>
+        <IlcGenerateTrimAnalysis>true</IlcGenerateTrimAnalysis>
+        <IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
+        <IlcOptimizationPreference>Size</IlcOptimizationPreference>
+        <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies> 
+                <RdXmlFile Include="rd.xml" />-->
 
     <PropertyGroup Condition="'$(Configuration)' == 'Release'">
         <DebugType>none</DebugType>
     </PropertyGroup>
 
     <ItemGroup>
-		<TrimmerRootDescriptor Include="TrimmedRoots.xml" />
+        <TrimmerRootDescriptor Include="TrimmedRoots.xml"/>
     </ItemGroup>
 
     <!--资源-->
     <ItemGroup>
-        <AvaloniaResource Include="Assets\**" />
-        <AvaloniaResource Remove="Assets\DefaultGroupHead.png" />
-        <AvaloniaResource Remove="Assets\DefaultHead.ico" />
-        <AvaloniaResource Remove="Assets\DefaultHead.png" />
-        <AvaloniaResource Remove="Assets\hangup.mp3" />
-        <AvaloniaResource Remove="Assets\ring.mp3" />
+        <AvaloniaResource Include="Assets\**"/>
+        <AvaloniaResource Remove="Assets\DefaultGroupHead.png"/>
+        <AvaloniaResource Remove="Assets\DefaultHead.ico"/>
+        <AvaloniaResource Remove="Assets\DefaultHead.png"/>
+        <AvaloniaResource Remove="Assets\hangup.mp3"/>
+        <AvaloniaResource Remove="Assets\ring.mp3"/>
     </ItemGroup>
 
     <!-- 通用包 -->
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
+        <PackageReference Include="Avalonia" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.4"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -61,16 +61,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.BaseService\ChatClient.BaseService.csproj" />
+        <ProjectReference Include="..\ChatClient.Avalonia.Suki\ChatClient.Avalonia.Suki.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj"/>
+        <ProjectReference Include="..\ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj"/>
+        <ProjectReference Include="..\ChatClient.Media.Desktop\ChatClient.Media.Desktop.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Views\Login\LoginView.axaml.cs">
             <DependentUpon>LoginView.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Views\Login\RegisterView.axaml.cs">
-            <DependentUpon>RegisterView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
         <Compile Update="Views\UserControls\UserHeadEditView.axaml.cs">
@@ -145,21 +145,52 @@
             <DependentUpon>ChatInputPanelView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Views\Register\RegisterSafeInfoView.axaml.cs">
+            <DependentUpon>RegisterSafeInfoView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Register\RegisterSuccessView.axaml.cs">
+            <DependentUpon>RegisterSuccessView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Register\RegisterUserInfoView.axaml.cs">
+            <DependentUpon>RegisterUserInfoView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Register\RegisterView.axaml.cs">
+            <DependentUpon>RegisterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPassword\ForgetPasswordConfirmView.axaml.cs">
+            <DependentUpon>ForgetPasswordConfirmView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPassword\ForgetPasswordResetView.axaml.cs">
+            <DependentUpon>ForgetPasswordResetView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPassword\ForgetPasswordView.axaml.cs">
+            <DependentUpon>ForgetPasswordView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
-        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\TextStyles.axaml" />
-        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml" />
-        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml" />
-        <UpToDateCheckInput Remove="Views\Login\RegisterStepView\RegisterStepFirstView.axaml" />
+        <UpToDateCheckInput Remove="Styles\GlassCardStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\MaterialIconStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\TextStyles.axaml"/>
+        <UpToDateCheckInput Remove="Styles\WrapPanelStyles.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchFriendView.axaml"/>
+        <UpToDateCheckInput Remove="Views\ChatPages\ContactViews\Region\SearchGroupView.axaml"/>
+        <UpToDateCheckInput Remove="Views\Login\RegisterStepView\RegisterStepFirstView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml" />
-        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml" />
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchFriendView.axaml"/>
+        <AdditionalFiles Include="Views\SearchUserGroupView\Region\SearchGroupView.axaml"/>
+        <AdditionalFiles Include="Views\UserControls\ChatUI\ChatMessageView.axaml"/>
+        <AdditionalFiles Include="Views\UserControls\ChatUI\ChatUI.axaml"/>
+        <AdditionalFiles Include="Views\UserControls\GroupChatUI\GroupChatUI.axaml"/>
     </ItemGroup>
 
     <ItemGroup>

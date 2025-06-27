@@ -1,3 +1,5 @@
+using static SIPSorcery.Net.SrtpCipherF8;
+
 namespace ChatClient.Tool.ManagerInterface;
 
 public interface IAppDataManager

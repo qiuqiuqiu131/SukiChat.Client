@@ -1,4 +1,3 @@
-using ChatClient.DataBase.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatServer.Common.Protobuf;
 
@@ -100,5 +99,5 @@ public interface IFriendService
     /// <param name="userId"></param>
     /// <param name="message"></param>
     /// <returns></returns>
-    public Task<FriendRequest?> GetFriendResponseFromServer(string userId, FriendResponseFromServer message);
+    public Task<FriendRequestDto?> GetFriendResponseFromServer(string userId, FriendResponseFromServer message);
 }

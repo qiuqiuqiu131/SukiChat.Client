@@ -7,7 +7,6 @@
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-             xmlns:extenstions="clr-namespace:ChatClient.Avalonia.Extenstions;assembly=ChatClient.Avalonia"
              xmlns:region="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Region"
              xmlns:region1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews.Region"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -266,7 +265,7 @@
                           Margin="10,0"
                           IsVisible="{Binding !IsRequestEmpty}"
                           VerticalScrollBarVisibility="Visible">
-                <ItemsControl Name="RequestItemsControl" extenstions:ItemsControlExtensions.AnimatedScroll="False">
+                <ItemsControl Name="RequestItemsControl" suki:ItemsControlExtensions.AnimatedScroll="False">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel Orientation="Vertical" />

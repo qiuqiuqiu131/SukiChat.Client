@@ -1,10 +1,13 @@
 using System.Runtime.InteropServices;
 using ChatClient.Media.Desktop.EndPoint.Windows;
+using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.Media.EndPoint;
+using SIPSorcery.Media;
 using SIPSorceryMedia.Abstractions;
 
 namespace ChatClient.Media.Desktop.EndPoint;
 
-public static class AudioEndPointFactory
+public class AudioEndPointFactory : IFactory<IAudioEndPoint>
 {
     /// <summary>
     /// 创建对应操作系统平台的音频端点实例。
@@ -12,12 +15,12 @@ public static class AudioEndPointFactory
     /// <param name="audioEncoder"></param>
     /// <returns></returns>
     /// <exception cref="PlatformNotSupportedException"></exception>
-    public static IAudioEndPoint CreateAudioEndPoint(IAudioEncoder audioEncoder)
+    public IAudioEndPoint Create()
     {
         try
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                return new WindowsAudioEndPoint(audioEncoder);
+                return new WindowsAudioEndPoint(new AudioEncoder());
         }
         catch (Exception e)
         {

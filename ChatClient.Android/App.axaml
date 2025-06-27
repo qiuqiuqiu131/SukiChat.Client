@@ -1,0 +1,14 @@
+<Application
+    x:Class="ChatClient.Android.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:semi="https://irihi.tech/semi"
+    RequestedThemeVariant="Default">
+    <Application.Resources>
+        <FontFamily x:Key="MiSans_Normal">avares://ChatClient.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
+    </Application.Resources>
+    <Application.Styles>
+        <semi:SemiTheme />
+    </Application.Styles>
+</Application>

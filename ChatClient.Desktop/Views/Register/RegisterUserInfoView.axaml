@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="login:RegisterViewModel"
+             x:Class="ChatClient.Desktop.Views.Register.RegisterUserInfoView">
+    <StackPanel Classes="Show" Orientation="Vertical">
+        <!-- 标题 -->
+        <TextBlock
+            Margin="25"
+            HorizontalAlignment="Center"
+            FontSize="20"
+            Foreground="{DynamicResource SukiText}"
+            Text="欢迎注册 SukiChat" />
+
+        <StackPanel>
+            <TextBox Watermark="输入昵称" Text="{Binding Name}"
+                     MaxLength="30" Foreground="{DynamicResource SukiText}"
+                     Classes="Register input LightWaterMask">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="AccountOutline" Width="18" Height="18" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <TextBlock Classes="error"
+                       IsVisible="{Binding NameError,Converter={x:Static ObjectConverters.IsNotNull}}"
+                       Text="{Binding NameError}" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBox Watermark="输入密码"
+                     LetterSpacing="2.5"
+                     Text="{Binding Password}"
+                     MaxLength="18" Classes="Register input LightWaterMask Password">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="KeyOutline" Width="17" Height="17" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <TextBlock Classes="error" Text="{Binding PasswordError}"
+                       IsVisible="{Binding PasswordError,Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBox Watermark="再次确认密码"
+                     LetterSpacing="2.5"
+                     Text="{Binding RePassword}"
+                     MaxLength="18" Classes="Register input LightWaterMask Password">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="ShieldKeyOutline" Width="18" Height="18" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <TextBlock Classes="error" Text="{Binding RePasswordError}"
+                       IsVisible="{Binding RePasswordError,Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+
+        <!-- 注册按钮 -->
+        <Button Width="245"
+                Margin="0,25,0,5"
+                Classes="Flat"
+                Command="{Binding NextStepCommand}">
+            <TextBlock Text="下一步" FontSize="15" />
+        </Button>
+    </StackPanel>
+</UserControl>

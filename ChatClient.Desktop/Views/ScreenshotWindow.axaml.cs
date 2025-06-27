@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using ChatClient.Media.Desktop.ScreenCapture;
 using ChatClient.Tool.HelperInterface;
 using Prism.Ioc;
 
@@ -121,7 +122,7 @@ public partial class ScreenshotWindow : Window, IDisposable
         // 将 System.Drawing.Image 转换为字节数组
         using (var ms = new MemoryStream())
         {
-            screenImage.Save(ms, ImageFormat.Png);
+            screenImage.Save(ms,ImageFormat.Png);
             ms.Position = 0; // 重置流位置
             _screenBitmap = new Bitmap(ms);
         }

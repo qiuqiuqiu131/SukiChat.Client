@@ -9,14 +9,14 @@
     xmlns:suki="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:uiEntity1="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
-    xmlns:groupSepatateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup.GroupSepatateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
     xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
-    xmlns:separateGroupsView="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup.SeparateGroupsView;assembly=ChatClient.Avalonia"
     xmlns:contactViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
     xmlns:contactViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ContactViews"
+    xmlns:freindGroup="clr-namespace:ChatClient.Avalonia.Controls.FreindGroup;assembly=ChatClient.Avalonia"
+    xmlns:groupGroup="clr-namespace:ChatClient.Avalonia.Controls.GroupGroup;assembly=ChatClient.Avalonia"
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="contactViews:ContactsViewModel"
@@ -139,7 +139,7 @@
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
                                            IsVisible="{Binding GroupFriends.Count ,Converter={converter:ListEmptyConverter}}" />
-                                <separateGroupsView:SeparateGroupsView
+                                <freindGroup:SeparateGroupsView
                                     x:Name="FriendView"
                                     Margin="0,0,0,100"
                                     IsVisible="{Binding !GroupFriends,Converter={converter:ListEmptyConverter}}"
@@ -159,15 +159,15 @@
                                            HorizontalAlignment="Center"
                                            Opacity="0.6"
                                            IsVisible="{Binding GroupGroups,Converter={converter:ListEmptyConverter}}" />
-                                <groupSepatateGroupsView:GroupSeparateGroupsView x:Name="GroupView"
-                                    Margin="0,0,0,100"
-                                    IsVisible="{Binding !GroupGroups.Count,Converter={converter:ListEmptyConverter}}"
-                                    GroupFriends="{Binding GroupGroups}"
-                                    SelectionChanged="GroupSelectionChanged"
-                                    DeleteGroupCommand="{Binding DeleteGroupCommand}"
-                                    AddGroupCommand="{Binding AddGroupCommand}"
-                                    RenameGroupCommand="{Binding RenameGroupCommand}"
-                                    SelectionChangedCommand="{Binding SelectedChangedCommand}" />
+                                <groupGroup:GroupSeparateGroupsView x:Name="GroupView"
+                                                                    Margin="0,0,0,100"
+                                                                    IsVisible="{Binding !GroupGroups.Count,Converter={converter:ListEmptyConverter}}"
+                                                                    GroupFriends="{Binding GroupGroups}"
+                                                                    SelectionChanged="GroupSelectionChanged"
+                                                                    DeleteGroupCommand="{Binding DeleteGroupCommand}"
+                                                                    AddGroupCommand="{Binding AddGroupCommand}"
+                                                                    RenameGroupCommand="{Binding RenameGroupCommand}"
+                                                                    SelectionChangedCommand="{Binding SelectedChangedCommand}" />
                             </Panel>
                         </TabItem>
                     </TabControl>

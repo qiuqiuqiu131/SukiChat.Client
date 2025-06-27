@@ -6,13 +6,13 @@
              xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
-             xmlns:multiSeparateGroupGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView;assembly=ChatClient.Avalonia"
              xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon;assembly=ChatClient.Avalonia"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
              xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
-             xmlns:multiSeparateGroupView="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup.MultiSeparateGroupView;assembly=ChatClient.Avalonia"
              xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
              xmlns:shareView="clr-namespace:ChatClient.Desktop.ViewModels.ShareView"
+             xmlns:multiFriendGroup="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup;assembly=ChatClient.Avalonia"
+             xmlns:multiGroupGroup="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
              x:DataType="shareView:ShareViewModel"
              Width="550" Height="550"
@@ -40,7 +40,7 @@
                                     BorderBrush="{DynamicResource SukiBorderBrush}">
                                 <TextBlock Text="好友" FontSize="12.5" Margin="15,3" Opacity="0.8" />
                             </Border>
-                            <multiSeparateGroupView:MultiSeparateGroupView
+                            <multiFriendGroup:MultiSeparateGroupView
                                 Margin="10,0"
                                 x:Name="MultiSeparateGroupView"
                                 SelectionChangedCommand="{Binding SelectionChangedCommand}"
@@ -48,7 +48,7 @@
                             <Border BorderThickness="0,1,0,1" BorderBrush="{DynamicResource SukiBorderBrush}">
                                 <TextBlock Text="群聊" FontSize="12.5" Margin="15,3" Opacity="0.8" />
                             </Border>
-                            <multiSeparateGroupGroupView:MultiSeparateGroupGroupView
+                            <multiGroupGroup:MultiSeparateGroupGroupView
                                 Margin="10,0"
                                 x:Name="MultiSeparateGroupGroupView"
                                 SelectionChangedCommand="{Binding SelectionChangedCommand}"

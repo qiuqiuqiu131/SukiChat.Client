@@ -1,6 +1,8 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.ViewModels.SukiDialogs;
@@ -71,6 +73,15 @@ public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLif
     // 邮箱变化时调用
     private async void UserDetailDtoOnOnEmailNumberChanged()
     {
+        var attribute = new QEmailAddressAttribute();
+        if (!attribute.IsValid(_userDetailDto.EmailNumber))
+        {
+            _userDetailDto.EmailNumberWithoutEvent = origionEmailNumber;
+            notificationMessageManager?.ShowMessage("请输入有效的邮箱地址", NotificationType.Error,
+                TimeSpan.FromSeconds(2));
+            return;
+        }
+
         var passwordService = _containerProvider.Resolve<IPasswordService>();
         var result = await passwordService.UpdateEmailAsync(_userDetailDto.Id, _userDetailDto.Password,
             _userDetailDto.EmailNumber);
@@ -90,6 +101,15 @@ public class AccountViewModel : BindableBase, INavigationAware, IRegionMemberLif
     // 手机号变化时调用
     private async void UserDetailDtoOnOnPhoneNumberChanged()
     {
+        var attribute = new QPhoneAttribute();
+        if (!attribute.IsValid(_userDetailDto.PhoneNumber))
+        {
+            _userDetailDto.PhoneNumberWithoutEvent = origionPhoneNumber;
+            notificationMessageManager?.ShowMessage("请输入有效的手机号码", NotificationType.Error,
+                TimeSpan.FromSeconds(2));
+            return;
+        }
+
         var passwordService = _containerProvider.Resolve<IPasswordService>();
         var result = await passwordService.UpdatePhoneNumberAsync(_userDetailDto.Id, _userDetailDto.Password,
             _userDetailDto.PhoneNumber);

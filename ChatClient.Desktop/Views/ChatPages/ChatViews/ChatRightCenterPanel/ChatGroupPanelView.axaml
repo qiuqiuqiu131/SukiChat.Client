@@ -5,11 +5,11 @@
              xmlns:overlaySplitView="clr-namespace:ChatClient.Avalonia.Controls.OverlaySplitView;assembly=ChatClient.Avalonia"
              xmlns:suki="https://github.com/kikipoulet/SukiUI"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:groupChatUi1="clr-namespace:ChatClient.Avalonia.Controls.Chat.GroupChatUI;assembly=ChatClient.Avalonia"
              xmlns:regions="http://prismlibrary.com/"
              xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
              xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
              xmlns:input="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
+             xmlns:groupChatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.GroupChatUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
@@ -129,21 +129,21 @@
                     </Grid.RowDefinitions>
 
                     <!-- 聊天内容 -->
-                    <groupChatUi1:GroupChatUI Name="ChatUI"
-                                              Margin="0"
-                                              HeadClick="ChatUI_OnHeadClick"
-                                              Notification="ChatUI_OnNotification"
-                                              MessageBoxShow="ChatUI_OnMessageBoxShow"
-                                              ContextMenuShow="ChatUI_OnContextMenuShow"
-                                              ShareMessageCommand="{Binding ShareMessageCommand}"
-                                              RetractMessageCommand="{Binding RetractMessageCommand}"
-                                              DeleteMessageCommand="{Binding DeleteMessageCommand}"
-                                              Messages="{Binding SelectedGroup.ChatMessages}"
-                                              FileRestoreCommand="{Binding }"
-                                              FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                              SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
-                                              SearchMoreCommand="{Binding SearchMoreCommand}"
-                                              UserImageSource="{Binding User.HeadImage}" />
+                    <groupChatUi:GroupChatUI Name="ChatUI"
+                                             Margin="0"
+                                             HeadClick="ChatUI_OnHeadClick"
+                                             Notification="ChatUI_OnNotification"
+                                             MessageBoxShow="ChatUI_OnMessageBoxShow"
+                                             ContextMenuShow="ChatUI_OnContextMenuShow"
+                                             ShareMessageCommand="{Binding ShareMessageCommand}"
+                                             RetractMessageCommand="{Binding RetractMessageCommand}"
+                                             DeleteMessageCommand="{Binding DeleteMessageCommand}"
+                                             Messages="{Binding SelectedGroup.ChatMessages}"
+                                             FileRestoreCommand="{Binding }"
+                                             FileMessageClickCommand="{Binding FileMessageClickCommand}"
+                                             SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
+                                             SearchMoreCommand="{Binding SearchMoreCommand}"
+                                             UserImageSource="{Binding User.HeadImage}" />
 
                     <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 

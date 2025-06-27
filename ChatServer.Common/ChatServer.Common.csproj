@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="DotNetty.Transport" Version="0.7.6" />
         <PackageReference Include="Google.Protobuf" Version="3.29.2" />
     </ItemGroup>

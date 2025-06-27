@@ -1,0 +1,29 @@
+﻿<linker>
+	<assembly fullname="Avalonia.Controls" preserve="all" />
+	<assembly fullname="Semi.Avalonia" preserve="all"/>
+
+	<assembly fullname="DryIoc" preserve="all"/>
+	<assembly fullname="Prism" preserve="all" />
+	<assembly fullname="Prism.Avalonia" preserve="all" />
+	<assembly fullname="Prism.DryIoc.Avalonia" preserve="all" />
+	<assembly fullname="Prism.Container.DryIoc" preserve="all" />
+	<assembly fullname="Prism.Container.Abstractions" preserve="all" />
+
+	<assembly fullname="SqlSugar" preserve="all" />
+
+	<assembly fullname="AutoMapper" preserve="all" />
+
+	<assembly fullname="DotNetty.Buffers" preserve="all" />
+	<assembly fullname="DotNetty.Codecs" preserve="all" />
+	<assembly fullname="DotNetty.Common" preserve="all" />
+	<assembly fullname="DotNetty.Handlers" preserve="all" />
+	<assembly fullname="DotNetty.Transport" preserve="all" />
+
+	<assembly fullname="ChatClient.Android" preserve="all" />
+	<assembly fullname="ChatClient.Client" preserve="all" />
+	<assembly fullname="ChatClient.Resources" preserve="all" />
+	<assembly fullname="ChatClient.BaseService" preserve="all" />
+	<assembly fullname="ChatClient.Tool" preserve="all" />
+	<assembly fullname="ChatClient.BaseService.SqlSugar" preserve="all" />
+	<assembly fullname="ChatClient.DataBase.SqlSugar" preserve="all" />
+</linker>

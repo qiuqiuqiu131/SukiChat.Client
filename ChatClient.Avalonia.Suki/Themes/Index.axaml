@@ -1,0 +1,55 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="TabItem.axaml" />
+                <ResourceInclude Source="ContextMenu.axaml" />
+                <ResourceInclude Source="MenuItem.axaml" />
+                <ResourceInclude Source="MenuFlyout.axaml" />
+                <ResourceInclude Source="Expander.axaml" />
+                <ResourceInclude Source="MySukiWindowStyle.axaml" />
+                <ResourceInclude Source="ToolTip.axaml" />
+                <ResourceInclude Source="MySukiSideMenuStyle.axaml" />
+                <ResourceInclude Source="SukiSideMenuItem.axaml" />
+                <ResourceInclude Source="SukiDialogHost.axaml" />
+                <ResourceInclude Source="Badge.axaml" />
+                <ResourceInclude Source="IPv4Box.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <StyleInclude Source="AutoCompleteBoxStyle.axaml" />
+    <StyleInclude Source="Text.axaml" />
+    <StyleInclude Source="TabButton.axaml" />
+    <StyleInclude Source="RatioButton.axaml" />
+    <StyleInclude Source="ListBox.axaml" />
+    <StyleInclude Source="Slider.axaml" />
+    <StyleInclude Source="ListBoxItem.axaml" />
+    <StyleInclude Source="ToggleButton.axaml" />
+    <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="ScrollViewer.axaml" />
+    <StyleInclude Source="ComboBox.axaml" />
+    <StyleInclude Source="BusyArea.axaml" />
+    <StyleInclude Source="DatePicker.axaml" />
+    <StyleInclude Source="ProgressBar.axaml" />
+    <StyleInclude Source="SelectableTextBlock.axaml" />
+    <StyleInclude Source="NotificationStyles.axaml" />
+
+    <!-- <StyleInclude Source="VoiceWaveIcon.axaml" /> -->
+    <StyleInclude Source="FormTextBoxStyle.axaml" />
+    <StyleInclude Source="FormDatePicker.axaml" />
+    <StyleInclude Source="FormComboBoxStyle.axaml" />
+    <StyleInclude Source="OverlaySplitView.axaml" />
+    <StyleInclude Source="GroupList.axaml" />
+    <StyleInclude Source="QScrollViewer.axaml" />
+    <StyleInclude Source="SeparateGroupsView.axaml" />
+    <StyleInclude Source="MultiGroupList.axaml" />
+    <StyleInclude Source="MultiSeparateGroupView.axaml" />
+    <StyleInclude Source="MultiGroupGroupList.axaml" />
+    <StyleInclude Source="MultiSeparateGroupGroupView.axaml" />
+    <StyleInclude Source="GroupGroupList.axaml" />
+    <StyleInclude Source="GroupSeparateGroupsView.axaml" />
+    <StyleInclude Source="EditableTextBlock.axaml" />
+    <StyleInclude Source="SearchBox.axaml" />
+</Styles>

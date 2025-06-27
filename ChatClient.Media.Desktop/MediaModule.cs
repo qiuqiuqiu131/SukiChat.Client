@@ -1,5 +1,12 @@
-using ChatClient.Media.Desktop.CallOperator;
+using System.Runtime.InteropServices;
+using ChatClient.Media.Desktop.AudioPlayer;
+using ChatClient.Media.Desktop.AudioRecorder;
+using ChatClient.Media.Desktop.EndPoint;
+using ChatClient.Media.Desktop.ScreenCapture;
+using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.Media.Audio;
 using ChatClient.Tool.Media.Call;
+using ChatClient.Tool.Media.EndPoint;
 
 namespace ChatClient.Media.Desktop;
 
@@ -7,12 +14,19 @@ public class MediaModule : IModule
 {
     public void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.Register<TelephoneCallOperator>();
-        containerRegistry.Register<VideoCallOperator>();
+        containerRegistry.Register<IFactory<IPlatformAudioRecorder>, AudioRecorderFactory>()
+            .Register<IFactory<IPlatformAudioPlayer>, AudioPlayerFactory>()
+            .Register<IFactory<IAudioEndPoint>, AudioEndPointFactory>()
+            .Register<IFactory<ICameraEndPoint>, CameraEndPointFactory>();
 
-        containerRegistry.RegisterSingleton<CallManager.CallManager>();
-        containerRegistry.RegisterSingleton<ICallManager>(d => d.Resolve<CallManager.CallManager>());
-        containerRegistry.RegisterSingleton<ICallOperator>(d => d.Resolve<CallManager.CallManager>());
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            containerRegistry.Register<ISystemCaptureScreen, WindowsCaptureScreenHelper>();
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            containerRegistry.Register<ISystemCaptureScreen, LinuxCaptureScreenHelper>();
+        }
     }
 
     public void OnInitialized(IContainerProvider containerProvider)

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using ChatClient.Desktop.Suki;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Tools;
 using Prism.Dialogs;

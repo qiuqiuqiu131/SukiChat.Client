@@ -1,25 +1,18 @@
 using System.Runtime.InteropServices;
-using AutoMapper;
+using ChatClient.BaseService.CallOperator;
 using ChatClient.BaseService.Helper;
 using ChatClient.BaseService.Helper.Linux;
 using ChatClient.BaseService.Helper.Windows;
 using ChatClient.BaseService.Manager;
-using ChatClient.BaseService.Mapper;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.BaseService.Services.Interface.RemoteService;
 using ChatClient.BaseService.Services.Interface.SearchService;
-using ChatClient.BaseService.Services.ServiceEfCore.PackService;
-using ChatClient.BaseService.Services.ServiceEfCore.RemoteService;
-using ChatClient.BaseService.Services.ServiceEfCore.SearchService;
-using ChatClient.BaseService.Services.ServiceSugar;
-using ChatClient.BaseService.Services.ServiceSugar.PackService;
-using ChatClient.BaseService.Services.ServiceSugar.RemoteService;
-using ChatClient.BaseService.Services.ServiceSugar.SearchServie;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Media.Call;
 
 namespace ChatClient.BaseService;
 
@@ -27,19 +20,8 @@ public static class BaseServiceExtension
 {
     public static void RegisterBaseServices(this IContainerRegistry containerRegistry)
     {
-        // 注册Mapper
-        var mapConfig = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<DataToDtoProfile>();
-            cfg.AddProfile<ProtoToDtoProfile>();
-            cfg.AddProfile<ProtoToDataProfile>();
-        }).CreateMapper();
-        containerRegistry.RegisterInstance(mapConfig);
-
         // 注册单例
-        containerRegistry.RegisterSingleton<IAppDataManager, AppDataManager>()
-            .RegisterSingleton<IConnection, ConnectionManager>()
-            .RegisterSingleton<IThemeStyle, ThemeStyleManager>()
+        containerRegistry.RegisterSingleton<IConnection, ConnectionManager>()
             .RegisterSingleton<IUserSetting, UserSettingsManager>()
             .Register<ILoginData, LoginDataManager>();
 
@@ -61,45 +43,29 @@ public static class BaseServiceExtension
             containerRegistry
                 .Register<ITaskbarFlashHelper, WindowTaskbarFlashHelper>()
                 .Register<ISystemScalingHelper, WindowScalingHelper>()
-                .Register<ISystemFileDialog, WindowsFileDialog>()
-                .Register<ISystemCaptureScreen, WindowsCaptureScreenHelper>();
+                .Register<ISystemFileDialog, WindowsFileDialog>();
         }
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             containerRegistry
                 .Register<ISystemFileDialog, LinuxFileDialog>()
                 .Register<ITaskbarFlashHelper, LinuxTaskbarFlashHelper>()
-                .Register<ISystemScalingHelper, LinuxScalingHelper>()
-                .Register<ISystemCaptureScreen, LinuxCaptureScreenHelper>();
+                .Register<ISystemScalingHelper, LinuxScalingHelper>();
         }
 
         // 注册Service
-        containerRegistry.Register<ILoginService, LoginSugarService>() // 
-            .Register<IFriendService, FriendSugarService>() // 
-            .Register<IUserService, UserSugarService>() //
-            .Register<IChatService, ChatSugarService>() //
-            .Register<IGroupGetService, GroupGetSugarService>() //
-            .Register<IGroupService, GroupSugarService>() //
-            .Register<IUserGroupService, UserGroupSugarService>() // 
-            .Register<IPasswordService, PasswordService>() // -
+        containerRegistry.Register<IPasswordService, PasswordService>() // -
             .Register<IRegisterService, RegisterService>() // -
             .Register<IChatLRService, ChatLRService>(); // -
 
         // 注册SearchService
-        containerRegistry.Register<ISearchService, SearchService>() // -
-            .Register<ILocalSearchService, LocalSearchSugarService>(); //
+        containerRegistry.Register<ISearchService, SearchService>(); // -
 
         // 注册PackService
-        containerRegistry.Register<IFriendChatPackService, FriendChatSugarPackService>() //
-            .Register<IFriendPackService, FriendSugarPackService>() //
-            .Register<IGroupPackService, GroupSugarPackService>() //
-            .Register<IGroupChatPackService, GroupChatSugarPackService>() //
-            .Register<IUserLoginService, UserLoginService>(); // -
+        containerRegistry.Register<IUserLoginService, UserLoginService>(); // -
 
         // 注册RemoteService
-        containerRegistry.Register<IGroupRemoteService, GroupSugarRemoteService>() //
-            .Register<IUserRemoteService, UserSugarRemoteService>() // 
-            .Register<IChatRemoteService, ChatRemoteService>(); // -
+        containerRegistry.Register<IChatRemoteService, ChatRemoteService>(); // -
 
         // 注册MessageHandler
         containerRegistry.Register<IMessageHandler, FriendMessageHandler>()
@@ -109,5 +75,14 @@ public static class BaseServiceExtension
             .Register<IMessageHandler, GroupRelationMessageHandler>()
             .Register<IMessageHandler, DeleteMessageHandler>()
             .Register<IMessageHandler, CallMessageHandler>(); // -
+
+        // 注册通话
+        containerRegistry.RegisterSingleton<CallManager>()
+            .RegisterSingleton<ICallManager>(d => d.Resolve<CallManager>())
+            .RegisterSingleton<ICallOperator>(d => d.Resolve<CallManager>());
+
+        // 注册通话处理器
+        containerRegistry.Register<TelephoneCallOperator>()
+            .Register<VideoCallOperator>();
     }
 }

@@ -1,5 +1,4 @@
 using Avalonia.Media.Imaging;
-using ChatClient.DataBase.Data;
 using ChatClient.Tool.Data.Group;
 using ChatServer.Common.Protobuf;
 
@@ -114,7 +113,7 @@ public interface IGroupService
     /// <param name="userId"></param>
     /// <param name="message"></param>
     /// <returns></returns>
-    Task<GroupRequest?> GetJoinGroupResponseFromServer(string userId, JoinGroupResponseFromServer message);
+    Task<GroupRequestDto?> GetJoinGroupResponseFromServer(string userId, JoinGroupResponseFromServer message);
 
     /// <summary>
     /// 获取到加入群聊请求

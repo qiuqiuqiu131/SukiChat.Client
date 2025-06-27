@@ -12,6 +12,8 @@ public interface IRegisterService
     /// </summary>
     /// <param name="name"></param>
     /// <param name="password"></param>
+    /// <param name="phone"></param>
+    /// <param name="email"></param>
     /// <returns></returns>
-    Task<RegisteResponse?> Register(string name, string password);
+    Task<RegisteResponse?> Register(string name, string password, string? phone, string? email);
 }

@@ -2,7 +2,7 @@ using Avalonia.Collections;
 using Avalonia.Media.Imaging;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services.Interface;
-using ChatClient.BaseService.Services.ServiceEfCore.PackService;
+using ChatClient.BaseService.Services.Interface.PackService;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;

@@ -5,9 +5,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
 using ChatClient.Avalonia.Common;
-using ChatClient.BaseService;
-using ChatClient.DataBase.SugarDB;
+using ChatClient.BaseService.Manager;
+using ChatClient.BaseService.SqlSugar;
+using ChatClient.DataBase.SqlSugar.SugarDB;
 using ChatClient.Desktop.CornerDialog;
+using ChatClient.Desktop.Services;
+using ChatClient.Desktop.Suki;
 using ChatClient.Desktop.ViewModels;
 using ChatClient.Desktop.ViewModels.About;
 using ChatClient.Desktop.ViewModels.CallViewModel;
@@ -62,6 +65,8 @@ using SIPSorcery;
 using SocketClient;
 using SqlSugar;
 using SukiUI.Dialogs;
+using ForgetPasswordView = ChatClient.Desktop.Views.ForgetPassword.ForgetPasswordView;
+using RegisterView = ChatClient.Desktop.Views.Register.RegisterView;
 
 namespace ChatClient.Desktop;
 
@@ -84,6 +89,7 @@ public class App : PrismApplication
         moduleCatalog.AddModule<ClientModule>();
         moduleCatalog.AddModule<ResourcesModule>();
         moduleCatalog.AddModule<MediaModule>();
+        moduleCatalog.AddModule<SqlSugarServiceModule>();
     }
 
     /// <summary>
@@ -111,27 +117,18 @@ public class App : PrismApplication
         containerRegistry.RegisterInstance(loggerFactory);
 
         // 注册数据库
-        // containerRegistry.RegisterDataBase(); // EFCore 数据库
         containerRegistry.RegisterSugarDataBase(); // SqlSugar 数据库
 
-        //// 资源模块加载
-        //var resourcesModule = new ResourcesModule();
-        //resourcesModule.RegisterTypes(containerRegistry);
+        // 注册SukiUI相关服务
+        containerRegistry.RegisterSingleton<IThemeStyle, ThemeStyleManager>();
 
-        //// 媒体模块加载
-        //var mediaModule = new MediaModule();
-        //mediaModule.RegisterTypes(containerRegistry);
-
-        //// 通信模块加载
-        //var clientModule = new ClientModule();
-        //clientModule.RegisterTypes(containerRegistry);
-
-        // 注册业务服务
-        containerRegistry.RegisterBaseServices();
+        // 注册持久化文件保存路径
+        containerRegistry.RegisterSingleton<IAppDataManager, DesktopAppDataManager>();
 
         containerRegistry.Register<MainWindowView>()
             .Register<MainWindowViewModel>();
-        containerRegistry.Register<LoginWindowView>().Register<LoginWindowViewModel>();
+        containerRegistry.Register<LoginWindowView>()
+            .Register<LoginWindowViewModel>();
 
         containerRegistry.RegisterSingleton<ISukiDialogManager, SukiDialogManager>();
         containerRegistry.Register<ICornerDialogService, CornerDialogService>();

@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="login:RegisterViewModel"
+             x:Class="ChatClient.Desktop.Views.Register.RegisterSafeInfoView">
+    <StackPanel Classes="Show" Orientation="Vertical">
+        <!-- 标题 -->
+        <TextBlock
+            Margin="25"
+            HorizontalAlignment="Center"
+            FontSize="19"
+            Foreground="{DynamicResource SukiText}"
+            Text="账户安全" />
+
+        <StackPanel>
+            <TextBox Watermark="输入手机号 (可选)" Text="{Binding Phone}"
+                     MaxLength="11" Foreground="{DynamicResource SukiText}"
+                     Classes="Register input LightWaterMask">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="PhoneOutline" Width="18" Height="18" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <TextBlock Classes="error"
+                       IsVisible="{Binding PhoneError,Converter={x:Static ObjectConverters.IsNotNull}}"
+                       Text="{Binding PhoneError}" />
+        </StackPanel>
+
+        <StackPanel>
+            <TextBox Watermark="输入邮箱 (可选)"
+                     Text="{Binding Email}"
+                     MaxLength="30" Classes="Register input LightWaterMask">
+                <TextBox.InnerLeftContent>
+                    <avalonia:MaterialIcon Kind="EmailOutline" Width="18" Height="18" />
+                </TextBox.InnerLeftContent>
+            </TextBox>
+            <TextBlock Classes="error" Text="{Binding EmailError}"
+                       IsVisible="{Binding EmailError,Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </StackPanel>
+
+        <TextBlock Margin="0,10" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填" FontSize="11.5"
+                   Opacity="0.8"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   Foreground="{DynamicResource SukiLowText}"
+                   HorizontalAlignment="Center" />
+
+        <!-- 注册按钮 -->
+        <Button Width="245"
+                Margin="0,15,0,5"
+                Classes="Flat"
+                Command="{Binding RegisterCommand}">
+            <TextBlock Text=" 注册 " FontSize="15" />
+        </Button>
+    </StackPanel>
+</UserControl>

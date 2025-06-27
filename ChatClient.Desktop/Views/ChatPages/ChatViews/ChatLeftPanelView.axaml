@@ -10,13 +10,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:searchBox="clr-namespace:ChatClient.Avalonia.Controls.SearchBox;assembly=ChatClient.Avalonia"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:chatUi="clr-namespace:ChatClient.Avalonia.Controls.Chat.ChatUI;assembly=ChatClient.Avalonia"
     xmlns:badge="clr-namespace:ChatClient.Avalonia.Controls.Badge;assembly=ChatClient.Avalonia"
     xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
     xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
     xmlns:chatViews="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews"
     xmlns:chatViews1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+    xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat;assembly=ChatClient.Avalonia"
     d:DesignHeight="650"
     d:DesignWidth="300"
     x:DataType="chatViews:ChatLeftPanelViewModel"
@@ -237,7 +237,7 @@
                                            Opacity="0.7"
                                            TextTrimming="CharacterEllipsis">
                                     <Run
-                                        Text="{Binding LastChatMessages.IsUser,Converter={chatUi:RetractedMessageConverter}}" />
+                                        Text="{Binding LastChatMessages.IsUser,Converter={chat:RetractedMessageConverter}}" />
                                     <Run Text="撤回一条消息" />
                                 </TextBlock>
                             </Panel>

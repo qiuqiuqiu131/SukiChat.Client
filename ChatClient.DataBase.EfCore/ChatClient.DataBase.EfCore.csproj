@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Data.SQLite" Version="1.0.119"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+    </ItemGroup>
+</Project>

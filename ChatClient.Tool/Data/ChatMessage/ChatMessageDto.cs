@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Media.Imaging;
 using ChatClient.Tool.Data.Group;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Media.Audio;
 using Material.Icons;
 
@@ -61,6 +62,8 @@ public class VoiceMessDto : BindableBase, IDisposable
     public Stream? AudioData { get; set; }
 
     public IPlatformAudioPlayer? AudioPlayer { get; set; }
+
+    public IFactory<IPlatformAudioPlayer>? AudioPlayerFactory { get; set; }
 
     public TimeSpan Duration { get; set; }
 

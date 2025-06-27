@@ -9,11 +9,11 @@ using Avalonia.Media.Imaging;
 using Avalonia.Notification;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using ChatClient.BaseService.CallOperator;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.Tool;
 using ChatClient.Media.Desktop;
 using ChatClient.Media.Desktop.AudioPlayer;
-using ChatClient.Media.Desktop.CallOperator;
 using ChatClient.Tool.Config;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
@@ -22,6 +22,7 @@ using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
 using ChatClient.Tool.Media.Audio;
 using ChatClient.Tool.Media.Call;
+using ChatClient.Tool.Media.Video;
 using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
@@ -328,8 +329,9 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
 
         try
         {
+            var audioPlayerFactory = _containerProvider.Resolve<IFactory<IPlatformAudioPlayer>>();
             var ringPath = Path.Combine(Environment.CurrentDirectory, "Assets", "ring.mp3");
-            _audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+            _audioPlayer = audioPlayerFactory.Create();
             if (_audioPlayer == null) return;
             _audioPlayer.LoadFile(ringPath);
             _audioPlayer.PlayAsync();
@@ -370,7 +372,8 @@ public class VideoCallViewModel : BindableBase, IDialogAware, ICallView
     {
         try
         {
-            var audio = AudioPlayerFactory.CreateAudioPlayer();
+            var audioPlayerFactory = _containerProvider.Resolve<IFactory<IPlatformAudioPlayer>>();
+            var audio = audioPlayerFactory.Create();
             audio.LoadFile(Path.Combine(Environment.CurrentDirectory, "Assets", "hangup.mp3"));
             audio.PlayAsync();
             audio.PlaybackCompleted += (s, e) =>

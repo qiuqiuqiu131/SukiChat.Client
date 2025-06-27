@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:customSelectableTextBlock1="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia">
+    <Styles.Resources>
+        <ContextMenu x:Key="DefaultSelectableTextBlockContextMenu">
+            <MenuItem Command="{Binding $parent[SelectableTextBlock].Copy}"
+                      Header="复制"
+                      IsEnabled="{Binding $parent[SelectableTextBlock].CanCopy}">
+                <MenuItem.Icon>
+                    <avalonia:MaterialIcon Kind="ContentCopy" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Styles.Resources>
+    <Style Selector="SelectableTextBlock">
+        <Setter Property="ContextMenu"
+                Value="{StaticResource DefaultSelectableTextBlockContextMenu}" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="SelectionForegroundBrush" Value="White"></Setter>
+    </Style>
+
+    <Style Selector="customSelectableTextBlock1|CustomSelectableTextBlock">
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="ContextMenu" Value="{StaticResource DefaultSelectableTextBlockContextMenu}" />
+        <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="SelectionForegroundBrush" Value="White"></Setter>
+    </Style>
+</Styles>

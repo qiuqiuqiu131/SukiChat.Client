@@ -59,15 +59,24 @@ public class PasswordService(IContainerProvider containerProvider, IMessageHelpe
         return (false, result?.Response?.Message ?? string.Empty);
     }
 
-    public async Task<(bool, string)> ForgetPasswordAsync(string? id, string? phoneNumber, string? emailNumber,
-        string newPassword)
+    public Task<PasswordAuthenticateResponse?> ForgetPasswordConfirmAsync(string phoneNumber, string emailNumber)
+    {
+        var message = new PasswordAuthenticateRequest
+        {
+            Phone = phoneNumber,
+            Email = emailNumber
+        };
+
+        return messageHelper.SendMessageWithResponse<PasswordAuthenticateResponse>(message);
+    }
+
+    public async Task<(bool, string)> ForgetPasswordResetAsync(string userId, string passKey, string newPassword)
     {
         var message = new ForgetPasswordRequest
         {
-            Id = id ?? "",
-            PhoneNumber = phoneNumber ?? "",
-            EmailNumber = emailNumber ?? "",
-            Password = newPassword
+            Password = newPassword,
+            UserId = userId,
+            PassKey = passKey
         };
 
         var result = await messageHelper.SendMessageWithResponse<ForgetPasswordResponse>(message);

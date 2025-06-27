@@ -1,0 +1,23 @@
+<UserControl
+    x:Class="ChatClient.Android.Views.LoginView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p1="https://github.com/kikipoulet/SukiUI"
+    xmlns:viewModels="clr-namespace:ChatClient.Android.ViewModels"
+    d:DesignHeight="440"
+    d:DesignWidth="315"
+    x:DataType="viewModels:LoginViewModel"
+    mc:Ignorable="d">
+    <Grid>
+        <TextBlock
+            FontSize="16"
+            IsVisible="{Binding IsConnected}"
+            Text="服务器已连接" />
+        <TextBlock
+            FontSize="16"
+            IsVisible="{Binding !IsConnected}"
+            Text="服务器已连接" />
+    </Grid>
+</UserControl>

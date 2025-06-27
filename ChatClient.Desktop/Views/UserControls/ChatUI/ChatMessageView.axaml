@@ -1,0 +1,294 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:suki="https://github.com/kikipoulet/SukiUI"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:customSelectableTextBlock1="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia"
+             xmlns:behaviors1="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             xmlns:chatUiConverter1="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
+             xmlns:voiceWaveIcon1="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon;assembly=ChatClient.Avalonia"
+             xmlns:chatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.ChatUI"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ChatClient.Desktop.Views.UserControls.ChatUI.ChatMessageView">
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="chatMessage:TextMessDto">
+            <customSelectableTextBlock1:CustomSelectableTextBlock Text="{Binding Text}"
+                                                                  HorizontalAlignment="Center"
+                                                                  ContextFlyout="{x:Null}"
+                                                                  Margin="3,0,2,2" Padding="2"
+                                                                  TextWrapping="Wrap" />
+        </DataTemplate>
+        <DataTemplate DataType="chatMessage:CallMessDto">
+            <Border Background="Transparent" Margin="1,1,0,0" Padding="2"
+                    PointerPressed="CallMess_PointerPressed">
+                <DockPanel LastChildFill="True">
+                    <avalonia:MaterialIcon DockPanel.Dock="{Binding Dock}" Kind="{Binding IconKind}" Height="19"
+                                           Width="19" Margin="0"
+                                           VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding Message}" Margin="3,0" Padding="0" IsHitTestVisible="False" />
+                </DockPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="chatMessage:ImageMessDto">
+            <Panel>
+                <Panel
+                    IsVisible="{Binding Failed}">
+                    <Border Width="180"
+                            Height="180"
+                            ClipToBounds="True" Background="#ccc" CornerRadius="6">
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="10"
+                                    HorizontalAlignment="Center">
+                            <avalonia:MaterialIcon Kind="ImageRemove" Foreground="#999"
+                                                   Width="40" Height="40" />
+                            <TextBlock Text="图片已过期" HorizontalAlignment="Center" Opacity="0.8"
+                                       FontSize="14" />
+                        </StackPanel>
+                    </Border>
+                </Panel>
+                <Panel IsVisible="{Binding !Failed}">
+                    <Border Width="150"
+                            IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNull}}"
+                            Height="150"
+                            ClipToBounds="True" Background="#ccc" CornerRadius="6">
+                        <StackPanel Orientation="Vertical"
+                                    VerticalAlignment="Center"
+                                    Spacing="10"
+                                    HorizontalAlignment="Center">
+                            <suki:Loading Foreground="#999" Width="30" Height="30" />
+                            <TextBlock Text="图片加载中" HorizontalAlignment="Center" Opacity="0.8"
+                                       FontSize="14" />
+                        </StackPanel>
+                    </Border>
+                    <Panel Classes="Icon"
+                           IsVisible="{Binding ImageSource,Converter={x:Static ObjectConverters.IsNotNull}}">
+                        <Panel.Styles>
+                            <Style Selector="Grid.Icon:pointerover Border#Icon">
+                                <Setter Property="Opacity" Value="0.45" />
+                            </Style>
+                        </Panel.Styles>
+                        <Border ClipToBounds="True" CornerRadius="6">
+                            <Image Name="ImageSource"
+                                   ToolTip.ShowDelay="500"
+                                   Source="{Binding ImageSource}">
+                                <ToolTip.Tip>
+                                    <TextBlock FontSize="13"
+                                               Text="双击查看图片" Classes="Small" />
+                                </ToolTip.Tip>
+                                <Interaction.Behaviors>
+                                    <behaviors1:ImageSizeAdjustBehavior />
+                                    <behaviors1:ImageShowBehavior ImageMess="{Binding}" />
+                                </Interaction.Behaviors>
+                            </Image>
+                        </Border>
+                        <Border Name="Icon"
+                                HorizontalAlignment="Right"
+                                Background="#00000000"
+                                VerticalAlignment="Bottom"
+                                Opacity="0"
+                                Padding="3"
+                                Classes="Icon"
+                                Margin="7">
+                            <Border.Transitions>
+                                <Transitions>
+                                    <DoubleTransition Property="Opacity" Duration="0:0:0.1" />
+                                </Transitions>
+                            </Border.Transitions>
+                            <Interaction.Behaviors>
+                                <behaviors1:ImageShowByClickBehavior
+                                    TargetImage="{Binding ElementName=ImageSource}" />
+                            </Interaction.Behaviors>
+                            <Border.Styles>
+                                <Style Selector="Border.Icon:pointerover">
+                                    <Setter Property="Opacity" Value="0.7" />
+                                    <Setter Property="Cursor" Value="Hand" />
+                                </Style>
+                            </Border.Styles>
+                            <avalonia:MaterialIcon Width="20"
+                                                   Foreground="White"
+                                                   Height="20"
+                                                   Kind="ImageSearch" />
+                        </Border>
+                    </Panel>
+                </Panel>
+            </Panel>
+        </DataTemplate>
+        <DataTemplate DataType="chatMessage:FileMessDto">
+            <Border Margin="5,5,5,0" Padding="0" Background="Transparent" DoubleTapped="FileMess_DoubleTapped">
+                <DockPanel LastChildFill="True">
+                    <Grid DockPanel.Dock="Bottom" Margin="0,0,0,3" Height="16">
+                        <ProgressBar Width="100"
+                                     Margin="0,0,0,0"
+                                     IsVisible="{Binding IsDownloading}"
+                                     VerticalAlignment="Center"
+                                     Maximum="1"
+                                     ShowProgressText="True"
+                                     FontSize="12.5"
+                                     Value="{Binding DownloadProgress}" />
+                        <DockPanel HorizontalAlignment="Stretch" LastChildFill="True"
+                                   VerticalAlignment="Center"
+                                   IsVisible="{Binding !IsDownloading}">
+                            <Panel DockPanel.Dock="Right" Margin="0,0,5,0" IsVisible="{Binding IsUser}">
+                                <TextBlock Text="已发送" FontSize="12" Opacity="0.8" Classes="Small"
+                                           Foreground="{DynamicResource SukiText}" IsVisible="{Binding IsExit}" />
+                                <TextBlock Text="文件已失效" FontSize="12" Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.8" Classes="Small"
+                                           IsVisible="{Binding !IsExit}" />
+                            </Panel>
+                            <Panel DockPanel.Dock="Right" Margin="0,0,5,0" IsVisible="{Binding !IsUser}">
+                                <TextBlock Text="已下载" FontSize="12" Opacity="0.8" Classes="Small"
+                                           Foreground="{DynamicResource SukiText}" IsVisible="{Binding IsSuccess}" />
+                                <Panel IsVisible="{Binding !IsSuccess}">
+                                    <TextBlock Text="文件已失效" FontSize="12" Foreground="{DynamicResource SukiText}"
+                                               Opacity="0.8" Classes="Small"
+                                               IsVisible="{Binding !IsExit}" />
+                                </Panel>
+                            </Panel>
+                            <TextBlock
+                                Margin="8,0" Classes="Small"
+                                HorizontalAlignment="Left"
+                                Text="{Binding FileSize,Converter={chatUiConverter1:FileSizeConverter}}"
+                                FontSize="12.5"
+                                TextWrapping="NoWrap" />
+                        </DockPanel>
+                    </Grid>
+                    <Grid ColumnDefinitions="160,45" Margin="0,0,0,5">
+                        <TextBlock
+                            Margin="10,0"
+                            Text="{Binding FileName,Converter={chatUiConverter1:GetFileNameConverter}}"
+                            HorizontalAlignment="Left"
+                            TextWrapping="Wrap"
+                            MaxLines="2"
+                            TextTrimming="CharacterEllipsis" />
+                        <Panel Grid.Column="1">
+                            <Border Width="38"
+                                    Height="42"
+                                    Cursor="Hand"
+                                    Background="{Binding FileType,Converter={chatUiConverter1:FileExtensionToColorConverter}}"
+                                    CornerRadius="5">
+                                <Interaction.Behaviors>
+                                    <behaviors1:OpenFileInExplorerBehavior IsEnabled="{Binding IsSuccess}"
+                                                                           FilePath="{Binding TargetFilePath}" />
+                                </Interaction.Behaviors>
+                                <avalonia:MaterialIcon
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Margin="2,0,0,0"
+                                    Foreground="White"
+                                    Height="33"
+                                    Width="33"
+                                    Kind="{Binding FileType,Converter={chatUiConverter1:FileExtensionToIconConverter}}" />
+                            </Border>
+                            <Border Width="38" Height="42" CornerRadius="5"
+                                    Cursor="Hand"
+                                    Background="#66000000">
+                                <Border.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!IsSuccess" />
+                                        <Binding Path="IsExit" />
+                                    </MultiBinding>
+                                </Border.IsVisible>
+                                <Interaction.Behaviors>
+                                    <EventTriggerBehavior EventName="PointerPressed">
+                                        <InvokeCommandAction
+                                            Command="{Binding $parent[chatUi:ChatUI].FileMessageClickCommand}"
+                                            CommandParameter="{Binding}" />
+                                    </EventTriggerBehavior>
+                                </Interaction.Behaviors>
+                                <avalonia:MaterialIcon Kind="DownloadCircleOutline"
+                                                       Height="30"
+                                                       Width="30"
+                                                       Foreground="White" Opacity="0.7" />
+                            </Border>
+                        </Panel>
+                    </Grid>
+                </DockPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate DataType="chatMessage:CardMessDto">
+            <Panel Background="Transparent" Margin="3" PointerPressed="InputElement_OnPointerPressed">
+                <Grid RowDefinitions="*,*,*" Margin="5,0">
+                    <TextBlock Grid.Row="0" Text="{Binding Title}" Margin="0,4" />
+                    <Grid Grid.Row="1" Margin="0,0,0,5" ColumnDefinitions="190,50">
+                        <TextBlock Margin="0,0,5,0"
+                                   Opacity="0.8"
+                                   TextWrapping="Wrap"
+                                   LineSpacing="2"
+                                   FontSize="12" Classes="Small"
+                                   Text="{Binding Detail}" />
+                        <Image Grid.Column="1" Width="50" Height="50" Source="{Binding HeadImage}">
+                            <Image.Clip>
+                                <RectangleGeometry RadiusX="7" RadiusY="7" Rect="0,0,50,50" />
+                            </Image.Clip>
+                        </Image>
+                    </Grid>
+                    <Border Grid.Row="2" BorderThickness="0,0.5,0,0"
+                            BorderBrush="{DynamicResource SukiText}" Opacity="0.2" />
+                    <TextBlock Grid.Row="2" Text="{Binding Bottom}" Classes="Small"
+                               Margin="0,5,0,2" Opacity="0.7" FontSize="12" />
+                </Grid>
+            </Panel>
+        </DataTemplate>
+        <DataTemplate DataType="chatMessage:VoiceMessDto">
+            <Border Background="Transparent" Classes.Voice="{Binding !Failed}">
+                <Border.Styles>
+                    <Style Selector="Border.Voice">
+                        <Setter Property="Cursor" Value="Hand" />
+                    </Style>
+                </Border.Styles>
+                <Interaction.Behaviors>
+                    <behaviors1:VoicePlayBehavior IsEnabled="{Binding !Failed}" VoiceMess="{Binding}" />
+                </Interaction.Behaviors>
+                <Panel>
+                    <DockPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                               Margin="0,1.5,2,0">
+                        <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="PlayCircleOutline"
+                                               IsVisible="{Binding !IsPlaying}"
+                                               Foreground="{DynamicResource SukiPrimaryColor}" Width="20"
+                                               Height="20" />
+                        <avalonia:MaterialIcon DockPanel.Dock="Left" Kind="StopCircleOutline"
+                                               IsVisible="{Binding IsPlaying}"
+                                               Foreground="{DynamicResource SukiAccentColor}" Width="20" Height="20" />
+                        <TextBlock DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right"
+                                   IsVisible="{Binding !Failed}"
+                                   FontSize="13"
+                                   Text="{Binding Duration,Converter={chatUiConverter1:VoiceDurationConverter}}" />
+                        <voiceWaveIcon1:VoiceWaveIcon Duration="{Binding Duration}"
+                                                      Foreground="{DynamicResource SukiText}"
+                                                      Opacity="0.8"
+                                                      IsVisible="{Binding !Failed}"
+                                                      IsPlaying="{Binding IsPlaying}" />
+                        <TextBlock Margin="5,1.5,5,0" Text="语音已过期" Opacity="0.8" FontSize="13"
+                                   IsVisible="{Binding Failed}" />
+                    </DockPanel>
+                </Panel>
+            </Border>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <UserControl.Styles>
+        <Style Selector="ProgressBar:horizontal /template/ suki|GlassCard#PART_RootBorder">
+            <Setter Property="MinHeight" Value="5" />
+            <Setter Property="Height" Value="5" />
+            <Setter Property="MaxHeight" Value="8" />
+        </Style>
+
+        <Style Selector="ProgressBar:horizontal /template/ TextBlock#PART_Text">
+            <Setter Property="FontSize" Value="12.5" />
+        </Style>
+
+        <Style Selector="chatUi|ChatMessageView">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <ContentControl
+                            Content="{TemplateBinding Message}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+</UserControl>

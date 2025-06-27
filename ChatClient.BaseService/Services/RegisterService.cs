@@ -7,12 +7,14 @@ namespace ChatClient.BaseService.Services;
 internal class RegisterService(IMessageHelper messageManager, IContainerProvider containerProvider)
     : BaseService(containerProvider), IRegisterService
 {
-    public async Task<RegisteResponse?> Register(string name, string password)
+    public async Task<RegisteResponse?> Register(string name, string password, string? phone, string? email)
     {
         var message = new RegisteRequest
         {
             Name = name,
-            Password = password
+            Password = password,
+            Email = email ?? string.Empty,
+            Phone = phone ?? string.Empty
         };
 
         var response = await messageManager.SendMessageWithResponse<RegisteResponse>(message);

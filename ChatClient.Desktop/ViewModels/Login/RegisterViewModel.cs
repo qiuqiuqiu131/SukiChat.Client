@@ -11,11 +11,19 @@ using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
+using ChatServer.Common.Protobuf;
 using Prism.Commands;
 using Prism.Dialogs;
 using Prism.Ioc;
 
 namespace ChatClient.Desktop.ViewModels.Login;
+
+public enum RegisterState
+{
+    UserInfo,
+    SafeInfo,
+    Success
+}
 
 public class RegisterViewModel : ValidateBindableBase, IDialogAware
 {
@@ -33,13 +41,23 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     #region Registerd
 
-    private bool isRegistered = false;
+    private RegisterState state;
 
-    public bool IsRegistered
+    public RegisterState State
     {
-        get => isRegistered;
-        set => SetProperty(ref isRegistered, value);
+        get => state;
+        set
+        {
+            if (SetProperty(ref state, value))
+            {
+                RaisePropertyChanged(nameof(IsUserInfo));
+                RaisePropertyChanged(nameof(IsSuccess));
+            }
+        }
     }
+
+    public bool IsUserInfo => State == RegisterState.UserInfo;
+    public bool IsSuccess => State == RegisterState.Success;
 
     private string? userId;
 
@@ -61,6 +79,7 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
         set
         {
             SetProperty(ref isBusy, value);
+            NextStepCommand.RaiseCanExecuteChanged();
             RegisterCommand.RaiseCanExecuteChanged();
         }
     }
@@ -81,6 +100,7 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
             if (SetProperty(ref name, value))
             {
                 ValidateProperty(nameof(Name), value);
+                RaisePropertyChanged(nameof(NameError));
                 RegisterCommand.RaiseCanExecuteChanged();
             }
         }
@@ -105,7 +125,9 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
             if (SetProperty(ref password, value))
             {
                 ValidateProperty(nameof(Password), value);
+                RaisePropertyChanged(nameof(PasswordError));
                 RegisterCommand.RaiseCanExecuteChanged();
+                NextStepCommand.RaiseCanExecuteChanged();
             }
         }
     }
@@ -130,7 +152,9 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
             if (SetProperty(ref repassword, value))
             {
                 ValidateProperty(nameof(RePassword), value);
+                RaisePropertyChanged(nameof(RePasswordError));
                 RegisterCommand.RaiseCanExecuteChanged();
+                NextStepCommand.RaiseCanExecuteChanged();
             }
         }
     }
@@ -140,10 +164,60 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
 
     #endregion
 
+    #region 电话(Phone)
+
+    private string? phone;
+
+    [QPhone(AllowEmpty = true, ErrorMessage = "请输入有效的电话号码")]
+    public string? Phone
+    {
+        get => phone;
+        set
+        {
+            if (SetProperty(ref phone, value))
+            {
+                ValidateProperty(nameof(Phone), value);
+                RaisePropertyChanged(nameof(PhoneError));
+                RegisterCommand.RaiseCanExecuteChanged();
+                NextStepCommand.RaiseCanExecuteChanged();
+            }
+        }
+    }
+
+    private List<string>? PhoneErrors => (List<string>?)GetErrors(nameof(Phone));
+    public string? PhoneError => PhoneErrors?.FirstOrDefault();
+
+    #endregion
+
+    #region 邮箱(Email)
+
+    private string? email;
+
+    [QEmailAddress(AllowEmpty = true, ErrorMessage = "请输入有效的邮箱地址")]
+    public string? Email
+    {
+        get => email;
+        set
+        {
+            if (SetProperty(ref email, value))
+            {
+                ValidateProperty(nameof(Email), value);
+                RaisePropertyChanged(nameof(EmailError));
+                RegisterCommand.RaiseCanExecuteChanged();
+                NextStepCommand.RaiseCanExecuteChanged();
+            }
+        }
+    }
+
+    private List<string>? EmailErrors => (List<string>?)GetErrors(nameof(Email));
+    public string? EmailError => EmailErrors?.FirstOrDefault();
+
+    #endregion
+
+    public AsyncDelegateCommand NextStepCommand { get; init; }
     public AsyncDelegateCommand RegisterCommand { get; init; }
     public DelegateCommand CancelCommand { get; init; }
     public DelegateCommand ReturnToLoginViewCommand { get; init; }
-    public DelegateCommand ReturnToRegisterCommand { get; init; }
 
     public INotificationMessageManager NotificationManager { get; set; } = new NotificationMessageManager();
 
@@ -155,57 +229,63 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
         _containerProvider = containerProvider;
 
         IsConnected = connection.IsConnected;
+        IsConnected.ConnecttedChanged += ConnectedChanged;
 
+        NextStepCommand = new AsyncDelegateCommand(NextStep, CanRegister);
         RegisterCommand = new AsyncDelegateCommand(Register, CanRegister);
         CancelCommand = new DelegateCommand(() => RequestClose.Invoke());
         ReturnToLoginViewCommand = new DelegateCommand(ReturnToLoginView);
-        ReturnToRegisterCommand = new DelegateCommand(() =>
-        {
-            Name = null;
-            Password = null;
-            RePassword = null;
-            IsRegistered = false;
-            UserId = null;
-        });
 
         ErrorsChanged += delegate
         {
             RegisterCommand.RaiseCanExecuteChanged();
+            NextStepCommand.RaiseCanExecuteChanged();
             RaisePropertyChanged(nameof(NameError));
             RaisePropertyChanged(nameof(PasswordError));
             RaisePropertyChanged(nameof(RePasswordError));
         };
     }
 
-    private bool CanRegister() => !HasErrors
+    private void ConnectedChanged(bool state)
+    {
+        NextStepCommand.RaiseCanExecuteChanged();
+        RegisterCommand.RaiseCanExecuteChanged();
+    }
+
+    private async Task NextStep()
+    {
+        await Task.Delay(150);
+        State = RegisterState.SafeInfo;
+    }
+
+    private bool CanRegister() => !HasErrors && !isBusy && IsConnected.IsConnected
                                   && !string.IsNullOrWhiteSpace(Name)
                                   && !string.IsNullOrWhiteSpace(Password)
                                   && !string.IsNullOrWhiteSpace(RePassword);
 
     private async Task Register()
     {
-        // UserId = "2025000001";
-        // IsRegistered = true;
-        // NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(2));
-        // return;
-
         IsBusy = true;
         var _registerService = _containerProvider.Resolve<IRegisterService>();
-        var result = await _registerService.Register(Name!, Password!);
+        var result = await _registerService.Register(Name!, Password!, Phone, Email);
+        // var result = new RegisteResponse
+        // {
+        //     Response = new CommonResponse { State = true }
+        // };
         IsBusy = false;
 
         if (result is { Response: { State: true } })
         {
             ClipBoardHelper.AddText(result.Id);
             UserId = result.Id;
-            IsRegistered = true;
+            State = RegisterState.Success;
             NotificationManager.ShowMessage("SukiChat注册成功", NotificationType.Success, TimeSpan.FromSeconds(3));
         }
         else
         {
             NotificationManager.ShowMessage("注册失败", NotificationType.Error, TimeSpan.FromSeconds(3));
-            Password = null;
-            RePassword = null;
+            CleatInput();
+            State = RegisterState.UserInfo;
         }
     }
 
@@ -217,12 +297,23 @@ public class RegisterViewModel : ValidateBindableBase, IDialogAware
         });
     }
 
+    private void CleatInput()
+    {
+        Name = null;
+        Password = null;
+        RePassword = null;
+        Email = null;
+        Phone = null;
+    }
+
     #region DialogAware
 
     public bool CanCloseDialog() => true;
 
     public void OnDialogClosed()
     {
+        IsConnected.ConnecttedChanged -= ConnectedChanged;
+        CleatInput();
     }
 
     public void OnDialogOpened(IDialogParameters parameters)

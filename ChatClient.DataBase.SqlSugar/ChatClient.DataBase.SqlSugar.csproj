@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <InterceptorsNamespaces>$(InterceptorsNamespaces);Microsoft.EntityFrameworkCore.GeneratedInterceptors</InterceptorsNamespaces>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="SqlSugarCore" Version="5.1.4.196"/>
+        <PackageReference Include="SqlSugarCoreNoDrive.Aot" Version="5.1.4.186"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+    </ItemGroup>
+</Project>

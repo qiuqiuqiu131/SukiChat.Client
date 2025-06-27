@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Tool", "ChatClie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Avalonia", "ChatClient.Avalonia\ChatClient.Avalonia.csproj", "{7CAC8E0F-B882-41DE-B970-0DC6CD084189}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.DataBase", "ChatClient.DataBase\ChatClient.DataBase.csproj", "{A1EF7910-9147-478F-A071-A5D4CC17AA47}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.BaseService", "ChatClient.BaseService\ChatClient.BaseService.csproj", "{C5C0EA97-885B-43DF-BDEB-04606F0F50C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Resources", "ChatClient.Resources\ChatClient.Resources.csproj", "{D36E7FFC-050C-4CFF-B26C-00C5EDF7A3CD}"
@@ -23,7 +21,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Media.Desktop", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Desktop", "ChatClient.Desktop\ChatClient.Desktop.csproj", "{F04F69D0-C903-45E0-8A45-EB548B9257B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSugarTest", "SqlSugarTest\SqlSugarTest.csproj", "{06FA1F77-4446-48B2-A828-03EFEA19BD08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Android", "ChatClient.Android\ChatClient.Android.csproj", "{B43B52BF-C21D-4C11-8F84-D560E5A41820}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.DataBase.EfCore", "ChatClient.DataBase.EfCore\ChatClient.DataBase.EfCore.csproj", "{0F6A4457-761B-4F62-A530-D40C9A280328}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatClient.DataBase", "ChatClient.DataBase", "{BD5E6113-251A-4748-9420-1239AD144616}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ChatClient.BaseService", "ChatClient.BaseService", "{8244C8DF-B8A6-4B61-838F-0F47F494147E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.DataBase.SqlSugar", "ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj", "{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.BaseService.EfCore", "ChatClient.BaseService.EfCore\ChatClient.BaseService.EfCore.csproj", "{3F7209DC-0980-4BAD-96A6-B5240D262AF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.BaseService.SqlSugar", "ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj", "{67BFD1D6-7B26-4C51-9D9D-108F42ED301D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatClient.Avalonia.Suki", "ChatClient.Avalonia.Suki\ChatClient.Avalonia.Suki.csproj", "{4F5F2121-4C90-486E-8749-A7102EE5C79E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +59,6 @@ Global
 		{7CAC8E0F-B882-41DE-B970-0DC6CD084189}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CAC8E0F-B882-41DE-B970-0DC6CD084189}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CAC8E0F-B882-41DE-B970-0DC6CD084189}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A1EF7910-9147-478F-A071-A5D4CC17AA47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A1EF7910-9147-478F-A071-A5D4CC17AA47}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A1EF7910-9147-478F-A071-A5D4CC17AA47}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A1EF7910-9147-478F-A071-A5D4CC17AA47}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C5C0EA97-885B-43DF-BDEB-04606F0F50C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C5C0EA97-885B-43DF-BDEB-04606F0F50C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C0EA97-885B-43DF-BDEB-04606F0F50C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -67,16 +75,43 @@ Global
 		{F04F69D0-C903-45E0-8A45-EB548B9257B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F04F69D0-C903-45E0-8A45-EB548B9257B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F04F69D0-C903-45E0-8A45-EB548B9257B9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06FA1F77-4446-48B2-A828-03EFEA19BD08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06FA1F77-4446-48B2-A828-03EFEA19BD08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06FA1F77-4446-48B2-A828-03EFEA19BD08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06FA1F77-4446-48B2-A828-03EFEA19BD08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{0F6A4457-761B-4F62-A530-D40C9A280328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F6A4457-761B-4F62-A530-D40C9A280328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F6A4457-761B-4F62-A530-D40C9A280328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F6A4457-761B-4F62-A530-D40C9A280328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F7209DC-0980-4BAD-96A6-B5240D262AF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F7209DC-0980-4BAD-96A6-B5240D262AF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F7209DC-0980-4BAD-96A6-B5240D262AF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F7209DC-0980-4BAD-96A6-B5240D262AF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67BFD1D6-7B26-4C51-9D9D-108F42ED301D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67BFD1D6-7B26-4C51-9D9D-108F42ED301D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67BFD1D6-7B26-4C51-9D9D-108F42ED301D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67BFD1D6-7B26-4C51-9D9D-108F42ED301D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F5F2121-4C90-486E-8749-A7102EE5C79E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F5F2121-4C90-486E-8749-A7102EE5C79E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F5F2121-4C90-486E-8749-A7102EE5C79E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F5F2121-4C90-486E-8749-A7102EE5C79E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{C5C0EA97-885B-43DF-BDEB-04606F0F50C4} = {8244C8DF-B8A6-4B61-838F-0F47F494147E}
 		{F04F69D0-C903-45E0-8A45-EB548B9257B9} = {6C072A7E-9A07-4617-B51A-8DF068D4E4E9}
+		{B43B52BF-C21D-4C11-8F84-D560E5A41820} = {6C072A7E-9A07-4617-B51A-8DF068D4E4E9}
+		{0F6A4457-761B-4F62-A530-D40C9A280328} = {BD5E6113-251A-4748-9420-1239AD144616}
+		{D75BB040-9AF2-4DBD-A3CF-6DE58DAC9686} = {BD5E6113-251A-4748-9420-1239AD144616}
+		{3F7209DC-0980-4BAD-96A6-B5240D262AF6} = {8244C8DF-B8A6-4B61-838F-0F47F494147E}
+		{67BFD1D6-7B26-4C51-9D9D-108F42ED301D} = {8244C8DF-B8A6-4B61-838F-0F47F494147E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1512C1DB-4DE9-4AA3-8E5D-13798E6A33E4}

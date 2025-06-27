@@ -3,11 +3,34 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
+        <entry key="ChatClient.Android/App.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Android/Views/LoginView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/GroupChatUI/GroupChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/GroupChatUI/GroupChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/BusyArea.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/Button.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/ComboBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/DatePicker.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/GroupSeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/IPv4Box.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/Index.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/MultiGroupGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/MultiGroupList.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/MultiSeparateGroupGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/MultiSeparateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/NotificationStyles.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/OverlaySplitView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/QScrollViewer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/TabItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/Text.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/AudioLevelVisualizer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Badge/Badge.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageDataTemplate.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatUI1.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/GroupChatUI/GroupChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/GroupChatUI/GroupChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -102,7 +125,7 @@
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/FriendSideView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideMemberView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
-        <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/AddNewFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/ContactsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/CreateGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -121,7 +144,7 @@
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/FriendDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/FriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/GroupDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/GroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/GroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/SearchFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/SearchGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -132,11 +155,17 @@
         <entry key="ChatClient.Desktop/Views/ContactDetailView/FriendDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ContactDetailView/NewFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/CornerWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ForgetPassword/ForgetPasswordConfirmView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ForgetPassword/ForgetPasswordResetView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ForgetPassword/ForgetPasswordSuccessView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/ForgetPassword/ForgetPasswordView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/LoaclSearchUserGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/LocalSearchUserGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchAllView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LocalSearchUserGroupView/Region/LocalSearchUserView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/ForgetPasswordConfirmView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/ForgetPasswordResetView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/ForgetPasswordView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/LoginDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/LoginSettingView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -145,14 +174,20 @@
         <entry key="ChatClient.Desktop/Views/Login/LoginWindowView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/NetSetting.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/NetSettingView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/RegisterSafeInfoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/RegisterStepView/RegisterStepFirstView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/RegisterStepView/RegisterStepSecondView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/Login/RegisterSuccessView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
-        <entry key="ChatClient.Desktop/Views/Login/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/RegisterSuccessView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/RegisterUserInfoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Login/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/RegisterWindowView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LoginView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/MainWindowView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Desktop/Views/RegisteView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Register/RegisterSafeInfoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Register/RegisterSuccessView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Register/RegisterUserInfoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/Register/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ScreenshotWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/AddFriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -180,14 +215,17 @@
         <entry key="ChatClient.Desktop/Views/SystemSetting/ThemeView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Desktop/Views/SystemSetting/UserSettingView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/ChatMessageBoxView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/CommonDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataDto.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EmojiPickerView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/FriendChatMessageBoxView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/GroupChatMessageBoxView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/GroupChatUI/GroupChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/GroupMessageBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/LeftSearchView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/SukiDialog.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/SukiDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UndoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />

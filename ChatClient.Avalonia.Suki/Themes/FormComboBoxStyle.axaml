@@ -1,0 +1,116 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI"
+        xmlns:formControls="clr-namespace:ChatClient.Avalonia.Controls.FormControls;assembly=ChatClient.Avalonia">
+    <Design.PreviewWith>
+        <Border Padding="20" Width="200">
+            <formControls:FormComboBox PlaceholderText="Hello" />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="formControls|FormComboBox">
+        <Setter Property="Padding" Value="10,5" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <suki:GlassCard CornerRadius="7" Padding="{TemplateBinding Padding}" Margin="{TemplateBinding Margin}">
+                    <suki:GlassCard.Styles>
+                        <Style Selector="ContentControl.ghost TextBlock">
+                            <Setter Property="Foreground" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ToggleButton:pointerover">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ToggleButton:checked">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ComboBoxItem">
+                            <Setter Property="FontSize" Value="{Binding $parent[ComboBox].FontSize}" />
+                        </Style>
+                    </suki:GlassCard.Styles>
+                    <Border Name="border"
+                            Background="Transparent"
+                            Classes="Discrete" Padding="0">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Grid.Resources>
+                                <suki:BiggestItemConverter x:Key="BigItem" />
+                            </Grid.Resources>
+                            <TextBlock FontSize="{TemplateBinding FontSize}"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0"
+                                       Text="{TemplateBinding Head}" />
+                            <TextBlock Name="PlaceholderTextBlock"
+                                       Grid.Column="1"
+                                       Margin="12,0,0,0"
+                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                       VerticalAlignment="Center"
+                                       Foreground="{TemplateBinding PlaceholderForeground}"
+                                       IsVisible="{TemplateBinding SelectionBoxItem,
+                                                                   Converter={x:Static ObjectConverters.IsNull}}"
+                                       Text="{TemplateBinding PlaceholderText}" />
+                            <ContentControl Grid.Column="1" Margin="12,0,0,0"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            FontSize="{Binding $parent[ComboBox].FontSize}"
+                                            VerticalAlignment="Center"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding ItemTemplate}"
+                                            Foreground="{DynamicResource SukiText}" />
+                            <ToggleButton Name="toggle"
+                                          Grid.Column="2"
+                                          Margin="10,0,0,0"
+                                          Background="Transparent"
+                                          BorderThickness="0"
+                                          Padding="10,0"
+                                          ClickMode="Press"
+                                          CornerRadius="{DynamicResource SmallCornerRadius}"
+                                          Focusable="False"
+                                          IsChecked="{TemplateBinding IsDropDownOpen,
+                                                                      Mode=TwoWay}">
+                                <Path Width="8"
+                                      Height="6"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z"
+                                      Fill="{DynamicResource SukiText}"
+                                      Stretch="Uniform" />
+                            </ToggleButton>
+                            <Popup Name="PART_Popup"
+                                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                                   HorizontalOffset="-2.5"
+                                   IsLightDismissEnabled="True"
+                                   IsOpen="{TemplateBinding IsDropDownOpen,
+                                                            Mode=TwoWay}"
+                                   PlacementTarget="{TemplateBinding}">
+                                <LayoutTransformControl Name="PART_LayoutTransform" RenderTransformOrigin="50%, 0%">
+
+                                    <Border Name="B1" Padding="0,10,0,0">
+                                        <Panel>
+                                            <Border Margin="10,-10,5,5"
+                                                    Background="{DynamicResource SukiCardBackground}"
+                                                    BorderBrush="{DynamicResource SukiMenuBorderBrush}"
+                                                    BorderThickness="1,1,1,1"
+                                                    BoxShadow="{DynamicResource SukiSmallPopupShadow}"
+                                                    CornerRadius="{DynamicResource SmallCornerRadius}">
+                                                <Panel Background="{DynamicResource PopupGradientBrush}">
+
+                                                    <ScrollViewer
+                                                        HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                                        VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+
+                                                        <ItemsPresenter Name="PART_ItemsPresenter"
+                                                                        Margin="0,3,0,0"
+                                                                        ItemsPanel="{TemplateBinding ItemsPanel}" />
+                                                    </ScrollViewer>
+                                                </Panel>
+                                            </Border>
+                                        </Panel>
+                                    </Border>
+                                </LayoutTransformControl>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                </suki:GlassCard>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

@@ -1,13 +1,15 @@
 using System.Runtime.InteropServices;
 using ChatClient.Media.Desktop.EndPoint.Windows;
+using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.Media.EndPoint;
 using ChatClient.Tool.Media.Video;
 using SIPSorceryMedia.Encoders;
 
 namespace ChatClient.Media.Desktop.EndPoint;
 
-public static class CameraEndPointFactory
+public class CameraEndPointFactory : IFactory<ICameraEndPoint>
 {
-    public static ICameraEndPoint CreateCameraEndPoint()
+    public ICameraEndPoint Create()
     {
         try
         {

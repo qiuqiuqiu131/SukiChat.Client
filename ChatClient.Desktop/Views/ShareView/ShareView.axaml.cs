@@ -1,8 +1,6 @@
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
-using ChatClient.Avalonia.Controls.MultiFriendGroup.MultiSeparateGroupView;
-using ChatClient.Avalonia.Controls.MultiGroupGroup.MultiSeparateGroupGroupView;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.Data.Group;
 

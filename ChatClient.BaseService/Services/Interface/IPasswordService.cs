@@ -1,3 +1,5 @@
+using ChatServer.Common.Protobuf;
+
 namespace ChatClient.BaseService.Services.Interface;
 
 /// <summary>
@@ -33,12 +35,21 @@ public interface IPasswordService
     Task<(bool, string)> UpdateEmailAsync(string id, string password, string emailNumber);
 
     /// <summary>
-    /// 忘记密码，通过手机号或邮箱号重置密码
+    /// 忘记密码，通过手机号或邮箱号认证身份状态
     /// </summary>
     /// <param name="id">当前用户ID</param>
     /// <param name="phoneNumber">电话号</param>
     /// <param name="emailNumber">邮箱号</param>
     /// <param name="newPassword">新密码</param>
     /// <returns></returns>
-    Task<(bool, string)> ForgetPasswordAsync(string id, string phoneNumber, string emailNumber, string newPassword);
+    Task<PasswordAuthenticateResponse?> ForgetPasswordConfirmAsync(string phoneNumber, string emailNumber);
+
+    /// <summary>
+    /// 忘记密码，重置密码
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="passKey"></param>
+    /// <param name="newPassword"></param>
+    /// <returns></returns>
+    Task<(bool, string)> ForgetPasswordResetAsync(string userId, string passKey, string newPassword);
 }

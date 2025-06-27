@@ -2,7 +2,6 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
-using ChatClient.Main;
 
 namespace ChatClient.Android;
 

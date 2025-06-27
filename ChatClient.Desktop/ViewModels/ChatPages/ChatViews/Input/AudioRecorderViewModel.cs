@@ -5,6 +5,7 @@ using System.Reactive.Linq;
 using Avalonia.Controls.Notifications;
 using ChatClient.Media.Desktop.AudioRecorder;
 using ChatClient.Tool.Events;
+using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.Media.Audio;
 using Prism.Commands;
 using Prism.Events;
@@ -63,7 +64,8 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
 
         try
         {
-            AudioRecorder = AudioRecorderFactory.CreateAudioRecorder();
+            var audioRecorderFactory = App.Current.Container.Resolve<IFactory<IPlatformAudioRecorder>>();
+            AudioRecorder = audioRecorderFactory.Create();
             _audioLevelSubscription = Observable.FromEventPattern<AudioLevelEventArgs>(
                     h => AudioRecorder.AudioLevelDetected += h,
                     h => AudioRecorder.AudioLevelDetected -= h)
@@ -109,6 +111,7 @@ public class AudioRecorderViewModel : BindableBase, IDisposable
         }
         catch (Exception ex)
         {
+            audioStream?.Dispose();
             var eventAggregator = App.Current.Container.Resolve<IEventAggregator>();
             eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
             {

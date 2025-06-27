@@ -20,6 +20,8 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using ForgetPasswordView = ChatClient.Desktop.Views.ForgetPassword.ForgetPasswordView;
+using RegisterView = ChatClient.Desktop.Views.Register.RegisterView;
 
 namespace ChatClient.Desktop.ViewModels.Login;
 
@@ -261,6 +263,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
             if (res.Result == ButtonResult.OK)
             {
                 Id = res.Parameters["ID"] as string;
+                if (string.IsNullOrWhiteSpace(Id)) return;
                 Password = null;
                 LoginData.Id = Id;
             }
@@ -274,6 +277,7 @@ public class LoginViewModel : ViewModelBase, IDisposable
             if (res.Result == ButtonResult.OK)
             {
                 Id = res.Parameters["ID"] as string;
+                if (string.IsNullOrWhiteSpace(Id)) return;
                 Password = null;
                 LoginData.Id = Id;
             }

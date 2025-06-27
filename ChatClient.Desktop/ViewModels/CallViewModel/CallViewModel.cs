@@ -4,9 +4,9 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using ChatClient.BaseService.CallOperator;
 using ChatClient.BaseService.Manager;
 using ChatClient.Media.Desktop.AudioPlayer;
-using ChatClient.Media.Desktop.CallOperator;
 using ChatClient.Tool.Config;
 using ChatClient.Tool.Data.ChatMessage;
 using ChatClient.Tool.Data.Friend;
@@ -189,8 +189,9 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
 
         try
         {
+            var audioPlayerFactory = _containerProvider.Resolve<IFactory<IPlatformAudioPlayer>>();
             var ringPath = Path.Combine(Environment.CurrentDirectory, "Assets", "ring.mp3");
-            _audioPlayer = AudioPlayerFactory.CreateAudioPlayer();
+            _audioPlayer = audioPlayerFactory.Create();
             _audioPlayer.LoadFile(ringPath);
             _audioPlayer.PlayAsync();
             _audioPlayer.PlaybackCompleted += PlayerAgain;
@@ -228,7 +229,8 @@ public class CallViewModel : BindableBase, IDialogAware, ICallView
     {
         try
         {
-            var audio = AudioPlayerFactory.CreateAudioPlayer();
+            var audioPlayerFactory = _containerProvider.Resolve<IFactory<IPlatformAudioPlayer>>();
+            var audio = audioPlayerFactory.Create();
             audio.LoadFile(Path.Combine(Environment.CurrentDirectory, "Assets", "hangup.mp3"));
             audio.PlayAsync();
             audio.PlaybackCompleted += (s, e) =>
