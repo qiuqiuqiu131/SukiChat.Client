@@ -618,8 +618,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     {
         ChatInputPanelViewModel?.Dispose();
         SelectedFriend = null;
-
-        RegionManager?.Regions[RegionNames.ChatSideRegion].RemoveAll();
     }
 
     #endregion

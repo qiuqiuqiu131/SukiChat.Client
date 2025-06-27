@@ -522,8 +522,6 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     {
         SelectedGroup = null;
         ChatInputPanelViewModel?.Dispose();
-
-        RegionManager?.Regions[RegionNames.ChatSideRegion].RemoveAll();
     }
 
     #endregion

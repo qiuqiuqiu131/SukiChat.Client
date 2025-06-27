@@ -216,6 +216,7 @@
         <entry key="ChatClient.Desktop/Views/SystemSetting/UserSettingView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/ChatMessageBoxView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/CommonDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataDto.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/EditUserDataView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -230,6 +231,7 @@
         <entry key="ChatClient.Desktop/Views/UserControls/UndoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserHeadEditView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/UserMessageBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Desktop/Views/UserControls/VoiceWaveIcon.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/WarningDialogView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/UserControls/WindowTitle.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
         <entry key="ChatClient.Main/App.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

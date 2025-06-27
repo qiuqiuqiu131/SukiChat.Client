@@ -30,6 +30,10 @@
             <DependentUpon>AudioLevelVisualizer.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Controls\VoiceWaveIcon.cs">
+          <DependentUpon>VoiceWaveIcon</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

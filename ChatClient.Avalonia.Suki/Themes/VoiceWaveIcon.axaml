@@ -1,13 +1,14 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:voiceWaveIcon="clr-namespace:ChatClient.Avalonia.Controls.VoiceWaveIcon">
+        xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+        xmlns:userControls1="clr-namespace:ChatClient.Desktop.Views.UserControls;assembly=ChatClient.Avalonia">
     <Design.PreviewWith>
         <Border Padding="20">
-            <voiceWaveIcon:VoiceWaveIcon Duration="0:0:10" />
+            <userControls1:VoiceWaveIcon Duration="0:0:10" />
         </Border>
     </Design.PreviewWith>
 
-    <Style Selector="voiceWaveIcon|VoiceWaveIcon">
+    <Style Selector="userControls1|VoiceWaveIcon">
         <Setter Property="Foreground" Value="Gray" />
         <Setter Property="MaxHeight" Value="13" />
         <Setter Property="MinHeight" Value="4" />
@@ -25,8 +26,8 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="voiceWaveIcon:WaveBar">
-                                <Rectangle Fill="{Binding $parent[voiceWaveIcon:VoiceWaveIcon].Foreground}"
+                            <DataTemplate DataType="userControls1:WaveBar">
+                                <Rectangle Fill="{Binding $parent[userControls1:VoiceWaveIcon].Foreground}"
                                            Width="1.5"
                                            Height="{Binding Height}"
                                            VerticalAlignment="Center">
