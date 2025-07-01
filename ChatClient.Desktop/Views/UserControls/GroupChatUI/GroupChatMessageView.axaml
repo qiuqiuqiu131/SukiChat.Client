@@ -11,6 +11,7 @@
              xmlns:groupChatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.GroupChatUI"
              xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
              xmlns:userControls1="clr-namespace:ChatClient.Desktop.Views.UserControls;assembly=ChatClient.Avalonia"
+             xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ChatClient.Desktop.Views.UserControls.GroupChatUI.GroupChatMessageView">
     <UserControl.DataTemplates>
@@ -244,11 +245,11 @@
                                    IsVisible="{Binding !Failed}"
                                    FontSize="13"
                                    Text="{Binding Duration,Converter={chatUiConverter1:VoiceDurationConverter}}" />
-                        <userControls1:VoiceWaveIcon Duration="{Binding Duration}"
-                                                      Foreground="{DynamicResource SukiText}"
-                                                      Opacity="0.8"
-                                                      IsVisible="{Binding !Failed}"
-                                                      IsPlaying="{Binding IsPlaying}" />
+                        <controls:VoiceWaveIcon Duration="{Binding Duration}"
+                                                Foreground="{DynamicResource SukiText}"
+                                                Opacity="0.8"
+                                                IsVisible="{Binding !Failed}"
+                                                IsPlaying="{Binding IsPlaying}" />
                         <TextBlock Margin="5,1.5,5,0" Text="语音已过期" Opacity="0.8" FontSize="13"
                                    IsVisible="{Binding Failed}" />
                     </DockPanel>

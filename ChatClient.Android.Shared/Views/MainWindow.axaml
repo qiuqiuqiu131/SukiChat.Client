@@ -1,0 +1,42 @@
+<Window
+    x:Class="ChatClient.Android.Shared.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:regions="http://prismlibrary.com/"
+    xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+    xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+    xmlns:controls1="clr-namespace:ChatClient.Avalonia.Semi.Controls;assembly=ChatClient.Avalonia.Semi"
+    xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+    xmlns:control="clr-namespace:ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control;assembly=ChatClient.Avalonia.Semi"
+    Title="MainWindow"
+    ExtendClientAreaToDecorationsHint="True"
+    Width="380"
+    Height="800"
+    CanResize="False"
+    regions:ViewModelLocator.AutoWireViewModel="True"
+    WindowStartupLocation="CenterScreen"
+    x:DataType="viewModels:MainWindowViewModel"
+    mc:Ignorable="d">
+    <Grid Background="Transparent" RowDefinitions="30,*" PointerPressed="InputElement_OnPointerPressed">
+        <!-- 主体内容 -->
+        <control:MobileSideBottomView Grid.Row="0" Grid.RowSpan="2" Manager="{Binding SideBottomViewManager}">
+            <control:MobileSideOverlayView Manager="{Binding SideOverlayViewManager}">
+                <ContentControl regions:RegionManager.RegionManager="{Binding RegionManager}"
+                                regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainRegion}" />
+            </control:MobileSideOverlayView>
+        </control:MobileSideBottomView>
+
+        <!-- 通知 -->
+        <controls:NotificationMessageContainer Grid.Row="0" Grid.RowSpan="2"
+                                               Manager="{Binding NotificationManager}" />
+
+        <Border Grid.Row="0" Background="Transparent">
+            <Interaction.Behaviors>
+                <behaviors:WindowDragBehavior />
+            </Interaction.Behaviors>
+        </Border>
+    </Grid>
+</Window>

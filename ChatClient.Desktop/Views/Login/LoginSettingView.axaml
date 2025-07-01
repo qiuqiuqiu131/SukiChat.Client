@@ -12,7 +12,6 @@
              mc:Ignorable="d"
              d:DesignHeight="440"
              d:DesignWidth="315"
-             Width="315" Height="440"
              x:DataType="login:LoginSettingViewModel"
              x:Class="ChatClient.Desktop.Views.Login.LoginSettingView">
     <UserControl.Transitions>

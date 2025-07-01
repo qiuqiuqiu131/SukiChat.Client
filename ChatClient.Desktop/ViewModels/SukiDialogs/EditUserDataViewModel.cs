@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Extenstions;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.UserControls;
 using ChatClient.Tool.Data;

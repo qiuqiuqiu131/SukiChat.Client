@@ -1,0 +1,128 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net8.0;net8.0-android</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <Nullable>enable</Nullable>
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    </PropertyGroup>
+
+    <!-- 仅 Android 平台引用 -->
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0-android'">
+        <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.1"/>
+        <PackageReference Include="Avalonia.Android" Version="11.2.3"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
+		<PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+	</ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
+        <PackageReference Include="Irihi.Ursa" Version="1.11.1"/>
+        <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.11.1"/>
+        <PackageReference Include="Semi.Avalonia" Version="11.2.1.8"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\ChatClient.Avalonia.Semi\ChatClient.Avalonia.Semi.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj"/>
+        <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj"/>
+        <ProjectReference Include="..\ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj"/>
+        <ProjectReference Include="..\ChatClient.Resources\ChatClient.Resources.csproj"/>
+        <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Notification.Avalonia">
+            <HintPath>..\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AndroidAsset Include="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </AndroidAsset>
+        <AndroidAsset Include="appsettings.webrtc.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </AndroidAsset>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="Views\LoginView.axaml"/>
+        <AdditionalFiles Include="Views\MainView.axaml"/>
+        <AdditionalFiles Include="Views\NetSettingView.axaml"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Views\LoginView.axaml.cs">
+            <DependentUpon>LoginView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\MainView.axaml.cs">
+            <DependentUpon>MainView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\NetSettingView.axaml.cs">
+            <DependentUpon>NetSettingView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="App.axaml.cs">
+            <DependentUpon>App.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\MainWindow.axaml.cs">
+            <DependentUpon>MainWindow.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\RegisterView\RegisterSafeInfoView.axaml.cs">
+            <DependentUpon>RegisterSafeInfoView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\RegisterView\RegisterUserInfoView.axaml.cs">
+            <DependentUpon>RegisterUserInfoView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\RegisterView\RegisterView.axaml.cs">
+            <DependentUpon>RegisterView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\RegisterView\RegisterSuccessView.axaml.cs">
+            <DependentUpon>RegisterSuccessView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPasswordView\ForgetPasswordConfirmView.axaml.cs">
+            <DependentUpon>ForgetPasswordConfirmView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPasswordView\ForgetPasswordResetView.axaml.cs">
+            <DependentUpon>ForgetPasswordResetView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPasswordView\ForgetPasswordSuccessView.axaml.cs">
+            <DependentUpon>ForgetPasswordSuccessView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ForgetPasswordView\ForgetPasswordView.axaml.cs">
+            <DependentUpon>ForgetPasswordView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\Blank.axaml.cs">
+            <DependentUpon>Blank.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.webrtc.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+</Project>

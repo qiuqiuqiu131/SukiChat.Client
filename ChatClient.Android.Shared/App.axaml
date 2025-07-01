@@ -1,0 +1,54 @@
+<Application
+    x:Class="ChatClient.Android.Shared.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:semi="https://irihi.tech/semi"
+    xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
+    xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
+    xmlns:u="https://irihi.tech/ursa">
+    <Application.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="TopTitleBackground" Color="{StaticResource SemiBlue8Color}" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="TopTitleBackground" Color="{StaticResource SemiBackground1Color}" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <OnPlatform x:Key="MiSans_Normal">
+                <OnPlatform.Windows>
+                    <FontFamily>avares://ChatClient.Android.Desktop/Assets/MiSans-Normal.ttf#MiSans</FontFamily>
+                </OnPlatform.Windows>
+            </OnPlatform>
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <semi:SemiTheme Locale="zh-CN" />
+        <u-semi:SemiTheme Locale="zh-CN" />
+        <avalonia:MaterialIconStyles />
+        <StyleInclude Source="avares://ChatClient.Avalonia.Semi/Themes/Index.axaml"></StyleInclude>
+
+        <OnPlatform>
+            <OnPlatform.Windows>
+                <Style Selector="TextBlock,SelectableTextBlock,TextBox,u|IPv4Box,NumericUpDown">
+                    <Setter Property="TextElement.FontFamily">
+                        <Setter.Value>
+                            <StaticResource ResourceKey="MiSans_Normal" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="TextElement.FontWeight" Value="SemiBold" />
+                    <Setter Property="TextElement.FontSize" Value="14.5" />
+                </Style>
+            </OnPlatform.Windows>
+            <OnPlatform.Default>
+                <Style Selector="TextBlock,SelectableTextBlock,TextBox,u|IPv4Box,NumericUpDown">
+                    <Setter Property="TextElement.FontWeight" Value="Medium" />
+                    <Setter Property="TextElement.FontSize" Value="14.5" />
+                </Style>
+            </OnPlatform.Default>
+        </OnPlatform>
+    </Application.Styles>
+</Application>

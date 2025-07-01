@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:DataType="viewModels:RegisterViewModel"
+             x:Class="ChatClient.Android.Shared.Views.RegisterView.RegisterSafeInfoView">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Spacing="20">
+        <!-- 标题 -->
+        <TextBlock
+            Margin="0,30,0,30"
+            HorizontalAlignment="Center"
+            FontSize="22"
+            Text="账户安全" />
+
+        <TextBox Watermark="输入手机号 (可选)" Text="{Binding Phone}"
+                 MaxLength="11"
+                 Classes="Register input">
+            <TextBox.InnerLeftContent>
+                <avalonia:MaterialIcon Kind="PhoneOutline" Width="18" Height="18" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <TextBox Watermark="输入邮箱 (可选)"
+                 Text="{Binding Email}"
+                 MaxLength="30" Classes="Register input">
+            <TextBox.InnerLeftContent>
+                <avalonia:MaterialIcon Kind="EmailOutline" Width="18" Height="18" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <TextBlock Margin="0,10" Text="注：手机和邮箱并不需要验证，只在&quot;找回密码&quot;时用于匹配账号,可以随便填" FontSize="12"
+                   Opacity="0.6"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center" />
+
+        <!-- 注册按钮 -->
+        <Button HorizontalAlignment="Stretch"
+                Theme="{StaticResource SolidButton}"
+                Margin="0,40,0,0"
+                CornerRadius="13"
+                Height="45"
+                Command="{Binding RegisterCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <u:LoadingIcon IsLoading="{Binding IsBusy}"
+                               IsVisible="{Binding IsBusy}"
+                               Opacity="0.8" Foreground="White" />
+                <TextBlock IsVisible="{Binding IsBusy}" FontSize="15.5" Text="注册中..." />
+                <TextBlock IsVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
+                           FontSize="15.5" Text="注册" />
+            </StackPanel>
+        </Button>
+    </StackPanel>
+</UserControl>

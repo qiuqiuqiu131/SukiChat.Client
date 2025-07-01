@@ -16,45 +16,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <AvaloniaXaml Include="Themes\BusyArea.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\ComboBox.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\DatePicker.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\Expander.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\ListBoxItem.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\MySukiSideMenuStyle.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\MySukiWindowStyle.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\ProgressBar.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\Slider.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\SukiDialogHost.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\SukiSideMenuItem.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-        <AvaloniaXaml Include="Themes\Text.axaml">
-            <SubType>Designer</SubType>
-        </AvaloniaXaml>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
     </ItemGroup>
 

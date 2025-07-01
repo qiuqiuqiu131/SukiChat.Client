@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:DataType="viewModels:RegisterViewModel"
+             x:Class="ChatClient.Android.Shared.Views.RegisterView.RegisterUserInfoView">
+    <StackPanel Orientation="Vertical" VerticalAlignment="Top" Spacing="20">
+        <!-- 标题 -->
+        <StackPanel Margin="0,30,0,30" Spacing="5"
+                    HorizontalAlignment="Center" Orientation="Horizontal">
+            <TextBlock
+                FontSize="22"
+                Text="欢迎注册" />
+            <TextBlock Text="SukiChat" FontSize="22">
+                <!-- <TextBlock.Foreground> -->
+                <!--     <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%"> -->
+                <!--         <GradientStop Offset="0" Color="#01acff" /> -->
+                <!--         <GradientStop Offset="0.5" Color="#9e90ff" /> -->
+                <!--         <GradientStop Offset="1" Color="#ffaddb" /> -->
+                <!--     </LinearGradientBrush> -->
+                <!-- </TextBlock.Foreground> -->
+            </TextBlock>
+        </StackPanel>
+
+        <TextBox Watermark="输入昵称" Text="{Binding Name}"
+                 LetterSpacing="1"
+                 MaxLength="30"
+                 Classes="Register input">
+            <TextBox.InnerLeftContent>
+                <avalonia:MaterialIcon Kind="AccountOutline" Width="18" Height="18" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <TextBox Watermark="输入密码"
+                 LetterSpacing="-4"
+                 Text="{Binding Password}"
+                 MaxLength="18" Classes="Register input Password">
+            <TextBox.InnerLeftContent>
+                <avalonia:MaterialIcon Kind="KeyOutline" Width="17" Height="17" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <TextBox Watermark="再次确认密码"
+                 Text="{Binding RePassword}"
+                 LetterSpacing="-4"
+                 MaxLength="18" Classes="Register input Password">
+            <TextBox.InnerLeftContent>
+                <avalonia:MaterialIcon Kind="ShieldKeyOutline" Width="18" Height="18" />
+            </TextBox.InnerLeftContent>
+        </TextBox>
+
+        <!-- 注册按钮 -->
+        <Button Theme="{StaticResource SolidButton}"
+                Margin="0,40,0,0"
+                Height="45" CornerRadius="13"
+                HorizontalAlignment="Stretch"
+                Command="{Binding NextStepCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="下一步" FontSize="15.5" />
+            </StackPanel>
+        </Button>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <TrimMode>link</TrimMode>
+        <PublishTrimmed>true</PublishTrimmed>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <PublishAot>false</PublishAot>
+        <IsAotCompatible>true</IsAotCompatible>
+        <StripSymbols>false</StripSymbols>
+        <TargetFrameworks>net8.0</TargetFrameworks>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Remove="Assets\MiSans-Normal.ttf" />
+    </ItemGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\MiSans-Normal.ttf">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </AvaloniaResource>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\ChatClient.Android.Shared\ChatClient.Android.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Views\LoginView.axaml.cs">
+            <SubType>Code</SubType>
+            <DependentUpon>%(Filename)</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Notification.Avalonia">
+            <HintPath>..\ChatClient.Desktop\DLL\Notification.Avalonia.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>

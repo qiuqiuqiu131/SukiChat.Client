@@ -65,21 +65,27 @@ internal class UserManager : IUserManager
     // 用户登录请求调用，返回登录的用户数据
     public async Task<CommonResponse?> Login(string id, string password, bool isRemember = false)
     {
-        using var scopeProvider = _containerProvider.CreateScope();
-        var loginService = scopeProvider.Resolve<ILoginService>();
+        var loginService = _containerProvider.Resolve<ILoginService>();
         var response = await loginService.Login(id, password, isRemember);
 
         if (!(response is { Response: { State: true } })) return response?.Response;
 
+        return await LoginOnly(id, password);
+    }
+
+    public async Task<CommonResponse?> LoginOnly(string userId, string password)
+    {
+        using var scopeProvider = _containerProvider.CreateScope();
+        var loginService = scopeProvider.Resolve<ILoginService>();
         // 调用userService获取用户完整数据
         try
         {
             var _userService = scopeProvider.Resolve<IUserLoginService>();
-            UserData = await _userService.GetUserFullData(id, password);
+            UserData = await _userService.GetUserFullData(userId, password);
         }
         catch (Exception e)
         {
-            await loginService.Logout(id);
+            await loginService.Logout(userId);
             return new CommonResponse
             {
                 State = false,
@@ -93,7 +99,11 @@ internal class UserManager : IUserManager
         IsLogin = true;
         // 登录成功后，程序启用全双工通信，开始监听消息。接收到消息后，由eventaggregator发布消息。 
         RegisterEvent(_eventAggregator);
-        return response.Response;
+        return new CommonResponse
+        {
+            State = true,
+            Message = "登录成功"
+        };
     }
 
     /// <summary>

@@ -1,0 +1,106 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:register="clr-namespace:ChatClient.Android.Shared.Views.RegisterView"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="700"
+             x:DataType="viewModels:RegisterViewModel"
+             x:Class="ChatClient.Android.Shared.Views.RegisterView.RegisterSuccessView">
+    <StackPanel IsVisible="{Binding $parent[register:RegisterSuccessView].IsVisible}" Classes="Enter"
+                Orientation="Vertical" Spacing="15">
+        <StackPanel.Styles>
+            <Style Selector="StackPanel.Enter[IsVisible=True]">
+                <Style Selector="^ avalonia|MaterialIcon#Success">
+                    <Style.Animations>
+                        <Animation Easing="CubicEaseOut"
+                                   FillMode="Forward" Duration="0:0:0.3">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="0.5" />
+                                <Setter Property="ScaleTransform.ScaleY" Value="0.5" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+
+                <Style Selector="^ TextBlock#Title">
+                    <Style.Animations>
+                        <Animation Duration="0:0:0.3">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+
+                <Style Selector="^ StackPanel#Info">
+                    <Style.Animations>
+                        <Animation Duration="0:0:0.9">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="50%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+
+                <Style Selector="^ Button#LoginButton">
+                    <Style.Animations>
+                        <Animation Duration="0:0:1.2">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="66%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Style>
+        </StackPanel.Styles>
+
+        <avalonia:MaterialIcon Kind="SuccessCircle" Name="Success"
+                               Width="60" Height="60" Margin="0,60,0,10"
+                               Foreground="{DynamicResource NotificationCardSuccessIconForeground}" />
+
+        <TextBlock Name="Title" FontSize="20" Margin="0,0,0,10" Text="注册成功" HorizontalAlignment="Center" />
+
+        <StackPanel Orientation="Vertical" Name="Info">
+            <TextBlock HorizontalAlignment="Center" FontSize="15.5">
+                <Run Text="您的账号ID为 " />
+                <Run Foreground="{DynamicResource SemiColorPrimary}"
+                     Text="{Binding UserId}" />
+            </TextBlock>
+            <TextBlock FontSize="12.5" Margin="0,3,0,0" Text="账号ID已复制到剪切板" Opacity="0.8"
+                       Foreground="{DynamicResource SukiLowText}"
+                       HorizontalAlignment="Center" />
+        </StackPanel>
+
+        <Button Name="LoginButton" HorizontalAlignment="Stretch"
+                Margin="0,35,0,20"
+                CornerRadius="13"
+                Height="45"
+                Theme="{StaticResource SolidButton}"
+                Command="{Binding ReturnToLoginViewCommand}">
+            <TextBlock Text="前往登录" FontSize="15.5" />
+        </Button>
+    </StackPanel>
+</UserControl>

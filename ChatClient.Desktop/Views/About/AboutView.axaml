@@ -7,6 +7,7 @@
              xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:about="clr-namespace:ChatClient.Desktop.ViewModels.About"
+             xmlns:clickableTextblock="clr-namespace:ChatClient.Avalonia.Controls.ClickableTextblock;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="320" d:DesignHeight="420"
              x:DataType="about:AboutViewModel"
              Width="320" Height="420"
@@ -69,15 +70,16 @@
                 <Grid ColumnDefinitions="Auto,*" HorizontalAlignment="Left">
                     <TextBlock Grid.Column="0" Text="项目地址："
                                Width="65" FontSize="12" Classes="Small" />
-                    <controls:ClickableTextBlock Grid.Column="1" TextWrapping="Wrap" HorizontalAlignment="Center"
-                                                 FontSize="12.5" Classes="Small"
-                                                 FontWeight="Medium"
-                                                 Cursor="Hand"
-                                                 TextDecorations="Underline"
-                                                 Url="https://github.com/qiuqiuqiu131/ChatClient"
-                                                 Foreground="{DynamicResource SukiPrimaryColor}">
+                    <clickableTextblock:ClickableTextBlock Grid.Column="1" TextWrapping="Wrap"
+                                                           HorizontalAlignment="Center"
+                                                           FontSize="12.5" Classes="Small"
+                                                           FontWeight="Medium"
+                                                           Cursor="Hand"
+                                                           TextDecorations="Underline"
+                                                           Url="https://github.com/qiuqiuqiu131/ChatClient"
+                                                           Foreground="{DynamicResource SukiPrimaryColor}">
                         https://github.com/qiuqiuqiu131/ChatClient
-                    </controls:ClickableTextBlock>
+                    </clickableTextblock:ClickableTextBlock>
                 </Grid>
             </StackPanel>
             <ScrollViewer>

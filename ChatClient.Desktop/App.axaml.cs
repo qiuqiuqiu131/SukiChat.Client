@@ -297,10 +297,5 @@ public class App : PrismApplication
             window.Icon = new WindowIcon(ico);
             window.Show();
         }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleView)
-        {
-            var view = Container.Resolve<LoginView>();
-            singleView.MainView = view;
-        }
     }
 }

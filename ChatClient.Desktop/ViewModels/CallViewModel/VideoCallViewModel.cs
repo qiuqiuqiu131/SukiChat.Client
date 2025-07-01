@@ -9,6 +9,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Notification;
 using Avalonia.Platform;
 using Avalonia.Threading;
+using ChatClient.Avalonia.Extenstions;
 using ChatClient.BaseService.CallOperator;
 using ChatClient.BaseService.Manager;
 using ChatClient.Desktop.Tool;

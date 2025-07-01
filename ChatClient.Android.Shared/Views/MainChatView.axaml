@@ -1,0 +1,93 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:MainChatViewModel"
+             d:DesignHeight="800"
+             d:DesignWidth="380"
+             x:Class="ChatClient.Android.Shared.Views.MainChatView">
+    <Panel Classes="Enter">
+        <Panel.Styles>
+            <Style Selector="Panel.Enter">
+                <Style Selector="^ avalonia|MaterialIcon#SukiIcon">
+                    <Style.Animations>
+                        <Animation FillMode="Forward" Duration="0:0:0.4" Easing="QuadraticEaseInOut">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="0" />
+                                <!-- <Setter Property="RenderTransform" Value="translateY(70px)" /> -->
+                                <Setter Property="ScaleTransform.ScaleY" Value="1.25" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="1.25" />
+                                <Setter Property="IsVisible" Value="False" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+                <Style Selector="^ Grid#Content">
+                    <Style.Animations>
+                        <Animation FillMode="Forward" Duration="0:0:0.4" Easing="QuadraticEaseInOut">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Style>
+        </Panel.Styles>
+
+        <Grid Name="Content" RowDefinitions="35,50,*,50">
+            <!-- 顶部背景 -->
+            <Border Background="{DynamicResource TopTitleBackground}" Grid.Row="0" Grid.RowSpan="2" />
+
+            <!-- 顶部栏 -->
+            <DockPanel TextElement.Foreground="#F9F9F9"
+                       LastChildFill="False" Grid.Row="1" Margin="15,0"
+                       VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="10" DockPanel.Dock="Left">
+                    <circleImage:CircleImage Image="{Binding User.UserDto.HeadImage}" Size="35" />
+                    <StackPanel Margin="0,6,0,0" Orientation="Vertical" VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="{Binding User.UserDto.Name}" />
+                        <TextBlock FontSize="10.5">
+                            <Ellipse Width="10" Margin="0,0,1,1" Height="10"
+                                     Fill="{DynamicResource NotificationCardSuccessIconForeground}" />
+                            <Run Text="在线" />
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
+                <avalonia:MaterialIcon Kind="Plus" DockPanel.Dock="Right" Width="28" Height="28"
+                                       VerticalAlignment="Center" />
+            </DockPanel>
+
+            <!-- 底部栏 -->
+            <Border Background="{DynamicResource SemiGrey1}" Opacity="0.5" Grid.Row="3">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="90">
+                    <avalonia:MaterialIcon Kind="ChatOutline" Width="25" Height="25" />
+                    <avalonia:MaterialIcon Kind="AccountSupervisorOutline" Width="25" Height="25" />
+                    <avalonia:MaterialIcon Kind="StarOutline" Width="25" Height="25" />
+                </StackPanel>
+            </Border>
+
+            <ContentControl Grid.Row="2"
+                            mvvm:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainChatRegion}" />
+        </Grid>
+
+        <avalonia:MaterialIcon IsHitTestVisible="False" Name="SukiIcon" Kind="ChartDonutVariant"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Foreground="{DynamicResource SemiColorPrimary}"
+                               Width="120" Height="120" />
+    </Panel>
+</UserControl>

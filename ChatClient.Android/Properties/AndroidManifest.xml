@@ -5,5 +5,5 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <application android:label="AvaloniaApplication2" android:icon="@drawable/Icon"/>
+    <application android:label="SukiChat" android:icon="@drawable/Icon"/>
 </manifest>

@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="380" d:DesignHeight="800"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:NetSettingViewModel"
+             x:Class="ChatClient.Android.Shared.Views.NetSettingView">
+    <Interaction.Behaviors>
+        <behaviors:SafeAreaPaddingBehavior />
+    </Interaction.Behaviors>
+    <Grid RowDefinitions="40,*">
+        <Button Grid.Row="0" Margin="10,0" Theme="{StaticResource InnerIconButton}"
+                HorizontalAlignment="Left" VerticalAlignment="Center"
+                Command="{Binding ReturnCommand}"
+                Content="{StaticResource SemiIconChevronLeft}"
+                Background="Transparent"
+                Width="27" Height="27" />
+        <StackPanel Grid.Row="1" Width="300"
+                    Margin="0,0,0,40"
+                    VerticalAlignment="Top" Orientation="Vertical">
+            <StackPanel.Styles>
+                <Style Selector="u|IPv4Box:pointerover /template/ Border#PART_Border">
+                    <Setter Property="Background" Value="{DynamicResource TextBoxPointeroverBackground}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource TextBoxPointeroverBorderBrush}" />
+                </Style>
+                <Style Selector="u|IPv4Box:pressed /template/ Border#PART_Border">
+                    <Setter Property="Background" Value="{DynamicResource IPv4BoxPressedBackground}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource  TextBoxFocusBorderBrush}" />
+                </Style>
+                <Style Selector="u|IPv4Box:focus-within /template/ Border#PART_Border">
+                    <Setter Property="BorderBrush" Value="{DynamicResource TextBoxFocusBorderBrush}" />
+                </Style>
+            </StackPanel.Styles>
+            <StackPanel Margin="0,20,0,60" VerticalAlignment="Center" Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <avalonia:MaterialIcon Kind="Web" Margin="-8,0,8,0"
+                                       Width="24" Height="24" />
+                <TextBlock Text="网络配置" HorizontalAlignment="Center" FontSize="21" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="IP地址:" FontSize="15.5"
+                           LetterSpacing="1" Margin="5,0,0,5" />
+                <TextBlock Text=" (设置服务器IP地址，请关注开发者动态)" Margin="0,5,0,0"
+                           FontSize="12"
+                           Opacity="0.6" HorizontalAlignment="Center" />
+            </StackPanel>
+            <u:IPv4Box ShowLeadingZero="False" Height="45" CornerRadius="10" FontSize="15.5"
+                       FontFamily="{StaticResource MiSans}"
+                       HorizontalAlignment="Stretch"
+                       InputMode="Fast" IPAddress="{Binding IPAddress,UpdateSourceTrigger=LostFocus}" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
+                <TextBlock Text="端口号:" FontSize="15.5"
+                           LetterSpacing="1" Margin="5,0,0,5" />
+                <TextBlock Text=" (端口范围 0~65535)" Margin="0,5,0,0"
+                           FontSize="12"
+                           Opacity="0.6" HorizontalAlignment="Center" />
+            </StackPanel>
+            <NumericUpDown Minimum="0" Maximum="65535" CornerRadius="13"
+                           TextAlignment="Center"
+                           AllowSpin="False" ShowButtonSpinner="False"
+                           FontSize="15.5"
+                           Height="45" Value="{Binding Port,UpdateSourceTrigger=LostFocus,Mode=TwoWay}" />
+
+
+            <Button Theme="{StaticResource SolidButton}"
+                    HorizontalAlignment="Stretch"
+                    Height="45" CornerRadius="13"
+                    Margin="0,70"
+                    Command="{Binding ApplyCommand}">
+                <TextBlock Text="应用" FontSize="15.5" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

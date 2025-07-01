@@ -8,13 +8,13 @@
                 <ResourceInclude Source="MenuItem.axaml" />
                 <ResourceInclude Source="MenuFlyout.axaml" />
                 <ResourceInclude Source="Expander.axaml" />
-                <ResourceInclude Source="MySukiWindowStyle.axaml" />
+                <ResourceInclude Source="../Controls/MySukiWindowStyle.axaml" />
                 <ResourceInclude Source="ToolTip.axaml" />
-                <ResourceInclude Source="MySukiSideMenuStyle.axaml" />
-                <ResourceInclude Source="SukiSideMenuItem.axaml" />
-                <ResourceInclude Source="SukiDialogHost.axaml" />
-                <ResourceInclude Source="Badge.axaml" />
-                <ResourceInclude Source="IPv4Box.axaml" />
+                <ResourceInclude Source="../Controls/MySukiSideMenuStyle.axaml" />
+                <ResourceInclude Source="../Controls/SukiSideMenuItem.axaml" />
+                <ResourceInclude Source="../Controls/SukiDialogHost.axaml" />
+                <ResourceInclude Source="../Controls/Badge.axaml" />
+                <ResourceInclude Source="../Controls/IPv4Box.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
@@ -30,26 +30,26 @@
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="ScrollViewer.axaml" />
     <StyleInclude Source="ComboBox.axaml" />
-    <StyleInclude Source="BusyArea.axaml" />
+    <StyleInclude Source="../Controls/BusyArea.axaml" />
     <StyleInclude Source="DatePicker.axaml" />
-    <StyleInclude Source="ProgressBar.axaml" />
+    <StyleInclude Source="../Controls/ProgressBar.axaml" />
     <StyleInclude Source="SelectableTextBlock.axaml" />
     <StyleInclude Source="NotificationStyles.axaml" />
 
-    <StyleInclude Source="VoiceWaveIcon.axaml" />
-    <StyleInclude Source="FormTextBoxStyle.axaml" />
-    <StyleInclude Source="FormDatePicker.axaml" />
-    <StyleInclude Source="FormComboBoxStyle.axaml" />
-    <StyleInclude Source="OverlaySplitView.axaml" />
-    <StyleInclude Source="GroupList.axaml" />
-    <StyleInclude Source="QScrollViewer.axaml" />
-    <StyleInclude Source="SeparateGroupsView.axaml" />
-    <StyleInclude Source="MultiGroupList.axaml" />
-    <StyleInclude Source="MultiSeparateGroupView.axaml" />
-    <StyleInclude Source="MultiGroupGroupList.axaml" />
-    <StyleInclude Source="MultiSeparateGroupGroupView.axaml" />
-    <StyleInclude Source="GroupGroupList.axaml" />
-    <StyleInclude Source="GroupSeparateGroupsView.axaml" />
-    <StyleInclude Source="EditableTextBlock.axaml" />
-    <StyleInclude Source="SearchBox.axaml" />
+    <StyleInclude Source="../Controls/VoiceWaveIcon.axaml" />
+    <StyleInclude Source="../Controls/FormTextBoxStyle.axaml" />
+    <StyleInclude Source="../Controls/FormDatePicker.axaml" />
+    <StyleInclude Source="../Controls/FormComboBoxStyle.axaml" />
+    <StyleInclude Source="../Controls/OverlaySplitView.axaml" />
+    <StyleInclude Source="../Controls/GroupList.axaml" />
+    <StyleInclude Source="../Controls/QScrollViewer.axaml" />
+    <StyleInclude Source="../Controls/SeparateGroupsView.axaml" />
+    <StyleInclude Source="../Controls/MultiGroupList.axaml" />
+    <StyleInclude Source="../Controls/MultiSeparateGroupView.axaml" />
+    <StyleInclude Source="../Controls/MultiGroupGroupList.axaml" />
+    <StyleInclude Source="../Controls/MultiSeparateGroupGroupView.axaml" />
+    <StyleInclude Source="../Controls/GroupGroupList.axaml" />
+    <StyleInclude Source="../Controls/GroupSeparateGroupsView.axaml" />
+    <StyleInclude Source="../Controls/EditableTextBlock.axaml" />
+    <StyleInclude Source="../Controls/SearchBox.axaml" />
 </Styles>

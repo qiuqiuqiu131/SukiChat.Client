@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
+using ChatClient.Avalonia.Extenstions;
 using ChatClient.Avalonia.Validation;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;

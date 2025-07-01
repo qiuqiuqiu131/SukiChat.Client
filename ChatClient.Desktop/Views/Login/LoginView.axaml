@@ -13,8 +13,8 @@
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
-    d:DesignHeight="440"
-    d:DesignWidth="315"
+    d:DesignHeight="450"
+    d:DesignWidth="320"
     x:DataType="login:LoginViewModel"
     mc:Ignorable="d">
     <Grid RowDefinitions="25,*">
@@ -118,16 +118,16 @@
                     <Panel Margin="0,25,0,7"
                            HorizontalAlignment="Center">
                         <avalonia:MaterialIcon
-                            Width="80"
-                            Height="80"
+                            Width="85"
+                            Height="85"
                             IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNull}}"
                             Foreground="{DynamicResource SukiPrimaryColor}"
                             Kind="ChartDonutVariant" />
-                        <Panel Width="80" Height="80"
+                        <Panel Width="85" Height="85"
                                IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNotNull}}">
-                            <Ellipse Width="80" Height="80" Fill="{DynamicResource SukiPrimaryColor50}" />
+                            <Ellipse Width="85" Height="85" Fill="{DynamicResource SukiPrimaryColor50}" />
                             <circleImage:CircleImage
-                                Size="75" Image="{Binding SelectedLoginItem.Head}" />
+                                Size="80" Image="{Binding SelectedLoginItem.Head}" />
                         </Panel>
                     </Panel>
 

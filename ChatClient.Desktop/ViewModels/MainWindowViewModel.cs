@@ -8,6 +8,7 @@ using Avalonia.Collections;
 using Avalonia.Notification;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Common;
+using ChatClient.Avalonia.Extenstions;
 using ChatClient.BaseService.CallOperator;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Suki;

@@ -1,0 +1,15 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="../Controls/MobileSideOverlayView/Control/MobileSideOverlayView.axaml" />
+                <ResourceInclude Source="../Controls/MobileSideOverlayView/Control/MobileSideBottomView.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+    <StyleInclude Source="Text.axaml" />
+    <StyleInclude Source="AutoCompleteBoxStyle.axaml" />
+    <StyleInclude Source="Button.axaml" />
+    <StyleInclude Source="NotificationStyle.axaml" />
+</Styles>

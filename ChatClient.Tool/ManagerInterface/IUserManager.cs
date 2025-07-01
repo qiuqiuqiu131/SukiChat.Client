@@ -35,6 +35,9 @@ public interface IUserManager
     // 用户登录请求
     Task<CommonResponse?> Login(string id, string password, bool isRemember = false);
 
+    // 用户登录请求（仅登录，不保存用户信息）
+    Task<CommonResponse?> LoginOnly(string userId, string password);
+
     // 用户登出请求
     Task<CommonResponse?> Logout();
 

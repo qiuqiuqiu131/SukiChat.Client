@@ -20,8 +20,11 @@
 	<assembly fullname="DotNetty.Transport" preserve="all" />
 
 	<assembly fullname="ChatClient.Android" preserve="all" />
+	<assembly fullname="ChatClient.Android.Shared" preserve="all" />
 	<assembly fullname="ChatClient.Client" preserve="all" />
 	<assembly fullname="ChatClient.Resources" preserve="all" />
+	<assembly fullname="ChatClient.Avalonia" preserve="all" />
+	<assembly fullname="ChatClient.Avalonia.Semi" preserve="all" />
 	<assembly fullname="ChatClient.BaseService" preserve="all" />
 	<assembly fullname="ChatClient.Tool" preserve="all" />
 	<assembly fullname="ChatClient.BaseService.SqlSugar" preserve="all" />

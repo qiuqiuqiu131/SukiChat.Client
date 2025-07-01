@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 using Avalonia.Notification;
 using ChatClient.Avalonia.Common;
+using ChatClient.Avalonia.Extenstions;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.Tool;
 using ChatClient.Desktop.Views.Login;

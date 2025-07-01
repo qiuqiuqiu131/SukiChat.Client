@@ -26,12 +26,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="Controls\AudioLevelVisualizer.axaml.cs">
-            <DependentUpon>AudioLevelVisualizer.axaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Controls\VoiceWaveIcon.cs">
           <DependentUpon>VoiceWaveIcon</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\AudioLevelVisualizer\AudioLevelVisualizer.axaml.cs">
+          <DependentUpon>AudioLevelVisualizer.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

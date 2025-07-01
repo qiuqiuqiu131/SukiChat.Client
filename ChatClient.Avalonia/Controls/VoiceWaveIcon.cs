@@ -1,13 +1,11 @@
-using System;
 using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 using Avalonia.Threading;
-using Prism.Mvvm;
 
-namespace ChatClient.Desktop.Views.UserControls;
+namespace ChatClient.Avalonia.Controls;
 
 public class WaveBar : BindableBase
 {

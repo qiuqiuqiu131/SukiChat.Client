@@ -3,12 +3,49 @@
   <component name="AvaloniaProject">
     <option name="projectPerEditor">
       <map>
-        <entry key="ChatClient.Android/App.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Android/Views/LoginView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Android.Desktop/App.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Desktop/Views/LoginView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Desktop/Views/MainWindow.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Desktop/Views/NetSettingView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/App.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/Blank.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/ForgetPasswordView/ForgetPasswordConfirmView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/ForgetPasswordView/ForgetPasswordResetView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/ForgetPasswordView/ForgetPasswordSuccessView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/ForgetPasswordView/ForgetPasswordView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/LoginView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/MainChatView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/MainView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/MainWindow.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/NetSettingView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterSafeInfoView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterUserInfoView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterView/RegisterSafeInfoView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterView/RegisterSuccessView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterView/RegisterUserInfoView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android.Shared/Views/RegisterView/RegisterView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Android/App.axaml" value="ChatClient.Android/ChatClient.Android.csproj" />
+        <entry key="ChatClient.Android/Views/LoginView.axaml" value="ChatClient.Android/ChatClient.Android.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/MobileSideOverlayView/Control/MobileSideBottomOverlayView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/MobileSideOverlayView/Control/MobileSideBottomView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/MobileSideOverlayView/Control/MobileSideOverlayView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/MobileSideOverlayView/SideViewManager.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/RegionOverlaySplitView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Controls/RegionOverlaySpliteView.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Themes/Button.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Themes/Index.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Themes/NotificationStyle.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Semi/Themes/Text.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/BusyArea.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Controls/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Controls/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Controls/GroupChatUI/GroupChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Controls/GroupChatUI/GroupChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/OverlaySplitView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/QScrollViewer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Controls/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/AutoCompleteBoxStyle.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/BusyArea.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/Button.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/ComboBox.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -23,10 +60,13 @@
         <entry key="ChatClient.Avalonia.Suki/Themes/NotificationStyles.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/OverlaySplitView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/QScrollViewer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia.Suki/Themes/SeparateGroupsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/TabItem.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia.Suki/Themes/Text.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/AudioLevelVisualizer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/AudioLevelVisualizer/AudioLevelVisualizer.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Badge/Badge.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
+        <entry key="ChatClient.Avalonia/Controls/ChartIcon.axaml" value="ChatClient.Android.Desktop/ChatClient.Android.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageDataTemplate.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatMessageView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Avalonia/Controls/Chat/ChatUI/ChatUI.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -182,7 +222,7 @@
         <entry key="ChatClient.Desktop/Views/Login/RegisterView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Login/RegisterWindowView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/LoginView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/MainWindowView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/MainWindowView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/RegisteView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Register/RegisterSafeInfoView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/Register/RegisterSuccessView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

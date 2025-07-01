@@ -1,0 +1,337 @@
+<UserControl
+    x:Class="ChatClient.Android.Shared.Views.LoginView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="http://prismlibrary.com/"
+    xmlns:u="https://irihi.tech/ursa"
+    xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+    xmlns:control="clr-namespace:ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control;assembly=ChatClient.Avalonia.Semi"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    d:DesignHeight="800"
+    d:DesignWidth="380"
+    x:DataType="viewModels:LoginViewModel"
+    mc:Ignorable="d">
+    <Panel Classes="Login" Classes.LoginSuccess="{Binding IsLoginSuccess}"
+           IsHitTestVisible="{Binding IsBusy,Converter={x:Static BoolConverters.Not}}">
+        <Panel.Transitions>
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.4" Easing="QuadraticEaseInOut" />
+            </Transitions>
+        </Panel.Transitions>
+        <Panel.Styles>
+            <Style Selector="TextBox,AutoCompleteBox,TextBlock">
+                <Setter Property="TextElement.FontSize" Value="15.5" />
+            </Style>
+
+            <Style Selector="Panel.Login">
+                <Setter Property="Background">
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                        <GradientStop Offset="0" Color="#28cF6B6B" />
+                        <!--  珊瑚红，透明度0.2  -->
+                        <GradientStop Offset="0.35" Color="#204ECDC4" />
+                        <!--  青绿色，透明度0.1  -->
+                        <GradientStop Offset="0.7" Color="#12FFEAA7" />
+                        <!--  薄荷绿，透明度0.05  -->
+                        <GradientStop Offset="1" Color="#00FDCB6E" />
+                        <!--  黄色，完全透明  -->
+                    </LinearGradientBrush>
+                </Setter>
+                <Style Selector="^ Panel#SukiIcon">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </Style>
+
+            <Style Selector="Panel.LoginSuccess">
+                <Setter Property="IsHitTestVisible" Value="False" />
+                <Setter Property="Background" Value="Transparent" />
+                <Style Selector="^ u|LoadingContainer#Container">
+                    <Setter Property="Opacity" Value="0" />
+                </Style>
+                <Style Selector="^ Panel#SukiIcon">
+                    <Setter Property="IsVisible" Value="True" />
+                </Style>
+            </Style>
+        </Panel.Styles>
+
+        <u:LoadingContainer Name="Container" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" Padding="0"
+                            LoadingMessage="请稍等..."
+                            IsLoading="{Binding IsLoading}">
+            <u:LoadingContainer.Transitions>
+                <Transitions>
+                    <DoubleTransition Property="Opacity" Duration="0:0:0.4" Easing="QuadraticEaseInOut" />
+                </Transitions>
+            </u:LoadingContainer.Transitions>
+            <!--  主体  -->
+            <DockPanel Width="260" VerticalAlignment="Stretch" LastChildFill="True">
+                <StackPanel
+                    Margin="0,0,0,40"
+                    HorizontalAlignment="Center"
+                    DockPanel.Dock="Bottom"
+                    Orientation="Horizontal"
+                    Spacing="45">
+                    <StackPanel.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="Height" Value="45" />
+                            <Setter Property="Width" Value="45" />
+                            <Setter Property="CornerRadius" Value="30" />
+                            <Setter Property="BorderThickness" Value="1" />
+                            <Setter Property="BorderBrush" Value="#afafaf" />
+                        </Style>
+                        <Style Selector="avalonia|MaterialIcon">
+                            <Setter Property="Width" Value="22" />
+                            <Setter Property="Height" Value="22" />
+                            <Setter Property="Foreground" Value="{DynamicResource TextBlockDefaultForeground}" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </Style>
+                        <Style Selector="TextBlock">
+                            <Setter Property="Opacity" Value="0.6" />
+                            <Setter Property="FontSize" Value="12.5" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                        <Button Classes="Outline" Command="{Binding ToRegisterViewCommand}">
+                            <avalonia:MaterialIcon Foreground="{DynamicResource SemiColorGrayText}" Kind="Add" />
+                        </Button>
+                        <TextBlock Text="注册账号" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                        <Button Classes="Outline" Command="{Binding ToForgetViewCommand}">
+                            <avalonia:MaterialIcon Kind="ForgotPassword" />
+                        </Button>
+                        <TextBlock Text="忘记密码" />
+                    </StackPanel>
+                    <StackPanel Orientation="Vertical" Spacing="10">
+                        <Button Classes="Outline" Command="{Binding NetSettingCommand}">
+                            <avalonia:MaterialIcon Kind="Web" />
+                        </Button>
+                        <TextBlock Text="网络设置" />
+                    </StackPanel>
+                </StackPanel>
+                <!--  登录表单  -->
+                <StackPanel
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical"
+                    Spacing="10">
+                    <StackPanel.Styles>
+                        <Style Selector="TextBlock.title">
+                            <Setter Property="FontSize" Value="16" />
+                            <Setter Property="Margin" Value="8,0,0,0" />
+                        </Style>
+                        <Style Selector="TextBox.input,AutoCompleteBox.input">
+                            <Setter Property="FontSize" Value="15" />
+                        </Style>
+                    </StackPanel.Styles>
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="28"
+                        Text="Suki Chat">
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                <GradientStop Offset="0" Color="#01acff" />
+                                <GradientStop Offset="0.5" Color="#9e90ff" />
+                                <GradientStop Offset="1" Color="#ffaddb" />
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+
+                    <!--  头像  -->
+                    <Panel Margin="0,40,0,0" HorizontalAlignment="Center">
+                        <avalonia:MaterialIcon
+                            Width="90"
+                            Height="90"
+                            Foreground="{DynamicResource SemiColorPrimary}"
+                            IsVisible="{Binding SelectedLoginItem, Converter={x:Static ObjectConverters.IsNull}}"
+                            Kind="ChartDonutVariant" />
+                        <Panel
+                            Width="90"
+                            Height="90"
+                            IsVisible="{Binding SelectedLoginItem, Converter={x:Static ObjectConverters.IsNotNull}}">
+                            <Ellipse
+                                Width="90"
+                                Height="90"
+                                Fill="{DynamicResource SemiColorPrimary}"
+                                Opacity="0.4" />
+                            <circleImage:CircleImage Image="{Binding SelectedLoginItem.Head}" Size="84" />
+                        </Panel>
+                    </Panel>
+
+                    <Button
+                        Background="Transparent"
+                        Command="{Binding LoginSettingCommand}"
+                        Opacity="0.8">
+                        <TextBlock
+                            FontSize="14"
+                            LetterSpacing="2"
+                            Text="账号管理" />
+                    </Button>
+
+                    <!--  ID  -->
+                    <AutoCompleteBox
+                        x:Name="IDBox"
+                        Height="45"
+                        Classes="Login input"
+                        ContextFlyout="{x:Null}"
+                        ContextMenu="{x:Null}"
+                        CornerRadius="13"
+                        IsHitTestVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
+                        ItemsSource="{Binding UserList}"
+                        MaxDropDownHeight="300"
+                        MaxLength="10"
+                        MinimumPrefixLength="4"
+                        Text="{Binding Id}"
+                        Watermark="输入用户ID">
+                        <AutoCompleteBox.Styles>
+                            <Style Selector="AutoCompleteBox.Login /template/ TextBox#PART_TextBox">
+                                <Setter Property="LetterSpacing" Value="1" />
+                                <Setter Property="TextAlignment" Value="Center" />
+                            </Style>
+                        </AutoCompleteBox.Styles>
+                        <AutoCompleteBox.InnerLeftContent>
+                            <avalonia:MaterialIcon
+                                Width="22"
+                                Height="22"
+                                Kind="AccountOutline" />
+                        </AutoCompleteBox.InnerLeftContent>
+                        <AutoCompleteBox.ItemTemplate>
+                            <DataTemplate DataType="data:LoginUserItem">
+                                <DockPanel
+                                    Margin="0"
+                                    HorizontalAlignment="Stretch"
+                                    LastChildFill="True">
+                                    <circleImage:CircleImage
+                                        Margin="10,0,0,0"
+                                        DockPanel.Dock="Left"
+                                        Image="{Binding Head}"
+                                        Size="35" />
+                                    <StackPanel
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="13.5"
+                                            LetterSpacing="1"
+                                            Text="{Binding ID, StringFormat='ID: {0}'}" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            FontSize="12"
+                                            Opacity="0.65"
+                                            Text="{Binding LastLoginTime}" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </DataTemplate>
+                        </AutoCompleteBox.ItemTemplate>
+                    </AutoCompleteBox>
+
+                    <!--  密码  -->
+                    <TextBox
+                        Height="45"
+                        Margin="0,5"
+                        Classes="Login input Password"
+                        ContextFlyout="{x:Null}"
+                        ContextMenu="{x:Null}"
+                        CornerRadius="13"
+                        IsHitTestVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
+                        MaxLength="16"
+                        Text="{Binding Password}"
+                        TextAlignment="Center"
+                        Watermark="输入密码">
+                        <TextBox.InnerLeftContent>
+                            <avalonia:MaterialIcon
+                                Width="20"
+                                Height="20"
+                                Kind="LockOutline" />
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+
+                    <!--  登录  -->
+                    <Button
+                        Width="260"
+                        Height="45"
+                        Margin="0,50,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding LoginCommand}"
+                        CornerRadius="13"
+                        Theme="{StaticResource SolidButton}">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <u:LoadingIcon IsLoading="{Binding IsBusy}"
+                                           IsVisible="{Binding IsBusy}"
+                                           Opacity="0.8" Foreground="White" />
+                            <TextBlock IsVisible="{Binding IsBusy}" FontSize="15.5" Text="登录中..." />
+                            <TextBlock IsVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
+                                       FontSize="15.5" Text="登录" />
+                            <!-- <TextBlock FontSize="15.5" Text="登录" /> -->
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </u:LoadingContainer>
+
+        <!-- 中间的圆形图标 -->
+        <Panel Name="SukiIcon" Classes="Icon"
+               Opacity="0"
+               HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Panel.Styles>
+                <Style Selector="Panel.Icon[IsVisible=True]">
+                    <Style.Animations>
+                        <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.4" FillMode="Forward">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="TranslateTransform.Y" Value="70" />
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="TranslateTransform.Y" Value="0" />
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                    <Style Selector="^ PathIcon#LittleIcon">
+                        <Style.Animations>
+                            <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.5" FillMode="Forward">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="RotateTransform.Angle" Value="90" />
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="RotateTransform.Angle" Value="0" />
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                    <Style Selector="^ PathIcon#LargeIcon">
+                        <Style.Animations>
+                            <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.5" FillMode="Forward">
+                                <KeyFrame Cue="0%">
+                                    <Setter Property="RotateTransform.Angle" Value="-90" />
+                                </KeyFrame>
+                                <KeyFrame Cue="100%">
+                                    <Setter Property="RotateTransform.Angle" Value="0" />
+                                </KeyFrame>
+                            </Animation>
+                        </Style.Animations>
+                    </Style>
+                </Style>
+            </Panel.Styles>
+            <PathIcon
+                Name="LittleIcon"
+                Foreground="{DynamicResource SemiColorPrimary}"
+                Data="M12,6A6,6 0 0,1 18,12C18,14.97 15.84,17.44 13,17.92V14.83C14.17,14.42 15,13.31 15,12A3,3 0 0,0 12,9L11.45,9.05L9.91,6.38C10.56,6.13 11.26,6 12,6M6,12C6,10.14 6.85,8.5 8.18,7.38L9.72,10.05C9.27,10.57 9,11.26 9,12C9,13.31 9.83,14.42 11,14.83V17.92C8.16,17.44 6,14.97 6,12Z"
+                Width="60" Height="60" />
+
+            <!-- 大圆弧 -->
+            <PathIcon
+                Name="LargeIcon"
+                Foreground="{DynamicResource SemiColorPrimary}"
+                Data="M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z"
+                Width="100" Height="100" />
+        </Panel>
+    </Panel>
+</UserControl>

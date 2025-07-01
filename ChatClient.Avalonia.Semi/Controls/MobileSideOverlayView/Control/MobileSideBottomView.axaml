@@ -1,0 +1,49 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:control="clr-namespace:ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control">
+    <ControlTheme TargetType="control:MobileSideBottomView" x:Key="{x:Type control:MobileSideBottomView}">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <!-- 主内容区域 -->
+                    <ContentPresenter Name="PART_ContentPresenter" ZIndex="0"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Content="{TemplateBinding Content}" />
+
+                    <Border Name="PART_Mask" ZIndex="1" Width="{TemplateBinding Width}" Opacity="0"
+                            IsHitTestVisible="False"
+                            Height="{TemplateBinding Height}" Background="{DynamicResource SemiBlack}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+
+                    <!-- 底部内容区域 -->
+                    <ContentPresenter Name="PART_LeftContent"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Bottom"
+                                      Content="{TemplateBinding SidePanel}"
+                                      CornerRadius="20,20,0,0"
+                                      Margin="0,0,0,-10"
+                                      Padding="0,0,0,0"
+                                      ZIndex="2" Background="{DynamicResource SemiGrey0Color}">
+                        <ContentPresenter.RenderTransform>
+                            <TranslateTransform
+                                X="0"
+                                Y="0">
+                                <TranslateTransform.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="Y" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                    </Transitions>
+                                </TranslateTransform.Transitions>
+                            </TranslateTransform>
+                        </ContentPresenter.RenderTransform>
+                    </ContentPresenter>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

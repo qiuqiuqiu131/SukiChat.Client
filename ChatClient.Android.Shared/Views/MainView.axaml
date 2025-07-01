@@ -1,0 +1,33 @@
+<UserControl
+    x:Class="ChatClient.Android.Shared.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
+    xmlns:controls1="clr-namespace:ChatClient.Avalonia.Semi.Controls;assembly=ChatClient.Avalonia.Semi"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:regions="http://prismlibrary.com/"
+    xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+    xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+    xmlns:control="clr-namespace:ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control;assembly=ChatClient.Avalonia.Semi"
+    d:DesignHeight="800"
+    d:DesignWidth="380"
+    x:DataType="viewModels:MainViewModel"
+    regions:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <Panel Background="Transparent" PointerPressed="InputElement_OnPointerPressed">
+        <!--  主体内容  -->
+        <control:MobileSideBottomView Manager="{Binding SideBottomViewManager}">
+            <control:MobileSideOverlayView Manager="{Binding SideOverlayViewManager}">
+                <ContentControl regions:RegionManager.RegionManager="{Binding RegionManager}"
+                                regions:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainRegion}" />
+            </control:MobileSideOverlayView>
+        </control:MobileSideBottomView>
+
+        <!--  通知  -->
+        <controls:NotificationMessageContainer
+            x:Name="NotificationContainer"
+            Margin="0,35,0,0"
+            Manager="{Binding NotificationManager}" />
+    </Panel>
+</UserControl>

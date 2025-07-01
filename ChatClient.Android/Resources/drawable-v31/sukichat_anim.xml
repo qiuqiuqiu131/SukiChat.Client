@@ -1,0 +1,99 @@
+<animated-vector
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+                android:name="vector"
+                android:width="128dp"
+                android:height="128dp"
+                android:viewportWidth="128"
+                android:viewportHeight="128">
+            <group
+                    android:name="wrapper"
+                    android:translateX="53"
+                    android:translateY="40">
+                <!-- 外圆弧组 -->
+                <group
+                        android:name="outer_arc_group"
+                        android:pivotX="12"
+                        android:pivotY="12"
+                        android:scaleX="2.5"
+                        android:scaleY="2.5">
+                    <path
+                            android:name="outer_arc"
+                            android:pathData="M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z"
+                            android:fillColor="#0064FA"
+                            android:fillAlpha="0"
+                            android:strokeWidth="1"/>
+                </group>
+
+                <!-- 内圆弧组 -->
+                <group
+                        android:name="inner_arc_group"
+                        android:pivotX="12"
+                        android:pivotY="12"
+                        android:scaleX="2.5"
+                        android:scaleY="2.5">
+                    <path
+                            android:name="inner_arc"
+                            android:pathData="M12,6A6,6 0 0,1 18,12C18,14.97 15.84,17.44 13,17.92V14.83C14.17,14.42 15,13.31 15,12A3,3 0 0,0 12,9L11.45,9.05L9.91,6.38C10.56,6.13 11.26,6 12,6M6,12C6,10.14 6.85,8.5 8.18,7.38L9.72,10.05C9.27,10.57 9,11.26 9,12C9,13.31 9.83,14.42 11,14.83V17.92C8.16,17.44 6,14.97 6,12Z"
+                            android:fillColor="#0064FA"
+                            android:fillAlpha="0"
+                            android:strokeWidth="1"/>
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <!-- 外圆弧旋转动画 -->
+    <target android:name="outer_arc_group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="1000"
+                    android:valueFrom="-180"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+
+    <!-- 内圆弧旋转动画 -->
+    <target android:name="inner_arc_group">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                    android:propertyName="rotation"
+                    android:duration="1000"
+                    android:valueFrom="180"
+                    android:valueTo="0"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+
+    <!-- 外圆弧透明度动画 -->
+    <target android:name="outer_arc">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:duration="1000"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+
+    <!-- 内圆弧透明度动画 -->
+    <target android:name="inner_arc">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                    android:propertyName="fillAlpha"
+                    android:duration="1000"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:valueType="floatType"
+                    android:interpolator="@android:interpolator/fast_out_slow_in"/>
+        </aapt:attr>
+    </target>
+</animated-vector>
