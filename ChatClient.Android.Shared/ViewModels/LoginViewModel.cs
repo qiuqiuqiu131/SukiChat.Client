@@ -226,7 +226,7 @@ public class LoginViewModel : BindableBase, IDisposable
 
         // 验证登录身份
         var loginService = _containerProvider.Resolve<ILoginService>();
-        var response = await loginService.Login(id, password, LoginData.RememberPassword);
+        var response = await Task.Run(() => loginService.Login(id, password, LoginData.RememberPassword));
 
         // 登录成功
         if (response?.Response is { State: true })
@@ -294,55 +294,39 @@ public class LoginViewModel : BindableBase, IDisposable
     private async void NetSetting()
     {
         IsLoading = true;
-        await Dispatcher.UIThread.InvokeAsync(
-            async () =>
-            {
-                await _sideOverlayViewManager.ShowSidePanelAsync(typeof(NetSettingView),
-                    SidePanelAnimationType.FadeAndSlide);
-            },
-            DispatcherPriority.Render);
+        await _sideOverlayViewManager.ShowSidePanelAsync(typeof(NetSettingView));
         IsLoading = false;
     }
 
     private async void ToRegisterView()
     {
         IsLoading = true;
-        await Dispatcher.UIThread.InvokeAsync(
-            async () =>
+        await _sideOverlayViewManager.ShowSidePanelAsync(typeof(RegisterView), null, (res, param) =>
+        {
+            if (res != ButtonResult.OK) return;
+            if (param != null && param.TryGetValue<string>("ID", out var userId) &&
+                !string.IsNullOrWhiteSpace(userId))
             {
-                await _sideOverlayViewManager.ShowSidePanelAsync(typeof(RegisterView), null, (res, param) =>
-                {
-                    if (res != ButtonResult.OK) return;
-                    if (param != null && param.TryGetValue<string>("ID", out var userId) &&
-                        !string.IsNullOrWhiteSpace(userId))
-                    {
-                        Id = userId;
-                        Password = null;
-                    }
-                });
-            },
-            DispatcherPriority.Render);
+                Id = userId;
+                Password = null;
+            }
+        });
         IsLoading = false;
     }
 
     private async void ToForgetView()
     {
         IsLoading = true;
-        await Dispatcher.UIThread.InvokeAsync(
-            async () =>
+        await _sideOverlayViewManager.ShowSidePanelAsync(typeof(ForgetPasswordView), null, (res, param) =>
+        {
+            if (res != ButtonResult.OK) return;
+            if (param != null && param.TryGetValue<string>("ID", out var userId) &&
+                !string.IsNullOrWhiteSpace(userId))
             {
-                await _sideOverlayViewManager.ShowSidePanelAsync(typeof(ForgetPasswordView), null, (res, param) =>
-                {
-                    if (res != ButtonResult.OK) return;
-                    if (param != null && param.TryGetValue<string>("ID", out var userId) &&
-                        !string.IsNullOrWhiteSpace(userId))
-                    {
-                        Id = userId;
-                        Password = null;
-                    }
-                });
-            },
-            DispatcherPriority.Render);
+                Id = userId;
+                Password = null;
+            }
+        });
         IsLoading = false;
     }
 

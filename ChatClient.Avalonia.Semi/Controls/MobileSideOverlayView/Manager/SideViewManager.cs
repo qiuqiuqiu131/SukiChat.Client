@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Threading;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.EventArgs;
 
@@ -34,19 +35,22 @@ public class SideViewManager : ISideBottomViewManager, ISideOverlayViewManager
         Action<ButtonResult, INavigationParameters?>? sideViewCallBack = null,
         SidePanelAnimationType animationType = SidePanelAnimationType.SlideWithMain)
     {
+        if (_view != null) return;
+
         _view = _containerProvider.Resolve(viewType);
         _sideViewCallBack = sideViewCallBack;
 
         // 动画已经启动，后台去跑 VM 的 OnSideViewOpened，不阻塞 UI
         if (_view is UserControl ctrl && ctrl.DataContext is ISideViewAware aware)
-            await aware.OnSideViewOpened(this, parameters);
+            await Task.Run(() => aware.OnSideViewOpened(this, parameters));
 
-        // 先让 View 侧订阅到 Show 事件，开始动画
+        // 将View添加到视觉树中
         var evTask = SideViewShowViewEvent?.Invoke(this, new SideViewShowViewEventArgs
         {
             NewView = _view,
             AnimationType = animationType
         });
+
         if (evTask != null)
             await evTask;
     }

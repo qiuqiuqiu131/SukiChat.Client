@@ -16,8 +16,8 @@
 
     <ItemGroup Condition="'$(TargetFramework)'=='net8.0'">
         <PackageReference Include="Avalonia.Desktop" Version="11.2.3"/>
-		<PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
-	</ItemGroup>
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3"/>
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3"/>
@@ -49,12 +49,6 @@
         <AndroidAsset Include="appsettings.webrtc.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </AndroidAsset>
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="Views\LoginView.axaml"/>
-        <AdditionalFiles Include="Views\MainView.axaml"/>
-        <AdditionalFiles Include="Views\NetSettingView.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -112,6 +106,18 @@
         </Compile>
         <Compile Update="Views\Blank.axaml.cs">
             <DependentUpon>Blank.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\ChatPageView.axaml.cs">
+            <DependentUpon>ChatPageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\UserControls\ChatMessageView.axaml.cs">
+            <DependentUpon>ChatMessageView.axaml</DependentUpon>
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Views\UserControls\GroupChatMessageView.axaml.cs">
+            <DependentUpon>GroupChatMessageView.axaml</DependentUpon>
             <SubType>Code</SubType>
         </Compile>
     </ItemGroup>

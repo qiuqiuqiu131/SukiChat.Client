@@ -1,0 +1,82 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:userControls="clr-namespace:ChatClient.Android.Shared.Views.UserControls"
+             mc:Ignorable="d" d:DesignHeight="800"
+             d:DesignWidth="380"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:FriendChatViewModel"
+             x:Class="ChatClient.Android.Shared.Views.FriendChatView">
+    <Grid Name="Content" RowDefinitions="35,45,*,50">
+        <!-- 顶部背景 -->
+        <Border Background="{DynamicResource TopTitleBackground}" Grid.Row="0" Grid.RowSpan="2" />
+
+        <!-- 顶部栏 -->
+        <DockPanel TextElement.Foreground="#F9F9F9"
+                   LastChildFill="True" Grid.Row="1" Margin="17.5,0"
+                   VerticalAlignment="Center">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="3">
+                <Button Margin="-7.5,0,0,0" Theme="{StaticResource ForgroundButton}"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Command="{Binding ReturnCommand}"
+                        Background="Transparent"
+                        Classes="MainReturn"
+                        Width="30" Height="30" Padding="5">
+                    <PathIcon Data="{StaticResource QIconLeft}" />
+                </Button>
+                <StackPanel Margin="0,5,0,0" Orientation="Vertical" VerticalAlignment="Center">
+                    <StackPanel.Styles>
+                        <Style Selector="TextBlock.Name">
+                            <Setter Property="FontSize" Value="14" />
+                            <Setter Property="Foreground" Value="#F9F9F9" />
+                        </Style>
+                        <Style Selector="TextBlock.bottom">
+                            <Setter Property="FontSize" Value="9" />
+                            <Setter Property="Foreground" Value="#F9F9F9" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Panel>
+                        <TextBlock
+                            IsVisible="{Binding FriendChatDto.FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Text="{Binding FriendChatDto.FriendRelatoinDto.Remark}"
+                            Classes="Name" />
+                        <TextBlock
+                            IsVisible="{Binding FriendChatDto.FriendRelatoinDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                            Text="{Binding FriendChatDto.FriendRelatoinDto.UserDto.Name}"
+                            Classes="Name" />
+                    </Panel>
+                    <Panel>
+                        <Panel VerticalAlignment="Center"
+                               IsVisible="{Binding FriendChatDto.FriendRelatoinDto.UserDto.IsOnline}">
+                            <TextBlock Classes="bottom"
+                                       IsVisible="{Binding !FriendChatDto.IsWriting}">
+                                <Ellipse Width="8" Margin="0,0,1,0" Height="8"
+                                         Fill="{DynamicResource NotificationCardSuccessIconForeground}" />
+                                <TextBlock Text="在线" />
+                            </TextBlock>
+                            <TextBlock IsVisible="{Binding FriendChatDto.IsWriting}"
+                                       Text="对方正在输入..."
+                                       Classes="bottom" />
+                        </Panel>
+                        <TextBlock Classes="bottom"
+                                   IsVisible="{Binding !FriendChatDto.FriendRelatoinDto.UserDto.IsOnline}">
+                            <Ellipse Width="8" Margin="0,0,1,0" Height="8"
+                                     Fill="{DynamicResource NotificationCardErrorIconForeground}" />
+                            <Run Text="离线" />
+                        </TextBlock>
+                    </Panel>
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- 聊天内容 -->
+        <userControls:FriendChatUI Grid.Row="2" Name="ChatUI"
+                                   Margin="0"
+                                   Notification="ChatUI_OnNotification" />
+
+        <Border Grid.Row="3" Background="{DynamicResource SemiGrey0}" Height="50" />
+    </Grid>
+</UserControl>

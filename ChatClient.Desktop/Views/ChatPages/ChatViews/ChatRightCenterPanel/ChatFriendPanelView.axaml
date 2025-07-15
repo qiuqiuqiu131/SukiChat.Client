@@ -184,15 +184,9 @@
                                        ContextMenuShow="ChatUI_OnContextMenuShow"
                                        ShareMessageCommand="{Binding ShareMessageCommand}"
                                        DeleteMessageCommand="{Binding DeleteMessageCommand}"
-                                       ReCallCommand="{Binding ReCallCommand}"
                                        RetractMessageCommand="{Binding RetractMessageCommand}"
-                                       Messages="{Binding SelectedFriend.ChatMessages}"
                                        FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                       FileRestoreCommand="{Binding FileRestoreCommand}"
-                                       SearchMoreVisible="{Binding SelectedFriend.HasMoreMessage}"
-                                       SearchMoreCommand="{Binding SearchMoreCommand}"
-                                       FriendImageSource="{Binding SelectedFriend.FriendRelatoinDto.UserDto.HeadImage}"
-                                       UserImageSource="{Binding User.HeadImage}" />
+                                       FileRestoreCommand="{Binding FileRestoreCommand}"/>
 
                         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 

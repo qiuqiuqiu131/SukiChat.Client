@@ -2,20 +2,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:suki="https://github.com/kikipoulet/SukiUI"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:groupChatUi1="clr-namespace:ChatClient.Android.Shared.Views.UserControls"
+             xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat;assembly=ChatClient.Avalonia"
              xmlns:chatMessage="clr-namespace:ChatClient.Tool.Data.ChatMessage;assembly=ChatClient.Tool"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
              xmlns:customSelectableTextBlock1="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia"
-             xmlns:chatUiConverter1="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
-             xmlns:chat1="clr-namespace:ChatClient.Avalonia.Controls.Chat;assembly=ChatClient.Avalonia"
-             xmlns:circleImage1="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:converter1="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
-             xmlns:qScrollViewer1="clr-namespace:ChatClient.Avalonia.Controls.QScrollViewer;assembly=ChatClient.Avalonia"
-             xmlns:groupChatUi1="clr-namespace:ChatClient.Desktop.Views.UserControls.GroupChatUI"
-             xmlns:chatRightCenterPanel="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
-             x:Class="ChatClient.Desktop.Views.UserControls.GroupChatUI.GroupChatUI">
+             x:Class="ChatClient.Android.Shared.Views.UserControls.GroupChatUI">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
             <Setter Property="Background" Value="{DynamicResource SukiControlBorderBrush}" />
@@ -32,50 +29,10 @@
         <Style Selector="MenuItem avalonia|MaterialIcon">
             <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         </Style>
-        <!-- <Style Selector="circleImage|CircleImage.Head"> -->
-        <!--     <Setter Property="Cursor" Value="Hand" /> -->
-        <!-- </Style> -->
-        <Style Selector="TextBlock.FadeIn">
-            <Style.Animations>
-                <Animation FillMode="Forward"
-                           IterationCount="1"
-                           PlaybackDirection="Normal"
-                           Duration="0:0:0.200">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="0.7" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
-        <Style Selector="Grid.FadeIn">
-            <Style.Animations>
-                <Animation FillMode="Forward"
-                           IterationCount="1"
-                           PlaybackDirection="Normal"
-                           Easing="CubicEaseOut"
-                           Duration="0:0:0.200">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0" />
-                        <Setter Property="ScaleTransform.ScaleX"
-                                Value="0.7" />
-                        <Setter Property="ScaleTransform.ScaleY"
-                                Value="0.7" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
     </UserControl.Styles>
     <UserControl.Resources>
-        <chatUiConverter1:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
-        <chat1:MessageDataTemplate x:Key="MessageDataTemplate">
+        <chatUiConverter:ChatUIDateTimeConverter x:Key="DateTimeConverter" />
+        <chat:MessageDataTemplate x:Key="MessageDataTemplate">
             <DataTemplate x:Key="Retracted" DataType="chatMessage:GroupChatData">
                 <!-- 撤回 -->
                 <Panel />
@@ -88,14 +45,13 @@
                     <Grid ColumnDefinitions="*,Auto"
                           HorizontalAlignment="Right">
                         <!-- Head -->
-                        <circleImage1:CircleImage Grid.Column="1"
-                                                  Margin="8,0,16,0"
-                                                  Classes="Head"
-                                                  VerticalAlignment="Top"
-                                                  DockPanel.Dock="Right"
-                                                  Image="{Binding $parent[groupChatUi1:GroupChatUI].UserImageSource}"
-                                                  Size="35"
-                                                  PointerPressed="Head_OnPointerPressed" />
+                        <circleImage:CircleImage Grid.Column="1"
+                                                 Margin="8,0,16,0"
+                                                 Classes="Head"
+                                                 VerticalAlignment="Top"
+                                                 DockPanel.Dock="Right"
+                                                 Image="{Binding $parent[groupChatUi1:GroupChatUI].UserImageSource}"
+                                                 Size="35" />
                         <Grid Grid.Column="0" RowDefinitions="Auto,*"
                               Margin="0,-5,0,0">
                             <StackPanel Grid.Row="0"
@@ -106,7 +62,7 @@
                                         CornerRadius="3"
                                         Opacity="0.7"
                                         Background="{DynamicResource SukiPrimaryColor50}"
-                                        IsVisible="{Binding Owner.Status,Converter={converter1:IntEqualityConverter Value=0}}">
+                                        IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
                                     <TextBlock Text="群主" FontSize="11.5" Classes="Small"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
@@ -124,13 +80,12 @@
                                       VerticalAlignment="Bottom" Width="20"
                                       Height="20"
                                       Margin="5">
-                                    <suki:Loading LoadingStyle="Simple"
-                                                  IsVisible="{Binding IsWriting}">
-                                        <suki:Loading.RenderTransform>
+                                    <u:Loading IsVisible="{Binding IsWriting}">
+                                        <u:Loading.RenderTransform>
                                             <ScaleTransform ScaleX="0.55"
                                                             ScaleY="0.55" />
-                                        </suki:Loading.RenderTransform>
-                                    </suki:Loading>
+                                        </u:Loading.RenderTransform>
+                                    </u:Loading>
                                     <avalonia:MaterialIcon Kind="AlertCircle"
                                                            IsVisible="{Binding IsError}"
                                                            Width="20"
@@ -144,28 +99,27 @@
                                         </ToolTip.Tip>
                                     </avalonia:MaterialIcon>
                                 </Grid>
-                                <suki:GlassCard Grid.Column="1"
-                                                Classes="Owner"
-                                                CornerRadius="6"
-                                                MaxWidth="450"
-                                                PointerPressed="InputElement_OnPointerPressed"
-                                                Padding="5">
-                                    <suki:GlassCard.Styles>
+                                <Border Grid.Column="1"
+                                        Classes="Owner"
+                                        CornerRadius="6"
+                                        MaxWidth="450"
+                                        Padding="5">
+                                    <Border.Styles>
                                         <Style
-                                            Selector="suki|GlassCard.Owner /template/ Border#PART_BorderCard">
+                                            Selector="Border.Owner /template/ Border#PART_BorderCard">
                                             <Setter Property="Opacity"
                                                     Value="0.7" />
                                             <Setter Property="Background"
                                                     Value="{DynamicResource SukiPrimaryColor25}" />
                                         </Style>
                                         <Style
-                                            Selector="suki|GlassCard.Owner:pointerover /template/ Border#PART_BorderCard">
+                                            Selector="Border.Owner:pointerover /template/ Border#PART_BorderCard">
                                             <Setter Property="Opacity"
                                                     Value="0.6" />
                                             <Setter Property="Background"
                                                     Value="{DynamicResource SukiPrimaryColor50}" />
                                         </Style>
-                                    </suki:GlassCard.Styles>
+                                    </Border.Styles>
                                     <ItemsControl
                                         ItemsSource="{Binding ChatMessages}"
                                         HorizontalAlignment="Center"
@@ -182,13 +136,12 @@
                                             <DataTemplate>
                                                 <groupChatUi1:GroupChatMessageView
                                                     IsLeft="False"
-                                                    MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
                                                     HorizontalAlignment="Right"
                                                     Message="{Binding Content}" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                </suki:GlassCard>
+                                </Border>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -201,14 +154,13 @@
                       Classes="FadeIn">
                     <Grid ColumnDefinitions="Auto,*">
                         <!-- Head -->
-                        <circleImage1:CircleImage
+                        <circleImage:CircleImage
                             DockPanel.Dock="Left"
                             VerticalAlignment="Top"
                             Classes="Head"
                             Margin="16,0,8,0"
                             Image="{Binding Owner.HeadImage}"
-                            Size="35"
-                            PointerPressed="Head_OnPointerPressed" />
+                            Size="35" />
                         <Grid Grid.Column="1"
                               RowDefinitions="Auto,*"
                               HorizontalAlignment="Left"
@@ -227,35 +179,34 @@
                                         CornerRadius="3"
                                         Opacity="0.7"
                                         Background="{DynamicResource SukiPrimaryColor50}"
-                                        IsVisible="{Binding Owner.Status,Converter={converter1:IntEqualityConverter Value=0}}">
+                                        IsVisible="{Binding Owner.Status,Converter={converter:IntEqualityConverter Value=0}}">
                                     <TextBlock Text="群主" FontSize="11.5" Classes="Small"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center" />
                                 </Border>
                             </StackPanel>
-                            <suki:GlassCard Classes="Friend"
-                                            Grid.Row="1"
-                                            HorizontalAlignment="Left"
-                                            CornerRadius="6"
-                                            MaxWidth="450"
-                                            PointerPressed="InputElement_OnPointerPressed"
-                                            Padding="5">
-                                <suki:GlassCard.Styles>
+                            <Border Classes="Friend"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Left"
+                                    CornerRadius="6"
+                                    MaxWidth="450"
+                                    Padding="5">
+                                <Border.Styles>
                                     <Style
-                                        Selector="suki|GlassCard.Friend /template/ Border#PART_BorderCard">
+                                        Selector="Border.Friend /template/ Border#PART_BorderCard">
                                         <Setter Property="Opacity"
                                                 Value="0.7" />
                                         <Setter Property="Background"
                                                 Value="{DynamicResource SukiGlassCardBackground}" />
                                     </Style>
                                     <Style
-                                        Selector="suki|GlassCard.Friend:pointerover /template/ Border#PART_BorderCard">
+                                        Selector="Border.Friend:pointerover /template/ Border#PART_BorderCard">
                                         <Setter Property="Opacity"
                                                 Value="1" />
                                         <Setter Property="Background"
                                                 Value="{DynamicResource SukiLightBorderBrush}" />
                                     </Style>
-                                </suki:GlassCard.Styles>
+                                </Border.Styles>
                                 <ItemsControl
                                     ItemsSource="{Binding ChatMessages}"
                                     Padding="0"
@@ -272,13 +223,12 @@
                                         <DataTemplate>
                                             <groupChatUi1:GroupChatMessageView
                                                 IsLeft="True"
-                                                MessageBoxShow="GroupChatMessageView_OnMessageBoxShow"
                                                 HorizontalAlignment="Left"
                                                 Message="{Binding Content}" />
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-                            </suki:GlassCard>
+                            </Border>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -291,92 +241,100 @@
                         Background="{DynamicResource SukiPrimaryColor10}">
                     <ContentControl Content="{Binding ChatMessages[0].Content}"
                                     Margin="0,0,4,0"
-                                    ContentTemplate="{x:Static chat1:SystemMessageDataTemplate.GenderDataTemplate}" />
+                                    ContentTemplate="{x:Static chat:SystemMessageDataTemplate.GenderDataTemplate}" />
                 </Border>
             </DataTemplate>
-        </chat1:MessageDataTemplate>
+        </chat:MessageDataTemplate>
     </UserControl.Resources>
-    <Panel>
-        <!-- 消息列表 -->
-        <qScrollViewer1:QScrollViewer
-            x:Name="ChatScrollViewer"
-            Opacity="0"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Visible">
-            <StackPanel Orientation="Vertical" Background="#00000000">
-                <Button IsVisible="{Binding SelectedGroup.HasMoreMessage}"
-                        Classes="Basic"
-                        Click="MoreButton_OnClick"
-                        Command="{Binding SearchMoreCommand}">
-                    <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
-                               Cursor="Hand" Classes="Small"
-                               Foreground="{DynamicResource SukiPrimaryColor75}" />
-                </Button>
-                <ItemsControl x:Name="IC"
-                              ItemsSource="{Binding SelectedGroup.ChatMessages}"
-                              Margin="0,0,-15,0"
-                              Padding="0,0,0,5">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" Spacing="5" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.DataTemplates>
-                        <DataTemplate DataType="chatMessage:GroupChatData">
-                            <Grid>
-                                <StackPanel Orientation="Vertical">
-                                    <!-- 时间条 -->
-                                    <TextBlock
-                                        Classes="FadeIn Small"
-                                        Margin="5"
-                                        Opacity="0.7"
-                                        IsVisible="{Binding ShowTime}"
-                                        FontSize="12"
-                                        Foreground="{DynamicResource SukiText}"
-                                        HorizontalAlignment="Center"
-                                        Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
-                                    <Panel>
-                                        <!-- 撤回消息 -->
-                                        <Border IsVisible="{Binding IsRetracted}"
-                                                Background="{DynamicResource SukiPrimaryColor10}"
-                                                Margin="0,5"
-                                                HorizontalAlignment="Center" CornerRadius="5">
-                                            <TextBlock FontSize="12" Opacity="0.75" Classes="Small"
-                                                       HorizontalAlignment="Center" Margin="5,1.5">
-                                                <Run Foreground="{DynamicResource SukiPrimaryColor}"
-                                                     Text="{Binding Converter={chat1:GroupRetractedMessageConverter}}" />
-                                                <Run Text="撤回一条消息" />
-                                            </TextBlock>
-                                        </Border>
-                                        <ContentControl
-                                            IsVisible="{Binding IsRetracted,Converter={x:Static BoolConverters.Not}}"
-                                            Content="{Binding}"
-                                            ContentTemplate="{StaticResource MessageDataTemplate}" />
-                                    </Panel>
-                                </StackPanel>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.DataTemplates>
-                </ItemsControl>
-            </StackPanel>
-        </qScrollViewer1:QScrollViewer>
-        <!-- 新消息提示 -->
-        <Button IsVisible="{Binding $parent[groupChatUi1:GroupChatUI].UnReadMessageCount}"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                Margin="0"
-                Padding="0"
-                Classes="Basic Visible "
-                RenderTransformOrigin="0.5,1"
-                Click="Button_OnClick">
-            <suki:GlassCard Background="{DynamicResource SukiPrimaryColor}"
-                            Margin="0"
-                            Padding="10,5"
-                            CornerRadius="7">
-                <TextBlock
-                    FontSize="13" Classes="Small"
-                    Text="{Binding $parent[groupChatUi1:GroupChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}" />
-            </suki:GlassCard>
-        </Button>
-    </Panel>
+    <UserControl.Styles>
+        <Style Selector="groupChatUi1|GroupChatUI">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <!-- 消息列表 -->
+                        <ScrollViewer
+                            Name="ChatScrollViewer"
+                            Opacity="0"
+                            HorizontalScrollBarVisibility="Disabled"
+                            VerticalScrollBarVisibility="Visible">
+                            <StackPanel Orientation="Vertical" Background="#00000000">
+                                <Button IsVisible="{TemplateBinding SearchMoreVisible}"
+                                        Classes="Basic"
+                                        Click="MoreButton_OnClick"
+                                        Command="{TemplateBinding SearchMoreCommand}">
+                                    <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
+                                               Cursor="Hand" Classes="Small"
+                                               Foreground="{DynamicResource SukiPrimaryColor75}" />
+                                </Button>
+                                <ItemsControl Name="IC"
+                                              ItemsSource="{TemplateBinding Messages}"
+                                              Margin="0,0,-15,0"
+                                              Padding="0,0,0,5">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.DataTemplates>
+                                        <DataTemplate DataType="chatMessage:GroupChatData">
+                                            <Grid>
+                                                <StackPanel Orientation="Vertical">
+                                                    <!-- 时间条 -->
+                                                    <TextBlock
+                                                        Classes="FadeIn Small"
+                                                        Margin="5"
+                                                        Opacity="0.7"
+                                                        IsVisible="{Binding ShowTime}"
+                                                        FontSize="12"
+                                                        Foreground="{DynamicResource SukiText}"
+                                                        HorizontalAlignment="Center"
+                                                        Text="{Binding Time,Converter={StaticResource DateTimeConverter}}" />
+                                                    <Panel>
+                                                        <!-- 撤回消息 -->
+                                                        <Border IsVisible="{Binding IsRetracted}"
+                                                                Background="{DynamicResource SukiPrimaryColor10}"
+                                                                Margin="0,5"
+                                                                HorizontalAlignment="Center" CornerRadius="5">
+                                                            <TextBlock FontSize="12" Opacity="0.75" Classes="Small"
+                                                                       HorizontalAlignment="Center" Margin="5,1.5">
+                                                                <Run Foreground="{DynamicResource SukiPrimaryColor}"
+                                                                     Text="{Binding Converter={chat:GroupRetractedMessageConverter}}" />
+                                                                <Run Text="撤回一条消息" />
+                                                            </TextBlock>
+                                                        </Border>
+                                                        <ContentControl
+                                                            IsVisible="{Binding IsRetracted,Converter={x:Static BoolConverters.Not}}"
+                                                            Content="{Binding}"
+                                                            ContentTemplate="{StaticResource MessageDataTemplate}" />
+                                                    </Panel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.DataTemplates>
+                                </ItemsControl>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <!-- 新消息提示 -->
+                        <Button IsVisible="{TemplateBinding HaveUnReadMessage}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Margin="0"
+                                Padding="0"
+                                Classes="Basic Visible "
+                                RenderTransformOrigin="0.5,1"
+                                Click="Button_OnClick">
+                            <Border Background="{DynamicResource SukiPrimaryColor}"
+                                    Margin="0"
+                                    Padding="10,5"
+                                    CornerRadius="7">
+                                <TextBlock
+                                    FontSize="13" Classes="Small"
+                                    Text="{Binding $parent[groupChatUi1:GroupChatUI].UnReadMessageCount,StringFormat='新增{0}条未读消息',Mode=OneWay}" />
+                            </Border>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
 </UserControl>

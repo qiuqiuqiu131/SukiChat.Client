@@ -6,9 +6,9 @@
     xmlns:semi="https://irihi.tech/semi"
     xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
     xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
-    xmlns:u="https://irihi.tech/ursa">
+    xmlns:u="https://irihi.tech/ursa"
+    xmlns:customSelectableTextBlock="clr-namespace:ChatClient.Avalonia.Controls.CustomSelectableTextBlock;assembly=ChatClient.Avalonia">
     <Application.Resources>
-
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
@@ -33,7 +33,8 @@
 
         <OnPlatform>
             <OnPlatform.Windows>
-                <Style Selector="TextBlock,SelectableTextBlock,TextBox,u|IPv4Box,NumericUpDown">
+                <Style
+                    Selector="TextBlock,SelectableTextBlock,TextBox,u|IPv4Box,NumericUpDown,customSelectableTextBlock|CustomSelectableTextBlock">
                     <Setter Property="TextElement.FontFamily">
                         <Setter.Value>
                             <StaticResource ResourceKey="MiSans_Normal" />

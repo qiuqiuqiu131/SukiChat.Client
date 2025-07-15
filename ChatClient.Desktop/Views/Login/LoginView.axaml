@@ -100,7 +100,7 @@
 
                 <!-- 登录表单 -->
                 <StackPanel
-                    Width="270"
+                    Width="250"
                     HorizontalAlignment="Center"
                     Orientation="Vertical" Spacing="8">
                     <StackPanel.Styles>
@@ -115,7 +115,7 @@
                     </StackPanel.Styles>
 
                     <!-- 头像 -->
-                    <Panel Margin="0,25,0,7"
+                    <Panel Margin="0,40,0,7"
                            HorizontalAlignment="Center">
                         <avalonia:MaterialIcon
                             Width="85"
@@ -200,7 +200,7 @@
 
                     <!-- 登录 -->
                     <Button
-                        Width="260"
+                        Width="240"
                         Margin="0,25,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"

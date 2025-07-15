@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:mvvm="http://prismlibrary.com/"
+             mc:Ignorable="d" d:DesignHeight="800"
+             d:DesignWidth="380"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             x:DataType="viewModels:GroupChatViewModel"
+             x:Class="ChatClient.Android.Shared.Views.GroupChatView">
+    <Grid Name="Content" RowDefinitions="35,45,*,50">
+        <!-- 顶部背景 -->
+        <Border Background="{DynamicResource TopTitleBackground}" Grid.Row="0" Grid.RowSpan="2" />
+
+        <!-- 顶部栏 -->
+        <DockPanel TextElement.Foreground="#F9F9F9"
+                   LastChildFill="False" Grid.Row="1" Margin="17.5,0"
+                   VerticalAlignment="Center">
+            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="3">
+                <StackPanel.Styles>
+                    <Style Selector="TextBlock.Name">
+                        <Setter Property="FontSize" Value="14" />
+                        <Setter Property="Foreground" Value="#F9F9F9" />
+                    </Style>
+                </StackPanel.Styles>
+                <Button Margin="-7.5,0,0,0" Theme="{StaticResource ForgroundButton}"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Command="{Binding ReturnCommand}"
+                        Background="Transparent"
+                        Classes="MainReturn"
+                        Width="30" Height="30" Padding="5">
+                    <PathIcon Data="{StaticResource QIconLeft}" />
+                </Button>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,50,0">
+                    <Panel>
+                        <TextBlock
+                            IsVisible="{Binding GroupChatDto.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Text="{Binding GroupChatDto.GroupRelationDto.Remark}"
+                            Classes="Name" />
+                        <TextBlock
+                            IsVisible="{Binding GroupChatDto.GroupRelationDto.Remark,Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                            Text="{Binding GroupChatDto.GroupRelationDto.GroupDto.Name}"
+                            Classes="Name" />
+                    </Panel>
+                    <TextBlock
+                        Text="{Binding GroupChatDto.GroupRelationDto.GroupDto.GroupMembers.Count,StringFormat=({0})}"
+                        Classes="Name" />
+                </StackPanel>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</UserControl>

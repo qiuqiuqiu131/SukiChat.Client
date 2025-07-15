@@ -138,11 +138,8 @@
                                              ShareMessageCommand="{Binding ShareMessageCommand}"
                                              RetractMessageCommand="{Binding RetractMessageCommand}"
                                              DeleteMessageCommand="{Binding DeleteMessageCommand}"
-                                             Messages="{Binding SelectedGroup.ChatMessages}"
                                              FileRestoreCommand="{Binding }"
                                              FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                             SearchMoreVisible="{Binding SelectedGroup.HasMoreMessage}"
-                                             SearchMoreCommand="{Binding SearchMoreCommand}"
                                              UserImageSource="{Binding User.HeadImage}" />
 
                     <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />

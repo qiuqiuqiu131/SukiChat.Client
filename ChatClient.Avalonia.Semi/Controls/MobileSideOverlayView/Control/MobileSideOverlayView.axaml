@@ -15,7 +15,7 @@
                             <TranslateTransform X="0" Y="0">
                                 <TranslateTransform.Transitions>
                                     <Transitions>
-                                        <DoubleTransition Property="X" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                        <DoubleTransition Property="X" Duration="0:0:0.35" Easing="QuadraticEaseInOut" />
                                     </Transitions>
                                 </TranslateTransform.Transitions>
                             </TranslateTransform>
@@ -29,7 +29,7 @@
                                       ZIndex="1" Background="{DynamicResource WindowDefaultBackground}">
                         <ContentPresenter.Transitions>
                             <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.35" Easing="QuadraticEaseInOut" />
                             </Transitions>
                         </ContentPresenter.Transitions>
                         <ContentPresenter.RenderTransform>
@@ -38,7 +38,7 @@
                                 Y="0">
                                 <TranslateTransform.Transitions>
                                     <Transitions>
-                                        <DoubleTransition Property="X" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                        <DoubleTransition Property="X" Duration="0:0:0.35" Easing="QuadraticEaseInOut" />
                                     </Transitions>
                                 </TranslateTransform.Transitions>
                             </TranslateTransform>

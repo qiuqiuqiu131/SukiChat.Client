@@ -26,27 +26,18 @@ namespace ChatClient.Desktop.Views.UserControls.ChatUI;
 public partial class ChatUI : UserControl
 {
     private ContextMenu? _contextMenu;
+    private Control ChatScrollContent;
 
     public ChatUI()
     {
         InitializeComponent();
-    }
 
-    #region ScrollField
-
-    private Avalonia.Controls.QScrollViewer.QScrollViewer ChatScroll;
-    private Control ChatScrollContent;
-
-    #endregion
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-
-        ChatScroll = e.NameScope.Get<Avalonia.Controls.QScrollViewer.QScrollViewer>("ChatScrollViewer");
-        ChatScrollContent = (ChatScroll.Content as Control)!;
-        ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
-        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, ChatScroll.CurrentPos); };
+        ChatScrollContent = (ChatScrollViewer.Content as Control)!;
+        ChatScrollViewer.PropertyChanged += ChatScrollOnPropertyChanged;
+        ChatScrollViewer.GotFocus += (sender, args) =>
+        {
+            ChatScrollViewer.Offset = new Vector(0, ChatScrollViewer.CurrentPos);
+        };
 
         // 捕获鼠标滚动事件
         var wheelEvent = Observable.FromEventPattern<PointerWheelEventArgs>(
@@ -56,24 +47,12 @@ public partial class ChatUI : UserControl
         wheelEvent.Subscribe(arg => arg.EventArgs.Handled = true);
 
         wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 150)
-            .Subscribe(d => ChatScroll.MoveUp(d));
+            .Subscribe(d => ChatScrollViewer.MoveUp(d));
+
+        IC.PropertyChanged += IC_OnPropertyChanged;
     }
 
     #region Property
-
-    #region Messages
-
-    public static readonly StyledProperty<AvaloniaList<ChatData>> MessagesProperty =
-        AvaloniaProperty.Register<ChatUI, AvaloniaList<ChatData>>(nameof(Messages),
-            defaultValue: new AvaloniaList<ChatData>());
-
-    public AvaloniaList<ChatData> Messages
-    {
-        get { return GetValue(MessagesProperty); }
-        set { SetValue(MessagesProperty, value); }
-    }
-
-    #endregion
 
     #region MessageBoxEvent
 
@@ -102,58 +81,6 @@ public partial class ChatUI : UserControl
     {
         add => AddHandler(NotificationEvent, value);
         remove => RemoveHandler(NotificationEvent, value);
-    }
-
-    #endregion
-
-    #region SearchMoreCommand
-
-    public static readonly StyledProperty<ICommand> SearchMoreCommandProperty =
-        AvaloniaProperty.Register<ChatUI, ICommand>(nameof(SearchMoreCommand));
-
-    public ICommand SearchMoreCommand
-    {
-        get => GetValue(SearchMoreCommandProperty);
-        set => SetValue(SearchMoreCommandProperty, value);
-    }
-
-    #endregion
-
-    #region SearchMoreVisible
-
-    public static readonly StyledProperty<bool> SearchMoreVisibleProperty =
-        AvaloniaProperty.Register<ChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
-
-    public bool SearchMoreVisible
-    {
-        get => GetValue(SearchMoreVisibleProperty);
-        set => SetValue(SearchMoreVisibleProperty, value);
-    }
-
-    #endregion
-
-    #region UserImage
-
-    public static readonly StyledProperty<IImage?> UserImageSourceProperty =
-        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(UserImageSource));
-
-    public IImage? UserImageSource
-    {
-        get => GetValue(UserImageSourceProperty);
-        set => SetValue(UserImageSourceProperty, value);
-    }
-
-    #endregion
-
-    #region FriendImage
-
-    public static readonly StyledProperty<IImage?> FriendImageSourceProperty =
-        AvaloniaProperty.Register<ChatUI, IImage?>(nameof(FriendImageSource));
-
-    public IImage? FriendImageSource
-    {
-        get => GetValue(FriendImageSourceProperty);
-        set => SetValue(FriendImageSourceProperty, value);
     }
 
     #endregion
@@ -257,22 +184,23 @@ public partial class ChatUI : UserControl
 
     #endregion
 
-    #region ReCallCommand
-
-    public static readonly StyledProperty<ICommand> ReCallCommandProperty = AvaloniaProperty.Register<ChatUI, ICommand>(
-        "ReCallCommand");
-
-    public ICommand ReCallCommand
-    {
-        get => GetValue(ReCallCommandProperty);
-        set => SetValue(ReCallCommandProperty, value);
-    }
-
-    #endregion
-
     #endregion
 
     #region ValueChanged
+
+    private void IC_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ItemsControl.ItemsSourceProperty)
+        {
+            if (e.OldValue is AvaloniaList<ChatData> oldMessages)
+                oldMessages.CollectionChanged -= ValueOnCollectionChanged;
+
+            if (e.NewValue is AvaloniaList<ChatData> newMessages)
+                newMessages.CollectionChanged += ValueOnCollectionChanged;
+
+            OnItemsSourceChanged();
+        }
+    }
 
     /// <summary>
     /// 当ChatUI绑定的Messages中的消息发生变化后调用
@@ -284,8 +212,8 @@ public partial class ChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        double maxOffsetY = ChatScroll.MaxOffsetY; // 最大可偏移量
-        double OffsetYOrigion = ChatScroll.Offset.Y; // 当前偏移量
+        double maxOffsetY = ChatScrollViewer.MaxOffsetY; // 最大可偏移量
+        double OffsetYOrigion = ChatScrollViewer.Offset.Y; // 当前偏移量
 
         Dispatcher.UIThread.Post(async () =>
         {
@@ -294,13 +222,13 @@ public partial class ChatUI : UserControl
                 if (e.NewStartingIndex == 0)
                 {
                     // -- 加载历史聊天记录 --//
-                    ChatScroll.UnLock();
+                    ChatScrollViewer.UnLock();
                 }
-                else if (ChatScroll.IsToMoving
+                else if (ChatScrollViewer.IsToMoving
                          || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 // 靠近底部且不是扩展聊天记录
                          || e.NewItems?[0] is ChatData chatData && chatData.IsUser) // 是自己发送的消息
                 {
-                    ChatScroll.ScrollToBottom();
+                    ChatScrollViewer.ScrollToBottom();
                 }
                 else
                 {
@@ -318,24 +246,6 @@ public partial class ChatUI : UserControl
     #region ControlPropertyChanged
 
     /// <summary>
-    /// 监听Messages属性变化，更改事件绑定
-    /// </summary>
-    /// <param name="change"></param>
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        if (change.Property == MessagesProperty)
-        {
-            if (change.OldValue is AvaloniaList<ChatData> oldMessages)
-                oldMessages.CollectionChanged -= ValueOnCollectionChanged;
-
-            if (change.NewValue is AvaloniaList<ChatData> newMessages)
-                newMessages.CollectionChanged += ValueOnCollectionChanged;
-
-            OnItemsSourceChanged();
-        }
-    }
-
-    /// <summary>
     /// 获取ChatScroll的属性变化
     /// 1、ScrollBarMaximumProperty 当用户更改ChatUI的窗口大小时调用
     /// 2、OffsetProperty 当Scroll拖到最底部时，取消新消息气泡的显示
@@ -347,16 +257,16 @@ public partial class ChatUI : UserControl
         if (e.Property == ScrollViewer.ScrollBarMaximumProperty)
         {
             // 最大可偏移量
-            double maxOffsetY = ChatScroll.MaxOffsetY;
+            double maxOffsetY = ChatScrollViewer.MaxOffsetY;
 
             // 当ScrollViewer的视口宽度发生变化时，重新变更偏移量，保证底部固定不变
-            if (Math.Abs(ChatScroll.Offset.Y - maxOffsetY) < 10)
-                ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 10);
+            if (Math.Abs(ChatScrollViewer.Offset.Y - maxOffsetY) < 10)
+                ChatScrollViewer.Offset = new Vector(ChatScrollViewer.Offset.X, maxOffsetY + 10);
         }
         else if (e.Property == ScrollViewer.OffsetProperty)
         {
             // 当ScrollViewer滚动到最底部时，取消新消息气泡的显示
-            if (Math.Abs(ChatScroll.Offset.Y - ChatScroll.MaxOffsetY) < 10)
+            if (Math.Abs(ChatScrollViewer.Offset.Y - ChatScrollViewer.MaxOffsetY) < 10)
             {
                 HaveUnReadMessage = false;
                 UnReadMessageCount = 0;
@@ -366,13 +276,26 @@ public partial class ChatUI : UserControl
 
     #endregion
 
+    // protected override void OnUnloaded(RoutedEventArgs e)
+    // {
+    //     base.OnUnloaded(e);
+    //
+    //     IC.ItemsSource = null;
+    //     IC.PropertyChanged -= IC_OnPropertyChanged;
+    //
+    //     ChatScrollViewer.PropertyChanged -= ChatScrollOnPropertyChanged;
+    //     ChatScrollContent = null;
+    //
+    //     _contextMenu?.Close();
+    //     _contextMenu = null;
+    // }
 
     /// <summary>
     /// 新消息气泡点击事件
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
+    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScrollViewer.MoveToBottom();
 
     /// <summary>
     /// 查看更多聊天记录按钮点击事件
@@ -382,9 +305,9 @@ public partial class ChatUI : UserControl
     private async void MoreButton_OnClick(object? sender, RoutedEventArgs e)
     {
         // 锁定ScrollViewer滚动
-        ChatScroll.Lock();
+        ChatScrollViewer.Lock();
         await Task.Delay(1500);
-        ChatScroll.UnLock();
+        ChatScrollViewer.UnLock();
     }
 
     /// <summary>
@@ -394,18 +317,18 @@ public partial class ChatUI : UserControl
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            if (ChatScroll != null)
-                ChatScroll.Opacity = 0;
+            if (ChatScrollViewer != null)
+                ChatScrollViewer.Opacity = 0;
         });
         Dispatcher.UIThread.Post(() =>
         {
-            ChatScroll.Opacity = 1;
-            ChatScroll.ScrollToBottom();
-            ChatScroll.CurrentPos = ChatScroll.Offset.Y;
+            ChatScrollViewer.Opacity = 1;
+            ChatScrollViewer.ScrollToBottom();
+            ChatScrollViewer.CurrentPos = ChatScrollViewer.Offset.Y;
         }, DispatcherPriority.Background);
     }
 
-// 左侧好友头像点击
+    // 左侧好友头像点击
     private void Head_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (e.GetCurrentPoint(sender as Control).Properties.IsLeftButtonPressed)
@@ -420,7 +343,7 @@ public partial class ChatUI : UserControl
         }
     }
 
-// 消息被点击
+    // 消息被点击
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         if (sender is Control control && control.DataContext is ChatData chatData &&

@@ -4,6 +4,7 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Threading;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.EventArgs;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Manager;
 
@@ -90,7 +91,6 @@ public class MobileSideBottomView : ContentControl
                 leftTransform.Y = _leftRegionContentControl.Bounds.Height;
             }
 
-
             _ = CantInteractAsync();
         }
     }
@@ -165,13 +165,13 @@ public class MobileSideBottomView : ContentControl
         // 1. 先插入视图
         SidePanel = view;
 
-        // 2. 等待一会儿，确保视图已经插入到 UI 树中
         UpdateLayout();
 
-        // 3. 触发动画
+        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Background);
+
         IsPanelOpened = true;
 
-        // 4.（可选）动画跑一会儿后再恢复交互（旧的 CantInteractAsync）
+        // 动画跑一会儿后再恢复交互（旧的 CantInteractAsync）
         _ = CantInteractAsync();
     }
 

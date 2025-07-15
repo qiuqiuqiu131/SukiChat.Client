@@ -13,9 +13,6 @@
         <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
 		<PublishTrimmed>true</PublishTrimmed>
 		<TrimMode>link</TrimMode>
-		<AndroidLinkMode>SdkOnly</AndroidLinkMode>
-		<UseInterpreter>false</UseInterpreter>
-		<AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     </PropertyGroup>
 
     <!--		<PublishTrimmed>true</PublishTrimmed>

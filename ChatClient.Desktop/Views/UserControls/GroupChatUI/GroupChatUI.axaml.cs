@@ -27,28 +27,19 @@ namespace ChatClient.Desktop.Views.UserControls.GroupChatUI;
 public partial class GroupChatUI : UserControl
 {
     private ContextMenu? _contextMenu;
+    private Control? ChatScrollContent;
 
     public GroupChatUI()
     {
         InitializeComponent();
-    }
 
-    #region ScrollField
-
-    private Avalonia.Controls.QScrollViewer.QScrollViewer ChatScroll;
-    private Control ChatScrollContent;
-
-    #endregion
-
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-
-        ChatScroll = e.NameScope.Get<Avalonia.Controls.QScrollViewer.QScrollViewer>("ChatScrollViewer");
-        ChatScrollContent = ChatScroll.Content as Control ??
+        ChatScrollContent = ChatScrollViewer.Content as Control ??
                             throw new InvalidOperationException("ChatScroll.Content must be a Control");
-        ChatScroll.PropertyChanged += ChatScrollOnPropertyChanged;
-        ChatScroll.GotFocus += (sender, args) => { ChatScroll.Offset = new Vector(0, ChatScroll.CurrentPos); };
+        ChatScrollViewer.PropertyChanged += ChatScrollOnPropertyChanged;
+        ChatScrollViewer.GotFocus += (sender, args) =>
+        {
+            ChatScrollViewer.Offset = new Vector(0, ChatScrollViewer.CurrentPos);
+        };
 
         // 捕获鼠标滚动事件
         var wheelEvent = Observable.FromEventPattern<PointerWheelEventArgs>(
@@ -58,24 +49,12 @@ public partial class GroupChatUI : UserControl
         wheelEvent.Subscribe(arg => arg.EventArgs.Handled = true);
 
         wheelEvent.Select(arg => -arg.EventArgs.Delta.Y * 150)
-            .Subscribe(d => ChatScroll.MoveUp(d));
+            .Subscribe(d => ChatScrollViewer.MoveUp(d));
+
+        IC.PropertyChanged += IC_OnPropertyChanged;
     }
 
     #region Property
-
-    #region Messages
-
-    public static readonly StyledProperty<AvaloniaList<GroupChatData>> MessagesProperty =
-        AvaloniaProperty.Register<GroupChatUI, AvaloniaList<GroupChatData>>(nameof(Messages),
-            defaultValue: new AvaloniaList<GroupChatData>());
-
-    public AvaloniaList<GroupChatData> Messages
-    {
-        get { return GetValue(MessagesProperty); }
-        set { SetValue(MessagesProperty, value); }
-    }
-
-    #endregion
 
     #region HeadClickEvent
 
@@ -95,19 +74,6 @@ public partial class GroupChatUI : UserControl
 
     #endregion
 
-    #region SearchMoreCommand
-
-    public static readonly StyledProperty<ICommand> SearchMoreCommandProperty =
-        AvaloniaProperty.Register<GroupChatUI, ICommand>(nameof(SearchMoreCommand));
-
-    public ICommand SearchMoreCommand
-    {
-        get => GetValue(SearchMoreCommandProperty);
-        set => SetValue(SearchMoreCommandProperty, value);
-    }
-
-    #endregion
-
     #region NotificationEvent
 
     public static readonly RoutedEvent<NotificationMessageEventArgs> NotificationEvent =
@@ -117,19 +83,6 @@ public partial class GroupChatUI : UserControl
     {
         add => AddHandler(NotificationEvent, value);
         remove => RemoveHandler(NotificationEvent, value);
-    }
-
-    #endregion
-
-    #region SearchMoreVisible
-
-    public static readonly StyledProperty<bool> SearchMoreVisibleProperty =
-        AvaloniaProperty.Register<GroupChatUI, bool>(nameof(SearchMoreVisible), defaultValue: false);
-
-    public bool SearchMoreVisible
-    {
-        get => GetValue(SearchMoreVisibleProperty);
-        set => SetValue(SearchMoreVisibleProperty, value);
     }
 
     #endregion
@@ -250,6 +203,20 @@ public partial class GroupChatUI : UserControl
 
     #region ValueChanged
 
+    private void IC_OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
+    {
+        if (e.Property == ItemsControl.ItemsSourceProperty)
+        {
+            if (e.OldValue is AvaloniaList<ChatData> oldMessages)
+                oldMessages.CollectionChanged -= ValueOnCollectionChanged;
+
+            if (e.NewValue is AvaloniaList<ChatData> newMessages)
+                newMessages.CollectionChanged += ValueOnCollectionChanged;
+
+            OnItemsSourceChanged();
+        }
+    }
+
     /// <summary>
     /// 当ChatUI绑定的Messages中的消息发生变化后调用
     /// 1、发送新消息
@@ -260,8 +227,8 @@ public partial class GroupChatUI : UserControl
     /// <param name="e"></param>
     private void ValueOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        double maxOffsetY = ChatScroll.MaxOffsetY; // 最大可偏移量
-        double OffsetYOrigion = ChatScroll.Offset.Y; // 当前偏移量
+        double maxOffsetY = ChatScrollViewer.MaxOffsetY; // 最大可偏移量
+        double OffsetYOrigion = ChatScrollViewer.Offset.Y; // 当前偏移量
         Dispatcher.UIThread.Post(async () =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
@@ -269,13 +236,13 @@ public partial class GroupChatUI : UserControl
                 if (e.NewStartingIndex == 0)
                 {
                     // -- 加载历史聊天记录 --//
-                    ChatScroll.UnLock();
+                    ChatScrollViewer.UnLock();
                 }
-                else if (ChatScroll.IsToMoving
+                else if (ChatScrollViewer.IsToMoving
                          || Math.Abs(OffsetYOrigion - maxOffsetY) < 50 // 靠近底部且不是扩展聊天记录
                          || e.NewItems?[0] is GroupChatData chatData && chatData.IsUser) // 是自己发送的消息
                 {
-                    ChatScroll.ScrollToBottom();
+                    ChatScrollViewer.ScrollToBottom();
                 }
                 else
                 {
@@ -293,25 +260,6 @@ public partial class GroupChatUI : UserControl
     #region ControlPropertyChanged
 
     /// <summary>
-    /// 监听Messages属性变化，更改事件绑定
-    /// </summary>
-    /// <param name="change"></param>
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (change.Property == MessagesProperty)
-        {
-            if (change.OldValue is AvaloniaList<GroupChatData> oldMessages)
-                oldMessages.CollectionChanged -= ValueOnCollectionChanged;
-
-            if (change.NewValue is AvaloniaList<GroupChatData> newMessages)
-                newMessages.CollectionChanged += ValueOnCollectionChanged;
-
-            OnItemsSourceChanged();
-        }
-    }
-
-    /// <summary>
     /// 获取ChatScroll的属性变化
     /// 1、ScrollBarMaximumProperty 当用户更改ChatUI的窗口大小时调用
     /// 2、OffsetProperty 当Scroll拖到最底部时，取消新消息气泡的显示
@@ -323,16 +271,16 @@ public partial class GroupChatUI : UserControl
         if (e.Property == ScrollViewer.ScrollBarMaximumProperty)
         {
             // 最大可偏移量
-            double maxOffsetY = ChatScroll.MaxOffsetY;
+            double maxOffsetY = ChatScrollViewer.MaxOffsetY;
             // 当前偏移量
-            double OffsetYOrigion = ChatScroll.Offset.Y;
+            double OffsetYOrigion = ChatScrollViewer.Offset.Y;
 
             if (Math.Abs(OffsetYOrigion - maxOffsetY) < 5)
-                ChatScroll.Offset = new Vector(ChatScroll.Offset.X, maxOffsetY + 5);
+                ChatScrollViewer.Offset = new Vector(ChatScrollViewer.Offset.X, maxOffsetY + 5);
         }
         else if (e.Property == ScrollViewer.OffsetProperty)
         {
-            if (Math.Abs(ChatScroll.Offset.Y - ChatScroll.MaxOffsetY) < 10)
+            if (Math.Abs(ChatScrollViewer.Offset.Y - ChatScrollViewer.MaxOffsetY) < 10)
             {
                 HaveUnReadMessage = false;
                 UnReadMessageCount = 0;
@@ -347,7 +295,7 @@ public partial class GroupChatUI : UserControl
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScroll.MoveToBottom();
+    private void Button_OnClick(object? sender, RoutedEventArgs e) => ChatScrollViewer.MoveToBottom();
 
     /// <summary>
     /// 查看更多聊天记录按钮点击事件
@@ -357,9 +305,9 @@ public partial class GroupChatUI : UserControl
     private async void MoreButton_OnClick(object? sender, RoutedEventArgs e)
     {
         // 锁定ScrollViewer滚动
-        ChatScroll.Lock();
+        ChatScrollViewer.Lock();
         await Task.Delay(1500);
-        ChatScroll.UnLock();
+        ChatScrollViewer.UnLock();
     }
 
 
@@ -370,13 +318,13 @@ public partial class GroupChatUI : UserControl
     {
         Dispatcher.UIThread.Invoke(() =>
         {
-            if (ChatScroll != null)
-                ChatScroll.Opacity = 0;
+            if (ChatScrollViewer != null)
+                ChatScrollViewer.Opacity = 0;
         });
         Dispatcher.UIThread.Post(() =>
         {
-            ChatScroll.Opacity = 1;
-            ChatScroll.ScrollToBottom();
+            ChatScrollViewer.Opacity = 1;
+            ChatScrollViewer.ScrollToBottom();
         }, DispatcherPriority.Background);
     }
 

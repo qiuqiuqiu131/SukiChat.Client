@@ -3,6 +3,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Styling;
 
 namespace ChatClient.Avalonia.Controls.QScrollViewer;
@@ -53,7 +54,20 @@ public class QScrollViewer : ScrollViewer
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        (Content as Control).PropertyChanged += OnContentPropertyChanged;
+        if (Content is Control control)
+        {
+            // 监听Content的Bounds属性变化
+            control.PropertyChanged += OnContentPropertyChanged;
+        }
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+        if (Content is Control control)
+        {
+            control.PropertyChanged -= OnContentPropertyChanged;
+        }
     }
 
     /// <summary>

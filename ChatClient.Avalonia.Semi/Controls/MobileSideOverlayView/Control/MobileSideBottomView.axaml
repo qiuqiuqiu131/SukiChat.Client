@@ -16,7 +16,7 @@
                             Height="{TemplateBinding Height}" Background="{DynamicResource SemiBlack}">
                         <Border.Transitions>
                             <Transitions>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.3" Easing="QuadraticEaseInOut" />
                             </Transitions>
                         </Border.Transitions>
                     </Border>
@@ -36,7 +36,7 @@
                                 Y="0">
                                 <TranslateTransform.Transitions>
                                     <Transitions>
-                                        <DoubleTransition Property="Y" Duration="0:0:0.25" Easing="QuadraticEaseInOut" />
+                                        <DoubleTransition Property="Y" Duration="0:0:0.3" Easing="QuadraticEaseInOut" />
                                     </Transitions>
                                 </TranslateTransform.Transitions>
                             </TranslateTransform>

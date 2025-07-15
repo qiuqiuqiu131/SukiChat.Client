@@ -1,0 +1,262 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:ChatClient.Android.Shared.Views"
+             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+             xmlns:friend="clr-namespace:ChatClient.Tool.Data.Friend;assembly=ChatClient.Tool"
+             xmlns:group="clr-namespace:ChatClient.Tool.Data.Group;assembly=ChatClient.Tool"
+             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:converter="clr-namespace:ChatClient.Avalonia.Converter;assembly=ChatClient.Avalonia"
+             xmlns:chat="clr-namespace:ChatClient.Avalonia.Controls.Chat;assembly=ChatClient.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:chatUiConverter="clr-namespace:ChatClient.Avalonia.Converter.ChatUIConverter;assembly=ChatClient.Avalonia"
+             xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
+             xmlns:mvvm="http://prismlibrary.com/"
+             xmlns:mobileScrollViewer="clr-namespace:ChatClient.Avalonia.Controls.MobileScrollViewer;assembly=ChatClient.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="380" d:DesignHeight="665"
+             x:DataType="viewModels:ChatPageViewModel"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
+             x:Class="ChatClient.Android.Shared.Views.ChatPageView">
+    <UserControl.Resources>
+        <chatUiConverter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
+        <converter:DateTimeConverter x:Key="DateTimeConverter" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="TextBlock.tip">
+            <Setter Property="Opacity" Value="0.6" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="TextBlock.time">
+            <Setter Property="Opacity" Value="0.4" />
+            <Setter Property="FontSize" Value="10.5" />
+        </Style>
+    </UserControl.Styles>
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="friend:FriendChatDto">
+            <controls:DelayedPressButton Height="64" Margin="0" CornerRadius="0"
+                                         Theme="{StaticResource Chat}"
+                                         Padding="15,0,0,0"
+                                         Background="Transparent"
+                                         HorizontalAlignment="Stretch"
+                                         Classes.ChatTop="{Binding FriendRelatoinDto.IsTop}">
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="PressOrLongPress">
+                        <InvokeCommandAction
+                            Command="{Binding ((viewModels:ChatPageViewModel)DataContext).FriendSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                            CommandParameter="{Binding}" />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
+                <Grid Name="Root_Grid" ColumnDefinitions="47.5,*">
+                    <!--  头像  -->
+                    <circleImage:CircleImage Image="{Binding FriendRelatoinDto.UserDto.HeadImage}" Size="47.5" />
+                    <!--  简略信息  -->
+                    <Grid
+                        Grid.Column="1"
+                        Margin="11"
+                        RowDefinitions="1.2*,1*">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,auto">
+                            <Grid Grid.Column="0">
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding FriendRelatoinDto.Remark, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{Binding FriendRelatoinDto.Remark}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding FriendRelatoinDto.Remark, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    Text="{Binding FriendRelatoinDto.UserDto.Name}"
+                                    TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                            <TextBlock
+                                Name="Time_Text"
+                                Grid.Column="1"
+                                Margin="0,5"
+                                Classes="time"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,auto">
+                            <Panel
+                                IsVisible="{Binding LastChatMessages,Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <TextBlock
+                                    Margin="0,0,15,0"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding !LastChatMessages.IsRetracted}"
+                                    Classes="tip"
+                                    Text="{Binding LastChatMessages.ChatMessages, Converter={StaticResource ChatMessageToStringConverter}}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock IsVisible="{Binding LastChatMessages.IsRetracted}" Margin="0,0,15,0"
+                                           VerticalAlignment="Center"
+                                           Classes="tip"
+                                           TextTrimming="CharacterEllipsis">
+                                    <Run
+                                        Text="{Binding LastChatMessages.IsUser,Converter={chat:RetractedMessageConverter}}" />
+                                    <Run Text="撤回一条消息" />
+                                </TextBlock>
+                            </Panel>
+                            <Panel Grid.Column="1">
+                                <Panel
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">
+                                    <avalonia:MaterialIcon
+                                        Width="12"
+                                        Height="12"
+                                        IsVisible="{Binding FriendRelatoinDto.CantDisturb}"
+                                        Kind="BellOffOutline"
+                                        Opacity="0.4" />
+                                </Panel>
+                                <u:Badge HorizontalAlignment="Right"
+                                         Classes.Danger="{Binding FriendRelatoinDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
+                                         Classes.Gray="{Binding FriendRelatoinDto.CantDisturb}"
+                                         Header="{Binding UnReadMessageCount}"
+                                         OverflowCount="99"
+                                         IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}" />
+                            </Panel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </controls:DelayedPressButton>
+        </DataTemplate>
+        <DataTemplate DataType="group:GroupChatDto">
+            <controls:DelayedPressButton
+                Height="64" Margin="0"
+                HorizontalAlignment="Stretch"
+                Background="Transparent"
+                Theme="{StaticResource Chat}"
+                Classes.ChatTop="{Binding GroupRelationDto.IsTop}"
+                CornerRadius="0"
+                Padding="15,0,0,0">
+                <Interaction.Behaviors>
+                    <EventTriggerBehavior EventName="PressOrLongPress">
+                        <InvokeCommandAction
+                            Command="{Binding ((viewModels:ChatPageViewModel)DataContext).GroupSelectionChangedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, Mode=FindAncestor}}"
+                            CommandParameter="{Binding}" />
+                    </EventTriggerBehavior>
+                </Interaction.Behaviors>
+                <Grid Name="Root_Grid" ColumnDefinitions="45,*">
+                    <!--  头像  -->
+                    <circleImage:CircleImage Image="{Binding GroupRelationDto.GroupDto.HeadImage}" Size="45" />
+                    <!--  简略信息  -->
+                    <Grid
+                        Grid.Column="1"
+                        Margin="11"
+                        RowDefinitions="1.2*,1*">
+                        <Grid Grid.Row="0" ColumnDefinitions="*,auto">
+                            <Grid Grid.Column="0">
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{Binding GroupRelationDto.Remark}"
+                                    TextTrimming="CharacterEllipsis" />
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding GroupRelationDto.Remark, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    Text="{Binding GroupRelationDto.GroupDto.Name}"
+                                    TextTrimming="CharacterEllipsis" />
+                            </Grid>
+                            <TextBlock
+                                Name="Time_Text"
+                                Grid.Column="1"
+                                Margin="0,5"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Classes="time"
+                                Text="{Binding LastChatMessages.Time, Converter={StaticResource DateTimeConverter}}" />
+                        </Grid>
+                        <Grid Grid.Row="1" ColumnDefinitions="*,auto">
+                            <Panel Grid.Column="0"
+                                   IsVisible="{Binding LastChatMessages, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                <Panel IsVisible="{Binding !LastChatMessages.IsSystem}">
+                                    <TextBlock
+                                        Margin="0,0,15,0"
+                                        VerticalAlignment="Center"
+                                        Classes="tip"
+                                        IsVisible="{Binding !LastChatMessages.IsRetracted}"
+                                        TextTrimming="CharacterEllipsis">
+                                        <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                        <Run Text=":" />
+                                        <Run
+                                            Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
+                                    </TextBlock>
+                                    <TextBlock
+                                        Margin="0,0,15,0"
+                                        VerticalAlignment="Center"
+                                        Classes="tip"
+                                        IsVisible="{Binding LastChatMessages.IsRetracted}"
+                                        TextTrimming="CharacterEllipsis">
+                                        <Run Text="{Binding LastChatMessages.Owner.NickName}" />
+                                        <Run Text=":" />
+                                        <Run
+                                            Text="撤回一条消息" />
+                                    </TextBlock>
+                                </Panel>
+                                <TextBlock
+                                    Margin="0,0,15,0"
+                                    VerticalAlignment="Center"
+                                    Classes="tip"
+                                    IsVisible="{Binding LastChatMessages.IsSystem}"
+                                    TextTrimming="CharacterEllipsis">
+                                    <Run
+                                        Text="{Binding LastChatMessages.ChatMessages, Mode=OneWay, Converter={StaticResource ChatMessageToStringConverter}}" />
+                                </TextBlock>
+                            </Panel>
+                            <Panel Grid.Column="1">
+                                <Panel
+                                    IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Value=0}}">
+                                    <avalonia:MaterialIcon
+                                        Width="14"
+                                        Height="14"
+                                        IsVisible="{Binding GroupRelationDto.CantDisturb}"
+                                        Kind="BellOffOutline"
+                                        Opacity="0.6" />
+                                </Panel>
+                                <u:Badge HorizontalAlignment="Right"
+                                         Classes.Danger="{Binding GroupRelationDto.CantDisturb,Converter={x:Static BoolConverters.Not}}"
+                                         Classes.Gray="{Binding GroupRelationDto.CantDisturb}"
+                                         Header="{Binding UnReadMessageCount}"
+                                         OverflowCount="99"
+                                         IsVisible="{Binding UnReadMessageCount, Converter={converter:IntEqualityConverter Equal=False, Value=0}}" />
+                            </Panel>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </controls:DelayedPressButton>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+    <views:ChatPageView.FriendItemsSource>
+        <Binding Path="Friends" />
+    </views:ChatPageView.FriendItemsSource>
+    <views:ChatPageView.GroupItemsSource>
+        <Binding Path="Groups" />
+    </views:ChatPageView.GroupItemsSource>
+
+    <Grid>
+        <mobileScrollViewer:MobileScrollViewer
+            x:Name="ScrollViewer"
+            Background="Transparent"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Hidden">
+            <StackPanel Orientation="Vertical">
+                <Border Background="{DynamicResource SemiGrey0}" Height="45">
+                    <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,0"
+                             Height="26" IsHitTestVisible="False"
+                             TextAlignment="Center" Watermark="搜索" CornerRadius="10" FontSize="15"
+                             Background="{DynamicResource WindowDefaultBackground}" />
+                </Border>
+                <ItemsControl x:Name="Items">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </mobileScrollViewer:MobileScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,24 +1,29 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
-             xmlns:mvvm="http://prismlibrary.com/"
-             xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
-             xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
-             x:DataType="viewModels:MainChatViewModel"
-             d:DesignHeight="800"
-             d:DesignWidth="380"
-             x:Class="ChatClient.Android.Shared.Views.MainChatView">
-    <Panel Classes="Enter">
+<UserControl
+    x:Class="ChatClient.Android.Shared.Views.MainChatView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mvvm="http://prismlibrary.com/"
+    xmlns:uiEntity="clr-namespace:ChatClient.Tool.UIEntity;assembly=ChatClient.Tool"
+    xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
+    xmlns:controls="clr-namespace:ChatClient.Avalonia.Semi.Controls;assembly=ChatClient.Avalonia.Semi"
+    d:DesignHeight="800"
+    d:DesignWidth="380"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
+    x:DataType="viewModels:MainChatViewModel"
+    mc:Ignorable="d">
+    <Panel x:Name="Root">
         <Panel.Styles>
             <Style Selector="Panel.Enter">
-                <Style Selector="^ avalonia|MaterialIcon#SukiIcon">
+                <Style Selector="^ Panel#SukiIcon">
                     <Style.Animations>
-                        <Animation FillMode="Forward" Duration="0:0:0.4" Easing="QuadraticEaseInOut">
+                        <Animation
+                            Easing="QuadraticEaseInOut"
+                            FillMode="Forward"
+                            Duration="0:0:0.4">
                             <KeyFrame Cue="0%">
                                 <Setter Property="Opacity" Value="1" />
                                 <Setter Property="ScaleTransform.ScaleX" Value="1" />
@@ -34,9 +39,12 @@
                         </Animation>
                     </Style.Animations>
                 </Style>
-                <Style Selector="^ Grid#Content">
+                <Style Selector="^ controls|MobileDragSideOverlayView#Content">
                     <Style.Animations>
-                        <Animation FillMode="Forward" Duration="0:0:0.4" Easing="QuadraticEaseInOut">
+                        <Animation
+                            Easing="QuadraticEaseInOut"
+                            FillMode="Forward"
+                            Duration="0:0:0.4">
                             <KeyFrame Cue="0%">
                                 <Setter Property="Opacity" Value="0" />
                             </KeyFrame>
@@ -47,47 +55,169 @@
                     </Style.Animations>
                 </Style>
             </Style>
+
+            <Style Selector="Panel.Quit">
+                <Style Selector="^ Panel#SukiIcon">
+                    <Style.Animations>
+                        <Animation
+                            Easing="QuadraticEaseInOut"
+                            FillMode="Forward"
+                            Duration="0:0:0.4">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="0" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="1.25" />
+                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                <Setter Property="IsVisible" Value="True" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                                <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+                <Style Selector="^ controls|MobileDragSideOverlayView#Content">
+                    <Style.Animations>
+                        <Animation
+                            Easing="QuadraticEaseInOut"
+                            FillMode="Forward"
+                            Duration="0:0:0.4">
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="1" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="0" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Style>
         </Panel.Styles>
 
-        <Grid Name="Content" RowDefinitions="35,50,*,50">
-            <!-- 顶部背景 -->
-            <Border Background="{DynamicResource TopTitleBackground}" Grid.Row="0" Grid.RowSpan="2" />
+        <controls:MobileDragSideOverlayView Opacity="0" Name="Content">
+            <!-- 侧边栏 -->
+            <controls:MobileDragSideOverlayView.SidePanel>
+                <DockPanel LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
 
-            <!-- 顶部栏 -->
-            <DockPanel TextElement.Foreground="#F9F9F9"
-                       LastChildFill="False" Grid.Row="1" Margin="15,0"
-                       VerticalAlignment="Center">
-                <StackPanel Orientation="Horizontal" Spacing="10" DockPanel.Dock="Left">
-                    <circleImage:CircleImage Image="{Binding User.UserDto.HeadImage}" Size="35" />
-                    <StackPanel Margin="0,6,0,0" Orientation="Vertical" VerticalAlignment="Center" Spacing="1">
-                        <TextBlock Text="{Binding User.UserDto.Name}" />
-                        <TextBlock FontSize="10.5">
-                            <Ellipse Width="10" Margin="0,0,1,1" Height="10"
-                                     Fill="{DynamicResource NotificationCardSuccessIconForeground}" />
-                            <Run Text="在线" />
-                        </TextBlock>
                     </StackPanel>
-                </StackPanel>
-                <avalonia:MaterialIcon Kind="Plus" DockPanel.Dock="Right" Width="28" Height="28"
-                                       VerticalAlignment="Center" />
-            </DockPanel>
+                    <Border Theme="{StaticResource CardBorder}" CornerRadius="15"
+                            Classes="Shadow" VerticalAlignment="Center"
+                            Padding="15" Margin="15">
+                        <StackPanel Orientation="Horizontal">
+                            <circleImage:CircleImage Size="70" Image="{Binding User.UserDto.HeadImage}" />
+                            <StackPanel Orientation="Vertical" Margin="15,0,0,0">
+                                <TextBlock Text="{Binding User.UserDto.Name}" FontSize="18" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </DockPanel>
+            </controls:MobileDragSideOverlayView.SidePanel>
+            <Grid RowDefinitions="35,47,*,50">
+                <!--  顶部背景  -->
+                <Border
+                    CornerRadius="10,10,0,0"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Background="{DynamicResource TopTitleBackground}" />
 
-            <!-- 底部栏 -->
-            <Border Background="{DynamicResource SemiGrey1}" Opacity="0.5" Grid.Row="3">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="90">
-                    <avalonia:MaterialIcon Kind="ChatOutline" Width="25" Height="25" />
-                    <avalonia:MaterialIcon Kind="AccountSupervisorOutline" Width="25" Height="25" />
-                    <avalonia:MaterialIcon Kind="StarOutline" Width="25" Height="25" />
-                </StackPanel>
-            </Border>
+                <!--  顶部栏  -->
+                <DockPanel
+                    Grid.Row="1"
+                    Margin="17.5,0"
+                    VerticalAlignment="Center"
+                    LastChildFill="False"
+                    TextElement.Foreground="#F9F9F9">
+                    <StackPanel
+                        DockPanel.Dock="Left"
+                        Orientation="Horizontal"
+                        Spacing="10">
+                        <circleImage:CircleImage Image="{Binding User.UserDto.HeadImage}" Size="35" />
+                        <StackPanel
+                            Margin="0,5,0,0"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical"
+                            Spacing="1">
+                            <TextBlock Text="{Binding User.UserDto.Name}" />
+                            <TextBlock FontSize="9">
+                                <Ellipse
+                                    Width="8"
+                                    Height="8"
+                                    Margin="0,0,1,0"
+                                    Fill="{DynamicResource NotificationCardSuccessIconForeground}" />
+                                <Run Text="在线" />
+                            </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
+                    <PathIcon
+                        Width="18"
+                        Height="18"
+                        Data="{StaticResource QIconAdd}"
+                        DockPanel.Dock="Right" />
+                </DockPanel>
 
-            <ContentControl Grid.Row="2"
-                            mvvm:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainChatRegion}" />
-        </Grid>
+                <!--  底部栏  -->
+                <Border Grid.Row="3" Background="{DynamicResource SemiGrey0}" Height="50">
+                    <StackPanel
+                        Margin="0,3,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="95">
+                        <StackPanel.Styles>
+                            <Style Selector="PathIcon">
+                                <Setter Property="Foreground" Value="{DynamicResource TextBlockDefaultForeground}" />
+                                <Setter Property="Width" Value="18" />
+                                <Setter Property="Height" Value="18" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                            <Style Selector="TextBlock">
+                                <Setter Property="FontSize" Value="12" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </StackPanel.Styles>
+                        <StackPanel Orientation="Vertical" Spacing="2.5">
+                            <PathIcon Data="{StaticResource QIconChat}" />
+                            <TextBlock Text="消息" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Spacing="2.5">
+                            <PathIcon Data="{StaticResource QIconUser}" />
+                            <TextBlock Text="联系人" />
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Spacing="2.5">
+                            <PathIcon Data="{StaticResource QIconStar}" />
+                            <TextBlock Text="动态" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
 
-        <avalonia:MaterialIcon IsHitTestVisible="False" Name="SukiIcon" Kind="ChartDonutVariant"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"
-                               Foreground="{DynamicResource SemiColorPrimary}"
-                               Width="120" Height="120" />
+                <ContentControl
+                    Grid.Row="2"
+                    mvvm:RegionManager.RegionManager="{Binding RegionManager}"
+                    mvvm:RegionManager.RegionName="{x:Static uiEntity:RegionNames.MainChatRegion}" />
+            </Grid>
+        </controls:MobileDragSideOverlayView>
+        <Panel
+            Name="SukiIcon"
+            Margin="0,0,0,20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            IsHitTestVisible="False">
+            <PathIcon
+                Name="LittleIcon"
+                Width="60"
+                Height="60"
+                Data="M12,6A6,6 0 0,1 18,12C18,14.97 15.84,17.44 13,17.92V14.83C14.17,14.42 15,13.31 15,12A3,3 0 0,0 12,9L11.45,9.05L9.91,6.38C10.56,6.13 11.26,6 12,6M6,12C6,10.14 6.85,8.5 8.18,7.38L9.72,10.05C9.27,10.57 9,11.26 9,12C9,13.31 9.83,14.42 11,14.83V17.92C8.16,17.44 6,14.97 6,12Z"
+                Foreground="{DynamicResource SemiColorPrimary}" />
+
+            <!--  大圆弧  -->
+            <PathIcon
+                Name="LargeIcon"
+                Width="100"
+                Height="100"
+                Data="M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z"
+                Foreground="{DynamicResource SemiColorPrimary}" />
+        </Panel>
     </Panel>
 </UserControl>

@@ -23,7 +23,6 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 {
     private readonly IContainerProvider _containerProvider;
     private readonly AppSettings _appSettings;
-    private readonly IChatLRService _chatLrService;
     private readonly IDialogService _dialogService;
     private readonly IUserManager _userManager;
 
@@ -39,13 +38,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 
     private FriendChatDto? _selectedFriend;
 
-    public FriendChatDto? SelectedFriend
-    {
-        get => _selectedFriend;
-        set { SetProperty(ref _selectedFriend, value); }
-    }
-
-    private string? _selectedFriendId;
+    private string? _selectedFriendId => _selectedFriend?.UserId;
 
     #endregion
 
@@ -53,14 +46,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
 
     private GroupChatDto? _selectedGroup;
 
-    public GroupChatDto? SelectedGroup
-    {
-        get => _selectedGroup;
-        set { SetProperty(ref _selectedGroup, value); }
-    }
-
-
-    private string? _selectedGroupId;
+    private string? _selectedGroupId => _selectedGroup?.GroupId;
 
     #endregion
 
@@ -71,13 +57,11 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
     public ChatViewModel(IContainerProvider containerProvider,
         IRegionManager regionManager,
         AppSettings appSettings,
-        IChatLRService chatLRService,
         IDialogService dialogService,
         IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _appSettings = appSettings;
-        _chatLrService = chatLRService;
         _dialogService = dialogService;
         _userManager = userManager;
 
@@ -97,57 +81,52 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
     {
         if (friendChatDto == null)
         {
-            SelectedGroup = null;
-            SelectedFriend = null;
-            _selectedGroupId = null;
-            _selectedFriendId = null;
+            _selectedFriend = null;
+            _selectedFriend = null;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
-        if (friendChatDto == SelectedFriend) return;
+        if (friendChatDto == _selectedFriend) return;
 
         // 检查是否已经打开了聊天窗口
         var exist = ChatDialogHelper.FriendChatSelected(friendChatDto.UserId);
         if (exist)
         {
-            _selectedGroupId = null;
-            _selectedFriendId = friendChatDto.UserId;
-            SelectedGroup = null;
-            SelectedFriend = null;
+            _selectedFriend = null;
+            _selectedGroup = null;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
-        await _chatLrService.LoadFriendChatDto(User.Id, friendChatDto);
+        await Task.Run(() =>
+        {
+            var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+            return _chatLrService.LoadFriendChatDto(User.Id, friendChatDto);
+        });
 
-        var previousSelectedFriend = SelectedFriend;
-        var previousSelectedGroup = SelectedGroup;
+        var previousSelectedFriend = _selectedFriend;
+        var previousSelectedGroup = _selectedGroup;
         // if (previousSelectedFriend != null) previousSelectedFriend.IsSelected = false;
         // if (previousSelectedGroup != null) previousSelectedGroup.IsSelected = false;
 
-        SelectedGroup = null;
-        SelectedFriend = friendChatDto;
-        SelectedFriend.IsSelected = true;
+        _selectedGroup = null;
+        _selectedFriend = friendChatDto;
+        _selectedFriend.IsSelected = true;
 
-        _selectedFriendId = SelectedFriend.UserId;
-        _selectedGroupId = null;
-
-        var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
+        var param = new NavigationParameters { { "SelectedFriend", _selectedFriend } };
         RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
             param);
 
-        _ = Task.Run(() =>
-        {
-            if (previousSelectedFriend != null)
-                _chatLrService.ClearFriendChatDto(previousSelectedFriend);
 
-            if (previousSelectedGroup != null)
-                _chatLrService.ClearGroupChatDto(previousSelectedGroup);
+        var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+        if (previousSelectedFriend != null)
+            _chatLrService.ClearFriendChatDto(previousSelectedFriend);
+        if (previousSelectedGroup != null)
+            _chatLrService.ClearGroupChatDto(previousSelectedGroup);
 
-            var imageManager = _containerProvider.Resolve<IImageManager>();
-            imageManager.CleanupUnusedChatImages();
-        });
+        var imageManager = _containerProvider.Resolve<IImageManager>();
+        imageManager.CleanupUnusedChatImages();
     }
 
     /// <summary>
@@ -161,13 +140,17 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         var exist = ChatDialogHelper.FriendChatSelected(friendChatDto.UserId);
         if (!exist)
         {
-            if (SelectedFriend == friendChatDto)
+            if (_selectedFriend == friendChatDto)
             {
-                SelectedFriend = null;
+                _selectedFriend = null;
                 RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             }
 
-            await _chatLrService.LoadFriendChatDto(User.Id, friendChatDto);
+            await Task.Run(() =>
+            {
+                var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+                return _chatLrService.LoadFriendChatDto(User.Id, friendChatDto);
+            });
             _dialogService.Show(nameof(ChatFriendDialogView),
                 new DialogParameters { { "FriendChatDto", friendChatDto } },
                 FriendDialogClosed, nameof(SukiChatDialogWindow));
@@ -179,14 +162,15 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         var friendChatDto = dialogResult.Parameters.GetValue<FriendChatDto>("FriendChatDto");
         if (_selectedFriendId != null && friendChatDto.UserId.Equals(_selectedFriendId))
         {
-            SelectedFriend = friendChatDto;
+            _selectedFriend = friendChatDto;
             friendChatDto.IsSelected = true;
-            var param = new NavigationParameters { { "SelectedFriend", SelectedFriend } };
+            var param = new NavigationParameters { { "SelectedFriend", _selectedFriend } };
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatFriendPanelView),
                 param);
         }
         else
         {
+            var _chatLrService = _containerProvider.Resolve<IChatLRService>();
             _chatLrService.ClearFriendChatDto(friendChatDto);
             friendChatDto.IsSelected = false;
         }
@@ -202,14 +186,12 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
     /// <param name="friendChatDto">被选中的好友</param>
     public async Task GroupSelectionChanged(GroupChatDto? groupChatDto)
     {
-        if (groupChatDto == SelectedGroup) return;
+        if (groupChatDto == _selectedGroup) return;
 
         if (groupChatDto == null)
         {
-            SelectedGroup = null;
-            SelectedFriend = null;
-            _selectedFriendId = null;
-            _selectedGroupId = null;
+            _selectedGroup = null;
+            _selectedGroup = null;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
@@ -219,42 +201,39 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         if (exist)
         {
             _selectedFriend = null;
-            _selectedGroupId = groupChatDto.GroupId;
-            SelectedGroup = null;
-            SelectedFriend = null;
+            _selectedGroup = null;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
 
-        await _chatLrService.LoadGroupChatDto(User.Id, groupChatDto);
+        await Task.Run(() =>
+        {
+            var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+            return _chatLrService.LoadGroupChatDto(User.Id, groupChatDto);
+        });
 
-        var previousSelectedFriend = SelectedFriend;
-        var previousSelectedGroup = SelectedGroup;
+        var previousSelectedFriend = _selectedFriend;
+        var previousSelectedGroup = _selectedGroup;
         // if (previousSelectedFriend != null) previousSelectedFriend.IsSelected = false;
         // if (previousSelectedGroup != null) previousSelectedGroup.IsSelected = false;
 
-        SelectedFriend = null;
-        SelectedGroup = groupChatDto;
-        SelectedGroup.IsSelected = true;
+        _selectedFriend = null;
+        _selectedGroup = groupChatDto;
+        _selectedGroup.IsSelected = true;
 
-        _selectedFriendId = null;
-        _selectedGroupId = SelectedGroup.GroupId;
-
-        var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
+        var param = new NavigationParameters { { "SelectedGroup", _selectedGroup } };
         RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
             param);
 
-        _ = Task.Run(() =>
-        {
-            if (previousSelectedFriend != null)
-                _chatLrService.ClearFriendChatDto(previousSelectedFriend);
 
-            if (previousSelectedGroup != null)
-                _chatLrService.ClearGroupChatDto(previousSelectedGroup);
+        var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+        if (previousSelectedFriend != null)
+            _chatLrService.ClearFriendChatDto(previousSelectedFriend);
+        if (previousSelectedGroup != null)
+            _chatLrService.ClearGroupChatDto(previousSelectedGroup);
 
-            var imageManager = _containerProvider.Resolve<IImageManager>();
-            imageManager.CleanupUnusedChatImages();
-        });
+        var imageManager = _containerProvider.Resolve<IImageManager>();
+        imageManager.CleanupUnusedChatImages();
     }
 
     /// <summary>
@@ -268,13 +247,17 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         var exist = ChatDialogHelper.GroupChatSelected(groupChatDto.GroupId);
         if (!exist)
         {
-            if (SelectedGroup == groupChatDto)
+            if (_selectedGroup == groupChatDto)
             {
-                SelectedGroup = null;
+                _selectedGroup = null;
                 RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             }
 
-            await _chatLrService.LoadGroupChatDto(User.Id, groupChatDto);
+            await Task.Run(() =>
+            {
+                var _chatLrService = _containerProvider.Resolve<IChatLRService>();
+                return _chatLrService.LoadGroupChatDto(User.Id, groupChatDto);
+            });
             _dialogService.Show(nameof(ChatGroupDialogView), new DialogParameters { { "GroupChatDto", groupChatDto } },
                 GroupDialogClosed, nameof(SukiChatDialogWindow));
         }
@@ -285,14 +268,15 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         var groupChatDto = dialogResult.Parameters.GetValue<GroupChatDto>("GroupChatDto");
         if (_selectedGroupId != null && groupChatDto.GroupId.Equals(_selectedGroupId))
         {
-            SelectedGroup = groupChatDto;
+            _selectedGroup = groupChatDto;
             groupChatDto.IsSelected = true;
-            var param = new NavigationParameters { { "SelectedGroup", SelectedGroup } };
+            var param = new NavigationParameters { { "SelectedGroup", _selectedGroup } };
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatGroupPanelView),
                 param);
         }
         else
         {
+            var _chatLrService = _containerProvider.Resolve<IChatLRService>();
             _chatLrService.ClearGroupChatDto(groupChatDto);
             groupChatDto.IsSelected = false;
         }

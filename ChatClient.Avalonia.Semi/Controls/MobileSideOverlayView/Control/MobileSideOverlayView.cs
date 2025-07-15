@@ -1,8 +1,12 @@
+using System.Diagnostics;
 using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
+using Avalonia.Threading;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.EventArgs;
 using ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Manager;
 
@@ -58,6 +62,8 @@ public class MobileSideOverlayView : ContentControl
         base.OnApplyTemplate(e);
         _mainRegionContentControl = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter")!;
         _leftRegionContentControl = e.NameScope.Find<ContentPresenter>("PART_LeftContent")!;
+        // _leftRegionContentControl.Transitions = null;
+        // _mainRegionContentControl.Transitions = null;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -119,11 +125,30 @@ public class MobileSideOverlayView : ContentControl
         }
     }
 
+    private void AnimateDouble(double from, double to, TimeSpan duration, Action<double> setter)
+    {
+        var sw = Stopwatch.StartNew();
+        DispatcherTimer.Run(() =>
+        {
+            var elapsed = sw.Elapsed;
+            if (elapsed >= duration)
+            {
+                setter(to);
+                return false;
+            }
+
+            double t = elapsed.TotalMilliseconds / duration.TotalMilliseconds;
+            double eased = new QuadraticEaseInOut().Ease(t);
+            setter(from + (to - from) * eased);
+            return true;
+        }, TimeSpan.FromMilliseconds(10), DispatcherPriority.Default);
+    }
+
     private async Task CantInteractAsync()
     {
         _mainRegionContentControl.IsHitTestVisible = false;
         _leftRegionContentControl.IsHitTestVisible = false;
-        await Task.Delay(250);
+        await Task.Delay(400);
         _mainRegionContentControl.IsHitTestVisible = true;
         _leftRegionContentControl.IsHitTestVisible = true;
     }
@@ -189,14 +214,14 @@ public class MobileSideOverlayView : ContentControl
 
         // 1. 先插入视图
         SidePanel = view;
-
-        // 2. 等待一会儿，确保视图已经插入到 UI 树中
         UpdateLayout();
 
-        // 3. 触发动画
+        // 2. 等待一次 Render pass 完成，确保 UI 已经测量、排列、渲染
+        await Dispatcher.UIThread.InvokeAsync(() => { }, DispatcherPriority.Render);
+
         IsPanelOpened = true;
 
-        // 4.（可选）动画跑一会儿后再恢复交互（旧的 CantInteractAsync）
+        // 动画跑一会儿后再恢复交互（旧的 CantInteractAsync）
         _ = CantInteractAsync();
     }
 

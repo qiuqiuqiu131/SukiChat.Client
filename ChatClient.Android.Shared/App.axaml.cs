@@ -97,6 +97,9 @@ public class App : PrismApplication
         containerRegistry.RegisterForNavigation<ForgetPasswordView, ForgetPasswordViewModel>();
 
         containerRegistry.RegisterForNavigation<MainChatView, MainChatViewModel>();
+        containerRegistry.RegisterForNavigation<ChatPageView, ChatPageViewModel>();
+        containerRegistry.RegisterForNavigation<GroupChatView, GroupChatViewModel>();
+        containerRegistry.RegisterForNavigation<FriendChatView, FriendChatViewModel>();
 
         containerRegistry.RegisterForNavigation<Blank>();
     }
@@ -113,6 +116,7 @@ public class App : PrismApplication
     {
         var regionManager = Container.Resolve<IRegionManager>();
         regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
+        regionManager.RegisterViewWithRegion(RegionNames.MainChatRegion, typeof(ChatPageView));
 
         // 获取STUN服务器地址
         Container.Resolve<IStunServerManager>().GetStunServersUrl();

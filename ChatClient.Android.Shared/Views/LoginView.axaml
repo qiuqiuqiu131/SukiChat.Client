@@ -4,24 +4,27 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
-    xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mvvm="http://prismlibrary.com/"
     xmlns:u="https://irihi.tech/ursa"
     xmlns:viewModels="clr-namespace:ChatClient.Android.Shared.ViewModels"
-    xmlns:control="clr-namespace:ChatClient.Avalonia.Semi.Controls.MobileSideOverlayView.Control;assembly=ChatClient.Avalonia.Semi"
-    mvvm:ViewModelLocator.AutoWireViewModel="True"
     d:DesignHeight="800"
     d:DesignWidth="380"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="viewModels:LoginViewModel"
     mc:Ignorable="d">
-    <Panel Classes="Login" Classes.LoginSuccess="{Binding IsLoginSuccess}"
-           IsHitTestVisible="{Binding IsBusy,Converter={x:Static BoolConverters.Not}}">
+    <Panel
+        Classes="Login"
+        Classes.LoginSuccess="{Binding IsLoginSuccess}"
+        IsHitTestVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}">
         <Panel.Transitions>
             <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.4" Easing="QuadraticEaseInOut" />
+                <BrushTransition
+                    Easing="QuadraticEaseInOut"
+                    Property="Background"
+                    Duration="0:0:0.4" />
             </Transitions>
         </Panel.Transitions>
         <Panel.Styles>
@@ -59,16 +62,26 @@
             </Style>
         </Panel.Styles>
 
-        <u:LoadingContainer Name="Container" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" Padding="0"
-                            LoadingMessage="请稍等..."
-                            IsLoading="{Binding IsLoading}">
+        <u:LoadingContainer
+            Name="Container"
+            Padding="0"
+            VerticalAlignment="Stretch"
+            VerticalContentAlignment="Stretch"
+            IsLoading="{Binding IsLoading}"
+            LoadingMessage="请稍等...">
             <u:LoadingContainer.Transitions>
                 <Transitions>
-                    <DoubleTransition Property="Opacity" Duration="0:0:0.4" Easing="QuadraticEaseInOut" />
+                    <DoubleTransition
+                        Easing="QuadraticEaseInOut"
+                        Property="Opacity"
+                        Duration="0:0:0.4" />
                 </Transitions>
             </u:LoadingContainer.Transitions>
             <!--  主体  -->
-            <DockPanel Width="260" VerticalAlignment="Stretch" LastChildFill="True">
+            <DockPanel
+                Width="260"
+                VerticalAlignment="Stretch"
+                LastChildFill="True">
                 <StackPanel
                     Margin="0,0,0,40"
                     HorizontalAlignment="Center"
@@ -183,7 +196,7 @@
                         CornerRadius="13"
                         IsHitTestVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
                         ItemsSource="{Binding UserList}"
-                        MaxDropDownHeight="300"
+                        MaxDropDownHeight="350"
                         MaxLength="10"
                         MinimumPrefixLength="4"
                         Text="{Binding Id}"
@@ -210,7 +223,7 @@
                                         Margin="10,0,0,0"
                                         DockPanel.Dock="Left"
                                         Image="{Binding Head}"
-                                        Size="35" />
+                                        Size="40" />
                                     <StackPanel
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -263,12 +276,19 @@
                         CornerRadius="13"
                         Theme="{StaticResource SolidButton}">
                         <StackPanel Orientation="Horizontal" Spacing="5">
-                            <u:LoadingIcon IsLoading="{Binding IsBusy}"
-                                           IsVisible="{Binding IsBusy}"
-                                           Opacity="0.8" Foreground="White" />
-                            <TextBlock IsVisible="{Binding IsBusy}" FontSize="15.5" Text="登录中..." />
-                            <TextBlock IsVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
-                                       FontSize="15.5" Text="登录" />
+                            <u:LoadingIcon
+                                Foreground="White"
+                                IsLoading="{Binding IsBusy}"
+                                IsVisible="{Binding IsBusy}"
+                                Opacity="0.8" />
+                            <TextBlock
+                                FontSize="15.5"
+                                IsVisible="{Binding IsBusy}"
+                                Text="登录中..." />
+                            <TextBlock
+                                FontSize="15.5"
+                                IsVisible="{Binding IsBusy, Converter={x:Static BoolConverters.Not}}"
+                                Text="登录" />
                             <!-- <TextBlock FontSize="15.5" Text="登录" /> -->
                         </StackPanel>
                     </Button>
@@ -276,14 +296,21 @@
             </DockPanel>
         </u:LoadingContainer>
 
-        <!-- 中间的圆形图标 -->
-        <Panel Name="SukiIcon" Classes="Icon"
-               Opacity="0"
-               HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!--  中间的圆形图标  -->
+        <Panel
+            Name="SukiIcon"
+            Margin="0,0,0,20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Classes="Icon"
+            Opacity="0">
             <Panel.Styles>
                 <Style Selector="Panel.Icon[IsVisible=True]">
                     <Style.Animations>
-                        <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.4" FillMode="Forward">
+                        <Animation
+                            Easing="QuadraticEaseInOut"
+                            FillMode="Forward"
+                            Duration="0:0:0.4">
                             <KeyFrame Cue="0%">
                                 <Setter Property="TranslateTransform.Y" Value="70" />
                                 <Setter Property="Opacity" Value="0" />
@@ -296,7 +323,10 @@
                     </Style.Animations>
                     <Style Selector="^ PathIcon#LittleIcon">
                         <Style.Animations>
-                            <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.5" FillMode="Forward">
+                            <Animation
+                                Easing="QuadraticEaseInOut"
+                                FillMode="Forward"
+                                Duration="0:0:0.5">
                                 <KeyFrame Cue="0%">
                                     <Setter Property="RotateTransform.Angle" Value="90" />
                                 </KeyFrame>
@@ -308,7 +338,10 @@
                     </Style>
                     <Style Selector="^ PathIcon#LargeIcon">
                         <Style.Animations>
-                            <Animation Easing="QuadraticEaseInOut" Duration="0:0:0.5" FillMode="Forward">
+                            <Animation
+                                Easing="QuadraticEaseInOut"
+                                FillMode="Forward"
+                                Duration="0:0:0.5">
                                 <KeyFrame Cue="0%">
                                     <Setter Property="RotateTransform.Angle" Value="-90" />
                                 </KeyFrame>
@@ -322,16 +355,18 @@
             </Panel.Styles>
             <PathIcon
                 Name="LittleIcon"
-                Foreground="{DynamicResource SemiColorPrimary}"
+                Width="60"
+                Height="60"
                 Data="M12,6A6,6 0 0,1 18,12C18,14.97 15.84,17.44 13,17.92V14.83C14.17,14.42 15,13.31 15,12A3,3 0 0,0 12,9L11.45,9.05L9.91,6.38C10.56,6.13 11.26,6 12,6M6,12C6,10.14 6.85,8.5 8.18,7.38L9.72,10.05C9.27,10.57 9,11.26 9,12C9,13.31 9.83,14.42 11,14.83V17.92C8.16,17.44 6,14.97 6,12Z"
-                Width="60" Height="60" />
+                Foreground="{DynamicResource SemiColorPrimary}" />
 
-            <!-- 大圆弧 -->
+            <!--  大圆弧  -->
             <PathIcon
                 Name="LargeIcon"
-                Foreground="{DynamicResource SemiColorPrimary}"
+                Width="100"
+                Height="100"
                 Data="M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z"
-                Width="100" Height="100" />
+                Foreground="{DynamicResource SemiColorPrimary}" />
         </Panel>
     </Panel>
 </UserControl>

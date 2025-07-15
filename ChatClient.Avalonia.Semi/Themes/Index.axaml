@@ -5,10 +5,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="../Controls/MobileSideOverlayView/Control/MobileSideOverlayView.axaml" />
                 <ResourceInclude Source="../Controls/MobileSideOverlayView/Control/MobileSideBottomView.axaml" />
+                <ResourceInclude Source="../Controls/MobileDragSideOverlayView.axaml" />
+                <ResourceInclude Source="../Controls/MobileScrollViewer.axaml" />
+                <ResourceInclude Source="Icons.axaml" />
+                <ResourceInclude Source="DelayedPressButton.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Styles.Resources>
     <StyleInclude Source="Text.axaml" />
+    <StyleInclude Source="../Controls/QScrollViewer.axaml" />
     <StyleInclude Source="AutoCompleteBoxStyle.axaml" />
     <StyleInclude Source="Button.axaml" />
     <StyleInclude Source="NotificationStyle.axaml" />

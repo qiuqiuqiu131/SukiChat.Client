@@ -33,7 +33,7 @@ public class SidePageViewModelBase : ValidateBindableBase, ISideViewAware
 
     #region ISideViewAware
 
-    public Task OnSideViewOpened(ISideViewManager sideViewManager, INavigationParameters? parameters)
+    public virtual Task OnSideViewOpened(ISideViewManager sideViewManager, INavigationParameters? parameters)
     {
         this.sideViewManager = sideViewManager;
 #if ANDROID
@@ -46,7 +46,7 @@ public class SidePageViewModelBase : ValidateBindableBase, ISideViewAware
         return Task.CompletedTask;
     }
 
-    public Task OnSideViewClosed()
+    public virtual Task OnSideViewClosed()
     {
         token?.Dispose();
         return Task.CompletedTask;

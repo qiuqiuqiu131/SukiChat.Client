@@ -1,0 +1,65 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:ChatClient.Avalonia.Semi.Controls">
+    <ControlTheme TargetType="controls:MobileDragSideOverlayView" x:Key="{x:Type controls:MobileDragSideOverlayView}">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <!-- 主内容区域 -->
+                    <ContentPresenter Name="PART_ContentPresenter" ZIndex="0"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Background="Transparent"
+                                      Content="{TemplateBinding Content}">
+                        <ContentPresenter.Transitions>
+                            <Transitions>
+                                <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.35"
+                                                        Easing="QuadraticEaseInOut" />
+                            </Transitions>
+                        </ContentPresenter.Transitions>
+                        <ContentPresenter.RenderTransform>
+                            <ScaleTransform>
+                                <ScaleTransform.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="ScaleX" Duration="0:0:0.35"
+                                                          Easing="QuadraticEaseInOut" />
+                                        <DoubleTransition Property="ScaleY" Duration="0:0:0.35"
+                                                          Easing="QuadraticEaseInOut" />
+                                    </Transitions>
+                                </ScaleTransform.Transitions>
+                            </ScaleTransform>
+                        </ContentPresenter.RenderTransform>
+                    </ContentPresenter>
+
+                    <Border Name="PART_Mask" ZIndex="1" Width="{TemplateBinding Width}" Opacity="0"
+                            IsHitTestVisible="False"
+                            Height="{TemplateBinding Height}" Background="{DynamicResource SemiBlack}">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.35" Easing="QuadraticEaseInOut" />
+                            </Transitions>
+                        </Border.Transitions>
+                    </Border>
+
+                    <!-- 左侧内容区域 -->
+                    <ContentPresenter Name="PART_LeftContent"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Content="{TemplateBinding SidePanel}"
+                                      Padding="0,0,0,0"
+                                      ZIndex="2" Background="{DynamicResource SemiGrey0Color}">
+                        <ContentPresenter.RenderTransform>
+                            <TranslateTransform>
+                                <TranslateTransform.Transitions>
+                                    <Transitions>
+                                        <DoubleTransition Property="X" Duration="0:0:0.35" Easing="QuadraticEaseInOut" />
+                                    </Transitions>
+                                </TranslateTransform.Transitions>
+                            </TranslateTransform>
+                        </ContentPresenter.RenderTransform>
+                    </ContentPresenter>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

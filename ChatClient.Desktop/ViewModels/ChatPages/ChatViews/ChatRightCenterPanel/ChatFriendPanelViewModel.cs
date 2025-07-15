@@ -49,8 +49,6 @@ public class ChatFriendPanelViewModel : ViewModelBase, IDestructible
     private readonly AppSettings _appSettings;
     private readonly IUserManager _userManager;
 
-    private SubscriptionToken? _token;
-
     public IRegionManager RegionManager { get; }
 
     public ThemeStyle ThemeStyle { get; set; }
