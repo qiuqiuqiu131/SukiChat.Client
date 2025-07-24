@@ -369,7 +369,7 @@ public class MobileScrollViewer : ScrollViewer
 
                 return true;
             },
-            TimeSpan.FromMilliseconds(10),
+            TimeSpan.FromMilliseconds(3),
             DispatcherPriority.Default);
     }
 }

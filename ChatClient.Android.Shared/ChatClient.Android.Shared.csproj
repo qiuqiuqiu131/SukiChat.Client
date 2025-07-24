@@ -28,7 +28,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ChatClient.Avalonia.Semi\ChatClient.Avalonia.Semi.csproj"/>
-        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj" />
         <ProjectReference Include="..\ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj"/>
         <ProjectReference Include="..\ChatClient.Client\ChatClient.Client.csproj"/>
         <ProjectReference Include="..\ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj"/>

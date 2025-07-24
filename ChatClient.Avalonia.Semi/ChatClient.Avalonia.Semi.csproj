@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj" />
         <ProjectReference Include="..\ChatClient.Tool\ChatClient.Tool.csproj"/>
         <ProjectReference Include="..\ChatServer.Common\ChatServer.Common.csproj"/>
     </ItemGroup>

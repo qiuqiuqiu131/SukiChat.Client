@@ -10,7 +10,7 @@
         <PublishAot>false</PublishAot>
         <IsAotCompatible>true</IsAotCompatible>
         <StripSymbols>false</StripSymbols>
-        <TargetFrameworks>net8.0</TargetFrameworks>
+        <TargetFrameworks>net9.0</TargetFrameworks>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
     </PropertyGroup>
@@ -62,7 +62,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\ChatClient.Avalonia.Suki\ChatClient.Avalonia.Suki.csproj"/>
-        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj"/>
+        <ProjectReference Include="..\ChatClient.Avalonia\ChatClient.Avalonia.csproj" />
         <ProjectReference Include="..\ChatClient.BaseService.SqlSugar\ChatClient.BaseService.SqlSugar.csproj"/>
         <ProjectReference Include="..\ChatClient.DataBase.SqlSugar\ChatClient.DataBase.SqlSugar.csproj"/>
         <ProjectReference Include="..\ChatClient.Media.Desktop\ChatClient.Media.Desktop.csproj"/>

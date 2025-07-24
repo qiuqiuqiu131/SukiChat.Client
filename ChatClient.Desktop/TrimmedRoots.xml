@@ -7,6 +7,7 @@
 	<assembly fullname="ChatClient.Avalonia" preserve="all"/>
 	<assembly fullname="ChatClient.Avalonia.Suki" preserve="all"/>
 	<assembly fullname="ChatClient.BaseService" preserve="all"/>
+	<assembly fullname="ChatClient.BaseService.SqlSugar" preserve="all"/>
 	<assembly fullname="ChatClient.Client" preserve="all"/>
 	<assembly fullname="ChatClient.Resources" preserve="all"/>
 	<assembly fullname="ChatClient.Desktop" preserve="all"/>

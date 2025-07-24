@@ -10,7 +10,7 @@
     xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
     Title="Suki Chat"
     Width="320"
-    Height="480"
+    Height="470"
     ExtendClientAreaTitleBarHeightHint="-1"
     IsTitleBarVisible="False"
     TitleBarAnimationEnabled="False"
