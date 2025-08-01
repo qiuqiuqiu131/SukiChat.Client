@@ -242,8 +242,7 @@
                 <Button IsVisible="{Binding SelectedFriend.HasMoreMessage}"
                         Classes="Basic"
                         Cursor="Hand"
-                        Click="MoreButton_OnClick"
-                        Command="{Binding SearchMoreCommand}">
+                        Click="MoreButton_OnClick">
                     <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1" Classes="Small"
                                Foreground="{DynamicResource SukiPrimaryColor75}" />
                 </Button>

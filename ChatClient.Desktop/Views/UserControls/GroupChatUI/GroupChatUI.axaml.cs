@@ -17,6 +17,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Desktop.Views.UserControls.ChatUI;
 using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
@@ -306,7 +307,8 @@ public partial class GroupChatUI : UserControl
     {
         // 锁定ScrollViewer滚动
         ChatScrollViewer.Lock();
-        await Task.Delay(1500);
+        ((ChatGroupPanelViewModel)DataContext!).SearchMoreCommand.Execute();
+        await Task.Delay(1500).ConfigureAwait(true);
         ChatScrollViewer.UnLock();
     }
 

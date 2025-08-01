@@ -72,9 +72,10 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
         // 注入资源
         var chatService = _scopedProvider.Resolve<IChatService>();
         if (!groupChat.IsRetracted)
-            _ = chatService.OperateChatMessage(userId, groupChat.GroupId, groupChatData.ChatId, groupChatData.IsUser,
+            _ = Task.Run(() => chatService.OperateChatMessage(userId, groupChat.GroupId, groupChatData.ChatId,
+                groupChatData.IsUser,
                 groupChatData.ChatMessages,
-                FileTarget.Group);
+                FileTarget.Group)).ConfigureAwait(false);
 
         groupChatDto.ChatMessages.Add(groupChatData);
         return groupChatDto;
@@ -144,9 +145,9 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
             }
 
             if (!groupChat.IsRetracted)
-                _ = chatService.OperateChatMessage(userId, groupChat.GroupId, data.ChatId, data.IsUser,
+                _ = Task.Run(() => chatService.OperateChatMessage(userId, groupChat.GroupId, data.ChatId, data.IsUser,
                     data.ChatMessages,
-                    FileTarget.Group).ConfigureAwait(false);
+                    FileTarget.Group)).ConfigureAwait(false);
             groupChatDatas.Add(data);
         }
 
@@ -220,8 +221,8 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
                 await _unitOfWork.Db.Updateable<GroupRelation>()
                     .SetColumns(d => d.IsChatting == true)
                     .Where(d => d.UserId == userId &&
-                               d.GroupId == update.GroupId &&
-                               d.LastChatId < update.MaxChatId)
+                                d.GroupId == update.GroupId &&
+                                d.LastChatId < update.MaxChatId)
                     .ExecuteCommandAsync();
             }
 

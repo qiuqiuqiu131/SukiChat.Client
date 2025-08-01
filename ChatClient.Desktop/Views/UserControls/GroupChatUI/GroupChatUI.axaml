@@ -306,8 +306,7 @@
             <StackPanel Orientation="Vertical" Background="#00000000">
                 <Button IsVisible="{Binding SelectedGroup.HasMoreMessage}"
                         Classes="Basic"
-                        Click="MoreButton_OnClick"
-                        Command="{Binding SearchMoreCommand}">
+                        Click="MoreButton_OnClick">
                     <TextBlock Text="查看更多历史记录" FontSize="12" LetterSpacing="1"
                                Cursor="Hand" Classes="Small"
                                Foreground="{DynamicResource SukiPrimaryColor75}" />

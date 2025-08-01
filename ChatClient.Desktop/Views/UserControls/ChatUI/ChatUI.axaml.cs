@@ -17,6 +17,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using ChatClient.Avalonia.Controls.Chat;
+using ChatClient.Desktop.ViewModels.ChatPages.ChatViews.ChatRightCenterPanel;
 using ChatClient.Tool.Data.ChatMessage;
 using Material.Icons;
 using Material.Icons.Avalonia;
@@ -215,7 +216,7 @@ public partial class ChatUI : UserControl
         double maxOffsetY = ChatScrollViewer.MaxOffsetY; // 最大可偏移量
         double OffsetYOrigion = ChatScrollViewer.Offset.Y; // 当前偏移量
 
-        Dispatcher.UIThread.Post(async () =>
+        Dispatcher.UIThread.Post(() =>
         {
             if (e.Action == NotifyCollectionChangedAction.Add)
             {
@@ -276,20 +277,6 @@ public partial class ChatUI : UserControl
 
     #endregion
 
-    // protected override void OnUnloaded(RoutedEventArgs e)
-    // {
-    //     base.OnUnloaded(e);
-    //
-    //     IC.ItemsSource = null;
-    //     IC.PropertyChanged -= IC_OnPropertyChanged;
-    //
-    //     ChatScrollViewer.PropertyChanged -= ChatScrollOnPropertyChanged;
-    //     ChatScrollContent = null;
-    //
-    //     _contextMenu?.Close();
-    //     _contextMenu = null;
-    // }
-
     /// <summary>
     /// 新消息气泡点击事件
     /// </summary>
@@ -306,7 +293,8 @@ public partial class ChatUI : UserControl
     {
         // 锁定ScrollViewer滚动
         ChatScrollViewer.Lock();
-        await Task.Delay(1500);
+        ((ChatFriendPanelViewModel)DataContext!).SearchMoreCommand.Execute();
+        await Task.Delay(1500).ConfigureAwait(true);
         ChatScrollViewer.UnLock();
     }
 

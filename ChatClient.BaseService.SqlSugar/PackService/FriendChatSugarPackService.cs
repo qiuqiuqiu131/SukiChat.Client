@@ -66,9 +66,10 @@ public class FriendChatSugarPackService
         var chatData = _mapper.Map<ChatData>(friendChat);
         chatData.IsUser = friendChat.UserFromId.Equals(userId);
         if (!chatData.IsRetracted)
-            _ = chatService.OperateChatMessage(userId, friendChat.UserFromId, chatData.ChatId, chatData.IsUser,
+            _ = Task.Run(() => chatService.OperateChatMessage(userId, friendChat.UserFromId, chatData.ChatId,
+                chatData.IsUser,
                 chatData.ChatMessages,
-                FileTarget.User);
+                FileTarget.User)).ConfigureAwait(false);
 
         friendChatDto.ChatMessages.Add(chatData);
         return friendChatDto;
@@ -132,9 +133,9 @@ public class FriendChatSugarPackService
             var data = _mapper.Map<ChatData>(chatPrivate);
             data.IsUser = chatPrivate.UserFromId.Equals(userId);
             if (!data.IsRetracted)
-                _ = chatService.OperateChatMessage(userId, chatPrivate.UserFromId, data.ChatId, data.IsUser,
-                    data.ChatMessages,
-                    FileTarget.User).ConfigureAwait(false);
+                _ = Task.Run(() => chatService.OperateChatMessage(userId,
+                    chatPrivate.UserFromId, data.ChatId, data.IsUser,
+                    data.ChatMessages, FileTarget.User)).ConfigureAwait(false);
             chatDatas.Add(data);
         }
 

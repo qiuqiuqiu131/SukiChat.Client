@@ -15,10 +15,8 @@ public class ImageManager : IImageManager
     private readonly ConcurrentDictionary<string, DateTime> _chatImageLastAccessTime = new();
     private readonly ConcurrentDictionary<string, Bitmap> _staticImageCache = new();
 
-    private SemaphoreSlim _semaphoreSlim1 = new(1, 1);
-    private SemaphoreSlim _semaphoreSlim2 = new(1, 1);
-    private SemaphoreSlim _semaphoreSlim3 = new(1, 1);
-    private SemaphoreSlim _semaphoreSlim4 = new(1, 1);
+    // 统一的锁字典，按 cacheKey 管理
+    private readonly ConcurrentDictionary<string, SemaphoreSlim> _locks = new();
 
     public ImageManager(IContainerProvider containerProvider, IFileOperateHelper fileOperateHelper)
     {
@@ -26,16 +24,22 @@ public class ImageManager : IImageManager
         _fileOperateHelper = fileOperateHelper;
     }
 
+    // 获取或创建指定 cacheKey 的锁
+    private SemaphoreSlim GetOrCreateLock(string cacheKey)
+    {
+        return _locks.GetOrAdd(cacheKey, _ => new SemaphoreSlim(1, 1));
+    }
+
     public async Task<Bitmap?> GetGroupFile(string path, string fileName)
     {
-        // 先检查是否存在缓存
         string cacheKey = $"group_{path}_{fileName}";
         if (_imageCache.TryGetValue(cacheKey, out Bitmap? cachedBitmap))
             return cachedBitmap;
 
+        var semaphore = GetOrCreateLock(cacheKey);
         try
         {
-            await _semaphoreSlim1.WaitAsync();
+            await semaphore.WaitAsync();
 
             if (_imageCache.TryGetValue(cacheKey, out cachedBitmap))
                 return cachedBitmap;
@@ -44,9 +48,7 @@ public class ImageManager : IImageManager
             await using (var stream = await _fileOperateHelper.GetGroupFile(path, fileName))
                 bitmap = new Bitmap(stream);
 
-            // 添加bitmap到字典中缓存
             _imageCache.TryAdd(cacheKey, bitmap);
-
             return bitmap;
         }
         catch
@@ -55,21 +57,20 @@ public class ImageManager : IImageManager
         }
         finally
         {
-            _semaphoreSlim1.Release();
+            semaphore.Release();
         }
     }
 
-    // 获取头像资源
     public async Task<Bitmap?> GetFile(string id, string path, string fileName, FileTarget fileTarget)
     {
-        // 先检查是否存在缓存
         string cacheKey = $"{fileTarget}_{id}_{path}_{fileName}";
         if (_imageCache.TryGetValue(cacheKey, out Bitmap? cachedBitmap))
             return cachedBitmap;
 
+        var semaphore = GetOrCreateLock(cacheKey);
         try
         {
-            await _semaphoreSlim2.WaitAsync();
+            await semaphore.WaitAsync();
 
             if (_imageCache.TryGetValue(cacheKey, out cachedBitmap))
                 return cachedBitmap;
@@ -78,9 +79,7 @@ public class ImageManager : IImageManager
             await using (var stream = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget))
                 bitmap = new Bitmap(stream);
 
-            // 添加bitmap到字典中缓存
             _imageCache.TryAdd(cacheKey, bitmap);
-
             return bitmap;
         }
         catch (Exception e)
@@ -89,13 +88,12 @@ public class ImageManager : IImageManager
         }
         finally
         {
-            _semaphoreSlim2.Release();
+            semaphore.Release();
         }
     }
 
     public async Task<Bitmap?> GetChatFile(string id, string path, string fileName, FileTarget fileTarget)
     {
-        // 先检查是否存在缓存
         string cacheKey = $"{fileTarget}_{id}_{path}_{fileName}";
         if (_chatImageCache.TryGetValue(cacheKey, out Bitmap? cachedBitmap))
         {
@@ -103,9 +101,10 @@ public class ImageManager : IImageManager
             return cachedBitmap;
         }
 
+        var semaphore = GetOrCreateLock(cacheKey);
         try
         {
-            await _semaphoreSlim3.WaitAsync();
+            await semaphore.WaitAsync();
 
             if (_chatImageCache.TryGetValue(cacheKey, out cachedBitmap))
             {
@@ -117,9 +116,7 @@ public class ImageManager : IImageManager
             await using (var stream = await _fileOperateHelper.GetFile(id, path, fileName, fileTarget))
                 bitmap = new Bitmap(stream);
 
-            // 添加bitmap到字典中缓存
             _chatImageCache.TryAdd(cacheKey, bitmap);
-            // 记录最后访问时间
             _chatImageLastAccessTime.TryAdd(cacheKey, DateTime.Now);
 
             return bitmap;
@@ -130,30 +127,25 @@ public class ImageManager : IImageManager
         }
         finally
         {
-            _semaphoreSlim3.Release();
+            semaphore.Release();
         }
     }
 
-    /// <summary>
-    /// 清理长时间未使用的聊天图片缓存
-    /// </summary>
-    /// <param name="maxAgeMinutes">清理超过此分钟数未访问的图片，默认30分钟</param>
-    /// <returns>清理的图片数量</returns>
     public int CleanupUnusedChatImages(int maxAgeMinutes = 10)
     {
         int removedCount = 0;
         DateTime cutoffTime = DateTime.Now.AddMinutes(-maxAgeMinutes);
 
-        try
+        List<string> keysToRemove = _chatImageLastAccessTime
+            .Where(kvp => kvp.Value < cutoffTime)
+            .Select(kvp => kvp.Key)
+            .ToList();
+
+        foreach (var key in keysToRemove)
         {
-            _semaphoreSlim3.Wait();
-
-            List<string> keysToRemove = _chatImageLastAccessTime
-                .Where(kvp => kvp.Value < cutoffTime)
-                .Select(kvp => kvp.Key)
-                .ToList();
-
-            foreach (var key in keysToRemove)
+            var semaphore = GetOrCreateLock(key);
+            semaphore.Wait();
+            try
             {
                 if (_chatImageCache.TryRemove(key, out Bitmap? bitmap))
                 {
@@ -162,10 +154,12 @@ public class ImageManager : IImageManager
                     removedCount++;
                 }
             }
-        }
-        finally
-        {
-            _semaphoreSlim3.Release();
+            finally
+            {
+                semaphore.Release();
+                // 清理不再需要的锁
+                _locks.TryRemove(key, out _);
+            }
         }
 
         return removedCount;
@@ -177,9 +171,10 @@ public class ImageManager : IImageManager
         if (_staticImageCache.TryGetValue(cacheKey, out Bitmap? cachedBitmap))
             return cachedBitmap;
 
+        var semaphore = GetOrCreateLock(cacheKey);
         try
         {
-            await _semaphoreSlim4.WaitAsync();
+            await semaphore.WaitAsync();
             if (_staticImageCache.TryGetValue(cacheKey, out cachedBitmap))
                 return cachedBitmap;
 
@@ -189,9 +184,7 @@ public class ImageManager : IImageManager
             using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read))
                 bitmap = new Bitmap(stream);
 
-            // 添加bitmap到字典中缓存
             _staticImageCache.TryAdd(cacheKey, bitmap);
-
             return bitmap;
         }
         catch
@@ -200,7 +193,7 @@ public class ImageManager : IImageManager
         }
         finally
         {
-            _semaphoreSlim4.Release();
+            semaphore.Release();
         }
     }
 
@@ -218,6 +211,10 @@ public class ImageManager : IImageManager
         foreach (var image in _staticImageCache.Values)
             image.Dispose();
         _staticImageCache.Clear();
+
+        foreach (var l in _locks.Values)
+            l.Dispose();
+        _locks.Clear();
     }
 
     public bool RemoveFromCache(string id, string path, string fileName, FileTarget? fileTarget = null)
