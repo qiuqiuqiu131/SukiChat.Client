@@ -13,7 +13,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Threading;
-using ChatClient.Avalonia.Controls.SearchBox;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.Desktop.ViewModels.ChatPages.ChatViews;
 using ChatClient.Desktop.ViewModels.SukiDialogs;
@@ -326,19 +325,22 @@ public partial class ChatLeftPanelView : UserControl, IDisposable
         }
     }
 
-// 当未读消息数量发生变化时触发
+    // 当未读消息数量发生变化时触发
     private void ItemOnOnUnReadMessageCountChanged()
     {
         // 重新计算所有未读消息数量
-        int count = 0;
-        foreach (var friendChatDto in FriendItemsSource)
-            if (friendChatDto.FriendRelatoinDto is { CantDisturb: false })
-                count += friendChatDto.UnReadMessageCount;
-        foreach (var groupChatDto in GroupItemsSource)
-            if (groupChatDto.GroupRelationDto is { CantDisturb: false })
-                count += groupChatDto.UnReadMessageCount;
+        Dispatcher.UIThread.Post(() =>
+        {
+            int count = 0;
+            foreach (var friendChatDto in FriendItemsSource)
+                if (friendChatDto.FriendRelatoinDto is { CantDisturb: false })
+                    count += friendChatDto.UnReadMessageCount;
+            foreach (var groupChatDto in GroupItemsSource)
+                if (groupChatDto.GroupRelationDto is { CantDisturb: false })
+                    count += groupChatDto.UnReadMessageCount;
 
-        eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Publish(("聊天", count));
+            eventAggregator.GetEvent<ChatPageUnreadCountChangedEvent>().Publish(("聊天", count));
+        });
     }
 
 // 排序

@@ -26,7 +26,7 @@ public static class SugarDataBaseExtensions
             });
 
             // 创建数据库表
-            if (!System.IO.File.Exists(dbPath))
+            if (!System.IO.File.Exists(dbPath) || db.DbMaintenance.GetTableInfoList(false).Count != GetDbTypes().Length)
             {
                 try
                 {
