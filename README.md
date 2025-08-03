@@ -1,44 +1,33 @@
-# Avalonia 聊天客户端
+## SukiChat 聊天客户端
 
-## 视频链接
-https://www.bilibili.com/video/BV1mE5jzLEPp
+### SukiChat 项目目录
+客户端项目：[SukiChat.Client](https://github.com/qiuqiuqiu131/SukiChat.Client)
+服务器项目：[SukiChat.Server](https://github.com/qiuqiuqiu131/SukiChat.Server)
+代理机器人项目：[SukiChat.Robot](https://github.com/qiuqiuqiu131/SukiChat.Robot)
 
-## 项目简介
+### 项目简介
 这是一个基于 Avalonia 框架的跨平台聊天客户端，采用 Prism 实现 MVVM 架构。  
 支持文字聊天、文件传输、实时音视频通话等功能，具有良好的扩展性和可维护性。
 
-通过模块化设计和依赖注入，实现了各模块间的解耦，便于团队协作开发和后期维护。
-
-## 界面展示
+### 界面展示
+[B站演示视频](https://www.bilibili.com/video/BV1mE5jzLEPp)
 - 聊天页面
 ![聊天页面](/Assets/ChatView.png)
+- 实时语音通话页面
+![实时语音通话页面](/Assets/Call.png) 
+ - 群发弹窗
+![群发弹窗](/Assets/CreateGroup.png)
 - 通讯录页面
 ![通讯录用户信息页面](/Assets/ContactView_UserDetail.png)
-- 实时语音通话页面
-![实时语音通话页面](/Assets/Call.png)  
-- 群发弹窗
-![群发弹窗](/Assets/CreateGroup.png)
+- 消息通知
+![消息通知](/Assets/ContactView_Notification.png)
+- 搜索弹窗
+![搜索弹窗](/Assets/SearchOnline.png)
+- 设置弹窗
+![设置弹窗](/Assets/SystemSetting.png)
 
-## 代码功能实现
-### a. 通信实现
-- 基于 Socket 和 Protobuf 实现消息编解码  
-- 心跳检测机制确保连接稳定性
-- 重连机制处理网络波动
-- 消息队列确保消息有序传递
-- 消息状态追踪（发送中、已发送、已读）
+### QQ群
+<div align="center">
+    <img src="/Assets/qrcode_1754192964630.jpg" width="380"/>
+</div>
 
-### b. 数据存储
-- SQLite 数据库初始化与迁移  
-- (EF Core / SqlSugar) 操作本地持久化用户、聊天记录等
-- 数据加密保证用户隐私
-- 查询优化确保大量消息记录下的流畅体验
-- 定期数据清理和备份机制
-
-### c. 文件处理
-- HTTP 短连接实现文件上传/下载  
-- 本地临时缓存与断点续传支持  
-- 文件预览功能（图片、文档等）
-
-### d. 媒体处理
-- WebRTC 点对点视频通话  
-- 音频编码/解码与回声消除  

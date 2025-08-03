@@ -13,6 +13,8 @@
     xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
     xmlns:data="clr-namespace:ChatClient.Tool.Data;assembly=ChatClient.Tool"
     xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+    xmlns:mvvm="http://prismlibrary.com/"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
     d:DesignHeight="450"
     d:DesignWidth="320"
     x:DataType="login:LoginViewModel"
@@ -127,7 +129,7 @@
                                IsVisible="{Binding SelectedLoginItem,Converter={x:Static ObjectConverters.IsNotNull}}">
                             <Ellipse Width="85" Height="85" Fill="{DynamicResource SukiPrimaryColor50}" />
                             <circleImage:CircleImage
-                                Size="80" Image="{Binding SelectedLoginItem.Head}" />
+                                Size="79" Image="{Binding SelectedLoginItem.Head}" />
                         </Panel>
                     </Panel>
 
