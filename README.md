@@ -1,9 +1,9 @@
 ## SukiChat 聊天客户端
 
 ### SukiChat 项目目录
-客户端项目：[SukiChat.Client](https://github.com/qiuqiuqiu131/SukiChat.Client)
-服务器项目：[SukiChat.Server](https://github.com/qiuqiuqiu131/SukiChat.Server)
-代理机器人项目：[SukiChat.Robot](https://github.com/qiuqiuqiu131/SukiChat.Robot)
+- 客户端项目：[SukiChat.Client](https://github.com/qiuqiuqiu131/SukiChat.Client)
+- 服务器项目：[SukiChat.Server](https://github.com/qiuqiuqiu131/SukiChat.Server)
+- 代理机器人项目：[SukiChat.Robot](https://github.com/qiuqiuqiu131/SukiChat.Robot)
 
 ### 项目简介
 这是一个基于 Avalonia 框架的跨平台聊天客户端，采用 Prism 实现 MVVM 架构。  
