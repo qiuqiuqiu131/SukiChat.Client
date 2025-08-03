@@ -22,9 +22,9 @@
 - 消息通知
 ![消息通知](/Assets/ContactView_Notification.png)
 - 搜索弹窗
-![搜索弹窗](/Assets/SearchOnline.png)
+<img src="/Assets/SearchOnline.png" width="430"/>
 - 设置弹窗
-![设置弹窗](/Assets/SystemSetting.png)
+<img src="/Assets/SystemSetting.png" width="500"/>
 
 ### QQ群
 <div align="center">
