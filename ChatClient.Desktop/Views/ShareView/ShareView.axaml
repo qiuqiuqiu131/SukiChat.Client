@@ -12,8 +12,6 @@
              xmlns:shareView="clr-namespace:ChatClient.Desktop.ViewModels.ShareView"
              xmlns:multiFriendGroup="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup;assembly=ChatClient.Avalonia"
              xmlns:multiGroupGroup="clr-namespace:ChatClient.Avalonia.Controls.MultiGroupGroup;assembly=ChatClient.Avalonia"
-             xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
-             xmlns:userControls1="clr-namespace:ChatClient.Desktop.Views.UserControls;assembly=ChatClient.Avalonia"
              xmlns:controls="clr-namespace:ChatClient.Avalonia.Controls;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="550"
              x:DataType="shareView:ShareViewModel"

@@ -10,7 +10,6 @@
              xmlns:dialog="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ContactViews.Dialog"
              xmlns:multiFriendGroup="clr-namespace:ChatClient.Avalonia.Controls.MultiFriendGroup;assembly=ChatClient.Avalonia"
              mc:Ignorable="d"
-             prism:ViewModelLocator.AutoWireViewModel="True"
              Width="550" Height="550"
              Background="Transparent"
              x:DataType="dialog:CreateGroupViewModel"
