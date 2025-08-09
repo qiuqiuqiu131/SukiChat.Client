@@ -138,9 +138,7 @@ public class App : PrismApplication
         // 登录
         containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
         containerRegistry.RegisterForNavigation<LoginSettingView, LoginSettingViewModel>();
-        // 注册
-        containerRegistry.RegisterForNavigation<RegisterView, RegisterViewModel>();
-        containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
+        containerRegistry.RegisterForNavigation<NetSettingView, NetSettingViewModel>();
         // 主页面
         containerRegistry.RegisterForNavigation<ChatView, ChatViewModel>();
         containerRegistry.RegisterForNavigation<ContactsView, ContactsViewModel>();
@@ -178,8 +176,9 @@ public class App : PrismApplication
         containerRegistry.RegisterDialogWindow<SukiChatDialogWindow>(nameof(SukiChatDialogWindow));
         containerRegistry.RegisterDialogWindow<SukiDialogWindow>();
 
-        containerRegistry.RegisterDialog<NetSettingView, NetSettingViewModel>();
+        // containerRegistry.RegisterDialog<NetSettingView, NetSettingViewModel>();
         containerRegistry.RegisterDialog<ForgetPasswordView, ForgetPasswordViewModel>();
+        containerRegistry.RegisterDialog<RegisterView, RegisterViewModel>();
         // 聊天窗口
         containerRegistry.RegisterDialog<ChatFriendDialogView, ChatFriendDialogViewModel>();
         containerRegistry.RegisterDialog<ChatGroupDialogView, ChatGroupDialogViewModel>();
@@ -227,6 +226,8 @@ public class App : PrismApplication
             ILoggerFactory loggerFactory = Container.Resolve<ILoggerFactory>();
             LogFactory.Set(loggerFactory);
         }
+
+        Container.EnsureDbCreated();
 
         // 设置Region默认视图
         IRegionManager regionManager = Container.Resolve<IRegionManager>();

@@ -17,10 +17,4 @@ public partial class NetSettingView : UserControl
         base.OnLoaded(e);
         Opacity = 1;
     }
-
-    private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        var toplevel = TopLevel.GetTopLevel(this);
-        toplevel.FocusManager.ClearFocus();
-    }
 }

@@ -114,6 +114,8 @@ public class App : PrismApplication
     /// </summary>
     protected override void OnInitialized()
     {
+        Container.EnsureDbCreated();
+
         var regionManager = Container.Resolve<IRegionManager>();
         regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(LoginView));
         regionManager.RegisterViewWithRegion(RegionNames.MainChatRegion, typeof(ChatPageView));

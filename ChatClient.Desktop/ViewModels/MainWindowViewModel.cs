@@ -202,6 +202,11 @@ public class MainWindowViewModel : ViewModelBase, IDisposable
         }
 
         User.PropertyChanged += UserOnPropertyChanged;
+
+        // 初始化未读消息数
+        var naviBar = NaviBars.FirstOrDefault(d => d.PageName == "通讯录");
+        if (naviBar != null)
+            naviBar.UnReadMessageCount = User.ContactUnReadMessageCount;
     }
 
     private void UnRegisterDtoEvent()

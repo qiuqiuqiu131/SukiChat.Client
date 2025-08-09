@@ -6,6 +6,7 @@ using ChatClient.Desktop.Views.Login;
 using ChatClient.Tool.Data;
 using ChatClient.Tool.ManagerInterface;
 using Prism.Commands;
+using Prism.Navigation;
 using Prism.Navigation.Regions;
 
 namespace ChatClient.Desktop.ViewModels.Login;
@@ -45,7 +46,11 @@ public class LoginSettingViewModel : ViewModelBase
         IsConnected = connection.IsConnected;
         _loginService = loginService;
         RemoveLoginCommand = new AsyncDelegateCommand<LoginUserItem>(RemoveLogin);
-        ReturnCommand = new DelegateCommand(() => { _navigationService.RequestNavigate(nameof(LoginView)); });
+        ReturnCommand = new DelegateCommand(() =>
+        {
+            _navigationService.RequestNavigate(nameof(LoginView),
+                new NavigationParameters { { "LoginSetting", "true" } });
+        });
     }
 
     private async Task RemoveLogin(LoginUserItem loginData)
@@ -61,6 +66,12 @@ public class LoginSettingViewModel : ViewModelBase
         if (navigationContext.Parameters.TryGetValue("UserList", out ObservableCollection<LoginUserItem>? list))
             UserList = list;
         _navigationService = navigationContext.NavigationService;
+    }
+
+    public override void OnNavigatedFrom(NavigationContext navigationContext)
+    {
+        base.OnNavigatedFrom(navigationContext);
+        UserList = null;
     }
 
     #endregion

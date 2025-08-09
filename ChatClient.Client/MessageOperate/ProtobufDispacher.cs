@@ -66,15 +66,15 @@ namespace SocketClient.MessageOperate
         /// <summary>
         /// 控制消息队列的执行
         /// </summary>
-        private async void ProcessQueue()
+        private void ProcessQueue()
         {
             foreach (var unit in queue.GetConsumingEnumerable())
             {
-                _ = Task.Run(async () =>
+                semaphore.Wait();
+                Task.Run(async () =>
                 {
                     try
                     {
-                        await semaphore.WaitAsync();
                         await OperateMessageUnit(unit);
                     }
                     catch (Exception ex)

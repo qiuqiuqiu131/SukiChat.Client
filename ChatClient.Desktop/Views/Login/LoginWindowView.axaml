@@ -1,4 +1,4 @@
-<suki:SukiWindow
+<Window
     x:Class="ChatClient.Desktop.Views.Login.LoginWindowView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -9,30 +9,157 @@
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
     Title="Suki Chat"
-    Width="320"
-    Height="470"
-    ExtendClientAreaTitleBarHeightHint="-1"
-    IsTitleBarVisible="False"
-    TitleBarAnimationEnabled="False"
-    ExtendClientAreaChromeHints="NoChrome"
-    ExtendClientAreaToDecorationsHint="False"
-    BackgroundAnimationEnabled="True"
-    BackgroundStyle="{Binding CurrentThemeStyle.BackgroundStyle}"
-    SystemDecorations="None"
+    Width="360"
+    Height="515"
     CanResize="False"
-    TransparencyLevelHint="Transparent"
     prism:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="login:LoginWindowViewModel"
     WindowStartupLocation="CenterScreen"
+    ExtendClientAreaChromeHints="NoChrome"
+    SystemDecorations="None"
+    Background="Transparent"
     mc:Ignorable="d">
-    <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}"
-                    Background="Transparent"
-                    prism:RegionManager.RegionManager="{Binding RegionManager}"
-                    x:Name="content">
-        <ContentControl.Transitions>
-            <Transitions>
-                <DoubleTransition Property="Opacity" Duration="0:0:0.3" />
-            </Transitions>
-        </ContentControl.Transitions>
-    </ContentControl>
-</suki:SukiWindow>
+    <Border CornerRadius="17" Margin="20"
+            BorderThickness="1" BorderBrush="DarkGray" BoxShadow="0 5 25 5 #30000000">
+        <Border ClipToBounds="True" CornerRadius="17">
+            <Panel>
+                <suki:SukiBackground Style="{Binding CurrentThemeStyle.BackgroundStyle}"
+                                     AnimationEnabled="True" Margin="-150" />
+                
+                <DockPanel Margin="0,30" IsHitTestVisible="False">
+                    <TextBlock x:Name="SukiText" Text="Suki Chat" Opacity="0" DockPanel.Dock="Bottom" IsHitTestVisible="False" HorizontalAlignment="Center"
+                               FontSize="22" Foreground="{DynamicResource SukiPrimaryColor}">
+                        <TextBlock.Styles>
+                            <Style Selector="TextBlock.Text">
+                                <Style.Animations>
+                                    <Animation Duration="0:0:0.5" Easing="QuadraticEaseInOut" FillMode="Forward">
+                                        <KeyFrame Cue="0%">
+                                            <Setter Property="Opacity" Value="0"/>
+                                        </KeyFrame>
+                                        <KeyFrame Cue="100%">
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </KeyFrame>
+                                    </Animation>
+                                    <Animation Duration="0:0:0.5" Delay="0:0:1" FillMode="Forward"
+                                               Easing="QuadraticEaseInOut" >
+                                        <KeyFrame Cue="0%">
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </KeyFrame>
+                                        <KeyFrame Cue="100%">
+                                            <Setter Property="Opacity" Value="0"/>
+                                        </KeyFrame>
+                                    </Animation>
+                                </Style.Animations>
+                            </Style>
+                        </TextBlock.Styles>
+                    </TextBlock>
+                    <!--  中间的圆形图标  -->
+                    <Panel
+                        x:Name="SukiIcon"
+                        Margin="0,0,0,25"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0">
+                        <Panel.Styles>
+                            <Style Selector="Panel.Icon">
+                                <Style.Animations>
+                                    <Animation
+                                        Easing="QuadraticEaseInOut"
+                                        FillMode="Forward"
+                                        Duration="0:0:0.5">
+                                        <KeyFrame Cue="0%">
+                                            <Setter Property="TranslateTransform.Y" Value="-90" />
+                                            <Setter Property="Opacity" Value="0" />
+                                        </KeyFrame>
+                                        <KeyFrame Cue="100%">
+                                            <Setter Property="TranslateTransform.Y" Value="0" />
+                                            <Setter Property="Opacity" Value="1" />
+                                        </KeyFrame>
+                                    </Animation>
+                                    <Animation Delay="0:0:1" Easing="QuadraticEaseInOut"
+                                               FillMode="Forward" Duration="0:0:0.6">
+                                        <KeyFrame Cue="0%">
+                                            <Setter Property="Opacity" Value="1" />
+                                        </KeyFrame>
+                                        <KeyFrame Cue="100%">
+                                            <Setter Property="ScaleTransform.ScaleX" Value="1.2" />
+                                            <Setter Property="ScaleTransform.ScaleY" Value="1.2" />
+                                            <Setter Property="Opacity" Value="0" />
+                                            <Setter Property="IsVisible" Value="False" />
+                                        </KeyFrame>
+                                    </Animation>
+                                </Style.Animations>
+                                <Style Selector="^ PathIcon#LittleIcon">
+                                    <Style.Animations>
+                                        <Animation
+                                            Easing="QuadraticEaseInOut"
+                                            FillMode="Forward"
+                                            Duration="0:0:0.6">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="RotateTransform.Angle" Value="90" />
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="RotateTransform.Angle" Value="0" />
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                                <Style Selector="^ PathIcon#LargeIcon">
+                                    <Style.Animations>
+                                        <Animation
+                                            Easing="QuadraticEaseInOut"
+                                            FillMode="Forward"
+                                            Duration="0:0:0.6">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="RotateTransform.Angle" Value="-90" />
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="RotateTransform.Angle" Value="0" />
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Style>
+                        </Panel.Styles>
+                        <!-- 小圆弧 -->
+                        <PathIcon
+                            Name="LittleIcon"
+                            Width="52"
+                            Height="52"
+                            Data="M12,6A6,6 0 0,1 18,12C18,14.97 15.84,17.44 13,17.92V14.83C14.17,14.42 15,13.31 15,12A3,3 0 0,0 12,9L11.45,9.05L9.91,6.38C10.56,6.13 11.26,6 12,6M6,12C6,10.14 6.85,8.5 8.18,7.38L9.72,10.05C9.27,10.57 9,11.26 9,12C9,13.31 9.83,14.42 11,14.83V17.92C8.16,17.44 6,14.97 6,12Z"
+                            Foreground="{DynamicResource SukiPrimaryColor}" />
+                        <!--  大圆弧  -->
+                        <PathIcon
+                            Name="LargeIcon"
+                            Width="90"
+                            Height="90"
+                            Data="M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z"
+                            Foreground="{DynamicResource SukiPrimaryColor}" />
+                    </Panel>
+                </DockPanel>
+
+                <ContentControl prism:RegionManager.RegionName="{x:Static uiEntity1:RegionNames.LoginRegion}"
+                                Background="Transparent"
+                                x:Name="content"
+                                Opacity="0"
+                                prism:RegionManager.RegionManager="{Binding RegionManager}">
+                    <ContentControl.Styles>
+                        <Style Selector="ContentControl.Content">
+                            <Style.Animations>
+                                <Animation Easing="QuadraticEaseInOut" FillMode="Forward" Duration="0:0:0.6"
+                                           Delay="0:0:1.3">
+                                    <KeyFrame Cue="0%">
+                                        <Setter Property="Opacity" Value="0" />
+                                    </KeyFrame>
+                                    <KeyFrame Cue="100%">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </KeyFrame>
+                                </Animation>
+                            </Style.Animations>
+                        </Style>
+                    </ContentControl.Styles>
+                </ContentControl>
+            </Panel>
+        </Border>
+    </Border>
+</Window>

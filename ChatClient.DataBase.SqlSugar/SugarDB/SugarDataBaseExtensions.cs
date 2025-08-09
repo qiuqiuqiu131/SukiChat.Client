@@ -7,6 +7,28 @@ namespace ChatClient.DataBase.SqlSugar.SugarDB;
 
 public static class SugarDataBaseExtensions
 {
+    public static void EnsureDbCreated(this IContainerProvider containerProvider)
+    {
+        var dbPath = containerProvider.Resolve<IAppDataManager>().GetFileInfo("ChatClient.db").FullName;
+        var db = new SqlSugarClient(new ConnectionConfig
+        {
+            DbType = DbType.Sqlite,
+            ConnectionString = $"Data Source={dbPath};",
+            IsAutoCloseConnection = true
+        });
+
+        var types = GetDbTypes();
+        if (db.DbMaintenance.GetTableInfoList().Count != types.Length)
+            db.CodeFirst.SetStringDefaultLength(200).InitTables(types);
+
+        // 重命名表名，确保所有表名都以"s"结尾
+        foreach (var tableName in db.DbMaintenance.GetTableInfoList().Select(d => d.Name).ToList())
+            if (!tableName.EndsWith('s'))
+                db.DbMaintenance.RenameTable($"`{tableName}`", $"`{tableName}s`");
+
+        db.Dispose();
+    }
+
     public static void RegisterSugarDataBase(this IContainerRegistry containerRegistry)
     {
         containerRegistry.RegisterScoped<ISqlSugarClient>(d =>
@@ -25,21 +47,6 @@ public static class SugarDataBaseExtensions
                 };
             });
 
-            // 创建数据库表
-            if (!System.IO.File.Exists(dbPath) || db.DbMaintenance.GetTableInfoList(false).Count != GetDbTypes().Length)
-            {
-                try
-                {
-                    db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(GetDbTypes());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
-
             return db;
         });
     }
@@ -55,21 +62,6 @@ public static class SugarDataBaseExtensions
                 ConnectionString = $"Data Source={dbPath};",
                 IsAutoCloseConnection = true
             });
-
-            // 创建数据库表
-            if (!System.IO.File.Exists(dbPath))
-            {
-                try
-                {
-                    db.CodeFirst.SetStringDefaultLength(200)
-                        .InitTables(GetDbTypes());
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    throw;
-                }
-            }
 
             return new SugarUnitOfWork<SugarChatClientDbContext>(db);
         });

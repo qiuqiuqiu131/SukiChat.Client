@@ -7,10 +7,10 @@
              xmlns:iPv4Box="clr-namespace:ChatClient.Avalonia.Controls.IPv4Box;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:login="clr-namespace:ChatClient.Desktop.ViewModels.Login"
+             xmlns:sukiColor="clr-namespace:SukiUI.ColorTheme;assembly=SukiUI"
              mc:Ignorable="d"
-             d:DesignHeight="200"
+             d:DesignHeight="440"
              d:DesignWidth="330"
-             Width="330" Height="200"
              x:DataType="login:NetSettingViewModel"
              x:Class="ChatClient.Desktop.Views.Login.NetSettingView">
     <UserControl.Transitions>
@@ -26,39 +26,41 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="25,*" Background="Transparent" PointerPressed="InputElement_OnPointerPressed">
+    <Grid RowDefinitions="25,*" Background="Transparent">
         <Panel Grid.Row="0" Background="Transparent">
             <Interaction.Behaviors>
                 <behaviors:WindowDragBehavior />
             </Interaction.Behaviors>
-            <Button Name="PART_CloseButton"
-                    HorizontalAlignment="Right" Margin="3,3,3,0"
-                    Classes="Basic Rounded WindowControlsButton Close">
-                <Interaction.Behaviors>
-                    <EventTriggerBehavior EventName="Click">
-                        <CallMethodAction TargetObject="{Binding $parent[theme:SukiWindow]}"
-                                          MethodName="Close" />
-                    </EventTriggerBehavior>
-                </Interaction.Behaviors>
-                <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
-            </Button>
-        </Panel>
-        <StackPanel Grid.Row="0" Grid.RowSpan="2" VerticalAlignment="Center" Margin="30,20,30,0" Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Center">
-                <avalonia:MaterialIcon Kind="Web" Margin="-5,0,5,0"
-                                       Width="20" Height="20" />
-                <TextBlock Text="网络配置" HorizontalAlignment="Center" FontSize="17.5" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,0">
+                <Panel Margin="4" IsVisible="{Binding !IsConnected.IsConnected}" ToolTip.ShowDelay="250"
+                       ToolTip.Placement="Bottom" ToolTip.VerticalOffset="5"
+                       ToolTip.HorizontalOffset="-10">
+                    <ToolTip.Tip>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <PathIcon Data="{x:Static theme:Icons.CircleWarning}"
+                                      Width="17.5" Height="17.5"
+                                      Opacity="0.9"
+                                      Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}" />
+                            <TextBlock Text="网络连接断开" FontSize="13" Opacity="0.75" Foreground="Red" />
+                        </StackPanel>
+                    </ToolTip.Tip>
+                    <avalonia:MaterialIcon
+                        Width="17"
+                        Height="17"
+                        Foreground="{x:Static sukiColor:NotificationColor.ErrorIconForeground}"
+                        Kind="WifiStrengthAlertOutline" />
+                </Panel>
+                <Button Name="PART_CloseButton"
+                        HorizontalAlignment="Right"
+                        Command="{Binding ReturnCommand}"
+                        Classes="Basic Rounded WindowControlsButton Close">
+                    <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
+                </Button>
             </StackPanel>
-            <TextBlock Margin="8">
-                <Run Text="服务器: " FontSize="14.5" />
-                <Run Text="(设置IPv4地址，请关注开发者动态)" Classes="Small" FontSize="11"
-                     Foreground="{DynamicResource SukiLowText}" />
-            </TextBlock>
-            <iPv4Box:IPv4Box ShowLeadingZero="False" FontSize="15" FontFamily="{StaticResource MiSans}"
-                             HorizontalAlignment="Stretch"
-                             InputMode="Fast" IPAddress="{Binding IPAddress,UpdateSourceTrigger=LostFocus}" />
-
-            <Button Classes="Basic user" Padding="14,6" Margin="0,10,0,0" Command="{Binding ApplyCommand}">
+        </Panel>
+        <DockPanel Grid.Row="1" Margin="30,15,30,25">
+            <Button DockPanel.Dock="Bottom" Classes="Flat user"
+                    Padding="0,8" Command="{Binding ApplyCommand}">
                 <Button.Styles>
                     <Style Selector="Button.user TextBlock#text">
                         <Setter Property="Opacity" Value="1" />
@@ -75,6 +77,24 @@
                     </TextBlock.Transitions>
                 </TextBlock>
             </Button>
-        </StackPanel>
+            <StackPanel VerticalAlignment="Top" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,20" HorizontalAlignment="Center">
+                    <avalonia:MaterialIcon Kind="Web" Margin="-5,0,5,0"
+                                           Width="20" Height="20" />
+                    <TextBlock Text="网络配置" HorizontalAlignment="Center" FontSize="17.5" />
+                </StackPanel>
+                <TextBlock Margin="8">
+                    <Run Text="服务器: " FontSize="14.5" />
+                    <Run Text="(设置IPv4地址，请关注开发者动态)" Classes="Small" FontSize="11"
+                         Foreground="{DynamicResource SukiLowText}" />
+                </TextBlock>
+                <iPv4Box:IPv4Box ShowLeadingZero="False" FontSize="15" FontFamily="{StaticResource MiSans}"
+                                 HorizontalAlignment="Stretch"
+                                 InputMode="Fast" IPAddress="{Binding IPAddress,UpdateSourceTrigger=LostFocus}" />
+
+
+            </StackPanel>
+        </DockPanel>
+
     </Grid>
 </UserControl>

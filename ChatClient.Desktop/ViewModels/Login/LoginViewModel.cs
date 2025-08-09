@@ -21,7 +21,9 @@ using Prism.Dialogs;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Navigation.Regions;
 using ForgetPasswordView = ChatClient.Desktop.Views.ForgetPassword.ForgetPasswordView;
+using RegionNavigationEventArgs = ChatClient.Tool.Events.RegionNavigationEventArgs;
 using RegisterView = ChatClient.Desktop.Views.Register.RegisterView;
 
 namespace ChatClient.Desktop.ViewModels.Login;
@@ -180,7 +182,8 @@ public class LoginViewModel : ViewModelBase, IDisposable
         await Task.WhenAll(tasks);
 
         // 设置最近一次登录的账号
-        Id = LoginData.Id;
+        if (UserList.FirstOrDefault(d => d.ID == LoginData.Id) != null)
+            Id = LoginData.Id;
     }
 
     private void IsConnectedOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -254,7 +257,13 @@ public class LoginViewModel : ViewModelBase, IDisposable
 
     private void NetSetting()
     {
-        _dialogService.Show(nameof(NetSettingView));
+        _eventAggregator.GetEvent<RegionNavigationEvent>().Publish(new RegionNavigationEventArgs
+        {
+            RegionName = RegionNames.LoginRegion,
+            ViewName = nameof(NetSettingView)
+        });
+
+        // _dialogService.Show(nameof(NetSettingView));
     }
 
     private void ToRegisterView()
@@ -283,6 +292,16 @@ public class LoginViewModel : ViewModelBase, IDisposable
                 LoginData.Id = Id;
             }
         });
+    }
+
+    public override void OnNavigatedTo(NavigationContext navigationContext)
+    {
+        base.OnNavigatedTo(navigationContext);
+        if (navigationContext.Parameters.ContainsKey("LoginSetting"))
+        {
+            if (UserList?.FirstOrDefault(d => d.ID == Id) == null)
+                Id = string.Empty;
+        }
     }
 
     #region Dispose

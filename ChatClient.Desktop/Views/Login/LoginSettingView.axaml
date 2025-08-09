@@ -53,27 +53,14 @@
                 </Panel>
                 <Button Name="PART_CloseButton"
                         HorizontalAlignment="Right"
+                        Command="{Binding ReturnCommand}"
                         Classes="Basic Rounded WindowControlsButton Close">
-                    <Interaction.Behaviors>
-                        <EventTriggerBehavior EventName="Click">
-                            <CallMethodAction TargetObject="{Binding $parent[theme:SukiWindow]}"
-                                              MethodName="Close" />
-                        </EventTriggerBehavior>
-                    </Interaction.Behaviors>
                     <PathIcon Data="{x:Static theme:Icons.WindowClose}" Height="8" Width="8" />
                 </Button>
             </StackPanel>
         </Panel>
-        <DockPanel LastChildFill="True" Grid.Row="1" VerticalAlignment="Stretch"
-                   HorizontalAlignment="Stretch">
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5" HorizontalAlignment="Center" DockPanel.Dock="Top">
-                <avalonia:MaterialIcon Kind="AccountMultipleOutline" Margin="-5,0,5,0"
-                                       Width="20" Height="20" />
-                <TextBlock Text="登录管理" HorizontalAlignment="Center" FontSize="17.5" />
-            </StackPanel>
-
-            <Button Classes="Basic user" Padding="14,6"
-                    Margin="0,10" DockPanel.Dock="Bottom"
+        <DockPanel LastChildFill="True" Grid.Row="1" Margin="30,15,30,25">
+            <Button Classes="Flat user" Padding="0,8" DockPanel.Dock="Bottom"
                     Command="{Binding ReturnCommand}">
                 <Button.Styles>
                     <Style Selector="Button.user TextBlock#text">
@@ -92,66 +79,75 @@
                 </TextBlock>
             </Button>
 
-            <Panel>
-                <StackPanel Orientation="Vertical"
-                            Opacity="0.6"
-                            Spacing="5"
-                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                            IsVisible="{Binding UserList.Count,Converter={converter:IntEqualityConverter Value=0, Equal=True}}">
-                    <avalonia:MaterialIcon Width="40" Height="40" Kind="ArchiveOutline" />
-                    <TextBlock Text="暂无登录记录" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <DockPanel VerticalAlignment="Stretch">
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,0" HorizontalAlignment="Center">
+                    <avalonia:MaterialIcon Kind="AccountMultipleOutline" Margin="-5,0,5,0"
+                                           Width="20" Height="20" />
+                    <TextBlock Text="登录管理" HorizontalAlignment="Center" FontSize="17.5" />
                 </StackPanel>
+                <Panel Margin="0,0,0,15">
+                    <StackPanel Orientation="Vertical"
+                                Opacity="0.6"
+                                Spacing="5"
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                IsVisible="{Binding UserList.Count,Converter={converter:IntEqualityConverter Value=0, Equal=True}}">
+                        <avalonia:MaterialIcon Width="40" Height="40" Kind="ArchiveOutline" />
+                        <TextBlock Text="暂无登录记录" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </StackPanel>
 
-                <ScrollViewer
-                    IsVisible="{Binding UserList.Count,Converter={converter:IntEqualityConverter Value=0, Equal=False}}"
-                    Classes="Fill" HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Visible">
-                    <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding UserList}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel Orientation="Horizontal" ItemHeight="90" ItemWidth="90"
-                                           VerticalAlignment="Center"
-                                           HorizontalAlignment="Center" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <theme:GlassCard Width="85" Height="85" IsAnimated="True" IsInteractive="True"
-                                                 CornerRadius="8" Padding="5" ToolTip.ShowDelay="500">
-                                    <ToolTip.Tip>
-                                        <StackPanel Orientation="Vertical" Spacing="2.5">
-                                            <TextBlock FontSize="12.5" HorizontalAlignment="Center"
-                                                       Text="{Binding ID,StringFormat='账号ID: {0}'}" />
-                                            <TextBlock FontSize="12.5" HorizontalAlignment="Center"
-                                                       Text="{Binding LastLoginTime,StringFormat='上次登录: {0}'}" />
-                                        </StackPanel>
-                                    </ToolTip.Tip>
-                                    <theme:GlassCard.Styles>
-                                        <Style Selector="theme|GlassCard.remove Button#removeButton">
-                                            <Setter Property="IsVisible" Value="False" />
-                                        </Style>
-                                        <Style Selector="theme|GlassCard:pointerover.remove Button#removeButton">
-                                            <Setter Property="IsVisible" Value="True" />
-                                        </Style>
-                                    </theme:GlassCard.Styles>
-                                    <Panel>
-                                        <circleImage:CircleImage VerticalAlignment="Center" Image="{Binding Head}"
-                                                                 Size="70" />
-                                        <Button Classes="Void" Name="removeButton" HorizontalAlignment="Right"
-                                                VerticalAlignment="Top"
-                                                Command="{Binding ((login:LoginSettingViewModel)DataContext).RemoveLoginCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
-                                                CommandParameter="{Binding }"
-                                                Margin="-2">
-                                            <PathIcon Width="15" Height="15" Foreground="{DynamicResource SukiLowText}"
-                                                      Data="{x:Static theme:Icons.CircleClose}" />
-                                        </Button>
-                                    </Panel>
-                                </theme:GlassCard>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Panel>
+                    <ScrollViewer
+                        IsVisible="{Binding UserList.Count,Converter={converter:IntEqualityConverter Value=0, Equal=False}}"
+                        Classes="Fill" HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Visible">
+                        <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding UserList}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" ItemHeight="90" ItemWidth="90"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <theme:GlassCard Width="85" Height="85" IsAnimated="True" IsInteractive="True"
+                                                     BorderThickness="1.5"
+                                                     CornerRadius="8" Padding="5" ToolTip.ShowDelay="500">
+                                        <ToolTip.Tip>
+                                            <StackPanel Orientation="Vertical" Spacing="2.5">
+                                                <TextBlock FontSize="12.5" HorizontalAlignment="Center"
+                                                           Text="{Binding ID,StringFormat='账号ID: {0}'}" />
+                                                <TextBlock FontSize="12.5" HorizontalAlignment="Center"
+                                                           Text="{Binding LastLoginTime,StringFormat='上次登录: {0}'}" />
+                                            </StackPanel>
+                                        </ToolTip.Tip>
+                                        <theme:GlassCard.Styles>
+                                            <Style Selector="theme|GlassCard.remove Button#removeButton">
+                                                <Setter Property="IsVisible" Value="False" />
+                                            </Style>
+                                            <Style Selector="theme|GlassCard:pointerover.remove Button#removeButton">
+                                                <Setter Property="IsVisible" Value="True" />
+                                            </Style>
+                                        </theme:GlassCard.Styles>
+                                        <Panel>
+                                            <circleImage:CircleImage VerticalAlignment="Center" Image="{Binding Head}"
+                                                                     Size="70" />
+                                            <Button Classes="Void" Name="removeButton" HorizontalAlignment="Right"
+                                                    VerticalAlignment="Top"
+                                                    Command="{Binding ((login:LoginSettingViewModel)DataContext).RemoveLoginCommand,RelativeSource={RelativeSource AncestorType=ItemsControl,Mode=FindAncestor}}"
+                                                    CommandParameter="{Binding }"
+                                                    Margin="-2">
+                                                <PathIcon Width="15" Height="15"
+                                                          Foreground="{DynamicResource SukiLowText}"
+                                                          Data="{x:Static theme:Icons.CircleClose}" />
+                                            </Button>
+                                        </Panel>
+                                    </theme:GlassCard>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Panel>
+            </DockPanel>
         </DockPanel>
     </Grid>
 </UserControl>

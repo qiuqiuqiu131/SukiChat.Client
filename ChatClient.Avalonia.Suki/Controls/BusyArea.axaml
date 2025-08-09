@@ -20,6 +20,7 @@
                         <TextBlock Margin="3"
                                    DockPanel.Dock="Bottom"
                                    IsHitTestVisible="False"
+                                   Foreground="{DynamicResource SukiText}"
                                    IsVisible="{TemplateBinding BusyText,
                                                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                    Text="{TemplateBinding BusyText}" />

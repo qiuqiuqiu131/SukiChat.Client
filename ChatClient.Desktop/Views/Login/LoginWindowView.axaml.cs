@@ -11,7 +11,7 @@ using SukiUI.Controls;
 
 namespace ChatClient.Desktop.Views.Login;
 
-public partial class LoginWindowView : SukiWindow, IDisposable
+public partial class LoginWindowView : Window, IDisposable
 {
     public LoginWindowView()
     {
@@ -19,14 +19,7 @@ public partial class LoginWindowView : SukiWindow, IDisposable
 
         RenderOptions.SetTextRenderingMode(this, TextRenderingMode.SubpixelAntialias);
         RenderOptions.SetBitmapInterpolationMode(this, BitmapInterpolationMode.HighQuality);
-
-        SystemDecorations = SystemDecorations.None;
-        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
-        ExtendClientAreaToDecorationsHint = false;
-        Loaded += (sender, args) => { Opacity = 1; };
     }
-
-    private SukiDialogHost? _dialogHost;
 
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -38,27 +31,20 @@ public partial class LoginWindowView : SukiWindow, IDisposable
     {
         base.OnLoaded(e);
 
-        _ = Task.Run(async () =>
+        // 平台特定
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            // 平台特定
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            var handle = TryGetPlatformHandle()?.Handle;
+            if (handle != null)
             {
-                await Task.Delay(100);
-
-                var handle = TryGetPlatformHandle()?.Handle;
-                if (handle != null)
-                {
-                    SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
-                    SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
-                }
+                SendMessage(handle.Value, WM_SETICON, IntPtr.Zero, IntPtr.Zero);
+                SendMessage(handle.Value, WM_SETICON, new IntPtr(1), IntPtr.Zero);
             }
-        });
+        }
 
-        content.Opacity = 1;
-        await Task.Delay(100);
-        SystemDecorations = SystemDecorations.BorderOnly;
-        ExtendClientAreaToDecorationsHint = true;
-        ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.Default;
+        content.Classes.Add("Content");
+        SukiIcon.Classes.Add("Icon");
+        SukiText.Classes.Add("Text");
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
