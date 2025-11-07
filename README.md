@@ -1,10 +1,9 @@
 <p align="center">
     <img src="Assets/Icon.ico" width="100px"/>
     <h1 align="center">Suki Chat</h1>
-</p>
-
-<p align="center">
-一个基于 Avalonia 框架开发的跨平台聊天客户端
+    <p align="center">
+        一个基于 Avalonia 框架开发的跨平台聊天客户端
+    </p>
 </p>
 
 ### 项目目录
