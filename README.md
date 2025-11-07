@@ -3,6 +3,10 @@
     <h1 align="center">Suki Chat</h1>
 </p>
 
+<p align="center">
+一个基于 Avalonia 框架开发的跨平台聊天客户端
+</p>
+
 ### 项目目录
 - 客户端项目：[SukiChat.Client](https://github.com/qiuqiuqiu131/SukiChat.Client)
 - 服务器项目：[SukiChat.Server](https://github.com/qiuqiuqiu131/SukiChat.Server)
