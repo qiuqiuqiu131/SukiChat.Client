@@ -1,6 +1,9 @@
-## SukiChat 聊天客户端
+<p align="center">
+    <img src="Assets/Icon.ico" width="100px"/>
+    <h1 align="center">Suki Chat</h1>
+</p>
 
-### SukiChat 项目目录
+### 项目目录
 - 客户端项目：[SukiChat.Client](https://github.com/qiuqiuqiu131/SukiChat.Client)
 - 服务器项目：[SukiChat.Server](https://github.com/qiuqiuqiu131/SukiChat.Server)
 - 代理机器人项目：[SukiChat.Robot](https://github.com/qiuqiuqiu131/SukiChat.Robot)

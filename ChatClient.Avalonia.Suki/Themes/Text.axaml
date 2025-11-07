@@ -60,6 +60,10 @@
         <Setter Property="LetterSpacing" Value="2.5" />
         <Setter Property="PasswordChar" Value="•" />
     </Style>
+    
+    <Style Selector="TextBox.SmallWaterMask /template/ TextBlock#watermark">
+        <Setter Property="FontSize" Value="15"/>
+    </Style>
 
     <Style Selector="TextBox.Small">
         <!-- <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" /> -->

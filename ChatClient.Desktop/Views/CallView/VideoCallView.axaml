@@ -9,8 +9,10 @@
              xmlns:controls="clr-namespace:Avalonia.Notification.Controls;assembly=Notification.Avalonia"
              xmlns:callViewModel="clr-namespace:ChatClient.Desktop.ViewModels.CallViewModel"
              xmlns:callView="clr-namespace:ChatClient.Desktop.Views.CallView"
+             xmlns:mvvm="http://prismlibrary.com/"
              mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="500"
              x:DataType="callViewModel:VideoCallViewModel"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.CallView.VideoCallView">
     <Panel>
         <Panel Background="{DynamicResource SukiGlassCardBackground}">

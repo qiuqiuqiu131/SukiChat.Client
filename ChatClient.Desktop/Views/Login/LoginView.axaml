@@ -183,7 +183,8 @@
                         MaxLength="10"
                         MinimumPrefixLength="4"
                         Classes="Login input"
-                        Padding="7,12.5"
+                        Padding="7,12"
+                        FontSize="15"
                         ContextMenu="{x:Null}"
                         MaxDropDownHeight="200"
                         ItemsSource="{Binding UserList}"
@@ -194,6 +195,9 @@
                             <Style Selector="AutoCompleteBox.Login /template/ TextBox#PART_TextBox">
                                 <Setter Property="LetterSpacing" Value="1" />
                                 <Setter Property="TextAlignment" Value="Center" />
+                                <Style Selector="^ /template/ TextBlock#watermark">
+                                    <Setter Property="FontSize" Value="15"/>
+                                </Style>
                                 <!-- <Setter Property="p1:TextBoxExtensions.AddDeleteButton" Value="True" /> -->
                             </Style>
                         </AutoCompleteBox.Styles>
@@ -209,7 +213,7 @@
                                         Image="{Binding Head}" Size="35" />
                                     <StackPanel Orientation="Vertical" HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
-                                        <TextBlock FontSize="13.5" HorizontalAlignment="Center" LetterSpacing="1"
+                                        <TextBlock FontSize="14" HorizontalAlignment="Center" LetterSpacing="1"
                                                    Text="{Binding ID,StringFormat='ID: {0}'}" />
                                         <TextBlock
                                             Text="{Binding LastLoginTime}"
@@ -225,8 +229,9 @@
                     <TextBox
                         MaxLength="16"
                         Padding="7,13,7,11"
-                        Classes="Login input Password"
+                        Classes="Login input Password SmallWaterMask"
                         TextAlignment="Center"
+                        FontSize="16.5"
                         ContextFlyout="{x:Null}"
                         ContextMenu="{x:Null}"
                         Text="{Binding Password}"

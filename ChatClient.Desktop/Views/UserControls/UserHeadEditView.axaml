@@ -10,9 +10,11 @@
     xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
     xmlns:content="https://github.com/kikipoulet/SukiUI"
     xmlns:userControls="clr-namespace:ChatClient.Desktop.ViewModels.UserControls"
+    xmlns:mvvm="http://prismlibrary.com/"
     Width="410"
     Height="570"
     x:DataType="userControls:UserHeadEditViewModel"
+    mvvm:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid RowDefinitions="35,*">
         <Panel Background="Transparent">

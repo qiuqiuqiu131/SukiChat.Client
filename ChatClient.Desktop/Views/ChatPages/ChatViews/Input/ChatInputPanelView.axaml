@@ -8,8 +8,10 @@
              xmlns:input="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.Input"
              xmlns:input1="clr-namespace:ChatClient.Desktop.Views.ChatPages.ChatViews.Input"
              xmlns:userControls="clr-namespace:ChatClient.Desktop.Views.UserControls"
+             xmlns:mvvm="http://prismlibrary.com/"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="input:ChatInputPanelViewModel"
+             mvvm:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.Input.ChatInputPanelView">
     <UserControl.DataTemplates>
         <DataTemplate DataType="x:String">

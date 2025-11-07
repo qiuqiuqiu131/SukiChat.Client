@@ -11,6 +11,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     x:DataType="chatViews:ChatViewModel"
+    prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid x:Name="Root">
         <Grid.ColumnDefinitions>
