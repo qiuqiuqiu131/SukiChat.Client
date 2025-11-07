@@ -14,21 +14,22 @@
 
 ### 界面展示
 [B站演示视频](https://www.bilibili.com/video/BV1mE5jzLEPp)
-- 聊天页面
+- **聊天页面**
 ![聊天页面](/Assets/ChatView.png)
-- 实时语音通话页面
+- **实时语音通话页面**
 ![实时语音通话页面](/Assets/Call.png) 
- - 群发弹窗
+- **群发弹窗**
 ![群发弹窗](/Assets/CreateGroup.png)
-- 通讯录页面
+- **通讯录页面**
 ![通讯录用户信息页面](/Assets/ContactView_UserDetail.png)
-- 消息通知
+- **消息通知**
 ![消息通知](/Assets/ContactView_Notification.png)
-- 搜索弹窗
+- **搜索弹窗**
 <div align="center">
     <img src="/Assets/SearchOnline.png" width="460"/>
 </div>
-- 设置弹窗
+
+- **设置弹窗**
 <div align="center">
     <img src="/Assets/SystemSetting.png" width="550"/>
 </div>
