@@ -7,8 +7,6 @@
         <TrimMode>link</TrimMode>
         <PublishTrimmed>true</PublishTrimmed>
         <ApplicationManifest>app.manifest</ApplicationManifest>
-        <PublishAot>false</PublishAot>
-        <IsAotCompatible>true</IsAotCompatible>
         <StripSymbols>false</StripSymbols>
         <TargetFrameworks>net9.0</TargetFrameworks>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

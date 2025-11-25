@@ -121,23 +121,24 @@
                             <Setter Property="Width" Value="20" />
                             <Setter Property="Margin" Value="-7.5,3" />
                             <Setter Property="Height" Value="20" />
-                            <Setter Property="Foreground" Value="{DynamicResource TextBlockDefaultForeground}" />
+                            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
                             <Setter Property="Opacity" Value="0.6" />
                         </Style>
                         <Style Selector="TextBlock">
                             <Setter Property="Opacity" Value="0.6" />
                             <Setter Property="FontSize" Value="12.5" />
+                            <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
                         </Style>
                     </StackPanel.Styles>
                     <StackPanel Orientation="Vertical" Spacing="5">
                         <Button Classes="Login" Command="{Binding ToRegisterViewCommand}">
-                            <avalonia:MaterialIcon Foreground="{DynamicResource SemiColorGrayText}" Kind="Add" />
+                            <avalonia:MaterialIcon Foreground="{DynamicResource SukiText}" Kind="Add" />
                         </Button>
                         <TextBlock Text="注册账号" />
                     </StackPanel>
                     <StackPanel Orientation="Vertical" Spacing="5">
                         <Button Classes="Login" Command="{Binding ToForgetViewCommand}">
-                            <avalonia:MaterialIcon Kind="ForgotPassword" />
+                            <avalonia:MaterialIcon Foreground="{DynamicResource SukiText}" Kind="ForgotPassword" />
                         </Button>
                         <TextBlock Text="忘记密码" />
                     </StackPanel>
@@ -196,7 +197,7 @@
                                 <Setter Property="LetterSpacing" Value="1" />
                                 <Setter Property="TextAlignment" Value="Center" />
                                 <Style Selector="^ /template/ TextBlock#watermark">
-                                    <Setter Property="FontSize" Value="15"/>
+                                    <Setter Property="FontSize" Value="15" />
                                 </Style>
                                 <!-- <Setter Property="p1:TextBoxExtensions.AddDeleteButton" Value="True" /> -->
                             </Style>

@@ -6,7 +6,7 @@ namespace ChatClient.BaseService.Services;
 
 internal class ChatRemoteService(
     IContainerProvider containerProvider,
-    IMessageHelper messageHelper) : Services.BaseService(containerProvider), IChatRemoteService
+    IMessageHelper messageHelper) : BaseService(containerProvider), IChatRemoteService
 {
     public async Task<List<ChatGroupDetailMessage>> GetChatGroupDetailMessages(string userId, DateTime loginTime)
     {

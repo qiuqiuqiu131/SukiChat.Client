@@ -249,6 +249,8 @@ public partial class MainWindowView : SukiWindow, IDisposable
         {
             if (WindowState == WindowState.Minimized)
                 _userManager.WindowState = MainWindowState.Hide;
+            else if (WindowState == WindowState.Normal)
+                _userManager.WindowState = MainWindowState.Show;
         }
     }
 

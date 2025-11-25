@@ -87,6 +87,11 @@ public class ProtoToDataProfile : Profile
             .ForMember(gr => gr.JoinTime, opt => opt.MapFrom(pgm => DateTime.Parse(pgm.Time)))
             .ForMember(gr => gr.UserId, opt => opt.MapFrom(pgm => pgm.UserIdTarget));
 
+        CreateMap<EnterGroupMessage, GroupRelation>()
+            .ForMember(gr => gr.JoinTime, opt => opt.MapFrom(pgm => DateTime.Parse(pgm.JoinTime)))
+            .ForMember(gr => gr.UserId, opt => opt.MapFrom(pgm => pgm.UserId))
+            .ForMember(gr => gr.GroupId, opt => opt.MapFrom(pgm => pgm.GroupId));
+
         #endregion
 
         // User login state, get outline message and operate friend request
@@ -98,8 +103,7 @@ public class ProtoToDataProfile : Profile
 
         CreateMap<FriendRequestMessage, FriendRequest>()
             .ForMember(fr => fr.RequestTime, opt =>
-                opt.MapFrom(
-                    fm => DateTime.Parse(fm.RequestTime)))
+                opt.MapFrom(fm => DateTime.Parse(fm.RequestTime)))
             .ForMember(fr => fr.SolveTime, opt =>
                 opt.MapFrom(fm =>
                     string.IsNullOrEmpty(fm.SolvedTime) ? (DateTime?)null : DateTime.Parse(fm.SolvedTime)));

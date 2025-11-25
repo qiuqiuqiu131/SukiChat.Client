@@ -12,7 +12,6 @@
     xmlns:controls="clr-namespace:ChatClient.Avalonia.Semi.Controls;assembly=ChatClient.Avalonia.Semi"
     d:DesignHeight="800"
     d:DesignWidth="380"
-    mvvm:ViewModelLocator.AutoWireViewModel="True"
     x:DataType="viewModels:MainChatViewModel"
     mc:Ignorable="d">
     <Panel x:Name="Root">

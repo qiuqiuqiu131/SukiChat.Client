@@ -17,7 +17,6 @@
              xmlns:mobileScrollViewer="clr-namespace:ChatClient.Avalonia.Controls.MobileScrollViewer;assembly=ChatClient.Avalonia"
              mc:Ignorable="d" d:DesignWidth="380" d:DesignHeight="665"
              x:DataType="viewModels:ChatPageViewModel"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Android.Shared.Views.ChatPageView">
     <UserControl.Resources>
         <chatUiConverter:ChatMessageToStringConverter x:Key="ChatMessageToStringConverter" />
