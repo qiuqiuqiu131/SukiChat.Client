@@ -3,7 +3,7 @@
 
 	<assembly fullname="AutoMapper" preserve="all" />
 
-	<assembly fullname="ChatClient.DataBase" preserve="all"/>
+	<assembly fullname="ChatClient.DataBase.SqlSugar" preserve="all"/>
 	<assembly fullname="ChatClient.Avalonia" preserve="all"/>
 	<assembly fullname="ChatClient.Avalonia.Suki" preserve="all"/>
 	<assembly fullname="ChatClient.BaseService" preserve="all"/>

@@ -18,6 +18,27 @@ public static class SugarDataBaseExtensions
         });
 
         var types = GetDbTypes();
+
+        // 检查 groupRequest / groupRequests 表是否存在字段 ID
+        var tableNames = db.DbMaintenance.GetTableInfoList().Select(d => d.Name).ToList();
+        var targetTable = tableNames.FirstOrDefault(n =>
+            n.Equals("groupRequest", System.StringComparison.OrdinalIgnoreCase)
+            || n.Equals("groupRequests", System.StringComparison.OrdinalIgnoreCase));
+        if (!string.IsNullOrEmpty(targetTable))
+        {
+            var columns = db.DbMaintenance.GetColumnInfosByTableName(targetTable);
+            var hasId = columns.Any(c => c.DbColumnName.Equals("ID", System.StringComparison.OrdinalIgnoreCase)
+                                         || c.DbColumnName.Equals("Id", System.StringComparison.OrdinalIgnoreCase));
+            if (hasId)
+            {
+                var allTables = db.DbMaintenance.GetTableInfoList().Select(t => t.Name);
+                db.DbMaintenance.DropTable(allTables.ToArray());
+
+                // 重新初始化 GroupRequest 表以确保包含 ID 字段
+                db.CodeFirst.SetStringDefaultLength(200).InitTables(types);
+            }
+        }
+
         if (db.DbMaintenance.GetTableInfoList().Count != types.Length)
             db.CodeFirst.SetStringDefaultLength(200).InitTables(types);
 

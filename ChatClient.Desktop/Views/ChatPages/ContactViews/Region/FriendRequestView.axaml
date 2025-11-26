@@ -67,8 +67,8 @@
                                    VerticalAlignment="Center" Classes="Small"
                                    IsVisible="{Binding !IsSolved}" />
                     </Grid>
-                    <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Size="37" Name="Head" Image="{Binding UserDto.HeadImage}" />
+                    <StackPanel Margin="0,8" Orientation="Horizontal">
+                        <circleImage:CircleImage Size="42" Name="Head" Image="{Binding UserDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
@@ -76,9 +76,10 @@
                                     Text="{Binding UserDto.Name}" />
                                 <TextBlock Text="正在验证你的邀请"
                                            Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.75"
                                            FontSize="13" Classes="Small" />
                                 <TextBlock Text="{Binding RequestTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5" Classes="Small"
+                                           FontSize="11.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -131,8 +132,8 @@
                             </Button>
                         </StackPanel>
                     </Grid>
-                    <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Name="Head" Size="37" Image="{Binding UserDto.HeadImage}" />
+                    <StackPanel Margin="0,8" Orientation="Horizontal">
+                        <circleImage:CircleImage Name="Head" Size="42" Image="{Binding UserDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
@@ -140,9 +141,10 @@
                                     Text="{Binding UserDto.Name}" />
                                 <TextBlock Text="请求加为好友" Classes="Small"
                                            Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.75"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding ReceiveTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5" Classes="Small"
+                                           FontSize="11.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -175,8 +177,8 @@
                         <TextBlock Opacity="0.6" FontSize="12" Text="处理者:你" VerticalAlignment="Center" Classes="Small"
                                    IsVisible="{Binding IsUser}" />
                     </Grid>
-                    <StackPanel Margin="0,10" Orientation="Horizontal">
-                        <circleImage:CircleImage Name="Head" Size="37" Image="{Binding UserDto.HeadImage}" />
+                    <StackPanel Margin="0,8" Orientation="Horizontal">
+                        <circleImage:CircleImage Name="Head" Size="42" Image="{Binding UserDto.HeadImage}" />
                         <Grid Margin="13,2" RowDefinitions="1.2*,*">
                             <StackPanel Orientation="Horizontal" Spacing="5">
                                 <TextBlock
@@ -184,9 +186,10 @@
                                     Text="{Binding UserDto.Name}" />
                                 <TextBlock Text="删除好友" Classes="Small"
                                            Foreground="{DynamicResource SukiText}"
+                                           Opacity="0.75"
                                            FontSize="13" />
                                 <TextBlock Text="{Binding DeleteTime,Converter={converter:DateOfYMDConverter}}"
-                                           FontSize="12.5" Classes="Small"
+                                           FontSize="11.5" Classes="Small"
                                            Opacity="0.6" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Grid.Row="1">

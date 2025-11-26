@@ -39,15 +39,23 @@ internal class WindowTaskbarFlashHelper : ITaskbarFlashHelper
     {
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
-            var hwnd = window.TryGetPlatformHandle().Handle;
-            FLASHWINFO fInfo = new FLASHWINFO
+            try
             {
-                hwnd = hwnd,
-                dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG,
-                uCount = flashCount,
-                cbSize = (uint)Marshal.SizeOf(typeof(FLASHWINFO))
-            };
-            FlashWindowEx(ref fInfo);
+                var hwnd = window.TryGetPlatformHandle().Handle;
+                FLASHWINFO fInfo = new FLASHWINFO
+                {
+                    hwnd = hwnd,
+                    dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG,
+                    uCount = flashCount,
+                    cbSize = (uint)Marshal.SizeOf(typeof(FLASHWINFO))
+                };
+                FlashWindowEx(ref fInfo);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 

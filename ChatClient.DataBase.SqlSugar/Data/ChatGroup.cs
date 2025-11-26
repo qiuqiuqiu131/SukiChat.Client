@@ -7,10 +7,7 @@ namespace ChatClient.DataBase.SqlSugar.Data;
 [SugarIndex("chatGroup_groupId", nameof(GroupId), OrderByType.Asc)]
 public class ChatGroup
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
-
-    public int ChatId { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public int ChatId { get; set; }
 
 
     [SugarColumn(Length = 10)] public string UserFromId { get; set; }

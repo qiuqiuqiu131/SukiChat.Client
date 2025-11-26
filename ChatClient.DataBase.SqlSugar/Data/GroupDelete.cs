@@ -6,10 +6,7 @@ namespace ChatClient.DataBase.SqlSugar.Data;
 [SugarIndex("unique_groupDelete_deleteId", nameof(DeleteId), OrderByType.Desc, true)]
 public class GroupDelete
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
-
-    public int DeleteId { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public int DeleteId { get; set; }
 
     public string GroupId { get; set; }
 

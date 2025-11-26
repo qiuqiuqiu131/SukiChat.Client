@@ -52,10 +52,10 @@ public class GroupSugarService : IGroupService
         {
             // 创建群组成功
             var time = DateTime.Parse(response.Time);
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var groupRepository = _unitOfWork.GetRepository<Group>();
+                var groupRepository = unitOfWork.GetRepository<Group>();
                 await groupRepository.InsertOrUpdateAsync(new Group
                 {
                     Id = response.GroupId,
@@ -64,7 +64,7 @@ public class GroupSugarService : IGroupService
                     HeadIndex = 1
                 });
 
-                var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+                var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
                 await groupRelationRepository.InsertOrUpdateAsync(new GroupRelation
                 {
                     GroupId = response.GroupId,
@@ -74,11 +74,11 @@ public class GroupSugarService : IGroupService
                     JoinTime = time
                 });
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
             }
 
@@ -107,10 +107,10 @@ public class GroupSugarService : IGroupService
         var response = await _messageHelper.SendMessageWithResponse<UpdateGroupRelation>(request);
         if (response is { Response: { State: true } })
         {
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+                var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
                 var entity = await groupRelationRepository.GetFirstAsync(whereExpression: d =>
                     d.UserId == userId && d.GroupId == groupRelationDto.Id);
                 if (entity != null)
@@ -124,11 +124,11 @@ public class GroupSugarService : IGroupService
                     await groupRelationRepository.UpdateAsync(entity);
                 }
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
             }
         }
@@ -181,20 +181,16 @@ public class GroupSugarService : IGroupService
                 Message = message,
                 IsSolved = false
             };
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
-                var entity = await groupRequestRepository.GetFirstAsync(
-                    whereExpression: d => d.GroupId == groupRequest.GroupId);
-                if (entity != null)
-                    groupRequest.Id = entity.Id;
+                var groupRequestRepository = unitOfWork.GetRepository<GroupRequest>();
                 await groupRequestRepository.UpdateAsync(groupRequest);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
             }
 
@@ -296,40 +292,27 @@ public class GroupSugarService : IGroupService
     public async Task<bool> GetJoinGroupResponseResponseFromServer(string userId,
         JoinGroupResponseResponseFromServer message)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
             // 如果请求成功,数据库中更改此请求信息
-            var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
-            var groupRequest =
-                await groupRequestRepository.GetFirstAsync(x => x.RequestId == message.RequestId);
-            if (groupRequest != null)
+            var groupReceivedRepository = unitOfWork.GetRepository<GroupReceived>();
+            var groupReceived =
+                await groupReceivedRepository.GetFirstAsync(x => x.RequestId == message.RequestId);
+            if (groupReceived != null)
             {
-                groupRequest.IsAccept = message.Accept;
-                groupRequest.IsSolved = true;
-                groupRequest.SolveTime = DateTime.Parse(message.Time);
-                groupRequest.AcceptByUserId = message.UserId;
-                await groupRequestRepository.UpdateAsync(groupRequest);
-            }
-            else
-            {
-                var gresponse = new GroupRequest
-                {
-                    RequestId = message.RequestId,
-                    RequestTime = DateTime.Now,
-                    SolveTime = null,
-                    IsAccept = message.Accept,
-                    IsSolved = true,
-                    AcceptByUserId = message.UserId
-                };
-                await groupRequestRepository.InsertAsync(gresponse);
+                groupReceived.IsAccept = message.Accept;
+                groupReceived.IsSolved = true;
+                groupReceived.SolveTime = DateTime.Parse(message.Time);
+                groupReceived.AcceptByUserId = message.UserId;
+                await groupReceivedRepository.UpdateAsync(groupReceived);
             }
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -340,11 +323,11 @@ public class GroupSugarService : IGroupService
     public async Task<GroupRequestDto?> GetJoinGroupResponseFromServer(string userId,
         JoinGroupResponseFromServer message)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
             // 更新groupRequest表
-            var requestRepository = _unitOfWork.GetRepository<GroupRequest>();
+            var requestRepository = unitOfWork.GetRepository<GroupRequest>();
             var result = await requestRepository.GetFirstAsync(d =>
                 d.RequestId == message.RequestId);
             if (result == null) return null;
@@ -352,10 +335,10 @@ public class GroupSugarService : IGroupService
             result.IsAccept = message.Accept;
             result.AcceptByUserId = message.UserIdFrom;
             result.SolveTime = DateTime.Parse(message.Time);
-            await _unitOfWork.Tenant.CommitTranAsync();
+            await unitOfWork.Tenant.CommitTranAsync();
 
             // 更新groupRelation表
-            var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+            var groupRelationRepository = unitOfWork.GetRepository<GroupRelation>();
             if (message.Accept)
             {
                 var groupRelation = new GroupRelation
@@ -369,14 +352,14 @@ public class GroupSugarService : IGroupService
                     Remark = result.Remark
                 };
                 await groupRelationRepository.InsertAsync(groupRelation);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
 
             return _mapper.Map<GroupRequestDto>(result);
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return null;
         }
@@ -384,17 +367,14 @@ public class GroupSugarService : IGroupService
 
     public async Task<bool> GetJoinGroupRequestFromServer(string userId, GroupReceivedDto dto)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
             var receive = _mapper.Map<GroupReceived>(dto);
-            var receiveRepository = _unitOfWork.GetRepository<GroupReceived>();
-            var entity = await receiveRepository.GetFirstAsync(d => d.RequestId == dto.RequestId);
-            if (entity != null)
-                receive.Id = entity.Id;
+            var receiveRepository = unitOfWork.GetRepository<GroupReceived>();
             await receiveRepository.InsertOrUpdateAsync(receive);
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
             return true;
         }
         catch (Exception e)

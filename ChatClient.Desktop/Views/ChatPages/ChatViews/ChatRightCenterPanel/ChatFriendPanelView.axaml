@@ -12,7 +12,6 @@
              xmlns:chatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.ChatUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatFriendPanelViewModel"
-             regions:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatFriendPanelView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">
@@ -187,7 +186,7 @@
                                        DeleteMessageCommand="{Binding DeleteMessageCommand}"
                                        RetractMessageCommand="{Binding RetractMessageCommand}"
                                        FileMessageClickCommand="{Binding FileMessageClickCommand}"
-                                       FileRestoreCommand="{Binding FileRestoreCommand}"/>
+                                       FileRestoreCommand="{Binding FileRestoreCommand}" />
 
                         <Border Grid.Row="1" Background="{DynamicResource SukiBorderBrush}" />
 

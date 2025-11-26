@@ -100,7 +100,7 @@ public class GroupRequestViewModel : ViewModelBase, IRegionMemberLifetime
             {
                 _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
-                    Message = "操作失败",
+                    Message = message,
                     Type = NotificationType.Error
                 });
             }
@@ -121,13 +121,13 @@ public class GroupRequestViewModel : ViewModelBase, IRegionMemberLifetime
             isOperate = false;
             if (result.Result != ButtonResult.OK) return;
 
-            var _groupService = _containerProvider.Resolve<IGroupService>();
-            var (state, message) = await _groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
+            var groupService = _containerProvider.Resolve<IGroupService>();
+            var (state, message) = await groupService.JoinGroupResponse(_userManager.User.Id, obj.RequestId, true);
             if (!state)
             {
                 _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
-                    Message = "操作失败",
+                    Message = message,
                     Type = NotificationType.Error
                 });
             }

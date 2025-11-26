@@ -180,7 +180,7 @@
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/Input/ChatInputPanelView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/FriendSideView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideEditView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideMemberView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideMemberView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ChatViews/SideRegion/GroupSideView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/AddNewFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/ContactsView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -198,7 +198,7 @@
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/GroupDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/GroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/FriendDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/FriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/FriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/GroupDetailView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/GroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/ChatPages/ContactViews/Region/SearchFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
@@ -248,7 +248,7 @@
         <entry key="ChatClient.Desktop/Views/ScreenshotWindow.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/AddFriendRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/AddGroupRequestView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
-        <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchAllView.axaml" value="ChatClient.Desktop/ChatClient.Main.csproj" />
+        <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchAllView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchFriendView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/Region/SearchGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />
         <entry key="ChatClient.Desktop/Views/SearchUserGroupView/SearchUserGroupView.axaml" value="ChatClient.Desktop/ChatClient.Desktop.csproj" />

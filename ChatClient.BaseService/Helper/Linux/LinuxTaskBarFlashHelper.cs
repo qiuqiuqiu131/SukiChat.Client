@@ -110,13 +110,21 @@ internal class LinuxTaskbarFlashHelper : ITaskbarFlashHelper
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             return;
 
-        var hwnd = window.TryGetPlatformHandle().Handle;
-
-        // 设置窗口urgency hint
-        if (!SetUrgencyHint(hwnd, true))
+        try
         {
-            // 如果设置urgency hint失败，尝试使用桌面通知作为备选方案
-            SendDesktopNotification("新消息", "您有新的消息，请查看");
+            var hwnd = window.TryGetPlatformHandle().Handle;
+
+            // 设置窗口urgency hint
+            if (!SetUrgencyHint(hwnd, true))
+            {
+                // 如果设置urgency hint失败，尝试使用桌面通知作为备选方案
+                SendDesktopNotification("新消息", "您有新的消息，请查看");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
         }
     }
 

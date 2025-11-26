@@ -5,8 +5,7 @@ namespace ChatClient.DataBase.SqlSugar.Data;
 [SugarTable("Users")]
 public class User
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = false)]
-    public string Id { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public string Id { get; set; }
 
     public string Name { get; set; }
 

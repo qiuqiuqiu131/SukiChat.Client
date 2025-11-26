@@ -6,10 +6,8 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:behaviors="clr-namespace:ChatClient.Avalonia.Behaviors;assembly=ChatClient.Avalonia"
              xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
-             xmlns:mvvm="http://prismlibrary.com/"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:DataType="sideRegion:FriendSideViewModel"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion.FriendSideView">
     <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="20">
         <suki:GlassCard CornerRadius="6" Padding="10" Margin="0">

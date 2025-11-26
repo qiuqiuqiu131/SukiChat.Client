@@ -33,7 +33,6 @@ public class ProtoToDataProfile : Profile
             .ForMember(cp => cp.Message, opt => opt.MapFrom(cm => ChatMessageTool.EncruptChatMessage(cm.Messages)))
             .ForMember(cp => cp.Time, opt => opt.MapFrom(cm => DateTime.Parse(cm.Time)))
             .ForMember(cp => cp.ChatId, opt => opt.MapFrom(cm => cm.Id))
-            .ForMember(cp => cp.Id, opt => opt.Ignore())
             .ForMember(cp => cp.RetractedTime,
                 opt => opt.MapFrom(cm =>
                     string.IsNullOrWhiteSpace(cm.RetractTime) ? DateTime.MinValue : DateTime.Parse(cm.RetractTime)));
@@ -52,7 +51,6 @@ public class ProtoToDataProfile : Profile
             .ForMember(cg => cg.Message, opt => opt.MapFrom(gm => ChatMessageTool.EncruptChatMessage(gm.Messages)))
             .ForMember(cg => cg.Time, opt => opt.MapFrom(gm => DateTime.Parse(gm.Time)))
             .ForMember(cg => cg.ChatId, opt => opt.MapFrom(gm => gm.Id))
-            .ForMember(cg => cg.Id, opt => opt.Ignore())
             .ForMember(cg => cg.RetractedTime,
                 opt => opt.MapFrom(gm =>
                     string.IsNullOrWhiteSpace(gm.RetractTime) ? DateTime.MinValue : DateTime.Parse(gm.RetractTime)));

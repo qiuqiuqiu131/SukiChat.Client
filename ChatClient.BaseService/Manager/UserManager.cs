@@ -227,6 +227,8 @@ internal class UserManager : IUserManager
         if (User == null) return null;
 
         var dto = await _userDtoManager.GetGroupRelationDto(User!.Id, groupId);
+        if (dto == null) return null;
+
         if (dto.GroupDto == null)
             dto.GroupDto = await _userDtoManager.GetGroupDto(User.Id, groupId);
 
@@ -237,7 +239,7 @@ internal class UserManager : IUserManager
         {
             var groupGroup = GroupGroups?.FirstOrDefault(d => d.GroupName.Equals(dto.Grouping));
             if (groupGroup != null)
-                groupGroup.Groups.Add(dto);
+                groupGroup.Groups?.Add(dto);
             else
             {
                 if (GroupGroups == null)

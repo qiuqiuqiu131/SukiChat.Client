@@ -71,19 +71,16 @@ public class FriendSugarService : IFriendService
             Remark = remark
         };
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var repository = _unitOfWork.GetRepository<FriendRequest>();
-            var entity = await repository.GetFirstAsync(d => d.RequestId == friendRequest.RequestId);
-            if (entity != null)
-                friendRequest.Id = entity.Id;
+            var repository = unitOfWork.GetRepository<FriendRequest>();
             await repository.InsertOrUpdateAsync(friendRequest);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -130,10 +127,10 @@ public class FriendSugarService : IFriendService
             return (false, message);
         }
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var repository = _unitOfWork.GetRepository<FriendReceived>();
+            var repository = unitOfWork.GetRepository<FriendReceived>();
             var friendReceived =
                 await repository.GetFirstAsync(x => x.RequestId.Equals(requestId));
             if (friendReceived != null)
@@ -145,11 +142,11 @@ public class FriendSugarService : IFriendService
                 await repository.UpdateAsync(friendReceived);
             }
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -195,13 +192,14 @@ public class FriendSugarService : IFriendService
 
         if (response is { Response: { State: true } })
         {
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var friendRelationRepository = _unitOfWork.GetRepository<FriendRelation>();
-                var entity = await friendRelationRepository.GetFirstAsync(
-                    d => d.User1Id == userId && d.User2Id == friendRelationDto.Id
-                );
+                var friendRelationRepository = unitOfWork.GetRepository<FriendRelation>();
+                var entity =
+                    await friendRelationRepository.GetFirstAsync(d =>
+                        d.User1Id == userId && d.User2Id == friendRelationDto.Id
+                    );
 
                 if (entity != null)
                 {
@@ -214,11 +212,11 @@ public class FriendSugarService : IFriendService
                     await friendRelationRepository.UpdateAsync(entity);
                 }
 
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
                 throw;
             }
@@ -249,20 +247,17 @@ public class FriendSugarService : IFriendService
 
     public async Task<bool> GetFriendRequestFromServer(string userId, FriendRequestFromServer message)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
             var data = _mapper.Map<FriendReceived>(message);
-            var receivedRepository = _unitOfWork.GetRepository<FriendReceived>();
-            var entity = receivedRepository.GetFirstAsync(d => d.RequestId == message.RequestId);
-            if (entity != null)
-                data.Id = entity.Id;
+            var receivedRepository = unitOfWork.GetRepository<FriendReceived>();
             await receivedRepository.InsertOrUpdateAsync(data);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -272,22 +267,22 @@ public class FriendSugarService : IFriendService
 
     public async Task<FriendRequestDto?> GetFriendResponseFromServer(string userId, FriendResponseFromServer message)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var requestRepository = _unitOfWork.GetRepository<FriendRequest>();
+            var requestRepository = unitOfWork.GetRepository<FriendRequest>();
             var result = await requestRepository.GetFirstAsync(d => d.RequestId == message.RequestId);
             if (result == null) return null;
             result.IsSolved = true;
             result.IsAccept = message.Accept;
             result.SolveTime = DateTime.Parse(message.ResponseTime);
             await requestRepository.UpdateAsync(result);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
             return _mapper.Map<FriendRequestDto>(result);
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return null;
         }

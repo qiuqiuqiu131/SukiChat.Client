@@ -68,7 +68,7 @@ public class GroupRelationMessageHandler : MessageHandlerBase
     private async Task OnJoinGroupRequestFromServer(IScopedProvider scopedprovider, JoinGroupRequestFromServer message)
     {
         // UI处理
-        var receiveDto = _userManager.GroupReceiveds?.FirstOrDefault(d => d.GroupId == message.GroupId);
+        var receiveDto = _userManager.GroupReceiveds?.FirstOrDefault(d => d.RequestId == message.RequestId);
         if (receiveDto != null)
         {
             receiveDto.IsSolved = false;
@@ -119,6 +119,10 @@ public class GroupRelationMessageHandler : MessageHandlerBase
         var groupService = scopedprovider.Resolve<IGroupService>();
         var result = await groupService.GetJoinGroupResponseFromServer(_userManager.User!.Id, message);
 
+        // 添加relation
+        var groupPackService = scopedprovider.Resolve<IGroupPackService>();
+        await groupPackService.GroupRequestResponseMessageOperate(_userManager.User.Id, message);
+
         // 更新UI
         var dto = _userManager.GroupRequests!.FirstOrDefault(d => d.RequestId == message.RequestId);
         var userDtoManager = scopedprovider.Resolve<IUserDtoManager>();
@@ -138,16 +142,6 @@ public class GroupRelationMessageHandler : MessageHandlerBase
             result.AcceptByGroupMemberDto = await userDtoManager.GetGroupMemberDto(result.GroupId, message.UserIdFrom);
             _userManager.GroupRequests?.Insert(0, result);
         }
-
-        // if (_userManager is not
-        //     { CurrentChatPage: "通讯录", CurrentContactState: ContactState.GroupRequest, User: not null })
-        //     _userManager.User!.UnreadGroupMessageCount++;
-        // else
-        // {
-        //     _userManager.User!.LastReadGroupMessageTime = DateTime.Now + TimeSpan.FromSeconds(1);
-        //     _userManager.User!.UnreadGroupMessageCount = 0;
-        //     _userManager.SaveUser();
-        // }
 
         // 加入群聊
         if (dto?.IsAccept ?? false)

@@ -6,16 +6,11 @@ namespace ChatClient.DataBase.SqlSugar.Data;
 [SugarIndex("unique_groupRequest_requestId", nameof(RequestId), OrderByType.Desc, true)]
 public class GroupRequest
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public int RequestId { get; set; }
 
-    public int RequestId { get; set; }
-    
-    [SugarColumn(Length = 10)]
-    public string UserFromId { get; set; }
-    
-    [SugarColumn(Length = 10)]
-    public string GroupId { get; set; }
+    [SugarColumn(Length = 10)] public string UserFromId { get; set; }
+
+    [SugarColumn(Length = 10)] public string GroupId { get; set; }
 
     public DateTime RequestTime { get; set; }
 

@@ -7,10 +7,8 @@
              xmlns:circleImage="clr-namespace:ChatClient.Avalonia.Controls.CircleImage;assembly=ChatClient.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:sideRegion="clr-namespace:ChatClient.Desktop.ViewModels.ChatPages.ChatViews.SideRegion"
-             xmlns:mvvm="http://prismlibrary.com/"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
              x:DataType="sideRegion:GroupSideEditViewModel"
-             mvvm:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.SideRegion.GroupSideEditView">
     <StackPanel Orientation="Vertical" Margin="16,20,0,20" Spacing="20">
         <StackPanel HorizontalAlignment="Left" Background="Transparent" Orientation="Horizontal" Spacing="5">

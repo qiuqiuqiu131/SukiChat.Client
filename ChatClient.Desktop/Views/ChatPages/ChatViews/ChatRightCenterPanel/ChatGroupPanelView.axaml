@@ -12,7 +12,6 @@
              xmlns:groupChatUi="clr-namespace:ChatClient.Desktop.Views.UserControls.GroupChatUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="chatRightCenterPanel:ChatGroupPanelViewModel"
-             regions:ViewModelLocator.AutoWireViewModel="True"
              x:Class="ChatClient.Desktop.Views.ChatPages.ChatViews.ChatRightCenterPanel.ChatGroupPanelView">
     <UserControl.Styles>
         <Style Selector="ScrollBar[AllowAutoHide=True] Border#ThumbBarVertical">

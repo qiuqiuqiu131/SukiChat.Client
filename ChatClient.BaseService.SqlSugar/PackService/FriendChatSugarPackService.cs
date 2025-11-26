@@ -148,20 +148,16 @@ public class FriendChatSugarPackService
     {
         var chatPrivate = _mapper.Map<ChatPrivate>(chatMessage);
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-            var result =
-                await chatPrivateRepository.GetFirstAsync(d => d.ChatId.Equals(chatPrivate.ChatId));
-            if (result != null)
-                chatPrivate.Id = result.Id;
+            var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
             await chatPrivateRepository.InsertOrUpdateAsync(chatPrivate);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -170,24 +166,13 @@ public class FriendChatSugarPackService
 
     public async Task<bool> FriendChatMessagesOperate(IEnumerable<FriendChatMessage> chatMessages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+            var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
 
             // 批量映射
             var chatPrivates = _mapper.Map<List<ChatPrivate>>(chatMessages);
-
-            // 批量查询已存在记录
-            var chatIds = chatPrivates.Select(x => x.ChatId).ToList();
-            var exists = await chatPrivateRepository.GetListAsync(d => chatIds.Contains(d.ChatId));
-
-            // 设置已有记录的ID
-            var existsDict = exists.ToDictionary(x => x.ChatId, x => x.Id);
-            foreach (var item in chatPrivates)
-                if (existsDict.TryGetValue(item.ChatId, out var id))
-                    item.Id = id;
-
 
             // 批量插入或更新
             await chatPrivateRepository.InsertOrUpdateAsync(chatPrivates);
@@ -206,7 +191,7 @@ public class FriendChatSugarPackService
             // 批量更新每个用户对的 IsChatting 状态
             foreach (var update in relationUpdates)
             {
-                await _unitOfWork.Db.Updateable<FriendRelation>()
+                await unitOfWork.Db.Updateable<FriendRelation>()
                     .SetColumns(d => d.IsChatting == true)
                     .Where(d => ((d.User1Id == update.UserFromId && d.User2Id == update.UserTargetId) ||
                                  (d.User1Id == update.UserTargetId && d.User2Id == update.UserFromId)) &&
@@ -214,11 +199,11 @@ public class FriendChatSugarPackService
                     .ExecuteCommandAsync();
             }
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -228,17 +213,17 @@ public class FriendChatSugarPackService
 
     public async Task<bool> ChatPrivateDetailMessagesOperate(IEnumerable<ChatPrivateDetailMessage> chatPrivateMessages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatPrivateDetailRepository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+            var chatPrivateDetailRepository = unitOfWork.GetRepository<ChatPrivateDetail>();
             var chatMessages = _mapper.Map<List<ChatPrivateDetail>>(chatPrivateMessages);
             await chatPrivateDetailRepository.InsertOrUpdateAsync(chatMessages);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 

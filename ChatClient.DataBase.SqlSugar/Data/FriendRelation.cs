@@ -7,12 +7,11 @@ namespace ChatClient.DataBase.SqlSugar.Data;
     nameof(User2Id), OrderByType.Asc, true)]
 public class FriendRelation
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
+    [SugarColumn(Length = 10, IsPrimaryKey = true)]
+    public string User1Id { get; set; }
 
-    [SugarColumn(Length = 10)] public string User1Id { get; set; }
-
-    [SugarColumn(Length = 10)] public string User2Id { get; set; }
+    [SugarColumn(Length = 10, IsPrimaryKey = true)]
+    public string User2Id { get; set; }
 
     [SugarColumn(Length = 20)] public string Grouping { get; set; }
 

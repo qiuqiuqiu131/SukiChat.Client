@@ -7,13 +7,10 @@ namespace ChatClient.DataBase.SqlSugar.Data;
     nameof(UserId), OrderByType.Asc, true)]
 public class GroupRelation
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
-    
-    [SugarColumn(Length = 10)]
+    [SugarColumn(Length = 10, IsPrimaryKey = true)]
     public string GroupId { get; set; }
-    
-    [SugarColumn(Length = 10)]
+
+    [SugarColumn(Length = 10, IsPrimaryKey = true)]
     public string UserId { get; set; }
 
     public int Status { get; set; }
@@ -21,10 +18,10 @@ public class GroupRelation
     public string Grouping { get; set; }
 
     public DateTime JoinTime { get; set; }
-    
+
     [SugarColumn(IsNullable = true, Length = 30)]
     public string? NickName { get; set; }
-    
+
     [SugarColumn(IsNullable = true, Length = 30)]
     public string? Remark { get; set; }
 

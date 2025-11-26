@@ -89,4 +89,6 @@ public interface IGroupPackService
     /// <param name="messages"></param>
     /// <returns></returns>
     Task<bool> GroupReceivedMesssagesOperate(string userId, IEnumerable<GroupRequestMessage> messages);
+
+    Task<bool> GroupRequestResponseMessageOperate(String userId, JoinGroupResponseFromServer message);
 }

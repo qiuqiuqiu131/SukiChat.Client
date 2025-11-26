@@ -139,8 +139,8 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
             if (!data.IsSystem)
             {
                 data.IsUser = groupChat.UserFromId.Equals(userId);
-                _ = Task.Run(
-                        async () => data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId))
+                _ = Task.Run(async () =>
+                        data.Owner = await _userDtoManager.GetGroupMemberDto(groupId, groupChat.UserFromId))
                     .ConfigureAwait(false);
             }
 
@@ -160,20 +160,16 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
     {
         var chatGroup = _mapper.Map<ChatGroup>(groupChatMessage);
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
-            var result =
-                await chatGroupRepository.GetFirstAsync(d => d.ChatId == chatGroup.ChatId);
-            if (result != null)
-                chatGroup.Id = result.Id;
+            var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
             await chatGroupRepository.InsertOrUpdateAsync(chatGroup);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -182,26 +178,13 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
 
     public async Task<bool> GroupChatMessagesOperate(string userId, IEnumerable<GroupChatMessage> groupChatMessages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
+            var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
 
             // 批量映射
             var chatGroups = _mapper.Map<List<ChatGroup>>(groupChatMessages);
-
-            // 批量查询已存在记录
-            var chatIds = chatGroups.Select(x => x.ChatId).ToList();
-            var exists = await chatGroupRepository.GetListAsync(d => chatIds.Contains(d.ChatId));
-
-            // 设置已有记录的ID
-            var existsDict = exists.ToDictionary(x => x.ChatId, x => x.Id);
-            foreach (var item in chatGroups)
-            {
-                if (existsDict.TryGetValue(item.ChatId, out var id))
-                    item.Id = id;
-            }
-
             // 批量插入或更新
             await chatGroupRepository.InsertOrUpdateAsync(chatGroups);
 
@@ -218,7 +201,7 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
             // 批量更新每个群组的 IsChatting 状态
             foreach (var update in relationUpdates)
             {
-                await _unitOfWork.Db.Updateable<GroupRelation>()
+                await unitOfWork.Db.Updateable<GroupRelation>()
                     .SetColumns(d => d.IsChatting == true)
                     .Where(d => d.UserId == userId &&
                                 d.GroupId == update.GroupId &&
@@ -226,11 +209,11 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
                     .ExecuteCommandAsync();
             }
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -241,17 +224,17 @@ public class GroupChatSugarPackService : Services.BaseService, IGroupChatPackSer
     public async Task<bool> ChatGroupDetailMessagesOperate(string userId,
         IEnumerable<ChatGroupDetailMessage> chatGroupMessages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatGroupDetailRepository = _unitOfWork.GetRepository<ChatGroupDetail>();
+            var chatGroupDetailRepository = unitOfWork.GetRepository<ChatGroupDetail>();
             var chatMessages = _mapper.Map<List<ChatGroupDetail>>(chatGroupMessages);
             await chatGroupDetailRepository.InsertOrUpdateAsync(chatMessages);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }

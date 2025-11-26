@@ -77,7 +77,7 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
     public async Task<AvaloniaList<FriendDeleteDto>?> GetFriendDeleteDtos(string userId, DateTime lastDeleteTime)
     {
         var friendDeletes = await _sqlSugarClient.Queryable<FriendDelete>()
-            .Where(d => (d.UseId1 == userId || d.UserId2.Equals(userId)) && d.DeleteTime > lastDeleteTime)
+            .Where(d => (d.UseId1.Equals(userId) || d.UserId2.Equals(userId)) && d.DeleteTime > lastDeleteTime)
             .OrderByDescending(d => d.DeleteTime)
             .ToListAsync();
 
@@ -103,20 +103,16 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
     {
         if (!userId.Equals(message.UserId)) return false;
         FriendRelation friendRelation = _mapper.Map<FriendRelation>(message);
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var friendRepository = _unitOfWork.GetRepository<FriendRelation>();
-            var relation = await friendRepository.GetFirstAsync(d =>
-                d.User1Id.Equals(friendRelation.User1Id) && d.User2Id.Equals(friendRelation.User2Id));
-            if (relation != null)
-                friendRelation.Id = relation.Id;
+            var friendRepository = unitOfWork.GetRepository<FriendRelation>();
             await friendRepository.InsertOrUpdateAsync(friendRelation);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -126,38 +122,22 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
 
     public async Task<bool> NewFriendMessagesOperate(string userId, IEnumerable<NewFriendMessage> messages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var friendRepository = _unitOfWork.GetRepository<FriendRelation>();
+            var friendRepository = unitOfWork.GetRepository<FriendRelation>();
             // 过滤有效消息并映射
             var validMessages = messages.Where(m => m.UserId.Equals(userId)).ToList();
             if (!validMessages.Any()) return true;
 
             var friendRelations = _mapper.Map<List<FriendRelation>>(validMessages);
-
-            // 批量查询已存在的关系
-            var relationPairs = friendRelations.Select(fr => new { fr.User1Id, fr.User2Id }).ToList();
-            var existingRelations = await friendRepository.GetListAsync(d =>
-                relationPairs.Any(p => d.User1Id == p.User1Id && d.User2Id == p.User2Id));
-
-            // 设置已有记录的ID
-            var existingDict = existingRelations.ToDictionary(x => new { x.User1Id, x.User2Id }, x => x.Id);
-            foreach (var relation in friendRelations)
-            {
-                var key = new { relation.User1Id, relation.User2Id };
-                if (existingDict.TryGetValue(key, out var id))
-                    relation.Id = id;
-            }
-
-
             await friendRepository.InsertOrUpdateAsync(friendRelations);
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -168,18 +148,14 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
     public async Task<bool> FriendDeleteMessageOperate(string userId, DeleteFriendMessage message)
     {
         if (!message.UserId.Equals(userId) && !message.FriendId.Equals(userId)) return false;
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
             await _sqlSugarClient.Ado.BeginTranAsync();
 
             // 添加删除记录
             var friendDelete = _mapper.Map<FriendDelete>(message);
-            var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
-            var existingDelete = await friendDeleteRepository.GetFirstAsync(d => d.DeleteId == friendDelete.DeleteId);
-
-            if (existingDelete != null)
-                friendDelete.Id = existingDelete.Id;
+            var friendDeleteRepository = unitOfWork.GetRepository<FriendDelete>();
             await friendDeleteRepository.InsertOrUpdateAsync(friendDelete);
 
             string friendId = message.UserId.Equals(userId) ? message.FriendId : message.UserId;
@@ -199,12 +175,12 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
                              && d.Time < deleteTime))
                 .ExecuteCommandAsync();
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
             return true;
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -212,10 +188,10 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
 
     public async Task<bool> FriendDeleteMessagesOperate(string userId, IEnumerable<FriendDeleteMessage> messages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var friendDeleteRepository = _unitOfWork.GetRepository<FriendDelete>();
+            var friendDeleteRepository = unitOfWork.GetRepository<FriendDelete>();
 
             // 过滤有效消息
             var validMessages = messages.Where(m =>
@@ -225,16 +201,6 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
 
             // 批量处理删除记录
             var friendDeletes = _mapper.Map<List<FriendDelete>>(validMessages);
-            var deleteIds = friendDeletes.Select(x => x.DeleteId).ToList();
-            var existingDeletes = await friendDeleteRepository.GetListAsync(d => deleteIds.Contains(d.DeleteId));
-
-            var existingDict = existingDeletes.ToDictionary(x => x.DeleteId, x => x.Id);
-            foreach (var delete in friendDeletes)
-            {
-                if (existingDict.TryGetValue(delete.DeleteId, out var id))
-                    delete.Id = id;
-            }
-
             await friendDeleteRepository.InsertOrUpdateAsync(friendDeletes);
 
             // 顺序处理关系和聊天记录删除，避免并发冲突
@@ -258,11 +224,11 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
                     .ExecuteCommandAsync();
             }
 
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -272,32 +238,19 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
 
     public async Task<bool> FriendRequestMessagesOperate(string userId, IEnumerable<FriendRequestMessage> messages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var requestRepository = _unitOfWork.GetRepository<FriendRequest>();
+            var requestRepository = unitOfWork.GetRepository<FriendRequest>();
 
             // 批量映射
             var friendRequests = _mapper.Map<List<FriendRequest>>(messages);
-
-            // 批量查询已存在记录
-            var requestIds = friendRequests.Select(x => x.RequestId).ToList();
-            var existingRequests = await requestRepository.GetListAsync(d => requestIds.Contains(d.RequestId));
-
-            // 设置已有记录的ID
-            var existingDict = existingRequests.ToDictionary(x => x.RequestId, x => x.Id);
-            foreach (var request in friendRequests)
-            {
-                if (existingDict.TryGetValue(request.RequestId, out var id))
-                    request.Id = id;
-            }
-
             await requestRepository.InsertOrUpdateAsync(friendRequests);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }
@@ -307,32 +260,20 @@ public class FriendSugarPackService : Services.BaseService, IFriendPackService
 
     public async Task<bool> FriendReceivedMesssagesOperate(string userId, IEnumerable<FriendRequestMessage> messages)
     {
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var receiveRepository = _unitOfWork.GetRepository<FriendReceived>();
+            var receiveRepository = unitOfWork.GetRepository<FriendReceived>();
 
             // 批量映射
             var receivedList = _mapper.Map<List<FriendReceived>>(messages);
 
-            // 批量查询已存在记录
-            var requestIds = receivedList.Select(x => x.RequestId).ToList();
-            var existingReceived = await receiveRepository.GetListAsync(d => requestIds.Contains(d.RequestId));
-
-            // 设置已有记录的ID
-            var existingDict = existingReceived.ToDictionary(x => x.RequestId, x => x.Id);
-            foreach (var received in receivedList)
-            {
-                if (existingDict.TryGetValue(received.RequestId, out var id))
-                    received.Id = id;
-            }
-
             await receiveRepository.InsertOrUpdateAsync(receivedList);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
             return false;
         }

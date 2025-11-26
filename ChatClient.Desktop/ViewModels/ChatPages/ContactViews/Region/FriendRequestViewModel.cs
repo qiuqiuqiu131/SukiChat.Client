@@ -31,7 +31,7 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
     public AsyncDelegateCommand<FriendReceiveDto> RejectCommand { get; init; }
     public DelegateCommand ClearAllCommand { get; init; }
 
-    private bool isOperate = false;
+    private bool _isOperate = false;
 
     private readonly IContainerProvider _containerProvider;
     private readonly ISukiDialogManager _sukiDialogManager;
@@ -40,15 +40,15 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
     public FriendRequestViewModel(IContainerProvider containerProvider,
         ISukiDialogManager sukiDialogManager,
         IEventAggregator eventAggregator,
-        IUserManager _userManager)
+        IUserManager userManager)
     {
         _containerProvider = containerProvider;
         _sukiDialogManager = sukiDialogManager;
         _eventAggregator = eventAggregator;
 
-        FriendReceivedDtos = _userManager.FriendReceives!;
-        FriendRequestDtos = _userManager.FriendRequests!;
-        FriendDeleteDtos = _userManager.FriendDeletes!;
+        FriendReceivedDtos = userManager.FriendReceives!;
+        FriendRequestDtos = userManager.FriendRequests!;
+        FriendDeleteDtos = userManager.FriendDeletes!;
         FriendReceivedDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
         FriendRequestDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
         FriendDeleteDtos.CollectionChanged += (sender, args) => RaisePropertyChanged(nameof(IsRequestEmpty));
@@ -86,17 +86,17 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
             .TryShow();
     }
 
-    private async Task RejectRequest(FriendReceiveDto obj)
+    private Task RejectRequest(FriendReceiveDto obj)
     {
-        if (isOperate) return;
+        if (_isOperate) return Task.CompletedTask;
 
         async void RejectRequestCallback(IDialogResult result)
         {
-            isOperate = false;
+            _isOperate = false;
             if (result.Result != ButtonResult.OK) return;
 
-            var _friendService = _containerProvider.Resolve<IFriendService>();
-            var (state, message) = await _friendService.ResponseFriendRequest(obj.RequestId, false);
+            var friendService = _containerProvider.Resolve<IFriendService>();
+            var (state, message) = await friendService.ResponseFriendRequest(obj.RequestId, false);
             if (state)
             {
                 obj.IsAccept = false;
@@ -106,32 +106,33 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
             else
                 _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
-                    Message = "操作失败",
+                    Message = message,
                     Type = NotificationType.Error
                 });
         }
 
-        isOperate = true;
+        _isOperate = true;
         _sukiDialogManager.CreateDialog()
             .WithViewModel(d => new CommonDialogViewModel(d, "确定拒绝好友请求吗？", RejectRequestCallback))
             .TryShow();
+        return Task.CompletedTask;
     }
 
-    private async Task AcceptRequest(FriendReceiveDto obj)
+    private Task AcceptRequest(FriendReceiveDto obj)
     {
-        if (isOperate) return;
+        if (_isOperate) return Task.CompletedTask;
 
         async void AcceptRequestCallback(IDialogResult result)
         {
-            isOperate = false;
+            _isOperate = false;
             if (result.Result != ButtonResult.OK) return;
 
             var remark = result.Parameters.ContainsKey("Remark") ? result.Parameters["Remark"] as string : string.Empty;
             var group = result.Parameters.ContainsKey("Group") ? result.Parameters["Group"] as string : string.Empty;
 
-            var _friendService = _containerProvider.Resolve<IFriendService>();
+            var friendService = _containerProvider.Resolve<IFriendService>();
             var (state, message) =
-                await _friendService.ResponseFriendRequest(obj.RequestId, true, remark ?? "", group ?? "默认分组");
+                await friendService.ResponseFriendRequest(obj.RequestId, true, remark ?? "", group ?? "默认分组");
             if (state)
             {
                 obj.IsAccept = true;
@@ -149,15 +150,16 @@ public class FriendRequestViewModel : ViewModelBase, IRegionMemberLifetime
             else
                 _eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArgs
                 {
-                    Message = "操作失败",
+                    Message = message,
                     Type = NotificationType.Error
                 });
         }
 
-        isOperate = true;
+        _isOperate = true;
         _sukiDialogManager.CreateDialog()
             .WithViewModel(d => new AcceptFriendViewModel(d, AcceptRequestCallback, obj.UserDto))
             .TryShow();
+        return Task.CompletedTask;
     }
 
     public bool KeepAlive => false;

@@ -6,10 +6,7 @@ namespace ChatClient.DataBase.SqlSugar.Data;
 [SugarIndex("unique_friendRequest_requestId", nameof(RequestId), OrderByType.Desc, true)]
 public class FriendReceived
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
-
-    public int RequestId { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public int RequestId { get; set; }
 
     public string UserFromId { get; set; }
 

@@ -126,20 +126,16 @@ public class ChatSugarService : IChatService
         friendMessage.Time = response.Time;
         var chatPrivate = _mapper.Map<ChatPrivate>(friendMessage);
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
-            var result =
-                await chatPrivateRepository.GetFirstAsync(d => d.ChatId.Equals(response.Id));
-            if (result != null)
-                chatPrivate.Id = result.Id;
+            var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
             await chatPrivateRepository.InsertOrUpdateAsync(chatPrivate);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -218,19 +214,16 @@ public class ChatSugarService : IChatService
         groupChatMessage.Time = response.Time;
         var chatGroup = _mapper.Map<ChatGroup>(groupChatMessage);
 
-        using var _unitOfWork = _sqlSugarClient.CreateContext();
+        using var unitOfWork = _sqlSugarClient.CreateContext();
         try
         {
-            var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
-            var result = await chatGroupRepository.GetFirstAsync(d => d.ChatId.Equals(response.Id));
-            if (result != null)
-                chatGroup.Id = result.Id;
+            var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
             await chatGroupRepository.InsertOrUpdateAsync(chatGroup);
-            _unitOfWork.Commit();
+            unitOfWork.Commit();
         }
         catch (Exception e)
         {
-            await _unitOfWork.Tenant.RollbackTranAsync();
+            await unitOfWork.Tenant.RollbackTranAsync();
             Console.WriteLine(e);
         }
 
@@ -264,12 +257,12 @@ public class ChatSugarService : IChatService
     /// 上传聊天图片，不会直接调用，而是在发送消息时调用
     /// 如果上传成功，返回true和文件名，否则返回false和错误信息
     /// </summary>
-    /// <param name="Id"></param>
+    /// <param name="id"></param>
     /// <param name="bitmap"></param>
     /// <param name="fileTarget"></param>
     /// <param name="filename"></param>
     /// <returns></returns>
-    private async Task<(bool, string)> UploadChatImage(string Id, Bitmap bitmap, FileTarget fileTarget,
+    private async Task<(bool, string)> UploadChatImage(string id, Bitmap bitmap, FileTarget fileTarget,
         string? filename = null)
     {
         var fileName =
@@ -277,7 +270,7 @@ public class ChatSugarService : IChatService
         var result = false;
         await using (var stream = bitmap.BitmapToStream())
         {
-            result = await _fileOperateHelper.UploadFile(Id, "ChatFile", fileName, stream,
+            result = await _fileOperateHelper.UploadFile(id, "ChatFile", fileName, stream,
                 fileTarget);
         }
 
@@ -316,24 +309,25 @@ public class ChatSugarService : IChatService
     /// <param name="Id"></param>
     /// <param name="filePath"></param>
     /// <param name="fileTarget"></param>
-    /// <param name="fileProcessDto"></param>
+    /// <param name="fileProgress"></param>
     /// <returns></returns>
     private async Task<(bool, string)> UploadChatFile(string Id, string filePath, FileTarget fileTarget,
         IProgress<double> fileProgress)
     {
         if (!System.IO.File.Exists(filePath)) return (false, "File not found");
 
-        var _fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
+        var fileIOHelper = _containerProvider.Resolve<IFileIOHelper>();
 
         var basePath = fileTarget switch
         {
             FileTarget.Group => "Groups",
             FileTarget.User => "Users",
+            _ => throw new ArgumentOutOfRangeException(nameof(fileTarget), fileTarget, null)
         };
         var path = Path.Combine(basePath, Id, "ChatFile");
 
         var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{Path.GetFileName(filePath)}";
-        var result = await _fileIOHelper.UploadLargeFileAsync(path, fileName, filePath, fileProgress);
+        var result = await fileIOHelper.UploadLargeFileAsync(path, fileName, filePath, fileProgress);
 
         if (result)
             return (true, fileName);
@@ -353,16 +347,16 @@ public class ChatSugarService : IChatService
                 TargetPath = fileMess.TargetFilePath,
                 UserId = userId
             };
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivateFile>();
+                var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivateFile>();
                 await chatPrivateRepository.InsertOrUpdateAsync(chatPrivateFile);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
             }
         }
@@ -374,16 +368,16 @@ public class ChatSugarService : IChatService
                 TargetPath = fileMess.TargetFilePath,
                 UserId = userId
             };
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var chatPrivateRepository = _unitOfWork.GetRepository<ChatGroupFile>();
+                var chatPrivateRepository = unitOfWork.GetRepository<ChatGroupFile>();
                 await chatPrivateRepository.InsertOrUpdateAsync(chatGroupFile);
-                _unitOfWork.Commit();
+                unitOfWork.Commit();
             }
             catch (Exception e)
             {
-                await _unitOfWork.Tenant.RollbackTranAsync();
+                await unitOfWork.Tenant.RollbackTranAsync();
                 Console.WriteLine(e);
             }
         }
@@ -402,19 +396,18 @@ public class ChatSugarService : IChatService
             var response = await _messageHelper.SendMessageWithResponse<UpdateFriendLastChatIdResponse>(request);
             if (response is { Response: { State: true } })
             {
-                using var _unitOfWork = _sqlSugarClient.CreateContext();
+                using var unitOfWork = _sqlSugarClient.CreateContext();
                 try
                 {
-                    var repository = _unitOfWork.GetRepository<FriendRelation>();
-                    var relation = await repository.GetFirstAsync(
-                        d => d.User1Id == userId && d.User2Id == targetId);
+                    var repository = unitOfWork.GetRepository<FriendRelation>();
+                    var relation = await repository.GetFirstAsync(d => d.User1Id == userId && d.User2Id == targetId);
                     if (relation != null)
                     {
                         if (relation.LastChatId < lastChatId)
                         {
                             relation.LastChatId = lastChatId;
                             // 只更新LastChatId列数据
-                            await _unitOfWork.Db.Updateable(relation)
+                            await unitOfWork.Db.Updateable(relation)
                                 .UpdateColumns(d => d.LastChatId)
                                 .ExecuteCommandAsync();
                         }
@@ -424,13 +417,13 @@ public class ChatSugarService : IChatService
                         if (friendRelation != null)
                             friendRelation.LastChatId = lastChatId;
 
-                        _unitOfWork.Commit();
+                        unitOfWork.Commit();
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    await _unitOfWork.Tenant.RollbackTranAsync();
+                    await unitOfWork.Tenant.RollbackTranAsync();
                     Console.WriteLine(e);
                 }
             }
@@ -449,10 +442,10 @@ public class ChatSugarService : IChatService
             var response = await _messageHelper.SendMessageWithResponse<UpdateGroupLastChatIdResponse>(request);
             if (response is { Response: { State: true } })
             {
-                using var _unitOfWork = _sqlSugarClient.CreateContext();
+                using var unitOfWork = _sqlSugarClient.CreateContext();
                 try
                 {
-                    var repository = _unitOfWork.GetRepository<GroupRelation>();
+                    var repository = unitOfWork.GetRepository<GroupRelation>();
                     var relation =
                         await repository.GetFirstAsync(d => d.UserId == userId && d.GroupId == targetId);
                     if (relation != null)
@@ -461,7 +454,7 @@ public class ChatSugarService : IChatService
                         {
                             relation.LastChatId = lastChatId;
                             // 只更新LastChatId列数据
-                            await _unitOfWork.Db.Updateable(relation)
+                            await unitOfWork.Db.Updateable(relation)
                                 .UpdateColumns(d => d.LastChatId)
                                 .ExecuteCommandAsync();
                         }
@@ -472,12 +465,12 @@ public class ChatSugarService : IChatService
                     if (groupRelation != null)
                         groupRelation.LastChatId = lastChatId;
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                     return true;
                 }
                 catch (Exception e)
                 {
-                    await _unitOfWork.Tenant.RollbackTranAsync();
+                    await unitOfWork.Tenant.RollbackTranAsync();
                     Console.WriteLine(e);
                 }
             }
@@ -621,7 +614,7 @@ public class ChatSugarService : IChatService
 
             if (result?.Response?.State ?? false)
             {
-                using var _unitOfWork = _sqlSugarClient.CreateContext();
+                using var unitOfWork = _sqlSugarClient.CreateContext();
                 try
                 {
                     var entityDetail = new ChatPrivateDetail
@@ -630,14 +623,14 @@ public class ChatSugarService : IChatService
                         UserId = userId,
                         IsDeleted = true
                     };
-                    var repository = _unitOfWork.GetRepository<ChatPrivateDetail>();
+                    var repository = unitOfWork.GetRepository<ChatPrivateDetail>();
                     await repository.InsertOrUpdateAsync(entityDetail);
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                 }
                 catch (Exception e)
                 {
-                    await _unitOfWork.Tenant.RollbackTranAsync();
+                    await unitOfWork.Tenant.RollbackTranAsync();
                     Console.WriteLine(e);
                 }
             }
@@ -656,7 +649,7 @@ public class ChatSugarService : IChatService
 
             if (result?.Response?.State ?? false)
             {
-                using var _unitOfWork = _sqlSugarClient.CreateContext();
+                using var unitOfWork = _sqlSugarClient.CreateContext();
                 try
                 {
                     var entityDetail = new ChatGroupDetail
@@ -665,14 +658,14 @@ public class ChatSugarService : IChatService
                         UserId = userId,
                         IsDeleted = true
                     };
-                    var repository = _unitOfWork.GetRepository<ChatGroupDetail>();
+                    var repository = unitOfWork.GetRepository<ChatGroupDetail>();
                     await repository.InsertOrUpdateAsync(entityDetail);
 
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                 }
                 catch (Exception e)
                 {
-                    await _unitOfWork.Tenant.RollbackTranAsync();
+                    await unitOfWork.Tenant.RollbackTranAsync();
                     Console.WriteLine(e);
                 }
             }
@@ -757,17 +750,17 @@ public class ChatSugarService : IChatService
     {
         if (fileTarget == FileTarget.User)
         {
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var chatPrivateRepository = _unitOfWork.GetRepository<ChatPrivate>();
+                var chatPrivateRepository = unitOfWork.GetRepository<ChatPrivate>();
                 var entity = await chatPrivateRepository.GetFirstAsync(d => d.ChatId == chatId);
                 if (entity != null)
                 {
                     entity.IsRetracted = true;
                     entity.RetractedTime = DateTime.Now;
                     await chatPrivateRepository.UpdateAsync(entity);
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                     return entity.UserFromId == userId ? entity.UserTargetId : entity.UserFromId;
                 }
 
@@ -781,17 +774,17 @@ public class ChatSugarService : IChatService
         }
         else
         {
-            using var _unitOfWork = _sqlSugarClient.CreateContext();
+            using var unitOfWork = _sqlSugarClient.CreateContext();
             try
             {
-                var chatGroupRepository = _unitOfWork.GetRepository<ChatGroup>();
+                var chatGroupRepository = unitOfWork.GetRepository<ChatGroup>();
                 var entity = await chatGroupRepository.GetFirstAsync(d => d.ChatId == chatId);
                 if (entity != null)
                 {
                     entity.IsRetracted = true;
                     entity.RetractedTime = DateTime.Now;
                     await chatGroupRepository.UpdateAsync(entity);
-                    _unitOfWork.Commit();
+                    unitOfWork.Commit();
                     return entity.GroupId;
                 }
 
@@ -802,8 +795,6 @@ public class ChatSugarService : IChatService
                 Console.WriteLine(e);
                 return null;
             }
-
-            return null;
         }
     }
 }

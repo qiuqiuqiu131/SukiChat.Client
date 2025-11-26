@@ -304,4 +304,39 @@ public class GroupPackService : Services.BaseService, IGroupPackService
 
         return true;
     }
+
+    public async Task<bool> GroupRequestResponseMessageOperate(string userId, JoinGroupResponseFromServer message)
+    {
+        if (!message.Accept) return false;
+        try
+        {
+            var groupRequestRepository = _unitOfWork.GetRepository<GroupRequest>();
+            var groupRelationRepository = _unitOfWork.GetRepository<GroupRelation>();
+            var groupRequest =
+                await groupRequestRepository.GetFirstOrDefaultAsync(predicate: d => d.RequestId == message.RequestId);
+            if (groupRequest == null) return false;
+
+            var groupRelation = new GroupRelation
+            {
+                UserId = userId,
+                GroupId = groupRequest.GroupId,
+                JoinTime = DateTime.Parse(message.Time),
+                IsChatting = true,
+                Grouping = groupRequest.Grouping, NickName = groupRequest.NickName,
+                Remark = groupRequest.Remark,
+                CantDisturb = false,
+                IsTop = false,
+                LastChatId = 0
+            };
+
+            await groupRelationRepository.InsertAsync(groupRelation);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return false;
+        }
+    }
 }

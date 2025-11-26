@@ -8,10 +8,7 @@ namespace ChatClient.DataBase.SqlSugar.Data;
     nameof(UserTargetId), OrderByType.Asc)]
 public class ChatPrivate
 {
-    [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
-    public int Id { get; set; }
-
-    public int ChatId { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] public int ChatId { get; set; }
 
     [SugarColumn(Length = 10)] public string UserFromId { get; set; }
 
