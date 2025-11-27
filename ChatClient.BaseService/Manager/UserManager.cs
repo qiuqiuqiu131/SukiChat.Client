@@ -1,5 +1,6 @@
 using Avalonia.Collections;
 using Avalonia.Media.Imaging;
+using Avalonia.Threading;
 using ChatClient.BaseService.MessageHandler;
 using ChatClient.BaseService.Services.Interface;
 using ChatClient.BaseService.Services.Interface.PackService;
@@ -308,8 +309,11 @@ internal class UserManager : IUserManager
         var friendChat = FriendChats!.FirstOrDefault(d => d.UserId.Equals(friendId));
         if (friendChat != null)
         {
-            FriendChats!.Remove(friendChat);
-            friendChat.Dispose();
+            Dispatcher.UIThread.Post(() =>
+            {
+                FriendChats!.Remove(friendChat);
+                friendChat.Dispose();
+            });
         }
 
         var user = await _userDtoManager.GetUserDto(friendId);
@@ -333,8 +337,11 @@ internal class UserManager : IUserManager
         var groupChat = GroupChats!.FirstOrDefault(d => d.GroupId.Equals(groupId));
         if (groupChat != null)
         {
-            GroupChats!.Remove(groupChat);
-            groupChat.Dispose();
+            Dispatcher.UIThread.Post(() =>
+            {
+                GroupChats!.Remove(groupChat);
+                groupChat.Dispose();
+            });
         }
 
         var groupDto = await _userDtoManager.GetGroupDto(User.Id, groupId);
