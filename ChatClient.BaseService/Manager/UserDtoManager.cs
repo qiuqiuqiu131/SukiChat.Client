@@ -37,11 +37,11 @@ internal class UserDtoManager : IUserDtoManager
     private readonly ConcurrentDictionary<string, GroupMemberDto> _groupMemberDtos = new();
 
     private readonly IContainerProvider _containerProvider;
-    private readonly SemaphoreSlim _semaphore_1 = new(1, 1);
-    private readonly SemaphoreSlim _semaphore_2 = new(1, 1);
-    private readonly SemaphoreSlim _semaphore_3 = new(1, 1);
-    private readonly SemaphoreSlim _semaphore_4 = new(1, 1);
-    private readonly SemaphoreSlim _semaphore_5 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore1 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore2 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore3 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore4 = new(1, 1);
+    private readonly SemaphoreSlim _semaphore5 = new(1, 1);
 
     public UserDtoManager(IContainerProvider containerProvider)
     {
@@ -53,13 +53,13 @@ internal class UserDtoManager : IUserDtoManager
         if (userDtos.Count == 0) return;
         try
         {
-            await _semaphore_1.WaitAsync();
+            await _semaphore1.WaitAsync();
             foreach (var userDto in userDtos)
                 _userDtos.TryAdd(userDto.Id, userDto);
         }
         finally
         {
-            _semaphore_1.Release();
+            _semaphore1.Release();
         }
     }
 
@@ -68,13 +68,13 @@ internal class UserDtoManager : IUserDtoManager
         if (memberDtos.Count == 0) return;
         try
         {
-            await _semaphore_5.WaitAsync();
+            await _semaphore5.WaitAsync();
             foreach (var memberDto in memberDtos)
                 _groupMemberDtos.TryAdd(memberDto.GroupId + memberDto.UserId, memberDto);
         }
         finally
         {
-            _semaphore_5.Release();
+            _semaphore5.Release();
         }
     }
 
@@ -83,8 +83,8 @@ internal class UserDtoManager : IUserDtoManager
         if (groupDtos.Count == 0) return;
         try
         {
-            await _semaphore_3.WaitAsync();
-            await _semaphore_5.WaitAsync();
+            await _semaphore3.WaitAsync();
+            await _semaphore5.WaitAsync();
             foreach (var groupDto in groupDtos)
             {
                 _groupDtos.TryAdd(groupDto.Id, groupDto);
@@ -97,8 +97,8 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_3.Release();
-            _semaphore_5.Release();
+            _semaphore3.Release();
+            _semaphore5.Release();
         }
     }
 
@@ -116,7 +116,7 @@ internal class UserDtoManager : IUserDtoManager
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
-            await _semaphore_1.WaitAsync();
+            await _semaphore1.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_userDtos.TryGetValue(id, out cachedUser))
@@ -135,7 +135,7 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_1.Release();
+            _semaphore1.Release();
         }
     }
 
@@ -149,7 +149,7 @@ internal class UserDtoManager : IUserDtoManager
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
-            await _semaphore_2.WaitAsync();
+            await _semaphore2.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_friendRelationDtos.TryGetValue(friendId, out cachedFriend))
@@ -177,7 +177,7 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_2.Release();
+            _semaphore2.Release();
         }
     }
 
@@ -186,6 +186,7 @@ internal class UserDtoManager : IUserDtoManager
     /// </summary>
     /// <param name="userId"></param>
     /// <param name="groupId"></param>
+    /// <param name="loadMembers"></param>
     /// <returns></returns>
     public async Task<GroupDto?> GetGroupDto(string userId, string groupId, bool loadMembers = true)
     {
@@ -206,7 +207,7 @@ internal class UserDtoManager : IUserDtoManager
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
-            await _semaphore_3.WaitAsync();
+            await _semaphore3.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupDtos.TryGetValue(groupId, out cachedGroup))
@@ -217,10 +218,21 @@ internal class UserDtoManager : IUserDtoManager
 
             if (group != null && loadMembers)
             {
-                var groupRemoteService = _containerProvider.Resolve<IGroupRemoteService>();
-                var memberLists = await groupRemoteService.GetRemoteGroupMembers(userId, groupId);
-                await AddGroupMemberDtos(memberLists);
-                group.GroupMembers.AddRange(memberLists);
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _semaphore5.WaitAsync();
+                        var groupRemoteService = _containerProvider.Resolve<IGroupRemoteService>();
+                        var memberLists = await groupRemoteService.GetRemoteGroupMembers(userId, groupId);
+                        await AddGroupMemberDtos(memberLists);
+                        group.GroupMembers.AddRange(memberLists);
+                    }
+                    finally
+                    {
+                        _semaphore5.Release();
+                    }
+                });
 
                 // 如果获取到用户信息，添加到缓存中
                 _groupDtos.TryAdd(groupId, group);
@@ -230,7 +242,7 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_3.Release();
+            _semaphore3.Release();
         }
     }
 
@@ -241,7 +253,7 @@ internal class UserDtoManager : IUserDtoManager
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
-            await _semaphore_4.WaitAsync();
+            await _semaphore4.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupRelationDtos.TryGetValue(groupId, out cachedGroupRelation))
@@ -270,7 +282,7 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_4.Release();
+            _semaphore4.Release();
         }
     }
 
@@ -284,7 +296,7 @@ internal class UserDtoManager : IUserDtoManager
         try
         {
             // 使用信号量确保同一时间只有一个线程在请求相同的用户信息
-            await _semaphore_5.WaitAsync();
+            await _semaphore5.WaitAsync();
 
             // 双重检查，防止在等待信号量时其他线程已经添加了数据
             if (_groupMemberDtos.TryGetValue(key, out cachedGroupMember))
@@ -303,7 +315,7 @@ internal class UserDtoManager : IUserDtoManager
         }
         finally
         {
-            _semaphore_5.Release();
+            _semaphore5.Release();
         }
     }
 
@@ -311,13 +323,13 @@ internal class UserDtoManager : IUserDtoManager
     {
         try
         {
-            await _semaphore_1.WaitAsync();
+            await _semaphore1.WaitAsync();
             _userDtos.TryRemove(id, out var user);
             user?.Dispose();
         }
         finally
         {
-            _semaphore_1.Release();
+            _semaphore1.Release();
         }
     }
 
@@ -325,13 +337,13 @@ internal class UserDtoManager : IUserDtoManager
     {
         try
         {
-            await _semaphore_2.WaitAsync();
+            await _semaphore2.WaitAsync();
             _friendRelationDtos.TryRemove(friendId, out var friendRelation);
             friendRelation?.Dispose();
         }
         finally
         {
-            _semaphore_2.Release();
+            _semaphore2.Release();
         }
     }
 
@@ -339,15 +351,18 @@ internal class UserDtoManager : IUserDtoManager
     {
         try
         {
-            await _semaphore_3.WaitAsync();
+            await _semaphore3.WaitAsync();
             _groupDtos.TryRemove(groupId, out var group);
-            foreach (var member in group.GroupMembers)
-                await RemoveGroupMemberDto(groupId, member.UserId);
-            group?.Dispose();
+            if (group != null)
+            {
+                foreach (var member in group.GroupMembers)
+                    await RemoveGroupMemberDto(groupId, member.UserId);
+                group.Dispose();
+            }
         }
         finally
         {
-            _semaphore_3.Release();
+            _semaphore3.Release();
         }
     }
 
@@ -355,13 +370,13 @@ internal class UserDtoManager : IUserDtoManager
     {
         try
         {
-            await _semaphore_4.WaitAsync();
+            await _semaphore4.WaitAsync();
             _groupRelationDtos.TryRemove(groupId, out var groupRelation);
             groupRelation?.Dispose();
         }
         finally
         {
-            _semaphore_4.Release();
+            _semaphore4.Release();
         }
     }
 
@@ -369,13 +384,13 @@ internal class UserDtoManager : IUserDtoManager
     {
         try
         {
-            await _semaphore_5.WaitAsync();
+            await _semaphore5.WaitAsync();
             _groupMemberDtos.TryRemove(groupId + memberId, out var groupMember);
             groupMember?.Dispose();
         }
         finally
         {
-            _semaphore_5.Release();
+            _semaphore5.Release();
         }
     }
 
@@ -405,11 +420,11 @@ internal class UserDtoManager : IUserDtoManager
     // 析构函数中释放信号量
     ~UserDtoManager()
     {
-        _semaphore_1.Dispose();
-        _semaphore_2.Dispose();
-        _semaphore_3.Dispose();
-        _semaphore_4.Dispose();
-        _semaphore_5.Dispose();
+        _semaphore1.Dispose();
+        _semaphore2.Dispose();
+        _semaphore3.Dispose();
+        _semaphore4.Dispose();
+        _semaphore5.Dispose();
         Clear();
     }
 }

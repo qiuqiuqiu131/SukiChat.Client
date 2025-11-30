@@ -54,9 +54,9 @@ internal class UserLoginService : BaseService, IUserLoginService
             List<Task> tasks =
             [
                 OperateOutlineMessage(userId, lastTime),
-                OperateChatMessages(userId, lastTime, cancellationToken)
+                OperateChatMessages(userId, lastTime, cancellationToken),
+                InitEntityDto(userId, cancellationToken)
             ];
-            _ = InitEntityDto(userId, cancellationToken);
             await Task.WhenAll(tasks).ConfigureAwait(false);
         }
         catch (Exception e)
@@ -82,11 +82,12 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 批量获取远程实体信息
     /// </summary>
     /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
     private async Task InitEntityDto(string userId, CancellationTokenSource cancellationToken)
     {
         DateTime start = DateTime.Now;
 
-        Task task_1 = Task.Run(async () =>
+        Task task1 = Task.Run(async () =>
         {
             var groupRemoteService = _scopedProvider.Resolve<IGroupRemoteService>();
             var groups = await groupRemoteService.GetRemoteGroups(userId);
@@ -96,17 +97,17 @@ internal class UserLoginService : BaseService, IUserLoginService
                 group.GroupMembers = [.. members];
             }
 
-            _ = _userDtoManager.AddGroupDtos(groups);
+            await _userDtoManager.AddGroupDtos(groups);
         }, cancellationToken.Token);
 
-        Task task_2 = Task.Run(async () =>
+        Task task2 = Task.Run(async () =>
         {
             var userRemoteService = _scopedProvider.Resolve<IUserRemoteService>();
             var users = await userRemoteService.GetRemoteUsersAsync(userId);
-            _ = _userDtoManager.AddUserDtos(users);
+            await _userDtoManager.AddUserDtos(users);
         }, cancellationToken.Token);
 
-        await Task.WhenAll(task_1, task_2).ConfigureAwait(false);
+        await Task.WhenAll(task1, task2).ConfigureAwait(false);
         DateTime end = DateTime.Now;
         Console.WriteLine("Entity Dto Init Cost Time:" + (end - start));
     }
@@ -114,35 +115,35 @@ internal class UserLoginService : BaseService, IUserLoginService
     private async Task OperateChatMessages(string userId, DateTime lastLoginTime,
         CancellationTokenSource cancellationToken)
     {
-        Task task_1 = Task.Run(async () =>
+        Task task1 = Task.Run(async () =>
         {
             var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var friendMessages = await chatRemoteService.GetFriendChatMessages(userId, lastLoginTime);
             await OperateFriendChatMessages(userId, friendMessages);
         }, cancellationToken.Token);
 
-        Task task_2 = Task.Run(async () =>
+        Task task2 = Task.Run(async () =>
         {
             var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var groupMessages = await chatRemoteService.GetGroupChatMessages(userId, lastLoginTime);
             await OperateGroupChatMessages(userId, groupMessages);
         }, cancellationToken.Token);
 
-        Task task_3 = Task.Run(async () =>
+        Task task3 = Task.Run(async () =>
         {
             var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var chatPrivateMessages = await chatRemoteService.GetChatPrivateDetailMessages(userId, lastLoginTime);
             await OperateChatPrivateDetailMessage(userId, chatPrivateMessages);
         }, cancellationToken.Token);
 
-        Task task_4 = Task.Run(async () =>
+        Task task4 = Task.Run(async () =>
         {
             var chatRemoteService = _scopedProvider.Resolve<IChatRemoteService>();
             var chatGroupMessages = await chatRemoteService.GetChatGroupDetailMessages(userId, lastLoginTime);
             await OperateChatGroupDetailMessage(userId, chatGroupMessages);
         }, cancellationToken.Token);
 
-        await Task.WhenAll(task_1, task_2, task_3, task_4).ConfigureAwait(false);
+        await Task.WhenAll(task1, task2, task3, task4).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -151,6 +152,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 相当于重新处理下离线的消息组
     /// </summary>
     /// <param name="userId"></param>
+    /// <param name="lastLoginTime"></param>
     /// <returns></returns>
     private async Task OperateOutlineMessage(string userId, DateTime lastLoginTime)
     {
@@ -186,6 +188,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     /// 从数据库中加载用户数据
     /// </summary>
     /// <param name="userId"></param>
+    /// <param name="password"></param>
     /// <returns></returns>
     private async Task<UserData> LoadUserDate(string userId, string password)
     {
