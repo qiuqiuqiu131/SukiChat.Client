@@ -6,6 +6,7 @@ using ChatClient.DataBase.EfCore.EFCoreDB.UnitOfWork;
 using ChatClient.Tool.Data.Friend;
 using ChatClient.Tool.HelperInterface;
 using ChatClient.Tool.ManagerInterface;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +43,7 @@ internal class FriendService : Services.BaseService, IFriendService
             Group = group,
             Remark = remark,
             Message = message,
-            RequestTime = DateTime.Now.ToString()
+            RequestTime = DateTime.Now.ToInvariantString()
         };
 
         // 发送好友请求
@@ -117,7 +118,7 @@ internal class FriendService : Services.BaseService, IFriendService
             RequestId = requestId,
             Group = group,
             Remark = remark,
-            ResponseTime = time.ToString()
+            ResponseTime = time.ToInvariantString()
         };
 
         var result = await _messageHelper.SendMessageWithResponse<FriendResponseFromClientResponse>(response);

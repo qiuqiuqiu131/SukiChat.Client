@@ -155,7 +155,7 @@ internal class UserLoginService : BaseService, IUserLoginService
     private async Task OperateOutlineMessage(string userId, DateTime lastLoginTime)
     {
         // 获取离线消息
-        var message = new OutlineMessageRequest { Id = userId, LastLogoutTime = lastLoginTime.ToString() };
+        var message = new OutlineMessageRequest { Id = userId, LastLogoutTime = lastLoginTime.ToInvariantString() };
         var outlineResponse = await _messageHelper.SendMessageWithResponse<OutlineMessageResponse>(message);
 
         if (outlineResponse is not { Response: { State : true } })

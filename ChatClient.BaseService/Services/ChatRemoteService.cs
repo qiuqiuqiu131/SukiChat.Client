@@ -1,5 +1,6 @@
 using ChatClient.BaseService.Services.Interface.RemoteService;
 using ChatClient.Tool.HelperInterface;
+using ChatClient.Tool.Tools;
 using ChatServer.Common.Protobuf;
 
 namespace ChatClient.BaseService.Services;
@@ -18,7 +19,7 @@ internal class ChatRemoteService(
             UserId = userId,
             PageIndex = 0,
             PageCount = 100,
-            LastLoginTime = loginTime.ToString()
+            LastLoginTime = loginTime.ToInvariantString()
         };
 
         // 循环获取群聊详情信息，直到没有更多数据
@@ -50,7 +51,7 @@ internal class ChatRemoteService(
             UserId = userId,
             PageIndex = 0,
             PageCount = 100,
-            LastLoginTime = loginTime.ToString()
+            LastLoginTime = loginTime.ToInvariantString()
         };
 
         // 循环获取群聊详情信息，直到没有更多数据
@@ -82,7 +83,7 @@ internal class ChatRemoteService(
             UserId = userId,
             PageIndex = 0,
             PageCount = 100,
-            LastLoginTime = loginTime.ToString()
+            LastLoginTime = loginTime.ToInvariantString()
         };
 
         // 循环获取群聊信息，直到没有更多数据
@@ -114,7 +115,7 @@ internal class ChatRemoteService(
             UserId = userId,
             PageIndex = 0,
             PageCount = 100,
-            LastLoginTime = loginTime.ToString()
+            LastLoginTime = loginTime.ToInvariantString()
         };
 
         // 循环获取群聊信息，直到没有更多数据

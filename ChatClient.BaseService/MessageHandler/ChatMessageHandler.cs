@@ -288,7 +288,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             {
                 if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    Dispatcher.UIThread.Post(() =>
+                    await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
                         cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
@@ -302,7 +302,7 @@ internal class ChatMessageHandler : MessageHandlerBase
 
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                Dispatcher.UIThread.Post(() =>
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {
@@ -470,7 +470,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             {
                 if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    Dispatcher.UIThread.Post(() =>
+                    await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
                         cornerDialogService.Show("FriendChatMessageBoxView", new DialogParameters
@@ -484,7 +484,7 @@ internal class ChatMessageHandler : MessageHandlerBase
 
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                Dispatcher.UIThread.Post(() =>
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {
@@ -629,7 +629,7 @@ internal class ChatMessageHandler : MessageHandlerBase
                 // 边角弹窗
                 if (_userManager.WindowState is MainWindowState.Close or MainWindowState.Hide)
                 {
-                    Dispatcher.UIThread.Post(() =>
+                    await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         var cornerDialogService = scopedprovider.Resolve<ICornerDialogService>();
                         cornerDialogService.Show("GroupChatMessageBoxView", new DialogParameters
@@ -644,7 +644,7 @@ internal class ChatMessageHandler : MessageHandlerBase
             // 任务栏闪烁
             if (_userManager.WindowState is MainWindowState.Hide or MainWindowState.Show)
             {
-                Dispatcher.UIThread.Post(() =>
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     if (Application.Current.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                     {
