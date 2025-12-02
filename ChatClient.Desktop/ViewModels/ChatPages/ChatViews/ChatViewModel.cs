@@ -93,7 +93,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         var exist = ChatDialogHelper.FriendChatSelected(friendChatDto.UserId);
         if (exist)
         {
-            _selectedFriend = null;
+            _selectedFriend = friendChatDto;
             _selectedGroup = null;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
@@ -141,10 +141,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         if (!exist)
         {
             if (_selectedFriend == friendChatDto)
-            {
-                _selectedFriend = null;
                 RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
-            }
 
             await Task.Run(() =>
             {
@@ -201,7 +198,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         if (exist)
         {
             _selectedFriend = null;
-            _selectedGroup = null;
+            _selectedGroup = groupChatDto;
             RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
             return;
         }
@@ -248,10 +245,7 @@ public class ChatViewModel : ValidateBindableBase, IDestructible, IRegionAware
         if (!exist)
         {
             if (_selectedGroup == groupChatDto)
-            {
-                _selectedGroup = null;
                 RegionManager.RequestNavigate(RegionNames.ChatRightRegion, nameof(ChatEmptyView));
-            }
 
             await Task.Run(() =>
             {

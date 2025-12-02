@@ -409,19 +409,29 @@ public class ChatGroupPanelViewModel : ViewModelBase, IDestructible
     {
         if (SelectedGroup == null) return (false, FileTarget.Group);
 
-        var chatMessageDtos = messages.Select(message => message switch
+        var chatMessageDtos = messages.Select(message =>
         {
-            string text when !string.IsNullOrEmpty(text) => new ChatMessageDto
+            switch (message)
             {
-                Type = ChatMessage.ContentOneofCase.TextMess,
-                Content = new TextMessDto { Text = text }
-            },
-            Bitmap bitmap => new ChatMessageDto
-            {
-                Type = ChatMessage.ContentOneofCase.ImageMess,
-                Content = new ImageMessDto { ImageSource = bitmap, FileSize = bitmap.GetSize(), FilePath = "" }
-            },
-            _ => null
+                case string text when !string.IsNullOrEmpty(text):
+                    return new ChatMessageDto
+                    {
+                        Type = ChatMessage.ContentOneofCase.TextMess,
+                        Content = new TextMessDto { Text = text }
+                    };
+                case Bitmap bitmap:
+                {
+                    Bitmap bitmapBitmap = bitmap.Clone();
+                    return new ChatMessageDto
+                    {
+                        Type = ChatMessage.ContentOneofCase.ImageMess,
+                        Content = new ImageMessDto
+                            { ImageSource = bitmapBitmap, FileSize = bitmap.GetSize(), FilePath = "" }
+                    };
+                }
+                default:
+                    return null;
+            }
         }).Where(dto => dto != null).ToList();
 
         return (await SendChatMessagesInternal(chatMessageDtos), FileTarget.Group);

@@ -157,6 +157,7 @@ public partial class ContactsView : UserControl, IDestructible
             Root.ColumnDefinitions[2].MinWidth = 0;
             //ContentControl.IsVisible = false;
             ContentControl.Opacity = 0;
+            ContentControl.IsEnabled = false;
 
             return;
         }
@@ -171,6 +172,7 @@ public partial class ContactsView : UserControl, IDestructible
             Root.ColumnDefinitions[2].MinWidth = 300;
             //ContentControl.IsVisible = true;
             ContentControl.Opacity = 1;
+            ContentControl.IsEnabled = true;
 
             return;
         }
@@ -227,6 +229,7 @@ public partial class ContactsView : UserControl, IDestructible
             Root.ColumnDefinitions[2].Width = new GridLength(0, GridUnitType.Pixel);
             Root.ColumnDefinitions[2].MinWidth = 0;
             ContentControl.Opacity = 0;
+            ContentControl.IsEnabled = false;
         }
         else if (width >= 460)
         {
@@ -237,6 +240,7 @@ public partial class ContactsView : UserControl, IDestructible
             Root.ColumnDefinitions[2].Width = new GridLength(1, GridUnitType.Star);
             Root.ColumnDefinitions[2].MinWidth = 300;
             ContentControl.Opacity = 1;
+            ContentControl.IsEnabled = true;
         }
     }
 }

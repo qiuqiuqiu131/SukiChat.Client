@@ -32,7 +32,7 @@ public class SearchService : Services.BaseService, ISearchService
             var userService = _scopedProvider.Resolve<IUserService>();
             var friendService = _scopedProvider.Resolve<IFriendService>();
             var userDtoManager = _scopedProvider.Resolve<IUserDtoManager>();
-            foreach (var id in result.Ids)
+            foreach (var id in result.Ids.Distinct())
             {
                 var userDto = await userService.GetUserDto(id);
                 if (userDto != null)
@@ -72,7 +72,7 @@ public class SearchService : Services.BaseService, ISearchService
             var list = new List<GroupDto>();
             var groupGetService = _scopedProvider.Resolve<IGroupGetService>();
             var groupService = _scopedProvider.Resolve<IGroupService>();
-            foreach (var id in result.Ids)
+            foreach (var id in result.Ids.Distinct())
             {
                 var groupDto = await userDtoManager.GetGroupDto(userId, id, false);
                 if (groupDto != null)

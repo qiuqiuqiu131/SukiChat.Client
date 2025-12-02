@@ -21,28 +21,28 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
 {
     #region Properties
 
-    private Bitmap _currentHead;
+    private Bitmap? _currentHead;
 
-    public Bitmap CurrentHead
+    public Bitmap? CurrentHead
     {
         get => _currentHead;
         set => SetProperty(ref _currentHead, value);
     }
 
-    private Bitmap _selectedItem;
+    private Bitmap? _selectedItem;
 
-    public Bitmap SelectedItem
+    public Bitmap? SelectedItem
     {
         get => _selectedItem;
         set => SetProperty(ref _selectedItem, value);
     }
 
-    private bool isBusy = false;
+    private bool _isBusy = false;
 
     public bool IsBusy
     {
-        get => isBusy;
-        set => SetProperty(ref isBusy, value);
+        get => _isBusy;
+        set => SetProperty(ref _isBusy, value);
     }
 
     private ObservableCollection<Bitmap> _headList;
@@ -62,10 +62,10 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
 
     private Dictionary<int, Bitmap> _headImages;
 
-    public event Action<Bitmap> ImageChanged;
+    public event Action<Bitmap?> ImageChanged;
     public Control? View;
 
-    private bool isNewHead = false;
+    private bool _isNewHead = false;
 
     private readonly IUserManager _userManager;
     private readonly IContainerProvider _containerProvider;
@@ -105,7 +105,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
     private void SelectedHeadChanged()
     {
         ImageChanged?.Invoke(SelectedItem);
-        isNewHead = false;
+        _isNewHead = false;
     }
 
     private async void AddHead()
@@ -114,7 +114,7 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
 
         string filePath = "";
         var window = TopLevel.GetTopLevel(View);
-        var handle = window.TryGetPlatformHandle()?.Handle;
+        var handle = window?.TryGetPlatformHandle()?.Handle;
 
         if (handle == null) return;
 
@@ -133,27 +133,28 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         }
         catch (Exception e)
         {
-            return;
+            Console.WriteLine(e);
         }
 
         if (bitmap == null) return;
 
         // 读取选中图片，显示出来
         ImageChanged?.Invoke(bitmap);
-        isNewHead = true;
+        _isNewHead = true;
     }
 
     private async void SaveHead()
     {
-        IsBusy = true;
-        UserHeadEditView view = View as UserHeadEditView;
+        UserHeadEditView? view = View as UserHeadEditView;
         if (view == null) return;
 
+        IsBusy = true;
+
         var imageResize = view.GetImageResize();
-        if (!isNewHead && imageResize.Scale == 1 && imageResize.MoveX == 0 && imageResize.MoveY == 0)
+        if (!_isNewHead && imageResize.Scale == 1 && imageResize.MoveX == 0 && imageResize.MoveY == 0)
         {
             IsBusy = false;
-            _userManager.User.UserDto.HeadImage = SelectedItem;
+            _userManager.User!.UserDto.HeadImage = SelectedItem;
             _userManager.User.UserDto.HeadIndex = _headImages.FirstOrDefault(x => x.Value == SelectedItem).Key;
             await _userManager.SaveUser();
 
@@ -168,7 +169,12 @@ public class UserHeadEditViewModel : BindableBase, IDialogAware
         }
 
         // 分割图片
-        Bitmap bitmap = ImageTool.GetHeadImage(imageResize);
+        Bitmap? bitmap = ImageTool.GetHeadImage(imageResize);
+        if (bitmap == null)
+        {
+            IsBusy = false;
+            return;
+        }
 
         var result = await _userManager.ResetHead(bitmap);
         IsBusy = false;

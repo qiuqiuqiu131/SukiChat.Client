@@ -93,7 +93,7 @@ namespace ChatClient.Tool.Data
 
         private DateTime registeTime;
 
-        public Bitmap HeadImage
+        public Bitmap? HeadImage
         {
             get => headImage;
             set
@@ -104,7 +104,7 @@ namespace ChatClient.Tool.Data
             }
         }
 
-        private Bitmap headImage;
+        private Bitmap? headImage;
 
         private bool _isOnline;
 

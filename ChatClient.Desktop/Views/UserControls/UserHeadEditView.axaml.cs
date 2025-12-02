@@ -61,25 +61,25 @@ public partial class UserHeadEditView : UserControl
         ScrollViewer.Offset = new Vector(ScrollViewer.Offset.X, 0);
     }
 
-    private Bitmap bitmap;
+    private Bitmap? _bitmap;
 
-    private double pixcel_width = 0;
-    private double pixcel_height = 0;
-    private double actual_width = 0;
-    private double actual_height = 0;
+    private double _pixcelWidth = 0;
+    private double _pixcelHeight = 0;
+    private double _actualWidth = 0;
+    private double _actualHeight = 0;
 
-    private double scale = 1;
-    private double moveX = 0;
-    private double moveY = 0;
+    private double _scale = 1;
+    private double _moveX = 0;
+    private double _moveY = 0;
 
     private double Scale
     {
-        get => scale;
+        get => _scale;
         set
         {
-            scale = value;
-            _scaleTransform.ScaleX = scale;
-            _scaleTransform.ScaleY = scale;
+            _scale = value;
+            _scaleTransform.ScaleX = _scale;
+            _scaleTransform.ScaleY = _scale;
         }
     }
 
@@ -87,38 +87,38 @@ public partial class UserHeadEditView : UserControl
     /// 图片变换
     /// </summary>
     /// <param name="obj"></param>
-    private void ImageChanged(Bitmap obj)
+    private void ImageChanged(Bitmap? obj)
     {
         if (obj == null) return;
 
-        bitmap = obj;
+        _bitmap = obj;
 
-        actual_width = obj.PixelSize.Width;
-        actual_height = obj.PixelSize.Height;
+        _actualWidth = obj.PixelSize.Width;
+        _actualHeight = obj.PixelSize.Height;
 
-        if (actual_width > actual_height)
+        if (_actualWidth > _actualHeight)
         {
-            pixcel_height = 300;
-            pixcel_width = actual_width * 300 / actual_height;
+            _pixcelHeight = 300;
+            _pixcelWidth = _actualWidth * 300 / _actualHeight;
 
-            moveX = -(pixcel_width - 300) / 2;
-            _translateTransform.X = moveX;
-            moveY = 0;
-            _translateTransform.Y = moveY;
+            _moveX = -(_pixcelWidth - 300) / 2;
+            _translateTransform.X = _moveX;
+            _moveY = 0;
+            _translateTransform.Y = _moveY;
         }
         else
         {
-            pixcel_width = 300;
-            pixcel_height = actual_height * 300 / actual_width;
+            _pixcelWidth = 300;
+            _pixcelHeight = _actualHeight * 300 / _actualWidth;
 
-            moveY = -(pixcel_height - 300) / 2;
-            _translateTransform.Y = moveY;
-            moveX = 0;
-            _translateTransform.X = moveX;
+            _moveY = -(_pixcelHeight - 300) / 2;
+            _translateTransform.Y = _moveY;
+            _moveX = 0;
+            _translateTransform.X = _moveX;
         }
 
-        HeadImage.Width = pixcel_width;
-        HeadImage.Height = pixcel_height;
+        HeadImage.Width = _pixcelWidth;
+        HeadImage.Height = _pixcelHeight;
         HeadImage.Source = obj;
 
         Scale = 1;
@@ -135,26 +135,26 @@ public partial class UserHeadEditView : UserControl
         Scale = e.NewValue + 1;
 
         // 图片缩放后，重新计算移动范围
-        double rangeX = pixcel_width * scale - 300;
-        double rangeY = pixcel_height * scale - 300;
+        double rangeX = _pixcelWidth * _scale - 300;
+        double rangeY = _pixcelHeight * _scale - 300;
 
-        if (moveX > 0)
-            moveX = 0;
-        else if (moveX < -rangeX)
-            moveX = -rangeX;
-        _translateTransform.X = moveX;
+        if (_moveX > 0)
+            _moveX = 0;
+        else if (_moveX < -rangeX)
+            _moveX = -rangeX;
+        _translateTransform.X = _moveX;
 
-        if (moveY > 0)
-            moveY = 0;
-        else if (moveY < -rangeY)
-            moveY = -rangeY;
-        _translateTransform.Y = moveY;
+        if (_moveY > 0)
+            _moveY = 0;
+        else if (_moveY < -rangeY)
+            _moveY = -rangeY;
+        _translateTransform.Y = _moveY;
     }
 
     #region 图片拖动
 
-    private bool isDraged = false;
-    private Point previousPoint;
+    private bool _isDraged = false;
+    private Point _previousPoint;
 
     /// <summary>
     /// HeadImage 按下
@@ -163,9 +163,9 @@ public partial class UserHeadEditView : UserControl
     /// <param name="e"></param>
     private void HeadImage_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        isDraged = true;
-        this.Cursor = new Cursor(StandardCursorType.SizeAll);
-        previousPoint = e.GetPosition(HeadImage);
+        _isDraged = true;
+        Cursor = new Cursor(StandardCursorType.SizeAll);
+        _previousPoint = e.GetPosition(HeadImage);
     }
 
     /// <summary>
@@ -175,9 +175,9 @@ public partial class UserHeadEditView : UserControl
     /// <param name="e"></param>
     private void HeadImage_OnPointerReleased(object? sender, PointerReleasedEventArgs e)
     {
-        isDraged = false;
+        _isDraged = false;
         this.Cursor = new Cursor(StandardCursorType.Arrow);
-        previousPoint = new Point();
+        _previousPoint = new Point();
     }
 
     /// <summary>
@@ -187,29 +187,29 @@ public partial class UserHeadEditView : UserControl
     /// <param name="e"></param>
     private void HeadImage_OnPointerMoved(object? sender, PointerEventArgs e)
     {
-        if (isDraged)
+        if (_isDraged)
         {
             var currentPoint = e.GetPosition(HeadImage);
-            var offsetX = currentPoint.X - previousPoint.X;
-            var offsetY = currentPoint.Y - previousPoint.Y;
-            previousPoint = currentPoint;
+            var offsetX = currentPoint.X - _previousPoint.X;
+            var offsetY = currentPoint.Y - _previousPoint.Y;
+            _previousPoint = currentPoint;
 
-            double rangeX = pixcel_width * scale - 300;
-            double rangeY = pixcel_height * scale - 300;
+            double rangeX = _pixcelWidth * _scale - 300;
+            double rangeY = _pixcelHeight * _scale - 300;
 
-            moveX += offsetX * 0.75;
-            if (moveX > 0)
-                moveX = 0;
-            else if (moveX < -rangeX)
-                moveX = -rangeX;
-            _translateTransform.X = moveX;
+            _moveX += offsetX * 0.75;
+            if (_moveX > 0)
+                _moveX = 0;
+            else if (_moveX < -rangeX)
+                _moveX = -rangeX;
+            _translateTransform.X = _moveX;
 
-            moveY += offsetY * 0.5;
-            if (moveY > 0)
-                moveY = 0;
-            else if (moveY < -rangeY)
-                moveY = -rangeY;
-            _translateTransform.Y = moveY;
+            _moveY += offsetY * 0.5;
+            if (_moveY > 0)
+                _moveY = 0;
+            else if (_moveY < -rangeY)
+                _moveY = -rangeY;
+            _translateTransform.Y = _moveY;
         }
     }
 
@@ -223,10 +223,10 @@ public partial class UserHeadEditView : UserControl
     {
         return new ImageResize
         {
-            Bitmap = bitmap,
+            Bitmap = _bitmap,
             Scale = Scale,
-            MoveX = -moveX / (pixcel_width * scale),
-            MoveY = -moveY / (pixcel_height * scale)
+            MoveX = -_moveX / (_pixcelWidth * _scale),
+            MoveY = -_moveY / (_pixcelHeight * _scale)
         };
     }
 }

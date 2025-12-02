@@ -6,8 +6,10 @@ namespace ChatClient.Tool.Tools;
 
 public static class ImageTool
 {
-    public static Bitmap GetHeadImage(ImageResize resize, int targetSize = 256)
+    public static Bitmap? GetHeadImage(ImageResize resize, int targetSize = 256)
     {
+        if (resize.Bitmap == null) return null;
+
         int width = resize.Bitmap.PixelSize.Width;
         int height = resize.Bitmap.PixelSize.Height;
         int minSize = Math.Min(width, height);
@@ -111,7 +113,7 @@ public static class ImageTool
 
 public class ImageResize
 {
-    public Bitmap Bitmap { get; set; }
+    public Bitmap? Bitmap { get; set; }
     public double Scale { get; set; }
     public double MoveX { get; set; }
     public double MoveY { get; set; }
